@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>RubyGems</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm482.html" rel="next" />
+<link href="refm480.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm480.html">&lt;-PREV</a>][<a href="refm482.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L009812" id="L009812">RubyGems</a></h1>
+<p><a href="refm002.html">執筆者募集</a></p>
+<p>ライブラリ管理ツールの１つ。
+標準で添付されていないので <a href="http://docs.rubygems.org/">RubyGems (英語)</a><sup class="outside"><small>[外部]</small></sup>より
+インストールする必要がある。</p>
+<h2><a name="L009813" id="L009813">参考URL</a></h2>
+<p>このページのマニュアルは不完全であるため、以下のサイトを参考にして下さい。</p>
+<ul>
+<li><a href="http://docs.rubygems.org/">RubyGems (英語)</a><sup class="outside"><small>[外部]</small></sup></li>
+<li><a href="http://jp.rubyist.net/magazine/?0006-PackageManagement">Rubyist MagazineのRubyGems紹介記事</a><sup class="outside"><small>[外部]</small></sup></li>
+</ul>
+<h2><a name="L009814" id="L009814">gem コマンドの使用例</a></h2>
+<dl>
+<dt><a name="L009815" id="L009815"><code>% <var>gem</var> <var>install</var> <var>hogehoge</var></code></a>
+</dl>
+<p>パッケージ <var>hogehoge</var> の最新版をインストールする。</p>
+<dl>
+<dt><a name="L009816" id="L009816"><code>% <var>gem</var> <var>cleanup</var> <var>hogehoge</var></code></a>
+</dl>
+<p>パッケージ <var>hogehoge</var> の最新版以外をアンインストールする。</p>
+<dl>
+<dt><a name="L009817" id="L009817"><code>% <var>gem</var> --<var>help</var> [<var>hogehoge</var>]</code></a>
+</dl>
+<p>その他詳しい使い方を調べる。</p>
+<pre>% gem help install </pre>
+<dl>
+<dt><a name="L009818" id="L009818"><code>% <var>gem_server</var></code></a>
+</dl>
+<p>インストール済みのライブラリのドキュメントを http://localhost:8808/ （デフォルト）で見ることが出来ます。</p>
+<h2><a name="L009819" id="L009819">インストールしたライブラリを使用するには？</a></h2>
+<p>例：gem でインストールした <var>hogehoge</var> を使用する場合</p>
+<pre>require 'rubygems'
+require_gem 'hogehoge'
+# 必要であればさらに hogehoge 内のライブラリを require する。</pre>
+<h2><a name="L009820" id="L009820">自作のライブラリを RubyGems で作成するには？</a></h2>
+<p><a href="refm002.html">執筆者募集</a></p>
+<h2><a name="L009821" id="L009821">自作のライブラリを RubyGems で公開するには？</a></h2>
+<p><a href="refm002.html">執筆者募集</a></p>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm480.html">&lt;-PREV</a>][<a href="refm482.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

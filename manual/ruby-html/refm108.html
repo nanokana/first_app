@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Errno::EXXX</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm109.html" rel="next" />
+<link href="refm107.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm107.html">UP</a>][<a href="refm107.html">&lt;-PREV</a>][<a href="refm109.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L002231" id="L002231">Errno::EXXX</a></h1>
+<p>各 <code>errno</code> に対応する例外クラスです。実際のクラス名については 
+<a href="refm072.html">Errno</a> モジュールとシステムのマニュアル <a href="refm535.html">errno(3)</a> 
+を参照してください。</p>
+<h2><a name="L002232" id="L002232">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm107.html">SystemCallError</a></li>
+</ul>
+<h2><a name="L002233" id="L002233">定数:</a></h2>
+<dl>
+<dt><a name="L002234" id="L002234"><code>Errno</code></a></dt>
+<dd>
+<p>各クラスに対応する <code>errno</code> の値です。</p>
+<p><code>Errno::EXXX::Errno</code> 定数は、対応する値が常に設定されています
+が、<a href="refm107.html#L002229">SystemCallError#errno</a> メソッドは実
+際にエラーが発生してなければ <code>nil</code> を返します。</p>
+<p><a href="refm385.html">ruby 1.8 feature</a>: Errno::EXXX では対応する errno 値がオブジェ
+クト生成時に設定されています。下記の例を参照。</p>
+<dl>
+<dt><a name="L002235" id="L002235">例:</a></dt>
+<dd>
+<p><code>Errno::EAGAIN</code> と <code>Errno::EWOULDBLOCK</code> はシステムによっ
+ては同じ <code>errno</code> 値を持つ例外クラスです。以下は <code>Errno</code> 
+定数によりこのことを調べています。</p>
+<pre>p Errno::EAGAIN::Errno            # =&gt; 11
+p Errno::EWOULDBLOCK::Errno       # =&gt; 11
+
+p Errno::EAGAIN.new.errno         # =&gt; nil
+p Errno::EWOULDBLOCK.new.errno    # =&gt; nil</pre>
+<p><a href="refm385.html">ruby 1.8 feature</a></p>
+<pre>p Errno::EAGAIN.new.errno         # =&gt; 11
+p Errno::EWOULDBLOCK.new.errno    # =&gt; 11</pre>
+</dd>
+</dl></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm107.html">UP</a>][<a href="refm107.html">&lt;-PREV</a>][<a href="refm109.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

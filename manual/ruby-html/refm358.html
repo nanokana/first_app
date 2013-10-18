@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>dl/types</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm359.html" rel="next" />
+<link href="refm357.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm351.html">UP</a>][<a href="refm357.html">&lt;-PREV</a>][<a href="refm359.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006831" id="L006831">DL::Types</a></h1>
+<p>型の定義を保持するオブジェクトのクラス。</p>
+<ul>
+<li><a href="refm351.html">dl</a></li>
+<li><a href="refm356.html">dl/import</a></li>
+<li><a href="refm357.html">dl/struct</a></li>
+</ul>
+<h2><a name="L006832" id="L006832">型を定義する</a></h2>
+<pre>[&quot;alias name&quot;, &quot;type name&quot;,
+ encoding_method, decoding_method,   # for function prototypes
+ encoding_method, decoding_method]   # for structures (not implemented)</pre>
+<p>という形式の配列を内部に持ち。エイリアス名と実際の型、エンコーディング、
+デコーディングの方法を定義する。DL::Types::TYPES はデフォルトで持って
+いる定義。</p>
+<h2><a name="L006833" id="L006833">メソッド</a></h2>
+<dl>
+<dt><a name="L006834" id="L006834"><code>typealias(<var>alias</var>, <var>type</var>, <var>enc</var>, <var>dec</var>, <var>struct_enc</var>, <var>struct_dec</var>)</code></a></dt>
+<dd>
+<p>型定義の追加を行う。インスタンス変数<code>@TYDEFS</code>の先頭に</p>
+<pre>[alias, type,
+ enc, dec, struct_end, struct_dec]</pre>
+<p>の組を追加する。</p></dd>
+<dt><a name="L006835" id="L006835"><code>encode_type(<var>alias</var>)</code></a></dt>
+<dd>
+<p>DLモジュールで用いる型定義とRubyのオブジェクトをDLモジュールで用いるデータへの
+エンコード用Procオブジェクトと、DLモジュールのデータからRubyオブジェクト
+へのデコード用のProcオブジェクトの組を次の通りのArrayとして返す。</p>
+<pre>[ty,enc,dec,senc,sdec]
+ty : DLでの型指定子
+enc : エンコード用Proc
+dec : デコード用Proc
+senc : エンコード用Proc(dl/structで使用)
+sdec : デコード用Proc(dl/structで使用)</pre></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm351.html">UP</a>][<a href="refm357.html">&lt;-PREV</a>][<a href="refm359.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>FAQ::組み込みライブラリ</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm404.html" rel="next" />
+<link href="refm402.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm395.html">UP</a>][<a href="refm402.html">&lt;-PREV</a>][<a href="refm404.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L009306" id="L009306">7. 組み込みライブラリ</a></h1>
+<ul>
+<li><a href="#L009307">7.1 <code>instance_methods(true)</code>は何を返しますか</a></li>
+<li><a href="#L009308">7.2 <code>rand</code>がいつも同じ乱数列を出しますが</a></li>
+<li><a href="#L009309">7.3 0から51の中から重複のない5つをランダムに選ぶにはどうしますか</a></li>
+<li><a href="#L009310">7.4 <code>Fixnum</code>、<code>Symbol</code>、<code>true</code>、<code>nil</code>、<code>false</code>が即値だということですが、参照との違いは何ですか</a></li>
+<li><a href="#L009311">7.5 <code>nil</code>と<code>false</code>はどう違いますか</a></li>
+<li><a href="#L009312">7.6 ファイルを読み込んで書き換えても変化しません</a></li>
+<li><a href="#L009313">7.7 同じ名前のファイルに書き戻したいのですが</a></li>
+<li><a href="#L009314">7.8 ファイルに書き込んでそのファイルをコピーしましたが、全部コピーされません</a></li>
+<li><a href="#L009315">7.9 パイプで<code>less</code>に文字列を渡したのですが、表示されません</a></li>
+<li><a href="#L009316">7.10 参照されない<code>File</code>オブジェクトはどうなりますか</a></li>
+<li><a href="#L009317">7.11 ファイルを<code>close</code>しないのは気持ちが悪いのですが</a></li>
+<li><a href="#L009318">7.12 ファイルを時間の新しい順にソートしたいのですが</a></li>
+<li><a href="#L009319">7.13 ファイル中の単語の出現頻度を調べたいのですが</a></li>
+<li><a href="#L009320">7.14 条件に文字列を使ったとき、文字列が空(&quot;&quot;)の時にも<code>true</code>になります</a></li>
+<li><a href="#L009321">7.15 英語文字列の配列を辞書順にソートしたいのですが</a></li>
+<li><a href="#L009322">7.16 <code>&quot;abcd&quot;[0]</code>は、何を返しますか</a></li>
+<li><a href="#L009323">7.17 タブをスペースに展開したいのですが</a></li>
+<li><a href="#L009324">7.18 バックスラッシュをエスケープするにはどうしますか</a></li>
+<li><a href="#L009325">7.19 <code>sub</code>と<code>sub!</code>はどう違うのですか</a></li>
+<li><a href="#L009326">7.20 \Zのマッチする場所はどこですか</a></li>
+<li><a href="#L009327">7.21 範囲オブジェクトのコンストラクタ<code>..</code>と<code>...</code>はどう違いますか</a></li>
+<li><a href="#L009328">7.22 関数ポインタはありますか</a></li>
+<li><a href="#L009329">7.23 スレッドとプロセスのフォークはどう使い分けるのですか</a></li>
+<li><a href="#L009330">7.24 Marshalの使い方を教えてください</a></li>
+<li><a href="#L009331">7.25 例外処理はありますか</a></li>
+<li><a href="#L009332">7.26 <code>trap</code>はどのように使いますか</a></li>
+<li><a href="#L009333">7.27 ファイルの行数を数えたいのですが</a></li>
+<li><a href="#L009334">7.28 配列からハッシュへの変換はどうすればできますか</a></li>
+<li><a href="#L009335">7.29 文字列からArrayを作るのは %w[...] でできますが、同じように文字列からHashを作るにはどうすればよいですか</a></li>
+<li><a href="#L009336">7.30 例外 NameError が捕捉できません</a></li>
+<li><a href="#L009337">7.31 succがあってprevがないのはなぜですか</a></li>
+</ul>
+<h2><a name="L009307" id="L009307">7.1 <code>instance_methods(true)</code>は何を返しますか</a></h2>
+<p><code>klass</code>.<a href="refm050.html">instance_methods</a> は、あるクラス(またはモジュール)
+<code>klass</code> で定義されたインスタンスメソッドだけを返しますが、
+<code>klass</code>.<a href="refm050.html">instance_methods(true)</a> は、
+スーパークラスから引き継いだものも含めてすべてのインスタンスメソッドを返します。
+(ただし、public メソッドのみ)</p>
+<p><a href="refm050.html">private_instance_methods</a>、
+<a href="refm050.html">protected_instance_methods</a> の引数の意味も同様です。</p>
+<p><a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></p>
+<h2><a name="L009308" id="L009308">7.2 <code>rand</code>がいつも同じ乱数列を出しますが</a></h2>
+<p><em>ruby 1.4.2以前</em>では<code>rand</code>は、プログラムが実行される度に同じ乱数列を生成します。
+異なる乱数列を生成させるためには、<code>srand</code>で毎回異なる乱数の
+種を与えてやる必要があります。srandを引数なしで呼ぶと、その時の
+時間を種にしますので、異なる乱数列を生成させることができます。</p>
+<h2><a name="L009309" id="L009309">7.3 0から51の中から重複のない5つをランダムに選ぶにはどうしますか</a></h2>
+<p>次のメソッドは、0からnまでの数の中からm個をランダムに選んだ配列を返します。</p>
+<pre>def sample(n, m)
+  if m.zero?
+    []
+  else
+    s = sample(n-1, m-1)
+    t = rand(n+1)
+    s.concat s.include?(t) ? [n] : [t]
+  end
+end</pre>
+<p>再帰形でなく書けば、次のとおりです。</p>
+<pre>def sample(n, m)
+  s = []
+  ((n-m)...n).each do |j|
+    t = rand(j+2)
+    s.concat s.include?(t) ? [j+1] : [t]
+  end
+  s
+end</pre>
+<h2><a name="L009310" id="L009310">7.4 <a href="refm055.html">Fixnum</a>、<a href="refm063.html">Symbol</a>、<code>true</code>、<code>nil</code>、<code>false</code>が即値だということですが、参照との違いは何ですか</a></h2>
+<p>特異メソッドを定義できないという制限があります。
+<a name="footmark:2" id="footmark:2" href="#foottext:2"><sup><small>*2</small></sup></a></p>
+<p>また、同じ数を表わす<a href="refm055.html">Fixnum</a>のインスタンスは常に同じものになります
+ので、インスタンス変数を定義した場合には、それも同じものを示すことにな
+ります。</p>
+<h2><a name="L009311" id="L009311">7.5 <code>nil</code>と<code>false</code>はどう違いますか</a></h2>
+<p>持っているメソッドの違いは、<code>nil.methods</code> - <code>false.methods</code>と
+<code>false.methods</code> - <code>nil.methods</code>を表示してください。</p>
+<p>メソッドが真偽を返す時は、<code>true</code>、<code>false</code>を、そうでない
+時は値か<code>nil</code>を返すようにすることが好まれます。</p>
+<p><code>?</code>のつくメソッドは、真偽を返すのが一般的ですが、
+そうでないものもあります(組み込みでは <a href="refm052.html#L001277">nonzero?</a> のみ)。</p>
+<h2><a name="L009312" id="L009312">7.6 ファイルを読み込んで書き換えても変化しません</a></h2>
+<pre>open(&quot;example&quot;, &quot;r+&quot;).readlines.each_with_index{|l, i|
+  l[0,0] = (i+1).to_s + &quot;: &quot;}</pre>
+<p>とやっても、<code>example</code>に行番号がつきません。
+ファイルを書き換えているのではなく、<code>readlines</code>で読み込んだ文字列を
+変えているだけです。ファイルに書き戻してやらなければいけません。</p>
+<pre>io = open(&quot;example&quot;, &quot;r+&quot;)
+ary = io.readlines
+ary.each_with_index{|l, i| l[0,0] = (i+1).to_s + &quot;: &quot;}
+io.rewind
+io.print ary
+io.close</pre>
+<p>この例の場合、ファイルサイズは増える方向なので問題ないのですが
+ファイルサイズが小さくなるような変更に対しては</p>
+<pre>io.flush
+io.truncate(io.pos)</pre>
+<p>を io.close の直前に実行する必要があります。</p>
+<h2><a name="L009313" id="L009313">7.7 同じ名前のファイルに書き戻したいのですが</a></h2>
+<p>コマンドラインオプションの<code>-i</code>、もしくは、組み込み変数<code>$-i</code>
+に&quot;&quot;を指定することにより、同じ名前のファイルに書き戻すことができます。</p>
+<p>上の問題は、次のように書くことができます。</p>
+<pre>$ ruby -i -ne 'print &quot;#$.: #$_&quot;' example</pre>
+<p>元のファイルを残しておきたければ、<code>-i.bak</code>などとしてください。</p>
+<h2><a name="L009314" id="L009314">7.8 ファイルに書き込んでそのファイルをコピーしましたが、全部コピーされません</a></h2>
+<pre>open('file', 'w').print &quot;This is a file.\n&quot;
+system 'cp file copy'</pre>
+<p>とやったのでは、コピーする時に<code>file</code>に内容がフラッシュされて
+いません。きちんと<code>close</code>してからコピーしましょう。</p>
+<pre>f = open('file', 'w')
+f.print &quot;This is a file.\n&quot;
+f.close
+system &quot;cp file copy&quot;</pre>
+<h2><a name="L009315" id="L009315">7.9 パイプで<code>less</code>に文字列を渡したのですが、表示されません</a></h2>
+<pre>f = open '|less', 'w'
+f.print &quot;abc\n&quot;</pre>
+<p>とやっても、直ちに終了してしまい、<code>less</code>で眺めることができません。
+<code>close</code>してやると、そこで<code>less</code>の終了を待ちます。</p>
+<pre>f = open '|less', 'w'
+f.print &quot;abc\n&quot;
+f.close</pre>
+<p>最初の行は、<code>f = IO.popen 'less', 'w'</code>としても同じ結果となります。</p>
+<h2><a name="L009316" id="L009316">7.10 参照されない<a href="refm046.html">File</a>オブジェクトはどうなりますか</a></h2>
+<p><code>open(&quot;file&quot;).read</code>というように参照されない<a href="refm046.html">File</a>
+オブジェクトは、次のガーベッジコレクションで<code>close</code>されて
+捨てられます。</p>
+<h2><a name="L009317" id="L009317">7.11 ファイルを<code>close</code>しないのは気持ちが悪いのですが</a></h2>
+<p>参照されなくなった<a href="refm046.html">File</a>オブジェクトは、GCで自動的にクローズ
+されますが、明示的にクローズするには、次の4つの構文から選んで下さい
+(コードの長さ順に並べました)。</p>
+<ol>
+<li><p><code> </code></p>
+<pre>File.foreach('filename') {|line| print line }</pre></li>
+<li><p><code> </code></p>
+<pre>File.readlines('filename').each {|line| print line }</pre></li>
+<li><p><code> </code></p>
+<pre>File.open('filename') {|f|
+  f.each {|line| print line }
+}</pre></li>
+<li><p><code> </code></p>
+<pre>f = File.open('filename')
+begin
+  f.each {|line| print line }
+ensure
+  f.close
+end</pre></li>
+</ol>
+<h2><a name="L009318" id="L009318">7.12 ファイルを時間の新しい順にソートしたいのですが</a></h2>
+<pre>Dir.glob(&quot;*&quot;).collect{|f| [File.mtime(f), f] }.
+        sort{|a,b| b[0]&lt;=&gt;a[0] }.collect{|e| e[1] }</pre>
+<p>とすると、カレントディレクトリの&quot;.&quot;、&quot;..&quot;以外のファイルを更新時間の
+新しい順にソートした配列を返します。更新時間の古い順にソートする
+なら、sortの後ろのブロックはなしにしても、いいですね。</p>
+<pre>Dir.glob(&quot;*&quot;).sort{|a,b| File.mtime(b)&lt;=&gt;File.mtime(a)}</pre>
+<p>でもソートすることができますが、比較する度にファイルにアクセスして
+更新時間を調べますので、ソートするのに時間がかかります。</p>
+<p>この問題を解決するもう一つの方法に個々のファイルの更新時間を
+キャッシュするオブジェクトを用意する方法があります。</p>
+<pre>cache = {}
+def cache.mtime(x)
+  self[x] ||= File.mtime(x)
+end
+Dir.glob(&quot;*&quot;).sort{|a,b| cache.mtime(b) &lt;=&gt; cache.mtime(a)}
+cache = nil</pre>
+<p>また ruby 1.7 では前者の例を簡単に実行するためのメソッド 
+<a href="refm070.html">Enumerable#sort_by</a> が追加されています。</p>
+<pre>Dir.glob(&quot;*&quot;).sort_by {|f| File.mtime(f)}.reverse</pre>
+<h2><a name="L009319" id="L009319">7.13 ファイル中の単語の出現頻度を調べたいのですが</a></h2>
+<p>ハッシュのデフォルト値に0を指定して、次のようにすることができます。</p>
+<pre>freq = Hash.new(0)
+open(&quot;file&quot;).read.scan(/\w+/){|w| freq[w] += 1}
+freq.keys.sort.each {|k| print k, &quot;--&quot;, freq[k], &quot;\n&quot;}</pre>
+<h2><a name="L009320" id="L009320">7.14 条件に文字列を使ったとき、文字列が空(&quot;&quot;)の時にも<code>true</code>になります</a></h2>
+<p>Rubyでは、<code>nil</code>と<code>false</code>だけが偽で、それ以外はすべて真に
+なります。文字列が空かどうかを知るには、&quot;&quot;と比較、<code>empty?</code>を使う、
+<code>length</code>を<code>0</code>と比較するなどの方法があります。</p>
+<h2><a name="L009321" id="L009321">7.15 英語文字列の配列を辞書順にソートしたいのですが</a></h2>
+<pre>ary.collect{|f| [f.downcase, f]}.sort.collect{|e| e[1]}</pre>
+<p>とします。<code>downcase</code>で等しくなった場合に、元の文字列で比較を行うのが
+tipsです。</p>
+<h2><a name="L009322" id="L009322">7.16 <code>&quot;abcd&quot;[0]</code>は、何を返しますか</a></h2>
+<p>文字aのコード97(Fixnum)を返します。これが文字aと一致するかどうか
+調べるには、?aと比較します。</p>
+<h2><a name="L009323" id="L009323">7.17 タブをスペースに展開したいのですが</a></h2>
+<p>以下のような定石があります。</p>
+<pre># 非破壊的
+def expand_tab( str )
+  str.gsub(/([^\t]{8})|([^\t]*)\t/n) { [$+].pack(&quot;A8&quot;) }
+end
+
+# 破壊的
+def expand_tab!( str )
+  1 while str.sub!(/(^[^\t]*)\t(\t*)/) { $1 + ' ' * (8-$1.size%8+8*$2.size) }
+end
+
+# 破壊的 (2)
+def expand_tab!( str )
+  1 while str.sub!(/\t(\t*)/) {' ' * (8-$~.begin(0)%8+8*$1.size) }
+end</pre>
+<h2><a name="L009324" id="L009324">7.18 バックスラッシュをエスケープするにはどうしますか</a></h2>
+<p>正規表現の場合は
+<code>Regexp.quote('\\')</code>でエスケープできます。</p>
+<p><code>gsub</code>を使う場合には、<code>gsub(/\\/, '\\\\')</code>では、置換文字列が
+構文解析で一度'\\'に変換され、実際に置き換えるときにもう一度'\'と
+解釈されるので、
+<code>gsub(/\\/, '\\\\\\')</code>とする必要があります。\&amp;がマッチ文字列を
+あらわすことを使えば、<code>gsub(/\\/,'\&amp;\&amp;')</code>と書けます。</p>
+<p><code>gsub(/\\/){'\\\\'}</code>とブロックを使う形にすれば、エスケープが1回しか
+解釈されませんので、求める結果が得られます。</p>
+<h2><a name="L009325" id="L009325">7.19 <code>sub</code>と<code>sub!</code>はどう違うのですか</a></h2>
+<p><code>sub</code>の場合はレシーバの状態は変化しません。文字列のコピーが
+作られ、それに置換がほどこされて(置換が必要なければそのまま)返されます。</p>
+<p><code>sub!</code>ではレシーバそのものが変更されます。変更がない時には
+<code>nil</code>が返されます。</p>
+<p><code>sub!</code>のようにレシーバの状態を変化させるメソッドを
+<a href="refm401.html">破壊的メソッド</a>と
+呼びます。Rubyでは同名のメソッドで破壊的なものとそうでないものがある場
+合、破壊的なメソッドには慣例的に<code>!</code>をつけます。</p>
+<pre>def foo(str)
+  str = str.sub(/foo/, &quot;baz&quot;)
+end
+
+obj = &quot;foo&quot;
+foo(obj)
+print obj
+#=&gt; &quot;foo&quot;
+
+def foo(str)
+  str = str.sub!(/foo/, &quot;baz&quot;)
+end
+
+foo(obj)
+print obj
+#=&gt; &quot;baz&quot;</pre>
+<p><code>sub!</code>のように破壊的なメソッドは予期しない効果をもたらすことがある
+ので、使用する場合は十分注意してください。</p>
+<h2><a name="L009326" id="L009326">7.20 \Zのマッチする場所はどこですか</a></h2>
+<p>\Zは、文字列の最後の文字が\nでない時は文字列の末尾に、
+\nのときはこの改行の前にマッチします。</p>
+<p>\n に関らず、文字列の最後にマッチさせたい場合は \z を使います。</p>
+<h2><a name="L009327" id="L009327">7.21 範囲オブジェクトのコンストラクタ<code>..</code>と<code>...</code>はどう違いますか</a></h2>
+<p><code>..</code>は終端を含み、<code>...</code>は終端を含みません。</p>
+<h2><a name="L009328" id="L009328">7.22 関数ポインタはありますか</a></h2>
+<p><code>Proc.new</code>、<code>proc</code>、<code>lambda</code>でProcオブジェクトを作れば、
+関数ポインタのような働きをさせることができます。</p>
+<p>また、<a href="refm048.html">Method</a>オブジェクトや<a href="refm049.html">UnboundMethod</a>オブジェクトも関数
+ポインタに近いものです。</p>
+<h2><a name="L009329" id="L009329">7.23 スレッドとプロセスのフォークはどう使い分けるのですか</a></h2>
+<p>スレッドとプロセスのフォークにはそれぞれ以下のような特徴があります。</p>
+<ul>
+<li>違うプロセスはメモリ空間を共有しない</li>
+<li>どちらも切り替わるタイミングは不定</li>
+<li>RubyスレッドはどんなOSでも動く</li>
+<li>Rubyスレッドは、なんらかの理由でブロックすると全体が止まる (non preemptive)</li>
+<li>Rubyスレッドはスラッシング (※) が起きない</li>
+</ul>
+<p>※ スラッシングとは、プロセスやスレッドが多くなりすぎたときに、
+切り替え処理に時間がかかりすぎて本来の処理が行われなくなってしまう
+ことを言います。</p>
+<p>一般に、プロセスフォークとスレッドは混ぜて使うべきではありません。</p>
+<p>またRubyのスレッドはタイムシェアリング方式なので、スレッドを使う
+ことによって処理が速くなることはまずありません。またユーザレベル
+スレッドなのでマルチプロセッサの恩恵も受けられません。</p>
+<h2><a name="L009330" id="L009330">7.24 Marshalの使い方を教えてください</a></h2>
+<p>オブジェクトをバイト列に変換する (シリアライズ serialize する) ための
+ものです。オブジェクトをファイルに保存しておいて後から復活させたり、
+ネットワーク経由で転送することができるようになります。例えばオブ
+ジェクトobjをバイト列にするには</p>
+<pre>Marshal.dump(obj)</pre>
+<p>とします。このメソッドは文字列を返すので、次のように普通にファイルを
+使って書き込めます。</p>
+<pre>File.open('filename', 'w') {|f|
+    f.write Marshal.dump(obj)
+}</pre>
+<p>このようにバイト列化したオブジェクトをファイルに書き込むことはよく
+あるので、以下のような簡約表現も用意されています。</p>
+<pre>Marshal.dump(obj, io)</pre>
+<p>ioには書き込み可能なIOオブジェクトです。またこの形式だと大きなオブ
+ジェクトをバイト列化するときでも巨大な文字列を作らずに済みます。</p>
+<p>一方、バイト列化したオブジェクトを再生するには次のようにします。
+まずは文字列から戻す場合です。</p>
+<pre>obj = Marshal.load(str)</pre>
+<p>以下はIOオブジェクトから直接戻す場合です。</p>
+<pre>obj = Marshal.load(io)</pre>
+<h2><a name="L009331" id="L009331">7.25 例外処理はありますか</a></h2>
+<p>あります。次のような構文を使います。</p>
+<pre>begin
+  (例外が発生しそうな処理)
+rescue (例外クラス)
+  (例外が発生した場合の処理)
+else
+  (例外が発生しなかった場合の処理)
+ensure
+  (必ず実行したい処理)
+end</pre>
+<p><code>begin</code>節で例外が発生すると<code>rescue</code>節が実行されます。
+例外が発生しなければ<code>else</code>が実行されます。
+<code>ensure</code>節は例外が発生してもしなくても必ず実行されます。<code>rescue</code>,
+<code>else</code>,<code>ensure</code>節はそれぞれ省略できます。
+<code>rescue</code>の後ろに例外クラスが
+指定されなかった場合は
+<a href="refm093.html">StandardError</a>が指定されたものとみなされ、<a href="refm093.html">StandardError</a>の
+サブクラスである例外が捕捉されます。</p>
+<p>この式の値は、<code>ensure</code> 節を実行する直前の値です。</p>
+<p>最後に起こった例外はグローバル変数<code>$!</code>により参照できます。
+発生した例外の種類は<code>$!.class</code>により調べることができます。</p>
+<h2><a name="L009332" id="L009332">7.26 <code>trap</code>はどのように使いますか</a></h2>
+<p>以下により、シグナル SIGPIPE が発生するとブロックが実行されます
+(そして、例外が発生します)。</p>
+<pre>trap(&quot;PIPE&quot;) {raise &quot;SIGPIPE&quot;}</pre>
+<h2><a name="L009333" id="L009333">7.27 ファイルの行数を数えたいのですが</a></h2>
+<p>ファイルの最後にも改行があるものと仮定すれば、次の方法が一番簡単でしょう。</p>
+<pre>open(&quot;filename&quot;).read.count(&quot;\n&quot;)</pre>
+<h2><a name="L009334" id="L009334">7.28 配列からハッシュへの変換はどうすればできますか</a></h2>
+<p>array という配列があった場合、</p>
+<pre>h = Hash[*array]</pre>
+<p>とすれば、array の奇数番目の値をキー、偶数番目の値を値とした
+h というハッシュが作られます。このとき array の要素は偶数個
+でなければいけません。</p>
+<pre>array = [1,2,3,4]
+h = Hash[*array]
+p h
+
+=&gt; {1=&gt;2, 3=&gt;4}</pre>
+<p>なお、arrayの前の「*」は、メソッド呼び出しのところで紹介されている、
+引数の展開用の記号です。</p>
+<h2><a name="L009335" id="L009335">7.29 文字列からArrayを作るのは %w[...] でできますが、同じように文字列からHashを作るにはどうすればよいですか</a></h2>
+<p>Arrayのように直接Hashを作るリテラルはありません。
+そのかわり、</p>
+<pre>p h = Hash[*%w[1 foo 2 bar]]
+
+=&gt; {&quot;1&quot;=&gt;&quot;foo&quot;, &quot;2&quot;=&gt;&quot;bar&quot;}</pre>
+<p>などと、いったんArrayを作るようにすれば、そこから簡単にHashを作れます。
+(ただし、この場合ハッシュのキーと値は文字列に限定されます)</p>
+<h2><a name="L009336" id="L009336">7.30 例外 NameError が捕捉できません</a></h2>
+<p>以下のコードは、バージョン 1.4 以前には rescue 節がちゃんと実行されて
+いましたが、バージョン 1.6 ではできなくなっています。</p>
+<pre>begin
+  foo
+rescue
+  puts &quot;TRAP : #$!&quot;
+end
+
+-:2: undefined local variable or method `foo' for #&lt;Object:0x401bece0&gt; (NameError)
+ruby 1.6.7 (2002-03-20) [i586-linux]</pre>
+<p>これは、例外クラス <a href="refm100.html">NameError</a> が <a href="refm093.html">StandardError</a> のサブクラス
+ではなくなったためです(例外クラスを指定しない rescue は 
+<code>StandardError</code> 配下の例外クラスだけを捕捉します)。
+このような場合は明示的に NameError を指定する必要があります。</p>
+<pre>begin
+  foo
+rescue NameError
+  puts &quot;**TRAP** : #$!&quot;
+end
+
+ruby 1.6.7 (2002-03-20) [i586-linux]
+**TRAP** : undefined local variable or method `foo' for #&lt;Object:0x401bece0&gt;</pre>
+<p>なお、バージョン 1.7 では NameError クラスは StandardError のサブクラスに
+戻っています。どの例外がデフォルトで捕捉できるかは
+<a href="refm034.html#L000639">例外クラス</a>
+で、クラス階層を確認してください。</p>
+<h2><a name="L009337" id="L009337">7.31 succがあってprevがないのはなぜですか</a></h2>
+<p><code>Integer#prev</code>は簡単に定義できます。しかし<code>succ</code>ほど有用とは思えません。</p>
+<p>一方<code>String#prev</code>はうまく定義できません。
+例えば</p>
+<pre>'09'.succ == '9'.succ #=&gt; true</pre>
+<p>というように、succ前と後の文字列が一対一対応でない場合があるため、
+<code>str.prev.succ == str.succ.prev</code>が必ずしも成立しないからです。</p>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>この項がFAQなのは引数の意味が昔リファレンスに載っていなかったためです</small><br />
+<a name="foottext:2" id="foottext:2" href="#footmark:2"><sup><small>*2</small></sup></a><small><a href="refm383.html">ruby 1.6 feature</a>: true/false/nil に対しては version 1.6 からは定
+義できます。</small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm395.html">UP</a>][<a href="refm402.html">&lt;-PREV</a>][<a href="refm404.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

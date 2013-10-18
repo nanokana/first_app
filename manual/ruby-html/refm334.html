@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>singleton</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm335.html" rel="next" />
+<link href="refm333.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm333.html">&lt;-PREV</a>][<a href="refm335.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006431" id="L006431">Singleton</a></h1>
+<h2><a name="L006432" id="L006432">目的・概要</a></h2>
+<p>Mix-inによりsingletonパターンを提供する。</p>
+<p>Singletonモジュールをincludeすることにより、クラスは
+高々ひとつのインスタンスしか持たないことが保証される。</p>
+<p>Singletonをmix-inしたクラスの
+クラスメソッド<code>instance</code>はその唯一のインスタンスを返す。</p>
+<p><code>new</code>はprivateメソッドに移され、外部から呼び出そうとするとエラーになる。</p>
+<h2><a name="L006433" id="L006433">サンプルコード</a></h2>
+<pre>require 'singleton'
+class SomeSingletonClass
+  include Singleton
+ #....
+end
+a = SomeSingletonClass.instance
+b = SomeSingletonClass.instance  # a and b are same object
+p [a,b]
+a = SomeSingletonClass.new               # error (`new' is private)</pre>
+<h2><a name="L006434" id="L006434">モジュールメソッド</a></h2>
+<dl>
+<dt><a name="L006435" id="L006435"><code>Singleton#instance</code></a></dt>
+<dd>
+<p>そのクラスの唯一のインスタンスを返す。
+最初に呼ばれたときはそのインスタンスを生成する。</p>
+<p>Singletonをincludeしたクラスで定義されるので、
+正確にはSingletonモジュールのメソッドではない。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm333.html">&lt;-PREV</a>][<a href="refm335.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Errno</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm073.html" rel="next" />
+<link href="refm071.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm034.html">UP</a>][<a href="refm071.html">&lt;-PREV</a>][<a href="refm073.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L001786" id="L001786">Errno</a></h1>
+<p>システムコールのエラーに対応する例外を集めたモジュールです。</p>
+<h2><a name="L001787" id="L001787">内部クラス:</a></h2>
+<p>以下の例外クラスが定義されています(システムに定義されていれば)。個々の
+例外の意味はシステム依存です。これらのクラス全般の説明については 
+<a href="refm108.html">Errno::EXXX</a> を参照してください。</p>
+<p>なお、Ruby にとって未知の(以下の一覧にはない)システムエラーが発生した
+場合は、<code>Errno::E<var>xxx</var></code> (<var>xxx</var> は、エラー番号を表す 3 桁の
+数字)という名の例外クラスが作成されます。</p>
+<dl>
+<dt><a name="L001788" id="L001788">ERROR</a></dt>
+<dd>
+<p>この例外クラスは <a href="refm466.html">BeOS</a> の場合に限ります。</p>
+</dd>
+<dt><a name="L001789" id="L001789">EPERM</a></dt>
+<dt><a name="L001790" id="L001790">ENOENT</a></dt>
+<dt><a name="L001791" id="L001791">ESRCH</a></dt>
+<dt><a name="L001792" id="L001792">EINTR</a></dt>
+<dt><a name="L001793" id="L001793">EIO</a></dt>
+<dt><a name="L001794" id="L001794">ENXIO</a></dt>
+<dt><a name="L001795" id="L001795">E2BIG</a></dt>
+<dt><a name="L001796" id="L001796">ENOEXEC</a></dt>
+<dt><a name="L001797" id="L001797">EBADF</a></dt>
+<dt><a name="L001798" id="L001798">ECHILD</a></dt>
+<dt><a name="L001799" id="L001799">EAGAIN</a></dt>
+<dt><a name="L001800" id="L001800">ENOMEM</a></dt>
+<dt><a name="L001801" id="L001801">EACCES</a></dt>
+<dt><a name="L001802" id="L001802">EFAULT</a></dt>
+<dt><a name="L001803" id="L001803">ENOTBLK</a></dt>
+<dt><a name="L001804" id="L001804">EBUSY</a></dt>
+<dt><a name="L001805" id="L001805">EEXIST</a></dt>
+<dt><a name="L001806" id="L001806">EXDEV</a></dt>
+<dt><a name="L001807" id="L001807">ENODEV</a></dt>
+<dt><a name="L001808" id="L001808">ENOTDIR</a></dt>
+<dt><a name="L001809" id="L001809">EISDIR</a></dt>
+<dt><a name="L001810" id="L001810">EINVAL</a></dt>
+<dt><a name="L001811" id="L001811">ENFILE</a></dt>
+<dt><a name="L001812" id="L001812">EMFILE</a></dt>
+<dt><a name="L001813" id="L001813">ENOTTY</a></dt>
+<dt><a name="L001814" id="L001814">ETXTBSY</a></dt>
+<dt><a name="L001815" id="L001815">EFBIG</a></dt>
+<dt><a name="L001816" id="L001816">ENOSPC</a></dt>
+<dt><a name="L001817" id="L001817">ESPIPE</a></dt>
+<dt><a name="L001818" id="L001818">EROFS</a></dt>
+<dt><a name="L001819" id="L001819">EMLINK</a></dt>
+<dt><a name="L001820" id="L001820">EPIPE</a></dt>
+<dt><a name="L001821" id="L001821">EDOM</a></dt>
+<dt><a name="L001822" id="L001822">ERANGE</a></dt>
+<dt><a name="L001823" id="L001823">EDEADLK</a></dt>
+<dt><a name="L001824" id="L001824">ENAMETOOLONG</a></dt>
+<dt><a name="L001825" id="L001825">ENOLCK</a></dt>
+<dt><a name="L001826" id="L001826">ENOSYS</a></dt>
+<dt><a name="L001827" id="L001827">ENOTEMPTY</a></dt>
+<dt><a name="L001828" id="L001828">ELOOP</a></dt>
+<dt><a name="L001829" id="L001829">EWOULDBLOCK</a></dt>
+<dt><a name="L001830" id="L001830">ENOMSG</a></dt>
+<dt><a name="L001831" id="L001831">EIDRM</a></dt>
+<dt><a name="L001832" id="L001832">ECHRNG</a></dt>
+<dt><a name="L001833" id="L001833">EL2NSYNC</a></dt>
+<dt><a name="L001834" id="L001834">EL3HLT</a></dt>
+<dt><a name="L001835" id="L001835">EL3RST</a></dt>
+<dt><a name="L001836" id="L001836">ELNRNG</a></dt>
+<dt><a name="L001837" id="L001837">EUNATCH</a></dt>
+<dt><a name="L001838" id="L001838">ENOCSI</a></dt>
+<dt><a name="L001839" id="L001839">EL2HLT</a></dt>
+<dt><a name="L001840" id="L001840">EBADE</a></dt>
+<dt><a name="L001841" id="L001841">EBADR</a></dt>
+<dt><a name="L001842" id="L001842">EXFULL</a></dt>
+<dt><a name="L001843" id="L001843">ENOANO</a></dt>
+<dt><a name="L001844" id="L001844">EBADRQC</a></dt>
+<dt><a name="L001845" id="L001845">EBADSLT</a></dt>
+<dt><a name="L001846" id="L001846">EDEADLOCK</a></dt>
+<dt><a name="L001847" id="L001847">EBFONT</a></dt>
+<dt><a name="L001848" id="L001848">ENOSTR</a></dt>
+<dt><a name="L001849" id="L001849">ENODATA</a></dt>
+<dt><a name="L001850" id="L001850">ETIME</a></dt>
+<dt><a name="L001851" id="L001851">ENOSR</a></dt>
+<dt><a name="L001852" id="L001852">ENONET</a></dt>
+<dt><a name="L001853" id="L001853">ENOPKG</a></dt>
+<dt><a name="L001854" id="L001854">EREMOTE</a></dt>
+<dt><a name="L001855" id="L001855">ENOLINK</a></dt>
+<dt><a name="L001856" id="L001856">EADV</a></dt>
+<dt><a name="L001857" id="L001857">ESRMNT</a></dt>
+<dt><a name="L001858" id="L001858">ECOMM</a></dt>
+<dt><a name="L001859" id="L001859">EPROTO</a></dt>
+<dt><a name="L001860" id="L001860">EMULTIHOP</a></dt>
+<dt><a name="L001861" id="L001861">EDOTDOT</a></dt>
+<dt><a name="L001862" id="L001862">EBADMSG</a></dt>
+<dt><a name="L001863" id="L001863">EOVERFLOW</a></dt>
+<dt><a name="L001864" id="L001864">ENOTUNIQ</a></dt>
+<dt><a name="L001865" id="L001865">EBADFD</a></dt>
+<dt><a name="L001866" id="L001866">EREMCHG</a></dt>
+<dt><a name="L001867" id="L001867">ELIBACC</a></dt>
+<dt><a name="L001868" id="L001868">ELIBBAD</a></dt>
+<dt><a name="L001869" id="L001869">ELIBSCN</a></dt>
+<dt><a name="L001870" id="L001870">ELIBMAX</a></dt>
+<dt><a name="L001871" id="L001871">ELIBEXEC</a></dt>
+<dt><a name="L001872" id="L001872">EILSEQ</a></dt>
+<dt><a name="L001873" id="L001873">ERESTART</a></dt>
+<dt><a name="L001874" id="L001874">ESTRPIPE</a></dt>
+<dt><a name="L001875" id="L001875">EUSERS</a></dt>
+<dt><a name="L001876" id="L001876">ENOTSOCK</a></dt>
+<dt><a name="L001877" id="L001877">EDESTADDRREQ</a></dt>
+<dt><a name="L001878" id="L001878">EMSGSIZE</a></dt>
+<dt><a name="L001879" id="L001879">EPROTOTYPE</a></dt>
+<dt><a name="L001880" id="L001880">ENOPROTOOPT</a></dt>
+<dt><a name="L001881" id="L001881">EPROTONOSUPPORT</a></dt>
+<dt><a name="L001882" id="L001882">ESOCKTNOSUPPORT</a></dt>
+<dt><a name="L001883" id="L001883">EOPNOTSUPP</a></dt>
+<dt><a name="L001884" id="L001884">EPFNOSUPPORT</a></dt>
+<dt><a name="L001885" id="L001885">EAFNOSUPPORT</a></dt>
+<dt><a name="L001886" id="L001886">EADDRINUSE</a></dt>
+<dt><a name="L001887" id="L001887">EADDRNOTAVAIL</a></dt>
+<dt><a name="L001888" id="L001888">ENETDOWN</a></dt>
+<dt><a name="L001889" id="L001889">ENETUNREACH</a></dt>
+<dt><a name="L001890" id="L001890">ENETRESET</a></dt>
+<dt><a name="L001891" id="L001891">ECONNABORTED</a></dt>
+<dt><a name="L001892" id="L001892">ECONNRESET</a></dt>
+<dt><a name="L001893" id="L001893">ENOBUFS</a></dt>
+<dt><a name="L001894" id="L001894">EISCONN</a></dt>
+<dt><a name="L001895" id="L001895">ENOTCONN</a></dt>
+<dt><a name="L001896" id="L001896">ESHUTDOWN</a></dt>
+<dt><a name="L001897" id="L001897">ETOOMANYREFS</a></dt>
+<dt><a name="L001898" id="L001898">ETIMEDOUT</a></dt>
+<dt><a name="L001899" id="L001899">ECONNREFUSED</a></dt>
+<dt><a name="L001900" id="L001900">EHOSTDOWN</a></dt>
+<dt><a name="L001901" id="L001901">EHOSTUNREACH</a></dt>
+<dt><a name="L001902" id="L001902">EALREADY</a></dt>
+<dt><a name="L001903" id="L001903">EINPROGRESS</a></dt>
+<dt><a name="L001904" id="L001904">ESTALE</a></dt>
+<dt><a name="L001905" id="L001905">EUCLEAN</a></dt>
+<dt><a name="L001906" id="L001906">ENOTNAM</a></dt>
+<dt><a name="L001907" id="L001907">ENAVAIL</a></dt>
+<dt><a name="L001908" id="L001908">EISNAM</a></dt>
+<dt><a name="L001909" id="L001909">EREMOTEIO</a></dt>
+<dt><a name="L001910" id="L001910">EDQUOT</a></dt>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm034.html">UP</a>][<a href="refm071.html">&lt;-PREV</a>][<a href="refm073.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ruby-src:ext/pty/README.expect.ja</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm521.html" rel="next" />
+<link href="refm519.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm519.html">&lt;-PREV</a>][<a href="refm521.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1>ruby-src:ext/pty/README.expect.ja</h1>
+&nbsp;&nbsp;README&nbsp;for&nbsp;expect<br />
+&nbsp;&nbsp;&nbsp;by&nbsp;A.&nbsp;Ito,&nbsp;28&nbsp;October,&nbsp;1998<br />
+<br />
+&nbsp;&nbsp;Expectライブラリは，tcl&nbsp;の&nbsp;expect&nbsp;パッケージと似たような機能を<br />
+IOクラスに追加します．<br />
+<br />
+&nbsp;&nbsp;追加されるメソッドの使い方は次の通りです．<br />
+<br />
+&nbsp;&nbsp;&nbsp;IO#expect(pattern,timeout=9999999)<br />
+<br />
+pattern&nbsp;は&nbsp;String&nbsp;か&nbsp;Regexp&nbsp;のインスタンス，timeout&nbsp;は&nbsp;Fixnum<br />
+のインスタンスです．timeout&nbsp;は省略できます．<br />
+&nbsp;&nbsp;このメソッドがブロックなしで呼ばれた場合，まずレシーバである<br />
+IOオブジェクトから&nbsp;pattern&nbsp;にマッチするパターンが読みこまれる<br />
+まで待ちます．パターンが得られたら，そのパターンに関する配列を<br />
+返します．配列の最初の要素は，pattern&nbsp;にマッチするまでに読みこ<br />
+まれた内容の文字列です．2番目以降の要素は，pattern&nbsp;の正規表現<br />
+の中にアンカーがあった場合に，そのアンカーにマッチする部分です．<br />
+もしタイムアウトが起きた場合は，このメソッドはnilを返します．<br />
+&nbsp;&nbsp;このメソッドがブロック付きで呼ばれた場合には，マッチした要素の<br />
+配列がブロック引数として渡され，ブロックが評価されます．<br />
+
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm519.html">&lt;-PREV</a>][<a href="refm521.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>BasicSocket</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm161.html" rel="next" />
+<link href="refm159.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm159.html">UP</a>][<a href="refm159.html">&lt;-PREV</a>][<a href="refm161.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L003052" id="L003052">BasicSocket</a></h1>
+<p>ソケットを表す抽象クラス。具体的なソケット操作はサブクラスで
+定義されます。
+例えばインターネットドメインストリームソケットの場合は
+<a href="refm162.html">TCPSocket</a>を用います。</p>
+<h2><a name="L003053" id="L003053">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm045.html">IO</a></li>
+</ul>
+<h2><a name="L003054" id="L003054">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L003055" id="L003055"><code>BasicSocket.do_not_reverse_lookup</code></a>
+<dt><a name="L003056" id="L003056"><code>BasicSocket.do_not_reverse_lookup = <var>bool</var></code></a></dt>
+<dd>
+<p>この値が真ならアドレスからホスト名への逆引きを行わなくなります。
+デフォルトは false です。この設定は大域的に作用します。</p>
+<p>以下のメソッドの動作に影響します。</p>
+<p><a href="#L003063">BasicSocket#recv</a>,
+<a href="refm161.html#L003076">IPSocket#recvfrom</a>,
+<a href="refm166.html#L003127">UNIXSocket#recvfrom</a>,
+<a href="refm168.html#L003169">Socket#recvfrom</a>,
+<a href="refm161.html#L003074">IPSocket#addr</a>,
+<a href="refm161.html#L003075">IPSocket#peeraddr</a>,
+<a href="refm168.html#L003148">Socket.getaddrinfo</a></p>
+<p>例:</p>
+<pre>require 'socket'
+
+p TCPSocket.new('localhost', 'telnet').addr
+TCPSocket.do_not_reverse_lookup = true
+p TCPSocket.new('localhost', 'telnet').addr
+
+=&gt; [&quot;AF_INET&quot;, 2253, &quot;localhost&quot;, &quot;127.0.0.1&quot;]
+   [&quot;AF_INET&quot;, 2254, &quot;127.0.0.1&quot;, &quot;127.0.0.1&quot;]</pre></dd>
+<dt><a name="L003057" id="L003057"><code>BasicSocket.for_fd(<var>fd</var>)           ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>ファイルディスクリプタ <var>fd</var> に対する新しいソケットを生成します。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>:
+このメソッドは <a href="refm168.html">Socket</a> クラスからこのクラスに移動しました。
+これにより、任意のソケットである fd から対応するソケッ
+トクラスを作ることができます。</p></dd>
+</dl>
+<h2><a name="L003058" id="L003058">メソッド:</a></h2>
+<dl>
+<dt><a name="L003055" id="L003055"><code>do_not_reverse_lookup               ((&lt;<var>ruby</var> <var>1</var>.<var>9</var> <var>feature</var>&gt;))</code></a>
+<dt><a name="L003059" id="L003059"><code>do_not_reverse_lookup=              ((&lt;<var>ruby</var> <var>1</var>.<var>9</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>アドレスからホスト名への逆引きの設定をソケットごとに設定します。
+初期値はソケットを生成したときの 
+BasicSocket.do_not_reverse_lookup になります。</p></dd>
+<dt><a name="L003060" id="L003060"><code>getpeername</code></a></dt>
+<dd>
+<p>接続の相手先のソケットの情報を取得します。sockaddr構造体をパッ
+クした文字列を返します。<code>getpeername(2)</code>を参照の
+こと。</p>
+<pre>serv = TCPServer.open(&quot;&quot;, 0)
+c = TCPSocket.open(*Socket.unpack_sockaddr_in(serv.getsockname).reverse)
+s = serv.accept
+addr = c.getpeername 
+p addr      #=&gt; &quot;\002\000\267\214\177\000\000\001\000\000\000\000\000\000\000\000&quot;
+p Socket.unpack_sockaddr_in(addr)   #=&gt; [46988, &quot;127.0.0.1&quot;]
+p addr == s.getsockname     #=&gt; true</pre></dd>
+<dt><a name="L003061" id="L003061"><code>getsockname</code></a></dt>
+<dd>
+<p>ソケットの情報を取得します。sockaddr構造体をパックした
+文字列を返します。<code>getsockname(2)</code>を参照のこと。</p>
+<pre>serv = TCPServer.open(&quot;&quot;, 0)
+p serv.getsockname        #=&gt; &quot;\002\000\236C\000\000\000\000\000\000\000\000\000\000\000\000&quot;
+p Socket.unpack_sockaddr_in(serv.getsockname)     #=&gt; [40515, &quot;0.0.0.0&quot;]
+c = TCPSocket.open(*Socket.unpack_sockaddr_in(serv.getsockname).reverse)
+s = serv.accept</pre></dd>
+<dt><a name="L003062" id="L003062"><code>getsockopt(<var>level</var>, <var>optname</var>)</code></a></dt>
+<dd>
+<p>ソケットのオプションを取得します。<code>getsockopt(2)</code>
+を参照のこと。取得したオプションのデータをパックした文字列を
+返します。</p>
+<pre>serv = TCPServer.open(&quot;&quot;, 0)
+c = TCPSocket.open(*Socket.unpack_sockaddr_in(serv.getsockname).reverse)
+s = serv.accept
+p c.getsockopt(Socket::IPPROTO_TCP, Socket::TCP_NODELAY)  #=&gt; &quot;\000\000\000\000&quot;
+p opt.unpack(&quot;i&quot;)[0]                                      #=&gt; 0   (Nagle アルゴリズム有効)</pre></dd>
+<dt><a name="L003063" id="L003063"><code>recv(<var>maxlen</var>[, <var>flags</var>])</code></a></dt>
+<dd>
+<p>ソケットからデータを受け取り、文字列として返します。
+<var>maxlen</var>は受け取る最大の長さを指定します。
+<var>flags</var>についてはrecv(2)を参照。<var>flags</var>の
+デフォルト値は0です。<var>flags</var>の指定に必要な定数は
+Socketクラスで定義されています。(例: Socket::MSG_PEEK)</p>
+<p>内部で呼び出す recv(2) が 0 を返した場合、このメソッドは &quot;&quot; を返します。
+この意味はソケットによって異なります。
+たとえば TCP では EOF を意味しますし、
+UDP では空のパケットを読み込んだことを意味します。</p>
+<pre>s1, s2 = UNIXSocket.pair
+s1.write &quot;a&quot;
+s1.close
+p s2.recv(10, Socket::MSG_PEEK)   #=&gt; &quot;a&quot;
+p s2.recv(10)                     #=&gt; &quot;a&quot;
+p s2.recv(10)                     #=&gt; &quot;&quot;</pre></dd>
+<dt><a name="L003064" id="L003064"><code>recv_nonblock(<var>maxlen</var>[, <var>flags</var>])</code></a></dt>
+<dd>
+<p><a href="refm391.html">ruby 1.8.5 feature</a></p>
+<p>ソケットをノンブロッキングモードに設定した後、
+<code>recvfrom(2)</code>でソケットからデータを受け取ります。</p>
+<p>引数、返り値は <a href="#L003063">recv</a> と同じです。</p>
+<p><code>recvfrom(2)</code>がエラーになった場合、
+EAGAIN, EINTR を含め例外 <a href="refm108.html">Errno::EXXX</a> が発生します。</p></dd>
+<dt><a name="L003065" id="L003065"><code>send(<var>mesg</var>, <var>flags</var>[, <var>dest_sockaddr</var>])</code></a></dt>
+<dd>
+<p>ソケットを介してデータを送ります。<var>flags</var> に関しては 
+<code>send(2)</code> を参照してください。<code>connect</code> していないソケット
+に対しては送り先である <var>dest_sockaddr</var> を指定する必要があります。実際に送っ
+たデータの長さを返します。</p>
+<p><var>dest_sockaddr</var> には<a href="refm159.html#L003049">ソケットアドレス構造体を pack した文字列</a>
+を指定します。</p>
+<p>データの送信に失敗した場合は例外 <a href="refm108.html">Errno::EXXX</a> が発生します。</p>
+<pre>s = UDPSocket.new
+sockaddr = Socket.sockaddr_in(&quot;discard&quot;, &quot;localhost&quot;)
+s.send(&quot;The king has donkey ears!&quot;, 0, sockaddr)</pre></dd>
+<dt><a name="L003066" id="L003066"><code>setsockopt(<var>level</var>, <var>optname</var>, <var>optval</var>)</code></a></dt>
+<dd>
+<p>ソケットのオプションを設定します。<a href="refm535.html">setsockopt(2)</a>
+を参照のこと。<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></p></dd>
+<dt><a name="L003067" id="L003067"><code>shutdown([<var>how</var>])</code></a></dt>
+<dd>
+<p>ソケットの以降の接続を終了させます。
+<var>how</var> の値によって以下のように接続が終了します。</p>
+<ul>
+<li>Socket::SHUT_RD: それ以降の受信が拒否されます</li>
+<li>Socket::SHUT_WR: それ以降の送信が拒否されます</li>
+<li>Socket::SHUT_RDWR: それ以降の送信、受信ともに拒否されます</li>
+</ul>
+<p><var>how</var>を省略すると Socket::SHUT_RDWR を指定したことになります。
+<code>shutdown(2)</code>を参照。</p></dd>
+</dl>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>より高レベルなものとして<a href="http://raa.ruby-lang.org/list.rhtml?name=Sockopt">RAA:Sockopt</a><sup class="outside"><small>[外部]</small></sup>があります</small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm159.html">UP</a>][<a href="refm159.html">&lt;-PREV</a>][<a href="refm161.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>PP</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm338.html" rel="next" />
+<link href="refm336.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm336.html">UP</a>][<a href="refm336.html">&lt;-PREV</a>][<a href="refm338.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006478" id="L006478">PP</a></h1>
+<h2><a name="L006479" id="L006479">super class</a></h2>
+<p><a href="refm364.html">PrettyPrint</a></p>
+<h2><a name="L006480" id="L006480">class methods</a></h2>
+<dl>
+<dt><a name="L006481" id="L006481"><code>PP.pp(<var>obj</var>[, <var>out</var>[, <var>width</var>]])</code></a></dt>
+<dd>
+<p><var>obj</var> を <var>out</var> に幅 <var>width</var> で pretty print します。</p>
+<p><var>out</var> を省略した場合は、<code>$&gt;</code> が指定されたものとみなされます。
+<var>width</var> を省略した場合は、79 が指定されたものとみなされます。</p>
+<p>PP.pp は <var>out</var> を返します。</p></dd>
+<dt><a name="L006482" id="L006482"><code>PP.sharing_detection</code></a></dt>
+<dd>
+<p>共有検出フラグを boolean すなわち true か false で返します。
+デフォルトは false です。</p></dd>
+<dt><a name="L006483" id="L006483"><code>PP.sharing_detection = <var>boolean_value</var></code></a></dt>
+<dd>
+<p>共有検出フラグを設定します。</p></dd>
+</dl>
+<h2><a name="L006484" id="L006484">methods</a></h2>
+<dl>
+<dt><a name="L006485" id="L006485"><code>pp(<var>obj</var>)</code></a></dt>
+<dd>
+<p>Object#pretty_print や Object#pretty_print_cycle を使って、
+<var>obj</var> を pretty print バッファに追加します。</p>
+<p><var>obj</var> がすでに出力されていたときには Object#pretty_print_cycle 
+が使われます。これはオブジェクトの参照の連鎖がループしていることを
+意味します。</p></dd>
+<dt><a name="L006486" id="L006486"><code>object_group(<var>obj</var>) { ... }</code></a></dt>
+<dd>
+<p>以下と等価な働きをするもので簡便のために用意されています。</p>
+<pre>group(1, '#&lt;' + obj.class.name, '&gt;') { ... }</pre></dd>
+<dt><a name="L006487" id="L006487"><code>comma_breakable</code></a></dt>
+<dd>
+<p>以下と等価な働きをするもので簡便のために用意されています。</p>
+<pre>text ','
+breakable</pre></dd>
+</dl>
+<h1><a name="L006488" id="L006488">Object</a></h1>
+<dl>
+<dt><a name="L006489" id="L006489"><code>pretty_print(<var>pp</var>)</code></a></dt>
+<dd>
+<p>一般のオブジェクトのためのデフォルトの pretty print メソッドです。
+このメソッドはインスタンス変数を列挙するために
+<code>pretty_print_instance_variables</code> を呼びます。</p>
+<p>カスタマイズ(再定義)された <code>inspect</code> を <code>self</code> が持つ場合、
+<code>self.inspect</code> の結果が使われますが、これは改行のヒントを持ちません。</p>
+<p>もっともよく使われるいくつかの組み込みクラスについて、
+PP モジュールはあらかじめ定義された pretty_print() メソッドを
+簡便のために提供しています。</p></dd>
+<dt><a name="L006490" id="L006490"><code>pretty_print_cycle(<var>pp</var>)</code></a></dt>
+<dd>
+<p>一般のオブジェクトがサイクルの一部であることが検出されたときのための
+デフォルトの pretty print メソッドです。</p></dd>
+<dt><a name="L006491" id="L006491"><code>pretty_print_instance_variables</code></a></dt>
+<dd>
+<p>ソートされたインスタンス変数の名前の配列を返します。</p>
+<p>このメソッドはインスタンス変数の名前をシンボルか文字列として要素に持つ
+配列を返さなければなりません。
+<code>[:@a, :@b]</code>.</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm336.html">UP</a>][<a href="refm336.html">&lt;-PREV</a>][<a href="refm338.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

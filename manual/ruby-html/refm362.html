@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>generator</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm363.html" rel="next" />
+<link href="refm361.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm361.html">&lt;-PREV</a>][<a href="refm363.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006859" id="L006859">Generator</a></h1>
+<p>内部イテレータを外部イテレータに変えるためのクラスです。
+実装に callcc を使っているので遅いです。</p>
+<ul>
+<li><a href="refm071.html">SyncEnumerator</a></li>
+</ul>
+<h2><a name="L006860" id="L006860">例</a></h2>
+<pre>require 'generator'
+
+# Generator from an Enumerable object
+g = Generator.new(['A', 'B', 'C', 'Z'])
+
+while g.next?
+  puts g.next
+end
+
+# Generator from a block
+g = Generator.new { |g|
+  for i in 'A'..'C'
+    g.yield i
+  end
+
+  g.yield 'Z'
+}
+
+# The same result as above
+while g.next?
+  puts g.next
+end</pre>
+<h2><a name="L006861" id="L006861">インクルードしているモジュール</a></h2>
+<p><a href="refm070.html">Enumerable</a></p>
+<h2><a name="L006862" id="L006862">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L006863" id="L006863"><code>Generator.new(<var>enum</var> = <var>nil</var>)</code></a>
+<dt><a name="L006864" id="L006864"><code>Generator.new(<var>enum</var> = <var>nil</var>){|<var>g</var>|  ... }</code></a></dt>
+<dd>
+<p><a href="refm070.html">Enumerable</a> オブジェクトかブロックから Generator オブジェクトを生成します。
+<var>enum</var> には <a href="refm070.html">Enumerable</a> をインクルードしたオブジェクトを与えます。
+<var>enum</var> とブロックを同時に与えた場合は、ブロックは無視されます。</p>
+<p>ブロックは self を引数として呼ばれます。</p></dd>
+</dl>
+<h2><a name="L006865" id="L006865">メソッド</a></h2>
+<dl>
+<dt><a name="L006866" id="L006866"><code>current</code></a></dt>
+<dd>
+<p>現在の位置にある要素を返します。next と違い位置は移動しません。</p>
+<pre>g = Generator.new(['A', 'B', 'C', 'Z'])
+p g.current # =&gt; 'A'
+p g.current # =&gt; 'A'</pre></dd>
+<dt><a name="L006867" id="L006867"><code>each{|<var>e</var>| ... }</code></a></dt>
+<dd>
+<p>ジェネレータの要素を引数としてブロックを評価します。self を返します。</p></dd>
+<dt><a name="L006868" id="L006868"><code>end?</code></a></dt>
+<dd>
+<p>次の要素がなく、ジェネレータが終わりに達しているなら真を返します。</p></dd>
+<dt><a name="L006869" id="L006869"><code>index</code></a>
+<dt><a name="L006870" id="L006870"><code>pos</code></a></dt>
+<dd>
+<p>現在の位置を返します。</p>
+<pre>g = Generator.new(['A', 'B', 'C', 'Z'])
+p g.pos     # =&gt; 0
+p g.next    # =&gt; 'A'
+p g.pos     # =&gt; 1</pre></dd>
+<dt><a name="L006871" id="L006871"><code>next</code></a></dt>
+<dd>
+<p>現在の位置にある要素を返し、位置を1つ増やします。次の要素がなければ、
+例外 EOFError を投げます。</p>
+<pre>g = Generator.new() do |g|
+      ['A', 'B', 'C', 'Z'].each{|s|
+        g.yield s
+      }
+    end
+p g.next # =&gt; 'A'
+p g.next # =&gt; 'B'</pre></dd>
+<dt><a name="L006872" id="L006872"><code>next?</code></a></dt>
+<dd>
+<p>次の要素が存在するなら真を返します。</p></dd>
+<dt><a name="L006873" id="L006873"><code>rewind()</code></a></dt>
+<dd>
+<p>ジェネレータを最初に巻戻します。self を返します。</p>
+<pre>g = Generator.new() do |g|
+      ['A', 'B', 'C', 'Z'].each{|s|
+        g.yield s
+      }
+    end
+p g.next # =&gt; 'A'
+p g.next # =&gt; 'B'
+g.rewind
+p g.next # =&gt; 'A'</pre></dd>
+<dt><a name="L006874" id="L006874"><code>yield(<var>val</var>)</code></a></dt>
+<dd>
+<p><var>val</var> をジェネレータに渡します。
+Generator.new(){|g|  ... } のブロックの中でしか呼ぶことができません。
+ジェネレータに渡された <var>val</var> は next などで取り出すことができます。</p>
+<pre>g = Generator.new() do |g|
+      n = 0
+      loop do            
+        g.yield n
+        n += 1
+      end
+    end
+p g.next # =&gt; 0
+p g.next # =&gt; 1
+p g.next # =&gt; 2
+g.rewind
+p g.next # =&gt; 0</pre></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm361.html">&lt;-PREV</a>][<a href="refm363.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

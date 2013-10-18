@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>OpenSSL::ASN1::ObjectId</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm240.html" rel="next" />
+<link href="refm238.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm237.html">UP</a>][<a href="refm238.html">&lt;-PREV</a>][<a href="refm240.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L004792" id="L004792">OpenSSL::ASN1::ObjectId</a></h1>
+<p>ASN.1のオブジェクトIDを操作するクラス</p>
+<h2><a name="L004793" id="L004793">スーパークラス</a></h2>
+<p><a href="refm238.html">OpenSSL::ASN1::Primitive</a></p>
+<h2><a name="L004794" id="L004794">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L004795" id="L004795"><code>ObjectId.new(<var>str</var>)</code></a></dt>
+<dd>
+<p>ASN.1のオブジェクト ID を生成する。</p></dd>
+</dl>
+<pre>require &quot;openssl&quot;
+include OpenSSL
+p ASN1::ObjectId.new(&quot;1.2.840.10040.4.3&quot;).long_name # =&gt; &quot;dsaWithSHA1&quot;
+p ASN1::ObjectId.new(&quot;dsaWithSHA1&quot;).oid             # =&gt; &quot;1.2.840.10040.4.3&quot;</pre>
+<dl>
+<dt><a name="L004796" id="L004796"><code>ObjectId.register(<var>oid</var>, <var>short_name</var>, <var>long_name</var>)</code></a></dt>
+<dd>
+<p>オブジェクトIDに対応する名前を登録する。登録した名前は<a href="refm220.html">OpenSSL::X509::Extension</a>などで利用できるようになる。</p></dd>
+</dl>
+<pre>require &quot;openssl&quot;
+OpenSSL::ASN1::ObjectId.register(
+  &quot;2.5.29.9&quot;, &quot;subjectDirAttrs&quot;, &quot;X509v3 Subject Directory Attributes&quot;)</pre>
+<h2><a name="L004797" id="L004797">メソッド</a></h2>
+<dl>
+<dt><a name="L004798" id="L004798"><code>oid</code></a></dt>
+<dd>
+<p>オブジェクトIDのドット区切り数値を文字列で返す。</p></dd>
+<dt><a name="L004799" id="L004799"><code>sn</code></a>
+<dt><a name="L004800" id="L004800"><code>short_name</code></a></dt>
+<dd>
+<p>オブジェクトIDに対応する短い形式の名前を返す。</p></dd>
+<dt><a name="L004801" id="L004801"><code>ln</code></a>
+<dt><a name="L004802" id="L004802"><code>long_name</code></a></dt>
+<dd>
+<p>オブジェクトIDに対応する長い形式の名前を返す。</p></dd>
+</dl>
+<pre>require &quot;openssl&quot;
+oid = OpenSSL::ObjectId.new(&quot;subjectAltName&quot;)
+p oid.oid   #=&gt; &quot;2.5.29.17&quot;
+p oid.sn    #=&gt; &quot;subjectAltName&quot;
+p oid.ln    #=&gt; &quot;X509v3 Subject Alternative Name&quot;</pre>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm237.html">UP</a>][<a href="refm238.html">&lt;-PREV</a>][<a href="refm240.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

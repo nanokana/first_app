@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Signal</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm086.html" rel="next" />
+<link href="refm084.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm034.html">UP</a>][<a href="refm084.html">&lt;-PREV</a>][<a href="refm086.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L002141" id="L002141">Signal</a></h1>
+<p><a href="refm384.html">ruby 1.7 feature</a></p>
+<p>UNIX のシグナル関連の操作を行うモジュールです。</p>
+<h2><a name="L002142" id="L002142">モジュール関数:</a></h2>
+<dl>
+<dt><a name="L002143" id="L002143"><code>Signal.list</code></a></dt>
+<dd>
+<p><a href="refm385.html">ruby 1.8 feature</a>:</p>
+<p>シグナル名とシグナル番号を対応づけた <a href="refm044.html">Hash</a> オブジェクトを返し
+ます。</p>
+<pre>p Signal.list   # =&gt; {&quot;WINCH&quot;=&gt;28, &quot;PROF&quot;=&gt;27, ...}</pre></dd>
+<dt><a name="L002144" id="L002144"><code>Signal.trap(<var>signal</var>, <var>command</var>)</code></a>
+<dt><a name="L002145" id="L002145"><code>Signal.trap(<var>signal</var>) { ... }</code></a></dt>
+<dd>
+<p><a href="refm385.html">ruby 1.8 feature</a>:</p>
+<p><var>signal</var> で指定された割り込みにたいするハンドラとして
+<var>command</var> を登録します。<var>signal</var> はシグナル名の
+文字列か <a href="refm063.html">Symbol</a>、またはシグナル番号で指定します。
+さらに特別な値として 0 または <code>&quot;EXIT&quot;</code> が指定できます。
+これは「プログラムの終了時」を表します。</p>
+<p><var>command</var> は文字列またはブロックで指定します。
+<code>nil</code>、空文字列<code>&quot;&quot;</code>、<code>&quot;SIG_IGN&quot;</code> または
+<code>&quot;IGNORE&quot;</code> を指定した時は、可能ならばそのシグナルを
+無視します。
+<code>&quot;SIG_DFL&quot;</code> または <code>&quot;DEFAULT&quot;</code> を指定した時は、
+シグナルハンドラをデフォルトに戻します。
+<code>&quot;EXIT&quot;</code>を指定した時は、シグナルを受け取ると<a href="refm016.html">終了処理</a>を
+行ったあとステータス 0 で終了します。</p>
+<p>いくつかのシグナルに対して、Ruby インタプリタは例外 <a href="refm092.html">Interrupt</a> や
+<a href="refm091.html">SignalException</a> を発生させます。このようなシグナルは例外処理によっ
+て捕捉することもできます。</p>
+<pre>begin
+  Process.kill :QUIT, $$   # 自身にSIGQUITを送信
+rescue SignalException
+  puts &quot;rescue #$!&quot;
+end
+# =&gt; rescue SIGQUIT</pre>
+<p>trap により捕捉されたシグナルは例外を発生させません。</p>
+<p>trap は前回の trap で設定したハンドラを返します。
+ブロックを登録していたらそれを <a href="refm057.html">Proc</a> オブジェクト
+として返します。文字列や &quot;EXIT&quot; を設定していた場合は
+それを返します。&quot;IGNORE&quot; や &quot;DEFAULT&quot; に対しては <code>nil</code>
+を返します。また、何も登録されていないときも <code>nil</code>
+を返します。</p>
+<p>また、ruby の仕組みの外でシグナルハンドラが登録された場合
+(例えば拡張ライブラリが独自に sigaction を呼んだ場合など)
+も <code>nil</code> を返します。</p>
+<pre>p Signal.trap(:INT, &quot;p true&quot;)     # =&gt; nil
+p Signal.trap(:INT) { }           # =&gt; &quot;p true&quot;
+p Signal.trap(:INT, &quot;SIG_IGN&quot;)    # =&gt; #&lt;Proc:0x401b1328&gt;
+p Signal.trap(:INT, &quot;DEFAULT&quot;)    # =&gt; nil
+p Signal.trap(:INT, &quot;EXIT&quot;)       # =&gt; nil
+p Signal.trap(:INT, nil)          # =&gt; &quot;EXIT&quot;</pre>
+<p>システムに定義されていないシグナルを trap に指定した場合は
+例外 <a href="refm094.html">ArgumentError</a> が発生します。例えばネイティブな
+Windows システム (mswin32, mingw など) で動く ruby では
+INT ILL FPE SEGV TERM BREAK ABRT EXIT しか定義されていません。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm034.html">UP</a>][<a href="refm084.html">&lt;-PREV</a>][<a href="refm086.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

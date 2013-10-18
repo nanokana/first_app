@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Vector</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm268.html" rel="next" />
+<link href="refm266.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm265.html">UP</a>][<a href="refm266.html">&lt;-PREV</a>][<a href="refm268.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L005322" id="L005322">Vector</a></h1>
+<p>[2002-04-03]  by <a href="mailto:sugawah@attglobal.net">すす</a><sup class="outside"><small>[外部]</small></sup></p>
+<p>数 <a href="refm052.html">Numeric</a> を要素とするベクトルを扱うクラス。</p>
+<h2><a name="L005323" id="L005323">使い方　Usage</a></h2>
+<p>Vectorクラスを使うためには、require 'matrix'する必要がある。</p>
+<pre>require 'matrix'</pre>
+<h2><a name="L005324" id="L005324">インスタンス生成 Instance Creation</a></h2>
+<dl>
+<dt><a name="L005325" id="L005325"><code>Vector.[<var>a</var>]</code></a></dt>
+<dd>
+<p>配列aを要素とするベクトルを生成する。</p></dd>
+<dt><a name="L005326" id="L005326"><code>Vector.elements(<var>a</var>, <var>copy</var> = <var>true</var>)</code></a></dt>
+<dd>
+<p>配列aを要素とするベクトルを生成する。
+ただし、オプション引数copyが偽(false)ならば、複製を行わない。</p></dd>
+</dl>
+<h2><a name="L005327" id="L005327">読み出し書き込み Accessing</a></h2>
+<dl>
+<dt><a name="L005328" id="L005328"><code>Vector#[<var>i</var>]</code></a></dt>
+<dd>
+<p>i番目の要素を返す。インデックスは0から開始する。</p></dd>
+<dt><a name="L005329" id="L005329"><code>Vector#size</code></a></dt>
+<dd>
+<p>ベクトルの大きさを返す。</p></dd>
+<dt><a name="L005330" id="L005330"><code>Vector#[<var>i</var>] = <var>x</var></code></a></dt>
+<dd>
+<p>i番目の要素をxに変更する。</p></dd>
+</dl>
+<p>このメソッドは、matrix.rbに定義されていない。
+以下に、その定義と使用例を示す。</p>
+<pre>require 'matrix'
+
+class Vector
+  def []=(i,x)
+    @elements[i]=x
+  end
+end
+
+v=Vector[1,2,3]
+v[2]=-1
+p v #=&gt; Vector[1,2,-1]</pre>
+<h2><a name="L005331" id="L005331">演算 Arithmatics</a></h2>
+<dl>
+<dt><a name="L005332" id="L005332"><code>Vector#* <var>a</var></code></a></dt>
+<dd>
+<p>数aを乗じたベクトルを返す。</p></dd>
+<dt><a name="L005333" id="L005333"><code>Vector#* <var>m</var></code></a></dt>
+<dd>
+<p>列ベクトル(行列)に変換して(実際には<a href="refm266.html#L005276">Matrix#column_vector</a>(self)を適用)から、行列mを右から乗じた行列(<a href="refm266.html">Matrix</a>クラス)を返す。</p></dd>
+<dt><a name="L005334" id="L005334"><code>Vector#+ <var>v</var></code></a></dt>
+<dd>
+<p>ベクトルvを加えたベクトルを返す。</p></dd>
+<dt><a name="L005335" id="L005335"><code>Vector#- <var>v</var></code></a></dt>
+<dd>
+<p>ベクトルvを減じたベクトルを返す。</p></dd>
+</dl>
+<h2><a name="L005336" id="L005336">ベクトルに対する関数 Vector Functions</a></h2>
+<dl>
+<dt><a name="L005337" id="L005337"><code>Vector#inner_product(<var>v</var>)</code></a></dt>
+<dd>
+<p>ベクトルvとの内積を返す。</p></dd>
+<dt><a name="L005338" id="L005338"><code>Vector#r</code></a></dt>
+<dd>
+<p>ベクトルの絶対値を返す。
+ベクトルの絶対値は、各要素の２乗の和の平方根を取ったものである。</p></dd>
+</dl>
+<h2><a name="L005339" id="L005339">イテレータ Iterators</a></h2>
+<dl>
+<dt><a name="L005340" id="L005340"><code>Vector#collect {|<var>x</var>| ... }</code></a>
+<dt><a name="L005341" id="L005341"><code>Vector#map {|<var>x</var>| ... }</code></a></dt>
+<dd>
+<p>ベクトルの各要素に対してブロックを評価した結果を、要素として持つベクトルを生成する。</p></dd>
+<dt><a name="L005342" id="L005342"><code>Vector#each2(<var>v</var>) {|<var>x</var>,<var>y</var>| ... }</code></a></dt>
+<dd>
+<p>ベクトルの各要素と、それに対応するインデックスを持つ引数vの要素との組に対して(2引数の)ブロックを繰返し評価する。`v'はsizeメソッドと[]メソッドを持つオブジェクトである。<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></p></dd>
+<dt><a name="L005343" id="L005343"><code>Vector#collect2(<var>v</var>) {|<var>x</var>,<var>y</var>| ... }</code></a></dt>
+<dd>
+<p>ベクトルの各要素と、それに対応するインデックスを持つ引数vの要素との組に対して(2引数の)ブロックを評価し、その結果を要素として持つ配列を生成する。</p></dd>
+<dt><a name="L005344" id="L005344"><code>Vector#map2(<var>v</var>) {|<var>x</var>,<var>y</var>| ... }</code></a></dt>
+<dd>
+<p>ベクトルの各要素と、それに対応するインデックスを持つ引数(配列)の要素との組に対して(2引数の)ブロックを評価した結果を、要素として持つベクトルを返す。</p></dd>
+</dl>
+<p>次の例は、二つのベクトルの要素毎の積をとる。</p>
+<pre>require 'matrix'
+
+v = Vector[2,3,5]
+w = Vector[7,9,11]
+z1 = v.collect2(w){|x,y| x*y } 
+z2 = v.map2(w) {|x,y| x*y }
+
+p z1 #=&gt; [14, 27, 55]
+p z2 #=&gt; Vector[14, 27, 55]</pre>
+<h2><a name="L005345" id="L005345">型変換 Converting</a></h2>
+<dl>
+<dt><a name="L005346" id="L005346"><code>Vector#covector</code></a></dt>
+<dd>
+<p>列ベクトル(行列)、すなわち、(n,1)型の行列に変換する。
+実際には<a href="refm266.html#L005275">Matrix#row_vector</a>(self)を適用する。</p></dd>
+<dt><a name="L005347" id="L005347"><code>Vector#to_a</code></a></dt>
+<dd>
+<p>配列(<a href="refm036.html">Array</a>)に変換する</p></dd>
+<dt><a name="L005348" id="L005348"><code>Vector#to_f</code></a></dt>
+<dd>
+<p>各要素を浮動小数点数(<a href="refm056.html">Float</a>)に変換する</p></dd>
+<dt><a name="L005349" id="L005349"><code>Vector#to_i</code></a></dt>
+<dd>
+<p>各要素を整数(<a href="refm053.html">Integer</a>)に変換する</p></dd>
+<dt><a name="L005350" id="L005350"><code>Vector#to_r</code></a></dt>
+<dd>
+<p>各要素を有理数(<a href="refm264.html">Rational</a>)に変換する</p></dd>
+</dl>
+<h2><a name="L005351" id="L005351">Complexクラスとの併用 Working with Complex class</a></h2>
+<p>require 'complex'することによって、
+Vectorオブジェクトの要素は<a href="refm262.html">Complex</a>クラスに拡張される。
+多くのメソッドは、この拡張されたVectorクラスでも、期待通りに動作する。</p>
+<p>次の例は、各要素を共役複素数に置換するメソッド(Vector#conjugate)である。</p>
+<pre>require 'matrix'
+require 'complex'
+
+class Vector
+  def conjugate
+    collect{|e| e.conjugate }
+  end
+end
+
+v1 = Vector[Complex(1,1),Complex(2,2),Complex(3,3)]
+v2 = v1.conjugate
+p v2 #=&gt; Vector[Complex(1,-1),Complex(2,-2),Complex(3,-3)]
+v3 = v1+v2
+p v3 #=&gt; Vector[Complex(1,0),Complex(2,0),Complex(3,0)]</pre>
+<p>しかし、Complex要素に拡張されたVectorクラスで、
+期待通りに動作しないメソッドもある。
+例えば、ベクトルの絶対値を求める<a href="#L005338">Vector#r</a>メソッドは、
+各要素の2乗和の平方根<a href="refm078.html#L002010">Math#sqrt</a>を求めるが、
+このとき例外を発生させる可能性がある。</p>
+<p>複素数を要素とするベクトルの絶対値を求めるためには、
+各要素の絶対値の2乗和をとらなくてはならない(次の例 Vector#absメソッド）。</p>
+<pre>require 'matrix'
+require 'complex'
+
+class Vector
+  def abs
+    r=0
+    @elements.each{|e| r += e.abs2 }
+    Math.sqrt(r)
+  end
+end
+
+v = Vector[Complex(1,1),Complex(2,2),Complex(3,3)}
+p v.abs #=&gt; 5.291502622 # Math.sqrt(28)
+p v.r   #=&gt; 'sqrt': undefined method `Rational'</pre>
+<h2><a name="L005352" id="L005352">ChangeLog</a></h2>
+<ul>
+<li>[2002-04-03] by <a href="mailto:sugawah@attglobal.net">すす</a><sup class="outside"><small>[外部]</small></sup>
+<ul>
+<li>使い方の節を追加</li>
+<li>Working with Complex classの節を追加</li>
+<li>[]=メソッドを追加</li>
+<li>イテレータ関係を同じ節にまとめた collect, map, each2, collect2, map2</li>
+<li>誤りを訂正し、説明を直した。 とくにeach2, collect2, map2</li>
+<li>他クラスへのリンクを追加 Numeric, Matrix </li>
+</ul></li>
+<li>[2002-04-02] 初版 by <a href="mailto:sugawah@attglobal.net">すす</a><sup class="outside"><small>[外部]</small></sup></li>
+</ul>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>sizeメソッドと[]メソッドを持つことをもってArrayクラスの定義としてよいのでしょうか?  単純に配列クラスと書けるとうれしいです。</small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm265.html">UP</a>][<a href="refm266.html">&lt;-PREV</a>][<a href="refm268.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

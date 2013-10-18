@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>webrick</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm174.html" rel="next" />
+<link href="refm172.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm172.html">&lt;-PREV</a>][<a href="refm174.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L003466" id="L003466">webrick</a></h1>
+<p><a href="refm002.html">執筆者募集</a></p>
+<p>汎用HTTPサーバーフレームワーク。HTTPサーバが簡単に作れます。</p>
+<p>WEBrick はサーブレットによって機能します。サーブレットとは何か。クライアントがアクセスしてきた時にHTTPサーバが実際に行なうことは ファイルを読み込んで返す・forkしてスクリプトを実行する・テンプレートを適用する など様々です。この「サーバが行なっている様々なこと」を抽象化したのがサーブレットです。</p>
+<p>サーブレットはRubyのオブジェクトとして実装されます。具体的には<a href="refm187.html">WEBrick::HTTPServlet::AbstractServlet</a>のサブクラスのインスタンスです。</p>
+<p>WEBrick はセッション管理の機能を提供しません。</p>
+<h2><a name="L003467" id="L003467">Components</a></h2>
+<ul>
+<li>WEBrick
+<ul>
+<li><a href="refm174.html">WEBrick::GenericServer</a></li>
+<li><a href="refm175.html">WEBrick::HTTPServer</a></li>
+<li><a href="refm176.html">WEBrick::HTTPProxyServer</a></li>
+<li><a href="refm177.html">WEBrick::HTTPResponse</a></li>
+<li><a href="refm178.html">WEBrick::HTTPRequest</a></li>
+<li>WEBrick::HTTPStatus</li>
+<li><a href="refm179.html">WEBrick::HTTPAuth</a>
+<ul>
+<li><a href="refm180.html">WEBrick::HTTPAuth::BasicAuth</a></li>
+<li><a href="refm181.html">WEBrick::HTTPAuth::DigestAuth</a></li>
+<li><a href="refm182.html">WEBrick::HTTPAuth::Htpasswd</a></li>
+<li><a href="refm183.html">WEBrick::HTTPAuth::Htdigest</a></li>
+<li><a href="refm191.html">WEBrick::HTTPAuth::Htgroup</a></li>
+</ul></li>
+<li>WEBrick::HTTPUtils</li>
+<li>WEBrick::HTTPUtils::FormData</li>
+<li><a href="refm184.html">WEBrick::HTTPVersion</a></li>
+<li><a href="refm185.html">WEBrick::Cookie</a></li>
+<li><a href="refm186.html">WEBrick::Log</a></li>
+<li>WEBrick::AccessLog</li>
+</ul></li>
+<li>WEBrick::HTTPServlet
+<ul>
+<li><a href="refm187.html">WEBrick::HTTPServlet::AbstractServlet</a>
+<ul>
+<li><a href="refm188.html">WEBrick::HTTPServlet::FileHandler</a></li>
+<li><a href="refm189.html">WEBrick::HTTPServlet::CGIHandler</a></li>
+<li><a href="refm190.html">WEBrick::HTTPServlet::ProcHandler</a></li>
+<li>WEBrick::HTTPServlet::ERBHandler</li>
+</ul></li>
+</ul></li>
+<li><a href="refm192.html">webrick/ssl</a></li>
+<li><a href="refm193.html">webrick/cgi</a></li>
+</ul>
+<h2><a name="L003468" id="L003468">参考</a></h2>
+<ul>
+<li><a href="http://www.webrick.org/">&lt;URL:http://www.webrick.org/&gt;</a><sup class="outside"><small>[外部]</small></sup></li>
+<li><a href="http://shogo.homelinux.org/~ysantoso/WebWiki/WEBrick.html">&lt;URL:http://shogo.homelinux.org/~ysantoso/WebWiki/WEBrick.html&gt;</a><sup class="outside"><small>[外部]</small></sup> </li>
+<li><a href="http://pub.cozmixng.org/~the-rwiki/rw-cgi.rb?cmd=view;name=WEBrick">&lt;URL:http://pub.cozmixng.org/~the-rwiki/rw-cgi.rb?cmd=view;name=WEBrick&gt;</a><sup class="outside"><small>[外部]</small></sup></li>
+<li><a href="http://jp.rubyist.net/magazine/">Rubyist Magazine</a><sup class="outside"><small>[外部]</small></sup>
+<ul>
+<li><a href="http://jp.rubyist.net/magazine/?0002-WEBrickProxy">WEBrickでプロキシサーバを作って遊ぶ</a><sup class="outside"><small>[外部]</small></sup></li>
+</ul></li>
+</ul>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm172.html">&lt;-PREV</a>][<a href="refm174.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

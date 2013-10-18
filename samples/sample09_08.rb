@@ -1,0 +1,5 @@
+str = "abcdefg"
+p str.upcase        #=> "ABCDEF"
+p str.downcase      #=> "abcdefg"
+p str.capitalize    #=> "Abcdefg"
+p str               #=> "abcdefg"

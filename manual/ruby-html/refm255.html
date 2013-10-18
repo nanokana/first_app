@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>io/wait</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm256.html" rel="next" />
+<link href="refm254.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm254.html">&lt;-PREV</a>][<a href="refm256.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L005067" id="L005067">io/wait</a></h1>
+<dl>
+<dt><a name="L005068" id="L005068"><code>IO#ready?</code></a></dt>
+<dd>
+<p>ブロックせずに読み込み可能なら真を返す。そうでなければ nil を返す。
+self が EOF に達していれば false を返す。</p></dd>
+<dt><a name="L005069" id="L005069"><code>IO#wait([<var>timeout</var> = <var>nil</var>])</code></a></dt>
+<dd>
+<p>self が読み込み可能になるまでブロックし、読み込み可能になったら 
+self を返す。</p>
+<p><var>timeout</var> を指定した場合は、指定秒数経過するまでブロックし、タ
+イムアウトした場合は nil を返す。</p>
+<p>self が EOF に達していれば false を返す。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm254.html">&lt;-PREV</a>][<a href="refm256.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

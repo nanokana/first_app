@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>dRuby</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm507.html" rel="next" />
+<link href="refm505.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm486.html">UP</a>][<a href="refm505.html">&lt;-PREV</a>][<a href="refm507.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L011198" id="L011198">dRubyリファレンスマニュアル</a></h1>
+<p>drb-1.3.2b2 版</p>
+<h2><a name="L011199" id="L011199">DRb::DRbIdConv class</a></h2>
+<p>オブジェクトと識別子の変換器。</p>
+<h3><a name="L011200" id="L011200">Methods:</a></h3>
+<dl>
+<dt><a name="L011201" id="L011201"><code>to_obj(<var>id</var>)</code></a>
+</dl>
+<p>識別子からオブジェクトに変換する。</p>
+<dl>
+<dt><a name="L011202" id="L011202"><code>to_id(<var>obj</var>)</code></a>
+</dl>
+<p>オブジェクトから識別子に変換する。</p>
+<h2><a name="L011203" id="L011203">DRb::DRbUndumped module</a></h2>
+<p>参照渡しのためのMix-inクラス</p>
+<h3><a name="L011200" id="L011200">Methods:</a></h3>
+<dl>
+<dt><a name="L011204" id="L011204"><code>dump(<var>dummy</var>)</code></a>
+</dl>
+<p>dumpを失敗させる。TypeError例外を発生する。</p>
+<h2><a name="L011205" id="L011205">DRb::DRbServerNotFound</a></h2>
+<p>DRbServerが見つからないエラー。おそらくDRbServerが準備されていない。</p>
+<h3><a name="L011206" id="L011206">Superclass:</a></h3>
+<p>RuntimeError</p>
+<h2><a name="L011207" id="L011207">DRb::DRbUnknownError</a></h2>
+<p>ローカルがMarshal.loadできない例外を受けたときに代わりに発生する例外。</p>
+<h3><a name="L011206" id="L011206">Superclass:</a></h3>
+<p>RuntimeError</p>
+<h3><a name="L011208" id="L011208">Class methods:</a></h3>
+<dl>
+<dt><a name="L011209" id="L011209"><code>new(<var>unknown</var>)</code></a>
+</dl>
+<h3><a name="L011200" id="L011200">Methods:</a></h3>
+<dl>
+<dt><a name="L011210" id="L011210"><code>unknown</code></a>
+</dl>
+<p>Marshal.loadできないために代わりに作られたDRbUnknownオブジェクト。</p>
+<h2><a name="L011211" id="L011211">DRb::DRbUnknown</a></h2>
+<p>Marshal.loadできないためオブジェクトが渡されたときに代わりに生成される
+オブジェクト。</p>
+<h3><a name="L011208" id="L011208">Class methods:</a></h3>
+<dl>
+<dt><a name="L011212" id="L011212"><code>new(<var>err</var>, <var>buf</var>)</code></a>
+</dl>
+<p>Marsahl.loadが失敗したときに例外と元の直列化したオブジェクトから
+DRbUnknownを作る。</p>
+<dl>
+<dt><a name="L011213" id="L011213"><code>load(<var>s</var>)</code></a>
+</dl>
+<p>DRbUnknownがMarshal.dumpされ、loadされるときに呼ばれるメソッド。
+元の直列化したオブジェクトをもう一度loadを試し、loadに成功すれば
+そのオブジェクトを返す。失敗すればDRbUnknownを返す。</p>
+<h3><a name="L011200" id="L011200">Methods:</a></h3>
+<dl>
+<dt><a name="L011214" id="L011214"><code>_dump(<var>lv</var>)</code></a>
+</dl>
+<p>Marshal.dumpで呼ばれ直列化したオブジェクトをそのまま返す。</p>
+<dl>
+<dt><a name="L011215" id="L011215"><code>reload</code></a>
+</dl>
+<p>もう一度loadする</p>
+<dl>
+<dt><a name="L011216" id="L011216"><code>exception</code></a>
+</dl>
+<p>DRbUnknownError例外を発生させる</p>
+<h2><a name="L011217" id="L011217">DRb::DRbProtocol module</a></h2>
+<p>通信にかかわるユーティリティ。内部で使用される。</p>
+<h3><a name="L011200" id="L011200">Methods:</a></h3>
+<dl>
+<dt><a name="L011218" id="L011218"><code>parse_uri(<var>uri</var>)</code></a>
+</dl>
+<p>URIからホスト、ポートを取り出す</p>
+<dl>
+<dt><a name="L011219" id="L011219"><code>dump(<var>obj</var>, <var>soc</var>)</code></a>
+</dl>
+<p>objを直列化してsocに送る</p>
+<dl>
+<dt><a name="L011220" id="L011220"><code>load(<var>soc</var>)</code></a>
+</dl>
+<p>socから直列化されたオブジェクトを取り出す</p>
+<dl>
+<dt><a name="L011221" id="L011221"><code>send_request(<var>soc</var>, <var>ref</var>, <var>msg_id</var>, *<var>arg</var>, &amp;<var>b</var>)</code></a>
+</dl>
+<p>socにメッセージを送信する</p>
+<dl>
+<dt><a name="L011222" id="L011222"><code>recv_request(<var>soc</var>)</code></a>
+</dl>
+<p>socからのメッセージを受信する</p>
+<dl>
+<dt><a name="L011223" id="L011223"><code>send_reply(<var>soc</var>, <var>succ</var>, <var>result</var>)</code></a>
+</dl>
+<p>socにメソッドの結果を送信する</p>
+<dl>
+<dt><a name="L011224" id="L011224"><code>recv_reply(<var>soc</var>)</code></a>
+</dl>
+<p>socからメソッドの結果を受信する</p>
+<dl>
+<dt><a name="L011225" id="L011225"><code>ro_to_obj(<var>ro</var>)</code></a>
+</dl>
+<p>参照オブジェクトからオブジェクトへ変換する</p>
+<h2><a name="L011226" id="L011226">DRb::DRbObject class</a></h2>
+<p>リモートオブジェクトを参照するオブジェクト</p>
+<h3><a name="L011208" id="L011208">Class methods:</a></h3>
+<dl>
+<dt><a name="L011227" id="L011227"><code>new(<var>obj</var>, <var>uri</var>=<var>nil</var>)</code></a>
+</dl>
+<p>objへの参照オブジェクトを作る。objがnilでuriが指定された場合uriのDRbServerの
+frontオブジェクトへの参照となる</p>
+<h3><a name="L011200" id="L011200">Methods:</a></h3>
+<dl>
+<dt><a name="L011228" id="L011228"><code>__drbref</code></a>
+</dl>
+<p>サーバ内でオブジェクトを特定するための識別子を返す。内部で使用。</p>
+<dl>
+<dt><a name="L011229" id="L011229"><code>method_missing(<var>msg_id</var>, *<var>a</var>, &amp;<var>b</var>)</code></a>
+</dl>
+<p>メソッドがないときに呼ばれ、リモートオブジェクトにメッセージを転送する</p>
+<dl>
+<dt><a name="L011230" id="L011230"><code>to_s</code></a>
+</dl>
+<p>undefされており、リモートのメソッドが起動される</p>
+<dl>
+<dt><a name="L011231" id="L011231"><code>to_a</code></a>
+</dl>
+<p>undefされており、リモートのメソッドが起動される</p>
+<dl>
+<dt><a name="L011232" id="L011232"><code>respond_to?</code></a>
+</dl>
+<p>undefされており、リモートのメソッドが起動される</p>
+<h2><a name="L011233" id="L011233">DRb::DRbConn class</a></h2>
+<p>DRbObjectがリモートメソッドを起動するために使用するライブラリ。内部で使用。</p>
+<h3><a name="L011206" id="L011206">Superclass:</a></h3>
+<p>DRbProtocol (Mix-in)</p>
+<h3><a name="L011208" id="L011208">Class methods:</a></h3>
+<dl>
+<dt><a name="L011234" id="L011234"><code>new(<var>remote_uri</var>)</code></a>
+</dl>
+<p>remote_uriで指定するサーバとの通信を準備する</p>
+<h3><a name="L011200" id="L011200">Methods:</a></h3>
+<dl>
+<dt><a name="L011235" id="L011235"><code>send_message(<var>ref</var>, <var>msg_id</var>, *<var>arg</var>, &amp;<var>block</var>)</code></a>
+</dl>
+<p>リモートへメッセージを送信し、評価結果を受信する。</p>
+<dl>
+<dt><a name="L011236" id="L011236"><code>untaint_remote</code></a>
+</dl>
+<p>privateメソッド。remote_uriをuntaintする</p>
+<h2><a name="L011237" id="L011237">DRb::DRbServer class</a></h2>
+<p>dRubyのRMIを提供するサーバスレッド。
+1.2系でDRbモジュールの機能だったのものの多くがDRbServerに移された。
+一つのプロセスで同時に複数のDRbServerを利用できる。</p>
+<h3><a name="L011238" id="L011238">Class Methods</a></h3>
+<dl>
+<dt><a name="L011239" id="L011239"><code>default_argc_limit(<var>argc</var>)</code></a>
+</dl>
+<p>メソッドの引数の数の上限を設定する。
+以降のDRbServerの生成から有効となる</p>
+<dl>
+<dt><a name="L011240" id="L011240"><code>default_load_limit(<var>sz</var>)</code></a>
+</dl>
+<p>直列化されたオブジェクトのサイズの上限を設定する。
+以降のDRbServerの生成から有効となる</p>
+<dl>
+<dt><a name="L011241" id="L011241"><code>default_acl(<var>acl</var>)</code></a>
+</dl>
+<p>デフォルトのACLを設定する。
+以降のDRbServerの生成から有効となる</p>
+<dl>
+<dt><a name="L011242" id="L011242"><code>new(<var>uri</var>=<var>nil</var>, <var>front</var>=<var>nil</var>, <var>acl</var>=<var>nil</var>, <var>idconv</var>=<var>nil</var>)</code></a>
+</dl>
+<p>DRbServerを生成しサーバスレッドを起動する。
+アプリケーションで最初に生成されたDRbServerがprimary_serverとなる。</p>
+<p>uri はDRbServer自身のURIとなる。uriにはnilや省略された形式のURIを
+与えることができる。ポート番号を省略するとシステムが自動的に割り当てた
+ポートを使用する。
+frontはURIに関連付けられるオブジェクトである。
+ACLやid_convをカスタマイズする場合、それぞれacl, idconvで指定する。</p>
+<h3><a name="L011243" id="L011243">Methods</a></h3>
+<dl>
+<dt><a name="L011244" id="L011244"><code>uri</code></a>
+</dl>
+<p>完全なURIを返す</p>
+<dl>
+<dt><a name="L011245" id="L011245"><code>thread</code></a>
+</dl>
+<p>サーバスレッドを返す</p>
+<dl>
+<dt><a name="L011246" id="L011246"><code>front</code></a>
+</dl>
+<p>URIに関連付けられるfrontオブジェクトを返す</p>
+<dl>
+<dt><a name="L011247" id="L011247"><code>argc_limit</code></a>
+</dl>
+<p>メソッドの引数の数の上限を返す</p>
+<dl>
+<dt><a name="L011248" id="L011248"><code>argc_limit=</code></a>
+</dl>
+<p>メソッドの引数の数の上限を設定する</p>
+<dl>
+<dt><a name="L011249" id="L011249"><code>load_limit</code></a>
+</dl>
+<p>直列化されたオブジェクトのサイズの上限を返す</p>
+<dl>
+<dt><a name="L011250" id="L011250"><code>load_limit=</code></a>
+</dl>
+<p>直列化されたオブジェクトのサイズの上限を設定する</p>
+<dl>
+<dt><a name="L011251" id="L011251"><code>alive?</code></a>
+</dl>
+<p>サーバスレッドが生きているか返す</p>
+<dl>
+<dt><a name="L011252" id="L011252"><code>stop_service</code></a>
+</dl>
+<p>サーバスレッドを停止する</p>
+<dl>
+<dt><a name="L011253" id="L011253"><code>to_obj(<var>ref</var>)</code></a>
+</dl>
+<p>識別子に対応するオブジェクトを返す</p>
+<dl>
+<dt><a name="L011202" id="L011202"><code>to_id(<var>obj</var>)</code></a>
+</dl>
+<p>オブジェクトに対応する識別子を返す</p>
+<h3><a name="L011254" id="L011254">Private instance methods:</a></h3>
+<dl>
+<dt><a name="L011255" id="L011255"><code>kill_sub_thread</code></a>
+</dl>
+<p>サーバスレッドに起動されたスレッドを全て停止する</p>
+<dl>
+<dt><a name="L011256" id="L011256"><code>run</code></a>
+</dl>
+<p>メインループ</p>
+<dl>
+<dt><a name="L011257" id="L011257"><code>allow?(<var>s</var>)</code></a>
+</dl>
+<p>ソケットsからのアクセスを許すかどうか返す。
+アクセスの制御を変更したいときはこれをoverrideする。</p>
+<dl>
+<dt><a name="L011258" id="L011258"><code>insecure_methods?(<var>msg_id</var>)</code></a>
+</dl>
+<p>危険なメソッドかどうか調べる。
+真の場合メソッドを起動しない</p>
+<dl>
+<dt><a name="L011259" id="L011259"><code>fake_yield(<var>argv</var>)</code></a>
+</dl>
+<p>内部使用</p>
+<dl>
+<dt><a name="L011260" id="L011260"><code>obj_send(<var>obj</var>, <var>msg_id</var>, *<var>argv</var>)</code></a>
+</dl>
+<p>リモートより要求されたobjへのメソッドを起動する。
+内部使用</p>
+<dl>
+<dt><a name="L011261" id="L011261"><code>proc</code></a>
+</dl>
+<p>RMIの要求を処理する。
+内部使用</p>
+<h2><a name="L011262" id="L011262">DRb module</a></h2>
+<p>1.3より多くの機能はDRbServerへ移され、DRbのメソッドはプライマリサーバ、
+カレントサーバへ転送するものが多くなった。</p>
+<h3><a name="L011200" id="L011200">Methods:</a></h3>
+<dl>
+<dt><a name="L011263" id="L011263"><code>start_service(<var>uri</var>=<var>nil</var>, <var>front</var>=<var>nil</var>, <var>acl</var>=<var>nil</var>)</code></a>
+</dl>
+<p>DRbServerを生成しサーバスレッドを起動する。</p>
+<dl>
+<dt><a name="L011264" id="L011264"><code>primary_server</code></a>
+</dl>
+<p>プライマリサーバを返す</p>
+<dl>
+<dt><a name="L011265" id="L011265"><code>current_server</code></a>
+</dl>
+<p>カレントサーバを返す。
+現在のスレッドが関連しているDRbServerを関連がなければプライマリサーバを返す
+現在のスレッドがRMIによって起動されたものであれば、そのRMIを受理した
+サーバがカレントサーバである。</p>
+<dl>
+<dt><a name="L011252" id="L011252"><code>stop_service</code></a>
+</dl>
+<p>プライマリサーバのサーバスレッドを停止する</p>
+<dl>
+<dt><a name="L011244" id="L011244"><code>uri</code></a>
+</dl>
+<p>カレントサーバのURIを返す</p>
+<dl>
+<dt><a name="L011246" id="L011246"><code>front</code></a>
+</dl>
+<p>カレントサーバのfrontオブジェクトを返す</p>
+<dl>
+<dt><a name="L011253" id="L011253"><code>to_obj(<var>ref</var>)</code></a>
+</dl>
+<p>カレントサーバの変換方法で識別子に対応するオブジェクトを返す</p>
+<dl>
+<dt><a name="L011266" id="L011266"><code>to_id(<var>ref</var>)</code></a>
+</dl>
+<p>カレントサーバの変換方法でオブジェクトに対応する識別子を返す</p>
+<dl>
+<dt><a name="L011245" id="L011245"><code>thread</code></a>
+</dl>
+<p>プライマリサーバのスレッドを返す</p>
+<dl>
+<dt><a name="L011267" id="L011267"><code>install_id_conv(<var>idconv</var>)</code></a>
+</dl>
+<p>DRbServer.default_id_conv(idconv)</p>
+<dl>
+<dt><a name="L011268" id="L011268"><code>install_acl(<var>acl</var>)</code></a>
+</dl>
+<p>DRbServer.default_acl(acl)</p>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm486.html">UP</a>][<a href="refm505.html">&lt;-PREV</a>][<a href="refm507.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

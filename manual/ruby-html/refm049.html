@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>UnboundMethod</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm050.html" rel="next" />
+<link href="refm048.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm048.html">UP</a>][<a href="refm048.html">&lt;-PREV</a>][<a href="refm050.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L001164" id="L001164">UnboundMethod</a></h1>
+<p>レシーバを持たないメソッドオブジェクトのクラスです。
+<a href="refm050.html#L001200">Module#instance_method</a> や 
+<a href="refm048.html#L001162">Method#unbind</a> により生成し、後で
+<a href="#L001170">UnboundMethod#bind</a> によりレシーバを
+割り当てた <a href="refm048.html">Method</a> オブジェクトを作ることができます。</p>
+<p>例: <a href="refm048.html">Method</a> クラスの冒頭にある例を UnboundMethod で書くと以下のようになる</p>
+<pre>class Foo
+  def foo() &quot;foo&quot; end
+  def bar() &quot;bar&quot; end
+  def baz() &quot;baz&quot; end
+end
+
+# 任意のキーとメソッドの関係をハッシュに保持しておく
+# レシーバの情報がここにはないことに注意
+methods = {1 =&gt; Foo.instance_method(:foo),
+           2 =&gt; Foo.instance_method(:bar),
+           3 =&gt; Foo.instance_method(:baz)}
+
+# キーを使って関連するメソッドを呼び出す
+# レシーバは任意(Foo クラスのインスタンスでなければならない)
+p methods[1].bind(Foo.new).call      # =&gt; &quot;foo&quot;
+p methods[2].bind(Foo.new).call      # =&gt; &quot;bar&quot;
+p methods[3].bind(Foo.new).call      # =&gt; &quot;baz&quot;</pre>
+<p>例: メソッドの再定義を UnboundMethod を使って行う方法(普通は、
+<a href="refm028.html#L000422">alias</a> や <a href="refm027.html#L000406">super</a> を使う)</p>
+<pre>class Foo
+  def foo
+    p :foo
+  end
+  @@orig_foo = instance_method :foo
+  def foo
+    p :bar
+    @@orig_foo.bind(self).call
+  end
+end
+
+Foo.new.foo
+
+=&gt; :bar
+   :foo</pre>
+<h2><a name="L001165" id="L001165">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm048.html">Method</a>  version 1.6 以前</li>
+<li><a href="refm035.html">Object</a>  (<a href="refm385.html">version 1.8 以降</a>)</li>
+</ul>
+<h2><a name="L001166" id="L001166">メソッド:</a></h2>
+<dl>
+<dt><a name="L001167" id="L001167"><code>self[args, ...]</code></a>
+<dt><a name="L001168" id="L001168"><code>call(<var>args</var>, ...)</code></a>
+<dt><a name="L001169" id="L001169"><code>call(<var>args</var>, ...) { ... }</code></a></dt>
+<dd>
+<p><code>UnboundMethod</code> は <a href="#L001170">bind</a> しなければ起動できません。
+常に例外 <a href="refm111.html">TypeError</a> が発生します。</p>
+<pre>class Foo
+  def foo
+  end
+end
+Foo.instance_method(:foo).call
+
+# =&gt; -:5:in `call': you cannot call unbound method; bind first (TypeError)</pre>
+<p><a href="refm385.html">ruby 1.8 feature</a>: このメソッドはなくなりました。</p></dd>
+<dt><a name="L001170" id="L001170"><code>bind(<var>obj</var>)</code></a></dt>
+<dd>
+<p><code>self</code> を <var>obj</var> にバインドして bound method オブジェクト
+(つまり <a href="refm048.html">Method</a> オブジェクト) を生成し返します。ただしバイン
+ドできるのは、unbind したオブジェクトのクラスのインスタンスか、メ
+ソッド定義元のモジュールをインクルードしたクラスのインスタンスだけ
+です。そうでなければ例外 <a href="refm111.html">TypeError</a> が発生します。</p>
+<p>例:</p>
+<pre># クラスのインスタンスメソッドの UnboundMethod の場合
+
+class Foo
+  def foo
+    &quot;foo&quot;
+  end
+end
+
+# UnboundMethod `m' を生成
+p m = Foo.instance_method(:foo) # =&gt; #&lt;UnboundMethod: Foo(Foo)#foo&gt;
+
+# Foo のインスタンスをレシーバとする Method オブジェクトを生成
+p m.bind(Foo.new)               # =&gt; #&lt;Method: Foo(Foo)#foo&gt;
+
+# Foo のサブクラス Bar のインスタンスをレシーバとする Method 
+# オブジェクトを生成(これは許されない)
+#  ruby 1.8 feature: 許されるようになりました
+
+class Bar &lt; Foo
+end
+# p m.bind(Bar.new)               # =&gt; -18:in `bind': bind argument must be an instance of Foo (TypeError)
+
+# 同名の特異メソッドが定義されているとダメ
+class &lt;&lt; obj = Foo.new
+  def foo
+  end
+end
+p m.bind(obj)                   # =&gt; -:25:in `bind': method `foo' overridden (TypeError)
+
+# モジュールのインスタンスメソッドの UnboundMethod の場合
+
+module Foo
+  def foo
+    &quot;foo&quot;
+  end
+end
+
+# UnboundMethod `m' を生成
+p m = Foo.instance_method(:foo) # =&gt; #&lt;UnboundMethod: Foo(Foo)#foo&gt;
+
+# Foo をインクルードしたクラス Bar のインスタンスをレシーバと
+# する Method オブジェクトを生成
+class Bar
+  include Foo
+end
+p m.bind(Bar.new)               # =&gt; #&lt;Method: Bar(Foo)#foo&gt;
+
+# Bar のサブクラスは Foo をインクルードしているのと同等なのでよい
+class Baz &lt;Bar
+end
+p m.bind(Baz.new)               # =&gt; #&lt;Method: Baz(Foo)#foo&gt;
+
+# 同名の特異メソッドが定義されているとダメ
+class &lt;&lt; obj = Baz.new
+  def foo
+  end
+end
+p m.bind(obj)                   # =&gt; -:27:in `bind': method `foo' overridden (TypeError)</pre></dd>
+<dt><a name="L001171" id="L001171"><code>to_proc</code></a></dt>
+<dd>
+<p><code>self</code> を <code>call</code> する <a href="refm057.html">Proc</a> オブジェクトを生成して返します。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>: このメソッドはなくなりました。</p></dd>
+<dt><a name="L001172" id="L001172"><code>unbind</code></a></dt>
+<dd>
+<p><code>self</code> を返します。</p>
+<p><a href="refm385.html">ruby 1.8 feature</a>: このメソッドはなくなりました。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm048.html">UP</a>][<a href="refm048.html">&lt;-PREV</a>][<a href="refm050.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

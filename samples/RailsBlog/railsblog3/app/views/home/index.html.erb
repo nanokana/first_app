@@ -1,0 +1,8 @@
+<% for entry in @entries %>
+  <div class="entry">
+    <div class="date"><%= entry.created_at.year %>年<%= entry.created_at.month %>月<%= entry.created_at.day %>日</div>
+    <h2><%=h entry.title %></h2>
+    <div><%= entry.to_html %></div>
+    <div class="permalink"><%=link_to 'permalink', :controller => 'entries', :action => 'show', :id => entry %></div>
+  </div>
+<% end %>

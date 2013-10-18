@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ruby-src:doc/forwardable.rd</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm513.html" rel="next" />
+<link href="refm511.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm511.html">&lt;-PREV</a>][<a href="refm513.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L011394" id="L011394">Forwardable</a></h1>
+<p>A Module to define delegations for selected methods to a class.</p>
+<h2><a name="L011395" id="L011395">Usage</a></h2>
+<p>Using through extending the class.</p>
+<pre>class Foo
+  extend Forwardable
+
+  def_delegators(&quot;@out&quot;, &quot;printf&quot;, &quot;print&quot;)
+  def_delegators(:@in, :gets)
+  def_delegator(:@contents, :[], &quot;content_at&quot;)
+end
+f = Foo.new
+f.printf ...
+f.gets
+f.content_at(1)</pre>
+<h2><a name="L011396" id="L011396">Methods</a></h2>
+<dl>
+<dt><a name="L011397" id="L011397"><code>Forwardable#def_instance_delegators(<var>accessor</var>, *<var>methods</var>)</code></a></dt>
+<dd>
+<p>adding the delegations for each method of <var>methods</var> to
+<var>accessor</var>.</p></dd>
+<dt><a name="L011398" id="L011398"><code>Forwardable#def_instance_delegator(<var>accessor</var>, <var>method</var>, <var>ali</var> = <var>method</var>)</code></a></dt>
+<dd>
+<p>adding the delegation for <var>method</var> to <var>accessor</var>. When
+you give optional argument <var>ali</var>, <var>ali</var> is used as the
+name of the delegation method, instead of <var>method</var>.</p></dd>
+<dt><a name="L011399" id="L011399"><code>Forwardable#def_delegators(<var>accessor</var>, *<var>methods</var>)</code></a></dt>
+<dd>
+<p>the alias of <var>Forwardable#def_instance_delegators</var>.</p></dd>
+<dt><a name="L011400" id="L011400"><code>Forwardable#def_delegator(<var>accessor</var>, <var>method</var>, <var>ali</var> = <var>method</var>)</code></a></dt>
+<dd>
+<p>the alias of <var>Forwardable#def_instance_delegator</var>.</p></dd>
+</dl>
+<h1><a name="L011401" id="L011401">SingleForwardable</a></h1>
+<p>a Module to define delegations for selected methods to an object.</p>
+<h2><a name="L011395" id="L011395">Usage</a></h2>
+<p>Using through extending the object.</p>
+<pre>g = Goo.new
+g.extend SingleForwardable
+g.def_delegator(&quot;@out&quot;, :puts)
+g.puts ...</pre>
+<h2><a name="L011396" id="L011396">Methods</a></h2>
+<dl>
+<dt><a name="L011402" id="L011402"><code>SingleForwardable#def_singleton_delegators(<var>accessor</var>, *<var>methods</var>)</code></a></dt>
+<dd>
+<p>adding the delegations for each method of <var>methods</var> to
+<var>accessor</var>.</p></dd>
+<dt><a name="L011403" id="L011403"><code>SingleForwardable#def_singleton_delegator(<var>accessor</var>, <var>method</var>, <var>ali</var> = <var>method</var>)</code></a></dt>
+<dd>
+<p>adding the delegation for <var>method</var> to <var>accessor</var>. When
+you give optional argument <var>ali</var>, <var>ali</var> is used as the
+name of the delegation method, instead of <var>method</var>.</p></dd>
+<dt><a name="L011404" id="L011404"><code>SingleForwardable#def_delegators(<var>accessor</var>, *<var>methods</var>)</code></a></dt>
+<dd>
+<p>the alias of <var>SingleForwardable#def_instance_delegators</var>.</p></dd>
+<dt><a name="L011405" id="L011405"><code>SingleForwardable#def_delegator(<var>accessor</var>, <var>method</var>, <var>ali</var> = <var>method</var>)</code></a></dt>
+<dd>
+<p>the alias of <var>SingleForwardable#def_instance_delegator</var>.</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm511.html">&lt;-PREV</a>][<a href="refm513.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

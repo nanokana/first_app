@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>OpenSSL::X509::Store</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm224.html" rel="next" />
+<link href="refm222.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm217.html">UP</a>][<a href="refm222.html">&lt;-PREV</a>][<a href="refm224.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L004418" id="L004418">OpenSSL::X509::Store</a></h1>
+<p>証明書のストレージクラス。</p>
+<h2><a name="L004419" id="L004419">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L004420" id="L004420"><code>Store.new()</code></a>
+</dl>
+<h2><a name="L004421" id="L004421">メソッド</a></h2>
+<dl>
+<dt><a name="L004422" id="L004422"><code>verify_callback=(<var>proc</var>)</code></a>
+<dt><a name="L004423" id="L004423"><code>error_string</code></a></dt>
+<dd>
+<p>verify を呼び出した時のエラー内容を述べた文字列。エラーでない場合は、&quot;ok&quot; がセットされる。verify を一度も呼び出していない時は nil。</p></dd>
+<dt><a name="L004424" id="L004424"><code>error</code></a></dt>
+<dd>
+<p><a href="refm217.html">OpenSSL::X509</a> を参照。</p></dd>
+<dt><a name="L004425" id="L004425"><code>flags=</code></a>
+<dt><a name="L004426" id="L004426"><code>chain</code></a></dt>
+<dd>
+<p>最後に verify(cert) した証明書を出発点とするルート CA 証明書までの証明書のチェーン。OpenSSL::X509::Certificate オブジェクトの配列。verify を一度も呼び出していない時は nil を返す。証明書の順序は以下のとおり。</p></dd>
+</dl>
+<pre>[証明書, 下位 CA 証明書, 中間 CA 証明書, ... , ルート CA 証明書]</pre>
+<dl>
+<dt><a name="L004427" id="L004427"><code>purpose=</code></a></dt>
+<dd>
+<p>証明書の使用目的を設定する。verify では検証対象の証明書がこの目的に使えるかどうかも検証する。<a href="refm217.html">OpenSSL::X509</a> の定数を参照。</p></dd>
+<dt><a name="L004428" id="L004428"><code>trust=</code></a></dt>
+<dd>
+<p><a href="refm217.html">OpenSSL::X509</a> の定数を参照。</p></dd>
+<dt><a name="L004429" id="L004429"><code>add_path(<var>path</var>)</code></a></dt>
+<dd>
+<p>パスに含まれる証明書を信頼する証明書としてストレージに加える。 </p></dd>
+<dt><a name="L004430" id="L004430"><code>add_file(<var>file</var>)</code></a></dt>
+<dd>
+<p>ファイルに含まれる証明書を信頼する証明書としてストレージに加える。 </p></dd>
+<dt><a name="L004431" id="L004431"><code>add_cert(<var>cert</var>)</code></a></dt>
+<dd>
+<p>証明書を信頼する証明書としてストレージに加える。 </p></dd>
+<dt><a name="L004432" id="L004432"><code>add_crl(<var>crl</var>)</code></a></dt>
+<dd>
+<p>信頼する CRL(証明書失効リスト) <a href="refm219.html">OpenSSL::X509::CRL</a> オブジェクトをストレージに加える。 </p></dd>
+<dt><a name="L004433" id="L004433"><code>verify(<var>cert</var>, <var>chain</var>=<var>nil</var>)</code></a></dt>
+<dd>
+<p>証明書 cert をストレージに存在する CA 証明書で検証する。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm217.html">UP</a>][<a href="refm222.html">&lt;-PREV</a>][<a href="refm224.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

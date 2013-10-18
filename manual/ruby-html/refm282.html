@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>dbm</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm283.html" rel="next" />
+<link href="refm281.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm281.html">&lt;-PREV</a>][<a href="refm283.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L005548" id="L005548">dbm</a></h1>
+<p>NDBMファイルをアクセスするクラス。キー、データともに文字列でなければな
+らないという制限と、データがファイルに保存されるという点を除いては
+Hashクラスと全く同様に扱うことがでます。</p>
+<h2><a name="L005549" id="L005549">使いかた</a></h2>
+<pre>require 'dbm'</pre>
+<h2><a name="L005550" id="L005550">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm035.html">Object</a></li>
+</ul>
+<h2><a name="XXINVALIDXX" id="XXINVALIDXX">インクルードしているモジュール: </a></h2>
+<ul>
+<li><a href="refm070.html">Enumerable</a></li>
+</ul>
+<h2><a name="L005552" id="L005552">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L005553" id="L005553"><code>open(<var>dbname</var>[, <var>mode</var>[, <var>flags</var>]])</code></a></dt>
+<dd>
+<p><var>dbname</var>で指定したデータベースをモードを
+<var>mode</var>に設定してオープンします。<var>mode</var>の省
+略値は0666です。<var>mode</var>として<code>nil</code>を指定
+するとデータベースが存在しない時には新たなデータベースを作らず
+<code>nil</code>を返します。</p>
+<p><a href="refm388.html">ruby 1.8.2 feature</a>:
+flags 引数を指定できます。
+flags には以下のいずれかを指定します。</p>
+<ul>
+<li>DBM::READER : データベースの読み込みのみを行う</li>
+<li>DBM::WRITER : データベースの新規作成はせず読み書きする</li>
+<li>DBM::WRCREAT : データベースが存在しなければ新規作成して読み書きする</li>
+<li>DBM::NEWDB : データベースを常に新規作成して既存のデータは破棄する</li>
+</ul></dd>
+</dl>
+<h2><a name="L005554" id="L005554">メソッド:</a></h2>
+<dl>
+<dt><a name="L005555" id="L005555"><code>self[key]</code></a></dt>
+<dd>
+<p><var>key</var>をキーとする値を返します。</p></dd>
+<dt><a name="L005556" id="L005556"><code>self[key]=value</code></a></dt>
+<dd>
+<p><var>key</var>をキーとして、<var>value</var>を格納します。
+<var>value</var>として<code>nil</code>を指定すると、keyに対
+する項目を削除します。</p></dd>
+<dt><a name="L005557" id="L005557"><code>clear</code></a></dt>
+<dd>
+<p>DBMファイルを空にします。</p></dd>
+<dt><a name="L005558" id="L005558"><code>close</code></a></dt>
+<dd>
+<p>DBMファイルをクローズします。以後の操作は例外を発生させます。</p></dd>
+<dt><a name="L005559" id="L005559"><code>delete(<var>key</var>)</code></a></dt>
+<dd>
+<p><var>key</var>をキーとする項目を削除します。</p></dd>
+<dt><a name="L005560" id="L005560"><code>delete_if { |<var>key</var>, <var>value</var>|  ...  }</code></a></dt>
+<dd>
+<p>ブロックを評価した値が真であれば該当する項目を削除します。</p></dd>
+<dt><a name="L005561" id="L005561"><code>each {|<var>key</var>, <var>value</var>|  ...  }</code></a>
+<dt><a name="L005562" id="L005562"><code>each_pair {|<var>key</var>, <var>value</var>|  ...  }</code></a></dt>
+<dd>
+<p>各要素に対するイテレータ。</p></dd>
+<dt><a name="L005563" id="L005563"><code>each_key {|<var>key</var>|  ...  }</code></a></dt>
+<dd>
+<p>全てのkeyに対して繰り返すイテレータ。</p></dd>
+<dt><a name="L005564" id="L005564"><code>each_value {|<var>value</var>|  ...  }</code></a></dt>
+<dd>
+<p>全てのvalueに対して繰り返すイテレータ。</p></dd>
+<dt><a name="L005565" id="L005565"><code>empty?()</code></a></dt>
+<dd>
+<p>データベースが空の時、真を返します。</p></dd>
+<dt><a name="L005566" id="L005566"><code>has_key?(<var>key</var>)</code></a>
+<dt><a name="L005567" id="L005567"><code>key?(<var>key</var>)</code></a>
+<dt><a name="L005568" id="L005568"><code>include?(<var>key</var>)</code></a></dt>
+<dd>
+<p>keyがデータベース中に存在する時、真を返します。</p></dd>
+<dt><a name="L005569" id="L005569"><code>has_value?(<var>value</var>)</code></a>
+<dt><a name="L005570" id="L005570"><code>value?(<var>value</var>)</code></a></dt>
+<dd>
+<p>valueを値とする組がデータベース中に存在する時、真を返します。</p></dd>
+<dt><a name="L005571" id="L005571"><code>indexes(<var>key_1</var>, ... )  ((&lt;<var>obsolete</var>&gt;))</code></a>
+<dt><a name="L005572" id="L005572"><code>indices(<var>key_1</var>, ... )  ((&lt;<var>obsolete</var>&gt;))</code></a></dt>
+<dd>
+<p>各引数の値をキーとする要素を含む配列を返します。</p></dd>
+<dt><a name="L005573" id="L005573"><code>keys</code></a></dt>
+<dd>
+<p>データベース中に存在するキー全てを含む配列を返します。</p></dd>
+<dt><a name="L005574" id="L005574"><code>length</code></a>
+<dt><a name="L005575" id="L005575"><code>size</code></a></dt>
+<dd>
+<p>データベース中の要素の数を返します。(注意:現在の実現では要素数を数
+えるためにデータベースを全部検索します)</p></dd>
+<dt><a name="L005576" id="L005576"><code>shift</code></a></dt>
+<dd>
+<p>データベース中の要素を一つ取り出し、データベースから削除します。</p></dd>
+<dt><a name="L005577" id="L005577"><code>values</code></a></dt>
+<dd>
+<p>データベース中に存在する値全てを含む配列を返します。</p></dd>
+</dl>
+<h2><a name="L005578" id="L005578">定数</a></h2>
+<dl>
+<dt><a name="L005579" id="L005579"><code>DBM::READER ((&lt;<var>ruby</var> <var>1</var>.<var>8</var>.<var>2</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>読み込みモードでオープンします．</p></dd>
+<dt><a name="L005580" id="L005580"><code>DBM::WRITER ((&lt;<var>ruby</var> <var>1</var>.<var>8</var>.<var>2</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>書き込みモードでオープンします．</p></dd>
+<dt><a name="L005581" id="L005581"><code>DBM::WRCREAT ((&lt;<var>ruby</var> <var>1</var>.<var>8</var>.<var>2</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>書き込みモードで、すでにファイルが存在しなかったら作ります．</p></dd>
+<dt><a name="L005582" id="L005582"><code>DBM::NEWDB ((&lt;<var>ruby</var> <var>1</var>.<var>8</var>.<var>2</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>書き込みモードで、すでにファイルが存在したら削除して作り直します．</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm281.html">&lt;-PREV</a>][<a href="refm283.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

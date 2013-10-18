@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>set</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm270.html" rel="next" />
+<link href="refm268.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm268.html">&lt;-PREV</a>][<a href="refm270.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L005379" id="L005379">set</a></h1>
+<p>集合を表す Set クラスを提供します。集合とは重複のないオブジェクトの
+順序づけられていない集まりです。
+Arrayの持つ演算機能とHashのような高速な検索を合わせ持ちます。</p>
+<p>2つのオブジェクトの等価性は Object#eql? と Object#hash によります。
+なぜなら、Set は Hash を記憶として使っているからです。</p>
+<h2><a name="L005380" id="L005380">例:</a></h2>
+<pre>require 'set'
+
+set1 = Set.new [&quot;foo&quot;, &quot;bar&quot;, &quot;baz&quot;, &quot;foo&quot;]
+
+p set1                        #=&gt; #&lt;Set: {&quot;baz&quot;, &quot;foo&quot;, &quot;bar&quot;}&gt;
+
+p set1.include?(&quot;bar&quot;)        #=&gt; true
+
+set1.add(&quot;heh&quot;)
+set1.delete(&quot;foo&quot;)
+
+p set1                        #=&gt; #&lt;Set: {&quot;heh&quot;, &quot;baz&quot;, &quot;bar&quot;}&gt;</pre>
+<h2><a name="L005381" id="L005381">インクルードしているモジュール:</a></h2>
+<ul>
+<li><a href="refm070.html">Enumerable</a></li>
+</ul>
+<h2><a name="L005382" id="L005382">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L005383" id="L005383"><code>Set.new(<var>enum</var> = <var>nil</var>)</code></a></dt>
+<dd>
+<p>引数 enum で与えられた Enumerable の要素からなる新しい集合を作ります。</p></dd>
+<dt><a name="L005384" id="L005384"><code>Set[*ary]</code></a></dt>
+<dd>
+<p>与えられたオブジェクトからなる新しい集合を作ります。</p></dd>
+</dl>
+<h2><a name="L005385" id="L005385">メソッド:</a></h2>
+<dl>
+<dt><a name="L005386" id="L005386"><code>dup</code></a></dt>
+<dd>
+<p>集合を複製します。</p></dd>
+<dt><a name="L005387" id="L005387"><code>size</code></a>
+<dt><a name="L005388" id="L005388"><code>length</code></a></dt>
+<dd>
+<p>要素の個数を返します。</p></dd>
+<dt><a name="L005389" id="L005389"><code>empty?</code></a></dt>
+<dd>
+<p>要素を1つも持たないときに true を返します。</p></dd>
+<dt><a name="L005390" id="L005390"><code>clear</code></a></dt>
+<dd>
+<p>要素をすべて削除します。</p></dd>
+<dt><a name="L005391" id="L005391"><code>replace(<var>enum</var>)</code></a></dt>
+<dd>
+<p>要素を enum のものと置き換えます。要素をすべて削除し、enum で与え
+られた Enumerable の要素を新しい要素とします。</p></dd>
+<dt><a name="L005392" id="L005392"><code>flatten</code></a></dt>
+<dd>
+<p>ネストした集合を平滑化して作られる新しい集合を返します。</p>
+<p>例:</p>
+<pre>p s0 = Set[Set[1,2], 3]  #=&gt; #&lt;Set: {#&lt;Set: {1, 2}&gt;, 3}&gt;
+p s0.flatten             #=&gt; #&lt;Set: {1, 2, 3}&gt;
+p s1 = Set[Set[1,2], 1]  #=&gt; #&lt;Set: {#&lt;Set: {1, 2}&gt;, 1}&gt;
+p s1.flatten             #=&gt; #&lt;Set: {1, 2}&gt;</pre></dd>
+<dt><a name="L005393" id="L005393"><code>flatten!</code></a></dt>
+<dd>
+<p>flatten と同じですが、
+集合それ自身が平滑化して作られた新しい集合の要素で置き換えられます。
+ただし、要素の変更が起こらなかったときには nil を返します。</p></dd>
+<dt><a name="L005394" id="L005394"><code>to_a</code></a></dt>
+<dd>
+<p>配列に変換します。順序は不定です。</p></dd>
+<dt><a name="L005395" id="L005395"><code>include?(<var>o</var>)</code></a>
+<dt><a name="L005396" id="L005396"><code>member?(<var>o</var>)</code></a></dt>
+<dd>
+<p>オブジェクト o がその集合に属す場合に true を返します。</p></dd>
+<dt><a name="L005397" id="L005397"><code>superset?(<var>set</var>)</code></a></dt>
+<dd>
+<p>集合が与えられた集合 set を含む場合に true を返します。</p></dd>
+<dt><a name="L005398" id="L005398"><code>proper_superset?(<var>set</var>)</code></a></dt>
+<dd>
+<p>集合が与えられた集合 set を真に含む場合に true を返します。つまり、
+ふたつの集合が等しい場合には false を返します。</p></dd>
+<dt><a name="L005399" id="L005399"><code>subset?(<var>set</var>)</code></a></dt>
+<dd>
+<p>集合が与えられた集合 set に含まれる場合に true を返します。</p></dd>
+<dt><a name="L005400" id="L005400"><code>proper_subset?(<var>set</var>)</code></a></dt>
+<dd>
+<p>集合が与えられた集合 set に真に含まれる場合に true を返します。つまり、
+ふたつの集合が等しい場合には false を返します。</p></dd>
+<dt><a name="L005401" id="L005401"><code>each { |<var>o</var>| ... }</code></a></dt>
+<dd>
+<p>集合のすべての要素に対して1度ずつブロックを実行します。
+ブロック変数 o にはその要素が渡されます。</p></dd>
+<dt><a name="L005402" id="L005402"><code>add(<var>o</var>)</code></a>
+<dt><a name="L005403" id="L005403"><code>&lt;&lt; <var>o</var></code></a></dt>
+<dd>
+<p>集合にオブジェクト o を加え、その集合自身を返します。</p></dd>
+<dt><a name="L005404" id="L005404"><code>delete(<var>o</var>)</code></a></dt>
+<dd>
+<p>集合からオブジェクト o を削除し、その集合自身を返します。</p></dd>
+<dt><a name="L005405" id="L005405"><code>delete_if { |<var>o</var>| ... }</code></a></dt>
+<dd>
+<p>ブロックで最後に評価された値が真であるようなすべての要素を削除し、
+その集合自身を返します。</p></dd>
+<dt><a name="L005406" id="L005406"><code>reject! { |<var>o</var>| ... }</code></a></dt>
+<dd>
+<p>delete_if と同じですが、要素が1つも削除されなかった場合は nil を返します。</p></dd>
+<dt><a name="L005407" id="L005407"><code>merge(<var>enum</var>)</code></a></dt>
+<dd>
+<p>enum で与えられた Enumerable の要素を追加し、その集合自身を返します。</p></dd>
+<dt><a name="L005408" id="L005408"><code>subtract(<var>enum</var>)</code></a></dt>
+<dd>
+<p>enum で与えられた Enumerable の要素を削除し、その集合自身を返します。</p></dd>
+<dt><a name="L005409" id="L005409"><code>+ <var>enum</var></code></a>
+<dt><a name="L005410" id="L005410"><code>| <var>enum</var></code></a></dt>
+<dd>
+<p>和集合、すなわち、2つの集合の少なくともどちらか一方に属するすべて
+の要素からなる新しい集合を作りそれを返します。</p></dd>
+<dt><a name="L005411" id="L005411"><code>- <var>enum</var></code></a></dt>
+<dd>
+<p>差集合、すなわち、前者に属し後者に属さないすべての要素からなる
+新しい集合を作りそれを返します。</p></dd>
+<dt><a name="L005412" id="L005412"><code>&amp; <var>enum</var></code></a></dt>
+<dd>
+<p>共通部分、すなわち、2つの集合のいずれにも属するすべての要素からなる
+新しい集合を作りそれを返します。</p></dd>
+<dt><a name="L005413" id="L005413"><code>^ <var>enum</var></code></a></dt>
+<dd>
+<p>対称差、すなわち、2つの集合のいずれか一方にだけ属するすべての要素からなる
+新しい集合を作りそれを返します。</p></dd>
+<dt><a name="L005414" id="L005414"><code>== <var>set</var></code></a></dt>
+<dd>
+<p>2つの集合が等しいときに true を返します。
+要素の等しさは Object#eql? で検査されます。</p></dd>
+<dt><a name="L005415" id="L005415"><code>classify { |<var>o</var>| ... }</code></a></dt>
+<dd>
+<p>集合をブロックの値によって分類します。返される分類結果は、
+{値 =&gt; 要素の集合} という形をしたハッシュです。
+ブロックは集合のすべての要素に対して1度ずつ実行され、
+ブロック変数 o にはその要素が渡されます。</p>
+<p>例:</p>
+<pre>require 'set'
+files = Set.new(Dir.glob(&quot;*.rb&quot;))
+hash = files.classify { |f| File.mtime(f).year }
+p hash    #=&gt; {2000=&gt;#&lt;Set: {&quot;a.rb&quot;, &quot;b.rb&quot;}&gt;,
+          #    2001=&gt;#&lt;Set: {&quot;c.rb&quot;, &quot;d.rb&quot;, &quot;e.rb&quot;}&gt;,
+          #    2002=&gt;#&lt;Set: {&quot;f.rb&quot;}&gt;}</pre></dd>
+<dt><a name="L005416" id="L005416"><code>divide { |<var>o</var>| ... }</code></a>
+<dt><a name="L005417" id="L005417"><code>divide { |<var>o1</var>, <var>o2</var>| ... }</code></a></dt>
+<dd>
+<p>商集合、すなわちブロックで定義される関係で分割した結果を集合として
+返します。</p>
+<p>引数が2個のときは block.call(o1, o2) が真ならば o1 と o2 は同じ分
+割に属します。引数が1個のときは block.call(o1) == block.call(o2) 
+が真ならばo1 と o2 は同じ分割に属します。つまりブロックの引数が2個
+のときはブロックの値の真偽で決まる同値類に、引数が1個のときはブロッ
+クの値の == による等しさで定義される同値類に分割されます。</p>
+<p>引数が2個のときは、いわゆる同値関係のうち、
+対称律「<code>block.call(o1, o2)</code> ならば <code>block.call(o2, o1)</code>」、
+そして推移律「<code>block.call(o1, o2)</code> かつ 
+<code>block.call(o2, o3)</code> ならば
+<code>block.call(o1, o3)</code>」
+の2つを満たすことが仮定されています。</p>
+<p>例:</p>
+<pre>require 'set'
+numbers = Set[1, 3, 4, 6, 9, 10, 11]
+set = numbers.divide { |i,j| (i - j).abs == 1 }
+p set     #=&gt; #&lt;Set: {#&lt;Set: {1}&gt;,
+          #           #&lt;Set: {11, 9, 10}&gt;,
+          #           #&lt;Set: {3, 4}&gt;,
+          #           #&lt;Set: {6}&gt;}&gt;</pre>
+<p>応用例:</p>
+<pre># 8x2 のチェス盤上でナイトが到達できる位置に関する分類
+require &quot;set&quot;
+board = Set.new
+m, n = 8, 2
+for i in 1..m do for j in 1..n do board &lt;&lt; [i,j] end end
+knight_move = Set[1,2]
+p board.divide { |i,j| 
+  Set[(i[0]-j[0]).abs, (i[1]-j[1]).abs] == knight_move
+}  #=&gt; #&lt;Set: {#&lt;Set: {[6, 2], [4, 1], [2, 2], [8, 1]}&gt;, 
+   #           #&lt;Set: {[2, 1], [8, 2], [6, 1], [4, 2]}&gt;, 
+   #           #&lt;Set: {[1, 1], [3, 2], [5, 1], [7, 2]}&gt;, 
+   #           #&lt;Set: {[1, 2], [5, 2], [3, 1], [7, 1]}&gt;}&gt;</pre></dd>
+<dt><a name="L005418" id="L005418"><code>inspect</code></a></dt>
+<dd>
+<p>人間の読みやすい形に表現した文字列を返します。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm268.html">&lt;-PREV</a>][<a href="refm270.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

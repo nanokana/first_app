@@ -1,0 +1,22 @@
+<HTML>
+<BODY>
+<H1>たし算ドリル</H1>
+
+<P>次のたし算を計算しなさい。制限時間は3分です。</P>
+
+<H2>問題</H2>
+<% answers = [] %>
+  <% 10.times do |i| %>
+  <% a = rand(10) %>
+  <% b = rand(10) %>
+  <% answers << a + b %>
+  (第<%= i + 1 %>問) <%= a %> + <%= b %> = <BR />
+<% end %>
+
+<H2>答え</H2>
+<% answers.each_with_index do |a, i| %>
+  (問<%= i + 1 %>) <%= a %><BR />
+<% end %>
+
+</BODY>
+</HTML>

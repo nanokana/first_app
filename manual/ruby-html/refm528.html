@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ruby-src:sample/biorhythm.rb</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm529.html" rel="next" />
+<link href="refm527.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm527.html">&lt;-PREV</a>][<a href="refm529.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1>ruby-src:sample/biorhythm.rb</h1>
+#!/usr/local/bin/ruby<br />
+#<br />
+#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;biorhythm.rb&nbsp;-&nbsp;<br />
+#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$Release&nbsp;Version:&nbsp;$<br />
+#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$Revision:&nbsp;11708&nbsp;$<br />
+#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$Date:&nbsp;2007-02-13&nbsp;08:01:19&nbsp;+0900&nbsp;(Tue,&nbsp;13&nbsp;Feb&nbsp;2007)&nbsp;$<br />
+#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;by&nbsp;Yasuo&nbsp;OHBA(STAFS&nbsp;Development&nbsp;Room)<br />
+#<br />
+#&nbsp;--<br />
+#<br />
+#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+#<br />
+<br />
+#&nbsp;probably&nbsp;based&nbsp;on:<br />
+#<br />
+#&nbsp;Newsgroups:&nbsp;comp.sources.misc,de.comp.sources.os9<br />
+#&nbsp;From:&nbsp;fkk@stasys.sta.sub.org&nbsp;(Frank&nbsp;Kaefer)<br />
+#&nbsp;Subject:&nbsp;v41i126:&nbsp;&nbsp;br&nbsp;-&nbsp;Biorhythm&nbsp;v3.0,&nbsp;Part01/01<br />
+#&nbsp;Message-ID:&nbsp;&lt;1994Feb1.070616.15982@sparky.sterling.com&gt;<br />
+#&nbsp;Sender:&nbsp;kent@sparky.sterling.com&nbsp;(Kent&nbsp;Landfield)<br />
+#&nbsp;Organization:&nbsp;Sterling&nbsp;Software<br />
+#&nbsp;Date:&nbsp;Tue,&nbsp;1&nbsp;Feb&nbsp;1994&nbsp;07:06:16&nbsp;GMT<br />
+#<br />
+#&nbsp;Posting-number:&nbsp;Volume&nbsp;41,&nbsp;Issue&nbsp;126<br />
+#&nbsp;Archive-name:&nbsp;br/part01<br />
+#&nbsp;Environment:&nbsp;basic,&nbsp;dos,&nbsp;os9<br />
+<br />
+include&nbsp;Math<br />
+require&nbsp;&quot;date.rb&quot;<br />
+require&nbsp;&quot;parsearg.rb&quot;<br />
+require&nbsp;&quot;parsedate.rb&quot;<br />
+<br />
+def&nbsp;usage()<br />
+&nbsp;&nbsp;print&nbsp;&quot;Usage:\n&quot;<br />
+&nbsp;&nbsp;print&nbsp;&quot;biorhythm.rb&nbsp;[options]\n&quot;<br />
+&nbsp;&nbsp;print&nbsp;&quot;&nbsp;&nbsp;options...\n&quot;<br />
+&nbsp;&nbsp;print&nbsp;&quot;&nbsp;&nbsp;&nbsp;&nbsp;-D&nbsp;YYYYMMDD(birthday)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;use&nbsp;default&nbsp;values.\n&quot;<br />
+&nbsp;&nbsp;print&nbsp;&quot;&nbsp;&nbsp;&nbsp;&nbsp;--sdate&nbsp;|&nbsp;--date&nbsp;YYYYMMDD&nbsp;:&nbsp;use&nbsp;system&nbsp;date;&nbsp;use&nbsp;specified&nbsp;date.\n&quot;<br />
+&nbsp;&nbsp;print&nbsp;&quot;&nbsp;&nbsp;&nbsp;&nbsp;--birthday&nbsp;YYYYMMDD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;specifies&nbsp;your&nbsp;birthday.\n&quot;<br />
+&nbsp;&nbsp;print&nbsp;&quot;&nbsp;&nbsp;&nbsp;&nbsp;-v&nbsp;|&nbsp;-g&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;show&nbsp;values&nbsp;or&nbsp;graph.\n&quot;<br />
+&nbsp;&nbsp;print&nbsp;&quot;&nbsp;&nbsp;&nbsp;&nbsp;--days&nbsp;DAYS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;graph&nbsp;range&nbsp;(only&nbsp;in&nbsp;effect&nbsp;for&nbsp;graphs).\n&quot;<br />
+&nbsp;&nbsp;print&nbsp;&quot;&nbsp;&nbsp;&nbsp;&nbsp;--help&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;help\n&quot;<br />
+end<br />
+$USAGE&nbsp;=&nbsp;'usage'<br />
+<br />
+def&nbsp;printHeader(y,&nbsp;m,&nbsp;d,&nbsp;p,&nbsp;w)<br />
+&nbsp;&nbsp;print&nbsp;&quot;\n&gt;&gt;&gt;&nbsp;Biorhythm&nbsp;&lt;&lt;&lt;\n&quot;<br />
+&nbsp;&nbsp;printf&nbsp;&quot;The&nbsp;birthday&nbsp;%04d.%02d.%02d&nbsp;is&nbsp;a&nbsp;%s\n&quot;,&nbsp;y,&nbsp;m,&nbsp;d,&nbsp;w<br />
+&nbsp;&nbsp;printf&nbsp;&quot;Age&nbsp;in&nbsp;days:&nbsp;[%d]\n\n&quot;,&nbsp;p<br />
+end<br />
+<br />
+def&nbsp;getPosition(z)<br />
+&nbsp;&nbsp;pi&nbsp;=&nbsp;Math::PI<br />
+&nbsp;&nbsp;z&nbsp;=&nbsp;Integer(z)<br />
+&nbsp;&nbsp;phys&nbsp;=&nbsp;(50.0&nbsp;*&nbsp;(1.0&nbsp;+&nbsp;sin((z&nbsp;/&nbsp;23.0&nbsp;-&nbsp;(z&nbsp;/&nbsp;23))&nbsp;*&nbsp;360.0&nbsp;*&nbsp;pi&nbsp;/&nbsp;180.0))).to_i<br />
+&nbsp;&nbsp;emot&nbsp;=&nbsp;(50.0&nbsp;*&nbsp;(1.0&nbsp;+&nbsp;sin((z&nbsp;/&nbsp;28.0&nbsp;-&nbsp;(z&nbsp;/&nbsp;28))&nbsp;*&nbsp;360.0&nbsp;*&nbsp;pi&nbsp;/&nbsp;180.0))).to_i<br />
+&nbsp;&nbsp;geist&nbsp;=(50.0&nbsp;*&nbsp;(1.0&nbsp;+&nbsp;sin((z&nbsp;/&nbsp;33.0&nbsp;-&nbsp;(z&nbsp;/&nbsp;33))&nbsp;*&nbsp;360.0&nbsp;*&nbsp;pi&nbsp;/&nbsp;180.0))).to_i<br />
+&nbsp;&nbsp;return&nbsp;phys,&nbsp;emot,&nbsp;geist<br />
+end<br />
+<br />
+def&nbsp;parsedate(s)<br />
+&nbsp;&nbsp;ParseDate::parsedate(s).values_at(0,&nbsp;1,&nbsp;2)<br />
+end<br />
+<br />
+def&nbsp;name_of_week(date)<br />
+&nbsp;&nbsp;Date::DAYNAMES[date.wday]<br />
+end<br />
+<br />
+#<br />
+#&nbsp;main&nbsp;program<br />
+#<br />
+parseArgs(0,&nbsp;nil,&nbsp;&quot;vg&quot;,&nbsp;&quot;D:&quot;,&nbsp;&quot;sdate&quot;,&nbsp;&quot;date:&quot;,&nbsp;&quot;birthday:&quot;,&nbsp;&quot;days:&quot;)<br />
+<br />
+if&nbsp;$OPT_D<br />
+&nbsp;&nbsp;dd&nbsp;=&nbsp;Date.today<br />
+&nbsp;&nbsp;bd&nbsp;=&nbsp;Date.new(*parsedate($OPT_D))<br />
+&nbsp;&nbsp;ausgabeart&nbsp;=&nbsp;&quot;g&quot;<br />
+else<br />
+&nbsp;&nbsp;if&nbsp;$OPT_birthday<br />
+&nbsp;&nbsp;&nbsp;&nbsp;bd&nbsp;=&nbsp;Date.new(*parsedate($OPT_birthday))<br />
+&nbsp;&nbsp;else<br />
+&nbsp;&nbsp;&nbsp;&nbsp;STDERR.print(&quot;Birthday&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(YYYYMMDD)&nbsp;:&nbsp;&quot;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;unless&nbsp;(si&nbsp;=&nbsp;STDIN.gets.chop).empty?<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bd&nbsp;=&nbsp;Date.new(*parsedate(si))<br />
+&nbsp;&nbsp;&nbsp;&nbsp;end<br />
+&nbsp;&nbsp;end<br />
+&nbsp;&nbsp;if&nbsp;!bd<br />
+&nbsp;&nbsp;&nbsp;&nbsp;STDERR.print&nbsp;&quot;BAD&nbsp;Input&nbsp;Birthday!!\n&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;exit()<br />
+&nbsp;&nbsp;end<br />
+<br />
+&nbsp;&nbsp;if&nbsp;$OPT_sdate<br />
+&nbsp;&nbsp;&nbsp;&nbsp;dd&nbsp;=&nbsp;Date.today<br />
+&nbsp;&nbsp;elsif&nbsp;$OPT_date<br />
+&nbsp;&nbsp;&nbsp;&nbsp;dd&nbsp;=&nbsp;Date.new(*parsedate($OPT_date))<br />
+&nbsp;&nbsp;else<br />
+&nbsp;&nbsp;&nbsp;&nbsp;STDERR.print(&quot;Date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&lt;RETURN&gt;&nbsp;for&nbsp;Systemdate]&nbsp;(YYYYMMDD)&nbsp;:&nbsp;&quot;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;unless&nbsp;(si&nbsp;=&nbsp;STDIN.gets.chop).empty?<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dd&nbsp;=&nbsp;Date.new(*parsedate(si))<br />
+&nbsp;&nbsp;&nbsp;&nbsp;end<br />
+&nbsp;&nbsp;end<br />
+&nbsp;&nbsp;dd&nbsp;||=&nbsp;Date.today<br />
+<br />
+&nbsp;&nbsp;if&nbsp;$OPT_v<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ausgabeart&nbsp;=&nbsp;&quot;v&quot;<br />
+&nbsp;&nbsp;elsif&nbsp;$OPT_g<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ausgabeart&nbsp;=&nbsp;&quot;g&quot;<br />
+&nbsp;&nbsp;else<br />
+&nbsp;&nbsp;&nbsp;&nbsp;STDERR.print(&quot;Values&nbsp;for&nbsp;today&nbsp;or&nbsp;Graph&nbsp;&nbsp;(v/g)&nbsp;[default&nbsp;g]&nbsp;:&nbsp;&quot;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ausgabeart&nbsp;=&nbsp;STDIN.gets.chop<br />
+&nbsp;&nbsp;end<br />
+end<br />
+if&nbsp;ausgabeart&nbsp;==&nbsp;&quot;v&quot;<br />
+&nbsp;&nbsp;printHeader(bd.year,&nbsp;bd.month,&nbsp;bd.day,&nbsp;dd&nbsp;-&nbsp;bd,&nbsp;name_of_week(bd))<br />
+&nbsp;&nbsp;print&nbsp;&quot;\n&quot;<br />
+&nbsp;&nbsp;<br />
+&nbsp;&nbsp;phys,&nbsp;emot,&nbsp;geist&nbsp;=&nbsp;getPosition(dd&nbsp;-&nbsp;bd)<br />
+&nbsp;&nbsp;printf&nbsp;&quot;Biorhythm:&nbsp;&nbsp;&nbsp;%04d.%02d.%02d\n&quot;,&nbsp;dd.year,&nbsp;dd.month,&nbsp;dd.day<br />
+&nbsp;&nbsp;printf&nbsp;&quot;Physical:&nbsp;&nbsp;&nbsp;&nbsp;%d%%\n&quot;,&nbsp;phys<br />
+&nbsp;&nbsp;printf&nbsp;&quot;Emotional:&nbsp;&nbsp;&nbsp;%d%%\n&quot;,&nbsp;emot<br />
+&nbsp;&nbsp;printf&nbsp;&quot;Mental:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%d%%\n&quot;,&nbsp;geist<br />
+&nbsp;&nbsp;print&nbsp;&quot;\n&quot;<br />
+else<br />
+&nbsp;&nbsp;if&nbsp;$OPT_days<br />
+&nbsp;&nbsp;&nbsp;&nbsp;display_period&nbsp;=&nbsp;$OPT_days.to_i<br />
+&nbsp;&nbsp;elsif&nbsp;$OPT_D<br />
+&nbsp;&nbsp;&nbsp;&nbsp;display_period&nbsp;=&nbsp;9<br />
+&nbsp;&nbsp;else<br />
+&nbsp;&nbsp;&nbsp;&nbsp;STDERR.printf(&quot;Graph&nbsp;for&nbsp;how&nbsp;many&nbsp;days&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[default&nbsp;10]&nbsp;:&nbsp;&quot;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;display_period&nbsp;=&nbsp;STDIN.gets.chop<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;display_period.empty?<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;display_period&nbsp;=&nbsp;9<br />
+&nbsp;&nbsp;&nbsp;&nbsp;else<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;display_period&nbsp;=&nbsp;display_period.to_i&nbsp;-&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;end<br />
+&nbsp;&nbsp;end<br />
+<br />
+&nbsp;&nbsp;printHeader(bd.year,&nbsp;bd.month,&nbsp;bd.day,&nbsp;dd&nbsp;-&nbsp;bd,&nbsp;name_of_week(bd))<br />
+&nbsp;&nbsp;print&nbsp;&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;P=physical,&nbsp;E=emotional,&nbsp;M=mental\n&quot;<br />
+&nbsp;&nbsp;print&nbsp;&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-------------------------+-------------------------\n&quot;<br />
+&nbsp;&nbsp;print&nbsp;&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bad&nbsp;Condition&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;Good&nbsp;Condition\n&quot;<br />
+&nbsp;&nbsp;print&nbsp;&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-------------------------+-------------------------\n&quot;<br />
+&nbsp;&nbsp;<br />
+&nbsp;&nbsp;(dd&nbsp;-&nbsp;bd).step(dd&nbsp;-&nbsp;bd&nbsp;+&nbsp;display_period)&nbsp;do&nbsp;|z|<br />
+&nbsp;&nbsp;&nbsp;&nbsp;phys,&nbsp;emot,&nbsp;geist&nbsp;=&nbsp;getPosition(z)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;printf&nbsp;&quot;%04d.%02d.%02d&nbsp;:&nbsp;&quot;,&nbsp;dd.year,&nbsp;dd.month,&nbsp;dd.day<br />
+&nbsp;&nbsp;&nbsp;&nbsp;p&nbsp;=&nbsp;(phys&nbsp;/&nbsp;2.0&nbsp;+&nbsp;0.5).to_i<br />
+&nbsp;&nbsp;&nbsp;&nbsp;e&nbsp;=&nbsp;(emot&nbsp;/&nbsp;2.0&nbsp;+&nbsp;0.5).to_i<br />
+&nbsp;&nbsp;&nbsp;&nbsp;g&nbsp;=&nbsp;(geist&nbsp;/&nbsp;2.0&nbsp;+&nbsp;0.5).to_i<br />
+&nbsp;&nbsp;&nbsp;&nbsp;graph&nbsp;=&nbsp;&quot;.&quot;&nbsp;*&nbsp;51<br />
+&nbsp;&nbsp;&nbsp;&nbsp;graph[25]&nbsp;=&nbsp;?|<br />
+&nbsp;&nbsp;&nbsp;&nbsp;graph[p]&nbsp;=&nbsp;?P<br />
+&nbsp;&nbsp;&nbsp;&nbsp;graph[e]&nbsp;=&nbsp;?E<br />
+&nbsp;&nbsp;&nbsp;&nbsp;graph[g]&nbsp;=&nbsp;?M<br />
+&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;graph,&nbsp;&quot;\n&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;dd&nbsp;=&nbsp;dd&nbsp;+&nbsp;1<br />
+&nbsp;&nbsp;end<br />
+&nbsp;&nbsp;print&nbsp;&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-------------------------+-------------------------\n\n&quot;<br />
+end<br />
+
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm527.html">&lt;-PREV</a>][<a href="refm529.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

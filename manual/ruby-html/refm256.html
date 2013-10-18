@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>iconv</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm257.html" rel="next" />
+<link href="refm255.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm255.html">&lt;-PREV</a>][<a href="refm257.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L005071" id="L005071">iconv</a></h1>
+<p>Iconv は UNIX 95 の <code>iconv()</code> 関数のラッパーで、
+さまざまな文字コード体系間で文字列の変換を行ないます。</p>
+<p>詳細は<a href="http://www.opengroup.org/">Open Group</a><sup class="outside"><small>[外部]</small></sup> のオンラインドキュメントを
+参照して下さい。</p>
+<ul>
+<li><a href="http://www.opengroup.org/onlinepubs/007908799/xsh/iconv.h.html">iconv.h</a><sup class="outside"><small>[外部]</small></sup></li>
+<li><a href="http://www.opengroup.org/onlinepubs/007908799/xsh/iconv_open.html">iconv_open()</a><sup class="outside"><small>[外部]</small></sup></li>
+<li><a href="http://www.opengroup.org/onlinepubs/007908799/xsh/iconv.html">iconv()</a><sup class="outside"><small>[外部]</small></sup></li>
+<li><a href="http://www.opengroup.org/onlinepubs/007908799/xsh/iconv_close.html">iconv_close()</a><sup class="outside"><small>[外部]</small></sup></li>
+</ul>
+<p>どの文字コード体系が利用できるかはプラットフォーム依存です。さらにエンコーディング名をあらわす文字列もプラットフォーム依存です。日本語 EUC をあらわす文字列が EUC-JP, euc-jp, eucJP など異なる場合があります。このプラットフォームによる違いを吸収するために、
+<em class="XXINVALIDXX">ruby-src:ext/iconv/charset_alias.rb</em> が用意されています。 
+GNU ソフトウェア <a href="http://www.gnu.org/software/texinfo/">texinfo</a><sup class="outside"><small>[外部]</small></sup> に含まれるファイル config.charset を以下のミラーサイトから手に入れて</p>
+<p><a href="http://ring.pwd.ne.jp/archives/text/CTAN/macros/texinfo/texinfo/intl/config.charset">&lt;URL:http://ring.pwd.ne.jp/archives/text/CTAN/macros/texinfo/texinfo/intl/config.charset&gt;</a><sup class="outside"><small>[外部]</small></sup></p>
+<p>ext/iconv/ に置き、ext/iconv/ で次のように実行すると</p>
+<pre>ruby extconf.rb
+make</pre>
+<p>iconv.rb が生成されます。この iconv.rb がプラットフォームによるエンコーディング名をあらわす文字列の違いを吸収します。</p>
+<p>config.charset のライセンスは LGPL なので、生成された iconv.rb にも LGPL が適用されます。<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></p>
+<h2><a name="L005072" id="L005072">例</a></h2>
+<pre>require 'iconv'
+euc = [&quot;a4a2a4a4a4a6a4a8a4aa&quot;].pack(&quot;H*&quot;) # あいうえお
+sjis = [&quot;82a082a282a482a682a8&quot;].pack(&quot;H*&quot;)
+iconv = Iconv.new('SHIFT_JIS', 'EUC-JP')  # EUC-JP から SHIFT_JIS へ変換
+str = iconv.iconv(euc) 
+str &lt;&lt; iconv.iconv(nil) 
+p( str == sjis )</pre>
+<ol>
+<li><p>新しく <a href="refm256.html">iconv</a> のインスタンスを作り, <a href="#L005082">Iconv#iconv</a> メソッドを使う</p>
+<pre>cd = Iconv.new(to, from)
+begin
+  input.each {|s| output &lt;&lt; cd.iconv(s)}
+  output &lt;&lt; cd.iconv(nil)      # don't forget this
+ensure
+  cd.close
+end</pre></li>
+<li><p><a href="#L005076">Iconv.open</a> をブロックつきで呼び出す</p>
+<pre>Iconv.open(to, from) do |cd|
+  input.each {|s| output &lt;&lt; cd.iconv(s)}
+  output &lt;&lt; cd.iconv(nil)
+end</pre></li>
+<li><p>(2) の短縮系</p>
+<pre>Iconv.iconv(to, from, *input.to_a)</pre></li>
+</ol>
+<h2><a name="L005073" id="L005073">Iconv クラス</a></h2>
+<h3><a name="L005074" id="L005074">クラスメソッド</a></h3>
+<dl>
+<dt><a name="L005075" id="L005075"><code>Iconv.new(<var>to</var>, <var>from</var>)</code></a></dt>
+<dd>
+<p><var>from</var> から <var>to</var> への新しい変換器を作り、それを返します。
+<var>to</var> と <var>from</var> は変換先と変換前の文字コード体系です。</p>
+<p>このメソッドが起こす例外は次の通りです。</p>
+<ul>
+<li><var>to</var> や <var>from</var> が String でないとき <code>TypeError</code>。</li>
+<li><var>to</var> や <var>from</var> で指定された変換器が見つからないとき
+      <code>ArgumentError</code>。</li>
+<li><code>iconv_open(3)</code> が失敗したとき<code>SystemCallError</code>。</li>
+</ul></dd>
+<dt><a name="L005076" id="L005076"><code>Iconv.open(<var>to</var>, <var>from</var>) {|<var>cd</var>| ...}</code></a></dt>
+<dd>
+<p>ブロックが与えられない場合は <a href="#L005075">Iconv.new</a> と等価です。
+ブロックが与えられると、変換器を引数としてブロックを呼び、変換器を閉じて、
+ブロックの値を返します。</p></dd>
+<dt><a name="L005077" id="L005077"><code>Iconv.iconv(<var>to</var>, <var>from</var>, *<var>strs</var>)</code></a></dt>
+<dd>
+<p>次の省略形です。</p>
+<pre>Iconv.open(to, from) {|cd| (strs + [nil]).collect {|s| cd.iconv(s)}}</pre>
+<p><var>to</var>, <var>from</var> の意味は <a href="#L005075">Iconv.new</a> と同じです。</p>
+<p><var>strs</var> は変換される文字列です。</p>
+<p>このメソッドは
+<a href="#L005075">Iconv.new</a>, <a href="#L005076">Iconv.open</a> および <a href="#L005082">Iconv#iconv</a> の例外
+を起こします。</p></dd>
+<dt><a name="L005078" id="L005078"><code>Iconv.conv(<var>to</var>, <var>from</var>, <var>str</var>)</code></a></dt>
+<dd>
+<p>次の省略形です。</p>
+<pre>Iconv.iconv(to, from, str).join</pre>
+<p><a href="#L005077">Iconv.iconv</a>参照。</p></dd>
+<dt><a name="L005079" id="L005079"><code>Iconv.list {|*<var>aliases</var>| ... }    ((&lt;<var>ruby</var> <var>1</var>.<var>9</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>Iterates each alias sets.
+ブロックが指定されていなければエンコーディング名のリストを返す。
+Iconv 標準の機能ではないのでサポートされるかはプラットフォームに依存する。
+サポートされていない場合は例外 NotImplementedError を投げる。</p></dd>
+</dl>
+<h3><a name="L005080" id="L005080">インスタンスメソッド</a></h3>
+<dl>
+<dt><a name="L005081" id="L005081"><code>Iconv#close</code></a></dt>
+<dd>
+<p>変換を終了します。</p>
+<p>このメソッドが呼ばれたあとで <a href="#L005082">Iconv#iconv</a> が呼ばれると例外が
+起きますが、<code>close</code> 自体は繰返し呼ばれても成功します。</p>
+<p>値として、
+出力バッファを初期シフト状態に戻すためのバイト列を含む文字列を返します。</p>
+<pre>i = Iconv.open(&quot;ISO-2022-JP&quot;, &quot;EUC-JP&quot;)
+i.iconv(&quot;\264\301&quot;)     #=&gt; &quot;\e$B4A&quot;
+i.iconv(&quot;\273\372&quot;)     #=&gt; &quot;;z&quot;
+i.close                 #=&gt; &quot;\e(B&quot;</pre></dd>
+<dt><a name="L005082" id="L005082"><code>Iconv#iconv(<var>str</var>, [ <var>start</var> = <var>0</var>, [ <var>length</var> = -<var>1</var> ] ])</code></a></dt>
+<dd>
+<p>文字列の変換を開始し、変換後の文字列を返します。
+<var>str</var> が文字列の場合、<code>str[start, length]</code> を変換し、
+変換後の文字列を返します。</p>
+<p><var>str</var> は変換される文字列または <code>nil</code> です。
+<var>start</var> は <var>str</var> のうち変換を開始するオフセットを指定します。
+<var>length</var> は <var>str</var> のうち変換する長さで、
+<code>nil</code> か <code>-1</code> のときは、<code>start</code> 以降全部を意味します。</p>
+<p><var>str</var> が <code>nil</code> の場合、変換器をその初期シフト状態にし、
+出力バッファを初期シフト状態に戻すためのバイト列からなる文字列を返します。</p>
+<p>その他の場合は例外を起こします。</p>
+<p>このメソッドは起こす例外は
+<em class="XXINVALIDXX">Iconv::IllegalSequence</em>、
+<em class="XXINVALIDXX">Iconv::InvalidCharacter</em>、
+および <em class="XXINVALIDXX">Iconv::OutOfRange</em>
+です。</p></dd>
+</dl>
+<h2><a name="L005083" id="L005083">Iconv::Failure モジュール</a></h2>
+<p><a href="refm256.html">iconv</a> が起こす例外のためのモジュールです。</p>
+<h3><a name="L005080" id="L005080">インスタンスメソッド</a></h3>
+<dl>
+<dt><a name="L005084" id="L005084"><code>Iconv::Failure#success</code></a></dt>
+<dd>
+<p>例外が起こるまでに変換に成功した文字列を返します。</p>
+<p><a href="#L005077">Iconv.iconv</a> でこの例外が起こったときに返される値は、
+以前の例外が例外が起こるまでに変換に成功した文字列を要素とする配列です。
+最後の要素は変換中の文字列です。</p></dd>
+<dt><a name="L005085" id="L005085"><code>Iconv::Failure#failed</code></a></dt>
+<dd>
+<p><em class="XXINVALIDXX">Iconv</em> に渡された文字列のうち、
+例外が起こった位置からはじまる部分を返します。</p></dd>
+<dt><a name="L005086" id="L005086"><code>Iconv::Failure#inspect</code></a></dt>
+<dd>
+<p>#&lt;<code>type</code>: &quot;<code>success</code>&quot;, &quot;<code>failed</code>&quot;&gt; のような形をした
+文字列を返します。</p></dd>
+</dl>
+<h2><a name="L005087" id="L005087">Iconv::BrokenLibrary クラス  <a href="refm390.html">ruby 1.8.4 feature</a></a></h2>
+<p>iconv ライブラリのバグなどにより、<a href="refm535.html">errno</a> が設定されなかった場合に発生します。
+(Windows で iconv.dll の使用する MSVC runtime DLL のバージョンが、ruby 本体が使用するものと一致していない場合も含みます。)</p>
+<h3><a name="L005088" id="L005088">スーパークラス</a></h3>
+<p><code>RuntimeError</code></p>
+<h3><a name="L005089" id="L005089">インクルードしているモジュール</a></h3>
+<p><em class="XXINVALIDXX">Iconv::Failure</em></p>
+<h2><a name="L005090" id="L005090">Iconv::IllegalSequence クラス</a></h2>
+<p>入力か出力の文字が指示された文字集合に含まれないために変換が停止したこと
+を表します。</p>
+<h3><a name="L005088" id="L005088">スーパークラス</a></h3>
+<p><code>ArgumentError</code></p>
+<h3><a name="L005089" id="L005089">インクルードしているモジュール</a></h3>
+<p><em class="XXINVALIDXX">Iconv::Failure</em></p>
+<h2><a name="L005091" id="L005091">Iconv::InvalidCharacter クラス</a></h2>
+<p>入力の最後が不完全な文字かシフトで終っているために変換が停止したこと
+を表します。</p>
+<h3><a name="L005088" id="L005088">スーパークラス</a></h3>
+<p><code>ArgumentError</code></p>
+<h3><a name="L005092" id="L005092">インクルードしているクラス</a></h3>
+<p><em class="XXINVALIDXX">Iconv::Failure</em></p>
+<h2><a name="L005093" id="L005093">Iconv::OutOfRange クラス</a></h2>
+<p>Iconv ライブラリの内部エラーです。この例外は起こらないはずです。</p>
+<h3><a name="L005088" id="L005088">スーパークラス</a></h3>
+<p><code>RuntimeError</code></p>
+<h3><a name="L005089" id="L005089">インクルードしているモジュール</a></h3>
+<p><em class="XXINVALIDXX">Iconv::Failure</em></p>
+<h2><a name="L005094" id="L005094">参考</a></h2>
+<ul>
+<li><a href="http://jp.rubyist.net/magazine/">Rubyist Magazine</a><sup class="outside"><small>[外部]</small></sup>
+<ul>
+<li><a href="http://jp.rubyist.net/magazine/?0009-BundledLibraries">標準添付ライブラリ紹介【第 3 回】 Kconv/NKF/Iconv</a><sup class="outside"><small>[外部]</small></sup></li>
+</ul></li>
+</ul>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>要調査</small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm255.html">&lt;-PREV</a>][<a href="refm257.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

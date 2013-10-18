@@ -1,0 +1,461 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>組み込み変数</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm031.html" rel="next" />
+<link href="refm029.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm029.html">&lt;-PREV</a>][<a href="refm031.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L000507" id="L000507">組み込み変数</a></h1>
+<p>このマニュアルでは、全体にわたって次の用語を使用しています。</p>
+<dl>
+<dt><a name="L000508" id="L000508">グローバル変数</a></dt>
+<dd>
+<p>`$' で始まる変数全般</p>
+</dd>
+<dt><a name="L000507" id="L000507">組み込み変数</a></dt>
+<dd>
+<p>グローバル変数の中でも組み込みのもの(このページの変数)</p>
+</dd>
+<dt><a name="L000509" id="L000509">特殊変数</a></dt>
+<dd>
+<p>組み込み変数の中でも「`$' + 1文字の数字、記号」であるもの</p>
+</dd>
+<dt><a name="L000510" id="L000510">オプション変数</a></dt>
+<dd>
+<p>組み込み変数の中でもコマンドラインオプションにより設定されるもの
+「`$-' + オプションの1文字」であるもの。</p>
+</dd>
+</dl>
+<p>組み込み変数(これらは特殊な機能と用途を持ちます)の中にはその有効なスコー
+プがグローバルとは限らない場合がありますが、上記の定義でグローバル変数
+の中に含まれます(どこでも使えるという意味ではグローバルですが、その値
+はグローバルとは限りません)。</p>
+<p>以下、変数の値のスコープで大別して組み込み変数の一覧を列挙します。</p>
+<h2><a name="L000511" id="L000511">ローカルスコープ</a></h2>
+<p>以下の変数はスレッドローカルでもあります。</p>
+<dl>
+<dt><a name="L000512" id="L000512"><code>$_</code></a></dt>
+<dd>
+<p>最後に <code>gets</code> または <code>readline</code> で読み込んだ文字列です。
+EOF に達した場合には、nil。この変数はローカルスコープです。
+(覚え方: Perlと同じ)</p></dd>
+<dt><a name="L000513" id="L000513"><code>$&amp;</code></a></dt>
+<dd>
+<p>現在のスコープで最後に成功した正規表現のパターンマッチでマッチした
+文字列です。最後のマッチが失敗していた場合には <code>nil</code>。
+(覚え方: いくつかのエディタでの <code>&amp;</code> と同じ)</p>
+<p><a href="refm060.html#L001426">Regexp.last_match</a>[0] と同じ。</p></dd>
+<dt><a name="L000514" id="L000514"><code>$~</code></a></dt>
+<dd>
+<p>現在のスコープで最後に成功したマッチに関する <a href="refm047.html">MatchData</a>
+オブジェクトです。これを設定すると <code>$&amp;</code> や <code>$1 ... $9</code> などの
+値が変化します。</p>
+<p>このデータから n 番目のマッチ($n)を取り出すためには <code>$~[n]</code> で
+参照できます。
+(覚え方: ~ はマッチに使われる)</p>
+<p><a href="refm060.html#L001426">Regexp.last_match</a> と同じ。</p></dd>
+<dt><a name="L000515" id="L000515"><code>$`</code></a></dt>
+<dd>
+<p>現在のスコープで最後に成功した正規表現のパターンマッチでマッチした
+部分より前の文字列です。最後のマッチが失敗していた場合には <code>nil</code>。
+(覚え方: <code>`</code>は文字列の前に置かれる)</p>
+<p><code><a href="refm060.html#L001426">Regexp.last_match</a>.<a href="refm047.html#L001146">pre_match</a></code> と同じ。</p></dd>
+<dt><a name="L000516" id="L000516"><code>$'</code></a></dt>
+<dd>
+<p>現在のスコープで最後に成功した正規表現のパターンマッチでマッチした
+部分より後ろの文字列です。最後のマッチが失敗していた場合には <code>nil</code>。
+(覚え方: <code>'</code>は文字列の後ろに置かれる)</p>
+<p><code><a href="refm060.html#L001426">Regexp.last_match</a>.<a href="refm047.html#L001145">post_match</a></code> と同じ。</p></dd>
+<dt><a name="L000517" id="L000517"><code>$+</code></a></dt>
+<dd>
+<p>現在のスコープで最後に成功した正規表現のパターンマッチでマッチした
+中で最後の括弧に対応する部分文字列です。
+最後のマッチが失敗していた場合には <code>nil</code>。
+いくつかある選択型のパターンのどれがマッチしたのか分からない時に便利
+(覚え方: be positive and forward looking.)</p></dd>
+<dt><a name="L000518" id="L000518"><code>$1</code></a>
+<dt><a name="L000519" id="L000519"><code>$2</code></a>
+<dt><a name="L000520" id="L000520"><code>$3 ...</code></a></dt>
+<dd>
+<p>最後に成功したパターンマッチでn番目の括弧にマッチした値が格
+納されます。該当する括弧がなければ<code>nil</code>が入ってい
+ます。(覚え方: \数字 のようなもの)</p>
+<p><a href="refm060.html#L001426">Regexp.last_match</a>[1],
+<a href="refm060.html#L001426">Regexp.last_match</a>[2], ... と同じ。</p></dd>
+</dl>
+<h2><a name="L000521" id="L000521">スレッドローカルスコープ</a></h2>
+<p>以下の変数は一つのスレッド内ではグローバルスコープですが、スレッド間で
+は独立しています。</p>
+<dl>
+<dt><a name="L000522" id="L000522"><code>$?</code></a></dt>
+<dd>
+<p>このスレッドで最後に終了した子プロセスのステータスです。
+1.6 以前は整数で 1.7 からは <a href="refm058.html">Process::Status</a> オブジェクトです。
+<a href="refm081.html#L002076">Process#wait</a> なども参照。</p>
+<p>整数値として評価した値は <code>wait()</code> システムコールで得られる値そ
+のものなので、子プロセスのexit statusを得るには 1/256 します(<code>$?/256</code>)。
+1.7以降なら
+<a href="refm058.html#L001392">Process::Status#exitstatus</a> も使え
+ます。</p></dd>
+<dt><a name="L000523" id="L000523"><code>$!</code></a></dt>
+<dd>
+<p>最近の例外に関する情報を表す <a href="refm040.html">Exception</a> クラスのサブクラスのインスタンスです。
+<a href="refm029.html#L000473">raise</a> によって設定されます。</p></dd>
+<dt><a name="L000524" id="L000524"><code>$@</code></a></dt>
+<dd>
+<p>例外が発生した時のバックトレースを表す配列です。
+配列の各要素はメソッドの呼び出し位置を示す文字列で形式は</p>
+<pre>&quot;filename:line&quot;</pre>
+<p>または</p>
+<pre>&quot;filename:line:in `methodname'&quot;</pre>
+<p>です。これは <a href="refm029.html#L000438">caller</a> が返す値と同じ形式です。</p>
+<p><code>$@</code> へ値を代入するときは、<a href="#L000523">$!</a> が nil であって
+はいけません。
+<code>$@</code> の参照は、<a href="refm040.html#L000827">$!.backtrace</a> と同じです。
+代入に関しては、 <a href="refm040.html#L000831">$!.set_backtrace</a>
+と同じです。</p>
+<p>(覚え方: where exception occurred <em>at</em>.)</p></dd>
+<dt><a name="L000525" id="L000525"><code>$SAFE</code></a></dt>
+<dd>
+<p>カレントスレッドのセーフレベルを表す整数です。セーフレベルについては
+<a href="refm018.html">セキュリティモデル</a>を参照してください。</p>
+<p><a href="refm064.html#L001639">Thread.current.safe_level</a> と同じ。</p></dd>
+</dl>
+<h2><a name="L000526" id="L000526">グローバルスコープ</a></h2>
+<dl>
+<dt><a name="L000527" id="L000527"><code>$=</code></a></dt>
+<dd>
+<p><a href="refm393.html">obsolete</a>: この変数は削除される予定です。</p>
+<p>パターンマッチや文字列の比較でアルファベットの大文字小文字を
+区別するかどうかのフラグ。デフォルトは nil です。</p></dd>
+<dt><a name="L000528" id="L000528"><code>$/</code></a></dt>
+<dd>
+<p>入力レコードセパレータを表す文字列です。デフォルト値は <code>&quot;\n&quot;</code> です。
+<code>awk</code> の RS 変数のように働きます。</p>
+<p>この変数に nil を設定するとファイル全体を一度に読み込みます。
+空文字列 &quot;&quot; を設定するとパラグラフモードとみなされ、2つ以上連続した
+改行がレコードの区切りになります。</p>
+<p><code>$/</code> には正規表現は使えません。</p>
+<p>(覚え方: 詩では / を行の区切りに使う)</p></dd>
+<dt><a name="L000529" id="L000529"><code>$\</code></a></dt>
+<dd>
+<p>出力レコードセパレータを表す文字列です。
+<a href="refm029.html#L000467">print</a> が最後にこの文字列を出力します。</p>
+<p>デフォルトは <code>nil</code> で、何も出力しません。</p></dd>
+<dt><a name="L000530" id="L000530"><code>$,</code></a></dt>
+<dd>
+<p>デフォルトの区切り文字列です。
+<a href="refm036.html#L000770">Array#join</a> で引数を省略した場合と、
+<a href="refm029.html#L000467">print</a> の各引数の間で出力されます。</p>
+<p>デフォルト値は nil で、空文字列と同じ結果になります。</p></dd>
+<dt><a name="L000531" id="L000531"><code>$;</code></a></dt>
+<dd>
+<p><a href="refm061.html#L001542">String#split</a> で引数を省略した場合の
+区切り文字。デフォルト値は <code>nil</code> で、この場合特殊な
+分割を行います。詳細は <a href="refm061.html#L001542">String#split</a>
+を参照してください。</p>
+<p><a href="refm385.html">ruby 1.8 feature</a>: 1.6 では、$; には文字列しか代入
+できません。1.8 では任意のオブジェクトを代入できますが、
+<a href="refm061.html#L001542">String#split</a> の仕様変更を考慮すると
+常に正規表現を指定すべきです。</p>
+<p>なお、互換性を上げるには $; に頼らないのが一番です。</p></dd>
+<dt><a name="L000532" id="L000532"><code>$.</code></a></dt>
+<dd>
+<p>最後に読んだ入力ファイルの行番号を表す整数です。</p>
+<p><a href="refm032.html#L000591">ARGF.lineno</a> と同じ。各引数ファイル毎の行番号が必要な場合は
+<a href="refm032.html#L000590">ARGF.file</a>.<a href="refm045.html#L001020">lineno</a> を使用します。</p></dd>
+<dt><a name="L000533" id="L000533"><code>$&lt;</code></a></dt>
+<dd>
+<p>引数(なければ標準入力)で構成される仮想ファイルです。つまり
+定数 <a href="refm031.html#L000573">ARGF</a> の別名。
+(覚え方: <code>&lt;</code>はシェルの入力元指定)</p></dd>
+<dt><a name="L000534" id="L000534"><code>$deferr     ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;)) ((&lt;<var>obsolete</var>&gt;))</code></a></dt>
+<dd>
+<p>Ruby インタプリタが出力するエラーメッセージ、警告メッセージ、
+<a href="refm029.html#L000505">warn</a> の出力先。</p>
+<p>この変数には、 <code>write</code> という名前のメソッドが定義されたオブジェ
+クトだけしか代入できません(warn 等の組み込みのメソッドは、最終的に
+$deferr.write メソッドを呼ぶようになっています)。</p>
+<p>$deferr は $stderr の別名です。$deferr は(新設されたばかりですが)
+<a href="refm393.html">obsolete</a> です。</p></dd>
+<dt><a name="L000535" id="L000535"><code>$&gt;</code></a>
+<dt><a name="L000536" id="L000536"><code>$defout     ((&lt;<var>obsolete</var>&gt;))</code></a></dt>
+<dd>
+<p>組み込み関数 <a href="refm029.html#L000467">print</a>、<a href="refm029.html#L000472">puts</a> や
+<a href="refm029.html#L000466">p</a> などのデフォルトの出力先です。初期値は
+<a href="refm031.html#L000570">STDOUT</a>。
+<a href="refm011.html#L000136">-i[extension]</a> オプションを指定した場合には読み
+込み元と同じ名前のファイルです。
+(覚え方: <code>&gt;</code>はシェルの出力先指定)</p>
+<p>この変数には、 <code>write</code> という名前のメソッドが定義されたオブジェ
+クトだけしか代入できません(print 等の組み込みのメソッドは、最終的に
+write メソッドを呼ぶようになっています)。</p>
+<p>print 等の Ruby の組み込み関数の出力先を変更するにはこの変数の値を別
+の <a href="refm045.html">IO</a> に再設定すればよいですが、サブプロセスや C による拡張
+ライブラリの標準出力までも変更したい場合には
+<a href="refm045.html#L001037">IO#reopen</a> によって標準出力を別の IO にリダイレクト
+する必要があります。<a href="#L000548">$stdout</a> も参照。</p>
+<p><a href="refm385.html">ruby 1.8 feature</a>:</p>
+<p>$defout は $stdout の別名です。$defout は <a href="refm393.html">obsolete</a> です。</p></dd>
+<dt><a name="L000537" id="L000537"><code>$0</code></a>
+<dt><a name="L000538" id="L000538"><code>$PROGRAM_NAME       ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>現在実行中のRubyスクリプトの名前を表す文字列です。OSによってはこの変数に代入すると
+<a href="refm535.html">ps(1)</a> の出力が変化します。この機能はプログラムの
+現在の状態を表示するのに便利です。(覚え方: sh や ksh と同じ)</p></dd>
+<dt><a name="L000539" id="L000539"><code>$*</code></a></dt>
+<dd>
+<p>Rubyスクリプトに与えられた引数を表す配列です。組み込み定数 <a href="refm031.html#L000574">ARGV</a>
+の別名です。Ruby 自身に対する引数は取り除かれています。
+(覚え方: sh や ksh と同じ)</p></dd>
+<dt><a name="L000540" id="L000540"><code>$$</code></a></dt>
+<dd>
+<p>現在実行中の Ruby プロセスの pid です。(覚え方: シェルと同じ)</p>
+<p><a href="refm081.html#L002061">Process.pid</a> と同じです。</p></dd>
+<dt><a name="L000541" id="L000541"><code>$:</code></a>
+<dt><a name="L000542" id="L000542"><code>$LOAD_PATH</code></a></dt>
+<dd>
+<p><a href="refm029.html#L000461">load</a>や <a href="refm029.html#L000480">require</a>
+がファイルをロードする時に検索するディレクトリのリスト
+を含む配列です。
+(覚え方: コロンは環境変数<var>PATH</var>の区切り文字である)</p>
+<p>起動時には、<a href="refm011.html#L000137">-I directory</a> オプションで指定したディ
+レクトリ、環境変数 <a href="refm012.html#L000159">RUBYLIB</a> の値、コンパイル時に指定
+したデフォルト値、&quot;.&quot; (カレントディレクトリ) を含みます。
+以下に典型的な UNIX システム上でのロードパスを示します。</p>
+<pre>-I で指定したパス
+環境変数 RUBYLIB の値
+/usr/local/lib/ruby/site_ruby/VERSION        サイト固有、バージョン依存のライブラリ
+/usr/local/lib/ruby/site_ruby/VERSION/ARCH   サイト固有、システム依存、拡張ライブラリ
+/usr/local/lib/ruby/site_ruby                サイト固有ライブラリ
+/usr/local/lib/ruby/VERSION                  標準ライブラリ
+/usr/local/lib/ruby/VERSION/ARCH             標準、システム依存、拡張ライブラリ
+.                                            カレントディレクトリ</pre>
+<p><a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a>
+上記表中の VERSION は Ruby のバージョンを表す文字列で、
+「1.6」や「1.8」です。ARCH はハードウェアと OS を表す文字列で、
+「i686-linux」や「alpha-osf5.1」です。
+<em class="XXINVALIDXX">Config::CONFIG['arch']</em> で得られます。</p>
+<p>コンパイル時のデフォルトパスは多くの UNIX システムでは
+&quot;/usr/local/lib/ruby&quot; です。<a href="refm458.html">mswin32</a>、<a href="refm460.html">mingw32</a>、
+<a href="refm463.html">Cygwin</a>、<a href="refm461.html">bccwin32</a>、<a href="refm476.html">mswince</a> 環境では
+ruby.dll の置き場所から相対的に決まります。<a href="refm467.html">DJGPP</a> と
+<a href="refm470.html">emx</a> (OS/2) では ruby.exe の位置から相対的に決まります。</p>
+<p>-T オプションで起動時に <a href="#L000525">$SAFE</a> を 1 以上に
+設定したときは &quot;.&quot; (カレントディレクトリ) はロードパスに入りません。</p>
+<p><code>require 'foo'</code> としたとき foo は以下のように .rb, .so を交互
+に探索します。</p>
+<pre>/usr/local/lib/ruby/site_ruby/VERSION/foo.rb
+/usr/local/lib/ruby/site_ruby/VERSION/foo.so
+/usr/local/lib/ruby/site_ruby/VERSION/ARCH/foo.rb
+/usr/local/lib/ruby/site_ruby/VERSION/ARCH/foo.so
+  :
+  :</pre>
+<p>共有ライブラリの拡張子が .so でないシステムでは自動的に
+そちらを使います。例えば HP-UX では require 'foo.so'
+とすると foo.sl を検索します。ですから Ruby で記述されたコードでは
+常に .so を使っておいて構いません。</p>
+<p>なお、ロードパスをコマンドラインから調べるには</p>
+<pre>$ ruby -e 'puts $:'</pre>
+<p>とします。</p></dd>
+<dt><a name="L000543" id="L000543"><code>$&quot;</code></a>
+<dt><a name="L000544" id="L000544"><code>$LOADED_FEATURES    ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p><a href="refm029.html#L000480">require</a> でロードされたファイル名を含む配列です。
+<a href="refm029.html#L000480">require</a> で同じファイルを複数回ロードしない
+ようにするためのロックです。</p></dd>
+<dt><a name="L000545" id="L000545"><code>$DEBUG</code></a></dt>
+<dd>
+<p>この値が真であればデバッグモードになります。
+<a href="refm011.html#L000130">-d</a> オプションでセットされます。</p>
+<p>デバッグモードでは、通常の実行と以下の違いがあります。</p>
+<ul>
+<li><p>いずれかのスレッドが例外によって終了した時に、インタプリタ全体
+      を中断します。<a href="refm064.html#L001611">Thread.abort_on_exception</a> を true
+      にセットした時と同じ効果がありますが、デバッグモードでは、スク
+      リプト中で abort_on_exception= クラスメソッドによってフラグをリ
+      セットしても、この効果をなくすことはできません。</p>
+<p>通常の実行では、あるスレッドで起こった例外は、
+<a href="refm064.html#L001632">Thread#join</a> などで検出されない限り、そのスレッドだ
+けをなにも警告を出さずに終了させます。</p></li>
+<li>捕捉しているかどうかに関りなく、例外が発生した時点で
+      それを $stderr にレポートします。処理は続行されます。</li>
+</ul></dd>
+<dt><a name="L000546" id="L000546"><code>$FILENAME</code></a></dt>
+<dd>
+<p>仮想ファイル <a href="refm031.html#L000573">ARGF</a> で現在読み込み中の(メソッド
+gets が今読んでいる)ファイル名です。<a href="refm032.html#L000588">ARGF.filename</a> と同じです。</p></dd>
+<dt><a name="L000547" id="L000547"><code>$stdin</code></a>
+<dt><a name="L000548" id="L000548"><code>$stdout</code></a>
+<dt><a name="L000549" id="L000549"><code>$stderr</code></a></dt>
+<dd>
+<p>それぞれ 標準入力、標準出力、標準エラー出力です。</p>
+<p><a href="refm385.html">ruby 1.8 feature</a></p>
+<p>$stdout, $stderr は <a href="#L000536">$defout</a>,
+<a href="#L000534">$deferr</a> の別名です。($defout, $deferr は 
+<a href="refm393.html">obsolete</a> になりました)</p>
+<p>$stdout, $stderr に設定されるオブジェクトには write という名の
+メソッドが定義されている必要があります。詳細は
+<a href="#L000536">$defout</a>, <a href="#L000534">$deferr</a> を参照して
+ください。</p>
+<p>$stdin に関しては $stdout, $stderr のように特定のメソッドを持たな
+くても代入できますが <a href="refm029.html#L000452">gets</a> などのメソッドを実行すると
+$stdin に設定されているオブジェクトにそのメソッドを投げます。
+(つまり、$stdin.gets を実行しようとします)</p>
+<p>$stdin に設定されるオブジェクトに定義すべきメソッドは以下です。
+(適宜必要なものを取捨選択してください)</p>
+<pre>gets, readline, readlines, getc, readchar, tell, seek,
+pos=, rewind, fileno, to_io, eof, each_line, each_byte,
+binmode, closed?</pre>
+<p>例:</p>
+<pre>$stdin = Object.new
+def $stdin.gets
+  &quot;foo&quot;
+end
+p gets
+
+# =&gt; &quot;foo&quot;</pre>
+<p>標準入力、出力、エラー出力のリダイレクトを行いたい場合は、
+<a href="refm045.html#L001037">IO#reopen</a> を使用します(1.6 でも同じ)。例えば、</p>
+<pre>$stdout = File.open(&quot;/tmp/foo&quot;, &quot;w&quot;)</pre>
+<p>は、</p>
+<pre>STDOUT.reopen(&quot;/tmp/foo&quot;, &quot;w&quot;)</pre>
+<p>とします。リダイレクトを戻したい場合は、</p>
+<pre>stdout_sv = STDOUT.dup          # STDOUT を保存
+STDOUT.reopen(&quot;/tmp/foo&quot;)       # STDOUT を /tmp/foo にリダイレクト
+
+puts &quot;foo&quot;                      # /tmp/foo に出力
+
+STDOUT.flush                    # 必要(?)
+STDOUT.reopen(stdout_sv)        # 元に戻す</pre>
+<p>とします。ただし、子プロセスにもリダイレクトの影響を与えたいという要
+件がないなら <a href="#L000548">$stdout</a> 等への代入で十分です。</p>
+<pre># 出力メソッドのデフォルトの出力先を置き換え
+$stdout = File.open(&quot;/tmp/foo&quot;, &quot;w&quot;)
+
+puts &quot;foo&quot;
+
+# 出力メソッドのデフォルトの出力先を戻す。
+$stdout = STDOUT</pre>
+<p><a href="refm383.html">ruby 1.6 feature</a>: $stdin, $stdout, $stderr へ代入を行うと
+リダイレクトの動作をしていました。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>: 暫定的にリダイレクトの挙動が変更されていま
+した<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/14601">ruby-dev:14601</a><sup class="outside"><small>[外部]</small></sup>。</p></dd>
+<dt><a name="L000550" id="L000550"><code>$VERBOSE</code></a></dt>
+<dd>
+<p>冗長メッセージフラグです。Rubyインタプリタへの
+<a href="refm011.html#L000145">-v</a>オプションでセットされます。</p>
+<p><a href="refm385.html">ruby 1.8 feature</a></p>
+<p>警告レベルは三段階あり、それぞれ以下の通りです。</p>
+<ul>
+<li>nil: 警告を出力しない</li>
+<li>false: 重要な警告のみ出力(デフォルト)</li>
+<li>true: すべての警告を出力する</li>
+</ul>
+<p>コマンドラインオプション <a href="refm011.html#L000149">-W[level]</a> でレベルを指定
+できます。それぞれ、-W0, -W1, -W2 (or -W) が対応します。
+<a href="refm011.html#L000145">-v</a> や <a href="refm011.html#L000148">-w</a> を指定した場合は -W2 と
+同じです。</p>
+<p>nil, false 以外を設定すると値は true になります。</p></dd>
+<dt><a name="L000551" id="L000551"><code>$KCODE</code></a></dt>
+<dd>
+<p>Ruby の認識するマルチバイト文字列エンコーディングです。
+変数の値は &quot;EUC&quot; &quot;SJIS&quot; &quot;UTF8&quot; &quot;NONE&quot; のいずれかの文字列です。</p>
+<p>$KCODE の値が &quot;EUC&quot; のときは文字列や正規表現の
+エンコーディングが EUC-JP であると仮定します。
+同様に &quot;SJIS&quot; のときは Shift JIS を仮定します。
+&quot;UTF8&quot; のときは UTF-8 を仮定します。
+&quot;NONE&quot; のときはマルチバイト文字列を認識しません。</p>
+<p>代入するときには値の最初の 1 バイトしか意味がなく、
+また大文字小文字の違いも無視されます。すなわち、
+&quot;e&quot; &quot;E&quot; は &quot;EUC&quot;、&quot;s&quot; &quot;S&quot; は &quot;SJIS&quot;、
+&quot;u&quot; &quot;U&quot; は &quot;UTF8&quot;、&quot;n&quot; &quot;N&quot; は &quot;NONE&quot; に展開されます。</p>
+<p>デフォルト値は &quot;NONE&quot; です。</p>
+<p>[参考]</p>
+<p>現在の実装では <code>$KCODE</code> は Ruby の以下の動作に影響します。</p>
+<ul>
+<li>インタプリタの字句解析器</li>
+<li><a href="refm060.html">Regexp</a> のエンコーディングフラグのデフォルト値</li>
+<li>(<a href="refm024.html#L000358">正規表現リテラル</a></li>
+<li><a href="refm060.html#L001423">Regexp.new</a>)</li>
+<li><a href="refm061.html#L001568">upcase</a></li>
+<li><a href="refm061.html#L001500">downcase</a></li>
+<li><a href="refm061.html#L001556">swapcase</a></li>
+<li><a href="refm061.html#L001480">capitalize</a></li>
+<li><em class="XXINVALIDXX">inspect</em></li>
+<li><a href="refm061.html#L001542">split</a></li>
+<li><a href="refm061.html#L001507">gsub</a></li>
+<li><a href="refm061.html#L001530">scan</a></li>
+</ul></dd>
+</dl>
+<h3><a name="L000510" id="L000510">オプション変数</a></h3>
+<p>Ruby インタプリタのコマンドライン情報を示す一連の変数があります。
+形式は <code>$-?</code> で ? の部分にオプションの一文字が入ります。</p>
+<dl>
+<dt><a name="L000552" id="L000552"><code>$-0</code></a></dt>
+<dd>
+<p><a href="#L000528">$/</a> の別名です。</p></dd>
+<dt><a name="L000553" id="L000553"><code>$-a</code></a></dt>
+<dd>
+<p><a href="refm011.html#L000125">-a</a> が指定されている時、真です。リードオ
+ンリー変数です。</p></dd>
+<dt><a name="L000554" id="L000554"><code>$-d</code></a></dt>
+<dd>
+<p><a href="#L000545">$DEBUG</a> の別名です。</p></dd>
+<dt><a name="L000555" id="L000555"><code>$-F</code></a></dt>
+<dd>
+<p><a href="#L000531">$;</a> の別名です。</p></dd>
+<dt><a name="L000556" id="L000556"><code>$-i</code></a></dt>
+<dd>
+<p><a href="refm011.html#L000136">-i[extension]</a> が指定されている時、拡張子を表す
+文字列を格納します。指定されていない時の値は <code>nil</code> です。スクリ
+プト内で代入することもでき、その場合は <a href="refm031.html#L000574">ARGV</a> の次の
+ファイルを読み込み始めるタイミングで in-place 置換を開始します。</p></dd>
+<dt><a name="L000557" id="L000557"><code>$-I</code></a></dt>
+<dd>
+<p><a href="#L000542">$LOAD_PATH</a> の別名です。</p></dd>
+<dt><a name="L000558" id="L000558"><code>$-K</code></a></dt>
+<dd>
+<p><a href="#L000551">$KCODE</a> の別名です。</p></dd>
+<dt><a name="L000559" id="L000559"><code>$-l</code></a></dt>
+<dd>
+<p><a href="refm011.html#L000138">-l</a> が指定されている時、真です。リードオンリー変数です。</p></dd>
+<dt><a name="L000560" id="L000560"><code>$-p</code></a></dt>
+<dd>
+<p><a href="refm011.html#L000140">-p</a> が指定されている時、真です。リードオ
+ンリー変数です。</p></dd>
+<dt><a name="L000561" id="L000561"><code>$-v</code></a>
+<dt><a name="L000562" id="L000562"><code>$-w</code></a></dt>
+<dd>
+<p><a href="#L000550">$VERBOSE</a> の別名です。</p></dd>
+<dt><a name="L000563" id="L000563"><code>$-W         ((&lt;<var>ruby</var> <var>1</var>.<var>9</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p><a href="refm011.html#L000149">-W[level]</a> で指定した値を返します。</p>
+<p>つまり、<a href="#L000550">$VERBOSE</a> の値に従って</p>
+<ul>
+<li>nil: 警告を出力しない -&gt; 0</li>
+<li>false: 重要な警告のみ出力(デフォルト) -&gt; 1</li>
+<li>true: すべての警告を出力する -&gt; 2</li>
+</ul>
+<p>のいずれかを返します。リードオンリー変数です。</p></dd>
+</dl>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>デフォルトの順序は 1.6.5 から変更されました</small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm029.html">&lt;-PREV</a>][<a href="refm031.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

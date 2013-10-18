@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>io.c</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm495.html" rel="next" />
+<link href="refm493.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm488.html">UP</a>][<a href="refm493.html">&lt;-PREV</a>][<a href="refm495.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L010325" id="L010325">io.c</a></h1>
+<dl>
+<dt><a name="L010326" id="L010326">void rb_p(VALUE obj)</a></dt>
+<dd>
+<p><code>p</code> の実体。<var>obj</var> を見やすく出力します。</p>
+</dd>
+<dt><a name="L010327" id="L010327">int rb_io_mode_flags(const char *mode);</a></dt>
+<dd>
+<p>fopen(3)のようなモード指定<var>mode</var>をruby内部のモードフラグに
+変換します。</p>
+<p><var>mode</var>は、[rwa][b][+]という文字列です(例: &quot;rb+&quot;)
+戻り値は、
+<code>FMODE_READABLE</code>,
+<code>FMODE_WRITABLE</code>,
+<code>FMODE_BINMODE</code>,
+<code>FMODE_READWRITE</code>
+の論理和です。<code>FMODE_READWRITE</code>は、<code>FMODE_READABLE</code>と
+<code>FMODE_WRITEABLE</code>の論理和です。</p>
+</dd>
+<dt><a name="L010328" id="L010328">static int rb_io_mode_flags2(int mode)</a></dt>
+<dd>
+<p>open(2)のようなモード指定<var>mode</var>をruby内部のモードフラグに
+変換します。</p>
+<p><var>mode</var>は、<var>O_RDONLY</var>, <var>O_WRONLY</var>, <var>O_RDWR</var>のい
+ずれかで
+対応する以下の値のいずれかを返します。
+<code>FMODE_READABLE</code>,
+<code>FMODE_WRITABLE</code>,
+<code>FMODE_READWRITE</code></p>
+<p><code>FMODE_READWRITE</code>は、<code>FMODE_READABLE</code>と
+<code>FMODE_WRITEABLE</code>の論理和です。</p>
+<p>MS-Windowsなどファイルにバイナリ／テキスト属性の区別があるプラッ
+トホームでは、<var>mode</var>に<var>O_BINARY</var>の論理和が指定されてい
+れば、戻り値には<code>FMODE_BINMODE</code>の論理和が指定されます。</p>
+</dd>
+<dt><a name="L010329" id="L010329">static VALUE pipe_open(char *pname, char *mode)</a></dt>
+<dd>
+<p>popen(3)を実行します。引数<var>pname</var>、<var>mode</var>はpopen(3)の
+引数に対応します。</p>
+<p><var>pname</var>は、実行するプロセスで<code>&quot;-&quot;</code>ならば、自身を
+fork(2)します。</p>
+<p><a href="refm045.html">IO</a>オブジェクトを生成し、
+<var>mode</var>が<code>&quot;r&quot;</code>のとき、
+子プロセスの標準出力を生成した<code>IO</code>の入力につなぎます。</p>
+<p><var>mode</var>が<code>&quot;w&quot;</code>のとき、
+子プロセスの標準入力を生成した<code>IO</code>の出力につなぎます。</p>
+<p><var>mode</var>に<code>&quot;+&quot;</code>が含まれれば、子プロセスの標準入出力を
+生成した<code>IO</code>の入出力につなぎます。</p>
+<p>生成した<code>IO</code>オブジェクトを返します。(<var>pname</var>が
+<code>&quot;-&quot;</code>であれば、子プロセスには、<code>nil</code>を返します)</p>
+</dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm488.html">UP</a>][<a href="refm493.html">&lt;-PREV</a>][<a href="refm495.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

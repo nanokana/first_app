@@ -1,0 +1,5 @@
+class Bar           # クラス定義
+  def foo           # インスタンスメソッド定義
+    @a = "Hello"    # インスタンス変数
+  end
+end

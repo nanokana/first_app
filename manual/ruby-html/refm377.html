@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>parsearg</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm378.html" rel="next" />
+<link href="refm376.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm376.html">&lt;-PREV</a>][<a href="refm378.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L007029" id="L007029">parsearg</a></h1>
+<pre>Author: &lt;jammy@shljapan.co.jp&gt;</pre>
+<p>オプションを解析し，`$OPT_xxx'に値を設定します．更に指定したオプシ
+ョンが条件にあっていない場合，USAGE を表示します．</p>
+<h2><a name="L007030" id="L007030">使用しているライブラリ:</a></h2>
+<ul>
+<li><a href="refm376.html">getopts</a></li>
+</ul>
+<h2><a name="L007031" id="L007031">書式:</a></h2>
+<dl>
+<dt><a name="L007032" id="L007032"><code>parseArgs(<var>MIN_ARGC，CHECH_OPTS，SINGLE_OPTS，</var>*<var>OPTS</var>)</code></a>
+</dl>
+<dl>
+<dt><a name="L007033" id="L007033">第一引数:</a></dt>
+<dd>
+<p>`-'や`--'を伴って指定するオプション以外のオプションの最低必要数
+を指定します．存在しない場合は0を指定します．</p>
+</dd>
+<dt><a name="L007034" id="L007034">第二引数:</a></dt>
+<dd>
+<p>どのオプションが必要条件かを指定します．第三，第四引数で指定する
+オプションのうち必要なものを'('，')'，'|'，'&amp;' を使って並べ，全
+体をダブルクォテーションで括ります． Rubyスクリプト実行時に全て
+のオプションが省略可能ならば `nil'を指定して下さい．
+以下の例では，&quot;-d&quot; と最低でも &quot;-x&quot;，&quot;-y&quot;，&quot;--geometry&quot;のど
+れか一つが実行時に必要なオプションとなります．
+`parseArgs(0，&quot;d&amp;(x|y|geometry)&quot;，&quot;fd&quot;，&quot;x:&quot;，&quot;y:&quot;，&quot;geometry:&quot;，&quot;version&quot;)'</p>
+</dd>
+<dt><a name="L007035" id="L007035">第三，第四引数:</a></dt>
+<dd>
+<p><a href="refm376.html">getopts</a> の第一，第二引数と同じです．</p>
+</dd>
+</dl>
+<h2><a name="L007036" id="L007036">オプション解析:</a></h2>
+<p><a href="refm376.html">getopts</a> のオプション解析と同じです．</p>
+<h2><a name="L007037" id="L007037">USAGEの設定:</a></h2>
+<p>`$USAGE'に`usage()'(名前は何でもよい)をセットします．</p>
+<pre>def usage()
+  printf(&quot;Usage:\n&quot;)
+        :
+end
+$USAGE='usage'</pre>
+<h2><a name="L007038" id="L007038">参照:</a></h2>
+<ul>
+<li><a href="refm530.html">ruby-src:sample/getopts.test</a></li>
+<li><a href="refm528.html">ruby-src:sample/biorhythm.rb</a></li>
+</ul>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm376.html">&lt;-PREV</a>][<a href="refm378.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

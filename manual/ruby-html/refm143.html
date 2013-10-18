@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Zlib::GzipReader</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm144.html" rel="next" />
+<link href="refm142.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm135.html">UP</a>][<a href="refm142.html">&lt;-PREV</a>][<a href="refm144.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L002745" id="L002745">Zlib::GzipReader</a></h1>
+<p><a href="refm134.html">zlib</a></p>
+<p>gzip 形式の圧縮ファイルを読み込むラッパークラス。
+IO クラスのインスタンス (又は IO クラスのインスタンスと同じメソッドを
+持つオブジェクト) と関連付けて使用します。</p>
+<pre>Zlib::GzipReader.open('hoge.gz') {|gz|
+  print gz.read
+}
+
+f = File.open('hoge.gz')
+gz = Zlib::GzipReader.new(f)
+print gz.read
+gz.close</pre>
+<h2><a name="L002746" id="L002746">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm140.html">Zlib::GzipFile</a></li>
+</ul>
+<h2><a name="L002747" id="L002747">インクルードしているモジュール:</a></h2>
+<ul>
+<li>Enumerable</li>
+</ul>
+<h2><a name="L002748" id="L002748">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L002749" id="L002749"><code>GzipReader.new(<var>io</var>)</code></a></dt>
+<dd>
+<p><var>io</var> と関連付けられた GzipReader オブジェクトを作成します。
+GzipReader オブジェクトは <var>io</var> からデータを逐次リードして
+解析/展開を行います。<var>io</var> には少なくとも、IO#read と
+同じ動作をする read メソッドが定義されている必要があります。</p>
+<p>ヘッダーの解析に失敗した場合 Zlib::GzipFile::Error 例外が
+発生します。</p></dd>
+<dt><a name="L002750" id="L002750"><code>GzipReader.wrap(<var>io</var>) {|<var>gz</var>| ... }</code></a></dt>
+<dd>
+<p><var>io</var> と関連付けられた GzipReader オブジェクトを作成し、
+それを引数としてブロックを実行します。
+ブロックの実行が終了すると、GzipReader オブジェクトは自動的に
+クローズされます。関連付けられている IO オブジェクトまで
+クローズしたくない時は、ブロック中で <a href="refm140.html#L002706">Zlib::GzipFile#finish</a>
+メソッドを呼び出して下さい。</p></dd>
+<dt><a name="L002751" id="L002751"><code>GzipReader.open(<var>filename</var>)</code></a>
+<dt><a name="L002752" id="L002752"><code>GzipReader.open(<var>filename</var>) {|<var>gz</var>| ... }</code></a></dt>
+<dd>
+<p><var>filename</var> で指定されるファイルを gzip ファイルとして
+オープンします。GzipReader オブジェクトを返します。
+その他詳細は <a href="#L002749">Zlib::GzipReader.new</a> や <a href="#L002750">Zlib::GzipReader.wrap</a> と
+同じです。</p></dd>
+</dl>
+<h2><a name="L002753" id="L002753">メソッド:</a></h2>
+<dl>
+<dt><a name="L002754" id="L002754"><code>eof</code></a>
+<dt><a name="L002755" id="L002755"><code>eof?</code></a></dt>
+<dd>
+<p>圧縮データの終端に達した場合真を返します。
+フッターが読み込まれていなくても真を返すことに注意して下さい。</p></dd>
+<dt><a name="L002756" id="L002756"><code>pos</code></a>
+<dt><a name="L002757" id="L002757"><code>tell</code></a></dt>
+<dd>
+<p>現在までに展開したデータの長さの合計を返します。
+ファイルポインタの位置ではないことに注意して下さい。</p></dd>
+<dt><a name="L002758" id="L002758"><code>each([<var>rs</var>])</code></a>
+<dt><a name="L002759" id="L002759"><code>each_line([<var>rs</var>])</code></a>
+<dt><a name="L002760" id="L002760"><code>each_byte([<var>rs</var>])</code></a>
+<dt><a name="L002761" id="L002761"><code>gets([<var>rs</var>])</code></a>
+<dt><a name="L002762" id="L002762"><code>getc</code></a>
+<dt><a name="L002763" id="L002763"><code>lineno</code></a>
+<dt><a name="L002764" id="L002764"><code>lineno=</code></a>
+<dt><a name="L002765" id="L002765"><code>read([<var>length</var>])</code></a>
+<dt><a name="L002766" id="L002766"><code>readchar</code></a>
+<dt><a name="L002767" id="L002767"><code>readline([<var>rs</var>])</code></a>
+<dt><a name="L002768" id="L002768"><code>readlines([<var>rs</var>])</code></a>
+<dt><a name="L002769" id="L002769"><code>readpartial(<var>maxlen</var>[, <var>outbuf</var>])</code></a>
+<dt><a name="L002770" id="L002770"><code>ungetc(<var>char</var>)</code></a></dt>
+<dd>
+<p>IO クラスの同名メソッドと同じですが、gzip ファイル中に
+エラーがあった場合 <a href="refm136.html">Zlib::Error</a> 例外や
+Zlib::GzipFile::Error 例外が発生します。</p>
+<p>gzip ファイルのフッターの処理に注意して下さい。
+gzip ファイルのフッターには圧縮前データのチェックサムが
+記録されています。GzipReader オブジェクトは、次の時に展開した
+データとフッターの照合を行い、エラーがあった場合は
+Zlib::GzipFile::NoFooter, Zlib::GzipFile::CRCError,
+Zlib::GzipFile::LengthError 例外を発生させます。</p>
+<ul>
+<li>EOF (圧縮データの最後) を越えて読み込み要求を受けた時。
+      すなわち <a href="#L002765">read</a>,
+      <a href="#L002761">gets</a> メソッド等が nil を返す時。</li>
+<li>EOF まで読み込んだ後、<a href="refm140.html#L002705">Zlib::GzipFile#close</a> メソッドが
+      呼び出された時。</li>
+<li>EOF まで読み込んだ後、<a href="#L002772">Zlib::GzipReader#unused</a> メソッドが
+      呼び出された時。</li>
+</ul></dd>
+<dt><a name="L002771" id="L002771"><code>rewind</code></a></dt>
+<dd>
+<p>ファイルポインタを <a href="#L002749">GzipReader.new</a> を呼び出した直後の
+時点に戻します。関連付けられている IO オブジェクトに
+seek メソッドが定義されている必要があります。</p></dd>
+<dt><a name="L002772" id="L002772"><code>unused</code></a></dt>
+<dd>
+<p>gzip フォーマットの解析のために読み込んだ余剰のデータを返します。
+gzip ファイルが最後まで解析されていない場合は nil を返します。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm135.html">UP</a>][<a href="refm142.html">&lt;-PREV</a>][<a href="refm144.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

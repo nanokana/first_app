@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>字句構造</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm022.html" rel="next" />
+<link href="refm020.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm020.html">UP</a>][<a href="refm020.html">&lt;-PREV</a>][<a href="refm022.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L000296" id="L000296">字句構造</a></h1>
+<ul>
+<li><a href="#L000297">識別子</a></li>
+<li><a href="#L000298">コメント</a></li>
+<li><a href="#L000299">埋め込みドキュメント</a></li>
+<li><a href="#L000300">予約語</a></li>
+</ul>
+<p>Rubyの現在の実装はASCIIキャラクタセットを用いています。アル
+ファベットの大文字と小文字は区別されます。識別子と一部のリテ
+ラルの途中を除いては任意の場所に空白文字やコメントを置くこと
+ができます。空白文字とはスペース、タブ、垂直タブ、バックスペー
+ス、キャリッジリターン、ラインフィード、改ページです。改行は行が明らかに次の
+行に継続する時だけ、空白文字として、それ以外では文の区切りと
+して解釈されます。</p>
+<p>改行と認識されるのは、キャリッジリターン+ラインフィードかラインフィードです。</p>
+<h2><a name="L000297" id="L000297">識別子</a></h2>
+<p>例:</p>
+<pre>foobar
+ruby_is_simple</pre>
+<p>Rubyの識別子は英文字またはアンダースコア(<code>'_'</code>)か
+ら始まり、英文字、アンダースコア(<code>'_'</code>)または数字
+からなります。識別子の長さに制限はありません。</p>
+<h2><a name="L000298" id="L000298">コメント</a></h2>
+<p>例:</p>
+<pre># this is a comment line</pre>
+<p>スクリプト言語の習慣にならい、文字列中や数値リテラル `<code>?#</code>' 以外の
+<code>#</code>から行末までをコメントと見なします。</p>
+<h2><a name="L000299" id="L000299">埋め込みドキュメント</a></h2>
+<p>例:</p>
+<pre>=begin
+the everything between a line beginning with `=begin' and
+that with `=end' will be skipped by the interpreter.
+=end</pre>
+<p>Rubyのソースコードにドキュメントを埋め込む事ができます。文が
+始まる部分の行頭の<code>=begin</code>から、<code>=end</code>で始まる行までが
+埋め込みドキュメントです。Rubyインタプリタとしては内容に縛りは
+かけませんが、通常は<a href="refm003.html">RD</a>形式でドキュメントを埋め込むことを
+期待しています。</p>
+<h2><a name="L000300" id="L000300">予約語</a></h2>
+<p>予約語は以下のものです。</p>
+<pre>BEGIN    class    ensure   nil      self     when
+END      def      false    not      super    while
+alias    defined? for      or       then     yield
+and      do       if       redo     true
+begin    else     in       rescue   undef
+break    elsif    module   retry    unless
+case     end      next     return   until</pre>
+<p>予約語はクラス名、変数名などに用いることはできません。ただし
+接頭辞<code>$</code>, <code>@</code>、<code>@@</code>が先頭についたものは予約語
+とは見なされません。また、<code>def</code> のあとやメソッド呼び出しの
+ピリオドのあとなどメソッド名であるとはっきり分かる場所では
+メソッド名として用いることができます。</p>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm020.html">UP</a>][<a href="refm020.html">&lt;-PREV</a>][<a href="refm022.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

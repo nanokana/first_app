@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ping</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm249.html" rel="next" />
+<link href="refm247.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm247.html">&lt;-PREV</a>][<a href="refm249.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L004961" id="L004961">Ping</a></h1>
+<h2><a name="L004962" id="L004962">モジュール関数:</a></h2>
+<dl>
+<dt><a name="L004963" id="L004963"><code>Ping.pingecho(<var>host</var>, <var>timeout</var>=<var>5</var>, <var>service</var>='<var>echo</var>')</code></a></dt>
+<dd>
+<p><var>host</var> の TCP サービス<var>service</var>に対して接続を試み
+成功すれば true を返します。<a href="refm535.html">ping(1)</a>
+と異なり ICMP を使用しないので root 権限を必要としない利点があります。</p>
+<p>相手から何も返ってこずタイムアウトの場合のみ false を返す。相手からの
+能動的な接続拒否の場合には true を返す。</p>
+<p>注)あなたが接続を許可されていないサーバのサービスに対してこのメソッドを使うのは
+推奨しない。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm247.html">&lt;-PREV</a>][<a href="refm249.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

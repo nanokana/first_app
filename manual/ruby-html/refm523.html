@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ruby-src:ext/syslog/syslog.txt</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm524.html" rel="next" />
+<link href="refm522.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm522.html">&lt;-PREV</a>][<a href="refm524.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1>ruby-src:ext/syslog/syslog.txt</h1>
+.\&quot;&nbsp;syslog.txt&nbsp;-&nbsp;&nbsp;-*-&nbsp;Indented-Text&nbsp;-*-<br />
+$RoughId:&nbsp;syslog.txt,v&nbsp;1.18&nbsp;2002/02/25&nbsp;08:20:14&nbsp;knu&nbsp;Exp&nbsp;$<br />
+$Id:&nbsp;syslog.txt&nbsp;11708&nbsp;2007-02-12&nbsp;23:01:19Z&nbsp;shyouhei&nbsp;$<br />
+<br />
+UNIX&nbsp;Syslog&nbsp;extension&nbsp;for&nbsp;Ruby<br />
+Amos&nbsp;Gouaux,&nbsp;University&nbsp;of&nbsp;Texas&nbsp;at&nbsp;Dallas<br />
+&lt;amos+ruby@utdallas.edu&gt;<br />
+&amp;<br />
+Akinori&nbsp;MUSHA<br />
+&lt;knu@ruby-lang.org&gt;<br />
+<br />
+**&nbsp;Syslog(Module)<br />
+<br />
+Included&nbsp;Modules:&nbsp;Syslog::Constants<br />
+<br />
+require&nbsp;'syslog'<br />
+<br />
+A&nbsp;Simple&nbsp;wrapper&nbsp;for&nbsp;the&nbsp;UNIX&nbsp;syslog&nbsp;system&nbsp;calls&nbsp;that&nbsp;might&nbsp;be&nbsp;handy<br />
+if&nbsp;you're&nbsp;writing&nbsp;a&nbsp;server&nbsp;in&nbsp;Ruby.&nbsp;&nbsp;For&nbsp;the&nbsp;details&nbsp;of&nbsp;the&nbsp;syslog(8)<br />
+architecture&nbsp;and&nbsp;constants,&nbsp;see&nbsp;the&nbsp;syslog(3)&nbsp;manual&nbsp;page&nbsp;of&nbsp;your<br />
+platform.<br />
+<br />
+Module&nbsp;Methods:<br />
+<br />
+&nbsp;&nbsp;&nbsp;open(ident&nbsp;=&nbsp;$0,&nbsp;logopt&nbsp;=&nbsp;Syslog::LOG_PID&nbsp;|&nbsp;Syslog::LOG_CONS,<br />
+&nbsp;&nbsp;&nbsp;facility&nbsp;=&nbsp;Syslog::LOG_USER)&nbsp;[{&nbsp;|syslog|&nbsp;...&nbsp;}]<br />
+<br />
+&nbsp;&nbsp;Opens&nbsp;syslog&nbsp;with&nbsp;the&nbsp;given&nbsp;options&nbsp;and&nbsp;returns&nbsp;the&nbsp;module<br />
+&nbsp;&nbsp;itself.&nbsp;&nbsp;If&nbsp;a&nbsp;block&nbsp;is&nbsp;given,&nbsp;calls&nbsp;it&nbsp;with&nbsp;an&nbsp;argument&nbsp;of<br />
+&nbsp;&nbsp;itself.&nbsp;&nbsp;If&nbsp;syslog&nbsp;is&nbsp;already&nbsp;opened,&nbsp;raises&nbsp;RuntimeError.<br />
+<br />
+&nbsp;&nbsp;Example:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Syslog.open('ftpd',&nbsp;Syslog::LOG_PID&nbsp;|&nbsp;Syslog::LOG_NDELAY,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Syslog::LOG_FTP)<br />
+<br />
+&nbsp;&nbsp;&nbsp;open!(ident&nbsp;=&nbsp;$0,&nbsp;logopt&nbsp;=&nbsp;Syslog::LOG_PID&nbsp;|&nbsp;Syslog::LOG_CONS,<br />
+&nbsp;&nbsp;&nbsp;facility&nbsp;=&nbsp;Syslog::LOG_USER)<br />
+&nbsp;&nbsp;&nbsp;reopen(ident&nbsp;=&nbsp;$0,&nbsp;logopt&nbsp;=&nbsp;Syslog::LOG_PID&nbsp;|&nbsp;Syslog::LOG_CONS,<br />
+&nbsp;&nbsp;&nbsp;facility&nbsp;=&nbsp;Syslog::LOG_USER)<br />
+<br />
+&nbsp;&nbsp;Same&nbsp;as&nbsp;open,&nbsp;but&nbsp;does&nbsp;a&nbsp;close&nbsp;first.<br />
+<br />
+&nbsp;&nbsp;&nbsp;opened?<br />
+<br />
+&nbsp;&nbsp;Returns&nbsp;true&nbsp;if&nbsp;syslog&nbsp;opened,&nbsp;otherwise&nbsp;false.<br />
+<br />
+&nbsp;&nbsp;&nbsp;ident<br />
+&nbsp;&nbsp;&nbsp;options<br />
+&nbsp;&nbsp;&nbsp;facility<br />
+<br />
+&nbsp;&nbsp;Returns&nbsp;the&nbsp;parameters&nbsp;given&nbsp;in&nbsp;the&nbsp;last&nbsp;open,&nbsp;respectively.<br />
+&nbsp;&nbsp;Every&nbsp;call&nbsp;of&nbsp;Syslog::open&nbsp;resets&nbsp;these&nbsp;values.<br />
+<br />
+&nbsp;&nbsp;&nbsp;log(pri,&nbsp;message,&nbsp;...)<br />
+<br />
+&nbsp;&nbsp;Writes&nbsp;message&nbsp;to&nbsp;syslog.<br />
+<br />
+&nbsp;&nbsp;Example:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Syslog.log(Syslog::LOG_CRIT,&nbsp;&quot;the&nbsp;sky&nbsp;is&nbsp;falling&nbsp;in&nbsp;%d&nbsp;seconds!&quot;,&nbsp;10)<br />
+<br />
+&nbsp;&nbsp;&nbsp;crit(message,&nbsp;...)<br />
+&nbsp;&nbsp;&nbsp;emerg(message,&nbsp;...)<br />
+&nbsp;&nbsp;&nbsp;alert(message,&nbsp;...)<br />
+&nbsp;&nbsp;&nbsp;err(message,&nbsp;...)<br />
+&nbsp;&nbsp;&nbsp;warning(message,&nbsp;...)<br />
+&nbsp;&nbsp;&nbsp;notice(message,&nbsp;...)<br />
+&nbsp;&nbsp;&nbsp;info(message,&nbsp;...)<br />
+&nbsp;&nbsp;&nbsp;debug(message,&nbsp;...)<br />
+<br />
+&nbsp;&nbsp;These&nbsp;are&nbsp;shortcut&nbsp;methods&nbsp;of&nbsp;Syslog::log().&nbsp;&nbsp;The&nbsp;lineup&nbsp;may<br />
+&nbsp;&nbsp;vary&nbsp;depending&nbsp;on&nbsp;what&nbsp;priorities&nbsp;are&nbsp;defined&nbsp;on&nbsp;your&nbsp;system.<br />
+<br />
+&nbsp;&nbsp;Example:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Syslog.crit(&quot;the&nbsp;sky&nbsp;is&nbsp;falling&nbsp;in&nbsp;%d&nbsp;seconds!&quot;,&nbsp;5)<br />
+&nbsp;<br />
+&nbsp;&nbsp;&nbsp;mask<br />
+&nbsp;&nbsp;&nbsp;mask=(mask)<br />
+<br />
+&nbsp;&nbsp;Returns&nbsp;or&nbsp;sets&nbsp;the&nbsp;log&nbsp;priority&nbsp;mask.&nbsp;&nbsp;The&nbsp;value&nbsp;of&nbsp;the&nbsp;mask<br />
+&nbsp;&nbsp;is&nbsp;persistent&nbsp;and&nbsp;will&nbsp;not&nbsp;be&nbsp;reset&nbsp;by&nbsp;Syslog::open&nbsp;or<br />
+&nbsp;&nbsp;Syslog::close.<br />
+<br />
+&nbsp;&nbsp;Example:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Syslog.mask&nbsp;=&nbsp;Syslog::LOG_UPTO(Syslog::LOG_ERR)<br />
+<br />
+&nbsp;&nbsp;&nbsp;close&nbsp;<br />
+<br />
+&nbsp;&nbsp;Closes&nbsp;syslog.<br />
+<br />
+&nbsp;&nbsp;&nbsp;inspect<br />
+<br />
+&nbsp;&nbsp;Returns&nbsp;the&nbsp;&quot;inspect&quot;&nbsp;string&nbsp;of&nbsp;the&nbsp;Syslog&nbsp;module.<br />
+<br />
+&nbsp;&nbsp;&nbsp;instance<br />
+<br />
+&nbsp;&nbsp;Returns&nbsp;the&nbsp;module&nbsp;itself.&nbsp;(Just&nbsp;for&nbsp;backward&nbsp;compatibility)<br />
+<br />
+&nbsp;&nbsp;&nbsp;LOG_MASK(pri)<br />
+<br />
+&nbsp;&nbsp;Creates&nbsp;a&nbsp;mask&nbsp;for&nbsp;one&nbsp;priority.<br />
+<br />
+&nbsp;&nbsp;&nbsp;LOG_UPTO(pri)<br />
+<br />
+&nbsp;&nbsp;Creates&nbsp;a&nbsp;mask&nbsp;for&nbsp;all&nbsp;priorities&nbsp;up&nbsp;to&nbsp;pri.<br />
+<br />
+**&nbsp;Syslog::Constants(Module)<br />
+<br />
+require&nbsp;'syslog'<br />
+include&nbsp;Syslog::Constants<br />
+<br />
+This&nbsp;module&nbsp;includes&nbsp;the&nbsp;LOG_*&nbsp;constants&nbsp;available&nbsp;on&nbsp;the&nbsp;system.<br />
+<br />
+Module&nbsp;Methods:<br />
+<br />
+&nbsp;&nbsp;&nbsp;LOG_MASK(pri)<br />
+<br />
+&nbsp;&nbsp;Creates&nbsp;a&nbsp;mask&nbsp;for&nbsp;one&nbsp;priority.<br />
+<br />
+&nbsp;&nbsp;&nbsp;LOG_UPTO(pri)<br />
+<br />
+&nbsp;&nbsp;Creates&nbsp;a&nbsp;mask&nbsp;for&nbsp;all&nbsp;priorities&nbsp;up&nbsp;to&nbsp;pri.<br />
+
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm522.html">&lt;-PREV</a>][<a href="refm524.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>セキュリティモデル</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm019.html" rel="next" />
+<link href="refm017.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm017.html">&lt;-PREV</a>][<a href="refm019.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L000224" id="L000224">セキュリティモデル</a></h1>
+<p>RubyにはCGI等のプログラミングを安全に行うことを助ける為に、セキュリティ
+機構が備わっています。</p>
+<p>Rubyのセキュリティモデルは「オブジェクトの汚染」と「セーフレベル」という
+仕組みによってなりたっています。</p>
+<h2><a name="L000225" id="L000225">オブジェクトの汚染</a></h2>
+<p>Rubyではオブジェクトは「汚染されている」とみなされることがあります。この
+しくみは大きく分けて二つの使われ方をします。</p>
+<p>ひとつ目は、信用できない入力をもとに作られたオブジェクトを「汚染されてい
+る」とみなし、「危険な操作」の引数として使えないようにすることです。悪意
+あるデータによって、プログラムが意図しない動作をする事を防ぐことを目的と
+しています。</p>
+<p>もうひとつは、信用しているオブジェクト(汚染されていないオブジェクト)を
+信用できないプログラムから守るという使い方です。セーフレベル4で汚染されて
+いないオブジェクトへの操作が大幅に制限されるのはこの事を意図しています。</p>
+<p>オブジェクトの汚染に関連するメソッド</p>
+<dl>
+<dt><a name="L000226" id="L000226">Object#taint</a></dt>
+<dd>
+<p>オブジェクトを汚染する</p>
+</dd>
+<dt><a name="L000227" id="L000227">Object#tainted?</a></dt>
+<dd>
+<p>オブジェクトが汚染されている場合に真を返す</p>
+</dd>
+<dt><a name="L000228" id="L000228">Object#untaint</a></dt>
+<dd>
+<p>オブジェクトの汚染を取り除く</p>
+</dd>
+</dl>
+<h2><a name="L000229" id="L000229">セーフレベル</a></h2>
+<p>各スレッドは固有の「セーフレベル」を持っています。セーフレベルが高くなるほ
+ど、行える操作は制限されます。セーフレベルはスレッドローカル変数 <a href="refm030.html#L000525">$SAFE</a> で
+設定します。</p>
+<p><a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/37415">ruby-list:37415</a><sup class="outside"><small>[外部]</small></sup></p>
+<p><a href="refm030.html#L000525">$SAFE</a> に関するルール</p>
+<ul>
+<li>プログラム開始時の$SAFEの値は0</li>
+<li><p>各スレッドは作られた時点での親スレッドの$SAFEの値を引き継ぐ</p>
+<pre>$SAFE = 1
+th = Thread.new{
+  p $SAFE #=&gt; 1
+  $SAFE = 3
+}
+th.join
+p $SAFE #=&gt; 1</pre></li>
+<li><p>$SAFE の値を現在の値より小さく変更する事はできない</p>
+<pre>$ ruby -e '$SAFE = 1; $SAFE = 0'
+-e:1: tried to downgrade safe level from 1 to 0 (SecurityError)</pre></li>
+</ul>
+<p>原則として、各セキュリティレベルにはそれ以下のセキュリティレベルの制限も
+適用されます。たとえばレベル1で許されない操作はレベル2でも行えません。</p>
+<h3><a name="L000230" id="L000230">レベル 0</a></h3>
+<p>デフォルトのセーフレベルです。</p>
+<h4><a name="L000231" id="L000231">汚染されるオブジェクト</a></h4>
+<ul>
+<li><p>IOや環境変数、コマンドライン引数(ARGV)から得られた文字列</p>
+<pre>$ ruby -e 'p ARGV[0].tainted?' hoge
+true</pre>
+<p>(環境変数PATHだけは特別)</p></li>
+</ul>
+<p>環境変数PATHだけは例外で、値に<em>危険なパス</em>を含む場合のみ汚染されます。</p>
+<p>ここでは<em>危険なパス</em>とは誰でも変更／書き込みが可能なパスをいいます。
+ルートディレクトリから階層が順番にチェックされ、一箇所でも誰でも
+変更可能な個所があればそのパスは危険とみなされます。</p>
+<h4><a name="L000232" id="L000232">禁止される操作</a></h4>
+<ul>
+<li>特になし</li>
+</ul>
+<h3><a name="L000233" id="L000233">レベル 1</a></h3>
+<p>信用しているプログラムで信用できないデータを処理する為のレベルです。
+CGI等でユーザからの入力を処理するのに適しています。</p>
+<h4><a name="L000231" id="L000231">汚染されるオブジェクト</a></h4>
+<ul>
+<li>レベル0と同様</li>
+</ul>
+<h4><a name="L000232" id="L000232">禁止される操作</a></h4>
+<ul>
+<li>汚染された文字列を引数とした以下の操作
+<ul>
+<li><p>Dir, IO, File、FileTestのクラスメソッド、メソッド</p>
+<pre>$ ruby -e '$SAFE = 1; open(ARGV[0])' hoge
+-e:1:in `initialize': Insecure operation - initialize (SecurityError)
+        from -e:1</pre></li>
+<li>ファイルテスト演算子の使用、ファイルの更新時刻比較</li>
+<li>外部コマンド実行(system, exec, ``)</li>
+<li>eval (<a href="#L000236">レベル 4</a>の説明も参照)</li>
+<li>トップレベルへのload(第二引数を指定してラップすれば実行可能)</li>
+<li>require</li>
+<li>trap</li>
+</ul></li>
+<li>外部コマンド実行(環境変数PATHに危険なパスを含んでいる場合のみ)</li>
+</ul>
+<h3><a name="L000234" id="L000234">レベル 2</a></h3>
+<h4><a name="L000231" id="L000231">汚染されるオブジェクト</a></h4>
+<ul>
+<li>レベル1と同様</li>
+</ul>
+<h4><a name="L000232" id="L000232">禁止される操作</a></h4>
+<p>レベル1の制限に加え、以下の操作が禁止されます。</p>
+<ul>
+<li>Dir.chdir Dir.chroot Dir.mkdir Dir.rmdir</li>
+<li>File.chown File.chmod File.umask File.truncate
+     File#lstat File#chmod File#chown File#delete File#unlink
+     File#truncate File#flock
+     およびFileTestモジュールのメソッド</li>
+<li>IO#ioctl, IO#fcntl</li>
+<li>Process.fork Process.setpgid Process.setsid
+     Process.setpriority Process.egid= Process.kill</li>
+<li>危険なパスからのload</li>
+<li>汚染された文字列を引数にしてのload(ラップされていても)</li>
+<li>syscall</li>
+<li>exit!</li>
+<li>trap</li>
+</ul>
+<h3><a name="L000235" id="L000235">レベル 3</a></h3>
+<p>生成される全てのオブジェクトが汚染されます。レベル4でプログラムを実行す
+る環境を作り上げるのに適しています。</p>
+<h4><a name="L000231" id="L000231">汚染されるオブジェクト</a></h4>
+<ul>
+<li>生成される全てのオブジェクト</li>
+</ul>
+<h4><a name="L000232" id="L000232">禁止される操作</a></h4>
+<p>レベル2の制限に加え、以下の操作が禁止されます。</p>
+<ul>
+<li>Object#untaint</li>
+</ul>
+<h3><a name="L000236" id="L000236">レベル 4</a></h3>
+<p>信用することのできないプログラムを実行するためのレベルです。</p>
+<p>レベル4は信頼できないプログラムによる危険な操作をほぼ全て検出できますが、
+完全な安全性は保証されません。</p>
+<p>このレベルではレベル3では禁止されている「汚染された文字列のeval」が許可
+されています。(evalで実行すると危険な操作は全て禁止されているからです。)</p>
+<h4><a name="L000231" id="L000231">汚染されるオブジェクト</a></h4>
+<ul>
+<li>レベル3と同様</li>
+</ul>
+<h4><a name="L000232" id="L000232">禁止される操作</a></h4>
+<p>レベル3の制限(上記のとおりevalは除く)に加え、以下の操作が禁止されます。</p>
+<ul>
+<li>Object#taint</li>
+<li>トップレベルの定義の変更(autoload, load, include)</li>
+<li>既存のメソッドの再定義</li>
+<li>Objectクラスの定義の変更</li>
+<li>汚染されていないクラスやモジュールの定義の変更
+     およびクラス変数の変更</li>
+<li>汚染されていないオブジェクトの状態の変更</li>
+<li>グローバル変数の変更</li>
+<li>汚染されていないIOやFileを使用する処理</li>
+<li>IOへの出力</li>
+<li>プログラムの終了(exit, abort)
+     (なおout of memoryでもfatalにならない)</li>
+<li>他のスレッドに影響が出るThreadクラスの操作
+     および他のスレッドのThread#[]</li>
+<li>ObjectSpace._id2ref</li>
+<li>ObjectSpace.each_object    <a href="refm384.html">ruby 1.7 feature</a></li>
+<li>環境変数の変更</li>
+<li>srand</li>
+</ul>
+<h2><a name="L000237" id="L000237">セーフレベルに関するその他の詳細</a></h2>
+<ul>
+<li>requireは$SAFE = 0で実行される</li>
+<li>Level 1以上では起動時に以下の違いがある
+<ul>
+<li>環境変数 RUBYLIB を $: に加えない</li>
+<li>カレントディレクトリを $: に加えない</li>
+<li>環境変数 RUBYOPT を処理しない</li>
+<li>以下のスイッチを使用できない
+        -s -S -e -r -i -I -x
+        (スクリプトがsetgid, setuidされている時も同様)</li>
+<li>標準入力からのプログラム読み込みを行わない
+        (スクリプトがsetgid, setuidされている時も同様)</li>
+</ul></li>
+<li>setuid, setgid されたスクリプトは $SAFE = 1 以上で実行される。</li>
+<li>Procはその時点でのセーフレベルを記憶する
+     そのProcオブジェクトがcallされると、
+     記憶していたセーフレベルで実行される。</li>
+<li>汚染されたMethodオブジェクトがcallされるとレベル4で実行される</li>
+<li>汚染された文字列を trap/trace_var の第二引数に指定する
+     とレベル4で実行される
+     <a href="refm384.html">ruby 1.7 feature</a>:
+     version 1.7 では、汚染された文字列を第二引数に指定して
+     trap/trace_var を実行するとその時点で例外 <a href="refm106.html">SecurityError</a> が
+     発生する。</li>
+<li>レベル4以上ではout of memoryでも <a href="refm114.html">fatal</a> にならない。</li>
+<li>実装の都合上、Fixnum・Symbol・true・false・nil は汚染されない。
+     なお Bignum・Float は汚染されることは注意が必要。</li>
+</ul>
+<h2><a name="L000238" id="L000238">使用例</a></h2>
+<p>一旦高くした$SAFEレベルを低く変更する事はできませんが、以下のようにスレッ
+ドを使うことで、プログラムの一部だけを高いセーフレベルで実行することが可
+能です。</p>
+<p>例:</p>
+<pre>def safe(level)
+  result = nil
+  Thread.start {
+    $SAFE = level
+    result = yield
+  }.join
+  result
+end
+
+safe(4) { puts &quot;hello&quot; }    # $SAFEなので例外
+puts &quot;world&quot;                # 外側は影響を受けない</pre>
+<h2><a name="L000239" id="L000239">拡張ライブラリでの扱い</a></h2>
+<ul>
+<li>拡張ライブラリではオブジェクトの汚染状態を適切に伝播させる必要があります。</li>
+<li>グローバルな状態を変更する場合や外部とのやりとりの前にセキュリティレベルを
+  チェックする必要があります。</li>
+</ul>
+<p><a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/37407">ruby-list:37407</a><sup class="outside"><small>[外部]</small></sup></p>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm017.html">&lt;-PREV</a>][<a href="refm019.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

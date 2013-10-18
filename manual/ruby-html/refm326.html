@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>finalize</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm327.html" rel="next" />
+<link href="refm325.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm325.html">&lt;-PREV</a>][<a href="refm327.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006356" id="L006356">finalize</a></h1>
+<p>Finalizerとは, あるオブジェクト obj がGCされる時に obj に依存しているオブジェクトに対
+してメッセージを送る機能です.</p>
+<h2><a name="L006357" id="L006357">使いかた</a></h2>
+<pre>require 'finalize'</pre>
+<p><a href="refm002.html">執筆者募集</a></p>
+<p><a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/3465">ruby-list:3465</a><sup class="outside"><small>[外部]</small></sup></p>
+<h2><a name="L006358" id="L006358">モジュール関数</a></h2>
+<dl>
+<dt><a name="L006359" id="L006359"><code>Finalizer.add(<var>obj</var>, <var>dependant</var>, <var>method</var> = :<var>finalize</var>, *<var>opt</var>)</code></a>
+<dt><a name="L006360" id="L006360"><code>Finalizer.add_dependency(<var>obj</var>, <var>dependant</var>, <var>method</var> = :<var>finalize</var>, *<var>opt</var>)</code></a>
+<dt><a name="L006361" id="L006361"><code>Finalizer.delete(<var>id</var>, <var>dependant</var>, <var>method</var> = :<var>finalize</var>)</code></a>
+<dt><a name="L006362" id="L006362"><code>Finalizer.delete_dependency(<var>id</var>, <var>dependant</var>, <var>method</var> = :<var>finalize</var>)</code></a>
+<dt><a name="L006363" id="L006363"><code>Finalizer.delete_all_dependency(<var>id</var>, <var>dependant</var>)</code></a>
+<dt><a name="L006364" id="L006364"><code>Finalizer.delete_by_dependant(<var>dependant</var>, <var>method</var> = :<var>finalize</var>)</code></a>
+<dt><a name="L006365" id="L006365"><code>Finalizer.delete_all_by_dependant(<var>dependant</var>)</code></a>
+<dt><a name="L006366" id="L006366"><code>Finalizer.finalize_dependency(<var>id</var>, <var>dependant</var>, <var>method</var> = :<var>finalize</var>)</code></a>
+<dt><a name="L006367" id="L006367"><code>Finalizer.finalize_all_dependency(<var>id</var>, <var>dependant</var>)</code></a>
+<dt><a name="L006368" id="L006368"><code>Finalizer.finalize_by_dependant(<var>dependant</var>, <var>method</var> = :<var>finalize</var>)</code></a>
+<dt><a name="L006369" id="L006369"><code>Finalizer.finalize_all_by_dependant(<var>dependant</var>)</code></a>
+<dt><a name="L006370" id="L006370"><code>Finalizer.finalize_all</code></a>
+<dt><a name="L006371" id="L006371"><code>Finalizer.safe</code></a>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm325.html">&lt;-PREV</a>][<a href="refm327.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

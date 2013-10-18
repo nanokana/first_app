@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>net/telnet</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm212.html" rel="next" />
+<link href="refm210.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm210.html">&lt;-PREV</a>][<a href="refm212.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L004192" id="L004192">Net::Telnet</a></h1>
+<h2><a name="L004193" id="L004193">使用例</a></h2>
+<pre>require 'net/telnet'
+
+# リモートホスト foobar に接続
+telnet = Net::Telnet.new(&quot;Host&quot; =&gt; &quot;foobar&quot;) {|c| print c}
+
+# ログイン
+telnet.login(&quot;your name&quot;, &quot;your password&quot;) {|c| print c}
+# ログイン後、プロンプトが出るまで待ち合わせる
+
+telnet.cmd(&quot;ls&quot;) {|c| print c}
+# コマンド実行後、プロンプトが出るまで待ち合わせる
+
+# 少し複雑な例
+telnet.cmd(&quot;sleep 5 &amp;&amp; echo foobar &amp;&quot;) {|c| print c}
+
+STDOUT.flush # &lt;- これがないとここまで処理が来てることがわかりにくい
+
+# 前のコマンドの出力を待ち合わせる
+telnet.waitfor(/foobar\Z/) {|c| print c}
+
+# ログインセッションの終了
+telnet.cmd(&quot;exit&quot;) {|c| print c}
+telnet.close</pre>
+<h2><a name="L004194" id="L004194">スーパークラス:</a></h2>
+<p><a href="refm329.html">SimpleDelegator</a></p>
+<p>Net::Telnet のインスタンスは、ソケットのメソッドをdelegateします(例え
+ば、セッションが終わった後は close を実行した方が良いでしょう)。</p>
+<h2><a name="L004195" id="L004195">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L004196" id="L004196"><code>Net::Telnet.new(<var>opts</var>)</code></a></dt>
+<dd>
+<p>Telnetオブジェクトを生成します。このときリモートホストへの接続も行いま
+す。<var>opts</var> には Telnet オブジェクトに設定する以下のオプションをハッ
+シュで指定します。オプションは省略時にはそれぞれ右に示すデフォルト値が
+適用されます。</p>
+<pre>&quot;Host&quot;       =&gt; &quot;localhost&quot;
+&quot;Port&quot;       =&gt; 23
+&quot;Prompt&quot;     =&gt; /[$%#&gt;] \z/n
+&quot;Timeout&quot;    =&gt; 10  # 接続待ちタイムアウト値(sec)
+&quot;Waittime&quot;   =&gt; 0   # Prompt を待ち合わせる時間。この値を nil にしてはいけません
+&quot;Binmode&quot;    =&gt; false
+&quot;Telnetmode&quot; =&gt; true
+&quot;Output_log&quot; =&gt; nil # 出力ファイル名
+&quot;Dump_log&quot;   =&gt; nil # 出力ファイル名
+&quot;Proxy&quot;      =&gt; nil # Net::Telnet または IO のオブジェクトを指定する</pre>
+<p>生成されたインスタンスは <a href="refm162.html">TCPSocket</a> あるいは &quot;Proxy&quot; で指定したオ
+ブジェクトが持つメソッドを受け付けます(<a href="refm329.html">SimpleDelegator</a>により
+delegateされる)．</p>
+<p>&quot;Timeout&quot; で指定した時間までに接続できない場合 <a href="refm306.html">TimeoutError</a> 例外
+が発生します。</p>
+<p>&quot;Waittime&quot; は <a href="#L004200">Net::Telnet#waitfor</a> メソッドの &quot;Waittime&quot; のデフォ
+ルト値になります。waitfor メソッドのプロンプト待ち合わせの処理は、リモー
+トホストからの出力が &quot;Prompt&quot; で指定した正規表現にマッチしてから
+&quot;Waittime&quot; 秒待っても出力がないかどうかで判断されます。
+waitfor メソッドは <a href="#L004202">Net::Telnet#cmd</a> や <a href="#L004198">Net::Telnet#login</a> 
+の内部でも使用されています。</p>
+<p>ブロックを指定した場合、接続前に</p>
+<pre>&quot;Trying #{ホスト名} ...\n&quot;</pre>
+<p>接続後に</p>
+<pre>&quot;Connected to #{ホスト名}.\n&quot;</pre>
+<p>という文字列を引数にそれぞれブロックを実行します。</p></dd>
+</dl>
+<h2><a name="L004197" id="L004197">メソッド:</a></h2>
+<dl>
+<dt><a name="L004198" id="L004198"><code>Net::Telnet#login(<var>user</var>[, <var>password</var>])</code></a>
+<dt><a name="L004199" id="L004199"><code>Net::Telnet#login(&quot;<var>Name</var>&quot;=&gt;<var>user</var>, &quot;<var>Password</var>&quot;=&gt;<var>password</var>)</code></a></dt>
+<dd>
+<p>ユーザ名<var>user</var>, パスワード<var>password</var>でログインします。
+リモートホストが以下のプロンプトでユーザ名、パスワードの入力を要求する
+ことを期待しています。</p>
+<pre>xxxlogin: 
+Password:</pre>
+<p>これに適合しない場合は、自分で例えば以下のようにログインを行う必要があ
+ります。</p>
+<pre># ログイン時にいきなりパスワードの問い合わせが来る場合
+telnet = Net::Telnet.new(&quot;Host&quot;=&gt;&quot;localhost&quot;) {|c| print c}
+telnet.waitfor(/Password[: ]*\z/n) {|c| print c}
+telnet.cmd(&quot;your password&quot;)</pre>
+<p>ブロックを指定した場合、出力文字列を引数にブロックを逐次実行します。</p></dd>
+<dt><a name="L004200" id="L004200"><code>Net::Telnet#waitfor(<var>match</var>)</code></a>
+<dt><a name="L004201" id="L004201"><code>Net::Telnet#waitfor(&quot;<var>Match</var>&quot;=&gt;<var>match</var>, &quot;<var>Timeout</var>&quot;=&gt;<var>timeout</var>, &quot;<var>Waittime</var>&quot;=&gt;<var>waittime</var>)</code></a></dt>
+<dd>
+<p>正規表現 <var>match</var> で指定した文字列が出力されるまで待ち合わせます。
+<var>match</var> の代わりに &quot;String&quot; をキーに文字列を指定した場合、
+リモートホストからの出力にその文字列が現れるまで待ち合わせます。</p>
+<p><var>timeout</var> 待っても何も出力がなければ <a href="refm306.html">TimeoutError</a> 例外が発生
+します．</p>
+<p><var>timeout</var>, <var>waittime</var> のデフォルト値は new で指定した 
+&quot;Timeout&quot;, &quot;Waittime&quot; の値です。</p>
+<p>ブロックを指定した場合、出力文字列を引数にブロックを逐次実行します。</p></dd>
+<dt><a name="L004202" id="L004202"><code>Net::Telnet#cmd(<var>string</var>)</code></a>
+<dt><a name="L004203" id="L004203"><code>Net::Telnet#cmd(&quot;<var>String</var>&quot;=&gt;<var>string</var>, &quot;<var>Match</var>&quot;=&gt;<var>match</var>, &quot;<var>Timeout</var>&quot;=&gt;<var>timeout</var>)</code></a></dt>
+<dd>
+<p><var>string</var> を改行付きでリモートホストに送り、次のプロンプト
+<var>match</var> が出力されるまで待ちます。</p>
+<p><var>match</var> のデフォルト値は new で指定した &quot;Prompt&quot; の値です。
+<var>timeout</var> のデフォルト値は new で指定した &quot;Timeout&quot; の値です。</p>
+<p>ブロックを指定した場合、出力文字列を引数にブロックを逐次実行します。</p></dd>
+<dt><a name="L004204" id="L004204"><code>Net::Telnet#puts(<var>string</var>)</code></a></dt>
+<dd>
+<p><var>string</var> を改行を付けてリモートホストに送ります。</p></dd>
+<dt><a name="L004205" id="L004205"><code>Net::Telnet#telnetmode</code></a>
+<dt><a name="L004206" id="L004206"><code>Net::Telnet#telnetmode(<var>bool</var>)</code></a>
+<dt><a name="L004207" id="L004207"><code>Net::Telnet#telnetmode = <var>bool</var></code></a></dt>
+<dd>
+<p>...</p></dd>
+<dt><a name="L004208" id="L004208"><code>Net::Telnet#binmode</code></a>
+<dt><a name="L004209" id="L004209"><code>Net::Telnet#binmode(<var>bool</var>)</code></a>
+<dt><a name="L004210" id="L004210"><code>Net::Telnet#binmode = <var>bool</var></code></a></dt>
+<dd>
+<p>...</p></dd>
+<dt><a name="L004211" id="L004211"><code>Net::Telnet#sock</code></a></dt>
+<dd>
+<p>リモートホストに接続している IO オブジェクトを返します。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm210.html">&lt;-PREV</a>][<a href="refm212.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

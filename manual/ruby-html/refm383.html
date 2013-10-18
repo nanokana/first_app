@@ -1,0 +1,1957 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ruby 1.6 feature</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm384.html" rel="next" />
+<link href="refm382.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm382.html">UP</a>][<a href="refm382.html">&lt;-PREV</a>][<a href="refm384.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L007072" id="L007072">ruby 1.6 feature</a></h1>
+<p>ruby version 1.6 は安定版です。この版での変更はバグ修正がメイン
+になります。</p>
+<p><a href="ftp://ftp.netlab.co.jp/pub/lang/ruby/stable-snapshot.tar.gz">stable-snapshot</a><sup class="outside"><small>[外部]</small></sup> は、日々更新される安定版の最新ソースです。</p>
+<h2><a name="L007073" id="L007073">1.6.8 (2002-12-24) -&gt; stable-snapshot</a></h2>
+<dl>
+<dt><a name="L007074" id="L007074">2003-01-22: errno</a></dt>
+<dd>
+<p>EAGAIN と EWOULDBLOCK が同じ値のシステムで、EWOULDBLOCK がなくなっ
+ていました。現在は、このようなシステムでは、EWOULDBLOCK は、EAGAIN 
+として定義されています。(これは 1.6.7 とは異なる挙動です)</p>
+<pre>p Errno::EAGAIN
+p Errno::EWOULDBLOCK
+
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   Errno::EAGAIN
+   Errno::EWOULDBLOCK
+
+=&gt; ruby 1.6.8 (2002-12-24) [i586-linux]
+   Errno::EAGAIN
+   -:2: uninitialized constant EWOULDBLOCK at Errno (NameError)
+
+=&gt; ruby 1.6.8 (2003-02-13) [i586-linux]
+   Errno::EAGAIN
+   Errno::EAGAIN</pre>
+</dd>
+</dl>
+<h2><a name="L007075" id="L007075">1.6.7 (2002-03-01) -&gt; 1.6.8 (2002-12-24)</a></h2>
+<dl>
+<dt><a name="L007076" id="L007076">2002-10-02: Thread (cygwin)</a></dt>
+<dd>
+<p>Cygwin で、Thread の切替えが行われないことがありました。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/36058">ruby-list:36058</a><sup class="outside"><small>[外部]</small></sup>, <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/24637">ruby-list:24637</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L007077" id="L007077">2002-10-01: Socket (win)</a></dt>
+<dd>
+<p>Windows でのソケットの問題が1つ解決されたようです。(どのような問題かは
+大本のメールがわかりませんでしたが、selectで読み込み可能になったのに
+空配列が返されるという問題なのだそうです) <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/40015">ruby-talk:40015</a><sup class="outside"><small>[外部]</small></sup>,
+<em class="XXINVALIDXX">ruby-win32:366</em></p>
+</dd>
+<dt><a name="L007078" id="L007078">2002-09-12: Thread.status (?)</a></dt>
+<dd>
+<p>シグナルを trap でトラップしたときにスレッドの状態を保持していなかっ
+たためシグナルに割り込まれたスレッドの状態がおかしくなることがありま
+した<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/40337">ruby-talk:40337</a><sup class="outside"><small>[外部]</small></sup>, <em class="XXINVALIDXX">ruby-core:00019</em></p>
+</dd>
+<dt><a name="L007079" id="L007079">2002-09-11: Queue#<a href="refm302.html#L006031">pop</a></a></dt>
+<dd>
+<p>Queue#pop に競合状態の問題がありました <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/17223">ruby-dev:17223</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L007080" id="L007080">2002-09-11: SizedQueue.new</a></dt>
+<dd>
+<p>引数に 0 以下を受けつけるバグが修正されました。</p>
+</dd>
+<dt><a name="L007081" id="L007081">2002-09-05: <a href="refm024.html#L000355">式展開</a></a></dt>
+<dd>
+<p>stable snapshot で、一時期、式展開中のクォートは、バックスラッシュエ
+スケープが必要になっていましたが、この変更は元に戻りました。</p>
+<pre>p &quot;#{ &quot;&quot; }&quot;
+
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   &quot;&quot;
+
+=&gt; -:1: warning: bad substitution in string
+   ruby 1.6.7 (2002-09-12) [i586-linux]
+   &quot;#{  }&quot;
+
+=&gt; ruby 1.6.7 (2002-09-25) [i586-linux]
+   &quot;&quot;</pre>
+<p>これは1.7からのバックポートではありません。コメントの扱いなどは、1.7 
+とは異なります。(<a href="refm384.html">ruby 1.7 feature</a> の 2002-06-24 も参照)</p>
+<pre>p &quot;#{ &quot;&quot; # comment }&quot;
+=&gt; ruby 1.6.8 (2002-10-04) [i586-linux]
+   &quot;&quot;
+=&gt; -:1: parse error
+   ruby 1.7.3 (2002-10-04) [i586-linux]</pre>
+</dd>
+<dt><a name="L007082" id="L007082">SizedQueue#deq, #shift</a></dt>
+<dt><a name="L007083" id="L007083">SizedQueue#enq</a></dt>
+<dd>
+<p>追加(push, pop の別名)。これらが定義されていなかったため、enq などを
+呼び出したときスーパークラス Queue の enq が実行されていました。</p>
+</dd>
+<dt><a name="L007084" id="L007084">2002-09-11: <a href="refm157.html#L003015">Tempfile#size</a></a></dt>
+<dd>
+<p>追加 <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/17221">ruby-dev:17221</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L007085" id="L007085">2002-09-09</a></dt>
+<dd>
+<p>mswin32 版と mingw32 版の ruby で、1.6.6の頃から ruby の子プロセスに環境変数が渡らない
+バグがありました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/18236">ruby-dev:18236</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L007086" id="L007086">2002-09-03</a></dt>
+<dd>
+<p>Bison を使用してコンパイルした Ruby で、複数回のライブラリロードを行
+うときの速度が向上しました。(Bison を使用しない場合、ロードの都度明
+示的に GC が実行されるためライブラリロードの実行速度が低下するのだそ
+うです) <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/18145">ruby-dev:18145</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L007087" id="L007087">2002-08-20 File.expand_path</a></dt>
+<dd>
+<p>Cygwin 1.3.x <a href="http://www.ruby-lang.org/cgi-bin/ruby-bugs-ja?selectid=299">ruby-bugs-ja:PR#299</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>p File.expand_path('file', 'c:/')
+
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   /tmp/c:/file
+=&gt; ruby 1.6.7 (2002-08-21) [i586-linux]
+   c:/file</pre>
+</dd>
+<dt><a name="L007088" id="L007088">2002-08-19 Thread (win)</a></dt>
+<dd>
+<p>Ruby のスレッドと Win32 の構造化例外（Win32 API からのコールバッ
+クを含む）を同時に使うと落ちてしまう不具合が修正されたのだそうです。
+<em class="XXINVALIDXX">ruby-win32:273</em></p>
+</dd>
+<dt><a name="L007089" id="L007089">2002-08-12 Hash#==</a></dt>
+<dd>
+<p>Hash オブジェクトはデフォルト値 (<a href="refm044.html#L000936">default</a>) も == で等しい
+ときに等しいとみなされるようになりました。</p>
+<pre>p Hash.new(&quot;foo&quot;) == Hash.new(&quot;bar&quot;)
+
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   true
+=&gt; ruby 1.6.7 (2002-08-21) [i586-linux]
+   false</pre>
+</dd>
+<dt><a name="L007090" id="L007090">2002-07-11 String#slice!</a></dt>
+<dd>
+<p>範囲外の文字列を指定したときに例外を返す場合がありましたが、常に nil 
+を返すようになりました。(String#[]やString#slice と同じ結果を返すと
+いうことです)</p>
+<pre>p &quot;foo&quot;.slice!(&quot;bar&quot;)   # &lt;- 以前からこちらは nil を返していた
+p &quot;foo&quot;.slice!(5,10)
+
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   nil
+   -:2:in `slice!': index 5 out of string (IndexError)
+        from -:2
+=&gt; ruby 1.6.7 (2002-08-01) [i586-linux]
+   nil
+   nil</pre>
+</dd>
+<dt><a name="L007091" id="L007091">2002-07-05 String#split</a></dt>
+<dd>
+<p>最初の引数に nil を指定できるようになりました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/43513">ruby-talk:43513</a><sup class="outside"><small>[外部]</small></sup> 
+この場合、$; を分割文字列として使用します。以前までは $; が有効にな
+るのは引数省略時だけでした。</p>
+<pre>$; = &quot;:&quot;
+p &quot;a:b:c&quot;.split(nil)
+=&gt; -:2:in `split': bad separator (ArgumentError)
+        from -:2
+   ruby 1.6.7 (2002-03-01) [i586-linux]
+
+=&gt; ruby 1.6.7 (2002-07-30) [i586-linux]
+   [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;]</pre>
+</dd>
+<dt><a name="L007092" id="L007092">2002-06-15 Dir.glob</a></dt>
+<dd>
+<p>リンクの切れたシンボリックリンクに対して、Dir.glob がマッチしません
+でした。</p>
+<pre>File.symlink(&quot;foo&quot;, &quot;bar&quot;)
+p Dir.glob(&quot;bar&quot;)
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   []
+=&gt; ruby 1.6.7 (2002-08-01) [i586-linux]
+   [&quot;bar&quot;]</pre>
+</dd>
+<dt><a name="L007093" id="L007093">2002-06-13 Hash[]</a></dt>
+<dd>
+<p>Hash[] で、キーとなる文字列を dup &amp; freeze していませんでした。</p>
+<pre>a = &quot;key&quot;
+h = Hash[a,&quot;val&quot;]
+h.keys[0].upcase!
+p a
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   &quot;KEY&quot;
+=&gt; -:3:in `upcase!': can't modify frozen string (TypeError)
+        from -:3
+   ruby 1.6.7 (2002-08-01) [i586-linux]</pre>
+</dd>
+<dt><a name="L007094" id="L007094">2002-06-10 Fixnum#&gt;&gt;, &lt;&lt;</a></dt>
+<dd>
+<p>負の数に対して右シフトすると 0 になることがありました。
+<a href="http://www.ruby-lang.org/cgi-bin/ruby-bugs-ja?selectid=247">ruby-bugs-ja:PR#247</a><sup class="outside"><small>[外部]</small></sup></p>
+<p>負の数を引数にした左シフト(つまり右シフト)も同様におかしな挙動をして
+いました。<a href="http://www.ruby-lang.org/cgi-bin/ruby-bugs-ja?selectid=248">ruby-bugs-ja:PR#248</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>p(-1 &gt;&gt; 31)
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   0
+=&gt; ruby 1.6.7 (2002-08-01) [i586-linux]
+   -1
+
+p(-1 &lt;&lt; -1)
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   -2147483649
+=&gt; ruby 1.6.7 (2002-08-01) [i586-linux]
+   -1</pre>
+</dd>
+<dt><a name="L007095" id="L007095">2002-06-05</a></dt>
+<dt><a name="L007096" id="L007096"><a href="refm078.html#L001993">Math.acosh</a></a></dt>
+<dt><a name="L007097" id="L007097"><a href="refm078.html#L001994">Math.asinh</a></a></dt>
+<dt><a name="L007098" id="L007098"><a href="refm078.html#L001995">Math.atanh</a></a></dt>
+<dd>
+<p>追加。</p>
+</dd>
+<dt><a name="L007099" id="L007099">2002-06-03</a></dt>
+<dt><a name="L007100" id="L007100">String#[]=</a></dt>
+<dd>
+<p>インデックスとして指定した文字列がレシーバに含まれない場合に、何もせ
+ず右辺を返していました。</p>
+<pre>foo = &quot;foo&quot;
+p foo[&quot;bar&quot;] = &quot;baz&quot;
+p foo
+
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   &quot;baz&quot;
+   &quot;foo&quot;
+=&gt; -:2:in `[]=': string not matched (IndexError)
+        from -:2
+   ruby 1.6.7 (2002-07-30) [i586-linux]</pre>
+</dd>
+<dt><a name="L007101" id="L007101">2002-06-03 sprintf()</a></dt>
+<dd>
+<p>&quot;%d&quot; で引数を整数にするときに、<a href="refm029.html#L000430">Integer</a> と同じ規則を
+使用するようになりました。</p>
+<pre>p sprintf(&quot;%d&quot;, nil)
+
+=&gt; -:1:in `sprintf': no implicit conversion from nil (TypeError)
+        from -:1
+   ruby 1.6.7 (2002-03-01) [i586-linux]
+
+=&gt; ruby 1.6.7 (2002-07-30) [i586-linux]
+   &quot;0&quot;</pre>
+</dd>
+<dt><a name="L007102" id="L007102">2002-05-23 -* オプション(?)</a></dt>
+<dd>
+<p>以前まで、</p>
+<pre>#! ruby -*- mode: ruby -*-</pre>
+<p>のような Emacs の '-*-' 指定を使用したスクリプトのために -* 以降を無
+視する(何もしないオプションとして認識)するようになっていましたが、こ
+の特別扱いはなくなりました。Emacs の '-*-' 指定は、2行目に書くように
+するべきです。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/17193">ruby-dev:17193</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>ruby '-*' -v
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+
+=&gt; ruby: invalid option -*  (-h will show valid options)</pre>
+</dd>
+<dt><a name="L007103" id="L007103">2002-05-22 parsedate</a></dt>
+<dd>
+<p>バージョンアップ<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/17171">ruby-dev:17171</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L007104" id="L007104">2002-05-22 -T オプション</a></dt>
+<dd>
+<p>ruby のコマンドラインオプション -T の後に空白を置かずに他のオプショ
+ンを続けると、-T以降のオプションが無効になっていました。-T の後は数
+字以外が続いた場合、オプションとみなすようになりました(-0 オプション
+と同じ) <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/17179">ruby-dev:17179</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>ruby -Tv  # -v が無効 (ruby 1.6.7 (2002-03-01) [i586-linux])
+
+=&gt; ruby: No program input from stdin allowed in tainted mode (SecurityError)
+
+=&gt; ruby 1.6.7 (2002-07-30) [i586-linux]</pre>
+</dd>
+<dt><a name="L007105" id="L007105">2002-05-20 IO#close</a></dt>
+<dd>
+<p>双方向のパイプの dup を close_write するとエラーになっていました。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/17155">ruby-dev:17155</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>open(&quot;|-&quot;,&quot;r+&quot;) {|f|
+  if f
+    f.dup.close_write
+  else
+     sleep 1
+  end
+}
+
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   -:3:in `close_write': closing non-duplex IO for writing (IOError)
+        from -:3
+        from -:1:in `open'
+        from -:1
+
+
+=&gt; ruby 1.6.7 (2002-07-30) [i586-linux]</pre>
+</dd>
+<dt><a name="L007106" id="L007106">2002-05-02 Regexp.quote</a></dt>
+<dd>
+<p># はバックスラッシュクォートするようになりました。これは、quote した
+正規表現を //x に正しく埋め込めるようにするためです。
+<a href="http://www.ruby-lang.org/cgi-bin/ruby-bugs-ja?selectid=231">ruby-bugs-ja:PR#231</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>p Regexp.quote(&quot;#&quot;)
+
+p /a#{Regexp.quote(&quot;#&quot;)}b/x =~ &quot;ab&quot;
+
+=&gt; -:3: warning: ambiguous first argument; make sure
+   ruby 1.6.7 (2002-03-01) [i586-linux]
+   &quot;#&quot;
+   0
+
+=&gt; -:3: warning: ambiguous first argument; make sure
+   ruby 1.6.7 (2002-07-30) [i586-linux]
+   &quot;\\#&quot;
+   nil</pre>
+</dd>
+<dt><a name="L007107" id="L007107">2002-04-29: rb_find_file()</a></dt>
+<dd>
+<p>$SAFE &gt;= 4 で、絶対パス指定でない場合、SecurityError 例外が発生する
+ようになりました。</p>
+</dd>
+<dt><a name="L007108" id="L007108">2002-04-26: Regexp.quote</a></dt>
+<dd>
+<p><a href="http://www.ruby-lang.org/cgi-bin/ruby-bugs-ja?selectid=231">ruby-bugs-ja:PR#231</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>p Regexp.quote(&quot;\t&quot;)
+
+p /a#{Regexp.quote(&quot;\t&quot;)}b/x =~ &quot;ab&quot;
+
+=&gt; -:3: warning: ambiguous first argument; make sure
+   ruby 1.6.7 (2002-03-01) [i586-linux]
+   &quot;\t&quot;
+   0
+
+=&gt; -:3: warning: ambiguous first argument; make sure
+   ruby 1.6.7 (2002-05-04) [i586-linux]
+   &quot;\\t&quot;
+   nil</pre>
+</dd>
+<dt><a name="L007109" id="L007109">2002-04-20: Regexp#inspect</a></dt>
+<dd>
+<p>/x フラグ付きの正規表現オブジェクトの inspect が改行を \n に変換して
+いました。<a href="http://www.ruby-lang.org/cgi-bin/ruby-bugs-ja?selectid=225">ruby-bugs-ja:PR#225</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>p /a
+        b/x
+
+=&gt; -:1: warning: ambiguous first argument; make sure
+   ruby 1.6.7 (2002-03-01) [i586-linux]
+   /a\n                b/x
+
+=&gt; -:1: warning: ambiguous first argument; make sure
+   ruby 1.7.2 (2002-04-24) [i586-linux]
+   /a
+                   b/x</pre>
+</dd>
+<dt><a name="L007110" id="L007110">2002-04-19: 終了処理</a></dt>
+<dd>
+<p>以下のスクリプトで 2 回シグナルを送らないと終了しない不具合が修正さ
+れました。<a href="http://www.ruby-lang.org/cgi-bin/ruby-bugs-ja?selectid=223">ruby-bugs-ja:PR#223</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>trap(:TERM, &quot;EXIT&quot;)
+
+END{
+  puts &quot;exit&quot;
+}
+
+Thread.start { Thread.stop }
+sleep</pre>
+</dd>
+<dt><a name="L007111" id="L007111">2002-04-17: Regexp#inspect</a></dt>
+<dd>
+<p><a href="http://www.ruby-lang.org/cgi-bin/ruby-bugs-ja?selectid=222">ruby-bugs-ja:PR#222</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>p %r{\/}
+
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   /\\//
+
+=&gt; ruby 1.6.7 (2002-05-04) [i586-linux]
+   /\//</pre>
+</dd>
+<dt><a name="L007112" id="L007112">2002-04-15: pack('U')</a></dt>
+<dd>
+<p>pack('U') を unpack('U') すると元に戻らないバグが修正されました。
+(unpack は、バイト単位でなく文字単位の処理になりました)
+<a href="http://www.ruby-lang.org/cgi-bin/ruby-bugs-ja?selectid=220">ruby-bugs-ja:PR#220</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>p [128].pack(&quot;U&quot;)
+p [128].pack(&quot;U&quot;).unpack(&quot;U&quot;)
+
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   &quot;\302\200&quot;
+   [0]
+
+=&gt; ruby 1.6.7 (2002-05-04) [i586-linux]
+   &quot;\302\200&quot;
+   [128]</pre>
+</dd>
+<dt><a name="L007113" id="L007113">2002-04-11: IO#write</a></dt>
+<dd>
+<p>ソケットやパイプに対する EPIPE の検出に失敗することがありました。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/16849">ruby-dev:16849</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L007114" id="L007114">2002-04-11: <a href="refm172.html">cgi/session</a>    (*ドキュメント未反映*)</a></dt>
+<dd>
+<p>support for multipart form.</p>
+</dd>
+<dt><a name="L007115" id="L007115">2002-04-10: Object#<a href="refm035.html#L000702">remove_instance_variable</a></a></dt>
+<dd>
+<p>指定したインスタンス変数が定義されていない場合例外 NameError を起こ
+すようになりました。<a href="http://www.ruby-lang.org/cgi-bin/ruby-bugs-ja?selectid=216">ruby-bugs-ja:PR#216</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>Object.new.instance_eval {
+  p remove_instance_variable :@foo
+}
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   nil
+
+=&gt; -:2:in `remove_instance_variable': instance variable @foo not defined (NameError)
+   ruby 1.6.7 (2002-04-10) [i586-linux]</pre>
+</dd>
+<dt><a name="L007116" id="L007116">2002-04-04: Integer#<a href="refm053.html#L001313">step</a></a></dt>
+<dd>
+<p>第二引数が 1 よりも小さい場合に 0 を指定したと見なされエラーになって
+いました。</p>
+<pre>1.step(2, 0.1) {|f| p f }
+
+=&gt; -:1:in `step': step cannot be 0 (ArgumentError)
+        from -:1
+   ruby 1.6.7 (2002-03-01) [i586-linux]
+
+=&gt; ruby 1.6.7 (2002-04-10) [i586-linux]
+   1
+   1.1
+    :
+   1.9</pre>
+</dd>
+<dt><a name="L007117" id="L007117">2002-04-01: <a href="refm030.html#L000514">$~</a></a></dt>
+<dd>
+<p>$~ に nil を代入できないバグが修正されました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/16697">ruby-dev:16697</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>/foo/ =~ &quot;foo&quot;
+p $~
+$~ = nil
+p $~
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   #&lt;MatchData:0x401b1be4&gt;
+   -:3: wrong argument type nil (expected Match) (TypeError)
+                                          ^^^^^ MatchData の間違い
+=&gt; ruby 1.6.7 (2002-04-04) [i586-linux]
+   #&lt;MatchData:0x401b1c98&gt;
+   nil</pre>
+</dd>
+<dt><a name="L007118" id="L007118">2002-03-25 <a href="refm160.html#L003055">BasicSocket.do_not_reverse_lookup</a></a></dt>
+<dd>
+<p>$SAFE &gt; 3 で値を設定できなくなりました。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/16554">ruby-dev:16554</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L007119" id="L007119">2002-03-23 IO#<a href="refm045.html#L000992">read</a></a></dt>
+<dd>
+<p>サイズが 0 で中身のあるファイル(Linux の /proc ファイルシステムでこ
+のような場合があります)が File#read などで読めないバグが修正されまし
+た。</p>
+<pre>p File.open(&quot;/proc/#$$/cmdline&quot;).read
+
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   &quot;&quot;
+
+=&gt; ruby 1.6.7 (2002-03-29) [i586-linux]
+   &quot;ruby-1.6\000-v\000-&quot;</pre>
+</dd>
+<dt><a name="L007120" id="L007120">2002-03-22 <a href="refm050.html#L001202">module_eval</a></a></dt>
+<dd>
+<p><a href="refm050.html#L001202">module_eval</a> のブロック内で定数やクラス変数のスコープが
+変わることはなくなりました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/17876">ruby-dev:17876</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>class Foo
+  FOO = 1
+  @@foo = 1
+end
+
+FOO = 2
+@@foo = 2
+
+Foo.module_eval { p FOO, @@foo }
+
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   1
+   1
+
+=&gt; ruby 1.6.7 (2002-03-29) [i586-linux]
+   2
+   2</pre>
+</dd>
+<dt><a name="L007121" id="L007121">2002-03-22 <a href="refm203.html">net/http</a></a></dt>
+<dd>
+<p>Net::HTTP.new がブロックなしのときに nil を返していました。
+<a href="http://www.ruby-lang.org/cgi-bin/ruby-bugs-ja?selectid=214">ruby-bugs-ja:PR#214</a><sup class="outside"><small>[外部]</small></sup></p>
+<p>net/protocol は削除される方向にあるようで、その準備時に
+エンバグしたそうです。</p>
+</dd>
+<dt><a name="L007122" id="L007122">2002-03-20 <a href="refm046.html#L001072">File.expand_path</a></a></dt>
+<dd>
+<p>メモリの解放洩れがありました。<em class="XXINVALIDXX">ruby-bugs:PR#276</em></p>
+</dd>
+<dt><a name="L007123" id="L007123">2002-03-18 文字列リテラル</a></dt>
+<dd>
+<p>漢字コードの扱いが #{..} の中などで不完全な部分がありました。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/34478">ruby-list:34478</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>#! ruby -Ks
+p a = &quot;#{&quot;表&quot;}&quot;
+=&gt; -:1: compile error in string expansion (SyntaxError)
+   -:1: unterminated string meets end of file
+   ruby 1.6.7 (2002-03-15) [i586-linux]
+=&gt; ruby 1.6.7 (2002-03-19) [i586-linux]
+   &quot;表&quot;
+
+#! ruby -Ks
+p %[評価]
+=&gt; -:2: parse error
+           p %[評価]
+                   ^
+   ruby 1.6.7 (2002-03-15) [i586-linux]
+
+=&gt; ruby 1.6.7 (2002-03-19) [i586-linux]
+   &quot;評価&quot;</pre>
+</dd>
+<dt><a name="L007124" id="L007124">2002-03-16 $~</a></dt>
+<dd>
+<p>正規表現マッチのメソッドが実際には内部でマッチを実行しない場合に 
+$~ の状態をクリアしていませんでした。
+<a href="http://www.ruby-lang.org/cgi-bin/ruby-bugs-ja?selectid=208">ruby-bugs-ja:PR#208</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>/foo/ =~ &quot;foo&quot;
+/foo/ =~ nil
+p $~
+
+/foo/ =~ &quot;foo&quot;
+$_ = nil; ~&quot;foo&quot;
+p $~
+
+/foo/ =~ &quot;foo&quot;
+&quot;foo&quot;.index(/bar/, 4)
+p $~
+
+/foo/ =~ &quot;foo&quot;
+&quot;foo&quot;.rindex(/bar/, -4)
+p $~
+
+=&gt; ruby 1.6.7 (2002-03-06) [i586-linux]
+   #&lt;MatchData:0x401b1be4&gt;
+   #&lt;MatchData:0x401b198c&gt;
+   #&lt;MatchData:0x401b1644&gt;
+   #&lt;MatchData:0x401b1414&gt;
+=&gt; ruby 1.6.7 (2002-03-19) [i586-linux]
+   nil
+   nil
+   nil
+   nil</pre>
+</dd>
+<dt><a name="L007125" id="L007125">2002-03-14 拡張ライブラリの autoload</a></dt>
+<dd>
+<p>拡張ライブラリに対して autoload が効いていませんでした。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/16379">ruby-dev:16379</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>autoload :Fcntl, &quot;fcntl&quot;
+require &quot;fcntl&quot;
+
+=&gt; -:2:in `require': uninitialized constant Fcntl (NameError)
+        from -:2
+   ruby 1.6.7 (2002-03-01) [i586-linux]
+
+=&gt; ruby 1.6.7 (2002-03-15) [i586-linux]</pre>
+</dd>
+<dt><a name="L007126" id="L007126">2002-03-13 <a href="refm376.html">getopts</a></a></dt>
+<dd>
+<p>refine. <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/16193">ruby-dev:16193</a><sup class="outside"><small>[外部]</small></sup>, <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/16213">ruby-dev:16213</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L007127" id="L007127">2002-03-11 正規表現中の 8 進コード</a></dt>
+<dd>
+<p>正規表現中の \nnn による 8 進記法で先頭が 0 の場合だけ、4桁を許して
+いました。<a href="http://www.ruby-lang.org/cgi-bin/ruby-bugs-ja?selectid=207">ruby-bugs-ja:PR#207</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>p /\0001/ =~ &quot;\0001&quot;   # equivalent to &quot;\0&quot; + &quot;1&quot;
+=&gt; -:1: warning: ambiguous first argument; make sure
+   ruby 1.6.7 (2002-03-01) [i586-linux]
+   nil
+=&gt; -:1: warning: ambiguous first argument; make sure
+   ruby 1.6.7 (2002-03-15) [i586-linux]
+   0</pre>
+</dd>
+<dt><a name="L007128" id="L007128">2002-03-11 trap</a></dt>
+<dd>
+<p><a href="http://www.ruby-lang.org/cgi-bin/ruby-bugs-ja?selectid=206">ruby-bugs-ja:PR#206</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>trap('EXIT','Foo')
+=&gt; -:1: [BUG] Segmentation fault
+   ruby 1.6.7 (2002-03-01) [i586-linux]
+=&gt; ruby 1.6.7 (2002-03-15) [i586-linux]</pre>
+</dd>
+<dt><a name="L007129" id="L007129">2002-03-10 メソッドの戻り値</a></dt>
+<dd>
+<p>以下のメソッドの戻り値が正しくなりました。<a href="http://www.ruby-lang.org/cgi-bin/ruby-bugs-ja?selectid=205">ruby-bugs-ja:PR#205</a><sup class="outside"><small>[外部]</small></sup></p>
+<ul>
+<li><a href="refm070.html#L001749">each_with_index</a> が self を返すようになった(以前は nil)</li>
+<li><a href="refm081.html#L002071">Process.setpgrp</a> が返す値が不定だった。</li>
+<li><a href="refm061.html#L001484">ljust</a>, <a href="refm061.html#L001485">rjust</a>, <a href="refm061.html#L001483">center</a> の結果に
+    変化がなくても常に dup した文字列を返すようになった</li>
+</ul>
+</dd>
+<dt><a name="L007130" id="L007130">2002-03-08 class variable</a></dt>
+<dd>
+<p><a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/35122">ruby-talk:35122</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>class C
+  class &lt;&lt; self
+    def test
+      @@cv = 5
+      p @@cv
+    end
+  end
+
+  test
+end
+=&gt; -:5:in `test': uninitialized class variable @@cv in C (NameError)
+        from -:9
+   ruby 1.6.7 (2002-03-01) [i586-linux]
+
+=&gt; ruby 1.6.6 (2001-12-26) [i586-linux]
+   5</pre>
+</dd>
+<dt><a name="L007131" id="L007131">2002-03-03 <a href="refm077.html#L001976">Marshal.load</a></a></dt>
+<dd>
+<p>Marshal.load が 1.7 のメソッド Proc#yield を呼んでいました。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/16178">ruby-dev:16178</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>Marshal.load(Marshal.dump('foo'), proc {|o| p o})
+=&gt; -:1:in `load': undefined method `yield' for #&lt;Proc:0x401b1b30&gt; (NameError)
+        from -:1
+   ruby 1.6.7 (2002-03-01) [i586-linux]
+
+=&gt; ruby 1.6.6 (2001-12-26) [i586-linux]
+   &quot;foo&quot;</pre>
+</dd>
+</dl>
+<h2><a name="L007132" id="L007132">1.6.6 (2001-12-26) -&gt; 1.6.7 (2002-03-01)</a></h2>
+<dl>
+<dt><a name="L007133" id="L007133">2002-02-20 true/false/nil の特異メソッド定義</a></dt>
+<dd>
+<p>これら疑似変数に特異クラス定義形式で特異メソッドを定義できるようにな
+りました。</p>
+<pre>class &lt;&lt;true
+  def foo
+   &quot;foo&quot;
+  end
+end
+p true.foo
+=&gt; -:1: no virtual class for true (TypeError)
+   ruby 1.6.6 (2001-12-26) [i586-linux]
+
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   &quot;foo&quot;</pre>
+</dd>
+<dt><a name="L007134" id="L007134"><a href="refm297.html">time</a>, URI</a></dt>
+<dd>
+<p>追加されました。</p>
+</dd>
+<dt><a name="L007135" id="L007135">Ruby/Tk</a></dt>
+<dd>
+<p>バグ修正、機能追加 <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/16139">ruby-dev:16139</a><sup class="outside"><small>[外部]</small></sup>,<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/16153">ruby-dev:16153</a><sup class="outside"><small>[外部]</small></sup>。</p>
+</dd>
+<dt><a name="L007136" id="L007136">数値リテラルの `_'</a></dt>
+<dd>
+<p>`_' を置ける場所の規則が見直され、String#hex などの数値変換メソッド
+の挙動と共に規則が統一されました。<a href="http://www.freeml.com/ml_view.php?ml=rubyist&pg=1018">rubyist:1018</a><sup class="outside"><small>[外部]</small></sup>, <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/15684">ruby-dev:15684</a><sup class="outside"><small>[外部]</small></sup>,
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/15757">ruby-dev:15757</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L007137" id="L007137"><a href="refm050.html#L001228">include</a></a></dt>
+<dd>
+<p>モジュールが再帰的に include されないようになりました。</p>
+<pre>module Foo; end
+module Bar; include Foo; end
+module Foo; include Bar; end
+
+p Foo.ancestors
+
+=&gt; ruby 1.6.6 (2001-12-26) [i586-linux]
+   [Foo, Bar, Foo]
+
+=&gt; -:3:in `append_features': cyclic include detected (ArgumentError)
+        from -:3:in `include'
+        from -:3
+   ruby 1.6.6 (2002-01-28) [i586-linux]</pre>
+</dd>
+<dt><a name="L007138" id="L007138">メソッドの戻り値</a></dt>
+<dd>
+<p>以下のメソッドの戻り値が正しくなりました。
+<a href="http://www.ruby-lang.org/cgi-bin/ruby-bugs-ja?selectid=182">ruby-bugs-ja:PR#182</a><sup class="outside"><small>[外部]</small></sup>, <a href="http://www.freeml.com/ml_view.php?ml=rubyist&pg=1016">rubyist:1016</a><sup class="outside"><small>[外部]</small></sup></p>
+<ul>
+<li>Hash#default= が右辺を返すようになった(以前は self を返していた)。</li>
+<li>Dir#pos= が右辺を返すようになった(以前は self を返していた)。
+    (Dir#seek は、変わらず self を返します)</li>
+<li>Dir.glob がブロックを伴うとき nil を返すようになった(以前は false)</li>
+<li>IO#close がクローズ済みな IO に対して IOError を起こすようになった。</li>
+<li>IO#each_byte が self を返すようになった(以前は nil)</li>
+</ul>
+</dd>
+<dt><a name="L007139" id="L007139">rb_define_module_under()</a></dt>
+<dd>
+<p>C 関数 rb_define_module_under() でモジュールを定義するときに同名の定
+数が既に定義されていると失敗していました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/30203">ruby-talk:30203</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>Constants = 1
+require 'syslog'
+p Syslog::Constants
+
+=&gt; -:2:in `require': Syslog::Fixnum is not a module (TypeError)
+        from -:2
+   ruby 1.6.6 (2001-12-26) [i586-linux]
+
+=&gt; ruby 1.6.6 (2002-01-07) [i586-linux]
+   Syslog::Constants</pre>
+<p>このバグにより 1.6.7 が近いうちにリリースされるかもしれません
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/30387">ruby-talk:30387</a><sup class="outside"><small>[外部]</small></sup>(やっぱそんなことはなかったようです。
+これを見て、1.6.6 の stable-snapshot を使用している方は、2002/1/30 
+の以下の変更(ChangeLog)</p>
+<ul>
+<li>re.c (rb_reg_search): should set regs.allocated.</li>
+</ul>
+<p>で、メモリリークが起こるようになってることに注意してください。
+2002/2/13 以降の修正版で直ってます。っと一度ハマッたので書いておきま
+す)。</p>
+</dd>
+</dl>
+<h2><a name="L007140" id="L007140">1.6.5 (2001-09-19) -&gt; 1.6.6 (2001-09-19)</a></h2>
+<dl>
+<dt><a name="L007141" id="L007141"><a href="refm319.html">Syslog</a></a></dt>
+<dd>
+<p>追加されました。</p>
+</dd>
+<dt><a name="L007142" id="L007142">CGI</a></dt>
+<dd>
+<p>Netscape(バージョンは？) のバグに対処しました
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/32089">ruby-list:32089</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L007143" id="L007143">Time#localtime</a></dt>
+<dt><a name="L007144" id="L007144">Time#gmtime</a></dt>
+<dd>
+<p>フリーズした Time オブジェクトに対して一度だけ呼び出しを許しました。</p>
+<pre>t = Time.new.freeze
+p t.gmtime
+p t.localtime
+
+=&gt; -:2:in `gmtime': can't modify frozen Time (TypeError)
+        from -:2
+   ruby 1.6.5 (2001-09-19) [i586-linux]
+
+=&gt; ruby 1.6.5 (2001-11-01) [i586-linux]
+   Mon Nov 05 18:08:34 UTC 2001
+   -:3:in `localtime': can't modify frozen Time (TypeError)
+        from -:3</pre>
+</dd>
+<dt><a name="L007145" id="L007145">File::SEPARATOR</a></dt>
+<dt><a name="L007146" id="L007146">File::ALT_SEPARATOR</a></dt>
+<dt><a name="L007147" id="L007147">File::PATH_SEPARATOR</a></dt>
+<dt><a name="L007148" id="L007148">RUBY_PLATFORM</a></dt>
+<dt><a name="L007149" id="L007149">RUBY_RELEASE_DATE</a></dt>
+<dt><a name="L007150" id="L007150">RUBY_VERSION</a></dt>
+<dd>
+<p>これらは、freeze された文字列になりました。</p>
+<pre>p File::SEPARATOR.frozen?
+p File::ALT_SEPARATOR.frozen?
+p File::PATH_SEPARATOR.frozen?
+
+=&gt; ruby 1.6.5 (2001-09-19) [i586-linux]
+   false
+   false
+   false
+
+=&gt; ruby 1.6.5 (2001-11-01) [i586-linux]
+   true
+   false  # ここでは実行環境がLinuxなので ALT_SEPARATOR は nil
+   true</pre>
+</dd>
+<dt><a name="L007151" id="L007151">Integer[nth]</a></dt>
+<dd>
+<p>大きな値のインデックスに対して例外が発生していました。
+<a href="http://www.ruby-lang.org/cgi-bin/ruby-bugs-ja?selectid=114">ruby-bugs-ja:PR#114</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>p(-1[10000000000])
+
+=&gt; -:1:in `[]': bignum too big to convert into `int' (RangeError)
+        from -:1
+   ruby 1.6.5 (2001-09-19) [i586-linux]
+
+=&gt; ruby 1.6.5 (2001-11-01) [i586-linux]
+   1</pre>
+<p>整数の負のインデックスに対して 0 を返すようにな・・・ってません。あれ？
+<a href="http://www.ruby-lang.org/cgi-bin/ruby-bugs-ja?selectid=122">ruby-bugs-ja:PR#122</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>p(-1[-1])
+
+=&gt; ruby 1.6.5 (2001-09-19) [i586-linux]
+   1
+=&gt; ruby 1.6.5 (2001-11-01) [i586-linux]
+   1</pre>
+</dd>
+<dt><a name="L007152" id="L007152">Numeric#remainder</a></dt>
+<dd>
+<p><a href="http://www.ruby-lang.org/cgi-bin/ruby-bugs-ja?selectid=110">ruby-bugs-ja:PR#110</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>p( 3.remainder(-3))
+p(-3.remainder(3))
+
+=&gt; ruby 1.6.5 (2001-09-19) [i586-linux]
+   3
+   -3
+=&gt; ruby 1.6.5 (2001-11-01) [i586-linux]
+   0
+   0</pre>
+</dd>
+<dt><a name="L007153" id="L007153">END { ... }</a></dt>
+<dd>
+<p>END ブロックの中の END ブロックが実行されていませんでした。
+<a href="http://www.ruby-lang.org/cgi-bin/ruby-bugs-ja?selectid=107">ruby-bugs-ja:PR#107</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>END {
+  p 1
+  END { p 2 }
+}
+
+=&gt; ruby 1.6.5 (2001-09-19) [i586-linux]
+   1
+
+=&gt; ruby 1.6.5 (2001-11-01) [i586-linux]
+   1
+   2</pre>
+</dd>
+<dt><a name="L007154" id="L007154">String#succ</a></dt>
+</dl>
+<p><a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/22557">ruby-talk:22557</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>p &quot;***&quot;.succ
+p &quot;*&quot;.succ
+p sprintf(&quot;%c&quot;, 255).succ
+p sprintf(&quot;*%c&quot;, 255).succ
+p sprintf(&quot;**%c&quot;, 255).succ
+
+=&gt; ruby 1.6.5 (2001-09-19) [i586-linux]
+   &quot;**+&quot;
+   &quot;\001+&quot;
+   &quot;\001\000&quot;
+   &quot;\001+\000&quot;
+   &quot;*+\000&quot;
+
+=&gt; ruby 1.6.5 (2001-11-01) [i586-linux]
+   &quot;**+&quot;
+   &quot;+&quot;
+   &quot;\001\000&quot;
+   &quot;+\000&quot;
+   &quot;*+\000&quot;</pre>
+<dl>
+<dt><a name="L007155" id="L007155">method_missing</a></dt>
+<dd>
+<p>以下が Segmentation Fault していました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/14942">ruby-dev:14942</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>Module.constants.each {|c|
+  c = eval c
+  if c.instance_of?(Class)
+    p c
+    c.instance_methods.each {|m|
+      c.module_eval &quot;undef #{m};&quot;
+    }
+    c.module_eval {undef initialize}
+  end
+}
+
+=&gt; ruby 1.6.5 (2001-09-19) [i586-linux]
+   NotImplementedError
+   MatchData
+   Exception
+   Numeric
+   MatchData
+   Segmentation fault
+
+=&gt; ruby 1.6.5 (2001-10-15) [i586-linux]
+   MatchData
+   NotImplementedError
+   FloatDomainError
+   LoadError
+   Float
+   Binding
+   SignalException
+   Module
+   -:6:in `method_missing': stack level too deep (SystemStackError)</pre>
+</dd>
+<dt><a name="L007156" id="L007156">%q(...)</a></dt>
+<dd>
+<p>% 記法によるリテラル表記でその区切り文字として英数字を指定
+できなくなりました。</p>
+<pre>p %q1..1</pre>
+<pre>=&gt; ruby 1.6.5 (2001-10-10) [i586-linux]
+   &quot;..&quot;
+=&gt; -:1: unknown type of %string
+        p %q1..1
+             ^
+   ruby 1.6.5 (2001-10-15) [i586-linux]</pre>
+</dd>
+<dt><a name="L007157" id="L007157">String#=~</a></dt>
+<dd>
+<p>String#=~ の呼出で両辺ともリテラルであったときに速度重視のためにメソッ
+ドコールを行わなくなりました。(実際は、前からこのようにしようとして
+いたがバグによりメソッドが呼び出されていた(しかもString#=~ でなく 
+Regexp#=~))</p>
+<pre>class String
+  def =~(arg)
+    [&quot;String#=~&quot;, self, arg]
+  end
+end
+
+class Regexp
+  def =~(arg)
+    [&quot;Regexp#=~&quot;, self, arg]
+  end
+end
+
+p &quot;foo&quot; =~ /foo/
+p &quot;foo&quot; =~ Regexp.new(&quot;foo&quot;)
+
+=&gt; -:2: warning: discarding old =~
+   -:8: warning: discarding old =~
+   ruby 1.6.5 (2001-09-19) [i586-linux]
+   [&quot;Regexp#=~&quot;, /foo/, &quot;foo&quot;]
+   [&quot;String#=~&quot;, &quot;foo&quot;, /foo/]
+
+=&gt; -:2: warning: discarding old =~
+   -:8: warning: discarding old =~
+   ruby 1.6.5 (2001-10-10) [i586-linux]
+   0
+   [&quot;String#=~&quot;, &quot;foo&quot;, /foo/]</pre>
+<p>(<em>組み込みのメソッドはこのような最適化が行われることがあるのでメソッ
+ドの再定義の効果が及ばないことがある点に注意</em>というか、メソッドが
+再定義されたかどうかで、最適化の on/off をしてほしいなあ)</p>
+</dd>
+<dt><a name="L007158" id="L007158">class 定義</a></dt>
+<dd>
+<p>既にクラスが定義されていて、そのクラスと異なるスーパークラスを明示的
+に指定して再定義したとき、指定したスーパークラスが反映されていません
+でした。<a href="http://www.ruby-lang.org/cgi-bin/ruby-bugs-ja?selectid=87">ruby-bugs-ja:PR#87</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>class A
+  p self.id
+end
+class A &lt; String
+  p self.id
+  p self.superclass
+end
+
+=&gt; ruby 1.6.5 (2001-09-19) [i586-linux]
+   537760880
+   -:4: warning: already initialized constant A
+   537757180
+   Object
+=&gt; ruby 1.6.5 (2001-10-10) [i586-linux]
+   537760960
+   -:4: warning: already initialized constant A
+   537757200
+   String</pre>
+</dd>
+<dt><a name="L007159" id="L007159">%w[...]</a></dt>
+<dd>
+<p>配列リテラル %w[...] が構文解析器により文字列リテラルとして判断されて
+いたため、以下のようなコードで異常な状態になっていました。
+<a href="http://www.ruby-lang.org/cgi-bin/ruby-bugs-ja?selectid=91">ruby-bugs-ja:PR#91</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>%w!a! &quot;b&quot; 
+=&gt; -:1: tried to allocate too big memory (NoMemoryError)
+   ruby 1.6.5 (2001-09-19) [i586-linux]
+
+=&gt; -:1: parse error
+       %w!a! &quot;b&quot; 
+                ^
+   ruby 1.6.5 (2001-10-10) [i586-linux]</pre>
+</dd>
+<dt><a name="L007160" id="L007160">Thread</a></dt>
+<dd>
+<p>Thread#status が aborting 状態に対して &quot;run&quot; を返していたバグが修正
+されました。また、Thread#priority = val が val でなく self を返して
+いました。<a href="http://www.freeml.com/ml_view.php?ml=rubyist&pg=820">rubyist:0820</a><sup class="outside"><small>[外部]</small></sup>, <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/14903">ruby-dev:14903</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L007161" id="L007161"><a href="refm077.html">Marshal</a></a></dt>
+<dd>
+<p>無名のクラス／モジュールは dump できないようになりました。</p>
+<pre>p Marshal.dump(Class.new)
+
+=&gt; ruby 1.6.4 (2001-06-04) [i586-linux]
+   &quot;\004\005c\031#&lt;Class 0lx401a6b44&gt;&quot;
+
+=&gt; -:1:in `dump': can't dump anonymous class #&lt;Class 0lx401ab980&gt; (ArgumentError)
+        from -:1
+   ruby 1.6.5 (2001-10-05) [i586-linux]</pre>
+</dd>
+<dt><a name="L007162" id="L007162">UNIXSocket#addr</a></dt>
+<dd>
+<p>UNIXSocket#addr がゴミを返していました(BSD の場合？)。
+<a href="http://www.ruby-lang.org/cgi-bin/ruby-bugs-ja?selectid=85">ruby-bugs-ja:PR#85</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre># server
+require 'socket'
+File.unlink(&quot;/tmp/sss&quot;)
+sock = UNIXServer.new(&quot;/tmp/sss&quot;).accept
+
+# client
+require 'socket'
+sock = UNIXSocket.new(&quot;/tmp/sss&quot;).addr
+
+=&gt; [&quot;AF_UNIX&quot;, &quot;\031((\306\031(\010&quot;]
+
+=&gt; [&quot;AF_UNIX&quot;, &quot;&quot;]</pre>
+</dd>
+<dt><a name="L007163" id="L007163">???</a></dt>
+<dd>
+<p><a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/21722">ruby-talk:21722</a><sup class="outside"><small>[外部]</small></sup></p>
+<p>class Ptr</p>
+<pre>def initialize(obj) @obj = obj end
+def []=() @obj = obj end
+def []() @obj end</pre>
+<p>end
+module Kernel</p>
+<pre>def _ptr() Ptr.new(self) end</pre>
+<p>end</p>
+<p>def foo(int)</p>
+<pre>int[] += 1</pre>
+<p>end
+x = 1._ptr
+foo(x)
+puts x[]</p>
+<p>=&gt; -:11: [BUG] Segmentation fault</p>
+<pre>ruby 1.6.5 (2001-09-19) [i586-linux]</pre>
+<p>=&gt; -:11:in `[]=': wrong # of arguments(1 for 0) (ArgumentError)</p>
+<pre>from -:11:in `foo'
+from -:14</pre>
+<pre>ruby 1.6.5 (2001-10-05) [i586-linux]</pre>
+</dd>
+<dt><a name="L007164" id="L007164">Subclass of String and Array</a></dt>
+<dd>
+<p>String, Array のサブクラスで特定のメソッドを呼ぶと、String, Array
+になっていました。</p>
+<pre>class Foo &lt; String
+end
+p Foo.new(&quot;&quot;).class
+p Foo.new(&quot;foo&quot;)[0,0].class              # String ???
+p Foo.new(&quot;foo&quot;)[1,1].class
+p Foo.new(&quot;foo&quot;).succ.class
+p Foo.new(&quot;foo&quot;).reverse.class
+p((Foo.new(&quot;foo&quot;) * 5).class)
+p Foo.new(&quot;foo&quot;).gsub(/foo/, &quot;bar&quot;).class
+p Foo.new(&quot;foo&quot;).sub(/foo/, &quot;bar&quot;).class
+p Foo.new(&quot;foo&quot;).ljust(10).class
+p Foo.new(&quot;foo&quot;).rjust(10).class
+p Foo.new(&quot;foo&quot;).center(10).class
+
+=&gt; ruby 1.6.5 (2001-09-19) [i586-linux]
+   Foo
+   String
+   String
+   String
+   String
+   String
+   String
+   Foo
+   String
+   String
+   String
+
+=&gt; ruby 1.6.5 (2001-10-05) [i586-linux]
+   Foo
+   String
+   Foo
+   Foo
+   Foo
+   Foo
+   Foo
+   Foo
+   Foo
+   Foo
+   Foo
+
+class Bar &lt; Array
+end
+bar = Bar.new
+p bar.class
+p bar.push(1,2,3)
+p bar.class
+p bar[0,0].class            # =&gt; Array ???
+p bar[0,1].class
+p ((bar * 5).class)
+
+=&gt; -:9: warning: p (...) interpreted as method call
+   ruby 1.6.5 (2001-09-19) [i586-linux]
+   Bar
+   [1, 2, 3]
+   Bar
+   Array
+   Array
+   Array
+=&gt; -:9: warning: p (...) interpreted as method call
+   ruby 1.6.5 (2001-10-05) [i586-linux]
+   Bar
+   [1, 2, 3]
+   Bar
+   Array
+   Bar
+   Bar</pre>
+</dd>
+</dl>
+<h2><a name="L007165" id="L007165">1.6.4 (2001-06-04) -&gt; 1.6.5 (2001-09-19)</a></h2>
+<dl>
+<dt><a name="L007166" id="L007166">$_, $~, if a..b</a></dt>
+<dd>
+<p>関数の中からThread#runを使うと、そのスレッドとスコープを共有する親スレッ
+ドの$_, $~が、子スレッドのもので上書きされてしまっていました。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/14743">ruby-dev:14743</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>def foo(t)
+  t.run
+end
+
+t = Thread.start do
+  t = $_= &quot;sub&quot;
+  loop{Thread.stop;puts &quot;sub:#$_&quot;}
+end
+
+$_ = &quot;main&quot;
+t.run                   # =&gt; sub:sub
+puts &quot;main:#$_&quot;         # =&gt; main:main
+foo(t)                  # =&gt; sub:sub
+puts &quot;main:#$_&quot;         # =&gt; main:sub
+=&gt; ruby 1.6.4 (2001-06-04) [i586-linux]
+   sub:sub
+   main:main
+   sub:sub
+   main:sub
+=&gt; ruby 1.6.5 (2001-09-19) [i586-linux]
+   sub:sub
+   main:main
+   sub:sub
+   main:main</pre>
+</dd>
+<dt><a name="L007167" id="L007167">net/telnet</a></dt>
+<dd>
+<p>Net::Telnet が特定のホストへ接続後、動かない事がありました。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/31303">ruby-list:31303</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L007168" id="L007168">CGI#header</a></dt>
+<dd>
+<p>以下のようなスクリプトでTEXT_PLAINが&quot;text/plain; charset=iso-8859-1&quot;
+のように書き換えられていました。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/14716">ruby-dev:14716</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>require 'cgi'
+
+TEXT_PLAIN = &quot;text/plain&quot;
+
+cgi = CGI.new
+print cgi.header(&quot;type&quot; =&gt; TEXT_PLAIN,
+                 &quot;charset&quot; =&gt; &quot;iso-8859-1&quot;)
+printf(&quot;TEXT_PLAIN: %s\n&quot;, TEXT_PLAIN)
+
+=&gt; ruby 1.6.4 (2001-06-04) [i586-linux]
+   Content-Type: text/plain; charset=iso-8859-1
+   ^M
+   TEXT_PLAIN: text/plain; charset=iso-8859-1
+   TEXT_PLAIN: text/plain
+
+=&gt; ruby 1.6.5 (2001-09-19) [i586-linux]
+   Content-Type: text/plain; charset=iso-8859-1
+   ^M
+   TEXT_PLAIN: text/plain</pre>
+</dd>
+<dt><a name="L007169" id="L007169">Dir.chdir</a></dt>
+<dd>
+<p>環境変数 HOME, LOGDIR のいずれも定義されていないとき引数なしの 
+Dir.chdir で ArgumentError 例外を起こすようになりました</p>
+<p>ENV['HOME'] = nil
+ENV['LOGDIR'] = nil
+Dir.chdir
+=&gt; -:3:in `chdir': Bad address (Errno::EFAULT)</p>
+<pre>from -:3</pre>
+<pre>ruby 1.6.4 (2001-08-26) [i586-linux]</pre>
+<p>=&gt; -:3:in `chdir': HOME/LOGDIR not set (ArgumentError)</p>
+<pre>from -:3</pre>
+<pre>ruby 1.6.5 (2001-09-19) [i586-linux]</pre>
+</dd>
+<dt><a name="L007170" id="L007170">Dir.glob</a></dt>
+<dd>
+<p>以下のコードが無限ループになっていました。</p>
+<pre>Dir.mkdir(&quot;test?&quot;) rescue nil
+p Dir.glob(&quot;test?/*&quot;)
+=&gt; ruby 1.6.5 (2001-09-19) [i586-linux]
+   []</pre>
+</dd>
+<dt><a name="L007171" id="L007171">jcode</a></dt>
+<dd>
+<p>バグがいくつか修正されました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/31238">ruby-list:31238</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+</dl>
+<p>〜この間、空白期間〜</p>
+<dl>
+<dt><a name="L007170" id="L007170"><a href="refm041.html">Dir</a>.glob</a></dt>
+<dd>
+<p>Dir.glob(&quot;*/**/*&quot;)がサブディレクトリのファイルを二度返していました。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/14576">ruby-dev:14576</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>Dir.mkdir('foo') rescue nil
+Dir.mkdir('foo/bar') rescue nil
+p Dir.glob('*/**/*')
+
+=&gt; ruby 1.6.4 (2001-06-04) [i586-linux]
+   [&quot;foo/bar&quot;, &quot;foo/bar&quot;]
+
+=&gt; ruby 1.6.4 (2001-08-26) [i586-linux]
+   [&quot;foo/bar&quot;]</pre>
+</dd>
+<dt><a name="L007172" id="L007172"><a href="refm049.html">UnboundMethod</a>#bind</a></dt>
+<dd>
+<p>モジュールの UnboundMethod オブジェクトを bind することができませんでした。
+<a href="http://www.freeml.com/ml_view.php?ml=rubyist&pg=728">rubyist:0728</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>module Foo
+  def foo
+    :foo
+  end
+end
+
+class Bar
+  include Foo
+end
+
+m = Foo.instance_method :foo
+p m.bind(Bar.new).call
+
+=&gt; ruby 1.6.4 (2001-06-04) [i586-linux]
+   -:12:in `bind': first argument must be an instance of Foo (TypeError)
+        from -:12
+
+=&gt; ruby 1.6.4 (2001-08-23) [i586-linux]
+   :foo</pre>
+</dd>
+<dt><a name="L007173" id="L007173">組み込みクラスの置き換え</a></dt>
+<dd>
+<p>組み込みクラス／モジュール(を代入した定数)への代入を行ったときに警告を
+出すようになりました。</p>
+<pre>Array = nil
+p Array
+=&gt; ruby 1.6.4 (2001-06-04) [i586-linux]
+   nil
+
+=&gt; -:1: warning: already initialized constant Array
+   ruby 1.6.4 (2001-08-23) [i586-linux]
+   nil</pre>
+</dd>
+<dt><a name="L007174" id="L007174"><a href="refm060.html">Regexp</a></a></dt>
+<dd>
+<p>括弧の数より大きな数のバックリファレンスが何にでもマッチしていました。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/30975">ruby-list:30975</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>p /(foo)\2/ =~ &quot;foobar&quot;
+=&gt; ruby 1.6.4 (2001-06-04) [i586-linux]
+   0
+=&gt; ruby 1.6.4 (2001-08-23) [i586-linux]
+   nil</pre>
+</dd>
+<dt><a name="L007175" id="L007175"><a href="refm162.html">TCPSocket</a>.open</a></dt>
+<dd>
+<p><a href="refm463.html">Cygwin</a> で <a href="refm162.html">TCPSocket</a>.open がタイミングによってエラー(Errno::EINVAL,
+EALREADY)になることがある問題に対処しました。(1.6.4 20010712以降)
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/9939">ruby-talk:9939</a><sup class="outside"><small>[外部]</small></sup>, <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/16632">ruby-talk:16632</a><sup class="outside"><small>[外部]</small></sup>,
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/24702">ruby-list:24702</a><sup class="outside"><small>[外部]</small></sup>, <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/27805">ruby-list:27805</a><sup class="outside"><small>[外部]</small></sup>, <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/30512">ruby-list:30512</a><sup class="outside"><small>[外部]</small></sup> 等など</p>
+</dd>
+<dt><a name="L007176" id="L007176">resolv, resolv-replace</a></dt>
+<dd>
+<p>追加。rubyで実装したリゾルバ(DNSの名前解決) とSocket関連のクラスでこ
+のライブラリを使用するためのライブラリです。</p>
+<p>rubyで実装したリゾルバは、timeout の制御が効きます(つまり、名前解
+決中にThreadが切替え可能ということです)</p>
+<pre>require 'resolv'
+p Resolv.new.getaddress(&quot;www.ruby-lang.org&quot;).to_s
+
+=&gt; /usr/local/lib/ruby/1.6/resolv.rb:160: warning: timeout (...) interpreted as method call
+   /usr/local/lib/ruby/1.6/resolv.rb:55: warning: instance variable @initialized not initialized
+   /usr/local/lib/ruby/1.6/resolv.rb:113: warning: instance variable @initialized not initialized
+   /usr/local/lib/ruby/1.6/resolv.rb:392: warning: instance variable @initialized not initialized
+   ruby 1.6.4 (2001-08-23) [i586-linux]
+   &quot;210.251.121.214&quot;</pre>
+</dd>
+<dt><a name="L007177" id="L007177"><a href="refm117.html">Digest</a> モジュール</a></dt>
+<dd>
+<p>SHA1, MD5 は Digest::SHA1, Digest::MD5 に置き換えられました。
+Digest::SHA256, Digest::SHA384,  Digest::SHA512, Digest::RMD160
+も新たに追加されました。</p>
+<pre>require 'digest/md5'
+include Digest
+
+md = MD5.new
+md &lt;&lt; &quot;abc&quot;
+puts md
+
+puts MD5.hexdigest(&quot;123&quot;)</pre>
+</dd>
+<dt><a name="L007178" id="L007178"><a href="refm062.html">Struct</a></a></dt>
+<dd>
+<p>フリーズされた構造体オブジェクトが変更できていました。また、$SAFE =
+4 のときの変更を禁止するようにしました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/19167">ruby-talk:19167</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>cat = Struct.new(&quot;Cat&quot;, :name, :age, :life)
+a = cat.new(&quot;cat&quot;, 12, 7).freeze
+a.name = &quot;dog&quot;
+p a
+=&gt; ruby 1.6.4 (2001-06-04) [i586-linux]
+   #&lt;Struct::Cat name=&quot;dog&quot;, age=12, life=7&gt;
+=&gt; ruby 1.6.4 (2001-08-06) [i586-linux]
+   -:4:in `name=': can't modify frozen Struct (TypeError)
+        from -:4
+
+cat = Struct.new(&quot;Cat&quot;, :name, :age, :life)
+a = cat.new(&quot;cat&quot;, 12, 7)
+Thread.new do
+   abort_on_exception = true
+   $SAFE = 4
+   a.life -= 1
+end.join
+p a.life
+=&gt; ruby 1.6.4 (2001-06-04) [i586-linux]
+   6
+=&gt; ruby 1.6.4 (2001-08-06) [i586-linux]
+   -:6:in `life=': Insecure: can't modify Struct (SecurityError)
+        from -:3:in `join'
+        from -:3</pre>
+</dd>
+<dt><a name="L007179" id="L007179"><a href="refm061.html">String</a>#rindex</a></dt>
+<dd>
+<p>rindex に正規表現を渡したときの動作にバグがありました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/13843">ruby-dev:13843</a><sup class="outside"><small>[外部]</small></sup>
+(1.6.4 リリース後のバグです)</p>
+<pre>p &quot;foobar&quot;.rindex(/b/)
+=&gt; ruby 1.6.4 (2001-06-04) [i586-linux]
+   3
+
+=&gt; ruby 1.6.4 (2001-06-19) [i386-freebsd5.0]
+   nil
+
+=&gt; ruby 1.6.4 (2001-08-06) [i586-linux]
+   3</pre>
+</dd>
+<dt><a name="L007180" id="L007180"><a href="refm029.html">require</a></a></dt>
+<dd>
+<p>requireに ~ で始まるファイル名を指定したとき、拡張子がついてな
+いとロードできなくなっていました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/13756">ruby-dev:13756</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>$ echo p __FILE__ &gt; ~/a.rb
+$ ruby17 -v -r~/a -e0
+ruby 1.7.1 (2001-07-03) [i686-linux]
+0: No such file to load -- ~/a (LoadError)
+$ ruby16 -v -r~/a -e0
+ruby 1.6.4 (2001-07-02) [i686-linux]
+0: No such file to load -- ~/a (LoadError)
+$ ruby14 -v -r~/a -e0
+ruby 1.4.6 (2000-08-16) [i686-linux]
+&quot;/home/nobu/a.rb&quot;</pre>
+</dd>
+<dt><a name="L007181" id="L007181"><a href="refm061.html">String</a>#each_line</a></dt>
+<dd>
+<p>正しく汚染が伝搬していませんでした。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/13755">ruby-dev:13755</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>&quot;foo\nbar\n&quot;.taint.each_line {|v| p v.tainted?}
+=&gt; ruby 1.6.4 (2001-06-04) [i586-linux]
+   false
+   true
+=&gt; ruby 1.6.4 (2001-08-06) [i586-linux]
+   true
+   true</pre>
+</dd>
+<dt><a name="L007182" id="L007182"><a href="refm260.html">NKF</a>.nkf</a></dt>
+<dd>
+<p>正しく汚染が伝搬していませんでした。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/13754">ruby-dev:13754</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>require 'nkf'
+p NKF.nkf(&quot;-j&quot;, &quot;a&quot;.taint).tainted?
+
+=&gt; ruby 1.6.4 (2001-06-04) [i586-linux]
+   false
+=&gt; ruby 1.6.4 (2001-08-06) [i586-linux]
+   true</pre>
+</dd>
+<dt><a name="L007183" id="L007183">ruby -x</a></dt>
+<dd>
+<p>オプション <a href="refm011.html#L000150">-x[directory]</a> を指定したときにスクリ
+プトを実行せずに終了することがありました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/13752">ruby-dev:13752</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L007184" id="L007184">attr_*</a></dt>
+<dd>
+<p>アクセサに余計な引数を渡してもエラーになりませんでした。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/13748">ruby-dev:13748</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>class C
+  def initialize
+    @message = 'ok'
+  end
+  attr_reader :message
+end
+puts C.new.message(1,2,3)
+
+=&gt; ruby 1.6.4 (2001-06-04) [i586-linux]
+   ok
+=&gt; ruby 1.6.4 (2001-08-06) [i586-linux]
+   -:7:in `message': wrong # of arguments(3 for 0) (ArgumentError)
+        from -:7</pre>
+</dd>
+<dt><a name="L007185" id="L007185"><a href="refm290.html">Readline</a>.completion_append_character</a></dt>
+<dt><a name="L007186" id="L007186"><a href="refm290.html">Readline</a>.completion_append_character=</a></dt>
+<dd>
+<p>追加。GNU Readline ライブラリの変数 <code>rl_completion_append_character</code>
+のアクセサ。(この変数は GNU readline 2.1 以降で使えます)
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-ext/1760">ruby-ext:01760</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L007187" id="L007187"><a href="refm169.html">Socket::Constants</a></a></dt>
+<dd>
+<p>ソケット関連の定数のうち以下が新規に追加されました(システムに定義さ
+れている場合に限る)。</p>
+<pre>SO_PASSCRED
+SO_PEERCRED
+SO_RCVLOWAT
+SO_SNDLOWAT
+SO_RCVTIMEO
+SO_SNDTIMEO
+SO_SECURITY_AUTHENTICATION
+SO_SECURITY_ENCRYPTION_TRANSPORT
+SO_SECURITY_ENCRYPTION_NETWORK
+SO_BINDTODEVICE
+SO_ATTACH_FILTER
+SO_DETACH_FILTER
+SO_PEERNAME
+SO_TIMESTAMP</pre>
+</dd>
+<dt><a name="L007188" id="L007188"><a href="refm029.html">require</a> / $LOAD_PATH</a></dt>
+<dd>
+<p>Changed to use a new algorithm to locate a library.</p>
+<p>Now when requiring &quot;foo&quot;, the following directories are searched for
+the library in the order listed.</p>
+<pre>$prefix/lib/ruby/site_ruby/$ver/foo.rb
+$prefix/lib/ruby/site_ruby/$ver/foo.so
+$prefix/lib/ruby/site_ruby/$ver/$arch/foo.rb
+$prefix/lib/ruby/site_ruby/$ver/$arch/foo.so
+$prefix/lib/ruby/site_ruby/foo.rb
+$prefix/lib/ruby/site_ruby/foo.so
+$prefix/lib/ruby/$ver/foo.rb
+$prefix/lib/ruby/$ver/foo.so
+$prefix/lib/ruby/$ver/$arch/foo.rb
+$prefix/lib/ruby/$ver/$arch/foo.so
+./foo.rb
+./foo.so</pre>
+<p>The previous behavior had a potential security risk because a
+foo.rb (if exists) in the current directory is located prior to a
+foo.so in $prefix/lib/ruby/site_ruby/$ver/$arch.</p>
+<p><em class="XXINVALIDXX">ruby-bugs:PR#140</em>, <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-ext/1778">ruby-ext:01778</a><sup class="outside"><small>[外部]</small></sup>, <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/13659">ruby-dev:13659</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L007189" id="L007189">sync</a></dt>
+<dt><a name="L007190" id="L007190">mutex_m</a></dt>
+<dd>
+<p>Fixed for obj.extend(Sync_m) and obj.extend(Mutex_m).<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/13463">ruby-dev:13463</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>$ ruby -v -rsocket -rmutex_m -e 's=TCPSocket.new(&quot;localhost&quot;,25); s.extend(Mutex_m)'
+ruby 1.6.4 (2001-06-04) [i386-linux]
+/usr/lib/ruby/1.6/mutex_m.rb:104:in `initialize': wrong # of arguments (0 for 1) (ArgumentError)
+        from /usr/lib/ruby/1.6/mutex_m.rb:104:in `initialize'
+        from /usr/lib/ruby/1.6/mutex_m.rb:50:in `mu_extended'
+        from /usr/lib/ruby/1.6/mutex_m.rb:34:in `extend_object'
+        from -e:1:in `extend'
+        from -e:1</pre>
+</dd>
+<dt><a name="L007191" id="L007191">$SAFE / <a href="refm029.html">load</a></a></dt>
+<dd>
+<p>1 &lt;= $SAFE &lt;= 3 で、第二引数が true のとき汚染されたファイル名を
+指定しても load() できてしまうバグが修正されました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/13481">ruby-dev:13481</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>$SAFE = 1
+filename = &quot;foo&quot;
+filename.taint
+p load(filename, true)
+
+=&gt; ruby 1.6.4 (2001-06-04) [i586-linux]
+   true
+
+=&gt; ruby 1.6.4 (2001-08-06) [i586-linux]
+   -:4:in `load': Insecure operation - load (SecurityError)
+        from -:4</pre>
+</dd>
+<dt><a name="L007174" id="L007174"><a href="refm060.html">Regexp</a></a></dt>
+<dd>
+<p>以下で、前者がマッチしませんでした。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/16233">ruby-talk:16233</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>puts &quot;OK 1&quot; if /(.|a)bd/ =~ &quot;cxbd&quot;
+puts &quot;OK 2&quot; if /(a|.)bd/ =~ &quot;cxbd&quot;
+
+=&gt; ruby 1.6.4 (2001-06-04) [i586-linux]
+   OK 2
+=&gt; ruby 1.6.4 (2001-08-06) [i586-linux]
+   OK 1
+   OK 2</pre>
+</dd>
+<dt><a name="L007161" id="L007161"><a href="refm077.html">Marshal</a></a></dt>
+<dd>
+<p>モジュールのロードの型チェックに誤りがありました。この変更によりdump
+フォーマットのマイナーバージョンが1あがりました</p>
+<pre>p Marshal.dump(Object.new).unpack(&quot;CC&quot;).join(&quot;.&quot;)
+    =&gt; ruby 1.6.4 (2001-06-04) [i586-linux]
+       &quot;4.5&quot;
+p Marshal.dump(Object.new).unpack(&quot;CC&quot;).join(&quot;.&quot;)
+    =&gt; ruby 1.6.4 (2001-06-11) [i586-linux]
+       &quot;4.6&quot;</pre>
+</dd>
+<dt><a name="L007192" id="L007192">$SAFE / <em class="XXINVALIDXX">def</em></a></dt>
+<dd>
+<p>doc/NEWS には</p>
+<pre>Fixed so defining a new method is allowed under $SAFE == 4, which
+previously wasn't.</pre>
+<p>とあるけど実際にはできません。</p>
+<pre>$SAFE = 4; def a; end
+
+=&gt; -:1: Insecure operation `(null)' at level 4 (SecurityError)
+   ruby 1.6.4 (2001-06-04) [i586-linux]
+
+=&gt; -:1: Insecure: can't define method (SecurityError)
+   ruby 1.6.4 (2001-08-06) [i586-linux]</pre>
+<p>対応するChangeLogは以下のようです。</p>
+<pre>Tue Jun  5 15:16:06 2001  Yukihiro Matsumoto  &lt;matz@ruby-lang.org&gt;
+
+        * eval.c (rb_add_method): should not call rb_secure(), for
+          last_func may not be set.</pre>
+<p>差分は以下のようです。</p>
+<pre>@@ -227,10 +227,7 @@ rb_add_method(klass, mid, node, noex)
+     NODE *body;
+
+     if (NIL_P(klass)) klass = rb_cObject;
+-    if (klass == rb_cObject) {
+-       rb_secure(4);
+-    }
+-    if (rb_safe_level() &gt;= 4 &amp;&amp; !OBJ_TAINTED(klass)) {
++    if (rb_safe_level() &gt;= 4 &amp;&amp; (klass == rb_cObject || !OBJ_TAINTED(klass))) {
+        rb_raise(rb_eSecurityError, &quot;Insecure: can't define method&quot;);
+     }
+     if (OBJ_FROZEN(klass)) rb_error_frozen(&quot;class/module&quot;);</pre>
+<p>また今度調べ直します。</p>
+</dd>
+<dt><a name="L007193" id="L007193"><a href="refm045.html">IO</a>#ioctl</a></dt>
+<dd>
+<p>第二引数に Bignum も受け付けるようになりました(long int の範囲をカバー
+するため)</p>
+</dd>
+</dl>
+<h2><a name="L007194" id="L007194">1.6.3 (2001-03-19) -&gt; 1.6.4 (2001-06-04)</a></h2>
+<dl>
+<dt><a name="L007195" id="L007195"><a href="refm044.html">Hash</a>#replace</a></dt>
+<dd>
+<p>ハッシュのイテレート中に、そのハッシュのある要素を削除して、
+他のハッシュへreplaceするとAbortしていました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/13432">ruby-dev:13432</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>h  = { 10 =&gt; 100, 20 =&gt; 200 }
+h2 = { }
+
+h.each { |k, v|
+  if (k == 10)
+    h.delete(10)
+    h2.replace(h)  # =&gt; Abort core dumped
+  end
+}</pre>
+</dd>
+<dt><a name="L007196" id="L007196">$SAFE / <a href="refm046.html">File</a>.unlink</a></dt>
+<dd>
+<p>File.unlink は引数が汚染されてなくても $SAFE &gt;= 2 の環境下では
+禁止するようになりました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/13426">ruby-dev:13426</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>touch foo
+ruby -v -e '$SAFE=2;File.unlink(&quot;foo&quot;)'
+
+=&gt; ruby 1.6.3 (2001-03-19) [i586-linux]
+=&gt; ruby 1.6.4 (2001-06-04) [i586-linux]
+   -e:1:in `unlink': Insecure operation `unlink' at level 2 (SecurityError)
+           from -e:1</pre>
+</dd>
+<dt><a name="L007197" id="L007197"><a href="refm035.html">Object</a>#untaint</a></dt>
+<dd>
+<p>凍結したオブジェクトに対してuntaintできないようにしました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/13409">ruby-dev:13409</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>a = Object.new
+a.taint
+a.freeze
+a.untaint
+
+=&gt; ruby 1.6.3 (2001-03-19) [i586-linux]
+=&gt; ruby 1.6.4 (2001-06-04) [i586-linux]
+   -:4:in `untaint': can't modify frozen object (TypeError)
+           from -:4</pre>
+</dd>
+<dt><a name="L007198" id="L007198">ruby -T4</a></dt>
+<dd>
+<p>オプション <a href="refm011.html#L000144">-T4</a> を指定したとき、ARGV を
+変更できないためプログラムの実行ができませんでした。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/13401">ruby-dev:13401</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>touch foo
+ruby-1.6.3 -v -T4 foo
+=&gt; ruby 1.6.3 (2001-03-19) [i586-linux]
+   foo: Insecure: can't modify array (SecurityError)</pre>
+</dd>
+<dt><a name="L007174" id="L007174"><a href="refm060.html">Regexp</a></a></dt>
+<dd>
+<p>正規表現中の \1 .. \9 は常にバックリファレンスとして解釈されるように
+なりました(以前は対応する括弧があればバックリファレンス、なければ8進
+の文字コードとして解釈されていました)。</p>
+<p>正規表現で8進文字コードを指定するには \001 のように3桁で指定します。</p>
+<p>また、対応する括弧のないバックリファレンスや対応する括弧が自身を含む
+バックリファレンスは常にマッチに失敗するようになりました。</p>
+<pre>p /(foo)\2/ =~ &quot;foo\002&quot;
+=&gt; ruby 1.6.3 (2001-03-19) [i586-linux]
+   0
+=&gt; ruby 1.6.4 (2001-06-04) [i586-linux]
+   0
+=&gt; ruby 1.6.4 (2001-08-23) [i586-linux]
+   nil</pre>
+<p>(上記の通り 1.6.4 にはまだバグがありました 2001-08-23 あたりで修正さ
+れています <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/30975">ruby-list:30975</a><sup class="outside"><small>[外部]</small></sup>)</p>
+<pre>p /(foo\1)/ =~ &quot;foo&quot;
+=&gt; ruby 1.6.3 (2001-03-19) [i586-linux]
+   0
+=&gt; ruby 1.6.4 (2001-06-04) [i586-linux]
+   nil</pre>
+</dd>
+<dt><a name="L007199" id="L007199">汚染文字列の伝搬</a></dt>
+<dd>
+<p>以下は、すべて true を返すようになりました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/13340">ruby-dev:13340</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre># []=
+s1 = &quot;abc&quot;
+s2 = &quot;cde&quot;.taint
+s1[0]= s2
+p s1.tainted?             # =&gt; false
+
+# crypt
+s = &quot;abc&quot;.taint
+p s.crypt(&quot;cd&quot;).tainted?  # =&gt; false
+
+# ljust
+s = &quot;abc&quot;.taint
+p s.ljust(10).tainted?    # =&gt; false
+
+# rjust
+s = &quot;abc&quot;.taint
+p s.rjust(10).tainted?    # =&gt; false
+
+# center
+s = &quot;abc&quot;.taint
+p s.center(10).tainted?   # =&gt; false</pre>
+</dd>
+<dt><a name="L007200" id="L007200">rb_yield_0()</a></dt>
+<dd>
+<p>C API から yield されたとき 1 つの引数が 1 要素の配列として渡されていました。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/13299">ruby-dev:13299</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>class X
+  include Enumerable
+
+  def each(&amp;block)
+    block.call(1,2)
+    block.call(2,3)
+    block.call(3,4)
+  end
+end
+
+x = X.new
+p x.to_a #=&gt; [[1], [2], [3]]
+
+# =&gt; ruby 1.6.3 (2001-03-19) [i586-linux]
+     [[1], [2], [3]]
+
+# =&gt; ruby 1.6.4 (2001-06-04) [i586-linux]
+     [1, 2, 3]</pre>
+</dd>
+<dt><a name="L007201" id="L007201">$SAFE / alias</a></dt>
+<dd>
+<p>$SAFE = 4 のときグローバル変数のエイリアスを許さないようにしました。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/13287">ruby-dev:13287</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L007202" id="L007202"><a href="refm251.html#L005024">Open3.popen3</a></a></dt>
+<dd>
+<p>終了したプロセスが at_exit を呼ばないようにしました。
+(exit を exit! に修正) <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/13170">ruby-dev:13170</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L007203" id="L007203"><a href="refm303.html">SizedQueue</a>#pop</a></dt>
+<dd>
+<p>以下のコードでデッドロックが起こらないようにしました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/13169">ruby-dev:13169</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>ruby -r thread -e 'q = SizedQueue.new(1); q.push(1);'\
+               -e 'Thread.new{sleep 1; q.pop}; q.push(1);'</pre>
+</dd>
+<dt><a name="L007204" id="L007204"><a href="refm303.html">SizedQueue</a>#max=</a></dt>
+<dd>
+<p>maxが現在値より大きい時にその差の分だけ待ちスレッドを起こす処理
+の判定に誤りがありました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/13170">ruby-dev:13170</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L007205" id="L007205"><a href="refm302.html">Queue</a></a></dt>
+<dt><a name="L007206" id="L007206"><a href="refm303.html">SizedQueue</a></a></dt>
+<dd>
+<p><a href="refm064.html">Thread</a>#run を呼ぶ直前にスレッドが死んでいた場合に <a href="refm110.html">ThreadError</a>
+が発生する問題に対処しました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/13194">ruby-dev:13194</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L007207" id="L007207">Ctrl-C (Interrupt)が効かなくなる</a></dt>
+<dd>
+<p><a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/13195">ruby-dev:13195</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>th1 = Thread.start {
+  begin
+    Thread.stop
+  ensure
+    Thread.pass
+    Thread.stop
+  end
+}
+sleep 1</pre>
+<p>(確認できる限りでは ruby-1.7.0 (2001-05-17) 以降で治ってますが、
+1.6 には取り込まれていません)</p>
+</dd>
+<dt><a name="L007208" id="L007208"><a href="refm036.html">Array</a>#&amp;</a></dt>
+<dt><a name="L007209" id="L007209"><a href="refm036.html">Array</a>#|</a></dt>
+<dt><a name="L007210" id="L007210"><a href="refm036.html">Array</a>#uniq</a></dt>
+<dd>
+<p>結果の配列の要素が freeze され変更不可になっていました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/29665">ruby-list:29665</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>(%w[foo bar] &amp; %w[foo baz])[0].upcase!
+=&gt; -:1:in `upcase!': can't modify frozen string (TypeError)
+
+%w[foo bar bar baz].uniq[0].upcase!
+=&gt; -:1:in `upcase!': can't modify frozen string (TypeError)</pre>
+</dd>
+<dt><a name="L007211" id="L007211"><a href="refm292.html">shell</a></a></dt>
+<dd>
+<p>shell 0.6 が標準ライブラリとして新規に追加されました。
+(ドキュメントが doc ディレクトリにあります)</p>
+</dd>
+<dt><a name="L007212" id="L007212"><a href="refm330.html">forwardable</a></a></dt>
+<dd>
+<p>forwardable 1.1 が標準ライブラリとして新規に追加されました。
+(ドキュメントが doc ディレクトリにあります)</p>
+</dd>
+<dt><a name="L007213" id="L007213"><a href="refm008.html">irb</a> &amp; irb-tools</a></dt>
+<dd>
+<p>irb と irb-tools がそれぞれ 0.7.4 と 0.7.1 にバージョンアップしました。</p>
+</dd>
+<dt><a name="L007214" id="L007214">夏時間</a></dt>
+<dd>
+<p>夏時間の考慮に不備がありました(？) <a href="http://www.ruby-lang.org/cgi-bin/ruby-bugs-ja?selectid=46">ruby-bugs-ja:PR#46</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>env TZ=America/Managua ruby -e 'p Time.local(1998,12,1,0,59,59)'
+=&gt; Mon Nov 30 01:59:59 EST 1998
+env TZ=America/Managua ruby -e 'p Time.local(1998,12,1,0,59,59).tv_sec'   
+=&gt; 912409199</pre>
+</dd>
+<dt><a name="L007215" id="L007215">SIGINFO</a></dt>
+<dd>
+<p>4.4BSD のシグナル SIGINFO に対応しました。<a href="http://www.ruby-lang.org/cgi-bin/ruby-bugs-ja?selectid=45">ruby-bugs-ja:PR#45</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L007216" id="L007216"><a href="refm064.html">Thread</a>.stop で SEGV</a></dt>
+<dd>
+<p><a href="refm064.html">Thread</a>.stop で SEGV することがありました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/13189">ruby-dev:13189</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L007217" id="L007217">rescue 修飾</a></dt>
+<dd>
+<p>以下が 1.6.3 で parse error になっていたバグが修正されました。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/13073">ruby-dev:13073</a><sup class="outside"><small>[外部]</small></sup>, <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/13292">ruby-dev:13292</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>raise &quot;&quot; rescue []
+raise &quot;&quot; rescue (p &quot;foo&quot;; true)
+raise &quot;&quot; rescue -1
+raise &quot;&quot; rescue (-1)</pre>
+</dd>
+<dt><a name="L007160" id="L007160"><a href="refm064.html">Thread</a></a></dt>
+<dd>
+<p>以下は dead lock にならなくなりました。</p>
+<pre>Thread.start { Thread.stop }
+sleep
+
+=&gt; deadlock 0x40199b58: 2:0  - -:1
+   deadlock 0x401a2528: 2:4 (main) - -:2
+   -:2:in `sleep': Thread: deadlock (fatal)
+           from -:2
+   ruby 1.6.3 (2001-03-19) [i586-linux]</pre>
+</dd>
+<dt><a name="L007218" id="L007218"><a href="refm050.html">Module</a>#const_defined?</a></dt>
+<dt><a name="L007219" id="L007219"><a href="refm050.html">Module</a>#const_get</a></dt>
+<dt><a name="L007220" id="L007220"><a href="refm050.html">Module</a>#const_set</a></dt>
+<dd>
+<p>これらのメソッドが定数以外にアクセス可能になっていたバグが修正されました
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/13019">ruby-dev:13019</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L007221" id="L007221"><a href="refm077.html">Marshal</a>.dump</a></dt>
+<dd>
+<p><a href="refm056.html">Float</a> を dump するときの精度が &quot;%.12g&quot; から &quot;%.16g&quot; になりました。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/29349">ruby-list:29349</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L007222" id="L007222"><a href="refm055.html">Fixnum</a>#[]</a></dt>
+<dd>
+<p>sizeof(long) &gt; sizeof(int) なシステムでのバグが修正されたようです。</p>
+</dd>
+<dt><a name="L007223" id="L007223">正規表現</a></dt>
+<dd>
+<p>まれなバグが2件修正されました <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/13658">ruby-talk:13658</a><sup class="outside"><small>[外部]</small></sup>, <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/13744">ruby-talk:13744</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L007224" id="L007224">retry</a></dt>
+<dd>
+<p>以下が 1.6.3 で正常に機能しませんでした<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/13957">ruby-talk:13957</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>def WHILE(cond)
+  return if not cond
+  yield
+  retry
+end
+
+i=0
+WHILE(i&lt;3) {
+  print i
+  i+=1
+}
+
+ruby 1.6.2 (2000-12-25) [i586-linux]
+=&gt; 012
+
+ruby 1.6.3 (2001-03-19) [i586-linux]
+=&gt; 0
+
+ruby 1.6.4 (2001-05-02) [i586-linux]
+=&gt; 012</pre>
+</dd>
+<dt><a name="L007225" id="L007225"><a href="refm043.html">File::Stat</a>#size</a></dt>
+<dd>
+<p>1G byte 以上のファイルに対して正しくファイルサイズを返していませんでした。</p>
+<pre>File.open(&quot;/tmp/1GB&quot;, &quot;w&quot;) {|f|
+  f.seek(2**30-1, 0)
+  f.puts
+  f.flush
+  p f.stat.size
+}
+
+# =&gt; ruby 1.6.3 (2001-04-03) [i586-linux]
+     -1073741824
+# =&gt; ruby 1.6.4 (2001-04-19) [i586-linux]
+     1073741824</pre>
+</dd>
+<dt><a name="L007226" id="L007226"><a href="refm056.html">Float</a>#modulo, <a href="refm056.html">Float</a>#divmod</a></dt>
+<dd>
+<p>なんか修正されたみたいです <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/12718">ruby-dev:12718</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L007227" id="L007227"><a href="refm079.html">ObjectSpace</a>#_id2ref</a></dt>
+<dd>
+<p>不正に例外を返す場合がありました。</p>
+</dd>
+<dt><a name="L007228" id="L007228">malloc の再帰呼び出し問題</a></dt>
+<dd>
+<p>stdio が内部で malloc() を呼び出す場合、Thread と相性が悪かったことに対
+処しました。(setvbuf() を使用することで malloc() が呼ばれるのを避けた)
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/12795">ruby-dev:12795</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L007229" id="L007229"><a href="refm046.html">File</a>#flock</a></dt>
+<dd>
+<p>File#flock がロック済みの場合に false を返さず Errno::EACCES 例外を
+あげる場合がありました(flock()がないシステムの場合)</p>
+</dd>
+<dt><a name="L007230" id="L007230"><a href="refm043.html">File::Stat</a>.new(filename)</a></dt>
+<dd>
+<p>追加 <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/12803">ruby-dev:12803</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L007231" id="L007231"><a href="refm054.html">Bignum</a>#% の計算誤り</a></dt>
+<dd>
+<p>% の計算に誤りが出ることがあるバグが(再度)修正されました</p>
+<pre>a = 677330545177305025495135714080
+b = 14269972710765292560
+p a % b  #=&gt; 0
+p -a % b #=&gt; 
+
+=&gt; ruby 1.6.3 (2001-04-02) [i386-cygwin]
+   0
+   14269972710765292560
+
+=&gt; ruby 1.6.4 (2001-04-19) [i586-linux]
+   0
+   0</pre>
+</dd>
+<dt><a name="L007161" id="L007161"><a href="refm077.html">Marshal</a></a></dt>
+<dd>
+<p>Bignum を dump -&gt; load した結果が元の値と異なる場合がありました。</p>
+<p>これに関連する修正が 1.6.3 リリース後、3回ほど行われています。
+stable-snapshot の</p>
+<pre>ruby 1.6.3 (2001-03-22)</pre>
+<p>以降を使用してください。</p>
+</dd>
+<dt><a name="L007232" id="L007232">Universal Naming Convention(UNC) のサポート(win32)</a></dt>
+<dd>
+<p>UNC 形式のパス名 (//host/share) がサポートされました。
+バックスラッシュ(`<code>\</code>')ではなくスラッシュ(`<code>/</code>')を使います。
+(元もとサポートされてたのがバグ修正された？？)</p>
+</dd>
+<dt><a name="L007233" id="L007233"><a href="refm041.html">Dir</a>.glob (win32)</a></dt>
+<dd>
+<p>カレントディレクトリ(./)に対するglobが失敗していました。</p>
+<pre>p Dir[&quot;./*.c&quot;]
+=&gt; []</pre>
+</dd>
+</dl>
+<h2><a name="L007234" id="L007234">1.6.2 -&gt; 1.6.3 (2001-03-19)</a></h2>
+<dl>
+<dt><a name="L007235" id="L007235">do .. end と { .. }</a></dt>
+<dd>
+<p>結合強度の違いがなくなっていたバグが修正されました。</p>
+<p>1.6.0 から 1.6.2 までのバージョンでは、</p>
+<pre>method v { .. }
+method v do .. end</pre>
+<p>の両者に違いがありませんでした。本来の挙動は<em class="XXINVALIDXX">イテレータ</em>
+に書かれた通りです。</p>
+</dd>
+<dt><a name="L007231" id="L007231"><a href="refm054.html">Bignum</a>#% の計算誤り</a></dt>
+<dd>
+<p>% の計算に誤りが出ることがあるバグが修正されました</p>
+<pre>ruby-1.6.2 -ve 'p 6800000000%4000000000'
+=&gt; ruby 1.6.2 (2000-12-25) [i586-linux]
+   -1494967296
+
+ruby-1.6.3 -ve 'p 6800000000%4000000000'
+=&gt; ruby 1.6.3 (2001-03-10) [i586-linux]
+   2800000000</pre>
+</dd>
+<dt><a name="L007236" id="L007236">特異メソッド定義</a></dt>
+<dd>
+<p>通常のメソッド定義と同様に rescue, ensure 節の指定が可能になりました</p>
+<pre>obj = Object.new
+def obj.foo
+rescue
+ensure
+end</pre>
+</dd>
+<dt><a name="L007237" id="L007237"><a href="refm061.html">String</a>#count</a></dt>
+<dt><a name="L007238" id="L007238"><a href="refm061.html">String</a>#delete</a></dt>
+<dt><a name="L007239" id="L007239"><a href="refm061.html">String</a>#squeeze</a></dt>
+<dt><a name="L007240" id="L007240"><a href="refm061.html">String</a>#tr</a></dt>
+<dt><a name="L007241" id="L007241"><a href="refm061.html">String</a>#tr_s</a></dt>
+<dd>
+<p>'\-' で '-' を指定可能になりました(tr! 等、bang method も同様)。
+以前は、文字列の先頭または末尾の'-'だけを'-'と見なしていました。</p>
+<pre>p &quot;-&quot;.tr(&quot;a-z&quot;,  &quot;+&quot;)  # =&gt; &quot;-&quot;
+p &quot;-&quot;.tr(&quot;-az&quot;,  &quot;+&quot;)  # =&gt; &quot;+&quot;
+p &quot;-&quot;.tr(&quot;az-&quot;,  &quot;+&quot;)  # =&gt; &quot;+&quot;
+p &quot;-&quot;.tr('a\-z', &quot;+&quot;)  # =&gt; &quot;+&quot; # シングルクォート文字列であることに注意
+p &quot;-&quot;.tr(&quot;a\\-z&quot;, &quot;+&quot;) # =&gt; &quot;+&quot; # &quot;&quot; では二重に\が必要</pre>
+</dd>
+<dt><a name="L007242" id="L007242"><a href="refm060.html">Regexp</a>#==</a></dt>
+<dd>
+<p>すべてのオプションも同じならば同じと判断するようになりました。
+以前は、漢字コード指定と /i (case-insensitive) の指定が同じで
+あれば同じと判断していました。</p>
+</dd>
+<dt><a name="L007243" id="L007243">%q(), %w[]</a></dt>
+<dd>
+<p>リテラルの終了文字(`)'や']'など)をバックスラッシュエスケープ可能になりました。</p>
+</dd>
+<dt><a name="L007170" id="L007170"><a href="refm041.html">Dir</a>.glob</a></dt>
+<dd>
+<p>&quot;**/&quot; がシンボリックリンクを辿らなくなりました。</p>
+</dd>
+<dt><a name="L007244" id="L007244"><a href="refm061.html">String</a>#[]</a></dt>
+<dd>
+<p>&quot;a&quot;[1,2] が &quot;&quot; を返すようになりました。</p>
+<pre>p &quot;a&quot;[1,2]
+=&gt; &quot;&quot;</pre>
+<p>これは本来の挙動です。過去のバージョン(1.4.6など)もこの値を返していました。
+1.6.0 以降 1.6.2 までは上記は <code>nil</code> になります。</p>
+<p><code>p &quot;a&quot;[2,1]</code> は、<code>nil</code> を返します。</p>
+</dd>
+<dt><a name="L007245" id="L007245"><a href="refm035.html">Object</a>#taint</a></dt>
+<dd>
+<p><a href="refm035.html">freeze</a> したオブジェクトに対して <code>taint</code> できなくなりました</p>
+<pre>obj = Object.new.freeze
+obj.taint
+=&gt; -:2:in `taint': can't modify frozen object (TypeError)
+           from -:2</pre>
+</dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm382.html">UP</a>][<a href="refm382.html">&lt;-PREV</a>][<a href="refm384.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

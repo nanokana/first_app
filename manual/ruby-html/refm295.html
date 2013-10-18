@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Date</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm296.html" rel="next" />
+<link href="refm294.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm294.html">UP</a>][<a href="refm294.html">&lt;-PREV</a>][<a href="refm296.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L005887" id="L005887">Date</a></h1>
+<p>日付を扱うクラスです。<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></p>
+<dl>
+<dt><a name="L005888" id="L005888"><a href="refm296.html">DateTime</a></a></dt>
+<dd>
+<p>日付だけでなく時間も扱える Date のサブクラスです。</p>
+</dd>
+</dl>
+<h2><a name="L005889" id="L005889">用語の定義</a></h2>
+<p>いくつか用語の定義は、ISO 8601、および JIS X 0301 に基づきます。</p>
+<h3><a name="L005890" id="L005890">暦日付</a></h3>
+<p>暦日付は、暦年、暦月、および暦月の中の序数によって
+指定される特定の日の日付です。</p>
+<p>つまり、ごく当たり前の年月日による日付です。</p>
+<h3><a name="L005891" id="L005891">年間通算日 (年日付)</a></h3>
+<p>年間通算日 (年日付) は、暦年、および暦年の中の序数によって指定される
+特定の日の日付です。</p>
+<h3><a name="L005892" id="L005892">暦週日付</a></h3>
+<p>暦週日付は、暦週と暦年中の序数による日付です。</p>
+<p>暦週は、暦年中の序数によって指定される特定の7日の期間であり、月曜から
+始まります。その年の第1暦週は、最初の木曜日を含む週とします。これは、1
+月4日を含む週と同じです。</p>
+<h3><a name="L005893" id="L005893">ユリウス日</a></h3>
+<p>ユリウス日は紀元前4713年1月1日 (ユリウス暦) 正午 (グリニッジ平均時) を
+暦元とした通日 (経過日数) です。</p>
+<p>この文書で、天文学的なユリウス日とは、本来のユリウス日と同じものです。
+また、年代学的なユリウス日とは、地方時における零時を一日の始まりとする
+流儀です。</p>
+<p>この文書で、単に「ユリウス日」といった場合、それは本来のユリウス日でな
+く、「年代学的なユリウス日」を意味しています。</p>
+<h3><a name="L005894" id="L005894">修正ユリウス日</a></h3>
+<p>修正ユリウス日は西暦1858年11月17日 (グレゴリオ暦) 零時 (協定世界時) を
+暦元とした通日 (経過日数) です。</p>
+<p>この文書で、天文学的な修正ユリウス日とは、本来の修正ユリウス日と同じも
+のです。また、年代学的な修正ユリウス日とは、地方時における零時を一日の
+始まりとする流儀です。</p>
+<p>この文書で、単に「修正ユリウス日」といった場合、それは本来の修正ユリウ
+ス日でなく、「年代学的な修正ユリウス日」を意味しています。</p>
+<h2><a name="L005895" id="L005895">使い方</a></h2>
+<pre>require 'date'</pre>
+<h2><a name="L005896" id="L005896">スーパークラス</a></h2>
+<p><a href="refm035.html">Object</a></p>
+<h2><a name="L005897" id="L005897">インクルードしているモジュール</a></h2>
+<p><a href="refm069.html">Comparable</a></p>
+<h2><a name="L005898" id="L005898">定数</a></h2>
+<dl>
+<dt><a name="L005899" id="L005899"><code>MONTHNAMES</code></a></dt>
+<dd>
+<p>月の名称(January, February ... )</p>
+<p>MONTHNAMES[0] == nil で MONTHNAMES[1] == &quot;January&quot; です。</p></dd>
+<dt><a name="L005900" id="L005900"><code>DAYNAMES</code></a></dt>
+<dd>
+<p>曜日の名称(Sunday, Monday ... )</p>
+<p>DAYNAMES[0] == &quot;Sunday&quot; です。</p></dd>
+<dt><a name="L005901" id="L005901"><code>ABBR_MONTHNAMES</code></a></dt>
+<dd>
+<p>月の省略名(Jan, Feb ... )</p>
+<p>ABBR_MONTHNAMES[0] == nil で ABBR_MONTHNAMES[1] == &quot;Jan&quot; です。</p></dd>
+<dt><a name="L005902" id="L005902"><code>ABBR_DAYNAMES</code></a></dt>
+<dd>
+<p>曜日の省略名(Sun, Mon ... )</p>
+<p>ABBR_DAYNAMES[0] == &quot;Sun&quot; です。</p></dd>
+</dl>
+<h2><a name="L005903" id="L005903">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L005904" id="L005904"><code>civil([<var>year</var>[, <var>mon</var>[, <var>mday</var>[, <var>start</var>]]]])</code></a>
+<dt><a name="L005905" id="L005905"><code>new([<var>year</var>[, <var>mon</var>[, <var>mday</var>[, <var>start</var>]]]])</code></a></dt>
+<dd>
+<p>暦日付に相当する日付オブジェクトを生成します。</p>
+<p>このクラスでは、紀元前の年を天文学の流儀で勘定します。
+1年の前は零年、零年の前は-1年、のようにします。
+月、および月の日は負、
+または正の数でなければなりません (負のときは最後からの序数)。
+零であってはなりません。</p>
+<p>最後の引数は、グレゴリオ暦をつかい始めた日をあらわすユリウス日です。
+グレゴリオ暦の指定として真、ユリウス暦の指定として偽を与えることもできます。
+省略した場合は、Date::ITALY (1582年10月15日) になります。</p>
+<p>jd も参照してください。</p></dd>
+<dt><a name="L005906" id="L005906"><code>commercial([<var>cwyear</var>[, <var>cweek</var>[, <var>cwday</var>[, <var>start</var>]]]])</code></a></dt>
+<dd>
+<p>暦週日付に相当する日付オブジェクトを生成します。</p>
+<p>週、および週の日 (曜日) は負、
+または正の数でなければなりません(負のときは最後からの序数)。
+零であってはなりません。</p>
+<p>このメソッドに改暦前の日付を与えることはできません。</p>
+<p>jd、および new も参照してください。</p></dd>
+<dt><a name="L005907" id="L005907"><code>jd([<var>jd</var>[, <var>start</var>]])</code></a></dt>
+<dd>
+<p>ユリウス日に相当する日付オブジェクトを生成します。</p>
+<p>このクラスのいくつかの重要なメソッドで、
+負のユリウス日は保証されません。</p>
+<p>new も参照してください。</p></dd>
+<dt><a name="L005908" id="L005908"><code>ordinal([<var>year</var>[, <var>yday</var>[, <var>start</var>]]])</code></a></dt>
+<dd>
+<p>年間通算日 (年日付) に相当する日付オブジェクトを生成します。</p>
+<p>月の日は負、
+または正の数でなければなりません (負のときは最後からの序数)。
+零であってはなりません。</p>
+<p>jd、および new も参照してください。</p></dd>
+<dt><a name="L005909" id="L005909"><code>parse(<var>str</var>[, <var>complete</var>[, <var>start</var>]])</code></a></dt>
+<dd>
+<p>与えられた日付表現を解析し、
+その情報に基づいて日付オブジェクトを生成します。</p>
+<p>省略できる最後の引数が真で、年が0から99の範囲であれば、
+年の下2桁表現であるとみなしこれを補います。
+なお、省略した場合は、偽とみなします。</p>
+<p>_parse も利用できます。
+このメソッドは parse と似ていますが、日付オブジェクトを生成せずに、
+見いだした要素をハッシュで返します。</p></dd>
+<dt><a name="L005910" id="L005910"><code>strptime(<var>str</var>[, <var>format</var>[, <var>start</var>]])</code></a></dt>
+<dd>
+<p>与えられた雛型で日付表現を解析し、
+その情報に基づいて日付オブジェクトを生成します。</p>
+<p>_strptime も利用できます。
+このメソッドは strptime と似ていますが、日付オブジェクト生成せずに、
+見いだした要素をハッシュで返します。</p>
+<p>strptime(3)、および strftime も参照してください。</p></dd>
+<dt><a name="L005911" id="L005911"><code>today([<var>start</var>])</code></a></dt>
+<dd>
+<p>現在の日付に相当する日付オブジェクトを生成します。</p></dd>
+<dt><a name="L005912" id="L005912"><code>valid_civil? (<var>year</var>, <var>mon</var>, <var>mday</var>[, <var>start</var>])</code></a>
+<dt><a name="L005913" id="L005913"><code>valid_date? (<var>year</var>, <var>mon</var>, <var>mday</var>[, <var>start</var>])</code></a></dt>
+<dd>
+<p>正しい暦日付であれば、相当するユリウス日を返します。
+そうでないなら、偽を返します。</p>
+<p>jd、および civil も参照してください。</p></dd>
+<dt><a name="L005914" id="L005914"><code>valid_commercial? (<var>cwyear</var>, <var>cweek</var>, <var>cwday</var>[, <var>start</var>])</code></a></dt>
+<dd>
+<p>正しい暦週日付であれば、相当するユリウス日を返します。
+そうでないなら、偽を返します。</p>
+<p>jd、および commercial も参照してください。</p></dd>
+<dt><a name="L005915" id="L005915"><code>valid_jd? (<var>jd</var>[, <var>start</var>])</code></a></dt>
+<dd>
+<p>ひとつ目の引数をそのまま返します。</p>
+<p>対称性のため用意されていますが、実際的に意味はありません。</p>
+<p>jd も参照してください。</p></dd>
+<dt><a name="L005916" id="L005916"><code>valid_ordinal? (<var>year</var>, <var>yday</var>[, <var>start</var>])</code></a></dt>
+<dd>
+<p>正しい年間通算日 (年日付) であれば、相当するユリウス日を返します。
+そうでないなら、偽を返します。</p>
+<p>jd、および ordinal も参照してください。</p></dd>
+</dl>
+<h2><a name="L005917" id="L005917">メソッド</a></h2>
+<dl>
+<dt><a name="L005918" id="L005918"><code><var>self</var> + <var>n</var></code></a></dt>
+<dd>
+<p>self から n 日後の日付オブジェクトを返します。
+n は数値でなければなりません。</p></dd>
+<dt><a name="L005919" id="L005919"><code><var>self</var> - <var>x</var></code></a></dt>
+<dd>
+<p>x が日付オブジェクトなら、ふたつの差を返します。
+あるいは
+x が数値ならば、self より x 日前の日付を返します。</p></dd>
+<dt><a name="L005920" id="L005920"><code><var>self</var> &lt;&lt; <var>n</var></code></a></dt>
+<dd>
+<p>self より n ヶ月前の日付オブジェクトを返します。
+n は数値でなければなりません。</p></dd>
+<dt><a name="L005921" id="L005921"><code><var>self</var> &lt;=&gt; <var>other</var></code></a></dt>
+<dd>
+<p>ふたつを比較し、-1、零、あるいは 1 を返します。
+other は日付オブジェクトか、
+天文学的なユリウス日をあらわす数値でなければなりません。</p></dd>
+<dt><a name="L005922" id="L005922"><code><var>self</var> === <var>other</var></code></a></dt>
+<dd>
+<p>同じ日なら真を返します。</p></dd>
+<dt><a name="L005923" id="L005923"><code><var>self</var> &gt;&gt; <var>n</var></code></a></dt>
+<dd>
+<p>self から n ヶ月後の日付オブジェクトを返します。
+n は数値でなければなりません。</p></dd>
+<dt><a name="L005924" id="L005924"><code>asctime</code></a>
+<dt><a name="L005925" id="L005925"><code>ctime</code></a></dt>
+<dd>
+<p>asctime(3) 書式の文字列を返します (ただし、末尾の &quot;\n\0&quot; は除く)。</p></dd>
+<dt><a name="L005926" id="L005926"><code>cwday</code></a></dt>
+<dd>
+<p>暦週の日 (曜日) を返します (1-7、月曜は1)。</p></dd>
+<dt><a name="L005927" id="L005927"><code>cweek</code></a></dt>
+<dd>
+<p>暦週を返します (1-53)。</p></dd>
+<dt><a name="L005928" id="L005928"><code>cwyear</code></a></dt>
+<dd>
+<p>暦週における年を返します。</p></dd>
+<dt><a name="L005929" id="L005929"><code>downto(<var>min</var>){|<var>date</var>| ...}</code></a></dt>
+<dd>
+<p>このメソッドは、<code>step(min, -1){|date| ...}</code> と等価です。</p></dd>
+<dt><a name="L005930" id="L005930"><code>england</code></a></dt>
+<dd>
+<p>このメソッドは、<code>new_start(Date::ENGLAND)</code> と等価です。</p></dd>
+<dt><a name="L005931" id="L005931"><code>gregorian</code></a></dt>
+<dd>
+<p>このメソッドは、<code>new_start(Date::GREGORIAN)</code> と等価です。</p></dd>
+<dt><a name="L005932" id="L005932"><code>italy</code></a></dt>
+<dd>
+<p>このメソッドは、<code>new_start(Date::ITALY)</code> と等価です。</p></dd>
+<dt><a name="L005907" id="L005907"><code>jd</code></a></dt>
+<dd>
+<p>ユリウス日を返します。
+時刻を含みません。</p>
+<p>ajd も利用できます。
+このメソッドは jd と似ていますが、天文学的なユリウス日を返します。
+時刻を含みます。</p></dd>
+<dt><a name="L005933" id="L005933"><code>julian</code></a></dt>
+<dd>
+<p>このメソッドは、<code>new_start(Date::JULIAN)</code> と等価です。</p></dd>
+<dt><a name="L005934" id="L005934"><code>leap?</code></a></dt>
+<dd>
+<p>閏年なら真を返します。</p></dd>
+<dt><a name="L005935" id="L005935"><code>mday</code></a>
+<dt><a name="L005936" id="L005936"><code>day</code></a></dt>
+<dd>
+<p>月の日を返します (1-31)。</p></dd>
+<dt><a name="L005937" id="L005937"><code>mjd</code></a></dt>
+<dd>
+<p>修正ユリウス日を返します。
+時刻の情報を含みません。</p>
+<p>amjd も利用できます。
+このメソッドは mjd と似ていますが、天文学的な修正ユリウス日を返します。
+時刻を含みます。</p></dd>
+<dt><a name="L005938" id="L005938"><code>mon</code></a>
+<dt><a name="L005939" id="L005939"><code>month</code></a></dt>
+<dd>
+<p>月を返します (1-12)。</p></dd>
+<dt><a name="L005940" id="L005940"><code>new_start([<var>start</var>])</code></a></dt>
+<dd>
+<p>self を複製して、その改暦日を設定しなおします。
+引数を省略した場合は、Date::ITALY (1582年10月15日) になります。</p>
+<p>new も参照してください。</p></dd>
+<dt><a name="L005941" id="L005941"><code>start</code></a></dt>
+<dd>
+<p>改暦日をあらわすユリウス日を返します。</p>
+<p>new も参照してください。</p></dd>
+<dt><a name="L005942" id="L005942"><code>step(<var>limit</var>, <var>step</var>){|<var>date</var>| ...}</code></a></dt>
+<dd>
+<p>ブロックの評価を繰り返します。ブロックは日付オブジェクトをとります。
+limit は日付オブジェクトでなければなりません、
+また step は非零でなければなりません。</p></dd>
+<dt><a name="L005943" id="L005943"><code>strftime([<var>format</var>])</code></a></dt>
+<dd>
+<p>与えられた雛型で日付を書式づけます。
+つぎの変換仕様をあつかいます:</p>
+<p>%A, %a, %B, %b, %C, %c, %D, %d, %e, %F, %G, %g, %H, %h, %I, %j, %k, %l,
+%M, %m, %n, %P, %p, %R, %r, %S, %s, %T, %t, %U, %u, %V, %v, %W, %w, %X,
+%x, %Y, %y, %Z, %z, %%, %+</p>
+<p>strftime(3)、および strptime も参照してください。</p></dd>
+<dt><a name="L005944" id="L005944"><code>succ</code></a>
+<dt><a name="L005945" id="L005945"><code>next</code></a></dt>
+<dd>
+<p>翌日の日付オブジェクトを返します。</p></dd>
+<dt><a name="L005946" id="L005946"><code>to_s</code></a></dt>
+<dd>
+<p>ISO 8601 書式の文字列を返します (拡大表記はつかいません)。</p></dd>
+<dt><a name="L005947" id="L005947"><code>upto(<var>max</var>){|<var>date</var>| ...}</code></a></dt>
+<dd>
+<p>このメソッドは、<code>step(max, 1){|date| ...}</code> と等価です。</p></dd>
+<dt><a name="L005948" id="L005948"><code>wday</code></a></dt>
+<dd>
+<p>曜日を返します (0-6、日曜日は零)。</p></dd>
+<dt><a name="L005949" id="L005949"><code>yday</code></a></dt>
+<dd>
+<p>年の日を返します (1-366)。</p></dd>
+<dt><a name="L005950" id="L005950"><code>year</code></a></dt>
+<dd>
+<p>年を返します。</p></dd>
+</dl>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>この文書のオリジナル (の html 版) は、
+<a href="http://www.funaba.org/date2/manual.html">&lt;URL:http://www.funaba.org/date2/manual.html&gt;</a><sup class="outside"><small>[外部]</small></sup>,
+<a href="http://www.funaba.org/en/date2/manual.html">&lt;URL:http://www.funaba.org/en/date2/manual.html&gt;</a><sup class="outside"><small>[外部]</small></sup> 
+です</small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm294.html">UP</a>][<a href="refm294.html">&lt;-PREV</a>][<a href="refm296.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

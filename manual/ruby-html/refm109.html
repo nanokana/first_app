@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SystemStackError</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm110.html" rel="next" />
+<link href="refm108.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm093.html">UP</a>][<a href="refm108.html">&lt;-PREV</a>][<a href="refm110.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L002237" id="L002237">SystemStackError</a></h1>
+<p>スタックレベルが深くなりすぎたときに発生します。</p>
+<p>ほとんどの場合は、実際にオーバーフローする前にチェックされてSystemStackError例外が発生しますが、
+残念ながら運悪くチェックをすり抜けてオーバーフローしてしまうことがあります。
+その場合、OSがシグナルハンドラを呼び出すこともできないため、
+<code>[BUG]</code>というエラーメッセージも出せずに直接強制終了されてしまいます。
+この問題の解決策は検討中です。</p>
+<h2><a name="L002238" id="L002238">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm093.html">StandardError</a></li>
+</ul>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm093.html">UP</a>][<a href="refm108.html">&lt;-PREV</a>][<a href="refm110.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

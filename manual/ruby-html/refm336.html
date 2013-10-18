@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>pp</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm337.html" rel="next" />
+<link href="refm335.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm335.html">&lt;-PREV</a>][<a href="refm337.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006471" id="L006471">pp</a></h1>
+<p>Pretty-printer</p>
+<h2><a name="L006472" id="L006472">どちらが読みやすいでしょうか?</a></h2>
+<p><code>p</code> による pretty-print されてない出力:</p>
+<pre>#&lt;PP:0x81a0d10 @stack=[], @genspace=#&lt;Proc:0x81a0cc0&gt;, @nest=[0], @newline=&quot;\n&quot;, @buf=#&lt;PrettyPrint::Group:0x81a0c98 @group=0, @tail=0, @buf=[#&lt;PrettyPrint::Group:0x81a0ba8 @group=1, @tail=0, @buf=[#&lt;PrettyPrint::Text:0x81a0b30 @tail=2, @width=1, @text=&quot;[&quot;&gt;, #&lt;PrettyPrint::Group:0x81a0a68 @group=2, @tail=1, @buf=[#&lt;PrettyPrint::Text:0x81a09f0 @tail=1, @width=1, @text=&quot;1&quot;&gt;], @singleline_width=1&gt;, #&lt;PrettyPrint::Text:0x81a0a7c @tail=0, @width=1, @text=&quot;,&quot;&gt;, #&lt;PrettyPrint::Breakable:0x81a0a2c @group=2, @genspace=#&lt;Proc:0x81a0cc0&gt;, @newline=&quot;\n&quot;, @indent=1, @tail=2, @sep=&quot; &quot;, @width=1&gt;, #&lt;PrettyPrint::Group:0x81a09c8 @group=2, @tail=1, @buf=[#&lt;PrettyPrint::Text:0x81a0950 @tail=1, @width=1, @text=&quot;2&quot;&gt;], @singleline_width=1&gt;, #&lt;PrettyPrint::Text:0x81a0af4 @tail=0, @width=1, @text=&quot;]&quot;&gt;], @singleline_width=6&gt;], @singleline_width=6&gt;, @sharing_detection=false&gt;</pre>
+<p><code>pp</code> による pretty-print された出力:</p>
+<pre>#&lt;PP:0x40d0688
+ @buf=
+  #&lt;PrettyPrint::Group:0x40d064c
+   @buf=
+    [#&lt;PrettyPrint::Group:0x40d05d4
+      @buf=
+       [#&lt;PrettyPrint::Text:0x40d0598 @tail=2, @text=&quot;[&quot;, @width=1&gt;,
+        #&lt;PrettyPrint::Group:0x40d0534
+         @buf=[#&lt;PrettyPrint::Text:0x40d04f8 @tail=1, @text=&quot;1&quot;, @width=1&gt;],
+         @group=2,
+         @singleline_width=1,
+         @tail=1&gt;,
+        #&lt;PrettyPrint::Text:0x40d053e @tail=0, @text=&quot;,&quot;, @width=1&gt;,
+        #&lt;PrettyPrint::Breakable:0x40d0516
+         @genspace=#&lt;Proc:0x40d0656&gt;,
+         @group=2,
+         @indent=1,
+         @newline=&quot;\n&quot;,
+         @sep=&quot; &quot;,
+         @tail=2,
+         @width=1&gt;,
+        #&lt;PrettyPrint::Group:0x40d04e4
+         @buf=[#&lt;PrettyPrint::Text:0x40d04a8 @tail=1, @text=&quot;2&quot;, @width=1&gt;],
+         @group=2,
+         @singleline_width=1,
+         @tail=1&gt;,
+        #&lt;PrettyPrint::Text:0x40d057a @tail=0, @text=&quot;]&quot;, @width=1&gt;],
+      @group=1,
+      @singleline_width=6,
+      @tail=0&gt;],
+   @group=0,
+   @singleline_width=6,
+   @tail=0&gt;,
+ @genspace=#&lt;Proc:0x40d0656&gt;,
+ @nest=[0],
+ @newline=&quot;\n&quot;,
+ @sharing_detection=false,
+ @stack=[]&gt;</pre>
+<h2><a name="L006473" id="L006473">使い方</a></h2>
+<dl>
+<dt><a name="L006474" id="L006474"><code>pp(<var>obj</var>)</code></a></dt>
+<dd>
+<p><var>obj</var> を <code>$&gt;</code> に pretty print で出力します。</p>
+<p><code>nil</code> を返します。</p></dd>
+<dt><a name="L006475" id="L006475"><code>Object#pretty_inspect</code></a></dt>
+<dd>
+<p><a href="refm391.html">ruby 1.8.5 feature</a></p>
+<p>self を pp で表示したときの結果を文字列として返します。</p></dd>
+</dl>
+<h2><a name="L006476" id="L006476">出力のカスタマイズ</a></h2>
+<p>あなたのクラスについて pritty print するカスタマイズ機能を定義するには、
+そのクラスで <code>pretty_print(<var>pp</var>)</code> を再定義します。
+このメソッドのがとる引数 <var>pp</var> は <a href="refm337.html">PP</a> クラスのインスタンスです。
+このメソッドは出力に際して PP#text, PP#breakable, PP#nest, PP#group および
+PP#pp を使います。</p>
+<p>--&gt; <a href="refm337.html">PP</a></p>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm335.html">&lt;-PREV</a>][<a href="refm337.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Math</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm079.html" rel="next" />
+<link href="refm077.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm034.html">UP</a>][<a href="refm077.html">&lt;-PREV</a>][<a href="refm079.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L001987" id="L001987">Math</a></h1>
+<p>浮動小数点演算をサポートするクラス。<code>Math</code> モジュールは同じ定義の
+メソッドと特異メソッドとの両方が定義されているので、特異メソッドを呼び
+出して使う使い方と、クラスにインクルードして使う使い方との両方ができま
+す。</p>
+<p>例:</p>
+<pre>pi = Math.atan2(1, 1)*4;
+include Math
+pi2 = atan2(1, 1)*4</pre>
+<h2><a name="L001988" id="L001988">モジュール関数:</a></h2>
+<dl>
+<dt><a name="L001989" id="L001989"><code>Math.acos(<var>x</var>)</code></a>
+<dt><a name="L001990" id="L001990"><code>Math.asin(<var>x</var>)</code></a>
+<dt><a name="L001991" id="L001991"><code>Math.atan(<var>x</var>)</code></a></dt>
+<dd>
+<p><var>x</var> の逆三角関数の値をラジアンで返します。</p>
+<p>返される値の範囲はそれぞれ <code>[0, +π]</code>、<code>[-π/2, +π/2]</code>、
+<code>(-π/2, +π/2)</code> です。</p>
+<p>acos(x), asin(x) では <var>x</var> は -1.0 &lt;= <var>x</var> &lt;= 1 の範囲内でな
+ければなりません。(普通、NaN を返します)</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>: acos(), asin() は範囲外の引数に対して、例
+外 <a href="refm108.html">Errno::EDOM</a> が発生します。</p></dd>
+<dt><a name="L001992" id="L001992"><code>Math.atan2(<var>y</var>, <var>x</var>)</code></a></dt>
+<dd>
+<p><var>y</var>/<var>x</var> のアークタンジェントを <code>[-π, π]</code> の範囲で返します。</p></dd>
+<dt><a name="L001993" id="L001993"><code>Math.acosh(<var>x</var>) ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a>
+<dt><a name="L001994" id="L001994"><code>Math.asinh(<var>x</var>) ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a>
+<dt><a name="L001995" id="L001995"><code>Math.atanh(<var>x</var>) ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p><var>x</var> の逆双曲線関数の値を返します。</p>
+<pre>asinh(x) = log(x + sqrt(x * x + 1))
+acosh(x) = log(x + sqrt(x * x - 1)) [x &gt;= 1]
+atanh(x) = log((1+x)/(1-x)) / 2     [-1 &lt; x &lt; 1]</pre>
+<p>acosh(x) では <var>x</var> は<var>x</var> &gt;= 1 の範囲内でなければなりません。
+(普通、例外 <a href="refm108.html">Errno::EDOM</a> が発生します)</p>
+<p>atanh(x) では <var>x</var> は -1.0 &lt; <var>x</var> &lt; 1 の範囲内でなければな
+りません。(普通、例外 <a href="refm108.html">Errno::EDOM</a> が発生します)</p></dd>
+<dt><a name="L001996" id="L001996"><code>Math.cos(<var>x</var>)</code></a>
+<dt><a name="L001997" id="L001997"><code>Math.sin(<var>x</var>)</code></a>
+<dt><a name="L001998" id="L001998"><code>Math.tan(<var>x</var>)</code></a></dt>
+<dd>
+<p>ラジアンで表された <var>x</var> の三角関数の値を <code>[-1, 1]</code> の範囲で
+返します。</p></dd>
+<dt><a name="L001999" id="L001999"><code>Math.cosh(<var>x</var>) ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a>
+<dt><a name="L002000" id="L002000"><code>Math.sinh(<var>x</var>) ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a>
+<dt><a name="L002001" id="L002001"><code>Math.tanh(<var>x</var>) ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p><var>x</var> の双曲線関数の値を返します。</p>
+<pre>cosh(x) = (exp(x) + exp(-x)) / 2
+sinh(x) = (exp(x) - exp(-x)) / 2
+tanh(x) = sinh(x) / cosh(x)</pre></dd>
+<dt><a name="L002002" id="L002002"><code>Math.erf(<var>x</var>)  ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a>
+<dt><a name="L002003" id="L002003"><code>Math.erfc(<var>x</var>) ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>x の誤差関数(erf)、相補誤差関数(erfc)の値を返します。</p></dd>
+<dt><a name="L002004" id="L002004"><code>Math.exp(<var>x</var>)</code></a></dt>
+<dd>
+<p><var>x</var> の指数関数の値を返します。</p></dd>
+<dt><a name="L002005" id="L002005"><code>Math.frexp(<var>x</var>)</code></a></dt>
+<dd>
+<p>実数 <var>x</var> の指数部と仮数部を返します。</p></dd>
+<dt><a name="L002006" id="L002006"><code>Math.hypot(<var>x</var>, <var>y</var>) ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p><code>sqrt(x*x + y*y)</code> を返します。</p></dd>
+<dt><a name="L002007" id="L002007"><code>Math.ldexp(<var>x</var>,<var>exp</var>)</code></a></dt>
+<dd>
+<p>実数 <var>x</var> に 2 の <var>exp</var> 乗をかけた数を返します。</p></dd>
+<dt><a name="L002008" id="L002008"><code>Math.log(<var>x</var>)</code></a></dt>
+<dd>
+<p><var>x</var> の自然対数を返します。</p>
+<p><var>x</var> は正の値でなければなりません(普通、負の値に対して NaN を 0
+に対して -Infinity を返します)</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>: 範囲外の引数に対して、負の場合に例外 
+<a href="refm108.html">Errno::EDOM</a> が 0 の場合に
+<a href="refm108.html">Errno::ERANGE</a> が発生します。</p></dd>
+<dt><a name="L002009" id="L002009"><code>Math.log10(<var>x</var>)</code></a></dt>
+<dd>
+<p><var>x</var> の常用対数を返します。</p>
+<p><var>x</var> は正の値でなければなりません(普通、負の値に対して NaN を 0
+に対して -Infinity を返します)</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>: 範囲外の引数に対して、負の場合に例外 
+<a href="refm108.html">Errno::EDOM</a> が 0 の場合に
+<a href="refm108.html">Errno::ERANGE</a> が発生します。</p></dd>
+<dt><a name="L002010" id="L002010"><code>Math.sqrt(<var>x</var>)</code></a></dt>
+<dd>
+<p><var>x</var> の平方根を返します。<var>x</var> の値が負である時には例外 
+<a href="refm094.html">ArgumentError</a> が発生します。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>: 普通、x が負の場合、例外 
+<a href="refm108.html">Errno::EDOM</a> が発生します。</p></dd>
+</dl>
+<h2><a name="L002011" id="L002011">定数:</a></h2>
+<dl>
+<dt><a name="L002012" id="L002012"><code>E</code></a></dt>
+<dd>
+<p>自然対数の底</p>
+<pre>p Math::E
+# =&gt; 2.718281828</pre></dd>
+<dt><a name="L002013" id="L002013"><code>PI</code></a></dt>
+<dd>
+<p>円周率</p>
+<pre>p Math::PI
+# =&gt; 3.141592654</pre></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm034.html">UP</a>][<a href="refm077.html">&lt;-PREV</a>][<a href="refm079.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

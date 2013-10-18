@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>optparse</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm348.html" rel="next" />
+<link href="refm346.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm346.html">&lt;-PREV</a>][<a href="refm348.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006652" id="L006652">optparse</a></h1>
+<p>-&gt; <a href="refm349.html">optparse::チュートリアル</a></p>
+<p>-&gt; <a href="refm348.html">OptionParser</a></p>
+<h1><a name="L006653" id="L006653">Miscellaneous</a></h1>
+<h2><a name="L006654" id="L006654"><a name="index:0" id="index:0">OptionParser::Arguable</a></a></h2>
+<p>Extends command line arguments array to parse itself.</p>
+<dl>
+<dt><a name="L006655" id="L006655"><code>OptionParser::Arguable#options=(<var>opt</var>)</code></a></dt>
+<dd>
+<p>Sets <em class="XXINVALIDXX">OptionParser</em> object, when <var>opt</var> is <code>false</code> or
+<code>nil</code>, methods <a href="#L006656">OptionParser::Arguable#options</a> and
+<a href="#L006655">OptionParser::Arguable#options=</a> are undefined.  Thus, there
+is no ways to access the <em class="XXINVALIDXX">OptionParser</em> object via the
+receiver object.</p></dd>
+<dt><a name="L006656" id="L006656"><code>OptionParser::Arguable#options</code></a></dt>
+<dd>
+<p>Actual <em class="XXINVALIDXX">OptionParser</em> object, automatically created if not
+yet.</p>
+<p>If called as iterator, yields with the <em class="XXINVALIDXX">OptionParser</em> object
+and returns the result of the block. In this case, rescues any
+<em class="XXINVALIDXX">OptionParser::ParseError</em> exceptions in the block, just emits
+error message to <em class="XXINVALIDXX">STDERR</em> and returns <code>nil</code>.</p>
+<dl>
+<dt><a name="XXINVALIDXX" id="XXINVALIDXX">Parameters:</a></dt>
+<dd>
+<dl>
+<dt><a name="XXINVALIDXX" id="XXINVALIDXX"><code>block</code></a></dt>
+<dd>
+<p>Yielded with the <em class="XXINVALIDXX">OptionParser</em> instance.</p>
+</dd>
+</dl>
+</dd>
+</dl></dd>
+<dt><a name="L006657" id="L006657"><code>OptionParser::Arguable#order!</code></a>
+<dt><a name="L006658" id="L006658"><code>OptionParser::Arguable#permute!</code></a>
+<dt><a name="L006659" id="L006659"><code>OptionParser::Arguable#parse!</code></a></dt>
+<dd>
+<p>Parses <var>self</var> destructively, and returns <var>self</var> just contains
+rest arguments left without parsed.</p></dd>
+</dl>
+<h1><a name="L006660" id="L006660">Example</a></h1>
+<p>The following example is a complete Ruby program.  You can run it and see the
+effect of specifying various options.</p>
+<pre>require 'optparse'
+require 'optparse/time'
+require 'ostruct'
+require 'pp'
+
+class OptparseExample
+
+  CODES = %w[iso-2022-jp shift_jis euc-jp utf8 binary]
+  CODE_ALIASES = {&quot;jis&quot; =&gt; &quot;iso-2022-jp&quot;, &quot;sjis&quot; =&gt; &quot;shift_jis&quot;}
+
+  #
+  # Return a structure describing the options.
+  #
+  def self.parse(args)
+    # The options specified on the command line will be collected in *options*.
+    # We set default values here.
+    options = OpenStruct.new
+    options.library = []
+    options.inplace = false
+    options.encoding = &quot;utf8&quot;
+    options.transfer_type = :auto
+    options.verbose = false
+
+    opts = OptionParser.new do |opts|
+      opts.banner = &quot;Usage: example.rb [options]&quot;
+
+      opts.separator &quot;&quot;
+      opts.separator &quot;Specific options:&quot;
+
+      # Mandatory argument.
+      opts.on(&quot;-r&quot;, &quot;--require LIBRARY&quot;,
+              &quot;Require the LIBRARY before executing your script&quot;) do |lib|
+        options.library &lt;&lt; lib
+      end
+
+      # Optional argument; multi-line description.
+      opts.on(&quot;-i&quot;, &quot;--inplace [EXTENSION]&quot;,
+              &quot;Edit ARGV files in place&quot;,
+              &quot;  (make backup if EXTENSION supplied)&quot;) do |ext|
+        options.inplace = true
+        options.extension = ext || ''
+        options.extension.sub!(/\A\.?(?=.)/, &quot;.&quot;)  # Ensure extension begins with dot.
+      end
+
+      # Cast 'delay' argument to a Float.
+      opts.on(&quot;--delay N&quot;, Float, &quot;Delay N seconds before executing&quot;) do |n|
+        options.delay = n
+      end
+
+      # Cast 'time' argument to a Time object.
+      opts.on(&quot;-t&quot;, &quot;--time [TIME]&quot;, Time, &quot;Begin execution at given time&quot;) do |time|
+        options.time = time
+      end
+
+      # Cast to octal integer.
+      opts.on(&quot;-F&quot;, &quot;--irs [OCTAL]&quot;, OptionParser::OctalInteger,
+              &quot;Specify record separator (default \\0)&quot;) do |rs|
+        options.record_separator = rs
+      end
+
+      # List of arguments.
+      opts.on(&quot;--list x,y,z&quot;, Array, &quot;Example 'list' of arguments&quot;) do |list|
+        options.list = list
+      end
+
+      # Keyword completion.  We are specifying a specific set of arguments (CODES
+      # and CODE_ALIASES - notice the latter is a Hash), and the user may provide
+      # the shortest unambiguous text.
+      code_list = (CODE_ALIASES.keys + CODES).join(',')
+      opts.on(&quot;--code CODE&quot;, CODES, CODE_ALIASES, &quot;Select encoding&quot;,
+              &quot;  (#{code_list})&quot;) do |encoding|
+        options.encoding = encoding
+      end
+
+      # Optional argument with keyword completion.
+      opts.on(&quot;--type [TYPE]&quot;, [:text, :binary, :auto], &quot;Select transfer type (text, binary, auto)&quot;) do |t|
+        options.transfer_type = t
+      end
+
+      # Boolean switch.
+      opts.on(&quot;-v&quot;, &quot;--[no-]verbose&quot;, &quot;Run verbosely&quot;) do |v|
+        options.verbose = v
+      end
+
+      opts.separator &quot;&quot;
+      opts.separator &quot;Common options:&quot;
+
+      # No argument, shows at tail.  This will print an options summary.
+      # Try it and see!
+      opts.on_tail(&quot;-h&quot;, &quot;--help&quot;, &quot;Show this message&quot;) do
+        puts opts
+        exit
+      end
+
+      # Another typical switch to print the version.
+      opts.on_tail(&quot;--version&quot;, &quot;Show version&quot;) do
+        puts OptionParser::Version.join('.')
+        exit
+      end
+    end
+
+    opts.parse!(args)
+    options
+  end  # parse()
+
+end  # class OptparseExample
+
+options = OptparseExample.parse(ARGV)
+pp options</pre>
+<p>Note: if you get errors or strange results from any of the above code, make
+sure you have the latest version installed.  Some changes have been made since
+Ruby 1.8.0 was released. </p>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm346.html">&lt;-PREV</a>][<a href="refm348.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

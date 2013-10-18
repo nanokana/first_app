@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Numeric</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm053.html" rel="next" />
+<link href="refm051.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm035.html">UP</a>][<a href="refm051.html">&lt;-PREV</a>][<a href="refm053.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L001256" id="L001256">Numeric</a></h1>
+<p><code>Numeric</code> は数値の抽象クラスです。Ruby では <a href="#L001270">coerce</a> 
+メソッドを使うことによって異なる数値クラス間で演算を行うことができます。</p>
+<p>演算や比較を行うメソッド(+, -, *, /, &lt;=&gt;)などはサブクラスで定義されま
+す。また、効率のため <code>Numeric</code> のメソッドと同じメソッドがサブクラ
+スで再定義されている場合があります。</p>
+<h2><a name="L001257" id="L001257">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm035.html">Object</a>
+<ul>
+<li><a href="refm052.html">Numeric</a> &lt;&lt;
+<ul>
+<li><a href="refm053.html">Integer</a>
+<ul>
+<li><a href="refm054.html">Bignum</a></li>
+<li><a href="refm055.html">Fixnum</a></li>
+</ul></li>
+<li><a href="refm056.html">Float</a></li>
+</ul></li>
+</ul></li>
+</ul>
+<h2><a name="L001258" id="L001258">インクルードしているモジュール:</a></h2>
+<ul>
+<li><a href="refm069.html">Comparable</a></li>
+</ul>
+<h2><a name="L001259" id="L001259">メソッド:</a></h2>
+<dl>
+<dt><a name="L001260" id="L001260"><code>+ <var>self</var></code></a></dt>
+<dd>
+<p><code>self</code> 自身を返します。</p></dd>
+<dt><a name="L001261" id="L001261"><code>- <var>self</var></code></a></dt>
+<dd>
+<p><code>self</code> の符号を反転させたものを返します。</p>
+<p>このメソッドは、二項演算子 <code>-</code> で <code>0 - self</code> によって定義
+されています。</p></dd>
+<dt><a name="L001262" id="L001262"><code><var>self</var> == <var>other</var></code></a></dt>
+<dd>
+<p><code>self</code> と <code>other</code> の値が等しいときに <code>true</code>、等しくないときに <code>false</code> を返します。
+<code>other</code> が <code>Numeric</code> で比較できないオブジェクトの場合、
+結合法則が成り立つことを仮定して <code>other == self</code> の結果を返します。</p></dd>
+<dt><a name="L001263" id="L001263"><code>abs</code></a></dt>
+<dd>
+<p><code>self</code> の絶対値を返します。</p></dd>
+<dt><a name="L001264" id="L001264"><code>ceil</code></a>
+<dt><a name="L001265" id="L001265"><code>floor</code></a>
+<dt><a name="L001266" id="L001266"><code>round</code></a>
+<dt><a name="L001267" id="L001267"><code>truncate</code></a></dt>
+<dd>
+<p>self を整数に丸めた結果を返します。</p>
+<p>整数に丸めるメソッドの例:</p>
+<pre>_
+      |       ceil      floor      round   truncate
+----------------------------------------------------
+  1.9 |          2          1          2          1
+  1.1 |          2          1          1          1
+ -1.1 |         -1         -2         -1         -1
+ -1.9 |         -1         -2         -2         -1</pre>
+<ul>
+<li>ceil は大きい方の整数へ丸めます(天井)。</li>
+<li>floor は小さい方の整数に丸めます(床)。</li>
+<li>round は 近い方の整数に丸めます。中央値 0.5, -0.5 は切上げ(1,
+      -1)されます。いわゆる四捨五入ですが、偶数丸めではありません。</li>
+<li>truncate(そして、<a href="refm056.html#L001354">to_i</a>) は 0 に近い方の整数に丸めます(切捨て)。</li>
+<li>0 から遠い方に丸める(切上げ)メソッドはありません。</li>
+</ul>
+<p>切上げはceil, floor を使用して以下のように定義できます。</p>
+<pre>if n &gt; 0 then
+  n.ceil
+else
+  n.floor
+end</pre>
+<p>また、任意桁の切上げ、切捨て、四捨五入を行うメソッドは以下のように
+定義できます。</p>
+<pre>class Numeric
+  def roundup(d=0)
+    x = 10**d
+    if self &gt; 0
+      (self * x).ceil.quo(x)
+    else
+      (self * x).floor.quo(x)
+    end
+  end
+
+  def rounddown(d=0)
+    x = 10**d
+    if self &lt; 0
+      (self * x).ceil.quo(x)
+    else
+      (self * x).floor.quo(x)
+    end
+  end
+
+  def roundoff(d=0)
+    x = 10**d
+    if self &lt; 0
+      (self * x - 0.5).ceil.quo(x)
+    else
+      (self * x + 0.5).floor.quo(x)
+    end
+  end
+end</pre></dd>
+<dt><a name="L001268" id="L001268"><code>clone</code></a>
+<dt><a name="L001269" id="L001269"><code>dup</code></a></dt>
+<dd>
+<p><code>self</code> を返します。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>: version 1.7 では数値などの immutable なオ
+ブジェクトは clone や dup が禁止されています。</p>
+<pre>1.dup   # =&gt; in `clone': can't clone Fixnum (TypeError)</pre></dd>
+<dt><a name="L001270" id="L001270"><code>coerce(<var>number</var>)</code></a></dt>
+<dd>
+<p><var>number</var> の型を自分と直接演算できる型に変換して
+<code>[<var>number</var>, self]</code> という配列に格納して返します。数値クラ
+スの算術演算子は通常自分と演算できないクラスをオペランドとして受け
+取ると <code>coerce</code> を使って自分とオペランドを変換した上で演算を行
+います。</p></dd>
+<dt><a name="L001271" id="L001271"><code>div(<var>other</var>)    ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a>
+<dt><a name="L001272" id="L001272"><code>quo(<var>other</var>)    ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>self を <var>other</var> で割った商を返します。
+<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></p>
+<ul>
+<li>div は self のクラスにかかわらず整数(<a href="refm053.html">Integer</a>)の商を返します。</li>
+<li>quo は self のクラスにかかわらず実数(<a href="refm056.html">Float</a>や<a href="refm264.html">Rational</a>)
+      の商を返します。</li>
+</ul>
+<p>div の商に対応する余りは <a href="#L001275">modulo</a> で求められます。</p>
+<p>div の例:</p>
+<pre>p 3.div(2) # =&gt; 1
+p -3.div(2) # =&gt; -2
+p -3.0.div(2) # =&gt; -2</pre>
+<p>quo の例:</p>
+<pre>p 1.quo(3)      # =&gt; 0.3333333333333333
+
+require 'rational'
+p 1.quo(3)      # =&gt; Rational(1, 3)</pre>
+<p>各メソッドの比較:</p>
+<pre>_
+       [a,b] |       divmod            /          div          quo
+-------------------------------------------------------------------
+     [13, 4] |       [3, 1]            3            3         3.25
+    [13, -4] |     [-4, -3]           -4           -4        -3.25
+    [-13, 4] |      [-4, 3]           -4           -4        -3.25
+   [-13, -4] |      [3, -1]            3            3         3.25
+  [-13, -13] |       [1, 0]            1            1          1.0
+   [11.5, 4] |   [2.0, 3.5]        2.875            2        2.875
+  [11.5, -4] | [-3.0, -0.5]       -2.875           -3       -2.875
+  [-11.5, 4] |  [-3.0, 0.5]       -2.875           -3       -2.875
+ [-11.5, -4] |  [2.0, -3.5]        2.875            2        2.875</pre></dd>
+<dt><a name="L001273" id="L001273"><code>divmod(<var>other</var>)</code></a></dt>
+<dd>
+<p><code>self</code> を <var>other</var> で割った商 (<var>q</var>) と余り (<var>r</var>) を、
+<code>[<var>q</var>, <var>r</var>]</code> という 2 要素の配列にして返します。</p>
+<p>ここで、<var>a</var> を <var>b</var> で割った商 <var>q</var> と余り <var>r</var> とい
+うのは、それぞれ</p>
+<pre>a = b * q + r  かつ  |r| &lt; |b|
+
+ other &gt; 0 のとき:  0     &lt;= r &lt; other
+ other &lt; 0 のとき:  other &lt;  r &lt;= 0</pre>
+<p>をみたす <em>整数</em> <var>q</var> と 数 <var>r</var> のことです。</p>
+<p>divmod が返す商は <a href="#L001271">div</a> と同じです。
+また余りは、<a href="#L001275">modulo</a> (つまり、%)と同じです。</p>
+<p>このメソッドは、メソッド <code>/</code> と <code>%</code> によって定義されています。</p>
+<pre>numbers=[[13,4], [13,-4], [-13,4],[-13,-4],[-13,-13],
+         [11.5,4], [11.5,-4], [-11.5,4], [-11.5,-4]]
+methods=%w[divmod / div quo % modulo remainder]
+
+fmt = &quot;%12s |&quot; + &quot; %12s&quot; * methods.size + &quot;\n&quot;
+
+heading = sprintf(fmt, &quot;[a,b]&quot;, *methods)
+puts heading
+puts &quot;-&quot; * heading.size
+
+numbers.each {|a,b|
+  printf(fmt, [a,b].inspect,
+         *methods.collect {|m| a.send(m, b).inspect})
+}
+       [a,b] |       divmod            /          div          quo            %       modulo    remainder
+----------------------------------------------------------------------------------------------------------
+     [13, 4] |       [3, 1]            3            3         3.25            1            1            1
+    [13, -4] |     [-4, -3]           -4           -4        -3.25           -3           -3            1
+    [-13, 4] |      [-4, 3]           -4           -4        -3.25            3            3           -1
+   [-13, -4] |      [3, -1]            3            3         3.25           -1           -1           -1
+  [-13, -13] |       [1, 0]            1            1          1.0            0            0            0
+   [11.5, 4] |     [2, 3.5]        2.875            2        2.875          3.5          3.5          3.5
+  [11.5, -4] |   [-3, -0.5]       -2.875           -3       -2.875         -0.5         -0.5          3.5
+  [-11.5, 4] |    [-3, 0.5]       -2.875           -3       -2.875          0.5          0.5         -3.5
+ [-11.5, -4] |    [2, -3.5]        2.875            2        2.875         -3.5         -3.5         -3.5</pre></dd>
+<dt><a name="L001274" id="L001274"><code>integer?</code></a></dt>
+<dd>
+<p><code>self</code> が整数の時、真を返します。</p></dd>
+<dt><a name="L001275" id="L001275"><code>modulo(<var>other</var>)</code></a>
+<dt><a name="L001276" id="L001276"><code>remainder(<var>other</var>)</code></a></dt>
+<dd>
+<p>self を <var>other</var> で割った余り <var>r</var> を返します(<a href="#L001273">divmod</a> も参照)。</p>
+<p>modulo では、<var>r</var> の符号は <var>other</var> と同じ(またはゼロ)になります。
+一方、remainder は、<var>r</var> の符号は <code>self</code> と同じ(またはゼロ)になります。</p>
+<p>つまり、modulo では、</p>
+<ul>
+<li><var>other</var> &gt; 0 のとき  0 &lt;= <var>r</var> &lt; <var>other</var></li>
+<li><var>other</var> &lt; 0 のとき <var>other</var> &lt; <var>r</var> &lt;= 0</li>
+</ul>
+<p>となり、
+remainder では、</p>
+<ul>
+<li><code>self</code> &gt; 0 のとき  0 &lt;= <var>r</var> &lt; |<var>other</var>|</li>
+<li><code>self</code> &lt; 0 のとき -|<var>other</var>| &lt; <var>r</var> &lt;= 0</li>
+</ul>
+<p>となります。</p>
+<p>modulo は、メソッド <code>%</code> の呼び出しとして定義されています。
+(つまり、<code>%</code> と同じです)</p>
+<pre>p (13.modulo(4))      #=&gt;  1
+p (13.modulo(-4))     #=&gt; -3
+p ((-13).modulo(4))   #=&gt;  3
+p ((-13).modulo(-4))  #=&gt; -1
+
+p (13.remainder(4))      #=&gt;  1
+p (13.remainder(-4))     #=&gt;  1
+p ((-13).remainder(4))   #=&gt; -1
+p ((-13).remainder(-4))  #=&gt; -1</pre>
+<p>余りの求めかたにはこの通り二つのメソッドがありますが、
+違いは、self または other が負のときの結果です。</p>
+<p>こだわりがなければ modulo (あるいは %)を使えばよいでしょう。
+この余りに対応する商は、<a href="#L001271">div</a> (あるいは Integer#/) 
+で求められます。</p>
+<p>一方、remainder に対応する商を直接返すメソッドはありません
+(self.quo(other).truncate が対応します)。</p>
+<p>各メソッドの比較:</p>
+<pre>_
+       [a,b] |       divmod            %       modulo    remainder
+-------------------------------------------------------------------
+     [13, 4] |       [3, 1]            1            1            1
+    [13, -4] |     [-4, -3]           -3           -3            1
+    [-13, 4] |      [-4, 3]            3            3           -1
+   [-13, -4] |      [3, -1]           -1           -1           -1
+  [-13, -13] |       [1, 0]            0            0            0
+   [11.5, 4] |   [2.0, 3.5]          3.5          3.5          3.5
+  [11.5, -4] | [-3.0, -0.5]         -0.5         -0.5          3.5
+  [-11.5, 4] |  [-3.0, 0.5]          0.5          0.5         -3.5
+ [-11.5, -4] |  [2.0, -3.5]         -3.5         -3.5         -3.5</pre></dd>
+<dt><a name="L001277" id="L001277"><code>nonzero?</code></a></dt>
+<dd>
+<p>ゼロの時<code>nil</code>を返し、非ゼロの時 <code>self</code> を返します。</p>
+<p>sort のブロックの中で、複数の要素を &lt;=&gt; で比較するときに使用できます。
+以下の例では、使用しているシェル毎にユーザをソートしています。</p>
+<pre>require 'etc'
+ary = []
+Etc.passwd {|v| ary &lt;&lt; v }
+p ary.sort {|a, b| a.shell &lt;=&gt; b.shell or a.name &lt;=&gt; b.name }</pre>
+<p>なお、Array#&lt;=&gt; を利用して、次のように書くこともできます。</p>
+<pre>require 'etc'
+ary = []
+Etc.passwd {|v| ary &lt;&lt; v }
+p ary.sort {|a, b| [a.shell, a.name] &lt;=&gt; [b.shell, b.name] }
+# もしくは
+p ary.sort_by {|a| [a.shell, a.name] }</pre></dd>
+<dt><a name="L001278" id="L001278"><code>to_int      ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>self.to_i と同じです。</p></dd>
+<dt><a name="L001279" id="L001279"><code>zero?</code></a></dt>
+<dd>
+<p>ゼロの時、真を返します。</p></dd>
+<dt><a name="L001280" id="L001280"><code>step(<var>limit</var>) {|<var>n</var>| ... }</code></a>
+<dt><a name="L001281" id="L001281"><code>step(<var>limit</var>, <var>step</var>) {|<var>n</var>| ... }        ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p><code>self</code> からはじめ <var>step</var> を足しながら <var>limit</var> を越える
+前までブロックを繰り返します。<var>step</var> は負の数も指定できます(省
+略時は 1)。また、<var>limit</var> や <var>step</var> には <a href="refm056.html">Float</a> なども
+指定できます。</p>
+<p><var>step</var> に 0 を指定した場合は例外 <a href="refm094.html">ArgumentError</a> が発生します。</p>
+<p><code>self</code> を返します。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>: このメソッドは、<a href="refm055.html">Fixnum</a>, <a href="refm053.html">Integer</a> から移動しまし
+た。これにより <a href="refm056.html">Float</a> も <code>step</code> できるようになりました。</p>
+<pre>1.1.step(1.5, 0.1) {|n| p n}
+=&gt; 1.1
+   1.2
+   1.3
+   1.4
+   1.5</pre>
+<p>注：浮動小数点数の 0.1 は 2進数では正確な表現ができない<a name="footmark:2" id="footmark:2" href="#foottext:2"><sup><small>*2</small></sup></a>ので、以下のようなループでは誤差が
+生じて意図した回数ループしないことがある。step はこの誤差を考慮し
+て実装されている。</p>
+<pre>i = 1.1
+while i &lt;= 1.5
+  p i
+  i += 0.1
+end
+=&gt; 1.1
+   1.2
+   1.3
+   1.4   &lt;- 1.5 が表示されない</pre></dd>
+</dl>
+<h2><a name="L001282" id="L001282">数値関連クラスの定義メソッド</a></h2>
+<p>ほとんどの数値関連のメソッドはサブクラスで再定義されています。これは、
+効率のためであったり上位抽象クラスで実装を定義することができなかったり
+するためです。実際にどのメソッドがどのクラスに定義されているかは以下の
+表を参照してください。</p>
+<pre>cary = [Numeric, Integer, Fixnum, Bignum, Float]
+mary = cary.collect {|c| c.instance_methods(false)}
+methods = mary.flatten.uniq.sort
+
+methods.each_with_index {|op, i|
+  if i % 10 == 0
+    heading = sprintf(&quot;%12s   %10s %10s %10s %10s %10s&quot;,
+                &quot;&quot;, *cary.collect {|klass| klass.name.center(10)})
+    puts heading
+    puts &quot;-&quot; * heading.size
+  end
+
+  printf(&quot;%12s | %10s %10s %10s %10s %10s\n&quot;,
+    op, *mary.collect {|ms| (ms.member?(op) ? &quot;o&quot; : &quot;-&quot;).center(10)})
+}
+=&gt; ruby 1.6.8 (2002-12-24) [i586-linux]
+                   Numeric    Integer     Fixnum     Bignum     Float
+   ---------------------------------------------------------------------
+              % |     -          -          o          o          o
+              &amp; |     -          -          o          o          -
+              * |     -          -          o          o          o
+             ** |     -          -          o          o          o
+              + |     -          -          o          o          o
+             +@ |     o          -          -          -          -
+              - |     -          -          o          o          o
+             -@ |     o          -          o          o          o
+              / |     -          -          o          o          o
+              &lt; |     -          -          o          -          o
+                   Numeric    Integer     Fixnum     Bignum     Float
+   ---------------------------------------------------------------------
+             &lt;&lt; |     -          -          o          o          -
+             &lt;= |     -          -          o          -          o
+            &lt;=&gt; |     o          -          o          o          o
+             == |     -          -          o          o          o
+            === |     o          -          -          o          -
+              &gt; |     -          -          o          -          o
+             &gt;= |     -          -          o          -          o
+             &gt;&gt; |     -          -          o          o          -
+             [] |     -          -          o          o          -
+              ^ |     -          -          o          o          -
+                   Numeric    Integer     Fixnum     Bignum     Float
+   ---------------------------------------------------------------------
+            abs |     o          -          o          o          o
+           ceil |     o          o          -          -          o
+            chr |     -          o          -          -          -
+          clone |     o          -          -          -          -
+         coerce |     o          -          -          o          o
+            div |     -          -          -          o          -
+         divmod |     o          -          o          o          o
+         downto |     -          o          o          -          -
+           eql? |     o          -          -          o          o
+        finite? |     -          -          -          -          o
+                   Numeric    Integer     Fixnum     Bignum     Float
+   ---------------------------------------------------------------------
+          floor |     o          o          -          -          o
+           hash |     -          -          -          o          o
+        id2name |     -          -          o          -          -
+      infinite? |     -          -          -          -          o
+       integer? |     o          o          -          -          -
+         modulo |     o          -          o          o          o
+           nan? |     -          -          -          -          o
+           next |     -          o          o          -          -
+       nonzero? |     o          -          -          -          -
+      remainder |     o          -          -          o          -
+                   Numeric    Integer     Fixnum     Bignum     Float
+   ---------------------------------------------------------------------
+          round |     o          o          -          -          o
+           size |     -          -          o          o          -
+           step |     -          o          o          -          -
+           succ |     -          o          o          -          -
+          times |     -          o          o          -          -
+           to_f |     -          -          o          o          o
+           to_i |     -          o          -          -          o
+         to_int |     -          o          -          -          -
+           to_s |     -          -          o          o          o
+       truncate |     o          o          -          -          o
+                   Numeric    Integer     Fixnum     Bignum     Float
+   ---------------------------------------------------------------------
+           type |     -          -          o          -          -
+           upto |     -          o          o          -          -
+          zero? |     o          -          o          o          o
+              | |     -          -          o          o          -
+              ~ |     -          -          o          o          -
+=&gt; ruby 1.8.0 (2003-08-04) [i586-linux]
+                   Numeric    Integer     Fixnum     Bignum     Float
+   ---------------------------------------------------------------------
+              % |     -          -          o          o          o
+              &amp; |     -          -          o          o          -
+              * |     -          -          o          o          o
+             ** |     -          -          o          o          o
+              + |     -          -          o          o          o
+             +@ |     o          -          -          -          -
+              - |     -          -          o          o          o
+             -@ |     o          -          o          o          o
+              / |     -          -          o          o          o
+              &lt; |     -          -          o          -          o
+                   Numeric    Integer     Fixnum     Bignum     Float
+   ---------------------------------------------------------------------
+             &lt;&lt; |     -          -          o          o          -
+             &lt;= |     -          -          o          -          o
+            &lt;=&gt; |     o          -          o          o          o
+             == |     -          -          o          o          o
+              &gt; |     -          -          o          -          o
+             &gt;= |     -          -          o          -          o
+             &gt;&gt; |     -          -          o          o          -
+             [] |     -          -          o          o          -
+              ^ |     -          -          o          o          -
+            abs |     o          -          o          o          o
+                   Numeric    Integer     Fixnum     Bignum     Float
+   ---------------------------------------------------------------------
+           ceil |     o          o          -          -          o
+            chr |     -          o          -          -          -
+         coerce |     o          -          -          o          o
+            div |     o          -          o          o          -
+         divmod |     o          -          o          o          o
+         downto |     -          o          -          -          -
+           eql? |     o          -          -          o          o
+        finite? |     -          -          -          -          o
+          floor |     o          o          -          -          o
+           hash |     -          -          -          o          o
+                   Numeric    Integer     Fixnum     Bignum     Float
+   ---------------------------------------------------------------------
+        id2name |     -          -          o          -          -
+      infinite? |     -          -          -          -          o
+       integer? |     o          o          -          -          -
+         modulo |     o          -          o          o          o
+           nan? |     -          -          -          -          o
+           next |     -          o          -          -          -
+       nonzero? |     o          -          -          -          -
+            quo |     o          -          o          o          -
+      remainder |     o          -          -          o          -
+          round |     o          o          -          -          o
+                   Numeric    Integer     Fixnum     Bignum     Float
+   ---------------------------------------------------------------------
+           size |     -          -          o          o          -
+           step |     o          -          -          -          -
+           succ |     -          o          -          -          -
+          times |     -          o          -          -          -
+           to_f |     -          -          o          o          o
+           to_i |     -          o          -          -          o
+         to_int |     o          o          -          -          o
+           to_s |     -          -          o          o          o
+         to_sym |     -          -          o          -          -
+       truncate |     o          o          -          -          o
+                   Numeric    Integer     Fixnum     Bignum     Float
+   ---------------------------------------------------------------------
+           upto |     -          o          -          -          -
+          zero? |     o          -          o          -          o
+              | |     -          -          o          o          -
+              ~ |     -          -          o          o          -</pre>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>2005-11-24 <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/27674">ruby-dev:27674</a><sup class="outside"><small>[外部]</small></sup>: 1.8 にはバグがあり、self/other 
+の結果が負のFloatになる場合に結果が異なります。p -3.0.div(2) # =&gt; -1
+(正しくは-2)</small><br />
+<a name="foottext:2" id="foottext:2" href="#footmark:2"><sup><small>*2</small></sup></a><small>2進数で
+0.1は 0.00011001100....となる</small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm035.html">UP</a>][<a href="refm051.html">&lt;-PREV</a>][<a href="refm053.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

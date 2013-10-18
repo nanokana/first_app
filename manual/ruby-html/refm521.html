@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ruby-src:ext/readline/README</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm522.html" rel="next" />
+<link href="refm520.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm520.html">&lt;-PREV</a>][<a href="refm522.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1>ruby-src:ext/readline/README</h1>
+Extension&nbsp;for&nbsp;GNU&nbsp;Readline&nbsp;Library<br />
+<br />
+Example:<br />
+<br />
+&nbsp;&nbsp;require&nbsp;&quot;readline&quot;<br />
+&nbsp;&nbsp;include&nbsp;Readline<br />
+<br />
+&nbsp;&nbsp;line&nbsp;=&nbsp;readline(&quot;Prompt&gt;&nbsp;&quot;,&nbsp;true)<br />
+<br />
+[Readline]<br />
+<br />
+&lt;module&nbsp;function&gt;<br />
+<br />
+readline(prompt,&nbsp;add_history=nil)<br />
+<br />
+&nbsp;&nbsp;Reads&nbsp;one&nbsp;line&nbsp;with&nbsp;line&nbsp;editing.&nbsp;&nbsp;The&nbsp;inputted&nbsp;line&nbsp;is&nbsp;added&nbsp;to&nbsp;the<br />
+&nbsp;&nbsp;history&nbsp;if&nbsp;add_history&nbsp;is&nbsp;true.<br />
+<br />
+&lt;class&nbsp;methods&gt;<br />
+<br />
+completion_proc&nbsp;=&nbsp;proc<br />
+<br />
+&nbsp;&nbsp;Specifies&nbsp;a&nbsp;Proc&nbsp;object&nbsp;to&nbsp;determine&nbsp;completion&nbsp;behavior.&nbsp;&nbsp;It<br />
+&nbsp;&nbsp;should&nbsp;take&nbsp;input-string,&nbsp;and&nbsp;return&nbsp;an&nbsp;array&nbsp;of&nbsp;completion<br />
+&nbsp;&nbsp;candidates.<br />
+<br />
+completion_proc<br />
+<br />
+&nbsp;&nbsp;Returns&nbsp;the&nbsp;completion&nbsp;Proc&nbsp;object.<br />
+<br />
+completion_case_fold&nbsp;=&nbsp;bool<br />
+<br />
+&nbsp;&nbsp;Sets&nbsp;whether&nbsp;or&nbsp;not&nbsp;to&nbsp;ignore&nbsp;case&nbsp;on&nbsp;completion.<br />
+<br />
+completion_case_fold<br />
+<br />
+&nbsp;&nbsp;Returns&nbsp;true&nbsp;if&nbsp;completion&nbsp;ignores&nbsp;case.<br />
+<br />
+completion_append_character&nbsp;=&nbsp;char<br />
+<br />
+&nbsp;&nbsp;Specifies&nbsp;a&nbsp;character&nbsp;to&nbsp;be&nbsp;appended&nbsp;on&nbsp;completion.<br />
+&nbsp;&nbsp;Nothing&nbsp;will&nbsp;be&nbsp;appended&nbsp;if&nbsp;an&nbsp;empty&nbsp;string&nbsp;(&quot;&quot;)&nbsp;or&nbsp;nil&nbsp;is<br />
+&nbsp;&nbsp;specified.<br />
+<br />
+completion_append_character<br />
+<br />
+&nbsp;&nbsp;Returns&nbsp;a&nbsp;string&nbsp;containing&nbsp;a&nbsp;character&nbsp;to&nbsp;be&nbsp;appended&nbsp;on<br />
+&nbsp;&nbsp;completion.&nbsp;&nbsp;The&nbsp;default&nbsp;is&nbsp;a&nbsp;space&nbsp;(&quot;&nbsp;&quot;).<br />
+<br />
+vi_editing_mode<br />
+<br />
+&nbsp;&nbsp;Specifies&nbsp;VI&nbsp;editing&nbsp;mode.<br />
+<br />
+emacs_editing_mode<br />
+<br />
+&nbsp;&nbsp;Specifies&nbsp;Emacs&nbsp;editing&nbsp;mode.<br />
+<br />
+&lt;class&nbsp;constants&gt;<br />
+<br />
+HISTORY<br />
+<br />
+The&nbsp;history&nbsp;buffer.&nbsp;&nbsp;It&nbsp;behaves&nbsp;just&nbsp;like&nbsp;an&nbsp;array.<br />
+
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm520.html">&lt;-PREV</a>][<a href="refm522.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Marshal</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm078.html" rel="next" />
+<link href="refm076.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm034.html">UP</a>][<a href="refm076.html">&lt;-PREV</a>][<a href="refm078.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L001973" id="L001973">Marshal</a></h1>
+<p>Ruby オブジェクトをファイル(または文字列)に書き出したり、読み戻したり
+する機能を提供するモジュール。大部分のクラスのインスタンスを書き出す事
+ができますが、書き出しの不可能なクラスも存在します(後述)。</p>
+<p>ここで「マーシャルデータ」と言う用語は、Marshal.dump が出力する文字列
+を指すものとします。</p>
+<h2><a name="L001974" id="L001974">モジュール関数:</a></h2>
+<dl>
+<dt><a name="L001975" id="L001975"><code>Marshal.dump(<var>obj</var>[,<var>port</var>][,<var>limit</var>])</code></a></dt>
+<dd>
+<p><var>obj</var> を再帰的にファイルに書き出します。ファイルに書き出せない
+オブジェクトをファイルに書き出そうとすると例外 <a href="refm111.html">TypeError</a> が
+発生します。ファイルに書き出せないオブジェクトは以下の通りです。</p>
+<ul>
+<li>名前のついてない <a href="refm051.html">Class</a>/<a href="refm050.html">Module</a> オブジェクト。(この場
+      合は、例外 <a href="refm094.html">ArgumentError</a> が発生します。無名クラスについて
+      は、<a href="refm050.html#L001179">Module.new</a> を参照。)</li>
+<li>システムがオブジェクトの状態を保持するもの。具体的には以下のイン
+      スタンス。<a href="refm041.html">Dir</a>, <a href="refm043.html">File::Stat</a>, <a href="refm045.html">IO</a> とそのサブクラス 
+      <a href="refm046.html">File</a>, <a href="refm168.html">Socket</a> など。</li>
+<li><a href="refm047.html">MatchData</a>, <a href="refm039.html">Data</a>, <a href="refm048.html">Method</a>, <a href="refm049.html">UnboundMethod</a>,
+      <a href="refm057.html">Proc</a>, <a href="refm064.html">Thread</a>, <a href="refm065.html">ThreadGroup</a>, <a href="refm038.html">Continuation</a>
+      のインスタンス。</li>
+<li>特異メソッドを定義したオブジェクト</li>
+</ul>
+<p>また、これらのオブジェクトを間接的に指すオブジェクトなども書き出せ
+ません。例えば、デフォルト値を求めるブロックを持った <a href="refm044.html">Hash</a> は 
+<a href="refm057.html">Proc</a> を間接的に指していることになります。</p>
+<pre>p Marshal.dump(Hash.new {})
+=&gt; -:1:in `dump': cannot dump hash with default proc (TypeError)</pre>
+<p><var>port</var> には <code>IO</code>(またはそのサブクラス)のインスタンスを指定
+します。この場合、<var>port</var> を返します。省略した場合には 
+<code>dump</code> はそのオブジェクトをダンプした文字列を返します。</p>
+<p><var>limit</var> を指定した場合、<var>limit</var> 段以上深くリンクしたオブジェ
+クトをダンプできません(デフォルトは 100 レベル)。負の <var>limit</var> 
+を指定すると深さチェックを行いません。</p>
+<p>マーシャルの動作を任意に定義することもできます。詳細は、
+<a href="#L001981">ユーザ定義のMarshal</a> を参照してください。</p></dd>
+<dt><a name="L001976" id="L001976"><code>Marshal.load(<var>port</var>[,<var>proc</var>])</code></a>
+<dt><a name="L001977" id="L001977"><code>Marshal.restore(<var>port</var>[,<var>proc</var>])</code></a></dt>
+<dd>
+<p><var>port</var> からマーシャルデータを読み込んで、元のオブジェクトと同
+じ状態をもつオブジェクトを生成します。<var>port</var> は文字列か 
+<code>IO</code>(またはそのサブクラス)のインスタンスを指定します。</p>
+<p><var>proc</var> として手続きオブジェクトが与えられた場合には読み込んだ
+オブジェクトを引数にその手続きを呼び出します。
+<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></p>
+<pre>str = Marshal.dump([&quot;a&quot;, 1, 10 ** 10, 1.0, :foo])
+p Marshal.load(str, proc {|obj| p obj})
+
+=&gt; &quot;a&quot;
+   1
+   10000000000
+   1.0
+   :foo
+   [&quot;a&quot;, 1, 10000000000, 1.0, :foo]
+   [&quot;a&quot;, 1, 10000000000, 1.0, :foo]</pre></dd>
+</dl>
+<h2><a name="L001978" id="L001978">定数:</a></h2>
+<dl>
+<dt><a name="L001979" id="L001979"><code>MAJOR_VERSION    ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a>
+<dt><a name="L001980" id="L001980"><code>MINOR_VERSION    ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p><a href="#L001975">Marshal.dump</a> が出力するデータフォーマットのバージョ
+ン番号です。</p>
+<p><a href="#L001976">Marshal.load</a> は、メジャーバージョンが異なるか、バー
+ジョンの大きなマーシャルデータを読み込んだとき例外 <a href="refm111.html">TypeError</a> 
+を発生させます。</p>
+<p>マイナーバージョンが古いだけのフォーマットは読み込み可能ですが、
+<a href="refm030.html#L000550">$VERBOSE</a> = true のときには警告メッセージが
+出力されます</p>
+<p>マーシャルされたデータのバージョン番号は以下のようにして取得するこ
+とができます。</p>
+<pre>obj = Object.new
+major, minor = Marshal.dump(obj).unpack(&quot;cc&quot;)
+p [major, minor]</pre></dd>
+</dl>
+<h2><a name="L001981" id="L001981">ユーザ定義のMarshal</a></h2>
+<dl>
+<dt><a name="L001982" id="L001982"><code>Object#_dump(<var>limit</var>)</code></a>
+<dt><a name="L001983" id="L001983"><code>Class#_load(<var>str</var>)</code></a></dt>
+<dd>
+<p>Marshal.dump において出力するオブジェクトがメソッド `<code>_dump</code>' 
+を定義している場合には、そのメソッドの結果が書き出されます。メソッ
+ド `<code>_dump</code>' は引数として再帰を制限するレベル <var>limit</var> を受
+け取り、オブジェクトを文字列化したものを返します。</p>
+<p>インスタンスがメソッド `<code>_dump</code>' を持つクラスは必ず同じフォー
+マットを読み戻すクラスメソッド `<code>_load</code>' を定義する必要があり
+ます。`<code>_load</code>' はオブジェクトを表現した文字列を受け取り、それ
+をオブジェクトに戻したものを返す必要があります。</p>
+<pre>class Foo
+  def initialize(obj)
+    p &quot;initialize() called&quot;
+    @foo = obj
+  end
+  def _dump(limit)
+    Marshal.dump(@foo, limit)
+  end
+  def self._load(obj)
+    Foo.new(Marshal.load(obj))
+  end
+end
+
+p Marshal.load(Marshal.dump(Foo.new(['foo', 'bar'])))
+
+=&gt; &quot;initialize() called&quot;
+   &quot;initialize() called&quot;
+   #&lt;Foo:0x4019eb88 @foo=[&quot;foo&quot;, &quot;bar&quot;]&gt;</pre>
+<p>インスタンス変数の情報は普通マーシャルデータに含まれるので、この例
+のように _dump を定義する必要はありません(ただし _dump を定義すると
+インスタンス変数の情報は dump されなくなります)。
+_dump/_load はより高度な制御を行いたい場合や拡張ライブラリで定義し
+たクラスのインスタンスがインスタンス変数以外に情報を保持する場合に
+利用します。(例えば、クラス <a href="refm066.html">Time</a> は、_dump/_load を定義して
+います)</p></dd>
+<dt><a name="L001984" id="L001984"><code>Object#marshal_dump         ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a>
+<dt><a name="L001985" id="L001985"><code>Object#marshal_load(<var>obj</var>)    ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p><a name="footmark:2" id="footmark:2" href="#foottext:2"><sup><small>*2</small></sup></a></p>
+<p>Marshal.dump において、出力するオブジェクトがメソッド 
+`marshal_dump' を定義している場合には、その戻り値が dump されます。
+メソッド <code>marshal_dump</code> は任意のオブジェクトを返すメソッドとし
+て定義します。</p>
+<p>このようなオブジェクトを load するにはメソッド `marshal_load' が定
+義されていなくてはならず、load 時に利用されます。
+<code>marshal_load</code> は marshal_dump の戻り値のコピーを引数に受け取
+ります。<code>marshal_load</code> 時の self は、生成されたばかり
+(<a href="refm051.html#L001250">allocate</a> されたばかり)の状態です。
+なお、marshal_load の戻り値は無視されます。</p>
+<p>dump するオブジェクトが _dump と marshal_dump の両方のメソッドを持
+つ場合 marshal_dump が利用されます。</p>
+<pre>class Foo
+  def initialize
+    p &quot;initialize() called&quot;
+    @foo = ['foo', 'bar']
+  end
+  def marshal_dump
+    @foo
+  end
+  def marshal_load(obj)
+    @foo = obj
+  end
+end
+
+p Marshal.load(Marshal.dump(Foo.new))
+
+&quot;initialize() called&quot;
+#&lt;Foo:0x4019ed2c @foo=[&quot;foo&quot;, &quot;bar&quot;]&gt;</pre>
+<p>インスタンス変数の情報は普通マーシャルデータに含まれるので、この例
+のように marshal_dump を定義する必要はありません(ただし 
+marsahl_dump を定義するとインスタンス変数の情報は dump されなくな
+りますので、marshal_dump/marshal_load で扱う必要があります)。
+marshal_dump/marshal_load はより高度な制御を行いたい場合や
+拡張ライブラリで定義したクラスのインスタンスがインスタンス変数以外
+に情報を保持する場合に利用します。</p>
+<p>特に、marshal_dump/marshal_load を定義したオブジェクトは特異メソッドが
+定義されていてもマーシャルできるようになります。
+(特異メソッドの情報が自動的に dump されるようになるわけではなく、
+marshal_dump/marshal_load によりそれを実現する余地があるということ
+です)</p></dd>
+</dl>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>以前 <a href="refm055.html">Fixnum</a>, <a href="refm063.html">Symbol</a> が渡されない不具合があったが、
+1.6.7 2002-03-15 ごろに改修済み</small><br />
+<a name="foottext:2" id="foottext:2" href="#footmark:2"><sup><small>*2</small></sup></a><small><a href="refm385.html">ruby 1.8 feature</a>: marshal_dump/marshal_load の仕組みは 
+ruby 1.8.0 から導入されました。_dump/_load よりも使いやすいので、
+こちらの利用が推奨されます。_dump/_load はまだ obsolete にはなって
+いませんが、遠い将来そうなるかもしれません。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/21088">ruby-dev:21088</a><sup class="outside"><small>[外部]</small></sup></small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm034.html">UP</a>][<a href="refm076.html">&lt;-PREV</a>][<a href="refm078.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

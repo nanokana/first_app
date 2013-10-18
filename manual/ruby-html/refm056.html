@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Float</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm057.html" rel="next" />
+<link href="refm055.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm052.html">UP</a>][<a href="refm055.html">&lt;-PREV</a>][<a href="refm057.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L001332" id="L001332">Float</a></h1>
+<p>浮動小数点数のクラス。Float の実装は C 言語の double で、その精度は環
+境に依存します。<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></p>
+<pre># あるシステムでの 1/3(=0.333...) の結果
+printf(&quot;%.50f\n&quot;, 1.0/3)
+=&gt; 0.33333333333333331482961625624739099293947219848633</pre>
+<h2><a name="L001333" id="L001333">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm035.html">Object</a>
+<ul>
+<li><a href="refm052.html">Numeric</a>
+<ul>
+<li><a href="refm053.html">Integer</a>
+<ul>
+<li><a href="refm054.html">Bignum</a></li>
+<li><a href="refm055.html">Fixnum</a></li>
+</ul></li>
+<li><a href="refm056.html">Float</a> &lt;&lt;</li>
+</ul></li>
+</ul></li>
+</ul>
+<h2><a name="L001334" id="L001334">インクルードしているモジュール:</a></h2>
+<ul>
+<li><a href="refm080.html">Precision</a></li>
+</ul>
+<h2><a name="L001335" id="L001335">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L001336" id="L001336"><code>Float.induced_from(<var>num</var>)</code></a></dt>
+<dd>
+<p><var>num</var> を <code>Float</code> に変換した結果を返します。</p></dd>
+</dl>
+<h2><a name="L001337" id="L001337">メソッド:</a></h2>
+<dl>
+<dt><a name="L001338" id="L001338"><code><var>self</var> + <var>other</var></code></a>
+<dt><a name="L001339" id="L001339"><code><var>self</var> - <var>other</var></code></a>
+<dt><a name="L001340" id="L001340"><code><var>self</var> * <var>other</var></code></a>
+<dt><a name="L001341" id="L001341"><code><var>self</var> / <var>other</var></code></a>
+<dt><a name="L001342" id="L001342"><code><var>self</var> % <var>other</var></code></a>
+<dt><a name="L001343" id="L001343"><code><var>self</var> ** <var>other</var></code></a></dt>
+<dd>
+<p>算術演算子。それぞれ和、差、積、商、剰余、冪を計算します。</p></dd>
+<dt><a name="L001344" id="L001344"><code><var>self</var> &lt;=&gt; <var>other</var></code></a></dt>
+<dd>
+<p><code>self</code> と <code>other</code> を比較して、<code>self</code> が大きい時に正、
+等しい時に 0、小さい時に負の整数を返します。</p></dd>
+<dt><a name="L001345" id="L001345"><code><var>self</var> == <var>other</var></code></a>
+<dt><a name="L001346" id="L001346"><code><var>self</var> &lt; <var>other</var></code></a>
+<dt><a name="L001347" id="L001347"><code><var>self</var> &lt;= <var>other</var></code></a>
+<dt><a name="L001348" id="L001348"><code><var>self</var> &gt; <var>other</var></code></a>
+<dt><a name="L001349" id="L001349"><code><var>self</var> &gt;= <var>other</var></code></a></dt>
+<dd>
+<p>比較演算子。</p></dd>
+<dt><a name="L001350" id="L001350"><code>finite?</code></a></dt>
+<dd>
+<p>数値が ∞ でも、NaN でもなければ真を返します</p></dd>
+<dt><a name="L001351" id="L001351"><code>infinite?</code></a></dt>
+<dd>
+<p>数値が +∞ のとき 1、-∞のとき -1 を返します。それ以外は nil を返
+します。浮動小数点数の 0 による除算は ∞ です。</p>
+<pre>inf = 1.0/0
+p inf
+p inf.infinite?
+
+=&gt; Infinity
+   1
+
+inf = -1.0/0
+p inf
+p inf.infinite?
+
+=&gt; -Infinity
+   -1</pre></dd>
+<dt><a name="L001352" id="L001352"><code>nan?</code></a></dt>
+<dd>
+<p>数値が NaN(Not a number)のとき真を返します。浮動小数点数 0 の 0 に
+よる除算は NaN です。</p>
+<pre>nan = 0.0/0.0
+p nan
+p nan.nan?
+
+=&gt; NaN
+   true</pre></dd>
+<dt><a name="L001353" id="L001353"><code>to_f</code></a></dt>
+<dd>
+<p><code>self</code> を返します。</p></dd>
+<dt><a name="L001354" id="L001354"><code>to_i</code></a>
+<dt><a name="L001355" id="L001355"><code>truncate</code></a></dt>
+<dd>
+<p>小数点以下を切り捨てて値を整数に変換します。</p>
+<p><a href="refm052.html#L001266">round</a>, <a href="refm052.html#L001264">ceil</a>, <a href="refm052.html#L001265">floor</a> も参照。</p></dd>
+</dl>
+<h2><a name="L001356" id="L001356">定数:</a></h2>
+<p>浮動小数点数の実装に関する定数 <a href="refm385.html">ruby 1.8 feature</a></p>
+<p><a href="refm078.html#L002013">PI</a> など、浮動小数点演算に関する定数については <a href="refm078.html">Math</a> を
+参照のこと。</p>
+<dl>
+<dt><a name="L001357" id="L001357"><code>DIG</code></a></dt>
+<dd>
+<p>Float が表現できる最大の 10 進桁数</p></dd>
+<dt><a name="L001358" id="L001358"><code>EPSILON</code></a></dt>
+<dd>
+<p><code>1.0 + Float::EPSILON != 1.0</code> となる最小の値</p></dd>
+<dt><a name="L001359" id="L001359"><code>MANT_DIG</code></a></dt>
+<dd>
+<p>仮数部の <code>Float::RADIX</code> 進法での桁数</p></dd>
+<dt><a name="L001360" id="L001360"><code>MAX</code></a>
+<dt><a name="L001361" id="L001361"><code>MIN</code></a></dt>
+<dd>
+<p>Float が取り得る最大値、最小値</p></dd>
+<dt><a name="L001362" id="L001362"><code>MAX_10_EXP</code></a>
+<dt><a name="L001363" id="L001363"><code>MIN_10_EXP</code></a></dt>
+<dd>
+<p>最大／最小の 10 進の指数</p></dd>
+<dt><a name="L001364" id="L001364"><code>MAX_EXP</code></a>
+<dt><a name="L001365" id="L001365"><code>MIN_EXP</code></a></dt>
+<dd>
+<p>最大／最小の Float::RADIX 進の指数</p></dd>
+<dt><a name="L001366" id="L001366"><code>RADIX</code></a></dt>
+<dd>
+<p>指数表現の基数</p></dd>
+<dt><a name="L001367" id="L001367"><code>ROUNDS</code></a></dt>
+<dd>
+<p>丸めモード (-1: 不定、0: 0.0 の方向に丸め、1: 四捨五入、2:正の無限
+大の方向に丸め、3:負の無限大の方向に丸め)</p></dd>
+</dl>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>一般にはせいぜい15桁です。詳しくは多くのシステムで
+採用されている浮動小数点標準規格、IEEE (Institute of Electrical and
+Electronics Engineers: 米国電気電子技術者協会) 754 を参照してください</small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm052.html">UP</a>][<a href="refm055.html">&lt;-PREV</a>][<a href="refm057.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

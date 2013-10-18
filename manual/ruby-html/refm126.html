@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>shellwords</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm127.html" rel="next" />
+<link href="refm125.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm125.html">&lt;-PREV</a>][<a href="refm127.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L002481" id="L002481">Shellwords</a></h1>
+<h2><a name="L002482" id="L002482">モジュール関数:</a></h2>
+<dl>
+<dt><a name="L002483" id="L002483"><code>Shellwords.shellwords(<var>line</var>)</code></a></dt>
+<dd>
+<p>Unix シェルのコマンドライン解析に似た空白区切りの単語分割を行い、
+単語(文字列)の配列を返します。</p>
+<p>空白、シングルクォート(')、ダブルクォート(&quot;)、バックスラッシュ(\)
+を解釈します。</p>
+<pre>require 'shellwords'
+
+p Shellwords.shellwords(%q{  foo bar &quot;foo bar&quot;\ baz 'foo bar'  })
+
+# =&gt; [&quot;foo&quot;, &quot;bar&quot;, &quot;foo bar baz&quot;, &quot;foo bar&quot;]
+
+p Shellwords.shellwords(%q{  A B C &quot;D E F&quot; &quot;G&quot;,&quot;H I&quot;  })
+
+# =&gt; [&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D E F&quot;, &quot;G,H I&quot;]</pre></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm125.html">&lt;-PREV</a>][<a href="refm127.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

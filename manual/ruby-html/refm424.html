@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>trap::\の影響</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm425.html" rel="next" />
+<link href="refm423.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm421.html">UP</a>][<a href="refm423.html">&lt;-PREV</a>][<a href="refm425.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L009450" id="L009450">\の影響</a></h1>
+<p>注：ブラウザや環境によって＼が￥に見えます。</p>
+<ul>
+<li>sub(gsub, sub!, gsub!)の引数
+<ul>
+<li><p>第一引数に文字列を渡すのは止めましょう</p>
+<p>第一引数に文字列を渡すと</p>
+<ol>
+<li>文字列のメタ文字の解釈(スクリプトコンパイル時)</li>
+<li>sub, gsub 実行時の正規表現へのコンパイル(正規表現のメタ文字の解釈)</li>
+</ol>
+<p>が順に行われ、混乱の元だからです。例えば</p>
+<pre>p &quot;foo&quot;.sub!(&quot;\\w+&quot;, 'bar') # =&gt; &quot;bar&quot;</pre>
+<p>は、以下と同じです。</p>
+<pre>p &quot;foo&quot;.sub!(/\w+/, 'bar') # =&gt; &quot;bar&quot;</pre>
+<p>シングルクォートを使っても</p>
+<pre>p &quot;\\&quot;.sub!('\\', 'bar') # =&gt; &quot;bar&quot;
+=&gt; -:1:in `sub!': invalid regular expression; '\' can't be last character: /\/ (RegexpError)</pre>
+<p>などと混乱する場合があります。この例では正規表現 `<code>\</code>' をコンパイル
+しようとして失敗しています。以下が正解です。</p>
+<pre>p &quot;\\&quot;.sub!(/\\/, 'bar') # =&gt; &quot;bar&quot;</pre>
+<p><a href="refm384.html">ruby 1.7 feature</a>: version 1.7 では、(2) は行われません。第一
+引数に文字列を指定した場合、正規表現にコンパイルすることなく、文字
+列をパターンとして探索を行います。(したがって、第一引数に関しての
+この注意は必要無くなります。)ただし、version 1.6 で</p>
+<pre>Regexp.escape(文字列)</pre>
+<p>を第一引数に指定している場合は、</p>
+<pre>/#{ Regexp.escape(文字列) }/</pre>
+<p>場合によっては(効率のために)</p>
+<pre>/#{ Regexp.escape(文字列) }/o</pre>
+<p>に書き換えるべきです。正規表現を渡すので、1.6、1.7 両方で同じ意
+味になります。</p></li>
+<li><p>第二引数に \1, \2 などを渡すのは慣れないうちは止めましょう</p>
+<p>第二引数に文字列を渡すと</p>
+<ol>
+<li>文字列のメタ文字の解釈(スクリプトコンパイル時)</li>
+<li>sub, gsub 実行時のメタ文字(\1, \2など)の解釈</li>
+</ol>
+<p>が順に行われ、混乱の元だからです。慣れないうちはブロックを使います。
+(ブロックを使えば (2) は行われません)例えば</p>
+<pre>p &quot;foo&quot;.sub!(/(\w+)/, &quot;\\1bar&quot;) # =&gt; &quot;foobar&quot;
+p &quot;foo&quot;.sub!(/(\w+)/, '\1bar') # =&gt; &quot;foobar&quot;</pre>
+<p>は、以下と同じです。</p>
+<pre>p &quot;foo&quot;.sub!(/(\w+)/) { &quot;#$1bar&quot; } # =&gt; &quot;foobar&quot;</pre>
+<p>ブロックを使えば以下のようなこともできます。</p>
+<pre>p &quot;foo&quot;.sub!(/(\w+)/) { &quot;#$1bar&quot;.upcase } # =&gt; &quot;FOOBAR&quot;</pre>
+<p>ブロックを使わなければ sub! 実行前に upcase を行うので無効です。</p>
+<pre>p &quot;foo&quot;.sub!(/(\w+)/, &quot;\\1bar&quot;.upcase) # =&gt; &quot;fooBAR&quot;</pre>
+<p>第二引数はあくまでも短く書くためのものだと割り切った方が良いでしょ
+う。以下で何が行われてるのかヒト目でわかるような人は良いかも知れま
+せんが:p。</p>
+<pre>p &quot;\\&quot;.sub!(/(\\)/, &quot;\1&quot;)       # =&gt; &quot;\001&quot;
+p &quot;\\&quot;.sub!(/(\\)/, &quot;\\1&quot;)      # =&gt; &quot;\\&quot;
+p &quot;\\&quot;.sub!(/(\\)/, &quot;\\\1&quot;)     # =&gt; &quot;\\\001&quot;
+p &quot;\\&quot;.sub!(/(\\)/, &quot;\\\\1&quot;)    # =&gt; &quot;\\1&quot;
+p &quot;\\&quot;.sub!(/(\\)/, &quot;\\\\\1&quot;)   # =&gt; &quot;\\\001&quot;
+p &quot;\\&quot;.sub!(/(\\)/, &quot;\\\\\\1&quot;)  # =&gt; &quot;\\\\&quot;
+p &quot;\\&quot;.sub!(/(\\)/, &quot;\\\\\\\1&quot;) # =&gt; &quot;\\\\\001&quot;
+
+p &quot;\\&quot;.sub!(/(\\)/, '\1')       # =&gt; &quot;\\&quot;
+p &quot;\\&quot;.sub!(/(\\)/, '\\1')      # =&gt; &quot;\\&quot;
+p &quot;\\&quot;.sub!(/(\\)/, '\\\1')     # =&gt; &quot;\\1&quot;
+p &quot;\\&quot;.sub!(/(\\)/, '\\\\1')    # =&gt; &quot;\\1&quot;
+p &quot;\\&quot;.sub!(/(\\)/, '\\\\\1')   # =&gt; &quot;\\\\&quot;
+p &quot;\\&quot;.sub!(/(\\)/, '\\\\\\1')  # =&gt; &quot;\\\\&quot;
+p &quot;\\&quot;.sub!(/(\\)/, '\\\\\\\1') # =&gt; &quot;\\\\1&quot;</pre>
+<p>この例で、メソッド p は `<code>\</code>' を `<code>\\</code>' と出力することにも
+注意してください。</p>
+<p>さらに、以下のようなことはできないことにも注意してください</p>
+<pre>p &quot;foo&quot;.sub!(/(.*)/, &quot;#{\\1}&quot;)
+# =&gt; -:1: compile error in string expansion (SyntaxError)</pre>
+<p>式展開 <code>#{..}</code> の解釈はsub, gsub 実行前(引数解釈時)に行われます。こ
+の時点では <code>\1</code> は <code>\1</code> のままです。やはりブロックを使うの
+が正解です。</p>
+<pre>p &quot;foo&quot;.sub!(/(.*)/) { &quot;#$1&quot; }</pre></li>
+</ul></li>
+</ul>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm421.html">UP</a>][<a href="refm423.html">&lt;-PREV</a>][<a href="refm425.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

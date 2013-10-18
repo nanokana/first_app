@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>WEBrick::HTTPAuth::BasicAuth</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm181.html" rel="next" />
+<link href="refm179.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm179.html">UP</a>][<a href="refm179.html">&lt;-PREV</a>][<a href="refm181.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L003592" id="L003592">WEBrick::HTTPAuth::BasicAuth</a></h1>
+<p>HTTP の Basic 認証のためのクラスです。</p>
+<h2><a name="L003593" id="L003593">例</a></h2>
+<pre>realm = &quot;WEBrick's realm&quot;
+srv = HTTPServer.new({ :BindAddress =&gt; '127.0.0.1', :Port =&gt; 10080})
+
+htpd = HTTPAuth::Htpasswd.new('dot.htpasswd')
+htpd.set_passwd(nil, 'username', 'supersecretpass')
+
+authenticator = HTTPAuth::BasicAuth.new(:UserDB =&gt; htpd, :Realm =&gt; realm)
+srv.mount_proc('/basic_auth') {|req, res|
+  authenticator.authenticate(req, res)
+  res.body = &quot;hoge&quot;
+}</pre>
+<h2><a name="L003594" id="L003594">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L003595" id="L003595"><code>BasicAuth.make_passwd(<var>realm</var>, <var>user</var>, <var>pass</var>)</code></a></dt>
+<dd>
+<p><var>pass</var> をランダムなソルトで crypt した文字列を返します。</p></dd>
+<dt><a name="L003596" id="L003596"><code>BasicAuth.new(<var>config</var>, <var>default</var>=<var>Config</var>::<var>BasicAuth</var>)</code></a></dt>
+<dd>
+<p>BasicAuth オブジェクトを生成します。<var>config</var> は設定を保存したハッシュです。</p>
+<p>config で有効なハッシュキーは以下の通りです。 </p>
+<pre>#
+:Realm            =&gt; 
+:UserDB           =&gt;
+:Logger           =&gt;
+:AutoReloadUserDB =&gt;</pre>
+<p>realm を表す文字列 :Realm には与えます。:UserDB
+には <a href="refm182.html">WEBrick::HTTPAuth::Htpasswd</a> オブジェクトを与えます。:Logger には
+ロガーオブジェクトを与えます。また、:AutoReloadUserDB には 
+<a href="refm182.html#L003623">Htpasswd#get_passwd</a> の
+reload_db に渡す引数を与えます。    </p></dd>
+</dl>
+<h2><a name="L003597" id="L003597">メソッド</a></h2>
+<dl>
+<dt><a name="L003598" id="L003598"><code>authenticate(<var>req</var>, <var>res</var>)</code></a></dt>
+<dd>
+<p>クライアントから送られてきたユーザ名とパスワードを認証します。
+認証に失敗した場合は challenge を呼びます。</p></dd>
+<dt><a name="L003599" id="L003599"><code>challenge(<var>req</var>, <var>res</var>)</code></a></dt>
+<dd>
+<p>クライアントにパスワードを要求するために res に WWW-Authenticate ヘッダを
+設定し、例外 WEBrick::HTTPStatus::Unauthorized を投げます。</p></dd>
+<dt><a name="L003600" id="L003600"><code>logger</code></a></dt>
+<dd>
+<p>ロガーオブジェクトを返します。</p></dd>
+<dt><a name="L003601" id="L003601"><code>realm</code></a></dt>
+<dd>
+<p>realm を文字列で返します。</p></dd>
+<dt><a name="L003602" id="L003602"><code>userdb</code></a></dt>
+<dd>
+<p>ユーザ名とパスワードを保存した <a href="refm182.html">WEBrick::HTTPAuth::Htpasswd</a> オブジェクトを
+返します。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm179.html">UP</a>][<a href="refm179.html">&lt;-PREV</a>][<a href="refm181.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

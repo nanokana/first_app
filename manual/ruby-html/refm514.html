@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ruby-src:doc/shell.rd</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm515.html" rel="next" />
+<link href="refm513.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm513.html">&lt;-PREV</a>][<a href="refm515.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L011522" id="L011522">What's shell.rb?</a></h1>
+<p>It realizes a wish to do execution of commands with filters and pipes
+like sh/csh by using just native facilities of ruby.</p>
+<h1><a name="L011523" id="L011523">Main classes</a></h1>
+<h2><a name="L011524" id="L011524">Shell</a></h2>
+<p>Every shell object has its own current working directory, and executes
+each command as if it stands in the directory.</p>
+<dl>
+<dt><a name="L011525" id="L011525"><code>Shell#cwd</code></a>
+<dt><a name="L011526" id="L011526"><code>Shell#dir</code></a>
+<dt><a name="L011527" id="L011527"><code>Shell#getwd</code></a>
+<dt><a name="L011528" id="L011528"><code>Shell#pwd</code></a></dt>
+<dd>
+<p>Returns the current directory</p></dd>
+<dt><a name="L011529" id="L011529"><code>Shell#system_path</code></a></dt>
+<dd>
+<p>Returns the command search path in an array</p></dd>
+<dt><a name="L011530" id="L011530"><code>Shell#umask</code></a></dt>
+<dd>
+<p>Returns the umask</p></dd>
+</dl>
+<h2><a name="L011531" id="L011531">Filter</a></h2>
+<p>Any result of command exection is a Filter.  Filter include
+Enumerable, therefore a Filter object can use all Enumerable
+facilities.</p>
+<h1><a name="L011532" id="L011532">Main methods</a></h1>
+<h2><a name="L011533" id="L011533">Command definitions</a></h2>
+<p>In order to execute a command on your OS, you need to define it as a
+Shell method.</p>
+<p>Alternatively, you can execute any command via Shell#system even if it
+is not defined.</p>
+<dl>
+<dt><a name="L011534" id="L011534"><code>Shell.def_system_command(<var>command</var>, <var>path</var> = <var>command</var>)</code></a></dt>
+<dd>
+<p>Defines a command.  Registers &lt;path&gt; as a Shell method
+&lt;command&gt;.</p>
+<p>ex)
+Shell.def_system_command &quot;ls&quot;</p>
+<pre>Defines ls.</pre>
+<p>Shell.def_system_command &quot;sys_sort&quot;, &quot;sort&quot;</p>
+<pre>Defines sys_sort as sort.</pre></dd>
+<dt><a name="L011535" id="L011535"><code>Shell.undef_system_command(<var>command</var>)</code></a></dt>
+<dd>
+<p>Undefines a commmand</p></dd>
+<dt><a name="L011536" id="L011536"><code>Shell.alias_command(<var>ali</var>, <var>command</var>, *<var>opts</var>) {...}</code></a></dt>
+<dd>
+<p>Aliases a command.</p>
+<p>ex)</p>
+<pre>Shell.alias_command &quot;lsC&quot;, &quot;ls&quot;, &quot;-CBF&quot;, &quot;--show-control-chars&quot;
+Shell.alias_command(&quot;lsC&quot;, &quot;ls&quot;){|*opts| [&quot;-CBF&quot;, &quot;--show-control-chars&quot;, *opts]}</pre></dd>
+<dt><a name="L011537" id="L011537"><code>Shell.unalias_command(<var>ali</var>)</code></a></dt>
+<dd>
+<p>Unaliases a command.</p></dd>
+<dt><a name="L011538" id="L011538"><code>Shell.install_system_commands(<var>pre</var> = &quot;<var>sys_</var>&quot;)</code></a></dt>
+<dd>
+<p>Defines all commands in the default_system_path as Shell method,
+all with &lt;pre&gt; prefixed to their names.</p></dd>
+</dl>
+<h2><a name="L011539" id="L011539">Creation</a></h2>
+<dl>
+<dt><a name="L011540" id="L011540"><code>Shell.new</code></a></dt>
+<dd>
+<p>Creates a Shell object which current directory is set to the
+process current directory.</p></dd>
+<dt><a name="L011541" id="L011541"><code>Shell.cd(<var>path</var>)</code></a></dt>
+<dd>
+<p>Creates a Shell object which current directory is set to
+&lt;path&gt;.</p></dd>
+</dl>
+<h2><a name="L011542" id="L011542">Process management</a></h2>
+<dl>
+<dt><a name="L011543" id="L011543"><code>Shell#jobs</code></a></dt>
+<dd>
+<p>Returns a list of scheduled jobs.</p></dd>
+<dt><a name="L011544" id="L011544"><code>Shell#kill <var>sig</var>, <var>job</var></code></a></dt>
+<dd>
+<p>Sends a signal &lt;sig&gt; to &lt;job&gt;.</p></dd>
+</dl>
+<h2><a name="L011545" id="L011545">Current directory operations</a></h2>
+<dl>
+<dt><a name="L011546" id="L011546"><code>Shell#cd(<var>path</var>, &amp;<var>block</var>)</code></a>
+<dt><a name="L011547" id="L011547"><code>Shell#chdir</code></a></dt>
+<dd>
+<p>Changes the current directory to &lt;path&gt;.  If a block is given,
+it restores the current directory when the block ends.</p></dd>
+<dt><a name="L011548" id="L011548"><code>Shell#pushd(<var>path</var> = <var>nil</var>, &amp;<var>block</var>)</code></a>
+<dt><a name="L011549" id="L011549"><code>Shell#pushdir</code></a></dt>
+<dd>
+<p>Pushes the current directory to the directory stack, changing
+the current directory to &lt;path&gt;.  If &lt;path&gt; is omitted, it
+exchanges its current directory and the top of its directory
+stack.  If a block is given, it restores the current directory
+when the block ends.</p></dd>
+<dt><a name="L011550" id="L011550"><code>Shell#popd</code></a>
+<dt><a name="L011551" id="L011551"><code>Shell#popdir</code></a></dt>
+<dd>
+<p>Pops a directory from the directory stack, and sets the current
+directory to it.</p></dd>
+</dl>
+<h2><a name="L011552" id="L011552">File and directory operations</a></h2>
+<dl>
+<dt><a name="L011553" id="L011553"><code>Shell#foreach(<var>path</var> = <var>nil</var>, &amp;<var>block</var>)</code></a></dt>
+<dd>
+<p>Same as:</p>
+<pre>File#foreach (when path is a file)
+Dir#foreach (when path is a directory)</pre></dd>
+<dt><a name="L011554" id="L011554"><code>Shell#open(<var>path</var>, <var>mode</var>)</code></a></dt>
+<dd>
+<p>Same as:</p>
+<pre>File#open (when path is a file)
+Dir#open (when path is a directory)</pre></dd>
+<dt><a name="L011555" id="L011555"><code>Shell#unlink(<var>path</var>)</code></a></dt>
+<dd>
+<p>Same as:</p>
+<pre>Dir#open (when path is a file)
+Dir#unlink (when path is a directory)</pre></dd>
+<dt><a name="L011556" id="L011556"><code>Shell#test(<var>command</var>, <var>file1</var>, <var>file2</var>)</code></a>
+<dt><a name="L011557" id="L011557"><code>Shell#[command, <var>file1</var>, <var>file2</var>]</code></a></dt>
+<dd>
+<p>Same as test().
+ex)</p>
+<pre>sh[?e, &quot;foo&quot;]
+sh[:e, &quot;foo&quot;]
+sh[&quot;e&quot;, &quot;foo&quot;]
+sh[:exists?, &quot;foo&quot;]
+sh[&quot;exists?&quot;, &quot;foo&quot;]</pre></dd>
+<dt><a name="L011558" id="L011558"><code>Shell#mkdir(*<var>path</var>)</code></a></dt>
+<dd>
+<p>Same as Dir.mkdir (with multiple directories allowed)</p></dd>
+<dt><a name="L011559" id="L011559"><code>Shell#rmdir(*<var>path</var>)</code></a></dt>
+<dd>
+<p>Same as Dir.rmdir (with multiple directories allowed)</p></dd>
+</dl>
+<h2><a name="L011560" id="L011560">Command execution</a></h2>
+<dl>
+<dt><a name="L011561" id="L011561"><code>System#system(<var>command</var>, *<var>opts</var>)</code></a></dt>
+<dd>
+<p>Executes &lt;command&gt; with &lt;opts&gt;.</p>
+<p>ex)</p>
+<pre>print sh.system(&quot;ls&quot;, &quot;-l&quot;)
+sh.system(&quot;ls&quot;, &quot;-l&quot;) | sh.head &gt; STDOUT</pre></dd>
+<dt><a name="L011562" id="L011562"><code>System#rehash</code></a></dt>
+<dd>
+<p>Does rehash.</p></dd>
+<dt><a name="L011563" id="L011563"><code>Shell#transact &amp;<var>block</var></code></a></dt>
+<dd>
+<p>Executes a block as self.
+ex)</p>
+<pre>sh.transact{system(&quot;ls&quot;, &quot;-l&quot;) | head &gt; STDOUT}</pre></dd>
+<dt><a name="L011564" id="L011564"><code>Shell#out(<var>dev</var> = <var>STDOUT</var>, &amp;<var>block</var>)</code></a></dt>
+<dd>
+<p>Does transact, with redirecting the result output to &lt;dev&gt;.</p></dd>
+</dl>
+<h2><a name="L011565" id="L011565">Internal commands</a></h2>
+<dl>
+<dt><a name="L011566" id="L011566"><code>Shell#echo(*<var>strings</var>)</code></a>
+<dt><a name="L011567" id="L011567"><code>Shell#cat(*<var>files</var>)</code></a>
+<dt><a name="L011568" id="L011568"><code>Shell#glob(<var>patten</var>)</code></a>
+<dt><a name="L011569" id="L011569"><code>Shell#tee(<var>file</var>)</code></a></dt>
+<dd>
+<p>Return Filter objects, which are results of their execution.</p></dd>
+<dt><a name="L011570" id="L011570"><code>Filter#each &amp;<var>block</var></code></a></dt>
+<dd>
+<p>Iterates a block for each line of it.</p></dd>
+<dt><a name="L011571" id="L011571"><code>Filter#&lt;(<var>src</var>)</code></a></dt>
+<dd>
+<p>Inputs from &lt;src&gt;, which is either a string of a file name or an
+IO.</p></dd>
+<dt><a name="L011572" id="L011572"><code>Filter#&gt;(<var>to</var>)</code></a></dt>
+<dd>
+<p>Outputs to &lt;to&gt;, which is either a string of a file name or an
+IO.</p></dd>
+<dt><a name="L011573" id="L011573"><code>Filter#&gt;&gt;(<var>to</var>)</code></a></dt>
+<dd>
+<p>Appends the ouput to &lt;to&gt;, which is either a string of a file
+name or an IO.</p></dd>
+<dt><a name="L011574" id="L011574"><code>Filter#|(<var>filter</var>)</code></a></dt>
+<dd>
+<p>Processes a pipeline.</p></dd>
+<dt><a name="L011575" id="L011575"><code>Filter#+(<var>filter</var>)</code></a></dt>
+<dd>
+<p>(filter1 + filter2) outputs filter1, and then outputs filter2.</p></dd>
+<dt><a name="L011576" id="L011576"><code>Filter#to_a</code></a>
+<dt><a name="L011577" id="L011577"><code>Filter#to_s</code></a>
+</dl>
+<h2><a name="L011578" id="L011578">Built-in commands</a></h2>
+<dl>
+<dt><a name="L011579" id="L011579"><code>Shell#atime(<var>file</var>)</code></a>
+<dt><a name="L011580" id="L011580"><code>Shell#basename(<var>file</var>, *<var>opt</var>)</code></a>
+<dt><a name="L011581" id="L011581"><code>Shell#chmod(<var>mode</var>, *<var>files</var>)</code></a>
+<dt><a name="L011582" id="L011582"><code>Shell#chown(<var>owner</var>, <var>group</var>, *<var>file</var>)</code></a>
+<dt><a name="L011583" id="L011583"><code>Shell#ctime(<var>file</var>)</code></a>
+<dt><a name="L011584" id="L011584"><code>Shell#delete(*<var>file</var>)</code></a>
+<dt><a name="L011585" id="L011585"><code>Shell#dirname(<var>file</var>)</code></a>
+<dt><a name="L011586" id="L011586"><code>Shell#ftype(<var>file</var>)</code></a>
+<dt><a name="L011587" id="L011587"><code>Shell#join(*<var>file</var>)</code></a>
+<dt><a name="L011588" id="L011588"><code>Shell#link(<var>file_from</var>, <var>file_to</var>)</code></a>
+<dt><a name="L011589" id="L011589"><code>Shell#lstat(<var>file</var>)</code></a>
+<dt><a name="L011590" id="L011590"><code>Shell#mtime(<var>file</var>)</code></a>
+<dt><a name="L011591" id="L011591"><code>Shell#readlink(<var>file</var>)</code></a>
+<dt><a name="L011592" id="L011592"><code>Shell#rename(<var>file_from</var>, <var>file_to</var>)</code></a>
+<dt><a name="L011593" id="L011593"><code>Shell#split(<var>file</var>)</code></a>
+<dt><a name="L011594" id="L011594"><code>Shell#stat(<var>file</var>)</code></a>
+<dt><a name="L011595" id="L011595"><code>Shell#symlink(<var>file_from</var>, <var>file_to</var>)</code></a>
+<dt><a name="L011596" id="L011596"><code>Shell#truncate(<var>file</var>, <var>length</var>)</code></a>
+<dt><a name="L011597" id="L011597"><code>Shell#utime(<var>atime</var>, <var>mtime</var>, *<var>file</var>)</code></a></dt>
+<dd>
+<p>Equivalent to the class methods of File with the same names.</p></dd>
+<dt><a name="L011598" id="L011598"><code>Shell#blockdev?(<var>file</var>)</code></a>
+<dt><a name="L011599" id="L011599"><code>Shell#chardev?(<var>file</var>)</code></a>
+<dt><a name="L011600" id="L011600"><code>Shell#directory?(<var>file</var>)</code></a>
+<dt><a name="L011601" id="L011601"><code>Shell#executable?(<var>file</var>)</code></a>
+<dt><a name="L011602" id="L011602"><code>Shell#executable_real?(<var>file</var>)</code></a>
+<dt><a name="L011603" id="L011603"><code>Shell#exist?(<var>file</var>)/<var>Shell</var>#<var>exists</var>?(<var>file</var>)</code></a>
+<dt><a name="L011604" id="L011604"><code>Shell#file?(<var>file</var>)</code></a>
+<dt><a name="L011605" id="L011605"><code>Shell#grpowned?(<var>file</var>)</code></a>
+<dt><a name="L011606" id="L011606"><code>Shell#owned?(<var>file</var>)</code></a>
+<dt><a name="L011607" id="L011607"><code>Shell#pipe?(<var>file</var>)</code></a>
+<dt><a name="L011608" id="L011608"><code>Shell#readable?(<var>file</var>)</code></a>
+<dt><a name="L011609" id="L011609"><code>Shell#readable_real?(<var>file</var>)</code></a>
+<dt><a name="L011610" id="L011610"><code>Shell#setgid?(<var>file</var>)</code></a>
+<dt><a name="L011611" id="L011611"><code>Shell#setuid?(<var>file</var>)</code></a>
+<dt><a name="L011612" id="L011612"><code>Shell#size(<var>file</var>)/<var>Shell</var>#<var>size</var>?(<var>file</var>)</code></a>
+<dt><a name="L011613" id="L011613"><code>Shell#socket?(<var>file</var>)</code></a>
+<dt><a name="L011614" id="L011614"><code>Shell#sticky?(<var>file</var>)</code></a>
+<dt><a name="L011615" id="L011615"><code>Shell#symlink?(<var>file</var>)</code></a>
+<dt><a name="L011616" id="L011616"><code>Shell#writable?(<var>file</var>)</code></a>
+<dt><a name="L011617" id="L011617"><code>Shell#writable_real?(<var>file</var>)</code></a>
+<dt><a name="L011618" id="L011618"><code>Shell#zero?(<var>file</var>)</code></a></dt>
+<dd>
+<p>Equivalent to the class methods of FileTest with the same names.</p></dd>
+<dt><a name="L011619" id="L011619"><code>Shell#syscopy(<var>filename_from</var>, <var>filename_to</var>)</code></a>
+<dt><a name="L011620" id="L011620"><code>Shell#copy(<var>filename_from</var>, <var>filename_to</var>)</code></a>
+<dt><a name="L011621" id="L011621"><code>Shell#move(<var>filename_from</var>, <var>filename_to</var>)</code></a>
+<dt><a name="L011622" id="L011622"><code>Shell#compare(<var>filename_from</var>, <var>filename_to</var>)</code></a>
+<dt><a name="L011623" id="L011623"><code>Shell#safe_unlink(*<var>filenames</var>)</code></a>
+<dt><a name="L011624" id="L011624"><code>Shell#makedirs(*<var>filenames</var>)</code></a>
+<dt><a name="L011625" id="L011625"><code>Shell#install(<var>filename_from</var>, <var>filename_to</var>, <var>mode</var>)</code></a></dt>
+<dd>
+<p>Equivalent to the class methods of FileTools with the same
+names.</p>
+<p>And also, there are some aliases for convenience:</p></dd>
+<dt><a name="L011626" id="L011626"><code>Shell#cmp	&lt;- <var>Shell</var>#<var>compare</var></code></a>
+<dt><a name="L011627" id="L011627"><code>Shell#mv	&lt;- <var>Shell</var>#<var>move</var></code></a>
+<dt><a name="L011628" id="L011628"><code>Shell#cp	&lt;- <var>Shell</var>#<var>copy</var></code></a>
+<dt><a name="L011629" id="L011629"><code>Shell#rm_f	&lt;- <var>Shell</var>#<var>safe_unlink</var></code></a>
+<dt><a name="L011630" id="L011630"><code>Shell#mkpath	&lt;- <var>Shell</var>#<var>makedirs</var></code></a>
+</dl>
+<h1><a name="L011631" id="L011631">Samples</a></h1>
+<h2><a name="L011632" id="L011632">ex1</a></h2>
+<pre>sh = Shell.cd(&quot;/tmp&quot;)
+sh.mkdir &quot;shell-test-1&quot; unless sh.exists?(&quot;shell-test-1&quot;)
+sh.cd(&quot;shell-test-1&quot;)
+for dir in [&quot;dir1&quot;, &quot;dir3&quot;, &quot;dir5&quot;]
+  if !sh.exists?(dir)
+    sh.mkdir dir
+    sh.cd(dir) do</pre>
+<pre>f = sh.open(&quot;tmpFile&quot;, &quot;w&quot;)
+f.print &quot;TEST\n&quot;
+f.close</pre>
+<pre>end
+print sh.pwd</pre>
+<pre>end</pre>
+<pre>end</pre>
+<h2><a name="L011633" id="L011633">ex2</a></h2>
+<pre>sh = Shell.cd(&quot;/tmp&quot;)
+sh.transact do
+  mkdir &quot;shell-test-1&quot; unless exists?(&quot;shell-test-1&quot;)
+  cd(&quot;shell-test-1&quot;)
+  for dir in [&quot;dir1&quot;, &quot;dir3&quot;, &quot;dir5&quot;]
+    if !exists?(dir)</pre>
+<pre>mkdir dir
+cd(dir) do
+  f = open(&quot;tmpFile&quot;, &quot;w&quot;)
+  f.print &quot;TEST\n&quot;
+  f.close
+end
+print pwd</pre>
+<pre>end</pre>
+<pre>end</pre>
+<pre>end</pre>
+<h2><a name="L011634" id="L011634">ex3</a></h2>
+<pre>sh.cat(&quot;/etc/printcap&quot;) | sh.tee(&quot;tee1&quot;) &gt; &quot;tee2&quot;
+(sh.cat &lt; &quot;/etc/printcap&quot;) | sh.tee(&quot;tee11&quot;) &gt; &quot;tee12&quot;
+sh.cat(&quot;/etc/printcap&quot;) | sh.tee(&quot;tee1&quot;) &gt;&gt; &quot;tee2&quot;
+(sh.cat &lt; &quot;/etc/printcap&quot;) | sh.tee(&quot;tee11&quot;) &gt;&gt; &quot;tee12&quot;</pre>
+<h2><a name="L011635" id="L011635">ex4</a></h2>
+<pre>print sh.cat(&quot;/etc/passwd&quot;).head.collect{|l| l =~ /keiju/}</pre>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm513.html">&lt;-PREV</a>][<a href="refm515.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

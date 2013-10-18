@@ -1,0 +1,13 @@
+# -*- coding: utf-8 -*-
+def total2(from, to, &block)
+  result = 0 #合計の値
+  from.upto(to) do |num| #fromからtoまで処理する
+    if block #ブロックがあれば
+      result += #ブロックで処理した値を足す
+        block.call(num)
+      else
+      result += num
+    end
+  end
+  return result #メソッドの結果を返す
+end

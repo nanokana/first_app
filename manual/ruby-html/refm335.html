@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Test::Unit</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm336.html" rel="next" />
+<link href="refm334.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm334.html">&lt;-PREV</a>][<a href="refm336.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006437" id="L006437">Test::Unit</a></h1>
+<p>ユニットテストを行うためのクラスです。</p>
+<p><a href="http://www.ruby-doc.org/stdlib/libdoc/test/unit/rdoc/index.html">&lt;URL:http://www.ruby-doc.org/stdlib/libdoc/test/unit/rdoc/index.html&gt;</a><sup class="outside"><small>[外部]</small></sup></p>
+<ul>
+<li><a href="#L006438">使い方</a></li>
+<li><a href="#L006439">Test::Unit::TestCase</a></li>
+<li><a href="#L006443">Test::Unit::Assertions</a></li>
+<li><a href="#L006465">Test::Unit::AutoRunner</a></li>
+</ul>
+<h2><a name="L006438" id="L006438">使い方</a></h2>
+<p>Test::Unit は以下のように使います。</p>
+<p>まずテスト対象のソース(foo.rb)が必要です。</p>
+<pre>class Foo
+   def foo
+     &quot;foo&quot;
+   end
+   def bar
+     &quot;foo&quot;
+   end
+end</pre>
+<p>次にユニットテスト(test_foo.rb)を書きます。テストを実行するメソッドの名前は
+全て test_ で始まる必要があります。</p>
+<pre>require 'test/unit'
+require 'foo'
+
+class TC_Foo &lt; Test::Unit::TestCase
+  def setup
+    @obj = Foo.new
+  end
+
+  # def teardown
+  # end
+
+  def test_foo
+    assert_equal(&quot;foo&quot;, @obj.foo)
+  end
+  def test_bar
+    assert_equal(&quot;bar&quot;, @obj.bar)
+  end
+end</pre>
+<p>テストを実行するには上で用意した test_foo.rb を実行します。
+デフォルトではすべてのテストが実行されます。</p>
+<pre>$ ruby test_foo.rb
+
+Loaded suite test_foo
+Started
+F.
+Finished in 0.022223 seconds.
+
+  1) Failure!!!
+test_bar(TC_Foo) [test_foo.rb:16]:
+&lt;bar&gt; expected but was
+&lt;foo&gt;
+
+2 tests, 2 assertions, 1 failures, 0 errors</pre>
+<p>test_bar だけテストしたい場合は以下のようなオプションを与えます。</p>
+<pre>$ ruby test_foo.rb --name=test_bar
+
+Loaded suite test_foo
+Started
+F
+Finished in 0.019573 seconds.
+
+  1) Failure!!!
+test_bar(TC_Foo) [test_foo.rb:16]:
+&lt;bar&gt; expected but was
+&lt;foo&gt;
+
+1 tests, 1 assertions, 1 failures, 0 errors</pre>
+<p>gtk を使った testrunner</p>
+<pre>$ ruby test_foo.rb --runner=gtk --name=test_bar</pre>
+<p>fox を使う</p>
+<pre>$ ruby test_foo.rb --runner=fox --name=test_bar</pre>
+<p>console を使う (default)</p>
+<pre>$ ruby test_foo.rb --runner=console --name=test_bar</pre>
+<p>以下のようにすると help も表示されます。</p>
+<pre>$ ruby test_foo.rb --help
+
+   Usage: test_foo.rb [options] [-- untouched arguments]
+
+       -r, --runner=RUNNER              Use the given RUNNER.
+                                        (c[onsole], f[ox], g[tk], g[tk]2, t[k])
+       -n, --name=NAME                  Runs tests matching NAME.
+                                        (patterns may be used).
+       -t, --testcase=TESTCASE          Runs tests in TestCases matching TESTCASE.
+                                        (patterns may be used).
+       -v, --verbose=[LEVEL]            Set the output level (default is verbose).
+                                        (s[ilent], p[rogress], n[ormal], v[erbose])
+           --                           Stop processing options so that the
+                                        remaining options will be passed to the
+                                        test.
+       -h, --help                       Display this help.</pre>
+<p>複数のテストを一度に行う場合、以下のように書いただけのファイルを実行します。</p>
+<pre>require 'test/unit'
+require 'test_foo.rb'
+require 'test_bar.rb'</pre>
+<p>もう少し高度なテストの実行方法に関しては <a href="#L006465">Test::Unit::AutoRunner</a> を
+参照して下さい。</p>
+<h2><a name="L006439" id="L006439">Test::Unit::TestCase</a></h2>
+<p>テストはこのクラスのサブクラスとして定義します。</p>
+<h3><a name="L006440" id="L006440">メソッド</a></h3>
+<dl>
+<dt><a name="L006441" id="L006441"><code>setup</code></a></dt>
+<dd>
+<p>各テストメソッドが呼ばれる前に必ず呼ばれます。</p></dd>
+<dt><a name="L006442" id="L006442"><code>teardown</code></a></dt>
+<dd>
+<p>各テストメソッドが呼ばれた後に必ず呼ばれます。</p></dd>
+</dl>
+<h2><a name="L006443" id="L006443">Test::Unit::Assertions</a></h2>
+<p>Test::Unit::TestCase に include されて使われるモジュールです。assert メソッドを定義して
+います。</p>
+<h3><a name="L006440" id="L006440">メソッド</a></h3>
+<p>各 assertion の最後の引数 message はテストが失敗したときに表示される
+メッセージ</p>
+<dl>
+<dt><a name="L006444" id="L006444"><code>assert(<var>boolean</var>, <var>message</var>=<var>nil</var>)</code></a></dt>
+<dd>
+<p>boolean が真なら pass</p></dd>
+<dt><a name="L006445" id="L006445"><code>assert_equal(<var>expected</var>, <var>actual</var>, <var>message</var>=<var>nil</var>)</code></a></dt>
+<dd>
+<p>expected == actual ならば pass</p></dd>
+<dt><a name="L006446" id="L006446"><code>assert_not_equal(<var>expected</var>, <var>actual</var>, <var>message</var>=&quot;&quot;)</code></a></dt>
+<dd>
+<p>expected != actual ならば pass</p></dd>
+<dt><a name="L006447" id="L006447"><code>assert_instance_of(<var>klass</var>, <var>object</var>, <var>message</var>=&quot;&quot;)</code></a></dt>
+<dd>
+<p>klass == object.class が真なら pass</p></dd>
+<dt><a name="L006448" id="L006448"><code>assert_nil(<var>object</var>, <var>message</var>=&quot;&quot;)</code></a></dt>
+<dd>
+<p>object.nil? ならば pass</p></dd>
+<dt><a name="L006449" id="L006449"><code>assert_not_nil(<var>object</var>, <var>message</var>=&quot;&quot;)</code></a></dt>
+<dd>
+<p>!object.nil? ならば pass</p></dd>
+<dt><a name="L006450" id="L006450"><code>assert_kind_of(<var>klass</var>, <var>object</var>, <var>message</var>=&quot;&quot;)</code></a></dt>
+<dd>
+<p>object.kind_of?(klass) が真なら pass</p></dd>
+<dt><a name="L006451" id="L006451"><code>assert_respond_to(<var>object</var>, <var>method</var>, <var>message</var>=&quot;&quot;)</code></a></dt>
+<dd>
+<p>object.respond_to?(method) が真なら pass</p></dd>
+<dt><a name="L006452" id="L006452"><code>assert_match(<var>pattern</var>, <var>string</var>, <var>message</var>=&quot;&quot;)</code></a></dt>
+<dd>
+<p>string =~ pattern が真ならば pass</p></dd>
+<dt><a name="L006453" id="L006453"><code>assert_no_match(<var>regexp</var>, <var>string</var>, <var>message</var>=&quot;&quot;)</code></a></dt>
+<dd>
+<p>regexp !~ string が真ならば pass</p></dd>
+<dt><a name="L006454" id="L006454"><code>assert_same(<var>expected</var>, <var>actual</var>, <var>message</var>=&quot;&quot;)</code></a></dt>
+<dd>
+<p>actual.equal?(expected) が真なら pass</p></dd>
+<dt><a name="L006455" id="L006455"><code>assert_not_same(<var>expected</var>, <var>actual</var>, <var>message</var>=&quot;&quot;)</code></a></dt>
+<dd>
+<p>!actual.equal?(expected) が真なら pass</p></dd>
+<dt><a name="L006456" id="L006456"><code>assert_operator(<var>object1</var>, <var>operator</var>, <var>object2</var>, <var>message</var>=&quot;&quot;)</code></a></dt>
+<dd>
+<p>object1.send(operator, object2) が真なら pass</p></dd>
+<dt><a name="L006457" id="L006457"><code>assert_raise(<var>expected_exception_klass</var>, <var>message</var>=&quot;&quot;) { ... }</code></a></dt>
+<dd>
+<p>ブロックを実行して例外が発生し、その例外が
+expected_exception_klass クラスならば pass</p></dd>
+<dt><a name="L006458" id="L006458"><code>assert_nothing_raised(*<var>args</var>) { ... }</code></a></dt>
+<dd>
+<p>ブロックを実行して例外が起きなければ pass</p></dd>
+<dt><a name="L006459" id="L006459"><code>flunk(<var>message</var>=&quot;<var>Flunked</var>&quot;)</code></a></dt>
+<dd>
+<p>常に失敗</p></dd>
+<dt><a name="L006460" id="L006460"><code>assert_throws(<var>expected_symbol</var>, <var>message</var>=&quot;&quot;) { ... }</code></a></dt>
+<dd>
+<p>ブロックを実行して :expected_symbol が throw されたら pass</p></dd>
+<dt><a name="L006461" id="L006461"><code>assert_nothing_thrown(<var>message</var>=&quot;&quot;) { ... }</code></a></dt>
+<dd>
+<p>ブロックを実行して throw が起こらなければ pass</p></dd>
+<dt><a name="L006462" id="L006462"><code>assert_in_delta(<var>expected_float</var>, <var>actual_float</var>, <var>delta</var>, <var>message</var>=&quot;&quot;)</code></a></dt>
+<dd>
+<p>(expected_float.to_f - actual_float.to_f).abs &lt;= delta.to_f 
+が真なら pass</p>
+<p>delta は正の数でなければならない。</p></dd>
+<dt><a name="L006463" id="L006463"><code>assert_send(<var>send_array</var>, <var>message</var>=&quot;&quot;)</code></a></dt>
+<dd>
+<p>send_array[0].__send__(send_array[1], *send_array[2..-1])
+が真なら pass</p></dd>
+<dt><a name="L006464" id="L006464"><code>assert_block(<var>message</var>=&quot;<var>assert_block</var> <var>failed</var>.&quot;) { ... }</code></a></dt>
+<dd>
+<p>block の結果が真なら pass</p></dd>
+</dl>
+<h2><a name="L006465" id="L006465">Test::Unit::AutoRunner</a></h2>
+<p>テストの実行を操作したいときにこの AutoRunner クラスを使います。
+大量のテストの中から特定のテストスクリプトのみを実行したい場合、
+特定のテストクラスのみを実行したい場合などに使います。
+AutoRunner は Collector::Dir オブジェクトなどの Collector に
+テストを集めさせて、UI::Console::TestRunner オブジェクトなどの
+Runner にテストを実行させているクラスです。</p>
+<h3><a name="L006466" id="L006466">例</a></h3>
+<p>ディレクトリ ./somedir 以下にある全てのテストを実行したい場合は次のようなファイル(runner.rb)を用意して実行します。テストは test_*.rb というファイル名である必要があります。</p>
+<p><a href="refm389.html">ruby 1.8.3 feature</a>: 
+ruby 1.8.3 以降では AutoRunner.run の第一引数の意味が変わり、今までと真偽が逆になりました。
+第一引数に true を与えると、./somedir 以下にある全てのテストを実行します。</p>
+<pre># ruby 1.8.2 まで
+require 'test/unit'
+Test::Unit::AutoRunner.run(false, './somedir')
+
+# ruby 1.8.3 以降
+require 'test/unit'
+Test::Unit::AutoRunner.run(true, './somedir')</pre>
+<p>単に実行します。</p>
+<pre>$ ruby runner.rb </pre>
+<p>ディレクトリ ./somedir 以下にあるテストをファイル somefile を除いて実行したい場合は次のように runner.rb にオプションを与えます。</p>
+<pre>$ ruby runner.rb --exclude=somefile</pre>
+<p>同じことは、runner.rb に直接オプションを書いても実現できます。</p>
+<pre>require 'test/unit'
+Test::Unit::AutoRunner.run(true, './somedir', ['--exclude=somefile'])</pre>
+<p>上のやり方では拡張子が .rb のファイルしか集めません。拡張子が .rbx のファイルも
+テストとして集めたい場合は次のようにします。</p>
+<pre>require 'test/unit'
+Test::Unit::AutoRunner.run(true, './somedir', ['--pattern=/test_.*\.rbx\Z/'])</pre>
+<h3><a name="L006467" id="L006467">クラスメソッド</a></h3>
+<dl>
+<dt><a name="L006468" id="L006468"><code>AutoRunner.run(<var>force_standalone</var> = <var>false</var>, <var>dir</var> = <var>nil</var>, <var>argv</var> = <var>ARGV</var>)</code></a></dt>
+<dd>
+<p>テストを実行します。</p>
+<p><a href="refm389.html">ruby 1.8.3 feature</a>:
+ruby 1.8.3 以降では <var>force_standalone</var> の意味が変わり、今までと真偽が逆になりました。        
+<var>force_standalone</var> に true を与えると、dir 以下にある全てのテストを実行します。
+false を与えた場合は既に読み込まれたファイルの中からテストを探して実行します。
+デフォルトは false です。</p>
+<p>ruby 1.8.2 まで: <var>force_standalone</var> には $0 か false を与えます。
+$0 を与えた場合は既に読み込まれたファイルの中からテストを探して実行します。
+false を与えた場合は、<var>dir</var> の中からテストスクリプトを再帰的に探査して
+実行します。デフォルトではファイル名が test_*.rb のテストスクリプトしか探査
+しません。
+false を与えた場合でも、既に読み込まれたファイルは実行するテストに含まれます。</p>
+<p><var>dir</var> には <var>force_standalone</var> に true を与えた時に再帰的に探査するディレクトリ名を
+与えます。デフォルトではカレントディレクトリを再帰的に探査します。</p>
+<p><var>argv</var> にはオプションを配列として与えます。解釈するオプションは先に
+出てきたものと同じです。</p>
+<pre>-r, --runner=RUNNER              Use the given RUNNER.
+                                 (c[onsole], f[ox], g[tk], g[tk]2, t[k])
+-n, --name=NAME                  Runs tests matching NAME.
+                                 (patterns may be used).
+-t, --testcase=TESTCASE          Runs tests in TestCases matching TESTCASE.
+                                 (patterns may be used).
+-v, --verbose=[LEVEL]            Set the output level (default is verbose).
+                                 (s[ilent], p[rogress], n[ormal], v[erbose])
+    --                           Stop processing options so that the
+                                 remaining options will be passed to the
+                                 test.
+-h, --help                       Display this help.</pre>
+<p><var>force_standalone</var> に true を与えた時には次のオプションが追加されます。</p>
+<pre>-a, --add=TORUN                  Add TORUN to the list of things to run;
+                                 can be a file or a directory.
+-p, --pattern=PATTERN            Match files to collect against PATTERN.
+-x, --exclude=PATTERN            Ignore files to collect against PATTERN.</pre>
+<p>例</p>
+<pre>require 'test/unit'
+Test::Unit::AutoRunner.run(true, './', ['--runner=tk', '-v',
+                                         '--exclude=/test_hoge.*\.rb\Z/i'])</pre>
+<p><var>argv</var> にデフォルトのまま ARGV を渡しておけばコマンドラインからオプションを
+指定できます。</p>
+<pre>require 'test/unit'
+Test::Unit::AutoRunner.run(true, './')</pre>
+<p>と、runner.rb に書いておいて、コマンドラインから以下のように実行。</p>
+<pre>$ ruby runner.rb --runner=tk -v --exclude=/test_hoge.\*\\.rb\\Z/i</pre></dd>
+</dl>
+<h2><a name="L006469" id="L006469">RubyUnit からの移行</a></h2>
+<p>assertion メソッドの違いは <em class="XXINVALIDXX">ruby-src:lib/runit/assert.rb</em> を参照。
+<a href="refm346.html">RUNIT::Assert</a> も参照。</p>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm334.html">&lt;-PREV</a>][<a href="refm336.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

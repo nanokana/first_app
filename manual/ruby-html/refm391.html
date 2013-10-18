@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ruby 1.8.5 feature</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm392.html" rel="next" />
+<link href="refm390.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm382.html">UP</a>][<a href="refm390.html">&lt;-PREV</a>][<a href="refm392.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L008792" id="L008792">ruby 1.8.5 feature</a></h1>
+<p>ruby 1.8.4 から ruby 1.8.5 までの変更点です。</p>
+<p>掲載方針</p>
+<ul>
+<li>バグ修正の影響も含めて動作が変わるものを収録する。</li>
+<li>単にバグを直しただけのものは収録しない。</li>
+<li>ライブラリへの単なる定数の追加は収録しない。</li>
+</ul>
+<p>以下は各変更点に付けるべきタグです。</p>
+<p>記号について(特に重要なものは大文字(主観))</p>
+<ul>
+<li>カテゴリ
+<ul>
+<li>[ruby]: ruby インタプリタの変更</li>
+<li>[api]: 拡張ライブラリ API</li>
+<li>[lib]: ライブラリ</li>
+</ul></li>
+<li>レベル
+<ul>
+<li>[bug]: バグ修正</li>
+<li>[new]: 追加されたクラス／メソッドなど</li>
+<li>[compat]: 変更されたクラス／メソッドなど
+<ul>
+<li>互換性のある変更</li>
+<li>only backward-compatibility</li>
+<li>影響の範囲が小さいと思われる変更もこちら</li>
+</ul></li>
+<li>[change]: 変更されたクラス／メソッドなど(互換性のない変更)</li>
+<li>[obsolete]: 廃止された(される予定の)機能</li>
+<li>[platform]: 対応プラットフォームの追加</li>
+</ul></li>
+</ul>
+<h2><a name="XXINVALIDXX" id="XXINVALIDXX">1.8.4 (2005-12-24) -&gt; <a href="ftp://ftp.ruby-lang.org/pub/ruby/stable-snapshot.tar.gz">stable-snapshot</a><sup class="outside"><small>[外部]</small></sup></a></h2>
+<h3><a name="L008794" id="L008794">2006-06-18</a></h3>
+<dl>
+<dt><a name="L008795" id="L008795">BasicSocket#recv_nonblock [new]</a></dt>
+<dt><a name="L008796" id="L008796">UDPSocket#recvfrom_nonblock [new]</a></dt>
+<dd>
+<p>追加</p>
+</dd>
+</dl>
+<h3><a name="L008797" id="L008797">2006-06-17</a></h3>
+<dl>
+<dt><a name="L008798" id="L008798">Pathname(path) [new]</a></dt>
+<dd>
+<p>pathname で追加</p>
+</dd>
+<dt><a name="L008799" id="L008799">Kernel#pretty_inspect [new]</a></dt>
+<dd>
+<p>pp で追加</p>
+</dd>
+<dt><a name="L008800" id="L008800">RSS::TaxonomyTopicModel [new]</a></dt>
+<dt><a name="L008801" id="L008801">RSS::TaxonomyTopicsModel [new]</a></dt>
+<dt><a name="L008802" id="L008802">RSS::Maker::TaxonomyTopicModel [new]</a></dt>
+<dt><a name="L008803" id="L008803">RSS::Maker::TaxonomyTopicsModel [new]</a></dt>
+<dd>
+<p>RSS Parser/RSS MakerがTaxonomyモジュールをサポートしました。</p>
+</dd>
+<dt><a name="L008804" id="L008804">RSS::Maker xxx.new_yyy(&amp;block) [compat]</a></dt>
+<dd>
+<p>maker.items.new_itemなどがブロックをとれるようになりました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/197284">ruby-talk:197284</a><sup class="outside"><small>[外部]</small></sup></p>
+<p>今まで</p>
+<pre>item = maker.items.new_item
+item.xxx = yyy
+...</pre>
+<p>と書いていたものが</p>
+<pre>maker.items.new_item |item|
+  item.xxx = yyy
+  ...
+end</pre>
+<p>と書けるようになりました。</p>
+</dd>
+<dt><a name="L008805" id="L008805">RSS::RootElementMixin#to_xml [new]</a></dt>
+<dd>
+<p>こんな風にすると、RSS 1.0からRSS 2.0に変換できます。</p>
+<pre>rss10 = RSS::Parser.parse(File.read(&quot;1.0.rdf&quot;))
+File.open(&quot;2.0.rss&quot;, &quot;w&quot;) {|f| f.print(rss10.to_xml(&quot;2.0&quot;))}</pre>
+<p><a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/197284">ruby-talk:197284</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L008806" id="L008806">RSS::VERSION</a></dt>
+<dd>
+<p>&quot;0.1.5&quot;から&quot;0.1.6&quot;になりました。</p>
+</dd>
+</dl>
+<h3><a name="L008807" id="L008807">2006-06-14</a></h3>
+<dl>
+<dt><a name="L008808" id="L008808">Process.getrlimit(resource) [new]</a></dt>
+<dt><a name="L008809" id="L008809">Process.setrlimit(resource, limit) [new]</a></dt>
+<dt><a name="L008810" id="L008810">Process.setrlimit(resource, cur_limit, max_limit) [new]</a></dt>
+<dt><a name="L008811" id="L008811">Process::RLIM_INFINITY</a></dt>
+<dt><a name="L008812" id="L008812">Process::RLIM_SAVED_MAX</a></dt>
+<dt><a name="L008813" id="L008813">Process::RLIM_SAVED_CUR</a></dt>
+<dt><a name="L008814" id="L008814">Process::RLIMIT_CORE</a></dt>
+<dt><a name="L008815" id="L008815">Process::RLIMIT_CPU</a></dt>
+<dt><a name="L008816" id="L008816">Process::RLIMIT_DATA</a></dt>
+<dt><a name="L008817" id="L008817">Process::RLIMIT_FSIZE</a></dt>
+<dt><a name="L008818" id="L008818">Process::RLIMIT_NOFILE</a></dt>
+<dt><a name="L008819" id="L008819">Process::RLIMIT_STACK</a></dt>
+<dt><a name="L008820" id="L008820">Process::RLIMIT_AS</a></dt>
+<dt><a name="L008821" id="L008821">Process::RLIMIT_MEMLOCK</a></dt>
+<dt><a name="L008822" id="L008822">Process::RLIMIT_NPROC</a></dt>
+<dt><a name="L008823" id="L008823">Process::RLIMIT_RSS</a></dt>
+<dt><a name="L008824" id="L008824">Process::RLIMIT_SBSIZE</a></dt>
+<dd>
+<p>追加 <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/28729">ruby-dev:28729</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+</dl>
+<h3><a name="L008825" id="L008825">2006-06-11</a></h3>
+<dl>
+<dt><a name="L008826" id="L008826">OptionParser#getopts [new]</a></dt>
+<dt><a name="L008827" id="L008827">tempfile の生成するテンポラリファイルの名前が &lt;basename&gt;&lt;pid&gt;.&lt;count&gt; から &lt;basename&gt;.&lt;pid&gt;.&lt;count&gt; になりました <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/196272">ruby-talk:196272</a><sup class="outside"><small>[外部]</small></sup></a></dt>
+</dl>
+<h3><a name="L008828" id="L008828">2006-06-07</a></h3>
+<dl>
+<dt><a name="L008829" id="L008829">configure --with-winsock2 [new]</a></dt>
+<dd>
+<p>mswin32版およびmingw32版で、従来のwinsock1に代わってwinsock2を利用する
+configureオプションが追加されました。</p>
+</dd>
+</dl>
+<h3><a name="L008830" id="L008830">2006-06-02</a></h3>
+<dl>
+<dt><a name="L008831" id="L008831">TCPServer#accept_nonblock [new]</a></dt>
+<dt><a name="L008832" id="L008832">UNIXServer#accept_nonblock [new]</a></dt>
+<dd>
+<p><em class="XXINVALIDXX">ruby-core:7925</em></p>
+</dd>
+</dl>
+<h3><a name="L008833" id="L008833">2006-05-22</a></h3>
+<dl>
+<dt><a name="L008834" id="L008834">IO#read_nonblock [new]</a></dt>
+<dt><a name="L008835" id="L008835">IO#write_nonblock [new]</a></dt>
+<dt><a name="L008836" id="L008836">Socket#connect_nonblock [new]</a></dt>
+<dt><a name="L008837" id="L008837">Socket#accept_nonblock [new]</a></dt>
+<dt><a name="L008838" id="L008838">Socket#recvfrom_nonblock [new]</a></dt>
+<dd>
+<p><em class="XXINVALIDXX">ruby-core:7917</em></p>
+</dd>
+</dl>
+<h3><a name="L008839" id="L008839">2006-02-21</a></h3>
+<dl>
+<dt><a name="L008840" id="L008840">File#link [bug]</a></dt>
+<dd>
+<p>mswin32版・mingw32版でFile#linkが動かなくなっていた不具合が修正されました。</p>
+</dd>
+</dl>
+<h3><a name="L008841" id="L008841">2006-02-20</a></h3>
+<dl>
+<dt><a name="L008842" id="L008842">RbConfig [new]</a></dt>
+<dd>
+<p><a href="refm344.html">rbconfig</a> が Config に加えて RbConfig を定義するようになりました。</p>
+</dd>
+</dl>
+<h3><a name="L008843" id="L008843">2006-02-06</a></h3>
+<dl>
+<dt><a name="L008844" id="L008844">File#flock [bug]</a></dt>
+<dd>
+<p>cygwin版でRubyのスレッドが複数ある状態で、ロックせずにflock(File::LOCK_UN)すると
+止まってしまっていたのが修正されました。</p>
+</dd>
+</dl>
+<h3><a name="L008845" id="L008845">2006-02-04</a></h3>
+<dl>
+<dt><a name="L008844" id="L008844">File#flock [bug]</a></dt>
+<dd>
+<p>mswin32版でRubyのスレッドが複数ある状態で、ロックせずにflock(File::LOCK_UN)すると
+止まってしまっていたのが修正されました。</p>
+</dd>
+</dl>
+<h3><a name="L008846" id="L008846">2005-12-29</a></h3>
+<dl>
+<dt><a name="L008847" id="L008847">Thread [compat]</a></dt>
+<dd>
+<p>他から操作されない限り動き出さないにもかかわらず他から参照されていない thread は abort されるようになりました
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/28154">ruby-dev:28154</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+</dl>
+<h2><a name="L008848" id="L008848">参考</a></h2>
+<ul>
+<li><a href="http://eigenclass.org/hiki.rb?ruby+1.8.5+changelog">Changes in Ruby 1.8.5</a><sup class="outside"><small>[外部]</small></sup></li>
+</ul>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm382.html">UP</a>][<a href="refm390.html">&lt;-PREV</a>][<a href="refm392.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

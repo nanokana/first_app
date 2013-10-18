@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>gdbm</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm284.html" rel="next" />
+<link href="refm282.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm282.html">&lt;-PREV</a>][<a href="refm284.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L005584" id="L005584">gdbm</a></h1>
+<p>GDBMファイルをアクセスするクラス．キー，データともに文字列でなければな
+らないという制限と，データがファイルに保存されるという点を除いては
+Hashクラスと全く同様に扱うことがでます．</p>
+<h2><a name="L005585" id="L005585">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm035.html">Object</a></li>
+</ul>
+<h2><a name="XXINVALIDXX" id="XXINVALIDXX">インクルードしているモジュール: </a></h2>
+<ul>
+<li><a href="refm070.html">Enumerable</a></li>
+</ul>
+<h2><a name="L005587" id="L005587">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L005588" id="L005588"><code>new(<var>dbname</var>[, <var>mode</var>[, <var>flags</var>]])</code></a>
+<dt><a name="L005589" id="L005589"><code>open(<var>dbname</var>[, <var>mode</var>[, <var>flags</var>]])</code></a>
+<dt><a name="L005590" id="L005590"><code>open(<var>dbname</var>[, <var>mode</var>[, <var>flags</var>]]) {|<var>db</var>| ...}</code></a></dt>
+<dd>
+<p><var>dbname</var>で指定したデータベースをモードを
+<var>mode</var>に設定してオープンします．<var>mode</var>の省
+略値は0666です．<var>mode</var>として<code>nil</code>を指定
+するとデータベースが存在しない時には新たなデータベースを作らず
+<code>nil</code>を返します．</p>
+<p><var>flags</var> には，GDBM::FAST, GDBM::SYNC, GDBM::NOLOCK を
+の論理和を指定します．デフォルト値は指定なし(つまり0)です．</p>
+<p><a href="refm388.html">ruby 1.8.2 feature</a>:
+flags に
+GDBM::READER, GDBM::WRITER, GDBM::WRCREAT, GDBM::NEWDB
+のどれかを与えて読み書きのモードを指定できます。
+これらをどれも指定しなかった場合には、
+GDBM::WRCREAT, GDBM::WRITER, GDBM::READER の順で試します。</p>
+<p>ブロックを指定した場合，オープンしたGDBMオブジェクトを
+引数にブロックを実行します．実行後GDBMオブジェクトをクローズ
+し，openメソッドはブロックの結果を返します．これはちょうど
+以下と同じです．</p>
+<pre>dbm = GDBM.open(file)
+begin
+  yield dbm
+ensure
+  dbm.close
+end</pre></dd>
+</dl>
+<h2><a name="L005591" id="L005591">メソッド:</a></h2>
+<dl>
+<dt><a name="L005592" id="L005592"><code>self[key]</code></a></dt>
+<dd>
+<p><var>key</var>をキーとする値を返します．</p></dd>
+<dt><a name="L005593" id="L005593"><code>self[key]=value</code></a></dt>
+<dd>
+<p><var>key</var>をキーとして，<var>value</var>を格納します．</p></dd>
+<dt><a name="L005594" id="L005594"><code>cachesize = <var>size</var></code></a>
+<dt><a name="L005595" id="L005595"><code>clear</code></a></dt>
+<dd>
+<p>DBMファイルを空にします．</p></dd>
+<dt><a name="L005596" id="L005596"><code>close</code></a></dt>
+<dd>
+<p>DBMファイルをクローズします．以後の操作は例外を発生させます．</p></dd>
+<dt><a name="L005597" id="L005597"><code>delete(<var>key</var>)</code></a>
+<dt><a name="L005598" id="L005598"><code>delete(<var>key</var>) {|<var>key</var>| ... }</code></a></dt>
+<dd>
+<p><var>key</var>をキーとする項目を削除します．</p>
+<p>指定したキーが存在しなければnilを返します，このとき
+ブロックを指定していれば，ブロックを評価します．</p></dd>
+<dt><a name="L005599" id="L005599"><code>delete_if { |<var>key</var>, <var>value</var>|  ...  }</code></a>
+<dt><a name="L005600" id="L005600"><code>reject! { |<var>key</var>, <var>value</var>|  ...  }</code></a></dt>
+<dd>
+<p>ブロックを評価した値が真であれば該当する項目を削除します．</p></dd>
+<dt><a name="L005601" id="L005601"><code>each {|<var>key</var>, <var>value</var>|  ...  }</code></a>
+<dt><a name="L005602" id="L005602"><code>each_pair {|<var>key</var>, <var>value</var>|  ...  }</code></a></dt>
+<dd>
+<p>各要素に対するイテレータ．</p></dd>
+<dt><a name="L005603" id="L005603"><code>each_key {|<var>key</var>|  ...  }</code></a></dt>
+<dd>
+<p>全てのkeyに対して繰り返すイテレータ．</p></dd>
+<dt><a name="L005604" id="L005604"><code>each_value {|<var>value</var>|  ...  }</code></a></dt>
+<dd>
+<p>全てのvalueに対して繰り返すイテレータ．</p></dd>
+<dt><a name="L005605" id="L005605"><code>empty?</code></a></dt>
+<dd>
+<p>データベースが空の時，真を返します．</p></dd>
+<dt><a name="L005606" id="L005606"><code>fastmode = <var>bool</var></code></a>
+<dt><a name="L005607" id="L005607"><code>syncmode = <var>bool</var></code></a></dt>
+<dd>
+<p>オープンしているGDBMオブジェクトのモードを変更します．下記の定数
+GDBM::FAST、GDBM::SYNC を参照してください．</p></dd>
+<dt><a name="L005608" id="L005608"><code>fetch(<var>key</var>[,<var>ifnone</var>])</code></a>
+<dt><a name="L005609" id="L005609"><code>fetch(<var>key</var>) {|<var>key</var>| ... }</code></a></dt>
+<dd>
+<p>ハッシュと同じ</p></dd>
+<dt><a name="L005610" id="L005610"><code>has_key?(<var>key</var>)</code></a>
+<dt><a name="L005611" id="L005611"><code>key?(<var>key</var>)</code></a>
+<dt><a name="L005612" id="L005612"><code>include?(<var>key</var>)</code></a>
+<dt><a name="L005613" id="L005613"><code>member?(<var>key</var>)</code></a></dt>
+<dd>
+<p>keyがデータベース中に存在する時，真を返します．</p></dd>
+<dt><a name="L005614" id="L005614"><code>has_value?(<var>key</var>)</code></a>
+<dt><a name="L005615" id="L005615"><code>value?(<var>value</var>)</code></a></dt>
+<dd>
+<p>valueを値とする組がデータベース中に存在する時，真を返します．</p></dd>
+<dt><a name="L005616" id="L005616"><code>index(<var>val</var>)</code></a></dt>
+<dd>
+<p>ハッシュと同じ</p></dd>
+<dt><a name="L005617" id="L005617"><code>indexes(<var>key_1</var>, ... )  ((&lt;<var>obsolete</var>&gt;))</code></a>
+<dt><a name="L005618" id="L005618"><code>indices(<var>key_1</var>, ... )  ((&lt;<var>obsolete</var>&gt;))</code></a></dt>
+<dd>
+<p>各引数の値をキーとする要素を含む配列を返します．</p></dd>
+<dt><a name="L005619" id="L005619"><code>invert</code></a></dt>
+<dd>
+<p>値からキーへのハッシュを返します．</p></dd>
+<dt><a name="L005620" id="L005620"><code>keys</code></a></dt>
+<dd>
+<p>データベース中に存在するキー全てを含む配列を返します．</p></dd>
+<dt><a name="L005621" id="L005621"><code>length</code></a>
+<dt><a name="L005622" id="L005622"><code>size</code></a></dt>
+<dd>
+<p>データベース中の要素の数を返します．(注意:現在の実現では要素数を数
+えるためにデータベースを全部検索します)</p></dd>
+<dt><a name="L005623" id="L005623"><code>reject {|<var>key</var>, <var>value</var>| ... }</code></a></dt>
+<dd>
+<p><a href="refm044.html">self.to_hash.reject</a> と同じです．ハッシュを返します．</p></dd>
+<dt><a name="L005624" id="L005624"><code>reorganize</code></a></dt>
+<dd>
+<p>GDBMでは，要素の削除を行ってもDBファイルのサイズは減少しません(削
+除によって空いた領域は次の格納のために取っておかれます、)．このメ
+ソッドを呼び出すことでDBMファイルを新規に作り直し無駄な領域をなく
+すことができます．</p>
+<p>大量の削除を行ったときに，ディスクスペースの節約のために使用します．</p></dd>
+<dt><a name="L005625" id="L005625"><code>replace(<var>other</var>)</code></a></dt>
+<dd>
+<p>DBMの内容を <var>other</var> の内容で置き換えます．
+<var>other</var> は each_pair メソッドを持つオブジェクトで
+なければなりません．</p></dd>
+<dt><a name="L005626" id="L005626"><code>shift</code></a></dt>
+<dd>
+<p>データベース中の要素を一つ取り出し，データベースから削除します．</p></dd>
+<dt><a name="L005627" id="L005627"><code>store(<var>key</var>, <var>val</var>)</code></a></dt>
+<dd>
+<p>self[key]=val と同じです．<var>key</var>に対して<var>val</var>を格納します．</p></dd>
+<dt><a name="L005628" id="L005628"><code>sync</code></a></dt>
+<dd>
+<p>要素の変更をファイルに反映します．FASTモード
+(GDBM#open() の第3引数にGDBM::FAST を指定)のときだけ意味があります．</p>
+<p>注) GNU gdbm version 1.8 以降よりFASTモードがデフォルトになりました．</p></dd>
+<dt><a name="L005629" id="L005629"><code>to_a</code></a></dt>
+<dd>
+<p>DBMの各要素を格納した配列を返します．返される配列の1つの要素は 
+[key, val] です．(つまり配列の配列を返します)．</p></dd>
+<dt><a name="L005630" id="L005630"><code>to_hash</code></a></dt>
+<dd>
+<p>DBMの各要素を格納したハッシュを返します．</p></dd>
+<dt><a name="L005631" id="L005631"><code>update(<var>other</var>)</code></a></dt>
+<dd>
+<p>DBMと<var>other</var>の内容をマージします．重複するキーに対応する値は
+<var>other</var>の内容で上書きされます．</p>
+<p><var>other</var>は each_pair メソッドを持つオブジェクトでなければなりま
+せん．</p></dd>
+<dt><a name="L005632" id="L005632"><code>values</code></a></dt>
+<dd>
+<p>データベース中に存在する値全てを含む配列を返します．</p></dd>
+</dl>
+<h2><a name="L005633" id="L005633">定数</a></h2>
+<dl>
+<dt><a name="L005634" id="L005634"><code>GDBM::VERSION</code></a></dt>
+<dd>
+<p>libgdbm のバージョン情報の文字列です．</p></dd>
+</dl>
+<p>以下の定数は open の第3引数に指定します．</p>
+<dl>
+<dt><a name="L005635" id="L005635"><code>GDBM::FAST</code></a></dt>
+<dd>
+<p>書き込みの結果が，ディスク上のファイルにすぐに反映しなくなります．
+このモードのときに結果を明示的にファイルに反映させるには GDBM#sync 
+メソッドを呼びます．libgdbm version 1.8.0 以降ではこのモードがデフォルト
+です．</p></dd>
+<dt><a name="L005636" id="L005636"><code>GDBM::SYNC</code></a></dt>
+<dd>
+<p>書き込みの結果が，ディスク上のファイルにすぐに反映されます．
+libgdbm version 1.8.0 以前のデフォルトモードです．</p>
+<p>この定数は libgdbm version 1.8.0 以降より有効です</p></dd>
+<dt><a name="L005637" id="L005637"><code>GDBM::NOLOCK</code></a></dt>
+<dd>
+<p>通常，他のプロセスがDBをオープンしている最中にオープンを行うと
+Errno::EWOULDBLOCK(またはErrno::EAGAIN)例外が発生します．このフラグを
+指定していれば，他のプロセスがオープンしている最中でも同時オープンする
+ことができます．</p>
+<p>この定数は libgdbm version 1.8.0 以降より有効です．</p></dd>
+<dt><a name="L005638" id="L005638"><code>GDBM::READER ((&lt;<var>ruby</var> <var>1</var>.<var>8</var>.<var>2</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>読み込みモードでオープンします．</p></dd>
+<dt><a name="L005639" id="L005639"><code>GDBM::WRITER ((&lt;<var>ruby</var> <var>1</var>.<var>8</var>.<var>2</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>書き込みモードでオープンします．</p></dd>
+<dt><a name="L005640" id="L005640"><code>GDBM::WRCREAT ((&lt;<var>ruby</var> <var>1</var>.<var>8</var>.<var>2</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>書き込みモードで、すでにファイルが存在しなかったら作ります．</p></dd>
+<dt><a name="L005641" id="L005641"><code>GDBM::NEWDB ((&lt;<var>ruby</var> <var>1</var>.<var>8</var>.<var>2</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>書き込みモードで、すでにファイルが存在したら削除してから作り直します．</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm282.html">&lt;-PREV</a>][<a href="refm284.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>gc.c</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm494.html" rel="next" />
+<link href="refm492.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm488.html">UP</a>][<a href="refm492.html">&lt;-PREV</a>][<a href="refm494.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L010271" id="L010271">gc.c</a></h1>
+<dl>
+<dt><a name="L010272" id="L010272">static VALUE add_final(VALUE os, VALUE proc)</a></dt>
+<dt><a name="L010273" id="L010273">static void add_heap(void)</a></dt>
+<dd>
+<p>Rubyオブジェクトのヒープスロットを増設する。</p>
+</dd>
+<dt><a name="L010274" id="L010274">static VALUE call_final(VALUE os, VALUE obj)</a></dt>
+<dt><a name="L010275" id="L010275">static VALUE define_final(int argc, VALUE *argv, VALUE os)</a></dt>
+<dt><a name="L010276" id="L010276">static VALUE finals(void)</a></dt>
+<dt><a name="L010277" id="L010277">static void gc_mark_all(void)</a></dt>
+<dt><a name="L010278" id="L010278">static void gc_mark_rest(void)</a></dt>
+<dt><a name="L010279" id="L010279">static void gc_sweep(void)</a></dt>
+<dd>
+<p>GC のスイープフェイズを実行します。</p>
+</dd>
+<dt><a name="L010280" id="L010280">static VALUE id2ref(VALUE obj, VALUE id)</a></dt>
+<dd>
+<p><code>ObjectSpace#_id2ref</code> の実体。
+Ruby の整数で表されたオブジェクト ID <var>id</var> から
+オブジェクトを返します。</p>
+</dd>
+<dt><a name="L010281" id="L010281">void Init_heap(void)</a></dt>
+<dt><a name="L010282" id="L010282">static void init_mark_stack(void)</a></dt>
+<dt><a name="L010283" id="L010283">void Init_stack(VALUE *addr)</a></dt>
+<dt><a name="L010284" id="L010284">static inline int is_pointer_to_heap(void *ptr)</a></dt>
+<dt><a name="L010285" id="L010285">static int mark_entry(ID key, VALUE value)</a></dt>
+<dt><a name="L010286" id="L010286">static int mark_hashentry(VALUE key, VALUE value)</a></dt>
+<dt><a name="L010287" id="L010287">static void mark_locations_array(register VALUE *x, register long n)</a></dt>
+<dt><a name="L010288" id="L010288">static void mark_source_filename(char *f)</a></dt>
+<dt><a name="L010289" id="L010289">static void obj_free(VALUE obj)</a></dt>
+<dt><a name="L010290" id="L010290">static VALUE os_each_obj(int argc, VALUE *argv)</a></dt>
+<dt><a name="L010291" id="L010291">static VALUE os_live_obj(void)</a></dt>
+<dt><a name="L010292" id="L010292">static VALUE os_obj_of(VALUE of)</a></dt>
+<dt><a name="L010293" id="L010293">VALUE rb_data_object_alloc(VALUE klass, void *datap, RUBY_DATA_FUNC dmark, RUBY_DATA_FUNC dfree)</a></dt>
+<dd>
+<p><var>datap</var> をラップするオブジェクトを生成し、返します。
+そのクラスは <var>klass</var> となり、<var>datap</var> をマークするときは
+<var>dmark</var>、 解放するときは <var>dfree</var> を使うようになります。</p>
+</dd>
+<dt><a name="L010294" id="L010294">VALUE rb_gc(void)</a></dt>
+<dd>
+<p>明示的に GC を開始します。rb_gc_disable() で禁止中のときおよび
+すでに GC が実行中のときは実際には行われません。</p>
+</dd>
+<dt><a name="L010295" id="L010295">void rb_gc_call_finalizer_at_exit(void)</a></dt>
+<dt><a name="L010296" id="L010296">VALUE rb_gc_disable(void)</a></dt>
+<dd>
+<p>GC を禁止します。</p>
+</dd>
+<dt><a name="L010297" id="L010297">VALUE rb_gc_enable(void)</a></dt>
+<dd>
+<p>GC を許可します。</p>
+</dd>
+<dt><a name="L010298" id="L010298">void rb_gc_force_recycle(VALUE p)</a></dt>
+<dd>
+<p><var>p</var> を強制的に GC します。</p>
+</dd>
+<dt><a name="L010299" id="L010299">void rb_gc_mark(VALUE v)</a></dt>
+<dd>
+<p><var>v</var> をマークします。</p>
+</dd>
+<dt><a name="L010300" id="L010300">void rb_gc_mark_children(VALUE ptr)</a></dt>
+<dd>
+<p><var>v</var> から指されているオブジェクトを全てマークします。</p>
+</dd>
+<dt><a name="L010301" id="L010301">void rb_gc_mark_frame(struct FRAME *frame)</a></dt>
+<dd>
+<p><var>frame</var> をマークします。</p>
+</dd>
+<dt><a name="L010302" id="L010302">void rb_gc_mark_locations(VALUE *start, VALUE *end)</a></dt>
+<dt><a name="L010303" id="L010303">void rb_gc_mark_maybe(VALUE v)</a></dt>
+<dd>
+<p><var>v</var> が Ruby のオブジェクトであればマークします。</p>
+</dd>
+<dt><a name="L010304" id="L010304">void rb_gc_register_address(VALUE *addr)</a></dt>
+<dd>
+<p>初出: [ruby-list:20488] [1.5 feature]</p>
+<p>ポインタ <var>addr</var> が指す変数を GC の対象にします。</p>
+</dd>
+<dt><a name="L010305" id="L010305">VALUE rb_gc_start(void)</a></dt>
+<dd>
+<p>GC を起動します。</p>
+</dd>
+<dt><a name="L010306" id="L010306">void rb_gc_unregister_address(VALUE *addr)</a></dt>
+<dd>
+<p>初出: [ruby-list:20488] [1.5 feature]</p>
+<p>ポインタ <var>addr</var> が指す変数を GC の対象から外します。</p>
+</dd>
+<dt><a name="L010307" id="L010307">void rb_global_variable(VALUE *var)</a></dt>
+<dd>
+<p><em class="XXINVALIDXX">rb_gc_register_address</em> と同じです。</p>
+</dd>
+<dt><a name="L010308" id="L010308">void rb_mark_hash(st_table *tbl)</a></dt>
+<dt><a name="L010309" id="L010309">void rb_mark_tbl(st_table *tbl)</a></dt>
+<dt><a name="L010310" id="L010310">void rb_memerror(void)</a></dt>
+<dd>
+<p>NoMemoryErrorをraiseする。
+しかしraise自体にもメモリ容量を使うため、メモリが足りない状況
+ではその途中でまたメモリ不足になる可能性がある。そのため
+この関数では再帰を検出した場合はraiseではなくexitするように
+なっている。</p>
+</dd>
+<dt><a name="L010311" id="L010311">VALUE rb_newobj(void)</a></dt>
+<dd>
+<p>未使用のオブジェクト領域一つへのポインタを返す。
+返り値が返ってきたときは失敗はない。</p>
+</dd>
+<dt><a name="L010312" id="L010312">char *rb_source_filename(const char *f)</a></dt>
+<dt><a name="L010313" id="L010313">static VALUE rm_final(VALUE os, VALUE proc)</a></dt>
+<dt><a name="L010314" id="L010314">int ruby_stack_check(void)</a></dt>
+<dt><a name="L010315" id="L010315">int ruby_stack_length(VALUE **p)</a></dt>
+<dt><a name="L010316" id="L010316">void *ruby_xcalloc(long n, long size)</a></dt>
+<dd>
+<p>引数と返り値は calloc() と同じです。
+ただしメモリ割り当てに失敗したときは
+GC を行いそれでもだめなときは例外 <code>NoMemoryError</code> を発生します。
+つまりこの関数が返り値を返したときは常に割り当ては成功です。</p>
+</dd>
+<dt><a name="L010317" id="L010317">void ruby_xfree(void *x)</a></dt>
+<dd>
+<p>以前 malloc/calloc/realloc して free していないポインタ <var>x</var> を
+開放します。ruby のシグナル機構とコンフリクトしません。</p>
+</dd>
+<dt><a name="L010318" id="L010318">void *ruby_xmalloc(long size)</a></dt>
+<dd>
+<p>引数と返り値は malloc() と同じ。
+ただしメモリ割り当てに失敗したときは
+GC を行いそれでもだめなときは NoMemoryError を raise する。
+つまりこの関数が返り値を返したときは常に割り当ては成功している。</p>
+</dd>
+<dt><a name="L010319" id="L010319">void *ruby_xrealloc(void *ptr, long size)</a></dt>
+<dd>
+<p>引数と返り値の意味は realloc() と同じ。
+ただしメモリ割り当てに失敗したときは
+GC を行いそれでもだめなときは NoMemoryError を raise する。
+つまりこの関数が返り値を返したときは常に割り当ては成功している。</p>
+</dd>
+<dt><a name="L010320" id="L010320">static void run_final(VALUE obj)</a></dt>
+<dd>
+<p><var>obj</var> のファイナライズを行います。</p>
+</dd>
+<dt><a name="L010321" id="L010321">static VALUE run_single_final(VALUE *args)</a></dt>
+<dt><a name="L010322" id="L010322">static enum st_retval sweep_source_filename(char *key, char *value)</a></dt>
+<dt><a name="L010323" id="L010323">static VALUE undefine_final(VALUE os, VALUE obj)</a></dt>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm488.html">UP</a>][<a href="refm492.html">&lt;-PREV</a>][<a href="refm494.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>getopts</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm377.html" rel="next" />
+<link href="refm375.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm375.html">&lt;-PREV</a>][<a href="refm377.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L007021" id="L007021">getopts</a></h1>
+<pre>Author: &lt;jammy@shljapan.co.jp&gt;</pre>
+<p>Note: Ruby 1.8.2 以降では、getopts は推奨されません。
+引数の解析には、<a href="refm348.html">OptionParser</a> の利用を推奨します。</p>
+<p>オプションを解析し、$OPT_xxx に値を設定します。</p>
+<p>典型的な使い方は以下のようになります。</p>
+<pre>require 'getopts'
+
+unless getopts('vh', 'version', 'help')
+  abort &quot;usage: #$0 [-vh] [--version] [--help] file&quot;
+end
+
+if $OPT_v or $OPT_version
+  puts VERSION_STRING
+  exit
+end
+
+# ARGV からオプションは取り除かれる。
+
+while line = ARGF.gets
+  # ...
+end</pre>
+<h2><a name="L007022" id="L007022">書式:</a></h2>
+<dl>
+<dt><a name="L007023" id="L007023"><code>getopts(<var>single_opts</var>, *<var>long_opts</var>)</code></a>
+</dl>
+<dl>
+<dt><a name="L007024" id="L007024">第一引数:</a></dt>
+<dd>
+<p>`-f'や`-x(=-fx)'の様な一文字のオプションの指定をします。オプショ
+ンが`-f'と`-x'の2つの場合は`&quot;fx&quot;'の様に指定します。ここでオプシ
+ョンがないときは必ず`nil'を指定して下さい。
+<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></p>
+</dd>
+<dt><a name="L007025" id="L007025">第二引数:</a></dt>
+<dd>
+<p>ロングネームのオプションや、引数を伴うオプションの指定をします。
+`--version'や`--geometry 300x400'、`-d host:0.0'等がこれに該当し
+ます。引数を伴う指定は &quot;:&quot; を必ず付ける様にします。この例の場合、
+&quot;version&quot;、&quot;geometry:&quot;、&quot;d:&quot; の様になります。 また、オプションを
+指定しなかった場合のデフォルトの値を持たせたい場合は、&quot;:&quot;の直後に
+そのデフォルト値を指定します。例えば、&quot;geometry:80x25&quot; の様になり
+ます。
+<a name="footmark:2" id="footmark:2" href="#foottext:2"><sup><small>*2</small></sup></a></p>
+</dd>
+</dl>
+<h2><a name="L007026" id="L007026">オプション解析:</a></h2>
+<p>解析結果は全て &quot;$OPT_指定した引数名&quot; という形で処理されます。</p>
+<ul>
+<li><p>シングルオプションや引数を伴わないオプションが使用された場合は、
+  `true'がセットされます。</p>
+<p>`-f'→`$OPT_f = true' `--version'→`$OPT_version = true'</p></li>
+<li><p>その他はそのオプションの引数がセットされます。</p>
+<p>`-d pengo:0.0'→`$OPT_d = pengo:0.0' `--geometry 80x25'→
+`$OPT_geometry = 80x25'。</p></li>
+<li>`-'もしくは`--'を指定した場合、それ以降の解析を行ないません。</li>
+</ul>
+<h2><a name="L007027" id="L007027">戻り値:</a></h2>
+<p>実際にセットされたオプションの数を返します。また、間違ったオプショ
+ンを指定した場合は、`nil'を返します。</p>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small><a href="refm383.html">ruby 1.6 feature</a>:
+(おそらく 1.6.8 から)第二引数と同じようにオプションの値が指定できるこ
+とを意味する : を指定できるようになりました。初期値は指定できません</small><br />
+<a name="foottext:2" id="foottext:2" href="#footmark:2"><sup><small>*2</small></sup></a><small><a href="refm383.html">ruby 1.6 feature</a>:
+(おそらく 1.6.8 から)ロングネームなオプションの値は --foo=bar のように
+= を間に挟んで値を指定できるようになりました。</small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm375.html">&lt;-PREV</a>][<a href="refm377.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

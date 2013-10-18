@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Zlib::GzipWriter</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm143.html" rel="next" />
+<link href="refm141.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm135.html">UP</a>][<a href="refm141.html">&lt;-PREV</a>][<a href="refm143.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L002722" id="L002722">Zlib::GzipWriter</a></h1>
+<p><a href="refm134.html">zlib</a></p>
+<p>gzip 形式の圧縮ファイルを書き出すラッパークラス。
+IO クラスのインスタンス (又は IO クラスのインスタンスと同じメソッドを
+持つオブジェクト) と関連付けて使用します。</p>
+<pre>Zlib::GzipWriter.open('hoge.gz') {|gz|
+  gz.write 'jugemu jugemu gokou no surikire...'
+}
+
+f = File.open('hoge.gz', 'w')
+gz = Zlib::GzipWriter.new(f)
+gz.write 'jugemu jugemu gokou no surikire...'
+gz.close</pre>
+<p>なお、Ruby の finalizer の制約のため、GzipWriter オブジェクトは必ず
+<a href="#L002730">Zlib::GzipWriter#close</a> 等を用いてクローズしてください。
+そうしなければフッターを書き出すことができず、壊れた gzip ファイルを
+生成してしまう可能性があります。</p>
+<h2><a name="L002723" id="L002723">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm140.html">Zlib::GzipFile</a></li>
+</ul>
+<h2><a name="L002724" id="L002724">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L002725" id="L002725"><code>GzipWriter.new(<var>io</var>[, <var>level</var>[, <var>strategy</var>]])</code></a></dt>
+<dd>
+<p><var>io</var> と関連付けられた GzipWriter オブジェクトを作成します。
+<var>level</var>, <var>strategy</var> は <a href="refm138.html#L002674">Zlib::Deflate.new</a> と同じです。
+GzipWriter オブジェクトは <var>io</var> に gzip 形式のデータを
+逐次ライトします。<var>io</var> には少なくとも、IO#write と
+同じ動作をする write メソッドが定義されている必要があります。</p></dd>
+<dt><a name="L002726" id="L002726"><code>GzipWriter.wrap(<var>io</var>[, <var>level</var>[, <var>strategy</var>]]) {|<var>gz</var>| ... }</code></a></dt>
+<dd>
+<p><var>io</var> と関連付けられた GzipWriter オブジェクトを作成し、
+それを引数としてブロックを実行します。
+ブロックの実行が終了すると、GzipWriter オブジェクトは自動的に
+クローズされます。関連付けられている IO オブジェクトまで
+クローズしたくない時は、ブロック中で <a href="refm140.html#L002706">Zlib::GzipFile#finish</a>
+メソッドを呼び出して下さい。</p></dd>
+<dt><a name="L002727" id="L002727"><code>GzipWriter.open(<var>filename</var>[, <var>level</var>[, <var>strategy</var>]])</code></a>
+<dt><a name="L002728" id="L002728"><code>GzipWriter.open(<var>filename</var>[, <var>level</var>[, <var>strategy</var>]]) {|<var>gz</var>| ... }</code></a></dt>
+<dd>
+<p><var>filename</var> で指定されるファイルを gzip 圧縮データの
+書き出し用にオープンします。GzipWriter オブジェクトを返します。
+その他詳細は <a href="#L002725">GzipWriter.new</a> や <a href="#L002726">GzipWriter.wrap</a> と
+同じです。</p></dd>
+</dl>
+<h2><a name="L002729" id="L002729">メソッド:</a></h2>
+<dl>
+<dt><a name="L002730" id="L002730"><code>close</code></a>
+<dt><a name="L002731" id="L002731"><code>finish</code></a></dt>
+<dd>
+<p>フッターを書き出し、GzipWriter オブジェクトをクローズします。close と
+finish の違いは <a href="refm140.html#L002705">Zlib::GzipFile#close</a>, <a href="refm140.html#L002706">Zlib::GzipFile#finish</a> を
+参照して下さい。</p>
+<p><em>注意: Ruby の finalizer の制約のため、GzipWriter オブジェクトは
+必ずクローズしてください。そうしなければフッターを書き出すことが
+できず、壊れた gzip ファイルを生成してしまう可能性があります。</em></p></dd>
+<dt><a name="L002732" id="L002732"><code>pos</code></a>
+<dt><a name="L002733" id="L002733"><code>tell</code></a></dt>
+<dd>
+<p>現在までに圧縮したデータの長さの合計を返します。
+ファイルポインタの位置ではないことに注意して下さい。</p></dd>
+<dt><a name="L002734" id="L002734"><code>&lt;&lt; <var>str</var></code></a>
+<dt><a name="L002735" id="L002735"><code>putc(<var>ch</var>)</code></a>
+<dt><a name="L002736" id="L002736"><code>puts(<var>obj</var>...)</code></a>
+<dt><a name="L002737" id="L002737"><code>print(<var>arg</var>...)</code></a>
+<dt><a name="L002738" id="L002738"><code>printf(<var>format</var>, <var>arg</var>...)</code></a>
+<dt><a name="L002739" id="L002739"><code>write(<var>str</var>)</code></a></dt>
+<dd>
+<p>IO クラスの同名メソッドと同じ。</p></dd>
+<dt><a name="L002740" id="L002740"><code>flush([<var>flush</var>])</code></a></dt>
+<dd>
+<p>まだ書き出されていないデータをフラッシュします。
+<var>flush</var> は <a href="refm138.html#L002673">Zlib::Deflate#deflate</a> と同じです。
+省略時は Zlib::SYNC_FLUSH が使用されます。
+<var>flush</var> に Zlib::NO_FLUSH を指定することは無意味です。</p></dd>
+<dt><a name="L002741" id="L002741"><code>mtime= <var>time</var></code></a></dt>
+<dd>
+<p>gzip ファイルのヘッダーに記録する最終更新時間を指定します。
+<a href="#L002739">Zlib::GzipWriter#write</a> 等の書き込み系メソッドを
+呼んだ後で指定しようとすると <a href="refm141.html">Zlib::GzipFile::Error</a> 例外が
+発生します。</p></dd>
+<dt><a name="L002742" id="L002742"><code>orig_name= <var>filename</var></code></a></dt>
+<dd>
+<p>gzip ファイルのヘッダーに記録する元ファイル名を指定します。
+<a href="#L002739">Zlib::GzipWriter#write</a> 等の書き込み系メソッドを
+呼んだ後で指定しようとすると <a href="refm141.html">Zlib::GzipFile::Error</a> 例外が
+発生します。</p></dd>
+<dt><a name="L002743" id="L002743"><code>comment= <var>string</var></code></a></dt>
+<dd>
+<p>gzip ファイルのヘッダーに記録するコメントを指定します。
+<a href="#L002739">Zlib::GzipWriter#write</a> 等の書き込み系メソッドを
+呼んだ後で指定しようとすると <a href="refm141.html">Zlib::GzipFile::Error</a> 例外が
+発生します。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm135.html">UP</a>][<a href="refm141.html">&lt;-PREV</a>][<a href="refm143.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

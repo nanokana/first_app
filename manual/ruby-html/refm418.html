@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>RubyTkFAQ::RubyTkとTclTkなどとの違い</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm419.html" rel="next" />
+<link href="refm417.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm408.html">UP</a>][<a href="refm417.html">&lt;-PREV</a>][<a href="refm419.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L009424" id="L009424">Ruby/Tk と Tcl/Tk, Perl/Tk, Python Tkinterなどとの違い</a></h1>
+<h2><a name="L009425" id="L009425">Ruby/Tk と Tcl/Tk との違いはどこですか？</a></h2>
+<dl>
+<dt><a name="L009426" id="L009426">依存関係のある widget の生成方法</a></dt>
+<dd>
+<p>ScrollBar と ListBox, Text, Canvas</p>
+</dd>
+<dt><a name="L009427" id="L009427">TkVariable</a></dt>
+<dt><a name="L009428" id="L009428">スコープ</a></dt>
+<dt><a name="L009429" id="L009429">評価タイミング</a></dt>
+</dl>
+<h2><a name="L009430" id="L009430">Ruby/Tk と Tcl/Tk との違い一覧は？</a></h2>
+<pre>what              Tcl/Tk                 Ruby/Tk
+variable          set a 123              a = 123 or a = '123'
+ initialization
+re-assignment     set b $a               b = a.dup
+
+lists/arrays      set a {1 2 fred 7.8}   a = [1, 2, 'fred', 7.8]
+re-assignment     set b $a               b = a.dup
+
+associative       set a(Jan) 456.02      a = {'Jan' =&gt; 456.02, 'Feb' =&gt; 534.96}
+arrays            set a(Feb) 534.96
+                  or
+                  array set a {Jan 456.02 Feb 534.96}
+re-assignment     foreach i \            b = a.dup
+                   [array names a] {
+                   set b($i) = $a($i) }
+                  or
+                  array set b [array get a]
+
+expressions       set a [expr $b+$c]     a = b + c
+
+increment         incr i                 i += 1
+
+declare           proc plus {a b} {      def plus(a, b)
+ subroutines       expr $a + $b }            return a + b
+                                         end
+
+variable scope    local default          local default
+                   override w/ &quot;global&quot;   
+
+call              plus 1 2               plus(1,2)
+ subroutines                             
+
+statement sep     newline or at &quot;;&quot;      newline or at &quot;;&quot;
+
+statement         &quot;\&quot; - newline          none required
+ continuation
+
+verbatim strings  {}                     ''
+ e.g.             {a \ lot@ of $stuff}   'a \ lot@ of $stuff'
+
+escaped strings   &quot;&quot;                     &quot;&quot;
+ e.g.             &quot;Who\nWhat\nIdunno&quot;    &quot;Who\nWhat\nIdunno&quot;
+
+STDOUT            puts &quot;Hello World!&quot;    print &quot;Hello!\n&quot;
+                  puts stdout &quot;Hello!&quot;   STDOUT.print &quot;Hello World!\n&quot;</pre>
+<h2><a name="L009431" id="L009431">Ruby/Tk と Perl/Tk との違いはどこですか？</a></h2>
+<ul>
+<li>Ruby/Tk では一部のメソッドが同じ名前でスーパークラスで定義されてしまっており、別名のメソッド名となっている。<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a>
+  type</li>
+<li>Ruby/Tk では変数のやり取りに TkVariable クラスを使用する</li>
+<li>Tcl/Tk でコマンドを2つ以上使っているメソッド名の違い</li>
+<li>Perl/Tk は Perl5 の機能を知らないと使うのがつらい</li>
+<li>Perl/Tk は Tcl/Tk とは独立したプログラムとなっていて一部 Tix の機能が使える</li>
+<li>Perl/Tk は本が出版されている</li>
+</ul>
+<h2><a name="L009432" id="L009432">Ruby/Tk と Perl/Tk との違い一覧は？</a></h2>
+<pre>what              Perl/Tk                     Ruby/Tk
+variable          $a = 123; or $a = '123';    a = 123 or a = '123'
+ initialization
+re-assignment     $b = $a;                    b = a.dup
+
+lists/arrays      @a = (1,2,'fred',7.8);      a = [1, 2, 'fred', 7.8]
+re-assignment     @b = @a;                    b = a.dup
+
+associative       %a = ('Jan',456.02,         a = {'Jan' =&gt; 456.02, 'Feb' =&gt; 534.96}
+ arrays            'Feb',534.96);
+re-assignment     %b = %a;                    b = a.dup
+
+expressions       $a = $b+$c;                 a = b + c
+
+increment         $i++; or ++$i;              i += 1
+
+declare           sub plus { my($a,$b) = @_;  def plus(a, b)
+ subroutines       $a+$b; }                    return a + b
+                                              end
+
+variable scope    global default              local default
+                   override w/ &quot;my&quot; (or &quot;local&quot;)
+
+call              &amp;plus(1,2); #or             plus(1,2)
+ subroutines       plus(1,2);  #OK after sub plus
+
+statement sep     &quot;;&quot; required                newline or at &quot;;&quot;
+
+statement         none required               none required
+ continuation
+
+verbatim strings  ''                          ''
+ e.g.             'a \ lot@ of $stuff'        'a \ lot@ of $stuff'
+
+escaped strings   &quot;&quot;                          &quot;&quot;
+ e.g.             &quot;Who\nWhat\nIdunno&quot;         &quot;Who\nWhat\nIdunno&quot;
+
+STDOUT            print &quot;Hello World!\n&quot;      print &quot;Hello World!\n&quot;
+                  STDOUT &quot;Hello!\n&quot;           STDOUT.print &quot;Hello World!\n&quot;</pre>
+<h2><a name="L009433" id="L009433">Ruby/Tk と Python Tkinter との違いはどこですか？</a></h2>
+<ul>
+<li>Python Tkinter は定数定義 Tkconstants.py があるが、Ruby/Tk にはない</li>
+<li>Python Tkinter は PMW (Python Mega Widgets) などが整備されている</li>
+<li>Python Tkinter は本が出版されている(英語)</li>
+</ul>
+<h2><a name="L009434" id="L009434">Ruby/Tk と Python Tkinter との違い一覧は？</a></h2>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>変</small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm408.html">UP</a>][<a href="refm417.html">&lt;-PREV</a>][<a href="refm419.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

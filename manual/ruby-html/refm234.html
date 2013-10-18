@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>OpenSSL::PKey::DSA</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm235.html" rel="next" />
+<link href="refm233.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm213.html">UP</a>][<a href="refm233.html">&lt;-PREV</a>][<a href="refm235.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L004648" id="L004648">OpenSSL::PKey::DSA</a></h1>
+<p>簡単な例。data に署名し、署名をもとに data を検証する。</p>
+<pre>require &quot;openssl&quot;
+dsa512 = OpenSSL::PKey::DSA.new(512)
+dss1 = OpenSSL::Digest::DSS1.new
+data = 'hoge'
+sign = dsa512.sign(dss1, data)
+p dsa512.verify(dss1, sign, data)</pre>
+<h2><a name="L004649" id="L004649">スーパークラス:</a></h2>
+<p><a href="refm232.html">OpenSSL::PKey::PKey</a></p>
+<h2><a name="L004650" id="L004650">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L004651" id="L004651"><code>DSA.generate(<var>size</var>)</code></a>
+<dt><a name="L004652" id="L004652"><code>DSA.new(<var>size</var>)</code></a></dt>
+<dd>
+<p>DSA オブジェクトを生成する。size は鍵長。</p></dd>
+<dt><a name="L004653" id="L004653"><code>DSA.new()</code></a>
+<dt><a name="L004654" id="L004654"><code>DSA.new(<var>str</var>)</code></a>
+<dt><a name="L004655" id="L004655"><code>DSA.new(<var>io</var>)</code></a></dt>
+<dd>
+<p>DSA オブジェクトを生成する。</p></dd>
+</dl>
+<h2><a name="L004656" id="L004656">インスタンスメソッド</a></h2>
+<dl>
+<dt><a name="L004657" id="L004657"><code>export</code></a>
+<dt><a name="L004658" id="L004658"><code>to_pem</code></a>
+<dt><a name="L004659" id="L004659"><code>to_s</code></a></dt>
+<dd>
+<p>PEM 形式に変換して返す。</p></dd>
+<dt><a name="L004660" id="L004660"><code>private?</code></a></dt>
+<dd>
+<p>秘密鍵をもっている場合に true を返す。</p></dd>
+<dt><a name="L004661" id="L004661"><code>public?</code></a></dt>
+<dd>
+<p>公開鍵をもっている場合に true を返す。</p></dd>
+<dt><a name="L004662" id="L004662"><code>public_key</code></a></dt>
+<dd>
+<p>公開鍵を返す。</p></dd>
+<dt><a name="L004663" id="L004663"><code>to_der</code></a></dt>
+<dd>
+<p>DER 形式にして返す。</p></dd>
+<dt><a name="L004664" id="L004664"><code>to_text</code></a></dt>
+<dd>
+<p>人間が読める形式にして返す。</p></dd>
+<dt><a name="L004665" id="L004665"><code>sign(<var>digest</var>, <var>data</var>)</code></a></dt>
+<dd>
+<p>data に関して digest を使って署名を作成して文字列として返す。
+digest は OpenSSL::PKey::DSS1 のインスタンス。</p></dd>
+<dt><a name="L004666" id="L004666"><code>verify(<var>digest</var>, <var>sign</var>, <var>data</var>)</code></a></dt>
+<dd>
+<p>digest には DSA の性質から OpenSSL::PKey::DSS1 のインスタンスのみ受け付ける。他は 
+例外 OpenSSL::PKey::PKeyError を投げる。</p></dd>
+<dt><a name="L004667" id="L004667"><code>p</code></a>
+<dt><a name="L004668" id="L004668"><code>p=</code></a>
+<dt><a name="L004669" id="L004669"><code>q</code></a>
+<dt><a name="L004670" id="L004670"><code>q=</code></a>
+<dt><a name="L004671" id="L004671"><code>g</code></a>
+<dt><a name="L004672" id="L004672"><code>g=</code></a>
+<dt><a name="L004673" id="L004673"><code>pub_key</code></a>
+<dt><a name="L004674" id="L004674"><code>pub_key=</code></a>
+<dt><a name="L004675" id="L004675"><code>priv_key</code></a>
+<dt><a name="L004676" id="L004676"><code>priv_key=</code></a></dt>
+<dd>
+<p>パラメータ。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm213.html">UP</a>][<a href="refm233.html">&lt;-PREV</a>][<a href="refm235.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

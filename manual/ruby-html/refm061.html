@@ -1,0 +1,1269 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>String</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm062.html" rel="next" />
+<link href="refm060.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm035.html">UP</a>][<a href="refm060.html">&lt;-PREV</a>][<a href="refm062.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L001445" id="L001445">String</a></h1>
+<p>文字列クラス。任意の長さのバイト列を扱うことができます。</p>
+<p>このクラスのメソッドのうち名前が <code>!</code> で終るものは文字列の中身を
+直接変更します。このような場合は <code>!</code> のついていない同じ名前の
+メソッドを使うほうが概して安全です。たとえば以下のような場合に問題に
+なることがあります。</p>
+<pre>def foo(arg)
+   arg.sub!(/good/, 'bad')
+   arg
+end
+
+s = 'verygoodname'
+p foo(s)  # =&gt; 'verybadname'
+p s       # =&gt; 'verybadname'</pre>
+<p>また日本語文字列を正しく処理するためには組み込み変数 <a href="refm030.html#L000551">$KCODE</a> を
+文字コードにあわせて設定しておく必要があります。
+<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a>
+<a name="footmark:2" id="footmark:2" href="#foottext:2"><sup><small>*2</small></sup></a>
+String クラスは自身をバイト列として扱います。例えば str[1] は str の内
+容がなんであれ 2 バイト目の文字コードを返します。日本語文字列に対して
+(バイト単位でなく)文字単位の処理を行わせたい場合は <a href="refm257.html">jcode</a> を使
+用します。<a name="footmark:3" id="footmark:3" href="#foottext:3"><sup><small>*3</small></sup></a>
+<a name="footmark:4" id="footmark:4" href="#foottext:4"><sup><small>*4</small></sup></a></p>
+<h2><a name="L001446" id="L001446">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm035.html">Object</a></li>
+</ul>
+<h2><a name="L001447" id="L001447">インクルードしているモジュール:</a></h2>
+<ul>
+<li><a href="refm069.html">Comparable</a></li>
+<li><a href="refm070.html">Enumerable</a></li>
+</ul>
+<h2><a name="L001448" id="L001448">メソッド一覧:</a></h2>
+<h3><a name="L001449" id="L001449">クラスメソッド:</a></h3>
+<p><a href="#L001451">String.new</a></p>
+<h3><a name="L001450" id="L001450">インスタンスメソッド:</a></h3>
+<p><a href="#L001453">self + other</a>
+<a href="#L001454">self * times</a>
+<a href="#L001455">self % args</a>
+<a href="#L001456">self == other</a>
+<a href="#L001457">self &gt; other</a>
+<a href="#L001458">self &gt;= other</a>
+<a href="#L001459">self &lt; other</a>
+<a href="#L001460">self &lt;= other</a>
+<a href="#L001461">self &lt;&lt; other</a>
+<a href="#L001463">self =~ regexp</a>
+<a href="#L001464">~ self</a>
+<a href="#L001465">self[nth]</a>
+<a href="#L001466">self[nth, len]</a>
+<a href="#L001467">self[substr]</a>
+<a href="#L001468">self[regexp]</a>
+<a href="#L001469">self[regexp, nth]</a>
+<a href="#L001470">self[first..last]</a>
+<a href="#L001471">self[first...last]</a>
+<a href="#L001472">self[nth]=val</a>
+<a href="#L001473">self[nth, len]=val</a>
+<a href="#L001474">self[substr]=val</a>
+<a href="#L001475">self[regexp]=val</a>
+<a href="#L001476">self[regexp, nth]=val</a>
+<a href="#L001477">self[first..last]=val</a>
+<a href="#L001478">self[first...last]=val</a>
+<a href="#L001479">self &lt;=&gt; other</a>
+<a href="#L001480">capitalize</a>
+<a href="#L001481">capitalize!</a>
+<a href="#L001482">casecmp</a>
+<a href="#L001483">center</a>
+<a href="#L001489">chomp</a>
+<a href="#L001490">chomp!</a>
+<a href="#L001491">chop</a>
+<a href="#L001492">chop!</a>
+<a href="#L001493">clear</a>
+<a href="#L001494">clone</a>
+<a href="#L001462">concat</a>
+<a href="#L001496">count</a>
+<a href="#L001497">crypt</a>
+<a href="#L001498">delete</a>
+<a href="#L001499">delete!</a>
+<a href="#L001500">downcase</a>
+<a href="#L001501">downcase!</a>
+<a href="#L001502">dump</a>
+<a href="#L001495">dup</a>
+<a href="#L001503">each</a>
+<a href="#L001505">each_byte</a>
+<a href="#L001504">each_line</a>
+<a href="#L001506">empty?</a>
+<a href="#L001507">gsub</a>
+<a href="#L001508">gsub!</a>
+<a href="#L001511">hex</a>
+<a href="#L001512">include?</a>
+<a href="#L001513">index</a>
+<a href="#L001514">insert</a>
+<a href="#L001515">intern</a>
+<a href="#L001517">length</a>
+<a href="#L001484">ljust</a>
+<a href="#L001547">lstrip</a>
+<a href="#L001548">lstrip!</a>
+<a href="#L001519">match</a>
+<a href="#L001521">next</a>
+<a href="#L001522">next!</a>
+<a href="#L001525">oct</a>
+<a href="#L001526">replace</a>
+<a href="#L001527">reverse</a>
+<a href="#L001528">reverse!</a>
+<a href="#L001529">rindex</a>
+<a href="#L001485">rjust</a>
+<a href="#L001549">rstrip</a>
+<a href="#L001550">rstrip!</a>
+<a href="#L001530">scan</a>
+<a href="#L001518">size</a>
+<a href="#L001532">slice</a>
+<a href="#L001537">slice!</a>
+<a href="#L001542">split</a>
+<a href="#L001543">squeeze</a>
+<a href="#L001544">squeeze!</a>
+<a href="#L001545">strip</a>
+<a href="#L001546">strip!</a>
+<a href="#L001551">sub</a>
+<a href="#L001552">sub!</a>
+<a href="#L001523">succ</a>
+<a href="#L001524">succ!</a>
+<a href="#L001555">sum</a>
+<a href="#L001556">swapcase</a>
+<a href="#L001557">swapcase!</a>
+<a href="#L001558">to_f</a>
+<a href="#L001559">to_i</a>
+<a href="#L001561">to_s</a>
+<a href="#L001562">to_str</a>
+<a href="#L001516">to_sym</a>
+<a href="#L001563">tr</a>
+<a href="#L001564">tr!</a>
+<a href="#L001565">tr_s</a>
+<a href="#L001566">tr_s!</a>
+<a href="#L001567">unpack</a>
+<a href="#L001568">upcase</a>
+<a href="#L001569">upcase!</a>
+<a href="#L001570">upto</a></p>
+<h2><a name="L001449" id="L001449">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L001451" id="L001451"><code>String.new([<var>string</var>])</code></a></dt>
+<dd>
+<p><var>string</var> と同じ内容の新しい文字列を作成して返します。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>: 引数を省略した場合は空文字列を
+生成して返します。</p></dd>
+</dl>
+<h2><a name="L001452" id="L001452">メソッド:</a></h2>
+<dl>
+<dt><a name="L001453" id="L001453"><code><var>self</var> + <var>other</var></code></a></dt>
+<dd>
+<p>文字列を連結した新しい文字列を返します。</p>
+<p>例:</p>
+<pre>str0 = &quot;abc&quot;
+str1 = &quot;def&quot;
+p str0 + str1  #=&gt; &quot;abcdef&quot;
+p str0         #=&gt; &quot;abc&quot;  (変化なし)
+p str1         #=&gt; &quot;def&quot;</pre></dd>
+<dt><a name="L001454" id="L001454"><code><var>self</var> * <var>times</var></code></a></dt>
+<dd>
+<p>文字列の内容を <var>times</var> 回だけ繰り返した新しい文字列を作成して
+返します。</p>
+<p>例:</p>
+<pre>str = &quot;abc&quot;
+p str * 4   #=&gt; &quot;abcabcabcabc&quot;
+p str       #=&gt; &quot;abc&quot;  (変化なし)</pre></dd>
+<dt><a name="L001455" id="L001455"><code><var>self</var> % <var>args</var></code></a></dt>
+<dd>
+<p>文字列のフォーマット。引数をフォーマット文字列(<code>self</code>)で書式化
+した文字列を返します。</p>
+<p><var>args</var> が配列であれば</p>
+<pre>sprintf(self, *args)</pre>
+<p>と同じです。それ以外の場合は、</p>
+<pre>sprintf(self, args)</pre>
+<p>と同じです。詳細は <a href="refm452.html">sprintfフォーマット</a>を参照してください。</p>
+<pre>p &quot;%#x&quot;     % 10        # =&gt; &quot;0xa&quot;
+p &quot;%#x,%#o&quot; % [10, 10]  # =&gt; &quot;0xa,012&quot;</pre></dd>
+<dt><a name="L001456" id="L001456"><code><var>self</var> == <var>other</var></code></a>
+<dt><a name="L001457" id="L001457"><code><var>self</var> &gt; <var>other</var></code></a>
+<dt><a name="L001458" id="L001458"><code><var>self</var> &gt;= <var>other</var></code></a>
+<dt><a name="L001459" id="L001459"><code><var>self</var> &lt; <var>other</var></code></a>
+<dt><a name="L001460" id="L001460"><code><var>self</var> &lt;= <var>other</var></code></a></dt>
+<dd>
+<p>文字列の比較。変数 <a href="refm030.html#L000527">$=</a> の値が真である時、比較はア
+ルファベットの大文字小文字を無視して行われます。
+(<code>$=</code>変数はいずれ廃止されることになっています <a href="refm393.html">obsolete</a> 
+を参照)</p></dd>
+<dt><a name="L001461" id="L001461"><code><var>self</var> &lt;&lt; <var>other</var></code></a>
+<dt><a name="L001462" id="L001462"><code>concat(<var>other</var>)</code></a></dt>
+<dd>
+<p>文字列 <var>other</var> の内容を <code>self</code> に連結します(<code>self</code> の内容が変更されます)。
+<var>other</var> が 0 から 255 の範囲の <a href="refm055.html">Fixnum</a> である場合は
+その 1 バイトを末尾に追加します。</p>
+<p><code>self</code> を返します。</p></dd>
+<dt><a name="L001463" id="L001463"><code><var>self</var> =~ <var>regexp</var></code></a></dt>
+<dd>
+<p>正規表現 <var>regexp</var> とのマッチを行います。マッチが成功すればマッ
+チした位置のインデックスを、そうでなければ <code>nil</code> を返します。</p>
+<p>組み込み変数 <a href="refm030.html#L000514">$~</a>, <a href="refm030.html#L000518">$1</a>, ...  にマッチに関する情報が設定され
+ます。</p>
+<p><var>other</var> が正規表現でも文字列でもない場合は</p>
+<pre>other =~ self</pre>
+<p>を行います。</p>
+<p><a href="refm385.html">ruby 1.8 feature</a>:
+以前までは、<var>other</var> が文字列であった場合にはこれを正規表現にコ
+ンパイルして <code>self</code> に対するマッチを行っていました。1.8 以降は、
+<var>other</var> に文字列を指定したときには例外 <a href="refm111.html">TypeError</a> が発生
+します。</p></dd>
+<dt><a name="L001464" id="L001464"><code>~ <var>self</var></code></a></dt>
+<dd>
+<p><a href="refm385.html">ruby 1.8 feature</a>:
+このメソッドは削除されました。代わりに、<a href="refm060.html#L001432">Regexp#~</a> な
+どを使用してください。</p>
+<p><code>self</code> を正規表現にコンパイルして、組み込み変数 <code>$_</code> に対して
+マッチを行いマッチした位置のインデックスを返します。
+<code>$_ =~ Regexp.compile(self)</code> と同じです。</p>
+<p><code>$_</code> が文字列でなければ <code>nil</code> を返します。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>:</p>
+<pre>$_ =~ Regexp.compile(Regexp.quote(self))</pre>
+<p>と同じです。</p></dd>
+<dt><a name="L001465" id="L001465"><code>self[nth]</code></a></dt>
+<dd>
+<p><var>nth</var> 番目のバイトを整数(文字コード)で返します(逆に文字コード
+から文字列を得るには <a href="refm053.html#L001309">Integer#chr</a> を使います)。
+<var>nth</var> が負の場合は文字列の末尾から数えます。</p>
+<p><var>nth</var> が範囲外を指す場合は <code>nil</code> を返します。</p>
+<p>例:</p>
+<pre>p 'bar'[2]        # =&gt; 114
+p 'bar'[2] == ?r  # =&gt; true
+p 'bar'[-1]       # =&gt; 114
+
+p 'bar'[3]        # =&gt; nil
+p 'bar'[-4]       # =&gt; nil</pre></dd>
+<dt><a name="L001466" id="L001466"><code>self[nth, <var>len</var>]</code></a></dt>
+<dd>
+<p><var>nth</var> バイト番目から長さ <var>len</var> バイトの部分文字列を新しく作って返しま
+す。<var>nth</var> が負の場合は文字列の末尾から数えます。</p>
+<p><var>nth</var> が範囲外を指す場合は <code>nil</code> を返します。</p>
+<p>例:</p>
+<pre>str0 = &quot;bar&quot;
+p str0[2, 1]         #=&gt; &quot;r&quot;
+p str0[2, 0]         #=&gt; &quot;&quot;
+p str0[2, 100]       #=&gt; &quot;r&quot;  (右側を超えても平気)
+p str0[2, 1] == ?r   #=&gt; false  (左辺は長さ1の文字列、右辺は整数の文字コード)
+p str0[-1, 1]        #=&gt; &quot;r&quot;
+p str0[-1, 2]        #=&gt; &quot;r&quot; (飽くまでも「右に向かって ((|len|)) バイト」)
+
+p str0[3, 1]         #=&gt; nil
+p str0[-4, 1]        #=&gt; nil
+str1 = str[0, 2]     # (str0の「一部」をstr1とする)
+p str1               #=&gt; &quot;ba&quot;
+str1[0] = &quot;XYZ&quot;
+p str1               #=&gt; &quot;XYZa&quot; (str1の内容が破壊的に変更された)
+p str0               #=&gt; &quot;bar&quot; (str0は無傷、str1はstr0と内容を共有していない)</pre></dd>
+<dt><a name="L001467" id="L001467"><code>self[substr]</code></a></dt>
+<dd>
+<p><code>self</code> が <var>substr</var> を含む場合、一致した文字列を新しく作って返します。
+<var>substr</var> を含まなければ <code>nil</code> を返します。</p>
+<pre>substr = &quot;bar&quot;
+result = &quot;foobar&quot;[substr]
+p result                  # =&gt; &quot;bar&quot;
+p substr.equal? result    # =&gt; true (ruby 1.7 feature:1.7.2 以降は false)</pre></dd>
+<dt><a name="L001468" id="L001468"><code>self[regexp]</code></a>
+<dt><a name="L001469" id="L001469"><code>self[regexp, <var>nth</var>]   ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p><var>regexp</var> にマッチする最初の部分文字列を返します。組み込み変数 
+<a href="refm030.html#L000514">$~</a> にマッチに関する情報が設定されます。</p>
+<p><var>regexp</var> にマッチしない場合 <code>nil</code> を返します。</p>
+<pre>p &quot;foobar&quot;[/bar/]  # =&gt; &quot;bar&quot;
+p $~.begin(0)      # =&gt; 3</pre>
+<p><a href="refm384.html">ruby 1.7 feature</a>:
+引数 <var>nth</var> を指定した場合は、<var>regexp</var> の、<var>nth</var> 番目の
+括弧にマッチする最初の部分文字列を返します。<var>nth</var> が 0 の場合
+は、マッチした部分文字列全体を返します。マッチしなかった場合や 
+<var>nth</var> に対応する括弧がなければ <code>nil</code> を返します。</p>
+<pre>p &quot;foobar&quot;[/bar/]   # =&gt; &quot;bar&quot;
+p $~.begin(0)       # =&gt; 3
+
+p &quot;def getcnt(line)&quot;[ /def\s*(\w+)/, 1 ]   # =&gt; &quot;getcnt&quot;</pre></dd>
+<dt><a name="L001470" id="L001470"><code>self[first..last]</code></a></dt>
+<dd>
+<p>インデックス <var>first</var> から <var>last</var> までのバイトを含む
+新しい文字列を作成して返します。</p>
+<pre>.
+  0   1   2   3   4   5   (インデックス)
+ -6  -5  -4  -3  -2  -1   (負のインデックス)
+| a | b | c | d | e | f |
+|&lt;---------&gt;|                'abcdef'[0..2]  # =&gt; 'abc'
+                |&lt;-----&gt;|    'abcdef'[4..5]  # =&gt; 'ef'
+        |&lt;---------&gt;|        'abcdef'[2..4]  # =&gt; 'cde'</pre>
+<p><var>last</var> が文字列の長さ以上のときは(文字列の長さ - 1)を指定
+したものとみなされます。</p>
+<p><var>first</var> が 0 より小さいか文字列の長さより大きいとき、
+および <code>first &gt; last + 1</code> であるときは <code>nil</code> を
+返します。ただし <var>first</var> および <var>last</var> のどちらか
+または両方が負の数のときは一度だけ文字列の長さを足して
+再試行します。</p>
+<p>例:</p>
+<pre>'abcd'[ 2 ..  1] # =&gt; &quot;&quot;
+'abcd'[ 2 ..  2] # =&gt; &quot;c&quot;
+'abcd'[ 2 ..  3] # =&gt; &quot;cd&quot;
+'abcd'[ 2 ..  4] # =&gt; &quot;cd&quot;
+
+'abcd'[ 2 .. -1] # =&gt; &quot;cd&quot;   # str[f..-1] は「f 文字目から
+'abcd'[ 2 .. -2] # =&gt; &quot;c&quot;    # 文字列の最後まで」を表す慣用句
+
+'abcd'[ 1 ..  2] # =&gt; &quot;bc&quot;
+'abcd'[ 2 ..  2] # =&gt;  &quot;c&quot;
+'abcd'[ 3 ..  2] # =&gt;   &quot;&quot;
+'abcd'[ 4 ..  2] # =&gt;  nil
+
+'abcd'[-3 ..  2] # =&gt;  &quot;bc&quot;
+'abcd'[-4 ..  2] # =&gt; &quot;abc&quot;
+'abcd'[-5 ..  2] # =&gt;  nil</pre></dd>
+<dt><a name="L001471" id="L001471"><code>self[first...last]</code></a></dt>
+<dd>
+<p>文字列先頭を 0 番目の隙間、末尾を self.length 番目の隙間として、
+<var>first</var> 番目の隙間から <var>last</var> 番目の隙間までに含まれる
+バイト列を含んだ新しい文字列を作成して返します。</p>
+<pre>文字列と「隙間」の模式図
+
+ 0   1   2   3   4   5   6  (隙間番号)
+-6  -5  -4  -3  -2  -1      (負の隙間番号)
+ | a | b | c | d | e | f |
+ |&lt;---------&gt;|                'abcdef'[0...3]  # =&gt; 'abc'
+                 |&lt;-----&gt;|    'abcdef'[4...6]  # =&gt; 'ef'
+         |&lt;---------&gt;|        'abcdef'[2...5]  # =&gt; 'cde'</pre>
+<p><var>last</var> が文字列の長さよりも大きいときは文字列の長さを
+指定したものとみなされます。</p>
+<p><code>first</code> が 0 より小さいか文字列の長さより大きいとき、
+および <code>first &gt; last</code> であるときは <code>nil</code> を返します。
+ただし <var>first</var> と <var>last</var> のどちらかまたは両方が負の数
+であるときは一度だけ文字列の長さを足して再試行します。</p>
+<p>例:</p>
+<pre>'abcd'[ 2 ... 3] # =&gt; &quot;c&quot;
+'abcd'[ 2 ... 4] # =&gt; &quot;cd&quot;
+'abcd'[ 2 ... 5] # =&gt; &quot;cd&quot;
+
+'abcd'[ 1 ... 2] # =&gt; &quot;b&quot;
+'abcd'[ 2 ... 2] # =&gt; &quot;&quot;
+'abcd'[ 3 ... 2] # =&gt; nil
+
+'abcd'[-3 ... 2] # =&gt; &quot;b&quot;
+'abcd'[-4 ... 2] # =&gt; &quot;ab&quot;
+'abcd'[-5 ... 2] # =&gt; nil</pre></dd>
+<dt><a name="L001472" id="L001472"><code>self[nth]=val</code></a></dt>
+<dd>
+<p><var>nth</var> 番目のバイトを文字列 <var>val</var> で置き換えます。
+<var>val</var> が 0 から 255 の範囲の整数である場合、文字コード
+とみなしてその文字で置き換えます。</p>
+<p><var>val</var> を返します。</p></dd>
+<dt><a name="L001473" id="L001473"><code>self[nth, <var>len</var>]=<var>val</var></code></a></dt>
+<dd>
+<p><var>nth</var> バイト番目から長さ <var>len</var> バイトの部分文字
+列を文字列 <var>val</var> で置き換えます。<var>nth</var> が負の場
+合は文字列の末尾から数えます。</p>
+<p><var>val</var> を返します。</p></dd>
+<dt><a name="L001474" id="L001474"><code>self[substr]=val</code></a></dt>
+<dd>
+<p>文字列中の <var>substr</var> に一致する最初の部分文字列を文字列
+<var>val</var> で置き換えます。</p>
+<p><code>self</code> が <var>substr</var> を含まない場合、例外 <a href="refm095.html">IndexError</a> 
+が発生します。</p>
+<p><var>val</var> を返します。</p></dd>
+<dt><a name="L001475" id="L001475"><code>self[regexp]=val</code></a>
+<dt><a name="L001476" id="L001476"><code>self[regexp, <var>nth</var>]=<var>val</var>       ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>正規表現 <var>regexp</var> にマッチする最初の部分文字列を文字列 
+<var>val</var> で置き換えます。</p>
+<p>正規表現がマッチしなければ例外 <a href="refm095.html">IndexError</a> が発生します。</p>
+<p><var>val</var> を返します。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>:
+引数 <var>nth</var> を指定した場合は、正規表現 <var>regexp</var> の 
+<var>nth</var> 番目の括弧にマッチする最初の部分文字列を文字列 <var>val</var> 
+で置き換えます。<var>nth</var> が 0 の場合は、マッチした部分文字列全体
+を <var>val</var> で置き換えます。</p>
+<p>正規表現がマッチしない場合や <var>nth</var> に対応する括弧が
+なければ例外 <a href="refm095.html">IndexError</a> が発生します。</p></dd>
+<dt><a name="L001477" id="L001477"><code>self[first..last]=val</code></a>
+<dt><a name="L001478" id="L001478"><code>self[first...last]=val</code></a></dt>
+<dd>
+<p><var>first</var> から <var>last</var> までの部分文字列を文字列 <var>val</var> で
+置き換えます。</p>
+<p><var>val</var> を返します。</p></dd>
+<dt><a name="L001479" id="L001479"><code><var>self</var> &lt;=&gt; <var>other</var></code></a></dt>
+<dd>
+<p><code>self</code> と <var>other</var> を ASCII コード順で比較して、<code>self</code> 
+が大きい時に正、等しい時に 0、小さい時に負の整数を返します。</p>
+<p>変数 <a href="refm030.html#L000527">$=</a> の値が真である時、比較は常にアルファベッ
+トの大文字小文字を無視して行われます。
+(<code>$=</code>変数はいずれ廃止されることになっています <a href="refm393.html">obsolete</a> 
+を参照)</p>
+<p><a href="refm385.html">ruby 1.8 feature</a>:</p>
+<p><var>other</var> が文字列でない場合、<var>other</var>.to_str と 
+<var>other</var>.&lt;=&gt; が定義されていれば <code>0 - (other &lt;=&gt; self)</code> の結
+果を返します。そうでなければ nil を返します。</p></dd>
+<dt><a name="L001480" id="L001480"><code>capitalize</code></a>
+<dt><a name="L001481" id="L001481"><code>capitalize!</code></a></dt>
+<dd>
+<p>先頭の文字を(アルファベットであれば)大文字に、残りを小文字に変更します。</p>
+<p><code>capitalize</code> は変更後の文字列を生成して返します。
+<code>capitalize!</code> は <code>self</code> を変更して返しますが、変更が起こら
+なかった場合は <code>nil</code> を返します。</p>
+<pre>p &quot;foobar&quot;.capitalize   # =&gt; &quot;Foobar&quot;</pre>
+<p><code>$KCODE</code> が適切に設定されていなければ、漢字コードの一部も変換
+してしまいます(これは、ShiftJIS コードで起こり得ます)。
+逆に、<code>$KCODE</code> を設定してもマルチバイト文字のアルファベット
+は処理しません。</p>
+<pre># -*- Coding: shift_jis -*-
+$KCODE ='n'
+puts &quot;帰&quot;.capitalize # =&gt; 蟻</pre>
+<p><a href="#L001568">upcase</a>, <a href="#L001500">downcase</a>, <a href="#L001556">swapcase</a> 
+も参照してください。</p></dd>
+<dt><a name="L001482" id="L001482"><code>casecmp(<var>other</var>)   ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p><a href="#L001479">String#&lt;=&gt;</a> と同様に文字列の順序を比較しますが、アル
+ファベットの大文字小文字の違いを無視します。</p>
+<p>このメソッドの動作は <a href="refm030.html#L000527">$=</a> には影響されません。</p>
+<pre>p 'a' &lt;=&gt; 'A'      #=&gt; 1
+p 'a'.casecmp('A') #=&gt; 0</pre></dd>
+<dt><a name="L001483" id="L001483"><code>center(<var>width</var>)</code></a>
+<dt><a name="L001484" id="L001484"><code>ljust(<var>width</var>)</code></a>
+<dt><a name="L001485" id="L001485"><code>rjust(<var>width</var>)</code></a>
+<dt><a name="L001486" id="L001486"><code>center(<var>width</var>[, <var>padding</var>])    ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a>
+<dt><a name="L001487" id="L001487"><code>ljust(<var>width</var>[, <var>padding</var>])     ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a>
+<dt><a name="L001488" id="L001488"><code>rjust(<var>width</var>[, <var>padding</var>])     ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>それぞれ中央寄せ、左詰め、右詰めした文字列を返します。</p>
+<pre>p &quot;foo&quot;.center(10)      # =&gt; &quot;   foo    &quot;
+p &quot;foo&quot;.ljust(10)       # =&gt; &quot;foo       &quot;
+p &quot;foo&quot;.rjust(10)       # =&gt; &quot;       foo&quot;</pre>
+<p>文字列の長さが <var>width</var> より長い時には元の文字列の複製を返しま
+す。</p>
+<pre>s = &quot;foo&quot;
+p s.center(1).object_id == s.object_id   # =&gt; false</pre>
+<p><a href="refm385.html">ruby 1.8 feature</a>:
+第二引数 <var>padding</var> を指定すると空白の代わりに <var>padding</var> を
+詰めます。</p>
+<pre>p &quot;foo&quot;.center(10,&quot;*&quot;)      # =&gt; &quot;***foo****&quot;
+p &quot;foo&quot;.ljust(10,&quot;*&quot;)       # =&gt; &quot;foo*******&quot;
+p &quot;foo&quot;.rjust(10,&quot;*&quot;)       # =&gt; &quot;*******foo&quot;</pre></dd>
+<dt><a name="L001489" id="L001489"><code>chomp([<var>rs</var>])</code></a>
+<dt><a name="L001490" id="L001490"><code>chomp!([<var>rs</var>])</code></a></dt>
+<dd>
+<p>文字列の末尾から <var>rs</var> で指定する行区切りを取り除きます。
+<var>rs</var>のデフォルト値は変数<a href="refm030.html#L000528">$/</a>の値です。</p>
+<p><var>rs</var> に <code>nil</code> を指定した場合、このメソッドは何もしません。
+<var>rs</var>が空文字列(パラグラフモード)の場合、末尾の連続する改行はす
+べて取り除かれます。</p>
+<p><code>chomp</code> は改行を取り除いた文字列を生成して返します。
+<code>chomp!</code> は <code>self</code> を変更して返しますが、取り除く改行が
+なかった場合は <code>nil</code> を返します。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>:
+<var>rs</var> が &quot;\n&quot;(デフォルト)のとき、システムによらず &quot;\r&quot;, &quot;\r\n&quot;,
+&quot;\n&quot; のいずれでも行区切りの文字とみなして取り除きます。</p>
+<pre>p &quot;foo\r&quot;.chomp    # =&gt; &quot;foo&quot;
+p &quot;foo\r\n&quot;.chomp  # =&gt; &quot;foo&quot;
+p &quot;foo\n&quot;.chomp    # =&gt; &quot;foo&quot;
+p &quot;foo\n\r&quot;.chomp  # =&gt; &quot;foo\n&quot;</pre></dd>
+<dt><a name="L001491" id="L001491"><code>chop</code></a>
+<dt><a name="L001492" id="L001492"><code>chop!</code></a></dt>
+<dd>
+<p>文字列の最後の文字を取り除きます(終端が&quot;\r\n&quot;であれば2文字取
+り除きます)。</p>
+<p><code>chop</code> は最後の文字を取り除いた文字列を生成して返します。
+<code>chop!</code> は <code>self</code> を変更して返しますが、取り除く文字がなかった
+場合は <code>nil</code> を返します。</p></dd>
+<dt><a name="L001493" id="L001493"><code>clear ((&lt;<var>ruby</var> <var>1</var>.<var>9</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>文字列の内容を削除して空にします。
+self を返します。</p>
+<pre>str = &quot;abc&quot;
+str.clear
+p str     #=&gt; &quot;&quot;</pre></dd>
+<dt><a name="L001494" id="L001494"><code>clone</code></a>
+<dt><a name="L001495" id="L001495"><code>dup</code></a></dt>
+<dd>
+<p>文字列と同じ内容を持つ新しい文字列を返します。フリーズ <a href="refm035.html#L000658">Object#freeze</a> した文字列の
+<code>clone</code> はフリーズされた文字列を返しますが、<code>dup</code> は内容の
+等しいフリーズされていない文字列を返します。
+すなわち <code>dup</code> と <a href="#L001451">String#new</a> は等価です。</p></dd>
+<dt><a name="L001496" id="L001496"><code>count(<var>str</var>[, <var>str2</var>[,  ... ]])</code></a></dt>
+<dd>
+<p>文字列中の文字の数を返します。</p>
+<p>検索する文字を示す引数 <var>str</var> の形式は <a href="refm535.html">tr(1)</a> と同じです。つまり、
+`<code>a-c</code>' は <code>a</code> から <code>c</code> を意味し、<code>&quot;^0-9&quot;</code> のように
+文字列の先頭が `<code>^</code>' の場合は指定文字以外を意味します。</p>
+<p>`<code>-</code>' は文字列の両端にない場合にだけ範囲指定の意味になります。
+同様に、`<code>^</code>' もその効果は文字列の先頭にあるときだけです。また、
+`<code>-</code>', `<code>^</code>', `<code>\</code>' はバックスラッシュ(`<code>\</code>')によ
+りエスケープすることができます。</p>
+<p>引数を複数指定した場合は、すべての引数の積集合を意味します。</p>
+<pre>p 'abcdefg'.count('c')               # =&gt; 1
+p '123456789'.count('2378')          # =&gt; 4
+p '123456789'.count('2-8', '^4-6')   # =&gt; 4</pre>
+<p>以下はこのメソッドの典型的な使用例で、ファイルの行数を返します</p>
+<pre>n_lines = File.open(&quot;foo&quot;).read.count(&quot;\n&quot;)</pre>
+<p>上記では、ファイルの末尾に改行がない場合に行としてカウントされません。これを補うには以下のようにするとよいでしょう。</p>
+<pre>buf = File.open(&quot;foo&quot;).read
+n_lines = buf.count(&quot;\n&quot;)
+n_lines += 1 if /[^\n]\z/ =~ buf # if /\n\z/ !~ buf だと空ファイルを1行として数えるのでダメ</pre></dd>
+<dt><a name="L001497" id="L001497"><code>crypt(<var>salt</var>)</code></a></dt>
+<dd>
+<p><code>self</code> と <var>salt</var> から暗号化された文字列を生成して返します。
+<var>salt</var> には英数字、ドット(.)、スラッシュ(/)から構成される、
+2 バイト以上の文字列を指定します。</p>
+<p><var>salt</var> には、以下の様になるべくランダムな文字列を選ぶべきです。
+<a name="footmark:5" id="footmark:5" href="#foottext:5"><sup><small>*5</small></sup></a></p>
+<pre>salt = [rand(64),rand(64)].pack(&quot;C*&quot;).tr(&quot;\x00-\x3f&quot;,&quot;A-Za-z0-9./&quot;)
+passwd.crypt(salt)</pre>
+<p>暗号化された文字列から暗号化前の文字列 (<code>self</code>) を求めることは
+一般に<em>難しい</em>とされ、<code>self</code> を知っている者のみが同じ暗号化
+された文字列を生成できます。このことから <code>self</code> を知っているか
+どうかの認証に使うことが出来ます。</p>
+<p>例えば UNIX パスワードの認証は以下のようにして行われます。
+(この例は Etc.getpwnam で暗号化文字列が得られることを仮定しています)。</p>
+<pre>require 'etc'
+
+user = &quot;foo&quot;
+passwd = &quot;bar&quot;
+
+ent = Etc.getpwnam(user)
+p passwd.crypt(ent.passwd) == ent.passwd</pre>
+<p><em>注意</em>:</p>
+<ul>
+<li>crypt の処理は <a href="refm535.html">crypt(3)</a> の実装に依存しています。
+      従って、crypt で処理される内容の詳細や salt の与え方については、
+      利用環境の <a href="refm535.html">crypt(3)</a> 等を見て確認してください。</li>
+<li>crypt の結果は利用環境が異なると変わる場合があります。
+      crypt の結果を、異なる利用環境を通して使用する場合には注意
+      して下さい。</li>
+<li>典型的な DES を使用した <a href="refm535.html">crypt(3)</a> の場合、
+      self の最初の 8 バイト、salt の最初の 2 バイトだけが使用されます。</li>
+</ul></dd>
+<dt><a name="L001498" id="L001498"><code>delete(<var>str</var>[, <var>str2</var>[,  ... ]])</code></a>
+<dt><a name="L001499" id="L001499"><code>delete!(<var>str</var>[, <var>str2</var>[,  ... ]])</code></a></dt>
+<dd>
+<p>文字列から <var>str</var> に含まれる文字を取り除きます。</p>
+<p><var>str</var> の形式は <a href="refm535.html">tr(1)</a> と同じです。つまり、
+`<code>a-c</code>' は <code>a</code> から <code>c</code> を意味し、<code>&quot;^0-9&quot;</code> のように
+文字列の先頭が `<code>^</code>' の場合は指定文字以外を意味します。</p>
+<p>`<code>-</code>' は文字列の両端にない場合にだけ範囲指定の意味になります。
+同様に、`<code>^</code>' もその効果は文字列の先頭にあるときだけです。また、
+`<code>-</code>', `<code>^</code>', `<code>\</code>' はバックスラッシュ(`<code>\</code>')によ
+りエスケープすることができます。</p>
+<p>引数を複数指定した場合は、すべての引数の積集合を意味します。</p>
+<pre>p &quot;123456789&quot;.delete(&quot;2-8&quot;, &quot;^4-6&quot;)  #=&gt; &quot;14569&quot;
+p &quot;123456789&quot;.delete(&quot;2378&quot;)         #=&gt; &quot;14569&quot;</pre>
+<p><code>delete</code> は変更後の文字列を生成して返します。
+<code>delete!</code> は <code>self</code> を変更して返しますが、変更が起こら
+なかった場合は <code>nil</code> を返します。</p></dd>
+<dt><a name="L001500" id="L001500"><code>downcase</code></a>
+<dt><a name="L001501" id="L001501"><code>downcase!</code></a></dt>
+<dd>
+<p>文字列中のアルファベット大文字をすべて小文字に置き換えます。</p>
+<p><code>downcase</code> は変更後の文字列を生成して返します。
+<code>downcase!</code> は <code>self</code> を変更して返しますが、置換が起こら
+なかった場合は <code>nil</code> を返します。</p>
+<p><code>$KCODE</code> が適切に設定されていなければ、漢字コードの一部も変換
+してしまいます(これは、ShiftJIS コードで起こり得ます)。
+逆に、<code>$KCODE</code> を設定してもマルチバイト文字のアルファベット
+は処理しません。</p>
+<pre># -*- Coding: shift_jis -*-
+$KCODE ='n'
+puts &quot;帰&quot;.downcase # =&gt; 蟻</pre>
+<p><a href="#L001568">upcase</a>, <a href="#L001556">swapcase</a>,
+<a href="#L001480">capitalize</a> も参照してください。</p></dd>
+<dt><a name="L001502" id="L001502"><code>dump</code></a></dt>
+<dd>
+<p>文字列中の非表示文字をバックスラッシュ記法に置き換えた文字列を
+返します。<code>str == eval(str.dump)</code> となることが保証されています。</p>
+<pre>puts &quot;abc\r\n\f\x00\b10\\\&quot;&quot;.dump  #=&gt; &quot;abc\r\n\f\000\01010\\\&quot;&quot;</pre></dd>
+<dt><a name="L001503" id="L001503"><code>each([<var>rs</var>]) {|<var>line</var>| ... }</code></a>
+<dt><a name="L001504" id="L001504"><code>each_line([<var>rs</var>]) {|<var>line</var>| ... }</code></a></dt>
+<dd>
+<p>文字列中の各行に対して繰り返します。行の区切りは <var>rs</var> に指定
+した文字列で、そのデフォルトは変数 <a href="refm030.html#L000528">$/</a> の値です。
+各 <var>line</var> には区切りの文字列も含みます。</p>
+<p><var>rs</var> に <code>nil</code> を指定すると行区切りなしとみなします。
+空文字列 <code>&quot;&quot;</code> を指定すると連続する改行を行の区切りとみなします
+(パラグラフモード)。</p>
+<p><code>self</code> を返します。</p></dd>
+<dt><a name="L001505" id="L001505"><code>each_byte {|<var>byte</var>| ... }</code></a></dt>
+<dd>
+<p>文字列の各バイトに対して繰り返します。</p>
+<p><code>self</code> を返します。</p>
+<p><a href="#L001567">unpack</a>も参照してください。unpack('C*')でバイト単位の配列を取得できます。</p></dd>
+<dt><a name="L001506" id="L001506"><code>empty?</code></a></dt>
+<dd>
+<p>文字列が空(つまり長さ 0)の時、真を返します。</p></dd>
+<dt><a name="L001507" id="L001507"><code>gsub(<var>pattern</var>, <var>replace</var>)</code></a>
+<dt><a name="L001508" id="L001508"><code>gsub!(<var>pattern</var>, <var>replace</var>)</code></a>
+<dt><a name="L001509" id="L001509"><code>gsub(<var>pattern</var>) {|<var>matched</var>| .... }</code></a>
+<dt><a name="L001510" id="L001510"><code>gsub!(<var>pattern</var>) {|<var>matched</var>| .... }</code></a></dt>
+<dd>
+<p>文字列中で <var>pattern</var> にマッチする部分<em>全て</em>を <var>replace</var> で
+置き換えます。置換文字列 <var>replace</var> 中の <code>\&amp;</code> と
+<code>\0</code> はマッチした部分文字列に、<code>\1 ... \9</code> は n 番
+目の括弧の内容に置き換えられます。置換文字列内では <code>\`</code>、
+<code>\'</code>、<code>\+</code> も使えます。これらは <a href="refm030.html#L000515">$`</a>、
+<a href="refm030.html#L000516">$'</a>、<a href="refm030.html#L000517">$+</a> に対応します。</p>
+<pre>p 'abcabc'.gsub(/b/, '(\&amp;)')   #=&gt; &quot;a(b)ca(b)c&quot;</pre>
+<p>引数 <var>replace</var> を省略した時にはイテレータとして動作し、
+ブロックを評価した結果で置換を行います。ブロックには引数として
+マッチした部分文字列が渡されます。
+またブロックなしの場合と違い、ブロックの中からは組み込み変数 
+<a href="refm030.html">$&lt;digits&gt;</a> を参照できます。</p>
+<pre>p 'abcabc'.gsub(/b/) {|s| s.upcase }  #=&gt; &quot;aBcaBc&quot;
+p 'abcabc'.gsub(/b/) { $&amp;.upcase }    #=&gt; &quot;aBcaBc&quot;</pre>
+<p><code>gsub</code> は置換後の文字列を生成して返します。
+<code>gsub!</code> は <code>self</code> を変更して返しますが、置換が起こらなかっ
+た場合は <code>nil</code> を返します。</p>
+<pre>p 'abcdefg'.gsub(/cd/, 'CD')   #=&gt; &quot;abCDefg&quot;
+
+str = 'abcdefg'
+str.gsub!(/cd/, 'CD')
+p str                          #=&gt; &quot;abCDefg&quot;
+
+p 'abbbxabx'.gsub(/a(b+)/, '\1')   #=&gt; &quot;bbbxbx&quot;</pre>
+<p><em>注意</em>: 引数 <var>replace</var> の中で <a href="refm030.html#L000518">$&lt;digits&gt;</a> 
+を使うことはできません。この文字列が評価される時点ではまだマッチが
+行われていないからです。また <var>replace</var> は <code>\</code> を 2 重にエ
+スケープしなければなりません(<a href="refm424.html">trap::\の影響</a>参照)。</p>
+<pre># 第二引数の指定でよくある間違い
+p 'abbbcd'.gsub(/a(b+)/, &quot;#{$1}&quot;)       # これは間違い
+p 'abbbcd'.gsub(/a(b+)/, &quot;\1&quot;)          # これも間違い
+p 'abbbcd'.gsub(/a(b+)/, &quot;\\1&quot;)         # これは正解
+p 'abbbcd'.gsub(/a(b+)/, '\1')          # これも正解
+p 'abbbcd'.gsub(/a(b+)/, '\\1')         # これも正解(より安全)
+p 'abbbcd'.gsub(/a(b+)/) { $1 }         # これも正解(もっとも安全)</pre>
+<p><a href="#L001551">sub</a> も参照してください。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>: 1.6 以前は、<var>pattern</var> が文字列の場合、
+その文字列を正規表現にコンパイルしていました。1.7 以降は、その文字
+列そのものがパターンになります。</p></dd>
+<dt><a name="L001511" id="L001511"><code>hex</code></a></dt>
+<dd>
+<p>文字列を 16 進数表現と解釈して、整数に変換します。</p>
+<pre>p &quot;10&quot;.hex    # =&gt; 16
+p &quot;ff&quot;.hex    # =&gt; 255
+p &quot;0x10&quot;.hex  # =&gt; 16
+p &quot;-0x10&quot;.hex # =&gt; -16</pre>
+<p>接頭辞 &quot;0x&quot;, &quot;0X&quot; は無視されます。<code>[_0-9a-fA-F]</code> 以外の
+文字があればそこまでを変換対象とします。変換対象が空文字列であれば 
+0 を返します。</p>
+<pre>p &quot;xyz&quot;.hex   # =&gt; 0
+p &quot;10z&quot;.hex   # =&gt; 16
+p &quot;1_0&quot;.hex   # =&gt; 16</pre>
+<p><a href="#L001525">oct</a>, <a href="#L001559">to_i</a>, <a href="#L001558">to_f</a>, 
+<a href="refm029.html#L000430">Integer</a>, <a href="refm029.html#L000429">Float</a> 
+も参照してください。</p>
+<p>逆に、数値を文字列に変換するには 
+<a href="refm029.html#L000488">sprintf</a>,
+<a href="#L001455">%</a>,
+<a href="refm053.html#L001319">Integer#to_s</a>
+を使用します。</p></dd>
+<dt><a name="L001512" id="L001512"><code>include?(<var>substr</var>)</code></a></dt>
+<dd>
+<p>文字列中に部分文字列 <var>substr</var> が含まれていれば真を返します。</p>
+<p><var>substr</var> が 0 から 255 の範囲の <a href="refm055.html">Fixnum</a> の場合、文字コー
+ドとみなして、その文字が含まれていれば真を返します。</p></dd>
+<dt><a name="L001513" id="L001513"><code>index(<var>pattern</var>[, <var>pos</var>])</code></a></dt>
+<dd>
+<p>部分文字列の探索を左端から右端に向かって行います。見つかった部分文
+字列の左端の位置を返します。見つからなければ <code>nil</code> を返します。</p>
+<p>引数 <var>pattern</var> には探索する部分文字列の指定を文字列、文字コー
+ドを示す 0 から 255 の整数、正規表現のいずれかで指定します。</p>
+<p><var>pos</var> が与えられた時にはその位置から探索します。<var>pos</var> の省
+略時の値は 0 です。</p>
+<pre>p &quot;astrochemistry&quot;.index(&quot;str&quot;)         # =&gt; 1
+p &quot;character&quot;.index(?c)                 # =&gt; 0
+p &quot;regexpindex&quot;.index(/e.*x/, 2)        # =&gt; 3</pre>
+<p><var>pos</var> が負の場合、文字列の末尾から数えた位置から探索します。</p>
+<pre>p &quot;foobarfoobar&quot;.index(&quot;bar&quot;, 6)        # =&gt; 9
+p &quot;foobarfoobar&quot;.index(&quot;bar&quot;, -6)       # =&gt; 9</pre>
+<p><a href="#L001529">rindex</a> も参照してください。</p></dd>
+<dt><a name="L001514" id="L001514"><code>insert(<var>nth</var>, <var>other</var>)  ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p><var>nth</var> 番目の文字の直前に文字列 <var>other</var> を挿入します。
+以下と(戻り値を除いて)同じです。</p>
+<pre>self[nth, 0] = other</pre>
+<p><code>self</code> を返します。</p>
+<pre>str = &quot;foobaz&quot;
+p str.insert(3, &quot;bar&quot;)
+# =&gt; &quot;foobarbaz&quot;</pre></dd>
+<dt><a name="L001515" id="L001515"><code>intern</code></a>
+<dt><a name="L001516" id="L001516"><code>to_sym ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>文字列に対応するシンボル値(<a href="refm063.html">Symbol</a>)を返します。ナルキャラクタ
+('\0')を含む文字列は <code>intern</code> できません(例外 
+<a href="refm094.html">ArgumentError</a> が発生します).</p>
+<p>シンボルに対応する文字列を得るには <a href="refm063.html#L001599">Symbol#to_s</a>
+(または<a href="refm063.html#L001598">Symbol#id2name</a>)を使います。</p>
+<pre>p &quot;foo&quot;.intern
+=&gt; :foo
+
+p &quot;foo&quot;.intern.to_s == &quot;foo&quot;
+=&gt; true</pre></dd>
+<dt><a name="L001517" id="L001517"><code>length</code></a>
+<dt><a name="L001518" id="L001518"><code>size</code></a></dt>
+<dd>
+<p>文字列のバイト数を返します。</p></dd>
+<dt><a name="L001519" id="L001519"><code>match(<var>regexp</var>)         ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a>
+<dt><a name="L001520" id="L001520"><code>match(<var>regexp</var>[, <var>pos</var>])  ((&lt;<var>ruby</var> <var>1</var>.<var>9</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p><var>regexp</var>.match(self[, pos]) と同じです
+(<a href="refm060.html#L001435">Regexp#match</a> 参照)。
+<var>regexp</var> が文字列の場合は、正規表現にコンパイルします。</p></dd>
+<dt><a name="L001521" id="L001521"><code>next</code></a>
+<dt><a name="L001522" id="L001522"><code>next!</code></a>
+<dt><a name="L001523" id="L001523"><code>succ</code></a>
+<dt><a name="L001524" id="L001524"><code>succ!</code></a></dt>
+<dd>
+<p>次の文字列を返します。「次」とは、アルファベットは26進数、数字は10
+進数として数え上げを行った結果です。負符号などは考慮されません。数
+え上げは以下の例のように繰り上げも行われます。</p>
+<pre>p &quot;aa&quot;.succ # =&gt; &quot;ab&quot;
+p &quot;99&quot;.succ # =&gt; &quot;100&quot;
+p &quot;a9&quot;.succ # =&gt; &quot;b0&quot;
+p &quot;Az&quot;.succ # =&gt; &quot;Ba&quot;
+p &quot;zz&quot;.succ # =&gt; &quot;aaa&quot;
+p &quot;-9&quot;.succ # =&gt; &quot;-10&quot;
+p &quot;9&quot;.succ  # =&gt; &quot;10&quot;
+p &quot;09&quot;.succ # =&gt; &quot;10&quot;</pre>
+<p>文字列がアルファベットや数字を含んでいればそれ以外の文字はそのまま
+になります。</p>
+<pre>p &quot;1.9.9&quot;.succ # =&gt; # &quot;2.0.0&quot;</pre>
+<p>逆に、アルファベットや数字を含まなければ以下のように次のASCII文字
+を返します。</p>
+<pre>p &quot;/&quot;.succ    #=&gt; &quot;0&quot;
+p &quot;\0&quot;.succ   #=&gt; &quot;\001&quot;
+p &quot;\377&quot;.succ #=&gt; &quot;\001\000&quot;</pre>
+<p>特別に &quot;&quot;.succ は &quot;&quot; を返します。またマルチバイトは意識せず文字列
+をバイト列として扱います。
+succ と逆の動作をするメソッドはありません。</p>
+<p><code>succ!</code>, <code>next!</code> は文字列の内容を破壊的に修正します。</p></dd>
+<dt><a name="L001525" id="L001525"><code>oct</code></a></dt>
+<dd>
+<p>文字列を 8 進文字列であると解釈して、整数に変換します。</p>
+<pre>p &quot;10&quot;.oct  # =&gt; 8
+p &quot;010&quot;.oct # =&gt; 8
+p &quot;8&quot;.oct   # =&gt; 0</pre>
+<p><code>oct</code> は文字列の接頭辞(&quot;0&quot;, &quot;0b&quot;, &quot;0B&quot;, &quot;0x&quot;, &quot;0X&quot;)に応じて 8 
+進以外の変換も行います。</p>
+<pre>p &quot;0b10&quot;.oct  # =&gt; 2
+p &quot;10&quot;.oct    # =&gt; 8
+p &quot;010&quot;.oct   # =&gt; 8
+p &quot;0x10&quot;.oct  # =&gt; 16</pre>
+<p>整数とみなせない文字があればそこまでを変換対象とします。変換対象が
+空文字列であれば 0 を返します。
+<a name="footmark:6" id="footmark:6" href="#foottext:6"><sup><small>*6</small></sup></a></p>
+<pre>p &quot;1_0_1x&quot;.oct   # =&gt; 65</pre>
+<p><a href="#L001511">hex</a>, <a href="#L001559">to_i</a>, <a href="#L001558">to_f</a>, 
+<a href="refm029.html#L000430">Integer</a>, <a href="refm029.html#L000429">Float</a> 
+も参照してください。</p>
+<p>逆に、数値を文字列に変換するには 
+<a href="refm029.html#L000488">sprintf</a>,
+<a href="#L001455">%</a>,
+<a href="refm053.html#L001319">Integer#to_s</a>
+を使用します。</p></dd>
+<dt><a name="L001526" id="L001526"><code>replace(<var>other</var>)</code></a></dt>
+<dd>
+<p>文字列の内容を <var>other</var> の内容で置き換えます。</p>
+<pre>s = &quot;foo&quot;
+id = s.object_id
+s.replace &quot;bar&quot;
+p s             # =&gt; &quot;bar&quot;
+p id == s.object_id    # =&gt; true</pre>
+<p><code>self</code> を返します。</p></dd>
+<dt><a name="L001527" id="L001527"><code>reverse</code></a>
+<dt><a name="L001528" id="L001528"><code>reverse!</code></a></dt>
+<dd>
+<p>文字列をひっくり返します。</p>
+<pre>p &quot;foobar&quot;.reverse # =&gt; &quot;raboof&quot;</pre>
+<p><code>reverse</code> は変更後の文字列を生成して返します。
+<code>reverse!</code> は <code>self</code> を変更してそれを返します。</p></dd>
+<dt><a name="L001529" id="L001529"><code>rindex(<var>pattern</var>[, <var>pos</var>])</code></a></dt>
+<dd>
+<p>部分文字列の探索を右端から左端に向かって行います。見つかった部分文
+字列の左端の位置を返します。見つからなければ <code>nil</code> を返します。</p>
+<p>引数 <var>pattern</var> には探索する部分文字列の指定を文字列、文字コー
+ドを示す 0 から 255 の整数、正規表現のいずれかで指定します。</p>
+<p><var>pos</var> が与えられた時にはその位置から探索します。<var>pos</var> の省
+略時の値は <code>self</code>.size (右端)です。</p>
+<pre>p &quot;astrochemistry&quot;.rindex(&quot;str&quot;)        # =&gt; 10
+p &quot;character&quot;.rindex(?c)                # =&gt; 5
+p &quot;regexprindex&quot;.rindex(/e.*x/, 2)      # =&gt; 1</pre>
+<p><var>pos</var> が負の場合、文字列の末尾から数えた位置から探索します。</p>
+<pre>p &quot;foobarfoobar&quot;.rindex(&quot;bar&quot;, 6)       # =&gt; 3
+p &quot;foobarfoobar&quot;.rindex(&quot;bar&quot;, -6)      # =&gt; 3</pre>
+<p><a href="#L001513">index</a> と完全に左右が反転した動作をするわけではありま
+せん。探索はその開始位置を右から左にずらしながら行いますが、部分文
+字列の照合は左から右に向かって行います。以下の例を参照してください。</p>
+<pre># String#index の場合
+p &quot;foobar&quot;.index(&quot;bar&quot;, 2)    # =&gt; 3
+#    bar   &lt;- ここから探索を行う
+#     bar  &lt;- 右にずらしてここで見つかる
+
+# String#rindex の場合
+p &quot;foobar&quot;.rindex(&quot;bar&quot;, -2)  # =&gt; 3
+#    bar &lt;- ここ(右端が末尾から 2 番目)ではなく
+#      bar &lt;- ここから探索を行う(左端が末尾から2番目)
+#     bar  &lt;- 左にずらしてここで見つかる</pre></dd>
+<dt><a name="L001530" id="L001530"><code>scan(<var>re</var>)</code></a>
+<dt><a name="L001531" id="L001531"><code>scan(<var>re</var>) {|<var>s</var>| ... }</code></a></dt>
+<dd>
+<p><code>self</code> に対して正規表現 <var>re</var> で繰り返しマッチを行い、マッ
+チした部分文字列の配列を返します。</p>
+<pre>p &quot;foobar&quot;.scan(/./)
+# =&gt; [&quot;f&quot;, &quot;o&quot;, &quot;o&quot;, &quot;b&quot;, &quot;a&quot;, &quot;r&quot;]
+
+p &quot;foobarbazfoobarbaz&quot;.scan(/ba./)
+# =&gt; [&quot;bar&quot;, &quot;baz&quot;, &quot;bar&quot;, &quot;baz&quot;]</pre>
+<p>正規表現が括弧を含む場合は、括弧で括られたパターンにマッチした部分
+文字列の配列の配列を返します。</p>
+<pre>p &quot;foobar&quot;.scan(/(.)/)
+# =&gt; [[&quot;f&quot;], [&quot;o&quot;], [&quot;o&quot;], [&quot;b&quot;], [&quot;a&quot;], [&quot;r&quot;]]
+
+p &quot;foobarbazfoobarbaz&quot;.scan(/(ba)(.)/)
+# =&gt; [[&quot;ba&quot;, &quot;r&quot;], [&quot;ba&quot;, &quot;z&quot;], [&quot;ba&quot;, &quot;r&quot;], [&quot;ba&quot;, &quot;z&quot;]]</pre>
+<p>ブロックを指定して呼び出した場合は、マッチした部分文字列(括弧を含
+む場合は括弧で括られたパターンにマッチした文字列の配列)をブロック
+のパラメータとします。ブロックを指定した場合は <code>self</code> を返しま
+す。</p>
+<pre>&quot;foobarbazfoobarbaz&quot;.scan(/ba./) {|s| p s}
+# =&gt; &quot;bar&quot;
+     &quot;baz&quot;
+     &quot;bar&quot;
+     &quot;baz&quot;
+
+&quot;foobarbazfoobarbaz&quot;.scan(/(ba)(.)/) {|s| p s}
+# =&gt; [&quot;ba&quot;, &quot;r&quot;]
+     [&quot;ba&quot;, &quot;z&quot;]
+     [&quot;ba&quot;, &quot;r&quot;]
+     [&quot;ba&quot;, &quot;z&quot;]</pre>
+<p><a href="refm384.html">ruby 1.7 feature</a>: 1.6 以前は、<var>re</var> が文字列の場合、その
+文字列を正規表現にコンパイルしていました。1.7 以降は、その文字列そ
+のものがパターンになります。</p></dd>
+<dt><a name="L001532" id="L001532"><code>slice(<var>nth</var>[, <var>len</var>])</code></a>
+<dt><a name="L001533" id="L001533"><code>slice(<var>substr</var>)</code></a>
+<dt><a name="L001534" id="L001534"><code>slice(<var>first</var>..<var>last</var>)</code></a>
+<dt><a name="L001535" id="L001535"><code>slice(<var>first</var>...<var>last</var>)</code></a>
+<dt><a name="L001536" id="L001536"><code>slice(<var>regexp</var>[, <var>nth</var>])</code></a></dt>
+<dd>
+<p><a href="#L001465">self[]</a> と同じです。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>: slice(regexp, nth) は、version 1.7 以降で
+使用できます。</p></dd>
+<dt><a name="L001537" id="L001537"><code>slice!(<var>nth</var>[, <var>len</var>])</code></a>
+<dt><a name="L001538" id="L001538"><code>slice!(<var>substr</var>)</code></a>
+<dt><a name="L001539" id="L001539"><code>slice!(<var>first</var>..<var>last</var>)</code></a>
+<dt><a name="L001540" id="L001540"><code>slice!(<var>first</var>...<var>last</var>)</code></a>
+<dt><a name="L001541" id="L001541"><code>slice!(<var>regexp</var>[, <var>nth</var>])</code></a></dt>
+<dd>
+<p>指定した範囲(<a href="#L001465">self[]</a> 参照)を文字列から取り除いたう
+えで取り除いた部分文字列を返します。</p>
+<p>引数が範囲外を指す場合は <code>nil</code> を返します。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>: slice!(regexp, nth) は、version 1.7 以降で
+使用できます。</p></dd>
+<dt><a name="L001542" id="L001542"><code>split([<var>sep</var>[, <var>limit</var>]])</code></a></dt>
+<dd>
+<p>文字列を <var>sep</var> で指定されたパターンによって分割して配列に格納
+します。</p>
+<p><var>sep</var> は以下のいずれかです。</p>
+<ul>
+<li>正規表現: 正規表現にマッチする文字列を区切りとして分割する。
+      特に、括弧によるグルーピングがあればそのグループにマッチした
+      文字列も結果の配列に含まれる(後述)。</li>
+<li>1 バイトの文字列: その文字を区切りとして分割する(ruby 1.6)。</li>
+<li>2 バイト以上の文字列: Regexp.new(sep) にマッチする文字列を
+      区切りとして分割する(ruby 1.6)。</li>
+<li>省略 or nil: <a href="refm030.html#L000531">$;</a> の値を区切りとして分割する。</li>
+<li>1 バイトの空白 <code>' '</code>か <code>$;</code> が使用される場合でその値が <code>nil</code>:
+      先頭の空白を除いて空白で分割する。</li>
+<li>空文字列 <code>''</code> あるいは空にマッチする正規表現: 1文字ずつに分割する。
+      マルチバイト文字を認識する。</li>
+</ul>
+<p><a href="refm384.html">ruby 1.7 feature</a>: 1.7 以降は、<var>sep</var> が文字列の場合その長
+さにかかわらず Regexp.new(Regexp.quote(sep)) にマッチする文字列(つ
+まりその文字列そのもの)が区切りとなります。</p>
+<p>例: awk split</p>
+<pre>p &quot;   a \t  b \n  c&quot;.split(/\s+/) # =&gt; [&quot;&quot;, &quot;a&quot;, &quot;b&quot;, &quot;c&quot;]
+p &quot;   a \t  b \n  c&quot;.split        # =&gt; [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;] ($;のデフォルト値はnilです)
+p &quot;   a \t  b \n  c&quot;.split(' ')   # =&gt; [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;]</pre>
+<p><var>sep</var> で指定されたパターンが空文字列とマッチする場合は文字列が 
+1 文字ずつに分割されます(<a href="refm030.html#L000551">$KCODE</a> が適切に設定されて
+いれば漢字を認識して文字単位で分割します)。例えば:</p>
+<p>例: 1 文字ずつの分割</p>
+<pre>p 'hi there'.split(/ */).join(':')
+# =&gt; &quot;h:i:t:h:e:r:e&quot;
+
+p 'hi there'.split(//).join(':')
+# =&gt; &quot;h:i: :t:h:e:r:e&quot;
+
+$KCODE = 'e'
+p '文字列'.split(//).join(':')
+# =&gt; &quot;文:字:列&quot;</pre>
+<p><var>sep</var> で指定されたパターンに括弧が含まれている場合には、各括弧
+のパターンにマッチした文字列も配列に含まれます。括弧が複数ある場合
+は、マッチしたものだけが配列に含まれます。例えば:</p>
+<p>例: グループにマッチした区切り</p>
+<pre>p '1-10,20'.split(/([-,])/)   # =&gt; [&quot;1&quot;, &quot;-&quot;, &quot;10&quot;, &quot;,&quot;, &quot;20&quot;]
+p '1-10,20'.split(/(-)|(,)/)  # =&gt; [&quot;1&quot;, &quot;-&quot;, &quot;10&quot;, &quot;,&quot;, &quot;20&quot;]</pre>
+<p><var>limit</var> は以下のいずれかです。</p>
+<ul>
+<li>省略 or 0: 配列末尾の空文字列は取り除かれる。</li>
+<li>limit &gt; 0: 最大 <var>limit</var> 個のフィールドに分割する。</li>
+<li>limit &lt; 0: 無限に大きい <var>limit</var> が指定されたかのように分割する。</li>
+</ul>
+<p>例: limit の例</p>
+<pre># limit 省略時は、0 を指定したのと同じ。配列末尾の空文字列は取り除かれる
+p &quot;a,b,c,,,&quot;.split(/,/)      # =&gt; [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;]
+p &quot;a,b,c,,,&quot;.split(/,/, 0)   # =&gt; [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;]
+
+# limit が 最大のフィールド数に満たない場合は最後の要素に残りすべてが入る
+p &quot;a,b,c,,,&quot;.split(/,/, 3)   # =&gt; [&quot;a&quot;, &quot;b&quot;, &quot;c,,,&quot;]
+
+# limit が -1 や最大のフィールド数以上の場合は最大のフィールド数を指定したのと同じ
+p &quot;a,b,c,,,&quot;.split(/,/, 6)     # =&gt; [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;]
+p &quot;a,b,c,,,&quot;.split(/,/, -1)    # =&gt; [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;]
+p &quot;a,b,c,,,&quot;.split(/,/, 100)   # =&gt; [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;]</pre></dd>
+<dt><a name="L001543" id="L001543"><code>squeeze([<var>str</var>[,<var>str2</var>[,  ... ]]])</code></a>
+<dt><a name="L001544" id="L001544"><code>squeeze!([<var>str</var>[,<var>str2</var>[,  ... ]]])</code></a></dt>
+<dd>
+<p><var>str</var> に含まれる同一の文字の並びをひとつにまとめます。</p>
+<p><var>str</var> の形式は <a href="refm535.html">tr(1)</a> と同じです。つまり、
+`<code>a-c</code>' は <code>a</code> から <code>c</code> を意味し、<code>&quot;^0-9&quot;</code> のように
+文字列の先頭が `<code>^</code>' の場合は指定文字以外を意味します。</p>
+<p>`<code>-</code>' は文字列の両端にない場合にだけ範囲指定の意味になります。
+同様に、`<code>^</code>' もその効果は文字列の先頭にあるときだけです。また、
+`<code>-</code>', `<code>^</code>', `<code>\</code>' はバックスラッシュ(`<code>\</code>')によ
+りエスケープすることができます。</p>
+<p>引数を複数指定した場合は、すべての引数の積集合を意味します。</p>
+<pre>p &quot;112233445566778899&quot;.squeeze
+=&gt;&quot;123456789&quot;
+
+p &quot;112233445566778899&quot;.squeeze(&quot;2-8&quot;)
+=&gt;&quot;11234567899&quot;
+
+p &quot;112233445566778899&quot;.squeeze(&quot;2-8&quot;, &quot;^4-6&quot;)
+=&gt;&quot;11234455667899&quot;
+
+p &quot;112233445566778899&quot;.squeeze(&quot;2378&quot;)
+=&gt;&quot;11234455667899&quot;</pre>
+<p><code>squeeze</code> は変更後の文字列を生成して返します。
+<code>squeeze!</code>  は <code>self</code> を変更して返しますが、変更が起こらな
+かった場合は <code>nil</code> を返します。</p></dd>
+<dt><a name="L001545" id="L001545"><code>strip</code></a>
+<dt><a name="L001546" id="L001546"><code>strip!</code></a></dt>
+<dd>
+<p>先頭と末尾の空白文字を全て取り除きます。
+空白文字の定義は &quot; \t\r\n\f\v&quot; です。</p>
+<p><code>strip</code> は変更後の文字列を新しく生成して返します。</p>
+<p><code>strip!</code> は <code>self</code> を変更して返します。
+ただし取り除く空白がなかったときは <code>nil</code> を返します。</p>
+<pre>p &quot;  abc  \r\n&quot;.strip    #=&gt; &quot;abc&quot;
+p &quot;abc\n&quot;.strip          #=&gt; &quot;abc&quot;
+p &quot;  abc&quot;.strip          #=&gt; &quot;abc&quot;
+p &quot;abc&quot;.strip            #=&gt; &quot;abc&quot;
+
+str = &quot;\tabc\n&quot;
+p str.strip              #=&gt; &quot;abc&quot;
+p str                    #=&gt; &quot;\tabc\n&quot;  (変化なし)
+
+str = &quot;  abc\r\n&quot;
+p str.strip!             #=&gt; &quot;abc&quot;
+p str                    #=&gt; &quot;abc&quot;  (変化あり)
+
+str = &quot;abc&quot;
+p str.strip!             #=&gt; nil
+p str                    #=&gt; &quot;abc&quot;</pre>
+<p><a href="refm385.html">ruby 1.8 feature</a>: <a href="#L001549">rstrip</a> と同様、右側の空白類と 
+&quot;\0&quot; を取り除きますが、左側の &quot;\0&quot; は特別扱いされません。</p>
+<pre>str = &quot;  \0  abc  \0&quot;
+p str.strip           # =&gt; &quot;\000  abc&quot;</pre></dd>
+<dt><a name="L001547" id="L001547"><code>lstrip    ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a>
+<dt><a name="L001548" id="L001548"><code>lstrip!   ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>文字列の先頭にある空白文字を全て取り除きます。
+空白文字の定義は &quot; \t\r\n\f\v&quot; です。</p>
+<p><code>lstrip</code> は加工後の文字列を新しく生成して返します。</p>
+<p><code>lstrip!</code> は <code>self</code> を変更して返します。
+ただし取り除く空白がなかったときは <code>nil</code> を返します。</p>
+<pre>p &quot;  abc\n&quot;.lstrip     #=&gt; &quot;abc\n&quot;
+p &quot;\t abc\n&quot;.lstrip    #=&gt; &quot;abc\n&quot;
+p &quot;abc\n&quot;.lstrip       #=&gt; &quot;abc\n&quot;
+
+str = &quot;\nabc&quot;
+p str.lstrip           #=&gt; &quot;abc&quot;
+p str                  #=&gt; &quot;\nabc&quot;  (変化なし)
+
+str = &quot;  abc&quot;
+p str.lstrip!          #=&gt; &quot;abc&quot;
+p str                  #=&gt; &quot;abc&quot;  (変化あり)
+
+str = &quot;abc&quot;
+p str.lstrip!          #=&gt; nil
+p str                  #=&gt; &quot;abc&quot;</pre></dd>
+<dt><a name="L001549" id="L001549"><code>rstrip    ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a>
+<dt><a name="L001550" id="L001550"><code>rstrip!   ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>文字列の末尾にある空白文字を全て取り除きます。
+空白文字の定義は &quot; \t\r\n\f\v&quot; です。</p>
+<p><code>rstrip</code> は加工後の文字列を新しく生成して返します。</p>
+<p><code>rstrip!</code> は自身を変更して返します。
+ただし取り除く空白がなかったときは <code>nil</code> を返します。</p>
+<pre>p &quot; abc\n&quot;.rstrip        #=&gt; &quot; abc&quot;
+p &quot; abc \t\r\n&quot;.rstrip   #=&gt; &quot; abc&quot;
+p &quot; abc&quot;.rstrip          #=&gt; &quot; abc&quot;
+
+str = &quot;abc\n&quot;
+p str.rstrip           #=&gt; &quot;abc&quot;
+p str                  #=&gt; &quot;abc\n&quot;  (変化なし)
+
+str = &quot;abc  &quot;
+p str.rstrip!          #=&gt; &quot;abc&quot;
+p str                  #=&gt; &quot;abc&quot;  (変化あり)
+
+str = &quot;abc&quot;
+p str.rstrip!          #=&gt; nil
+p str                  #=&gt; &quot;abc&quot;</pre>
+<p><a href="refm385.html">ruby 1.8 feature</a>: 空白類と &quot;\0&quot; を取り除きます。これに対して、
+<a href="#L001547">lstrip</a> は &quot;\0&quot; を特別扱いしません。</p>
+<pre>str = &quot;abc  \0&quot;
+p str.rstrip           # =&gt; &quot;abc&quot;</pre></dd>
+<dt><a name="L001551" id="L001551"><code>sub(<var>pattern</var>, <var>replace</var>)</code></a>
+<dt><a name="L001552" id="L001552"><code>sub!(<var>pattern</var>, <var>replace</var>)</code></a>
+<dt><a name="L001553" id="L001553"><code>sub(<var>pattern</var>) {|<var>matched</var>| ... }</code></a>
+<dt><a name="L001554" id="L001554"><code>sub!(<var>pattern</var>) {|<var>matched</var>| ... }</code></a></dt>
+<dd>
+<p>文字列中で <var>pattern</var> に<em>最初に</em>マッチする部分を <var>replace</var> で
+置き換えます。</p>
+<p>ブロックを指定して呼び出された時には、最初にマッチした部分をブロッ
+クを評価した値で置き換えます。</p>
+<p><code>sub</code> は置換後の文字列を生成して返します。
+<code>sub!</code> は <code>self</code> を変更して返しますが、置換が起こら
+なかった場合は <code>nil</code> を返します。</p>
+<p>マッチを一度しか行わない点を除けば <a href="#L001507">gsub</a> と同じです。</p>
+<p><em>注意</em>: <a href="#L001507">gsub</a> の項には sub/gsub を使用する上での注
+意点が書かれています。<a href="#L001507">gsub</a> も参照してください。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>: 1.6 以前は、<var>pattern</var> が文字列の場合、
+その文字列を正規表現にコンパイルしていました。1.7 以降は、その文字
+列そのものがパターンになります。</p></dd>
+<dt><a name="L001555" id="L001555"><code>sum([<var>bits</var>=<var>16</var>])</code></a></dt>
+<dd>
+<p>文字列の <var>bits</var> ビットのチェックサムを計算します。
+以下と同じです。</p>
+<pre>sum = 0
+str.each_byte {|c| sum += c}
+sum = sum &amp; ((1 &lt;&lt; bits) - 1) if bits != 0</pre>
+<p>例えば以下のコードで System V の <a href="refm535.html">sum(1)</a> コマンドと
+同じ値が得られます。</p>
+<pre>sum = 0
+while gets
+  sum += $_.sum
+end
+sum %= 65536</pre></dd>
+<dt><a name="L001556" id="L001556"><code>swapcase</code></a>
+<dt><a name="L001557" id="L001557"><code>swapcase!</code></a></dt>
+<dd>
+<p>全ての大文字を小文字に、小文字を大文字に変更します。</p>
+<p><code>swapcase</code> は置換後の文字列を生成して返します。
+<code>swapcase!</code> は <code>self</code> を変更して返しますが、置換が起こら
+なかった場合は <code>nil</code> を返します。</p>
+<p><code>$KCODE</code> が適切に設定されていなければ、漢字コードの一部も変換
+してしまいます(これは、ShiftJIS コードで起こり得ます)。
+逆に、<code>$KCODE</code> を設定してもマルチバイト文字のアルファベット
+は処理しません。</p>
+<pre># -*- Coding: shift_jis -*-
+$KCODE ='n'
+puts &quot;蟻&quot;.swapcase # =&gt; 帰</pre>
+<p><a href="#L001568">upcase</a>, <a href="#L001500">downcase</a>,
+<a href="#L001480">capitalize</a> も参照してください。</p></dd>
+<dt><a name="L001558" id="L001558"><code>to_f</code></a></dt>
+<dd>
+<p>文字列を 10 進数表現と解釈して、浮動小数点数 <a href="refm056.html">Float</a> に変換します。</p>
+<pre>p &quot;10&quot;.to_f    # =&gt; 10.0
+p &quot;10e2&quot;.to_f  # =&gt; 1000.0
+p &quot;1e-2&quot;.to_f  # =&gt; 0.01
+p &quot;.1&quot;.to_f    # =&gt; 0.1
+
+p &quot;nan&quot;.to_f   # =&gt; NaN         (ruby 1.7 feature: =&gt; 0.0)
+p &quot;INF&quot;.to_f   # =&gt; Infinity    (ruby 1.7 feature: =&gt; 0.0)
+p &quot;-Inf&quot;.to_f  # =&gt; -Infinity   (ruby 1.7 feature: =&gt; -0.0)
+p ((&quot;10&quot; * 1000).to_f) # =&gt; Infinity  (ruby 1.7 feature: =&gt; out of range (ArgumentError)
+
+p &quot;0xa.a&quot;.to_f # =&gt; 10.625     # 16 進も許される(システム依存)
+                               # (ruby 1.7 feature: =&gt; 0.0)
+p &quot; \n10&quot;.to_f # =&gt; 10.0       # 先頭の空白は無視される
+p &quot;1_0_0&quot;.to_f # =&gt; 1.0        # `_' は数値要素とみなされない
+                               # (ruby 1.7 feature: =&gt; 100.0)
+p &quot;&quot;.to_f      # =&gt; 0.0</pre>
+<p>浮動小数点数とみなせなくなるところまでを変換対象とします。
+変換対象が空文字列であれば 0.0 を返します。
+<a name="footmark:7" id="footmark:7" href="#foottext:7"><sup><small>*7</small></sup></a>
+<a name="footmark:8" id="footmark:8" href="#foottext:8"><sup><small>*8</small></sup></a></p>
+<p><a href="#L001511">hex</a>, <a href="#L001525">oct</a>, <a href="#L001559">to_i</a>, 
+<a href="refm029.html#L000430">Integer</a>, <a href="refm029.html#L000429">Float</a> 
+も参照してください。</p>
+<p>逆に、数値を文字列に変換するには 
+<a href="refm029.html#L000488">sprintf</a>,
+<a href="#L001455">%</a>,
+<a href="refm053.html#L001319">Integer#to_s</a>
+を使用します。</p></dd>
+<dt><a name="L001559" id="L001559"><code>to_i</code></a>
+<dt><a name="L001560" id="L001560"><code>to_i(<var>base</var>)          ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>文字列を 10 進数表現と解釈して、整数に変換します。</p>
+<pre>p &quot; 10&quot;.to_i    # =&gt; 10
+p &quot;010&quot;.to_i    # =&gt; 10
+p &quot;-010&quot;.to_i   # =&gt; -10</pre>
+<p>整数とみなせない文字があればそこまでを変換対象とします。変換対象が
+空文字列であれば 0 を返します。</p>
+<pre>p &quot;0x11&quot;.to_i   # =&gt; 0</pre>
+<p><a href="#L001511">hex</a>, <a href="#L001525">oct</a>, <a href="#L001558">to_f</a>, 
+<a href="refm029.html#L000430">Integer</a>, <a href="refm029.html#L000429">Float</a> 
+も参照してください。</p>
+<p>逆に、数値を文字列に変換するには 
+<a href="refm029.html#L000488">sprintf</a>,
+<a href="#L001455">%</a>,
+<a href="refm053.html#L001319">Integer#to_s</a>
+を使用します。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>:
+基数を指定することでデフォルトの 10 進以外に 2 〜 36 進数への変換
+を行うことができます。また、0 を指定すると prefix により基数を判断
+します(逆に prefix を認識するのは 0 を指定したときだけです)。
+0, 2 〜 36 以外の引数を指定した場合、例外 <a href="refm094.html">ArgumentError</a> が発
+生します。</p>
+<pre>p &quot;0b10&quot;.to_i(0)  # =&gt; 2
+p &quot;0o10&quot;.to_i(0)  # =&gt; 8
+p &quot;010&quot;.to_i(0)   # =&gt; 8
+p &quot;0d10&quot;.to_i(0)  # =&gt; 10
+p &quot;0x10&quot;.to_i(0)  # =&gt; 16</pre></dd>
+<dt><a name="L001561" id="L001561"><code>to_s</code></a>
+<dt><a name="L001562" id="L001562"><code>to_str</code></a></dt>
+<dd>
+<p><code>self</code> を返します。</p></dd>
+<dt><a name="L001563" id="L001563"><code>tr(<var>search</var>, <var>replace</var>)</code></a>
+<dt><a name="L001564" id="L001564"><code>tr!(<var>search</var>, <var>replace</var>)</code></a></dt>
+<dd>
+<p>文字列の中に <var>search</var> 文字列に含まれる文字が存在したら、
+それを <var>replace</var> 文字列の対応する文字に置き換えます。</p>
+<p><var>search</var> の形式は <a href="refm535.html">tr(1)</a> と同じです。つまり、
+`<code>a-c</code>' は <code>a</code> から <code>c</code> を意味し、<code>&quot;^0-9&quot;</code> のように
+文字列の先頭が `<code>^</code>' の場合は指定文字以外が置換の対象になります。</p>
+<p><var>replace</var> に対しても `<code>-</code>' による範囲指定が可能です。
+例えば、<a href="#L001568">String#upcase</a> を <code>tr</code> で書くと、</p>
+<pre>p &quot;foo&quot;.tr('a-z', 'A-Z')
+=&gt; &quot;FOO&quot;</pre>
+<p>となります。</p>
+<p>`<code>-</code>' は文字列の両端にない場合にだけ範囲指定の意味になります。
+同様に、`<code>^</code>' もその効果は文字列の先頭にあるときだけです。また、
+`<code>-</code>', `<code>^</code>', `<code>\</code>' はバックスラッシュ(`<code>\</code>')によ
+りエスケープすることができます。</p>
+<p><var>replace</var> の範囲が <var>search</var> の範囲よりも小さい場合は、
+<var>replace</var> の最後の文字が無限に続くものとして扱われます。</p>
+<p><code>tr</code> は置換後の文字列を生成して返します。
+<code>tr!</code> は <code>self</code> を変更して返しますが、置換が起こら
+なかった場合は <code>nil</code> を返します。</p></dd>
+<dt><a name="L001565" id="L001565"><code>tr_s(<var>search</var>, <var>replace</var>)</code></a>
+<dt><a name="L001566" id="L001566"><code>tr_s!(<var>search</var>, <var>replace</var>)</code></a></dt>
+<dd>
+<p>文字列の中に <var>search</var> 文字列に含まれる文字が存在したら、
+<var>replace</var> 文字列の対応する文字に置き換えます。さらに、
+置換した部分内に同一の文字の並びがあったらそれを 1 文字に圧縮します。</p>
+<p><var>search</var> の形式は <a href="refm535.html">tr(1)</a> と同じです。つまり、
+`<code>a-c</code>' は <code>a</code> から <code>c</code> を意味し、<code>&quot;^0-9&quot;</code> のように
+文字列の先頭が `<code>^</code>' の場合は指定文字以外が置換の対象になります。</p>
+<p><var>replace</var> に対しても `<code>-</code>' による範囲指定が可能です。</p>
+<pre>p &quot;foo&quot;.tr_s('a-z', 'A-Z')
+=&gt; &quot;FO&quot;</pre>
+<p>`<code>-</code>' は文字列の両端にない場合にだけ範囲指定の意味になります。
+同様に、`<code>^</code>' もその効果は文字列の先頭にあるときだけです。また、
+`<code>-</code>', `<code>^</code>', `<code>\</code>' はバックスラッシュ(`<code>\</code>')によ
+りエスケープすることができます。</p>
+<p><var>replace</var> の範囲が <var>search</var> の範囲よりも小さい場合、
+<var>replace</var> の最後の文字が無限に続くものとして扱われます。</p>
+<p><code>tr_s</code> は置換後の文字列を生成して返します。
+<code>tr_s!</code> は <code>self</code> を変更して返しますが、置換が起こら
+なかった場合は <code>nil</code> を返します。</p>
+<p><em>注意</em>: このメソッドと <code>tr(search, replace).squeeze(replace)</code>
+とでは挙動が異なります。tr と squeeze の組みあわせが置換後の文字列全体を
+squeeze の対象にするのに対して、<code>tr_s</code> は<em>置換された部分だけ</em>を
+squeeze の対象とします。</p>
+<pre>p &quot;foo&quot;.tr_s(&quot;o&quot;, &quot;f&quot;)              # =&gt; &quot;ff&quot;
+p &quot;foo&quot;.tr(&quot;o&quot;, &quot;f&quot;).squeeze(&quot;f&quot;)   # =&gt; &quot;f&quot;</pre></dd>
+<dt><a name="L001567" id="L001567"><code>unpack(<var>template</var>)</code></a></dt>
+<dd>
+<p>パックされた (おそらくは <a href="refm036.html#L000776">Array#pack</a> で生成された) 
+文字列を <var>template</var> 文字列にしたがってアンパックし、それらの要
+素を含む配列を返します。<var>template</var> 文字列のフォーマットについ
+ては<a href="refm451.html">packテンプレート文字列</a>を参照してください。</p></dd>
+<dt><a name="L001568" id="L001568"><code>upcase</code></a>
+<dt><a name="L001569" id="L001569"><code>upcase!</code></a></dt>
+<dd>
+<p>ASCII 文字列の範囲内でアルファベットを全て大文字にします</p>
+<p><code>upcase</code> は置換後の文字列を生成して返します。
+<code>upcase!</code> は <code>self</code> を変更して返しますが、置換が起こら
+なかった場合は <code>nil</code> を返します。</p>
+<p><code>$KCODE</code> が適切に設定されていなければ、漢字コードの一部も変換
+してしまいます(これは、ShiftJIS コードで起こり得ます)。
+逆に、<code>$KCODE</code> を設定してもマルチバイト文字のアルファベット
+は処理しません。</p>
+<pre># -*- Coding: shift_jis -*-
+$KCODE ='n'
+puts &quot;蟻&quot;.upcase # =&gt; 帰</pre>
+<p><a href="#L001500">downcase</a>, <a href="#L001556">swapcase</a>,
+<a href="#L001480">capitalize</a> も参照してください。</p></dd>
+<dt><a name="L001570" id="L001570"><code>upto(<var>max</var>) {|<var>s</var>| ... }</code></a></dt>
+<dd>
+<p><code>self</code> から始めて <var>max</var> まで「次の文字列」を順番にブロックに
+与えて繰り返します。「次」の定義については <a href="#L001523">String#succ</a> を
+参照してください。</p>
+<p>このメソッドは文字列の <a href="refm059.html">Range</a> の内部で使用されます。
+<a name="footmark:9" id="footmark:9" href="#foottext:9"><sup><small>*9</small></sup></a></p>
+<p>たとえば以下のコードは <code>a, b, c, ... z,aa, ... az, ..., za</code> を
+出力します。</p>
+<pre>(&quot;a&quot; .. &quot;za&quot;).each do |str|
+  puts str
+end</pre></dd>
+</dl>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>あらい 2002-01-24: 覚書: $KCODE の影響はほとんどの場合 String よりも 
+Regexp に対して。String に影響を与える部分として何がある
+かを書くこと。「Shift_JIS の 2 バイト目に \ が含まれても正しく扱う」(←これは
+Stringというより字句解析器)、
+upcase, downcase, swapcase, capitalize, inspect, split, gsub, scan は、
+$KCODE を設定すれば、日本語を意識して正しく処理する。(どのように影響
+するか書くこと)</small><br />
+<a name="foottext:2" id="foottext:2" href="#footmark:2"><sup><small>*2</small></sup></a><small>あらい 2002-01-24: inspect は、漢字をバックスラッシュ記法の8進で表
+示するか、漢字で表示するかの違い。gsub, scan は、実装の都合で漢字を意
+識しているのであくまでも Regexp が漢字を認識しているのだという理解で良
+いと思う。split は、split('') の処理がバイト単位か文字単位かの違い。
+もうちょい調べること</small><br />
+<a name="foottext:3" id="foottext:3" href="#footmark:3"><sup><small>*3</small></sup></a><small>jcode はもう obsolete にしようよ……あおき</small><br />
+<a name="foottext:4" id="foottext:4" href="#footmark:4"><sup><small>*4</small></sup></a><small>あらい 2002-01-13: 代替物がないからそれはないよね</small><br />
+<a name="foottext:5" id="foottext:5" href="#footmark:5"><sup><small>*5</small></sup></a><small>他にも<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/29297">ruby-list:29297</a><sup class="outside"><small>[外部]</small></sup> などがあります</small><br />
+<a name="foottext:6" id="foottext:6" href="#footmark:6"><sup><small>*6</small></sup></a><small><a href="refm384.html">ruby 1.7 feature</a>: 1.6 では、8 進だけが符号を許す。1.7 以
+降はいずれも符号を許す
+p &quot;-010&quot;.oct  # =&gt; -8;
+p &quot;-0x10&quot;.oct  # =&gt; 0;
+p &quot;-0b10&quot;.oct  # =&gt; 0</small><br />
+<a name="foottext:7" id="foottext:7" href="#footmark:7"><sup><small>*7</small></sup></a><small>あらい 2002-01-14: String#to_f の現在の実装は
+<a href="refm535.html">strtod(3)</a> の呼び出しです。すべてのシステムで、ま
+た将来にわたって例のとおりの動作になるかどうかは確認してません</small><br />
+<a name="foottext:8" id="foottext:8" href="#footmark:8"><sup><small>*8</small></sup></a><small><a href="refm384.html">ruby 1.7 feature</a>: strtod(3) に依存しなくなりました</small><br />
+<a name="foottext:9" id="foottext:9" href="#footmark:9"><sup><small>*9</small></sup></a><small>あらい 2002-01-14: といっても、このメソッドを再定義しても、
+Range#each の挙動は変わらない。あくまでも重要なのは
+<a href="#L001523">succ</a>の方</small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm035.html">UP</a>][<a href="refm060.html">&lt;-PREV</a>][<a href="refm062.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,964 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>cgi</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm172.html" rel="next" />
+<link href="refm170.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm170.html">&lt;-PREV</a>][<a href="refm172.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L003326" id="L003326">CGI</a></h1>
+<p>CGI プログラムの支援ライブラリです。
+CGI プロトコルの詳細については以下の文書を参照してください。</p>
+<ul>
+<li>http://Web.Golux.Com/coar/cgi/draft-coar-cgi-v11-03.txt</li>
+<li><em class="XXINVALIDXX">RFC:3875</em>: The Common Gateway Interface (CGI) Version 1.1</li>
+</ul>
+<ul>
+<li><a href="#L003327">使用例</a>
+<ul>
+<li><a href="#L003328">フォームフィールドの値を得る</a></li>
+<li><a href="#L003329">フォームフィールドの値をハッシュとして得る</a></li>
+<li><a href="#L003330">フォームフィールドの値をファイルに保存する</a></li>
+<li><a href="#L003331">マルチパートフィールドの値を取得する（ファイル送信）</a></li>
+<li><a href="#L003332">クライアントにクッキーを渡す</a></li>
+<li><a href="#L003333">クライアントからクッキーを得る</a></li>
+<li><a href="#L003334">CGI に関連する環境変数の値を取得する</a></li>
+<li><a href="#L003335">標準出力に HTTP ヘッダと HTML を出力する</a></li>
+</ul></li>
+<li><a href="#L003337">オフラインモード</a></li>
+<li><a href="#L003338">class CGI</a></li>
+<li><a href="#L003386">class CGI::Cookie</a></li>
+<li><a href="#L003401">HTMLエレメント出力用メソッド</a></li>
+</ul>
+<h2><a name="L003327" id="L003327">使用例</a></h2>
+<h3><a name="L003328" id="L003328">フォームフィールドの値を得る</a></h3>
+<pre>require &quot;cgi&quot;
+cgi = CGI.new
+values = cgi['field_name']   # &lt;== 'field_name' の配列
+  # 'field_name' が指定されていなかったら、 []を返す。 (1.6)
+  # 'field_name' が指定されていなかったら、 &quot;&quot;を返す。(1.8)
+
+fields = cgi.keys            # &lt;== field nameの配列
+
+
+# フォームに 'field_name' というfield nameがあるときに真
+cgi.has_key?('field_name')
+cgi.include?('field_name')</pre>
+<h3><a name="L003329" id="L003329">フォームフィールドの値をハッシュとして得る</a></h3>
+<p>フォームの値をハッシュとして得るには <code>CGI#params</code> を使います。</p>
+<pre>例
+require &quot;cgi&quot;
+cgi = CGI.new
+params = cgi.params</pre>
+<p>また CGI#params は毎回同じ Hash オブジェクトを返すので
+以下のような使いかたもできます。</p>
+<pre>cgi.params['new_field_name'] = [&quot;value&quot;]  # 新しいパラメータを加える
+cgi.params['field_name'] = [&quot;new_value&quot;]  # パラメータの値を変える
+cgi.params.delete('field_name')           # パラメータを消去
+cgi.params.clear                          # 全パラメータを消去</pre>
+<h3><a name="L003330" id="L003330">フォームフィールドの値をファイルに保存する</a></h3>
+<p>PStore を使うのが最も簡単です。</p>
+<pre># 保存
+require 'pstore'
+db = PStore.new(&quot;query.db&quot;)
+db.transaction do
+  db[&quot;params&quot;] = cgi.params
+end
+
+# 復帰
+require 'pstore'
+db = PStore.new(&quot;query.db&quot;)
+db.transaction do
+  cgi.params = db[&quot;params&quot;]
+end</pre>
+<p>ただし、PStore は Ruby のバージョンによってデータ互換性が
+なくなることがあるので、長い期間データを保存することがある
+場合には検討が必要です。</p>
+<p><a href="refm285.html">PStore</a> も参照してください。</p>
+<h3><a name="L003331" id="L003331">マルチパートフィールドの値を取得する（ファイル送信）</a></h3>
+<pre>require &quot;cgi&quot;
+cgi = CGI.new
+value = cgi.params['field_name'][0]   # TempFile オブジェクト（Ruby 1.8では 10240バイト未満の場合は StringIOオブジェクト）
+value.read                            # 本文（送られてきたファイルの中身）
+value.local_path                      # ローカルファイルのパス（Ruby 1.8では存在しない）
+value.original_filename               # 元の名前
+value.content_type                    # content_type</pre>
+<h3><a name="L003332" id="L003332">クライアントにクッキーを渡す</a></h3>
+<pre>require &quot;cgi&quot;
+cgi = CGI.new
+for name, cookie in cgi.cookies
+  cookie.expires = Time.now + 30
+end
+cgi.out(&quot;cookie&quot; =&gt; cgi.cookies){&quot;string&quot;}
+
+cgi.cookies # { &quot;name1&quot; =&gt; cookie1, &quot;name2&quot; =&gt; cookie2, ... }
+
+require &quot;cgi&quot;
+cgi = CGI.new
+cgi.cookies['name'].expires = Time.now + 30
+cgi.out(&quot;cookie&quot; =&gt; cgi.cookies['name']){&quot;string&quot;}</pre>
+<h3><a name="L003333" id="L003333">クライアントからクッキーを得る</a></h3>
+<pre>require &quot;cgi&quot;
+cgi = CGI.new
+values = cgi.cookies['name']  # values は name クッキーの値の配列。
+                              # name クッキーが存在しない場合は空配列を返す。
+names = cgi.cookies.keys      # 全てのクッキーの名前の配列</pre>
+<h3><a name="L003334" id="L003334">CGI に関連する環境変数の値を取得する</a></h3>
+<p>CGI に関連する環境変数の値は直接 ENV から得る他に、
+CGI クラスのメソッドで得ることもできます。
+基本的には環境変数の名前を downcase したメソッドにマップされます。
+例えば AUTH_TYPE には CGI#auth_type が対応します。</p>
+<pre>require &quot;cgi&quot;
+cgi = CGI.new
+value = cgi.auth_type</pre>
+<p>このような環境変数には以下のものがあります。</p>
+<ul>
+<li>AUTH_TYPE</li>
+<li>CONTENT_LENGTH</li>
+<li>CONTENT_TYPE</li>
+<li>GATEWAY_INTERFACE</li>
+<li>PATH_INFO</li>
+<li>PATH_TRANSLATED</li>
+<li>QUERY_STRING</li>
+<li>REMOTE_ADDR</li>
+<li>REMOTE_HOST</li>
+<li>REMOTE_IDENT</li>
+<li>REMOTE_USER</li>
+<li>REQUEST_METHOD</li>
+<li>SCRIPT_NAME</li>
+<li>SERVER_NAME</li>
+<li>SERVER_PORT</li>
+<li>SERVER_PROTOCOL</li>
+<li>SERVER_SOFTWARE</li>
+</ul>
+<p><code>#content_length</code> と <code>#server_port</code>
+<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a>
+は整数を、その他のメソッドは文字列を返します。</p>
+<p><var>HTTP_COOKIE</var> と <var>HTTP_COOKIE2</var> には
+それぞれ raw_cookie と raw_cookie2 が対応します。</p>
+<pre>value = cgi.raw_cookie      # ENV[&quot;HTTP_COOKIE&quot;]
+value = cgi.raw_cookie2     # ENV[&quot;HTTP_COOKIE2&quot;]</pre>
+<p>最後に、以下の HTTP 関連の環境変数は HTTP_ を除いた部分を downcase
+したメソッド名が定義されています。</p>
+<pre>例
+value = cgi.accept              # ENV[&quot;HTTP_ACCEPT&quot;]
+value = cgi.accept_charset      # ENV[&quot;HTTP_ACCEPT_CHARSET&quot;]</pre>
+<p>このような環境変数には以下のものがあります。</p>
+<ul>
+<li>HTTP_ACCEPT</li>
+<li>HTTP_ACCEPT_CHARSET</li>
+<li>HTTP_ACCEPT_ENCODING</li>
+<li>HTTP_ACCEPT_LANGUAGE</li>
+<li>HTTP_CACHE_CONTROL</li>
+<li>HTTP_FROM</li>
+<li>HTTP_HOST</li>
+<li>HTTP_NEGOTIATE</li>
+<li>HTTP_PRAGMA</li>
+<li>HTTP_REFERER</li>
+<li>HTTP_USER_AGENT</li>
+</ul>
+<p>CGI に関連する環境変数に関しては
+<a href="http://www.w3.org/CGI/">&lt;URL:http://www.w3.org/CGI/&gt;</a><sup class="outside"><small>[外部]</small></sup> も参照してください。</p>
+<h3><a name="L003335" id="L003335">標準出力に HTTP ヘッダと HTML を出力する</a></h3>
+<pre>require &quot;cgi&quot;
+
+cgi = CGI.new(&quot;html3&quot;)  # HTML生成メソッドを追加
+cgi.out() do
+  cgi.html() do
+    cgi.head{ cgi.title{&quot;TITLE&quot;} } +
+    cgi.body() do
+      cgi.form() do
+        cgi.textarea(&quot;get_text&quot;) +
+        cgi.br +
+        cgi.submit
+      end +
+      cgi.pre() do
+        CGI.escapeHTML(
+          &quot;params: &quot; + cgi.params.inspect + &quot;\n&quot; +
+          &quot;cookies: &quot; + cgi.cookies.inspect + &quot;\n&quot; +
+          ENV.collect() do |key, value|
+            key + &quot; --&gt; &quot; + value + &quot;\n&quot;
+          end.join(&quot;&quot;)
+        )
+      end
+    end
+  end
+end
+
+# HTML生成メソッドを追加
+CGI.new(&quot;html3&quot;)    # html3.2
+CGI.new(&quot;html4&quot;)    # html4.0 (Strict)
+CGI.new(&quot;html4Tr&quot;)  # html4.0 Transitional
+CGI.new(&quot;html4Fr&quot;)  # html4.0 Frameset</pre>
+<h3><a name="L003336" id="L003336">ファイルのアップロード</a></h3>
+<p><a href="refm002.html">執筆者募集</a></p>
+<p><a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/25399">ruby-list:25399</a><sup class="outside"><small>[外部]</small></sup> を参照してください。</p>
+<h2><a name="L003337" id="L003337">オフラインモード</a></h2>
+<p><a href="refm002.html">執筆者募集</a></p>
+<p>cgi には、コマンドラインから CGI スクリプトを動かすための仕組み（オフラインモード）があります。
+コマンドラインから以下のように実行すると、</p>
+<pre>$ ruby -r cgi some_script.rb
+(offline mode: enter name=value pairs on standard input)</pre>
+<p>と聞いてくるので、</p>
+<pre>q=hoge&amp;v=foo</pre>
+<p>などと入力して下さい。クエリーに入力された値がセットされて、スクリプトが実行されます。</p>
+<p>なお、Windows 環境の場合、ただ値を入力して Enter を押すだけでは実行されません。キーボードから Ctrl + Z を入力する必要があります。</p>
+<h2><a name="L003338" id="L003338">class CGI</a></h2>
+<h3><a name="L003339" id="L003339">クラスメソッド</a></h3>
+<dl>
+<dt><a name="L003340" id="L003340"><code>CGI.escape(<var>string</var>)</code></a></dt>
+<dd>
+<p>string を URL エンコードした文字列を新しく作成し返します。</p>
+<pre>p CGI.escape('@##')   #=&gt; &quot;%40%23%23&quot;</pre></dd>
+<dt><a name="L003341" id="L003341"><code>CGI.unescape(<var>string</var>)</code></a></dt>
+<dd>
+<p>string を URL デコードした文字列を新しく作成し返します。</p>
+<pre>p CGI.unescape('%40%23%23')   #=&gt; &quot;@##&quot;</pre></dd>
+<dt><a name="L003342" id="L003342"><code>CGI.escapeHTML(<var>string</var>)</code></a></dt>
+<dd>
+<p>string 中の &amp;&quot;&lt;&gt; を実体参照にエンコードした文字列を新しく作成し返します。</p>
+<pre>p CGI.escapeHTML(&quot;3 &gt; 1&quot;)   #=&gt; &quot;3 &amp;gt; 1&quot;</pre></dd>
+<dt><a name="L003343" id="L003343"><code>CGI.unescapeHTML(<var>string</var>)</code></a></dt>
+<dd>
+<p>string 中の実体参照のうち、&amp;amp; &amp;gt; &amp;lt; &amp;quot;
+と数値指定がされているもの (&amp;#0ffff など) だけを外します。</p>
+<pre>p CGI.unescapeHTML(&quot;3 &amp;gt; 1&quot;)   #=&gt; &quot;3 &gt; 1&quot;</pre></dd>
+<dt><a name="L003344" id="L003344"><code>CGI.escapeElement(<var>string</var>, *<var>elements</var>)</code></a></dt>
+<dd>
+<p>elements に指定したエレメントのタグだけを実体参照に置換します。</p>
+<pre>例：
+p CGI.escapeElement('&lt;BR&gt;&lt;A HREF=&quot;url&quot;&gt;&lt;/A&gt;', &quot;A&quot;, &quot;IMG&quot;)
+     # =&gt; &quot;&lt;BR&gt;&amp;lt;A HREF=&quot;url&quot;&amp;gt;&amp;lt;/A&amp;gt&quot;
+
+p CGI.escapeElement('&lt;BR&gt;&lt;A HREF=&quot;url&quot;&gt;&lt;/A&gt;', [&quot;A&quot;, &quot;IMG&quot;])
+     # =&gt; &quot;&lt;BR&gt;&amp;lt;A HREF=&quot;url&quot;&amp;gt;&amp;lt;/A&amp;gt&quot;</pre></dd>
+<dt><a name="L003345" id="L003345"><code>CGI.unescapeElement(<var>string</var>, *<var>element</var>)</code></a></dt>
+<dd>
+<p>特定の要素だけをHTMLエスケープから戻す。</p>
+<pre>例：          
+print CGI.unescapeElement('&amp;lt;BR&amp;gt;&amp;lt;A HREF=&quot;url&quot;&amp;gt;&amp;lt;/A&amp;gt;', &quot;A&quot;, &quot;IMG&quot;)
+  # =&gt; &quot;&amp;lt;BR&amp;gt;&lt;A HREF=&quot;url&quot;&gt;&lt;/A&gt;&quot;
+
+print CGI.unescapeElement('&amp;lt;BR&amp;gt;&amp;lt;A HREF=&quot;url&quot;&amp;gt;&amp;lt;/A&amp;gt;', %w[A IMG])
+  # =&gt; &quot;&amp;lt;BR&amp;gt;&lt;A HREF=&quot;url&quot;&gt;&lt;/A&gt;&quot;</pre></dd>
+<dt><a name="L003346" id="L003346"><code>CGI.rfc1123_date(<var>time</var>)</code></a></dt>
+<dd>
+<p>時刻 time を <em class="XXINVALIDXX">RFC:1123</em> フォーマットに準拠した文字列に変換します。</p>
+<pre>例：
+CGI.rfc1123_date(Time.now)
+  # =&gt; Sat, 1 Jan 2000 00:00:00 GMT</pre></dd>
+<dt><a name="L003347" id="L003347"><code>CGI.parse(<var>query</var>)</code></a></dt>
+<dd>
+<p>QUERY_STRING をパースします。</p>
+<pre>例：    
+params = CGI.parse(&quot;query_string&quot;)
+  # {&quot;name1&quot; =&gt; [&quot;value1&quot;, &quot;value2&quot;, ...],
+  #  &quot;name2&quot; =&gt; [&quot;value1&quot;, &quot;value2&quot;, ...], ... }</pre></dd>
+<dt><a name="L003348" id="L003348"><code>CGI.pretty(<var>string</var>, <var>shift</var> = &quot;  &quot;)</code></a></dt>
+<dd>
+<p>HTML を人間に見やすく整形します。</p>
+<pre>例：
+print CGI.pretty(&quot;&lt;HTML&gt;&lt;BODY&gt;&lt;/BODY&gt;&lt;/HTML&gt;&quot;)
+  # &lt;HTML&gt;
+  #   &lt;BODY&gt;
+  #   &lt;/BODY&gt;
+  # &lt;/HTML&gt;
+
+print CGI.pretty(&quot;&lt;HTML&gt;&lt;BODY&gt;&lt;/BODY&gt;&lt;/HTML&gt;&quot;, &quot;\t&quot;)
+  # &lt;HTML&gt;
+  #         &lt;BODY&gt;
+  #         &lt;/BODY&gt;
+  # &lt;/HTML&gt;</pre></dd>
+</dl>
+<h3><a name="L003349" id="L003349">メソッド</a></h3>
+<dl>
+<dt><a name="L003350" id="L003350"><code>self[key]</code></a></dt>
+<dd>
+<p>文字列 key に対応するパラメータを配列で返します。
+key に対応するパラメータが見つからなかった場合は、nil を返します。（<a href="#L003353">CGI#params</a>と等価です）</p>
+<p>フォームから入力された値や、URL に埋め込まれた QUERY_STRING のパース結果の取得などに使用します。</p>
+<p><a href="refm385.html">ruby 1.8 feature</a>: 挙動が 1.6 以前の cgi と大きく変化しています <a name="footmark:2" id="footmark:2" href="#foottext:2"><sup><small>*2</small></sup></a> 。メソッドの返り値は配列でなく、文字列 <a name="footmark:3" id="footmark:3" href="#foottext:3"><sup><small>*3</small></sup></a> になり、それに伴って cgi[key][0] のような書き方は廃止されました。また key に対応するパラメータが存在しなかった場合、nil ではなく &quot;&quot; を返すようになっています。 ruby 1.6 と同じ挙動を望む場合は、<a href="#L003353">CGI#params</a>を利用してください。 </p>
+<p>この結果、インターフェースがどう変わったのかについては、以下の例を参考にしてください。</p>
+<pre># with ruby 1.6 ---------------------------
+cgi = CGI.new
+cgi['developer']     # =&gt; [&quot;Matz&quot;] (Array)
+cgi['developer'][0]  # =&gt; &quot;Matz&quot; (String)
+cgi['']              # =&gt; nil
+
+# with ruby 1.8 ---------------------------
+cgi = CGI.new
+cgi['developer']     # =&gt; &quot;Matz&quot;
+cgi['developer'][0]  # =&gt; obsolete（警告が出ます）
+cgi['']              # =&gt; &quot;&quot;
+
+cgi['developer'].is_a?(String) # =&gt; 1.8.1まではfalse、1.8.2以降はtrue</pre>
+<p><a href="refm002.html">執筆者募集</a></p></dd>
+<dt><a name="L003351" id="L003351"><code>header(<var>headers</var> = &quot;<var>text</var>/<var>html</var>&quot;)</code></a></dt>
+<dd>
+<p>HTTP ヘッダを headers に従って生成します。（ <a href="#L003352">out</a> と違い、標準出力には出力しません）
+<a href="#L003352">out</a> を使わずに自力で HTML を出力したい場合などに使います。
+このメソッドは文字列エンコーディングを変換しません。</p>
+<pre>例：
+header
+  # Content-Type: text/html
+
+header(&quot;text/plain&quot;)
+  # Content-Type: text/plain
+
+header({&quot;nph&quot;        =&gt; true,
+        &quot;status&quot;     =&gt; &quot;OK&quot;,  # == &quot;200 OK&quot;
+          # &quot;status&quot;     =&gt; &quot;200 GOOD&quot;,
+        &quot;server&quot;     =&gt; ENV['SERVER_SOFTWARE'],
+        &quot;connection&quot; =&gt; &quot;close&quot;,
+        &quot;type&quot;       =&gt; &quot;text/html&quot;,
+        &quot;charset&quot;    =&gt; &quot;iso-2022-jp&quot;,
+          # Content-Type: text/html; charset=iso-2022-jp
+        &quot;language&quot;   =&gt; &quot;ja&quot;,
+        &quot;expires&quot;    =&gt; Time.now + 30,
+        &quot;cookie&quot;     =&gt; [cookie1, cookie2],
+        &quot;my_header1&quot; =&gt; &quot;my_value&quot;
+        &quot;my_header2&quot; =&gt; &quot;my_value&quot;})</pre>
+<p>status パラメータには以下の文字列が使えます。</p>
+<pre>&quot;OK&quot;                  --&gt; &quot;200 OK&quot;
+&quot;PARTIAL_CONTENT&quot;     --&gt; &quot;206 Partial Content&quot;
+&quot;MULTIPLE_CHOICES&quot;    --&gt; &quot;300 Multiple Choices&quot;
+&quot;MOVED&quot;               --&gt; &quot;301 Moved Permanently&quot;
+&quot;REDIRECT&quot;            --&gt; &quot;302 Found&quot;
+&quot;NOT_MODIFIED&quot;        --&gt; &quot;304 Not Modified&quot;
+&quot;BAD_REQUEST&quot;         --&gt; &quot;400 Bad Request&quot;
+&quot;AUTH_REQUIRED&quot;       --&gt; &quot;401 Authorization Required&quot;
+&quot;FORBIDDEN&quot;           --&gt; &quot;403 Forbidden&quot;
+&quot;NOT_FOUND&quot;           --&gt; &quot;404 Not Found&quot;
+&quot;METHOD_NOT_ALLOWED&quot;  --&gt; &quot;405 Method Not Allowed&quot;
+&quot;NOT_ACCEPTABLE&quot;      --&gt; &quot;406 Not Acceptable&quot;
+&quot;LENGTH_REQUIRED&quot;     --&gt; &quot;411 Length Required&quot;
+&quot;PRECONDITION_FAILED&quot; --&gt; &quot;412 Rrecondition Failed&quot;
+&quot;SERVER_ERROR&quot;        --&gt; &quot;500 Internal Server Error&quot;
+&quot;NOT_IMPLEMENTED&quot;     --&gt; &quot;501 Method Not Implemented&quot;
+&quot;BAD_GATEWAY&quot;         --&gt; &quot;502 Bad Gateway&quot;
+&quot;VARIANT_ALSO_VARIES&quot; --&gt; &quot;506 Variant Also Negotiates&quot;</pre></dd>
+</dl>
+<pre>例
+
+     cgi = CGI.new('html3')
+     print cgi.header({&quot;charset&quot; =&gt; &quot;shift_jis&quot;})
+     print &quot;&lt;html&gt;&lt;head&gt;&lt;title&gt;TITLE&lt;/title&gt;&lt;/head&gt;\r\n&quot;
+     print &quot;&lt;body&gt;BODY&lt;/body&gt;&lt;/html&gt;\r\n&quot;</pre>
+<dl>
+<dt><a name="L003352" id="L003352"><code>out(<var>options</var> = &quot;<var>text</var>/<var>html</var>&quot;) { .... }</code></a></dt>
+<dd>
+<p>HTTP ヘッダと、ブロックで与えられた文字列を標準出力に出力します。</p>
+<pre>cgi = CGI.new
+cgi.out{ &quot;string&quot; }
+  # Content-Type: text/html
+  # Content-Length: 6
+  #
+  # string
+
+cgi.out(&quot;text/plain&quot;){ &quot;string&quot; }
+  # Content-Type: text/plain
+  # Content-Length: 6
+  #
+  # string
+
+cgi.out({&quot;nph&quot;        =&gt; true,
+         &quot;status&quot;     =&gt; &quot;OK&quot;,  # == &quot;200 OK&quot;
+         &quot;server&quot;     =&gt; ENV['SERVER_SOFTWARE'],
+         &quot;connection&quot; =&gt; &quot;close&quot;,
+         &quot;type&quot;       =&gt; &quot;text/html&quot;,
+         &quot;charset&quot;    =&gt; &quot;iso-2022-jp&quot;,
+           # Content-Type: text/html; charset=iso-2022-jp
+         &quot;language&quot;   =&gt; &quot;ja&quot;,
+         &quot;expires&quot;    =&gt; Time.now + (3600 * 24 * 30),
+         &quot;cookie&quot;     =&gt; [cookie1, cookie2],
+         &quot;my_header1&quot; =&gt; &quot;my_value&quot;,
+         &quot;my_header2&quot; =&gt; &quot;my_value&quot;}){ &quot;string&quot; }</pre>
+<p>HEADリクエスト (<code>REQUEST_METHOD == &quot;HEAD&quot;</code>) の場合は HTTP ヘッダのみを出力します。</p>
+<p><var>charset</var> が <code>&quot;iso-2022-jp&quot;</code>・<code>&quot;euc-jp&quot;</code>・<code>&quot;shift_jis&quot;</code> のいずれかで
+ある場合は文字列エンコーディングを自動変換し、<var>language</var> を <code>&quot;ja&quot;</code>にします。</p></dd>
+<dt><a name="L003353" id="L003353"><code>params</code></a></dt>
+<dd>
+<p>パラメータを格納したハッシュを返します。</p>
+<p>フォームから入力された値や、URLに埋め込まれた QUERY_STRING のパース結果の取得などに使用します。</p>
+<pre>cgi = CGI.new
+cgi.params['developer']     # =&gt; [&quot;Matz&quot;] (Array)
+cgi.params['developer'][0]  # =&gt; &quot;Matz&quot;
+cgi.params['']              # =&gt; nil</pre></dd>
+<dt><a name="L003354" id="L003354"><code>print(*<var>strings</var>)</code></a></dt>
+<dd>
+<p>引数の文字列を標準出力に出力します。</p>
+<pre>例：
+cgi = CGI.new
+cgi.print &quot;This line is a part of content body.\r\n&quot;</pre></dd>
+<dt><a name="L003355" id="L003355"><code>multipart?</code></a></dt>
+<dd>
+<p>マルチパートフォームの場合にtrueが返ります。</p>
+<pre>例：
+cgi = CGI.new
+if cgi.multipart?
+  field1=cgi['field1'].read
+else
+  field1=cgi['field1']
+end</pre></dd>
+<dt><a name="L003356" id="L003356"><code>auth_type</code></a>
+</dl>
+<pre>ENV['AUTH_TYPE']</pre>
+<dl>
+<dt><a name="L003357" id="L003357"><code>content_length</code></a>
+</dl>
+<pre>ENV['CONTENT_LENGTH']</pre>
+<dl>
+<dt><a name="L003358" id="L003358"><code>content_type</code></a>
+</dl>
+<pre>ENV['CONTENT_TYPE']</pre>
+<dl>
+<dt><a name="L003359" id="L003359"><code>gateway_interface</code></a>
+</dl>
+<pre>ENV['GATEWAY_INTERFACE']</pre>
+<dl>
+<dt><a name="L003360" id="L003360"><code>path_info</code></a>
+</dl>
+<pre>ENV['PATH_INFO']</pre>
+<dl>
+<dt><a name="L003361" id="L003361"><code>path_translated</code></a>
+</dl>
+<pre>ENV['PATH_TRANSLATED']</pre>
+<dl>
+<dt><a name="L003362" id="L003362"><code>query_string</code></a>
+</dl>
+<pre>ENV['QUERY_STRING']</pre>
+<dl>
+<dt><a name="L003363" id="L003363"><code>remote_addr</code></a>
+</dl>
+<pre>ENV['REMOTE_ADDR']</pre>
+<dl>
+<dt><a name="L003364" id="L003364"><code>remote_host</code></a>
+</dl>
+<pre>ENV['REMOTE_HOST']</pre>
+<dl>
+<dt><a name="L003365" id="L003365"><code>remote_ident</code></a>
+</dl>
+<pre>ENV['REMOTE_IDENT']</pre>
+<dl>
+<dt><a name="L003366" id="L003366"><code>remote_user</code></a>
+</dl>
+<pre>ENV['REMOTE_USER']</pre>
+<dl>
+<dt><a name="L003367" id="L003367"><code>request_method</code></a>
+</dl>
+<pre>ENV['REQUEST_METHOD']</pre>
+<dl>
+<dt><a name="L003368" id="L003368"><code>script_name</code></a>
+</dl>
+<pre>ENV['SCRIPT_NAME']</pre>
+<dl>
+<dt><a name="L003369" id="L003369"><code>server_name</code></a>
+</dl>
+<pre>ENV['SERVER_NAME']</pre>
+<dl>
+<dt><a name="L003370" id="L003370"><code>server_port</code></a>
+</dl>
+<pre>ENV['SERVER_PORT']</pre>
+<dl>
+<dt><a name="L003371" id="L003371"><code>server_protocol</code></a>
+</dl>
+<pre>ENV['SERVER_PROTOCOL']</pre>
+<dl>
+<dt><a name="L003372" id="L003372"><code>server_software</code></a>
+</dl>
+<pre>ENV['SERVER_SOFTWARE']</pre>
+<dl>
+<dt><a name="L003373" id="L003373"><code>raw_cookie</code></a>
+</dl>
+<pre>ENV[&quot;HTTP_COOKIE&quot;]</pre>
+<dl>
+<dt><a name="L003374" id="L003374"><code>raw_cookie2</code></a>
+</dl>
+<pre>ENV[&quot;HTTP_COOKIE2&quot;]</pre>
+<dl>
+<dt><a name="L003375" id="L003375"><code>accept</code></a>
+</dl>
+<pre>ENV['HTTP_ACCEPT']</pre>
+<dl>
+<dt><a name="L003376" id="L003376"><code>accept_charset</code></a>
+</dl>
+<pre>ENV['HTTP_ACCEPT_CHARSET']</pre>
+<dl>
+<dt><a name="L003377" id="L003377"><code>accept_encoding</code></a>
+</dl>
+<pre>ENV['HTTP_ACCEPT_ENCODING']</pre>
+<dl>
+<dt><a name="L003378" id="L003378"><code>accept_language</code></a>
+</dl>
+<pre>ENV['HTTP_ACCEPT_LANGUAGE']</pre>
+<dl>
+<dt><a name="L003379" id="L003379"><code>cache_control</code></a>
+</dl>
+<pre>ENV['HTTP_CACHE_CONTROL']</pre>
+<dl>
+<dt><a name="L003380" id="L003380"><code>from</code></a>
+</dl>
+<pre>ENV['HTTP_FROM']</pre>
+<dl>
+<dt><a name="L003381" id="L003381"><code>host</code></a>
+</dl>
+<pre>ENV['HTTP_HOST']</pre>
+<dl>
+<dt><a name="L003382" id="L003382"><code>negotiate</code></a>
+</dl>
+<pre>ENV['HTTP_NEGOTIATE']</pre>
+<dl>
+<dt><a name="L003383" id="L003383"><code>pragma</code></a>
+</dl>
+<pre>ENV['HTTP_PRAGMA']</pre>
+<dl>
+<dt><a name="L003384" id="L003384"><code>referer</code></a>
+</dl>
+<pre>ENV['HTTP_REFERER']</pre>
+<dl>
+<dt><a name="L003385" id="L003385"><code>user_agent</code></a>
+</dl>
+<pre>ENV['HTTP_USER_AGENT']</pre>
+<h2><a name="L003386" id="L003386">class CGI::Cookie</a></h2>
+<h3><a name="L003339" id="L003339">クラスメソッド</a></h3>
+<dl>
+<dt><a name="L003387" id="L003387"><code>CGI::Cookie.new(<var>name</var> = &quot;&quot;, *<var>value</var>)</code></a></dt>
+<dd>
+<p>クッキーオブジェクトを作成します。</p>
+<pre>例：
+cookie1 = CGI::Cookie.new(&quot;name&quot;, &quot;value1&quot;, &quot;value2&quot;, ...)
+cookie1 = CGI::Cookie.new({&quot;name&quot; =&gt; &quot;name&quot;, &quot;value&quot; =&gt; &quot;value&quot;})
+cookie1 = CGI::Cookie.new({'name'    =&gt; 'name',
+                           'value'   =&gt; ['value1', 'value2', ...],
+                           'path'    =&gt; 'path',   # optional
+                           'domain'  =&gt; 'domain', # optional
+                           'expires' =&gt; Time.now, # optional
+                           'secure'  =&gt; true      # optional
+                          })
+
+cgi.out({&quot;cookie&quot; =&gt; [cookie1, cookie2]}){ &quot;string&quot; }
+
+name    = cookie1.name
+values  = cookie1.value
+path    = cookie1.path
+domain  = cookie1.domain
+expires = cookie1.expires
+secure  = cookie1.secure
+
+cookie1.name    = 'name'
+cookie1.value   = ['value1', 'value2', ...]
+cookie1.path    = 'path'
+cookie1.domain  = 'domain'
+cookie1.expires = Time.now + 30
+cookie1.secure  = true</pre></dd>
+<dt><a name="L003388" id="L003388"><code>CGI::Cookie.parse(<var>raw_cookie</var>)</code></a></dt>
+<dd>
+<p>クッキー文字列をパースします。</p>
+<pre>例：
+cookies = CGI::Cookie.parse(&quot;raw_cookie_string&quot;)
+  # { &quot;name1&quot; =&gt; cookie1, &quot;name2&quot; =&gt; cookie2, ... }</pre></dd>
+<dt><a name="L003389" id="L003389"><code>CGI::Cookie#name</code></a>
+<dt><a name="L003390" id="L003390"><code>CGI::Cookie#name=</code></a>
+<dt><a name="L003391" id="L003391"><code>CGI::Cookie#value</code></a>
+<dt><a name="L003392" id="L003392"><code>CGI::Cookie#value=</code></a>
+<dt><a name="L003393" id="L003393"><code>CGI::Cookie#path</code></a>
+<dt><a name="L003394" id="L003394"><code>CGI::Cookie#path=</code></a>
+<dt><a name="L003395" id="L003395"><code>CGI::Cookie#domain</code></a>
+<dt><a name="L003396" id="L003396"><code>CGI::Cookie#domain=</code></a>
+<dt><a name="L003397" id="L003397"><code>CGI::Cookie#expires</code></a>
+<dt><a name="L003398" id="L003398"><code>CGI::Cookie#expires=</code></a>
+<dt><a name="L003399" id="L003399"><code>CGI::Cookie#secure</code></a>
+<dt><a name="L003400" id="L003400"><code>CGI::Cookie#secure=</code></a></dt>
+<dd>
+<p>Cookie オブジェクトのアトリビュートです。</p>
+<pre>例：
+cookie1 = CGI::Cookie.new(&quot;name&quot;, &quot;value1&quot;, &quot;value2&quot;, ...)
+cookie1 = CGI::Cookie.new({&quot;name&quot; =&gt; &quot;name&quot;, &quot;value&quot; =&gt; &quot;value&quot;})
+cookie1 = CGI::Cookie.new({'name'    =&gt; 'name',
+                           'value'   =&gt; ['value1', 'value2', ...],
+                           'path'    =&gt; 'path',   # optional
+                           'domain'  =&gt; 'domain', # optional
+                           'expires' =&gt; Time.now, # optional
+                           'secure'  =&gt; true      # optional
+                          })
+
+cgi.out({&quot;cookie&quot; =&gt; [cookie1, cookie2]}){ &quot;string&quot; }
+
+name    = cookie1.name
+values  = cookie1.value
+path    = cookie1.path
+domain  = cookie1.domain
+expires = cookie1.expires
+secure  = cookie1.secure
+
+cookie1.name    = 'name'
+cookie1.value   = ['value1', 'value2', ...]
+cookie1.path    = 'path'
+cookie1.domain  = 'domain'
+cookie1.expires = Time.now + 30
+cookie1.secure  = true</pre></dd>
+</dl>
+<h2><a name="L003401" id="L003401">HTMLエレメント出力用メソッド</a></h2>
+<p>新たな CGI オブジェクトを生成する際、引数として特定の文字列を与えることによって、そのオブジェクトに HTML 生成用のメソッドを追加することができます。これらのメソッドを利用することにより、「よりRuby的に」HTML 文書を出力することが可能になります。</p>
+<pre>例：
+
+cgi = CGI.new(&quot;html3&quot;)  # HTML3.2に準拠したHTML生成メソッドを追加
+cgi.h1
+  # &lt;H1&gt;&lt;/h1&gt;
+cgi.h1{ &quot;content&quot; }
+  # &lt;H1&gt;content&lt;/H1&gt;
+cgi.h1({ &quot;class&quot; =&gt; &quot;foo&quot;, &quot;attr&quot; =&gt; &quot;bar&quot; }){ &quot;content&quot; }
+  # &lt;H1 class=&quot;foo&quot; attr=&quot;bar&quot;&gt;content&lt;/H1&gt;
+
+
+# HTML生成メソッドを追加
+CGI.new(&quot;html3&quot;)    # html3.2
+CGI.new(&quot;html4&quot;)    # html4.0 (Strict)
+CGI.new(&quot;html4Tr&quot;)  # html4.0 Transitional
+CGI.new(&quot;html4Fr&quot;)  # html4.0 Frameset</pre>
+<p>HTML 生成メソッドの引数としては、基本的に Hash オブジェクトが与えられる（あるいは何も与えられない）べきです。ただし以下に列挙されたメソッドでは、各メソッドの引数の形式に従って、 Hash オブジェクト以外のものを渡すこともできます。</p>
+<dl>
+<dt><a name="L003402" id="L003402"><code>CGI::HtmlExtension#a(<var>href</var> = &quot;&quot;)</code></a></dt>
+<dd>
+<p><code> </code></p>
+<pre>例：
+a(&quot;url&quot;)
+  # = a({ &quot;HREF&quot; =&gt; &quot;url&quot; })</pre></dd>
+<dt><a name="L003403" id="L003403"><code>CGI::HtmlExtension#base(<var>href</var> = &quot;&quot;)</code></a></dt>
+<dd>
+<p><code> </code></p>
+<pre>例：
+base(&quot;url&quot;)
+  # = base({ &quot;HREF&quot; =&gt; &quot;url&quot; })</pre></dd>
+<dt><a name="L003404" id="L003404"><code>CGI::HtmlExtension#blockquote(<var>cite</var> = <var>nil</var>)</code></a></dt>
+<dd>
+<p><code> </code></p>
+<pre>例：
+blockquote(&quot;url&quot;){ &quot;string&quot; }
+  # = blockquote({ &quot;CITE&quot; =&gt; &quot;url&quot; }){ &quot;string&quot; }</pre></dd>
+<dt><a name="L003405" id="L003405"><code>CGI::HtmlExtension#caption(<var>align</var> = <var>nil</var>)</code></a></dt>
+<dd>
+<p><code> </code></p>
+<pre>例：
+caption(&quot;align&quot;){ &quot;string&quot; }
+  # = caption({ &quot;ALIGN&quot; =&gt; &quot;align&quot; }){ &quot;string&quot; }</pre></dd>
+<dt><a name="L003406" id="L003406"><code>CGI::HtmlExtension#checkbox(<var>name</var> = &quot;&quot;, <var>value</var> = <var>nil</var>, <var>checked</var> = <var>nil</var>)</code></a></dt>
+<dd>
+<p><code> </code></p>
+<pre>例：
+checkbox(&quot;name&quot;)
+  # = checkbox({ &quot;NAME&quot; =&gt; &quot;name&quot; })
+
+checkbox(&quot;name&quot;, &quot;value&quot;)
+  # = checkbox({ &quot;NAME&quot; =&gt; &quot;name&quot;, &quot;VALUE&quot; =&gt; &quot;value&quot; })
+
+checkbox(&quot;name&quot;, &quot;value&quot;, true)
+  # = checkbox({ &quot;NAME&quot; =&gt; &quot;name&quot;, &quot;VALUE&quot; =&gt; &quot;value&quot;, &quot;CHECKED&quot; =&gt; true })</pre></dd>
+<dt><a name="L003407" id="L003407"><code>CGI::HtmlExtension#checkbox_group(<var>name</var> = &quot;&quot;, *<var>values</var>)</code></a></dt>
+<dd>
+<p><code> </code></p>
+<pre>例：
+checkbox_group(&quot;name&quot;, &quot;foo&quot;, &quot;bar&quot;, &quot;baz&quot;)
+  # &lt;INPUT TYPE=&quot;checkbox&quot; NAME=&quot;name&quot; VALUE=&quot;foo&quot;&gt;foo
+  # &lt;INPUT TYPE=&quot;checkbox&quot; NAME=&quot;name&quot; VALUE=&quot;bar&quot;&gt;bar
+  # &lt;INPUT TYPE=&quot;checkbox&quot; NAME=&quot;name&quot; VALUE=&quot;baz&quot;&gt;baz
+
+checkbox_group(&quot;name&quot;, [&quot;foo&quot;], [&quot;bar&quot;, true], &quot;baz&quot;)
+  # &lt;INPUT TYPE=&quot;checkbox&quot; NAME=&quot;name&quot; VALUE=&quot;foo&quot;&gt;foo
+  # &lt;INPUT TYPE=&quot;checkbox&quot; SELECTED NAME=&quot;name&quot; VALUE=&quot;bar&quot;&gt;bar
+  # &lt;INPUT TYPE=&quot;checkbox&quot; NAME=&quot;name&quot; VALUE=&quot;baz&quot;&gt;baz
+
+checkbox_group(&quot;name&quot;, [&quot;1&quot;, &quot;Foo&quot;], [&quot;2&quot;, &quot;Bar&quot;, true], &quot;Baz&quot;)
+  # &lt;INPUT TYPE=&quot;checkbox&quot; NAME=&quot;name&quot; VALUE=&quot;1&quot;&gt;Foo
+  # &lt;INPUT TYPE=&quot;checkbox&quot; SELECTED NAME=&quot;name&quot; VALUE=&quot;2&quot;&gt;Bar
+  # &lt;INPUT TYPE=&quot;checkbox&quot; NAME=&quot;name&quot; VALUE=&quot;Baz&quot;&gt;Baz
+
+checkbox_group({ &quot;NAME&quot; =&gt; &quot;name&quot;,
+                 &quot;VALUES&quot; =&gt; [&quot;foo&quot;, &quot;bar&quot;, &quot;baz&quot;] })
+
+checkbox_group({ &quot;NAME&quot; =&gt; &quot;name&quot;,
+                 &quot;VALUES&quot; =&gt; [[&quot;foo&quot;], [&quot;bar&quot;, true], &quot;baz&quot;] })
+
+checkbox_group({ &quot;NAME&quot; =&gt; &quot;name&quot;,
+                 &quot;VALUES&quot; =&gt; [[&quot;1&quot;, &quot;Foo&quot;], [&quot;2&quot;, &quot;Bar&quot;, true], &quot;Baz&quot;] })</pre></dd>
+<dt><a name="L003408" id="L003408"><code>CGI::HtmlExtension#file_field(<var>name</var> = &quot;&quot;, <var>size</var> = <var>20</var>, <var>maxlength</var> = <var>nil</var>)</code></a></dt>
+<dd>
+<p><code> </code></p>
+<pre>例：
+file_field(&quot;name&quot;)
+  # &lt;INPUT TYPE=&quot;file&quot; NAME=&quot;name&quot; SIZE=&quot;20&quot;&gt;
+
+file_field(&quot;name&quot;, 40)
+  # &lt;INPUT TYPE=&quot;file&quot; NAME=&quot;name&quot; SIZE=&quot;40&quot;&gt;
+
+file_field(&quot;name&quot;, 40, 100)
+  # &lt;INPUT TYPE=&quot;file&quot; NAME=&quot;name&quot; SIZE=&quot;40&quot; MAXLENGTH=&quot;100&quot;&gt;
+
+file_field({ &quot;NAME&quot; =&gt; &quot;name&quot;, &quot;SIZE&quot; =&gt; 40 })
+  # &lt;INPUT TYPE=&quot;file&quot; NAME=&quot;name&quot; SIZE=&quot;40&quot;&gt;</pre></dd>
+<dt><a name="L003409" id="L003409"><code>CGI::HtmlExtension#form(<var>method</var> = &quot;<var>post</var>&quot;, <var>action</var> = <var>nil</var>, <var>enctype</var> = &quot;<var>application</var>/<var>x</var>-<var>www</var>-<var>form</var>-<var>urlencoded</var>&quot;)</code></a></dt>
+<dd>
+<p><code> </code></p>
+<pre>例：
+form{ &quot;string&quot; }
+  # &lt;FORM METHOD=&quot;post&quot; ENCTYPE=&quot;application/x-www-form-urlencoded&quot;&gt;string&lt;/FORM&gt;
+
+form(&quot;get&quot;){ &quot;string&quot; }
+  # &lt;FORM METHOD=&quot;get&quot; ENCTYPE=&quot;application/x-www-form-urlencoded&quot;&gt;string&lt;/FORM&gt;
+
+form(&quot;get&quot;, &quot;url&quot;){ &quot;string&quot; }
+  # &lt;FORM METHOD=&quot;get&quot; ACTION=&quot;url&quot; ENCTYPE=&quot;application/x-www-form-urlencoded&quot;&gt;string&lt;/FORM&gt;
+
+form({&quot;METHOD&quot; =&gt; &quot;post&quot;, ENCTYPE =&gt; &quot;enctype&quot;}){ &quot;string&quot; }
+  # &lt;FORM METHOD=&quot;post&quot; ENCTYPE=&quot;enctype&quot;&gt;string&lt;/FORM&gt;</pre></dd>
+<dt><a name="L003410" id="L003410"><code>CGI::HtmlExtension#hidden(<var>name</var> = &quot;&quot;, <var>value</var> = <var>nil</var>)</code></a></dt>
+<dd>
+<p><code> </code></p>
+<pre>例：
+hidden(&quot;name&quot;)
+  # &lt;INPUT TYPE=&quot;hidden&quot; NAME=&quot;name&quot;&gt;
+
+hidden(&quot;name&quot;, &quot;value&quot;)
+  # &lt;INPUT TYPE=&quot;hidden&quot; NAME=&quot;name&quot; VALUE=&quot;value&quot;&gt;
+
+hidden({ &quot;NAME&quot; =&gt; &quot;name&quot;, &quot;VALUE&quot; =&gt; &quot;reset&quot;, &quot;ID&quot; =&gt; &quot;foo&quot; })
+  # &lt;INPUT TYPE=&quot;hidden&quot; NAME=&quot;name&quot; VALUE=&quot;value&quot; ID=&quot;foo&quot;&gt;</pre></dd>
+<dt><a name="L003411" id="L003411"><code>CGI::HtmlExtension#html(<var>attributes</var> = {})</code></a></dt>
+<dd>
+<p><code> </code></p>
+<pre>例：
+
+html{ &quot;string&quot; }
+  # &lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 3.2 Final//EN&quot;&gt;&lt;HTML&gt;string&lt;/HTML&gt;
+
+html({ &quot;LANG&quot; =&gt; &quot;ja&quot; }){ &quot;string&quot; }
+  # &lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 3.2 Final//EN&quot;&gt;&lt;HTML LANG=&quot;ja&quot;&gt;string&lt;/HTML&gt;
+
+html({ &quot;DOCTYPE&quot; =&gt; false }){ &quot;string&quot; }
+  # &lt;HTML&gt;string&lt;/HTML&gt;
+
+html({ &quot;DOCTYPE&quot; =&gt; '&lt;!DOCTYPE HTML PUBLIC &quot;-//IETF//DTD HTML//EN&quot;&gt;' }){ &quot;string&quot; }
+  # &lt;!DOCTYPE HTML PUBLIC &quot;-//IETF//DTD HTML//EN&quot;&gt;&lt;HTML&gt;string&lt;/HTML&gt;
+
+html({ &quot;PRETTY&quot; =&gt; &quot;  &quot; }){ &quot;&lt;BODY&gt;&lt;/BODY&gt;&quot; }
+  # &lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 3.2 Final//EN&quot;&gt;
+  # &lt;HTML&gt;
+  #   &lt;BODY&gt;
+  #   &lt;/BODY&gt;
+  # &lt;/HTML&gt;
+
+html({ &quot;PRETTY&quot; =&gt; &quot;\t&quot; }){ &quot;&lt;BODY&gt;&lt;/BODY&gt;&quot; }
+  # &lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 3.2 Final//EN&quot;&gt;
+  # &lt;HTML&gt;
+  #         &lt;BODY&gt;
+  #         &lt;/BODY&gt;
+  # &lt;/HTML&gt;
+
+html(&quot;PRETTY&quot;){ &quot;&lt;BODY&gt;&lt;/BODY&gt;&quot; }
+  # = html({ &quot;PRETTY&quot; =&gt; &quot;  &quot; }){ &quot;&lt;BODY&gt;&lt;/BODY&gt;&quot; }
+
+html(if $VERBOSE then &quot;PRETTY&quot; end){ &quot;HTML string&quot; }</pre></dd>
+<dt><a name="L003412" id="L003412"><code>CGI::HtmlExtension#image_button(<var>src</var> = &quot;&quot;, <var>name</var> = <var>nil</var>, <var>alt</var> = <var>nil</var>)</code></a></dt>
+<dd>
+<p><code> </code></p>
+<pre>例：
+image_button(&quot;url&quot;)
+  # &lt;INPUT TYPE=&quot;image&quot; SRC=&quot;url&quot;&gt;
+
+image_button(&quot;url&quot;, &quot;name&quot;, &quot;string&quot;)
+  # &lt;INPUT TYPE=&quot;image&quot; SRC=&quot;url&quot; NAME=&quot;name&quot; ALT=&quot;string&quot;&gt;
+
+image_button({ &quot;SRC&quot; =&gt; &quot;url&quot;, &quot;ATL&quot; =&gt; &quot;strng&quot; })
+  # &lt;INPUT TYPE=&quot;image&quot; SRC=&quot;url&quot; ALT=&quot;string&quot;&gt;</pre></dd>
+<dt><a name="L003413" id="L003413"><code>CGI::HtmlExtension#img(<var>src</var> = &quot;&quot;, <var>alt</var> = &quot;&quot;, <var>width</var> = <var>nil</var>, <var>height</var> = <var>nil</var>)</code></a></dt>
+<dd>
+<p><code> </code></p>
+<pre>例：
+img(&quot;src&quot;, &quot;alt&quot;, 100, 50)
+  # &lt;IMG SRC=&quot;src&quot; ALT=&quot;alt&quot; WIDTH=&quot;100&quot; HEIGHT=&quot;50&quot;&gt;
+
+img({ &quot;SRC&quot; =&gt; &quot;src&quot;, &quot;ALT&quot; =&gt; &quot;alt&quot;, &quot;WIDTH&quot; =&gt; 100, &quot;HEIGHT&quot; =&gt; 50 })
+  # &lt;IMG SRC=&quot;src&quot; ALT=&quot;alt&quot; WIDTH=&quot;100&quot; HEIGHT=&quot;50&quot;&gt;</pre></dd>
+<dt><a name="L003414" id="L003414"><code>CGI::HtmlExtension#multipart_form(<var>action</var> = <var>nil</var>, <var>enctype</var> = &quot;<var>multipart</var>/<var>form</var>-<var>data</var>&quot;)</code></a></dt>
+<dd>
+<p><code> </code></p>
+<pre>例：
+multipart_form{ &quot;string&quot; }
+  # &lt;FORM METHOD=&quot;post&quot; ENCTYPE=&quot;multipart/form-data&quot;&gt;string&lt;/FORM&gt;
+
+multipart_form(&quot;url&quot;){ &quot;string&quot; }
+  # &lt;FORM METHOD=&quot;post&quot; ACTION=&quot;url&quot; ENCTYPE=&quot;multipart/form-data&quot;&gt;string&lt;/FORM&gt;</pre></dd>
+<dt><a name="L003415" id="L003415"><code>CGI::HtmlExtension#password_field(<var>name</var> = &quot;&quot;, <var>value</var> = <var>nil</var>, <var>size</var> = <var>40</var>, <var>maxlength</var> = <var>nil</var>)</code></a></dt>
+<dd>
+<p><code> </code></p>
+<pre>例：
+password_field(&quot;name&quot;)
+  # &lt;INPUT TYPE=&quot;password&quot; NAME=&quot;name&quot; SIZE=&quot;40&quot;&gt;
+
+password_field(&quot;name&quot;, &quot;value&quot;)
+  # &lt;INPUT TYPE=&quot;password&quot; NAME=&quot;name&quot; VALUE=&quot;value&quot; SIZE=&quot;40&quot;&gt;
+
+password_field(&quot;password&quot;, &quot;value&quot;, 80, 200)
+  # &lt;INPUT TYPE=&quot;password&quot; NAME=&quot;name&quot; VALUE=&quot;value&quot; SIZE=&quot;80&quot; MAXLENGTH=&quot;200&quot;&gt;
+
+password_field({ &quot;NAME&quot; =&gt; &quot;name&quot;, &quot;VALUE&quot; =&gt; &quot;value&quot; })
+  # &lt;INPUT TYPE=&quot;password&quot; NAME=&quot;name&quot; VALUE=&quot;value&quot;&gt;</pre></dd>
+<dt><a name="L003416" id="L003416"><code>CGI::HtmlExtension#popup_menu(<var>name</var> = &quot;&quot;, *<var>values</var>)</code></a></dt>
+<dd>
+<p><code> </code></p>
+<pre>例：
+popup_menu(&quot;name&quot;, &quot;foo&quot;, &quot;bar&quot;, &quot;baz&quot;)
+  # &lt;SELECT NAME=&quot;name&quot;&gt;
+  #   &lt;OPTION VALUE=&quot;foo&quot;&gt;foo&lt;/OPTION&gt;
+  #   &lt;OPTION VALUE=&quot;bar&quot;&gt;bar&lt;/OPTION&gt;
+  #   &lt;OPTION VALUE=&quot;baz&quot;&gt;baz&lt;/OPTION&gt;
+  # &lt;/SELECT&gt;
+
+popup_menu(&quot;name&quot;, [&quot;foo&quot;], [&quot;bar&quot;, true], &quot;baz&quot;)
+  # &lt;SELECT NAME=&quot;name&quot;&gt;
+  #   &lt;OPTION VALUE=&quot;foo&quot;&gt;foo&lt;/OPTION&gt;
+  #   &lt;OPTION VALUE=&quot;bar&quot; SELECTED&gt;bar&lt;/OPTION&gt;
+  #   &lt;OPTION VALUE=&quot;baz&quot;&gt;baz&lt;/OPTION&gt;
+  # &lt;/SELECT&gt;
+
+popup_menu(&quot;name&quot;, [&quot;1&quot;, &quot;Foo&quot;], [&quot;2&quot;, &quot;Bar&quot;, true], &quot;Baz&quot;)
+  # &lt;SELECT NAME=&quot;name&quot;&gt;
+  #   &lt;OPTION VALUE=&quot;1&quot;&gt;Foo&lt;/OPTION&gt;
+  #   &lt;OPTION SELECTED VALUE=&quot;2&quot;&gt;Bar&lt;/OPTION&gt;
+  #   &lt;OPTION VALUE=&quot;Baz&quot;&gt;Baz&lt;/OPTION&gt;
+  # &lt;/SELECT&gt;
+
+popup_menu({&quot;NAME&quot; =&gt; &quot;name&quot;, &quot;SIZE&quot; =&gt; 2, &quot;MULTIPLE&quot; =&gt; true,
+            &quot;VALUES&quot; =&gt; [[&quot;1&quot;, &quot;Foo&quot;], [&quot;2&quot;, &quot;Bar&quot;, true], &quot;Baz&quot;] })
+  # &lt;SELECT NAME=&quot;name&quot; MULTIPLE SIZE=&quot;2&quot;&gt;
+  #   &lt;OPTION VALUE=&quot;1&quot;&gt;Foo&lt;/OPTION&gt;
+  #   &lt;OPTION SELECTED VALUE=&quot;2&quot;&gt;Bar&lt;/OPTION&gt;
+  #   &lt;OPTION VALUE=&quot;Baz&quot;&gt;Baz&lt;/OPTION&gt;
+  # &lt;/SELECT&gt;</pre></dd>
+<dt><a name="L003417" id="L003417"><code>CGI::HtmlExtension#radio_button(<var>name</var> = &quot;&quot;, <var>value</var> = <var>nil</var>, <var>checked</var> = <var>nil</var>)</code></a></dt>
+<dd>
+<p><code> </code></p>
+<pre>例：
+radio_button(&quot;name&quot;, &quot;value&quot;)
+  # &lt;INPUT TYPE=&quot;radio&quot; NAME=&quot;name&quot; VALUE=&quot;value&quot;&gt;
+
+radio_button(&quot;name&quot;, &quot;value&quot;, true)
+  # &lt;INPUT TYPE=&quot;radio&quot; NAME=&quot;name&quot; VALUE=&quot;value&quot; CHECKED&gt;
+
+radio_button({ &quot;NAME&quot; =&gt; &quot;name&quot;, &quot;VALUE&quot; =&gt; &quot;value&quot;, &quot;ID&quot; =&gt; &quot;foo&quot; })
+  # &lt;INPUT TYPE=&quot;radio&quot; NAME=&quot;name&quot; VALUE=&quot;value&quot; ID=&quot;foo&quot;&gt;</pre></dd>
+<dt><a name="L003418" id="L003418"><code>CGI::HtmlExtension#radio_group(<var>name</var> = &quot;&quot;, *<var>values</var>)</code></a></dt>
+<dd>
+<p><code> </code></p>
+<pre>例：
+radio_group(&quot;name&quot;, &quot;foo&quot;, &quot;bar&quot;, &quot;baz&quot;)
+  # &lt;INPUT TYPE=&quot;radio&quot; NAME=&quot;name&quot; VALUE=&quot;foo&quot;&gt;foo
+  # &lt;INPUT TYPE=&quot;radio&quot; NAME=&quot;name&quot; VALUE=&quot;bar&quot;&gt;bar
+  # &lt;INPUT TYPE=&quot;radio&quot; NAME=&quot;name&quot; VALUE=&quot;baz&quot;&gt;baz
+
+radio_group(&quot;name&quot;, [&quot;foo&amp;quot;], [&quot;bar&quot;, true], &quot;baz&quot;)
+  # &lt;INPUT TYPE=&quot;radio&quot; NAME=&quot;name&quot; VALUE=&quot;foo&quot;&gt;foo
+  # &lt;INPUT TYPE=&amp;quot;radio&quot; CHECKED NAME=&quot;name&quot; VALUE=&quot;bar&quot;&gt;bar
+  # &lt;INPUT TYPE=&quot;radio&quot; NAME=&quot;name&quot; VALUE=&quot;baz&quot;&gt;baz
+
+radio_group(&quot;name&quot;, [&quot;1&quot;, &quot;Foo&quot;], [&quot;2&quot;, &quot;Bar&quot;, true], &quot;Baz&quot;)
+  # &lt;INPUT TYPE=&quot;radio&quot; NAME=&quot;name&quot; VALUE=&quot;1&quot;&gt;Foo
+  # &lt;INPUT TYPE=&quot;radio&quot; CHECKED NAME=&quot;name&quot; VALUE=&quot;2&quot;&gt;Bar
+  # &lt;INPUT TYPE=&quot;radio&quot; NAME=&quot;name&quot; VALUE=&quot;Baz&quot;&gt;Baz
+
+radio_group({ &quot;NAME&quot; =&gt; &quot;name&quot;,
+              &quot;VALUES&quot; =&gt; [&quot;foo&quot;, &quot;bar&quot;, &quot;baz&quot;] })
+
+radio_group({ &quot;NAME&quot; =&gt; &quot;name&quot;,
+              &quot;VALUES&quot; =&gt; [[&quot;foo&quot;], [&quot;bar&quot;, true], &quot;baz&quot;] })
+
+radio_group({ &quot;NAME&quot; =&gt; &quot;name&quot;,
+              &quot;VALUES&quot; =&gt; [[&quot;1&quot;, &quot;Foo&quot;], [&quot;2&quot;, &quot;Bar&quot;, true], &quot;Baz&quot;] })</pre></dd>
+<dt><a name="L003419" id="L003419"><code>CGI::HtmlExtension#reset(<var>value</var> = <var>nil</var>, <var>name</var> = <var>nil</var>)</code></a></dt>
+<dd>
+<p><code> </code></p>
+<pre>例：
+reset
+  # &lt;INPUT TYPE=&quot;reset&quot;&gt;
+
+reset(&quot;reset&quot;)
+  # &lt;INPUT TYPE=&quot;reset&quot; VALUE=&quot;reset&quot;&gt;
+
+reset({ &quot;VALUE&quot; =&gt; &quot;reset&quot;, &quot;ID&quot; =&gt; &quot;foo&quot; })
+  # &lt;INPUT TYPE=&quot;reset&quot; VALUE=&quot;reset&quot; ID=&quot;foo&quot;&gt;</pre></dd>
+<dt><a name="L003420" id="L003420"><code>CGI::HtmlExtension#scrolling_list(<var>name</var> = &quot;&quot;, *<var>values</var>)</code></a></dt>
+<dd>
+<p><code> </code></p>
+<pre>例：
+
+scrolling_list({&quot;NAME&quot; =&gt; &quot;name&quot;, &quot;SIZE&quot; =&gt; 2, &quot;MULTIPLE&quot; =&gt; true,
+                &quot;VALUES&quot; =&gt; [[&quot;1&quot;, &quot;Foo&quot;], [&quot;2&quot;, &quot;Bar&quot;, true], &quot;Baz&quot;] })
+  # &lt;SELECT NAME=&quot;name&quot; MULTIPLE SIZE=&quot;2&quot;&gt;
+  #   &lt;OPTION VALUE=&quot;1&quot;&gt;Foo&lt;/OPTION&gt;
+  #   &lt;OPTION SELECTED VALUE=&quot;2&quot;&gt;Bar&lt;/OPTION&gt;
+  #   &lt;OPTION VALUE=&quot;Baz&quot;&gt;Baz&lt;/OPTION&gt;
+  # &lt;/SELECT&gt;</pre></dd>
+<dt><a name="L003421" id="L003421"><code>CGI::HtmlExtension#submit(<var>value</var> = <var>nil</var>, <var>name</var> = <var>nil</var>)</code></a></dt>
+<dd>
+<p><code> </code></p>
+<pre>例：
+submit
+  # &lt;INPUT TYPE=&quot;submit&quot;&gt;
+
+submit(&quot;ok&quot;)
+  # &lt;INPUT TYPE=&quot;submit&quot; VALUE=&quot;ok&quot;&gt;
+
+submit(&quot;ok&quot;, &quot;button1&quot;)
+  # &lt;INPUT TYPE=&quot;submit&quot; VALUE=&quot;ok&quot; NAME=&quot;button1&quot;&gt;
+
+submit({ &quot;VALUE&quot; =&gt; &quot;ok&quot;, &quot;NAME&quot; =&gt; &quot;button1&quot;, &quot;ID&quot; =&gt; &quot;foo&quot; })
+  # &lt;INPUT TYPE=&quot;submit&quot; VALUE=&quot;ok&quot; NAME=&quot;button1&quot; ID=&quot;foo&quot;&gt;</pre></dd>
+<dt><a name="L003422" id="L003422"><code>CGI::HtmlExtension#text_field(<var>name</var> = &quot;&quot;, <var>value</var> = <var>nil</var>, <var>size</var> = <var>40</var>, <var>maxlength</var> = <var>nil</var>)</code></a></dt>
+<dd>
+<p><code> </code></p>
+<pre>例：
+text_field(&quot;name&quot;)
+  # &lt;INPUT TYPE=&quot;text&quot; NAME=&quot;name&quot; SIZE=&quot;40&quot;&gt;
+
+text_field(&quot;name&quot;, &quot;value&quot;)
+  # &lt;INPUT TYPE=&quot;text&quot; NAME=&quot;name&quot; VALUE=&quot;value&quot; SIZE=&quot;40&quot;&gt;
+
+text_field(&quot;name&quot;, &quot;value&quot;, 80)
+  # &lt;INPUT TYPE=&quot;text&quot; NAME=&quot;name&quot; VALUE=&quot;value&quot; SIZE=&quot;80&quot;&gt;
+
+text_field(&quot;name&quot;, &quot;value&quot;, 80, 200)
+  # &lt;INPUT TYPE=&quot;text&quot; NAME=&quot;name&quot; VALUE=&quot;value&quot; SIZE=&quot;80&quot; MAXLENGTH=&quot;200&quot;&gt;
+
+text_field({ &quot;NAME&quot; =&gt; &quot;name&quot;, &quot;VALUE&quot; =&gt; &quot;value&quot; })
+  # &lt;INPUT TYPE=&quot;text&quot; NAME=&quot;name&quot; VALUE=&quot;value&quot;&gt;</pre></dd>
+<dt><a name="L003423" id="L003423"><code>CGI::HtmlExtension#textarea(<var>name</var> = &quot;&quot;, <var>cols</var> = <var>70</var>, <var>rows</var> = <var>10</var>)</code></a></dt>
+<dd>
+<p><code> </code></p>
+<pre>例：
+textarea(&quot;name&quot;)
+  # = textarea({ &quot;NAME&quot; =&gt; &quot;name&quot;, &quot;COLS&quot; =&gt; 70, &quot;ROWS&quot; =&gt; 10 })
+
+textarea(&quot;name&quot;, 40, 5)
+  # = textarea({ &quot;NAME&quot; =&gt; &quot;name&quot;, &quot;COLS&quot; =&gt; 40, &quot;ROWS&quot; =&gt; 5 })</pre></dd>
+</dl>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small> 1.8.1に添付のcgiには「CGI#server_portが常に0を返す」というバグがあります。 </small><br />
+<a name="foottext:2" id="foottext:2" href="#footmark:2"><sup><small>*2</small></sup></a><small> この挙動は流動的で、1.8.0, 1.8.1, 1.8.2 の挙動はすべて異なります（1.9.0の挙動は1.8.2と同様です）。 </small><br />
+<a name="foottext:3" id="foottext:3" href="#footmark:3"><sup><small>*3</small></sup></a><small> 1.8.1 までは、正確に言うと String ではありません。 </small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm170.html">&lt;-PREV</a>][<a href="refm172.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

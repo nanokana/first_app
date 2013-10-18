@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Forwardable</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm332.html" rel="next" />
+<link href="refm330.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm330.html">UP</a>][<a href="refm330.html">&lt;-PREV</a>][<a href="refm332.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006400" id="L006400">Forwardable</a></h1>
+<p>クラスに対しメソッドの委譲機能を定義するモジュールです。</p>
+<h2><a name="L006401" id="L006401">使い方</a></h2>
+<p>クラスに対して <a href="refm035.html#L000657">extend</a> して使います。<a href="refm050.html#L001228">include</a> でないところに注意して下さい。</p>
+<pre>class Foo
+  extend Forwardable
+
+  def_delegators(&quot;@out&quot;, &quot;printf&quot;, &quot;print&quot;)
+  def_delegators(:@in, :gets)
+  def_delegator(:@contents, :[], &quot;content_at&quot;)
+end
+f = Foo.new
+f.printf ...
+f.gets
+f.content_at(1)</pre>
+<h2><a name="L006402" id="L006402">メソッド</a></h2>
+<dl>
+<dt><a name="L006403" id="L006403"><code>def_instance_delegators(<var>accessor</var>, *<var>methods</var>)</code></a></dt>
+<dd>
+<p><var>methods</var> で渡されたメソッドのリストを <var>accessor</var> に委譲する
+ようにします。</p></dd>
+<dt><a name="L006404" id="L006404"><code>def_instance_delegator(<var>accessor</var>, <var>method</var>, <var>ali</var> = <var>method</var>)</code></a></dt>
+<dd>
+<p><var>method</var> で渡されたメソッドを <var>accessor</var> に委譲するようにし
+ます。<var>ali</var>が引数として渡されたときは、メソッド<var>ali</var>が呼ば
+れたときには、<var>accessor</var> に対し <var>method</var> を呼び出します。</p></dd>
+<dt><a name="L006405" id="L006405"><code>def_delegators(<var>accessor</var>, *<var>methods</var>)</code></a></dt>
+<dd>
+<p>def_instance_delegators の 別名です。</p></dd>
+<dt><a name="L006406" id="L006406"><code>def_delegator(<var>accessor</var>, <var>method</var>, <var>ali</var> = <var>method</var>)</code></a></dt>
+<dd>
+<p>def_instance_delegator の別名です。</p></dd>
+</dl>
+<h2><a name="L006407" id="L006407">モジュールメソッド</a></h2>
+<dl>
+<dt><a name="L006408" id="L006408"><code>Forwardable.debug</code></a>
+<dt><a name="L006409" id="L006409"><code>Forwardable.debug=(<var>bool</var>)</code></a></dt>
+<dd>
+<p>委譲したメソッドをバックトレースに含めるかどうかを設定します。
+(デフォルトは表示しません。)</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm330.html">UP</a>][<a href="refm330.html">&lt;-PREV</a>][<a href="refm332.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

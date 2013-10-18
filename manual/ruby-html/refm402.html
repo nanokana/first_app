@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>FAQ::クラス、モジュール</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm403.html" rel="next" />
+<link href="refm401.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm395.html">UP</a>][<a href="refm401.html">&lt;-PREV</a>][<a href="refm403.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L009289" id="L009289">6. クラス、モジュール</a></h1>
+<ul>
+<li><a href="#L009290">6.1 クラス定義は、一度に行わなければなりませんか</a></li>
+<li><a href="#L009291">6.2 クラス変数はありますか</a></li>
+<li><a href="#L009292">6.3 クラスのインスタンス変数とは何ですか</a></li>
+<li><a href="#L009293">6.4 特異メソッドとは何ですか</a></li>
+<li><a href="#L009294">6.5 クラスメソッドはありますか</a></li>
+<li><a href="#L009295">6.6 特異クラスとは何ですか</a></li>
+<li><a href="#L009296">6.7 モジュール関数とは何ですか</a></li>
+<li><a href="#L009297">6.8 クラスとモジュールの違いは何ですか</a></li>
+<li><a href="#L009298">6.9 モジュールはサブクラスを作りますか</a></li>
+<li><a href="#L009299">6.10 クラス定義の中でクラスメソッドを定義するのと、トップレベルでクラスメソッドを定義する違いは何ですか</a></li>
+<li><a href="#L009300">6.11 <code>load</code>と<code>require</code>はどう違いますか</a></li>
+<li><a href="#L009301">6.12 <code>include</code>と<code>extend</code>はどう違いますか</a></li>
+<li><a href="#L009302">6.13 <code>self</code> というのは何ですか</a></li>
+<li><a href="#L009303">6.14 <code>MatchData</code> の <code>begin</code>、<code>end</code> は何を返しますか</a></li>
+<li><a href="#L009304">6.15 クラス名からクラスを得ることはできますか</a></li>
+</ul>
+<h2><a name="L009290" id="L009290">6.1 クラス定義は、一度に行わなければなりませんか</a></h2>
+<p>同じクラスを再定義すると、前のクラス定義に追加されていきます。
+メソッドを再定義した場合には後のものが上書きしますので、前のものは
+失われます。</p>
+<h2><a name="L009291" id="L009291">6.2 クラス変数はありますか</a></h2>
+<p>1.6より実装されました。`@@'で始まる変数はクラス変数です。</p>
+<pre>class Foo
+  @@F = 0
+  def foo
+    @@F += 1
+    print @@F, &quot;\n&quot;
+  end
+end</pre>
+<p>1.4以前までは定数に代入されたコンテナクラス(<a href="refm036.html">Array</a>、<a href="refm044.html">Hash</a>など)
+がクラス変数の代わりに使用されていました。</p>
+<pre>class Foo
+  F = [0]
+  def foo
+    F[0] += 1
+    print F[0], &quot;\n&quot;
+  end
+end</pre>
+<h2><a name="L009292" id="L009292">6.3 クラスのインスタンス変数とは何ですか</a></h2>
+<pre>class Foo
+  @a = 123 # (1)
+  def foo
+    p @a  # (2) ... 123でなくnilになる。
+  end
+end</pre>
+<p>(1)がクラスのインスタンス変数、(2)が通常のインスタンス変数です。(2)は
+クラス<code>Foo</code>のインスタンスに属するのに対し、(1)は<code>Foo</code>というクラ
+スオブジェクト(<a href="refm051.html">Class</a>のインスタンス)に属します。</p>
+<p>インスタンスメソッドからクラスのインスタンス変数に直接アクセスすること
+はできません。</p>
+<p>上のように初期化されていないインスタンス変数とみなされ、<code>nil</code>になり
+ます。</p>
+<h2><a name="L009293" id="L009293">6.4 特異メソッドとは何ですか</a></h2>
+<p>特異メソッドは特定のインスタンスに固有のメソッドです。</p>
+<p>こんな感じで使います。</p>
+<pre>foo = Foo.new
+def foo.hello
+  print &quot;Hello\n&quot;
+end
+foo.hello</pre>
+<p>クラスにあるメソッドを追加したいが、わざわざサブクラスを作るほどのこと
+でもない、といった場合に有効です。</p>
+<p>Javaをやってる人は匿名のインナークラスに似てると思うかもしれませんね。</p>
+<h2><a name="L009294" id="L009294">6.5 クラスメソッドはありますか</a></h2>
+<p>クラスの特異メソッドをクラスメソッドと呼びます。特異メソッドは
+オブジェクトの固有のメソッドだと説明したばかりですが、Rubyには、
+メタクラスという概念があり、すべてのクラスは、同名のメタクラスと
+いうものを持っていて、これは、Classクラスのインスタンスになって
+います。ここにクラスメソッドが定義されます。</p>
+<p>形式的にはクラス名をレシーバーとして呼べるメソッドということに
+なります。</p>
+<p><a href="refm051.html">Class</a>のインスタンスである<code>Foo</code>の特異メソッドを考えてみま
+しょう。</p>
+<pre>class Foo
+  def Foo.test
+    print &quot;this is foo\n&quot;
+  end
+end</pre>
+<p>呼び出す時はこうです。</p>
+<pre>Foo.test</pre>
+<p>何か気付きませんか？</p>
+<p>そう、これはいわゆるクラスメソッドですね。</p>
+<p>もちろん<a href="refm051.html">Class</a>で定義されているメソッドもクラスメソッドとして使えま
+す。</p>
+<h2><a name="L009295" id="L009295">6.6 特異クラスとは何ですか</a></h2>
+<p>すでに<a href="#L009293">特異メソッド</a>については
+触れました。</p>
+<p>簡単におさらいするとRubyではオブジェクト(インスタンス)に対してメソッド
+を追加することができるわけです。</p>
+<p>この考えをもう少し進めるとクラスに対する他の操作をオブジェクトに対して
+も行えるようにしたくなってきませんか？</p>
+<p>なってこないよ、と言わないで(^^;</p>
+<p>これを可能にするのが特異クラスという機構です。</p>
+<pre>class Foo
+  def hello
+    print &quot;hello.\n&quot;
+  end
+end
+
+foo = Foo.new
+foo.hello
+
+#=&gt; hello.
+
+class &lt;&lt; foo
+  attr :name, true
+  def hello
+    print &quot;hello. I'm &quot;, @name, &quot;.\n&quot;
+  end
+end
+
+foo.name = &quot;Tom&quot;
+foo.hello
+
+#=&gt; hello. I'm Tom.</pre>
+<p>なんかすごいですよね。</p>
+<p>ではここで問題。</p>
+<p><em>Q.</em> <code>private_class_method</code>を使わずにクラスメソッドをprivateにするにはどうすればよいでしょう？</p>
+<p><em>ヒント:</em> クラスメソッドはクラスの特異メソッドでしたね。</p>
+<p>ちょっとトリッキーですが、こんなふうにできます。</p>
+<pre>class Foo
+  # ...
+end
+
+class &lt;&lt; Foo
+  def class_method
+    print &quot;class method\n&quot;
+  end
+  private :class_method
+end
+Foo.class_method #=&gt; Error</pre>
+<p>特異メソッドを定義するには、このように特異クラスで定義する方法と
+直接 def obj.method という風に定義してしまう方法があります。</p>
+<p>ちょっと性格は違いますが、モジュールでは、モジュール関数にする
+ことにより、特異メソッド(と同時にprivateメソッド)を定義する
+ことができます。</p>
+<h2><a name="L009296" id="L009296">6.7 モジュール関数とは何ですか</a></h2>
+<p>モジュールの特異メソッドとして、また同時にprivateメソッドして定義されて
+いるメソッドをRubyではモジュール関数と呼びます。例えば</p>
+<pre>Math.sqrt(2)</pre>
+<p>のように用いることも、</p>
+<pre>include Math
+sqrt(2)</pre>
+<p>のように<code>include</code>して用いることもでき、とても便利です。</p>
+<p>あるメソッドをモジュール関数にするには、モジュール定義の中で</p>
+<pre>module_function :method_name</pre>
+<p>とします。</p>
+<h2><a name="L009297" id="L009297">6.8 クラスとモジュールの違いは何ですか</a></h2>
+<p>モジュールはインスタンスを作れません。
+クラスはincludeすることができません。</p>
+<h2><a name="L009298" id="L009298">6.9 モジュールはサブクラスを作りますか</a></h2>
+<p>モジュールは、クラス(モジュール)にincludeされることにより、多重継承に
+相当するMix-inを実現します。これは直接の継承であるサブクラスとは
+異なりますが、includeしたクラスは、モジュールとis_a?の関係を
+持ちます。</p>
+<h2><a name="L009299" id="L009299">6.10 クラス定義の中でクラスメソッドを定義するのと、トップレベルでクラスメソッドを定義する違いは何ですか</a></h2>
+<p>前者では定数を直接参照することができます。後者ではクラス名をつけて参照
+しなければなりません。</p>
+<h2><a name="L009300" id="L009300">6.11 <code>load</code>と<code>require</code>はどう違いますか</a></h2>
+<p>どちらも指定した Ruby プログラムを読み込むという点では似ています。しか
+し、 <a href="refm029.html#L000461">load</a> が指定したファイルを Ruby プログラム
+として読み込むのに利用するのに対し、 <a href="refm029.html#L000480">require</a>
+では拡張ライブラリの読み込みが可能で、拡張子が so や rb のもののみを
+探索します。また <code>require</code> では拡張子を省略できますし、一度読み込んだ
+ファイルは二度と読み込まないようになっています。 <code>load</code> は指定すれば何度でも読み込みます。</p>
+<p>したがって、 <code>require</code> はライブラリのロードに利用し、 <code>load</code> は設定ファイ
+ルの読み込みなどに使うのが一般的です。また、両者はファイルのサーチパス
+も異なります。</p>
+<h2><a name="L009301" id="L009301">6.12 <code>include</code>と<code>extend</code>はどう違いますか</a></h2>
+<p><code>include</code>は<code>module</code>をクラス(モジュール)にインクルードして、
+メソッドを関数形式で呼べるようにし、<code>extend</code>は
+<code>module</code>をオブジェクト(インスタンス)にインクルードして、メソッドを
+特異メソッドとして追加します。</p>
+<h2><a name="L009302" id="L009302">6.13 <code>self</code> というのは何ですか</a></h2>
+<p><code>self</code>は、メソッドが適用されるオブジェクトそれ自身を表わします。
+関数形式のメソッドは、<code>self</code>をレシーバーとします。</p>
+<h2><a name="L009303" id="L009303">6.14 <a href="refm047.html">MatchData</a> の <code>begin</code>、<code>end</code> は何を返しますか</a></h2>
+<p><a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></p>
+<p><code>$~</code> に作用して、<code>$0</code>、<code>$1</code>などの元の文字列での開始位置、
+終了位置を返します。<a href="refm403.html">タブ展開</a>の例を参照
+してください。</p>
+<h2><a name="L009304" id="L009304">6.15 クラス名からクラスを得ることはできますか</a></h2>
+<p>例えば classname = &quot;SomeClass&quot; のときに SomeClass クラスの
+インスタンスを作りたいというときです。この問題には主に
+二通りの解決策があります。</p>
+<ol>
+<li>eval(classname).new</li>
+<li>Object.const_get(classname).new</li>
+</ol>
+<p>1 は簡単ですしネストしたクラス (Net::HTTP など) にも対応できますが、
+CGI 環境などで迂闊に使うと危険です。</p>
+<p>一方、2 の方法ではネストしたクラスに対応できません。
+次のようにするとネストしたクラスも扱えるようになります。</p>
+<pre># Ruby 1.8 以降でいいなら
+c = classname.split(/::/).inject(Object) {|c,name| c.const_get(name) }
+c.new
+
+# Ruby 1.6 にも対応するなら
+c = Object
+classname.split(/::/).each do |name|
+  c = c.const_get(name)
+end
+c.new</pre>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>この項目がこのページにあるのはおかしい気がする</small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm395.html">UP</a>][<a href="refm401.html">&lt;-PREV</a>][<a href="refm403.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

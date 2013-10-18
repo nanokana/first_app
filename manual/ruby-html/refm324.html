@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Win32::Registry</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm325.html" rel="next" />
+<link href="refm323.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm323.html">UP</a>][<a href="refm323.html">&lt;-PREV</a>][<a href="refm325.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006271" id="L006271">Win32::Registry</a></h1>
+<h2><a name="L006272" id="L006272">Win32::Registry class</a></h2>
+<h3><a name="L006273" id="L006273">included modules</a></h3>
+<ul>
+<li><a href="refm070.html">Enumerable</a></li>
+<li><a href="#L006336">Registry::Constants</a></li>
+</ul>
+<h3><a name="L006274" id="L006274">class methods</a></h3>
+<dl>
+<dt><a name="L006275" id="L006275"><code>Registry.new(<var>key</var>, <var>subkey</var>, <var>desired</var> = <var>KEY_READ</var>, <var>opt</var> = <var>REG_OPTION_RESERVED</var>)</code></a>
+<dt><a name="L006276" id="L006276"><code>Registry.new(<var>key</var>, <var>subkey</var>, <var>desired</var> = <var>KEY_READ</var>, <var>opt</var> = <var>REG_OPTION_RESERVED</var>) { |<var>reg</var>| ... }</code></a>
+<dt><a name="L006277" id="L006277"><code>Registry.open(<var>key</var>, <var>subkey</var>, <var>desired</var> = <var>KEY_READ</var>, <var>opt</var> = <var>REG_OPTION_RESERVED</var>)</code></a>
+<dt><a name="L006278" id="L006278"><code>Registry.open(<var>key</var>, <var>subkey</var>, <var>desired</var> = <var>KEY_READ</var>, <var>opt</var> = <var>REG_OPTION_RESERVED</var>) { |<var>reg</var>| ... }</code></a></dt>
+<dd>
+<p>レジストリキー <var>key</var> 下のキー <var>subkey</var> を開き，
+開いたキーを表す Win32::Registry オブジェクトを返します。
+<var>key</var> は親のキーを Win32::Registry オブジェクトで指定します。
+親のキーには定義済キー HKEY_* を使用できます (⇒<a href="#L006329">constants</a>)</p>
+<p><var>desired</var> はアクセスマスクです。<var>opt</var> はキーのオプションです。
+詳細は <a href="http://msdn.microsoft.com/library/en-us/sysinfo/base/registry_key_security_and_access_rights.asp">MSDN Library</a><sup class="outside"><small>[外部]</small></sup> を参照してください。</p>
+<p>ブロックが与えられると，キーは自動的に閉じられます。</p></dd>
+<dt><a name="L006279" id="L006279"><code>Registry.create(<var>key</var>, <var>subkey</var>, <var>desired</var> = <var>KEY_ALL_ACCESS</var>, <var>opt</var> = <var>REG_OPTION_RESERVED</var>)</code></a>
+<dt><a name="L006280" id="L006280"><code>Registry.create(<var>key</var>, <var>subkey</var>, <var>desired</var> = <var>KEY_ALL_ACCESS</var>, <var>opt</var> = <var>REG_OPTION_RESERVED</var>) { |<var>reg</var>| ... }</code></a></dt>
+<dd>
+<p>レジストリキー <var>key</var> 下にキー <var>subkey</var> を作成し，
+開いたキーを表す Win32::Registry オブジェクトを返します。
+<var>key</var> は親のキーを Win32::Registry オブジェクトで指定します。
+親のキーには定義済キー HKEY_* を使用できます (⇒<a href="#L006329">constants</a>)</p>
+<p>サブキーが既に存在していればキーはただ開かれ，<code><a href="#L006307">created?</a></code>
+メソッドが false を返します。</p>
+<p>ブロックが与えられると，キーは自動的に閉じられます。</p></dd>
+<dt><a name="L006281" id="L006281"><code>Registry.expand_environ(<var>str</var>)</code></a></dt>
+<dd>
+<p><var>str</var> の <code>%\w+%</code> という並びを環境変数に置換します。
+REG_EXPAND_SZ で用いられます。</p>
+<p>詳細は <a href="http://msdn.microsoft.com/library/en-us/sysinfo/base/expandenvironmentstrings.asp">ExpandEnvironmentStrings</a><sup class="outside"><small>[外部]</small></sup> Win32 API を参照してください。</p></dd>
+<dt><a name="L006282" id="L006282"><code>Registry.type2name(<var>type</var>)</code></a></dt>
+<dd>
+<p>レジストリ値の型を整数から可読文字列に変換します。</p></dd>
+<dt><a name="L006283" id="L006283"><code>Registry.wtime2time(<var>wtime</var>)</code></a></dt>
+<dd>
+<p>64bit の <a href="http://msdn.microsoft.com/library/en-us/sysinfo/base/filetime_str.asp">FILETIME</a><sup class="outside"><small>[外部]</small></sup> を Time オブジェクトに変換します。</p></dd>
+<dt><a name="L006284" id="L006284"><code>Registry.time2wtime(<var>time</var>)</code></a></dt>
+<dd>
+<p>Time オブジェクトまたは Integer オブジェクトを受け取り，
+64bit の FILETIME に変換します。</p></dd>
+</dl>
+<h3><a name="L006285" id="L006285">instance methods</a></h3>
+<dl>
+<dt><a name="L006286" id="L006286"><code>open(<var>subkey</var>, <var>desired</var> = <var>KEY_READ</var>, <var>opt</var> = <var>REG_OPTION_RESERVED</var>)</code></a></dt>
+<dd>
+<p><code><a href="#L006277">Win32::Registry.open</a>(self, subkey, desired, opt)</code> と同じです。</p></dd>
+<dt><a name="L006287" id="L006287"><code>create(<var>subkey</var>, <var>desired</var> = <var>KEY_ALL_ACCESS</var>, <var>opt</var> = <var>REG_OPTION_RESERVED</var>)</code></a></dt>
+<dd>
+<p><code><a href="#L006279">Win32::Registry.create</a>(self, subkey, desired, opt)</code> と同じです。</p></dd>
+<dt><a name="L006288" id="L006288"><code>close</code></a></dt>
+<dd>
+<p>開かれているキーを閉じます。</p>
+<p>閉じられた後では，多くのメソッドは例外を発生します。</p></dd>
+<dt><a name="L006289" id="L006289"><code>read(<var>name</var>, *<var>rtype</var>)</code></a></dt>
+<dd>
+<p>レジストリ値 <var>name</var> を読み，[ <var>type</var>, <var>data</var> ] 
+の配列で返します。
+<var>name</var> が nil の場合，(標準) レジストリ値が読み込まれます。</p>
+<p><var>type</var> はレジストリ値の型です。(⇒<a href="#L006336">Registry::Constants module</a>)
+<var>data</var> はレジストリ値のデータで，クラスは以下の通りです:</p>
+<dl>
+<dt><a name="L006322" id="L006322">REG_SZ, REG_EXPAND_SZ</a></dt>
+<dd>
+<p>String</p>
+</dd>
+<dt><a name="L006323" id="L006323">REG_MULTI_SZ</a></dt>
+<dd>
+<p>String の配列</p>
+</dd>
+<dt><a name="L006324" id="L006324">REG_DWORD, REG_DWORD_BIG_ENDIAN, REG_QWORD</a></dt>
+<dd>
+<p>Integer</p>
+</dd>
+<dt><a name="L006325" id="L006325">REG_BINARY</a></dt>
+<dd>
+<p>String (バイナリデータを含みます)</p>
+</dd>
+</dl>
+<p>オプション引数 <var>rtype</var> が指定されていた場合，レジストリ値の型が
+与えられた <var>rtype</var> の配列に存在するかチェックされ，存在しない場合に
+<a href="refm111.html">TypeError</a> が発生します。</p></dd>
+<dt><a name="L006290" id="L006290"><code>self[name, *<var>rtype</var>]</code></a></dt>
+<dd>
+<p>レジストリ値 <var>name</var> を読み，その値を返します。クラスは
+<code><a href="#L006289">read</a></code> に準じます。</p>
+<p>レジストリ値の型が REG_EXPAND_SZ だった場合，環境変数が置換されます。
+レジストリ値の型が REG_SZ, REG_EXPAND_SZ, REG_MULTI_SZ, REG_DWORD,
+REG_DWORD_BIG_ENDIAN, REG_QWORD 以外だった場合は TypeError が発生します。</p>
+<p>オプション引数 <var>rtype</var> の意味は <code>read</code> と同じです。</p></dd>
+<dt><a name="L006291" id="L006291"><code>read_s(<var>name</var>)</code></a>
+<dt><a name="L006292" id="L006292"><code>read_i(<var>name</var>)</code></a>
+<dt><a name="L006293" id="L006293"><code>read_bin(<var>name</var>)</code></a></dt>
+<dd>
+<p>型がそれぞれ REG_SZ(read_s), REG_DWORD(read_i), REG_BINARY(read_bin)
+であるレジストリ値 <var>name</var> を読み，その値を返します。</p>
+<p>型がマッチしなかった場合，TypeError が発生します。</p></dd>
+<dt><a name="L006294" id="L006294"><code>read_s_expand(<var>name</var>)</code></a></dt>
+<dd>
+<p>型が REG_SZ または REG_EXPAND_SZ であるレジストリ値 <var>name</var> を読み，
+その値を返します。</p>
+<p>型が REG_EXPAND_SZ だった場合，環境変数が置換された値が返ります。
+REG_SZ または REG_EXPAND_SZ 以外だった場合，TypeError が発生します。</p></dd>
+<dt><a name="L006295" id="L006295"><code>write(<var>name</var>, <var>type</var>, <var>data</var>)</code></a></dt>
+<dd>
+<p>レジストリ値 <var>name</var> に型 <var>type</var> で <var>data</var> を書き込みます。
+<var>name</var> が nil の場合，(標準) レジストリ値に書き込みます。</p>
+<p><var>type</var> はレジストリ値の型です。(⇒<a href="#L006336">Registry::Constants module</a>)
+<var>data</var> のクラスは <code><a href="#L006289">read</a></code>
+メソッドに準じていなければなりません。</p></dd>
+<dt><a name="L006296" id="L006296"><code>self[name, <var>wtype</var> = <var>nil</var>] = <var>value</var></code></a></dt>
+<dd>
+<p>レジストリ値 <var>name</var> に <var>value</var> を書き込みます。</p>
+<p>オプション引数 <var>wtype</var> を指定した場合は，その型で書き込みます。
+指定しなかった場合，<var>value</var> のクラスに応じて次の型で書き込みます:</p>
+<dl>
+<dt><a name="L006326" id="L006326">Integer</a></dt>
+<dd>
+<p>REG_DWORD</p>
+</dd>
+<dt><a name="L006327" id="L006327">String</a></dt>
+<dd>
+<p>REG_SZ</p>
+</dd>
+<dt><a name="L006328" id="L006328">Array</a></dt>
+<dd>
+<p>REG_MULTI_SZ</p>
+</dd>
+</dl></dd>
+<dt><a name="L006297" id="L006297"><code>write_s(<var>name</var>, <var>value</var>)</code></a>
+<dt><a name="L006298" id="L006298"><code>write_i(<var>name</var>, <var>value</var>)</code></a>
+<dt><a name="L006299" id="L006299"><code>write_bin(<var>name</var>, <var>value</var>)</code></a></dt>
+<dd>
+<p>レジストリ値 <var>name</var> に <var>value</var> を書き込みます。</p>
+<p>レジストリ値の型はそれぞれ REG_SZ(write_s), REG_DWORD(write_i),
+REG_BINARY(write_bin) です。</p></dd>
+<dt><a name="L006300" id="L006300"><code>each { |<var>name</var>, <var>type</var>, <var>value</var>| ... }</code></a>
+<dt><a name="L006301" id="L006301"><code>each_value { |<var>name</var>, <var>type</var>, <var>value</var>| ... }</code></a></dt>
+<dd>
+<p>キーが持つレジストリ値を列挙します。</p></dd>
+<dt><a name="L006302" id="L006302"><code>each_key { |<var>subkey</var>, <var>wtime</var>| ... }</code></a></dt>
+<dd>
+<p>キーのサブキーを列挙します。</p>
+<p><var>subkey</var> はサブキーの名前を表す String です。
+<var>wtime</var> は最終更新時刻を表す FILETIME (64-bit 整数) です。
+(⇒<code><a href="#L006283">Registry.wtime2time</a></code>)</p></dd>
+<dt><a name="L006303" id="L006303"><code>delete(<var>name</var>)</code></a>
+<dt><a name="L006304" id="L006304"><code>delete_value(<var>name</var>)</code></a></dt>
+<dd>
+<p>レジストリ値 <var>name</var> を削除します。
+(標準) レジストリ値を削除することはできません。</p></dd>
+<dt><a name="L006305" id="L006305"><code>delete_key(<var>name</var>, <var>recursive</var> = <var>false</var>)</code></a></dt>
+<dd>
+<p>サブキー <var>name</var> とそのキーが持つすべての値を削除します。</p>
+<p><var>recursive</var> が false の場合，そのサブキーはサブキーを持っていてはなりません。
+true の場合，キーは再帰的に削除されます。</p></dd>
+<dt><a name="L006306" id="L006306"><code>flush</code></a></dt>
+<dd>
+<p>キーの全てのデータをレジストリファイルに書き込みます。</p></dd>
+<dt><a name="L006307" id="L006307"><code>created?</code></a></dt>
+<dd>
+<p>キーが<em>新しく</em>作成された場合，真を返します。
+(⇒<code><a href="#L006279">Registry.create</a></code>)</p></dd>
+<dt><a name="L006308" id="L006308"><code>opened?</code></a></dt>
+<dd>
+<p>キーがまだ閉じられていない場合，真を返します。</p></dd>
+<dt><a name="L006309" id="L006309"><code>parent</code></a></dt>
+<dd>
+<p>親のキーを表す Win32::Registry オブジェクトを返します。
+定義済キーでは nil を返します。</p></dd>
+<dt><a name="L006310" id="L006310"><code>keyname</code></a></dt>
+<dd>
+<p><code><a href="#L006277">Registry.open</a></code> または <code><a href="#L006279">Registry.create</a></code> に指定された
+<var>subkey</var> の値を返します。</p></dd>
+<dt><a name="L006311" id="L006311"><code>disposition</code></a></dt>
+<dd>
+<p>キーの disposition 値を返します。
+(REG_CREATED_NEW_KEY または REG_OPENED_EXISTING_KEY)</p></dd>
+<dt><a name="L006312" id="L006312"><code>name</code></a>
+<dt><a name="L006313" id="L006313"><code>to_s</code></a></dt>
+<dd>
+<p>キーのフルパスを <code>'HKEY_CURRENT_USER\SOFTWARE\foo\bar'</code>
+のような形で返します。</p></dd>
+<dt><a name="L006314" id="L006314"><code>info</code></a></dt>
+<dd>
+<p>キー情報を以下の値の配列で返します:</p>
+<dl>
+<dt><a name="L006315" id="L006315">num_keys</a></dt>
+<dd>
+<p>サブキーの個数</p>
+</dd>
+<dt><a name="L006316" id="L006316">max_key_length</a></dt>
+<dd>
+<p>サブキー名の最大長</p>
+</dd>
+<dt><a name="L006317" id="L006317">num_values</a></dt>
+<dd>
+<p>値の個数</p>
+</dd>
+<dt><a name="L006318" id="L006318">max_value_name_length</a></dt>
+<dd>
+<p>値の名前の最大長</p>
+</dd>
+<dt><a name="L006319" id="L006319">max_value_length</a></dt>
+<dd>
+<p>値の最大長</p>
+</dd>
+<dt><a name="L006320" id="L006320">descriptor_length</a></dt>
+<dd>
+<p>セキュリティ記述子の長さ</p>
+</dd>
+<dt><a name="L006321" id="L006321">wtime</a></dt>
+<dd>
+<p>最終更新時刻 (FILETIME)</p>
+</dd>
+</dl>
+<p>詳細は <a href="http://msdn.microsoft.com/library/en-us/sysinfo/base/regqueryinfokey.asp">RegQueryInfoKey</a><sup class="outside"><small>[外部]</small></sup> Win32 API を参照してください。</p></dd>
+<dt><a name="L006315" id="L006315"><code>num_keys</code></a>
+<dt><a name="L006316" id="L006316"><code>max_key_length</code></a>
+<dt><a name="L006317" id="L006317"><code>num_values</code></a>
+<dt><a name="L006318" id="L006318"><code>max_value_name_length</code></a>
+<dt><a name="L006319" id="L006319"><code>max_value_length</code></a>
+<dt><a name="L006320" id="L006320"><code>descriptor_length</code></a>
+<dt><a name="L006321" id="L006321"><code>wtime</code></a></dt>
+<dd>
+<p>キー情報の個々の値を返します。</p></dd>
+</dl>
+<h3><a name="L006329" id="L006329">constants</a></h3>
+<dl>
+<dt><a name="L006330" id="L006330"><code>HKEY_CLASSES_ROOT</code></a>
+<dt><a name="L006331" id="L006331"><code>HKEY_CURRENT_USER</code></a>
+<dt><a name="L006332" id="L006332"><code>HKEY_LOCAL_MACHINE</code></a>
+<dt><a name="L006333" id="L006333"><code>HKEY_PERFORMANCE_DATA</code></a>
+<dt><a name="L006334" id="L006334"><code>HKEY_CURRENT_CONFIG</code></a>
+<dt><a name="L006335" id="L006335"><code>HKEY_DYN_DATA</code></a></dt>
+<dd>
+<p>それぞれの定義済キーを表す Win32::Registry オブジェクトです。
+詳細は <a href="httphttp://msdn.microsoft.com/library/en-us/sysinfo/base/predefined_keys.asp">MSDN Library</a><sup class="outside"><small>[外部]</small></sup> を参照してください。</p></dd>
+</dl>
+<h2><a name="L006336" id="L006336">Registry::Constants module</a></h2>
+<p>詳細は <a href="http://msdn.microsoft.com/library/en-us/sysinfo/base/registry.asp">MSDN Library</a><sup class="outside"><small>[外部]</small></sup> を参照してください。</p>
+<dl>
+<dt><a name="L006337" id="L006337"><code>HKEY_*</code></a></dt>
+<dd>
+<p>定義済キー<em>値</em>.
+これらは Integer で，Win32::Registry オブジェクトではありません。</p></dd>
+<dt><a name="L006338" id="L006338"><code>REG_*</code></a></dt>
+<dd>
+<p>レジストリ値の型</p></dd>
+<dt><a name="L006339" id="L006339"><code>KEY_*</code></a></dt>
+<dd>
+<p>セキュリティアクセスマスク</p></dd>
+<dt><a name="L006340" id="L006340"><code>KEY_OPTIONS_*</code></a></dt>
+<dd>
+<p>キーオプション</p></dd>
+<dt><a name="L006341" id="L006341"><code>REG_CREATED_NEW_KEY</code></a>
+<dt><a name="L006342" id="L006342"><code>REG_OPENED_EXISTING_KEY</code></a></dt>
+<dd>
+<p>キーが新しく作られたか，既存キーが開かれたか。
+<code><a href="#L006311">disposition</a></code> メソッドも参照してください。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm323.html">UP</a>][<a href="refm323.html">&lt;-PREV</a>][<a href="refm325.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

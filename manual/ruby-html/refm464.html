@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Mac</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm465.html" rel="next" />
+<link href="refm463.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm453.html">UP</a>][<a href="refm463.html">&lt;-PREV</a>][<a href="refm465.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L009585" id="L009585">Mac</a></h1>
+<p>Mac 版の ruby の開発は止まってるらしい。<a href="refm465.html">Mac OS X</a> ではそのまま 
+ruby をコンパイルできるらしい。
+Mac のディレクトリセパレータは、&quot;:&quot; らしい。OSXでは、&quot;/&quot;で指定しても通るようだ。テキストファイルの行末コー
+ドは CR らしい（通常CRのみです）。デバイスファイルは存在しないらしい・・・</p>
+<p>HFS/HFS+では<a href="http://www.senko-corp.co.jp/alsoft/Askal2001/AskalBody_04.27.01.htm">パス区切りはコロンを使います</a><sup class="outside"><small>[外部]</small></sup>。改行コードは通常はCRのみです。Mac OS XではUNIXの世界も入り込んでいるので、古いライブラリで改行コードをCRに決め打ちしているものは正常に動かないこともあります。Mac OS Xの大抵のテキストエディタはCRでもCR+LFでもLFのみでも正しく改行されるようです。デバイスファイルは旧Mac OSには存在しません。RubyのコンパイルはMac OS XではDeveloper Toolをインストールしておけば通るはずです（コンパイラフラグにCFLAGS = -g -O2 -pipe -fno-common -no-cpp-precompと、-no-cpp-precompが必要になるかも知れません）。</p>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm453.html">UP</a>][<a href="refm463.html">&lt;-PREV</a>][<a href="refm465.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

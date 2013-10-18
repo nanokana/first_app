@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ruby-src:ext/etc/etc.txt</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm516.html" rel="next" />
+<link href="refm514.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm514.html">&lt;-PREV</a>][<a href="refm516.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1>ruby-src:ext/etc/etc.txt</h1>
+.\&quot;&nbsp;etc.txt&nbsp;-&nbsp;&nbsp;-*-&nbsp;Indented-Text&nbsp;-*-&nbsp;created&nbsp;at:&nbsp;Fri&nbsp;Jul&nbsp;14&nbsp;00:47:15&nbsp;JST&nbsp;1995<br />
+<br />
+**&nbsp;Etc(Module)<br />
+<br />
+The&nbsp;module&nbsp;to&nbsp;retrieve&nbsp;information&nbsp;under&nbsp;/etc&nbsp;directory.&nbsp;&nbsp;Available<br />
+only&nbsp;on&nbsp;UNIX&nbsp;platforms.&nbsp;&nbsp;All&nbsp;operations&nbsp;defined&nbsp;in&nbsp;this&nbsp;module&nbsp;are<br />
+module&nbsp;functions,&nbsp;so&nbsp;that&nbsp;you&nbsp;can&nbsp;include&nbsp;Etc&nbsp;module&nbsp;into&nbsp;your&nbsp;class.<br />
+<br />
+Module&nbsp;Function:<br />
+<br />
+&nbsp;&nbsp;&nbsp;getlogin<br />
+<br />
+&nbsp;&nbsp;returns&nbsp;login&nbsp;name&nbsp;of&nbsp;the&nbsp;user.&nbsp;&nbsp;It&nbsp;this&nbsp;fails,&nbsp;try&nbsp;getpwuid().<br />
+<br />
+&nbsp;&nbsp;&nbsp;getpwnam(name)<br />
+<br />
+&nbsp;&nbsp;searches&nbsp;in&nbsp;/etc/passwd&nbsp;file&nbsp;(or&nbsp;equivalent&nbsp;database),&nbsp;and<br />
+&nbsp;&nbsp;returns&nbsp;password&nbsp;entry&nbsp;for&nbsp;the&nbsp;user.&nbsp;&nbsp;The&nbsp;return&nbsp;value&nbsp;is&nbsp;an<br />
+&nbsp;&nbsp;passwd&nbsp;structure,&nbsp;which&nbsp;has&nbsp;members&nbsp;described&nbsp;below.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;struct&nbsp;passwd<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name&nbsp;&nbsp;#&nbsp;user&nbsp;name(string)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;passwd&nbsp;#&nbsp;encrypted&nbsp;password(string)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;uid&nbsp;&nbsp;#&nbsp;user&nbsp;ID(integer)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gid&nbsp;&nbsp;#&nbsp;group&nbsp;ID(integer)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gecos&nbsp;#&nbsp;gecos&nbsp;field(string)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dir&nbsp;&nbsp;#&nbsp;home&nbsp;directory(string)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;shell&nbsp;#&nbsp;login&nbsp;shell(string)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;members&nbsp;below&nbsp;are&nbsp;optional<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;change&nbsp;#&nbsp;password&nbsp;change&nbsp;time(integer)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;quota&nbsp;#&nbsp;quota&nbsp;value(integer)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;age&nbsp;&nbsp;#&nbsp;password&nbsp;age(integer)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;class&nbsp;#&nbsp;user&nbsp;access&nbsp;class(string)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;comment&nbsp;#&nbsp;comment(string)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;expire&nbsp;#&nbsp;account&nbsp;expiration&nbsp;time(integer)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;end<br />
+<br />
+&nbsp;&nbsp;See&nbsp;getpwnam(3)&nbsp;for&nbsp;detail.<br />
+<br />
+&nbsp;&nbsp;&nbsp;getpwuid([uid])<br />
+<br />
+&nbsp;&nbsp;returns&nbsp;passwd&nbsp;entry&nbsp;for&nbsp;the&nbsp;specified&nbsp;user&nbsp;id.&nbsp;&nbsp;If&nbsp;uid&nbsp;is<br />
+&nbsp;&nbsp;ommitted,&nbsp;use&nbsp;the&nbsp;value&nbsp;from&nbsp;getuid().&nbsp;&nbsp;See&nbsp;getpwuid(3)&nbsp;for<br />
+&nbsp;&nbsp;detail.<br />
+<br />
+&nbsp;&nbsp;&nbsp;getgrgid(gid)<br />
+<br />
+&nbsp;&nbsp;searches&nbsp;in&nbsp;/etc/group&nbsp;file&nbsp;(or&nbsp;equivalent&nbsp;database),&nbsp;and<br />
+&nbsp;&nbsp;returns&nbsp;group&nbsp;entry&nbsp;for&nbsp;the&nbsp;group&nbsp;id.&nbsp;&nbsp;The&nbsp;return&nbsp;value&nbsp;is&nbsp;an<br />
+&nbsp;&nbsp;group&nbsp;structure,&nbsp;which&nbsp;has&nbsp;members&nbsp;described&nbsp;below.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;struct&nbsp;group<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name&nbsp;&nbsp;#&nbsp;group&nbsp;name(string)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;passwd&nbsp;#&nbsp;group&nbsp;password(string)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gid&nbsp;&nbsp;#&nbsp;group&nbsp;ID(integer)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mem&nbsp;&nbsp;#&nbsp;array&nbsp;of&nbsp;the&nbsp;group&nbsp;member&nbsp;names<br />
+&nbsp;&nbsp;&nbsp;&nbsp;end<br />
+<br />
+&nbsp;&nbsp;See&nbsp;getgrgid(3)&nbsp;for&nbsp;detail.<br />
+<br />
+&nbsp;&nbsp;&nbsp;getgrnam(name)<br />
+<br />
+&nbsp;&nbsp;returns&nbsp;the&nbsp;group&nbsp;entry&nbsp;for&nbsp;the&nbsp;specified&nbsp;name.&nbsp;&nbsp;The&nbsp;return<br />
+&nbsp;&nbsp;value&nbsp;is&nbsp;the&nbsp;group&nbsp;structure.&nbsp;&nbsp;See&nbsp;getgrnam(3)&nbsp;for&nbsp;detail.<br />
+<br />
+&nbsp;&nbsp;&nbsp;group<br />
+<br />
+&nbsp;&nbsp;iterates&nbsp;over&nbsp;all&nbsp;group&nbsp;entries.<br />
+<br />
+&nbsp;&nbsp;&nbsp;passwd<br />
+<br />
+&nbsp;&nbsp;iterates&nbsp;over&nbsp;all&nbsp;passwd&nbsp;entries.<br />
+
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm514.html">&lt;-PREV</a>][<a href="refm516.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

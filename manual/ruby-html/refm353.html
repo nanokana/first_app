@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>DL::Handle</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm354.html" rel="next" />
+<link href="refm352.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm352.html">UP</a>][<a href="refm352.html">&lt;-PREV</a>][<a href="refm354.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006756" id="L006756">DL::Handle</a></h1>
+<ul>
+<li><a href="refm351.html">dl</a></li>
+<li><a href="refm352.html">DL</a></li>
+</ul>
+<h2><a name="L006757" id="L006757">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L006758" id="L006758"><code>Handle.new(<var>lib</var>){|<var>handle</var>| ... }</code></a></dt>
+<dd>
+<p>ライブラリ lib をオープンし、Handle オブジェクト handle を返す。ブ
+ロックを指定すれば、(訳注: オープンしたハンドルをブロック引数に渡
+してブロックを実行する)ハンドルはブロックの終りで自動的にクローズ
+される。</p></dd>
+</dl>
+<h2><a name="L006759" id="L006759">メソッド</a></h2>
+<dl>
+<dt><a name="L006760" id="L006760"><code>close</code></a></dt>
+<dd>
+<p>Handle.new(lib) によってオープンされたハンドルをクローズする。</p></dd>
+<dt><a name="L006761" id="L006761"><code>sym(<var>func</var>, <var>prototype</var> = &quot;<var>0</var>&quot;),</code></a>
+<dt><a name="L006762" id="L006762"><code>self[func, <var>prototype</var> = <var>nil</var>]</code></a></dt>
+<dd>
+<p>関数 func (訳注:やグローバル変数？)へのポインタを取得し、<a href="refm354.html">DL::Symbol</a> オ
+ブジェクトや <a href="refm355.html">DL::PtrData</a> オブジェクトを返す。
+prototype は型修飾からなる文字列で関数のプロトタイプを示す。
+<a href="refm352.html#L006754">Type specifiers</a> も参照。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm352.html">UP</a>][<a href="refm352.html">&lt;-PREV</a>][<a href="refm354.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,2787 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ruby 1.7 feature</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm385.html" rel="next" />
+<link href="refm383.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm382.html">UP</a>][<a href="refm383.html">&lt;-PREV</a>][<a href="refm385.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L007247" id="L007247">ruby 1.7 feature</a></h1>
+<p>ruby version 1.7 は開発版です。以下にあげる機能は将来削除されたり互換
+性のない仕様変更がなされるかもしれません。</p>
+<h2><a name="L007248" id="L007248">1.7.3 -&gt; 1.8.0 preview1 (2002-12-24)</a></h2>
+<h3><a name="L007249" id="L007249">2002-12-20</a></h3>
+<dl>
+<dt><a name="L007250" id="L007250"><a href="refm341.html">profiler</a> [lib] [new]</a></dt>
+<dd>
+<p>追加。<a href="refm342.html">profile</a> の実体として分離されました。</p>
+</dd>
+<dt><a name="L007251" id="L007251">rb_define_alloc_func() [api] [new]</a></dt>
+<dt><a name="L007252" id="L007252">rb_undef_alloc_func() [api] [new]</a></dt>
+<dd>
+<p>追加。<a href="refm051.html#L001250">allocate</a> メソッドの定義に使用します。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/19116">ruby-dev:19116</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+</dl>
+<h3><a name="L007253" id="L007253">2002-12-18</a></h3>
+<dl>
+<dt><a name="L007254" id="L007254"><a href="refm060.html#L001431">Regexp#===</a> [compat]</a></dt>
+<dd>
+<p>真偽値を返すようになりました。</p>
+<pre>p(/foo/ === &quot;foo&quot;)
+
+=&gt; ruby 1.6.8 (2002-12-24) [i586-linux]
+   0
+=&gt; ruby 1.8.0 (2003-03-12) [i586-linux]
+   true</pre>
+</dd>
+</dl>
+<h3><a name="L007255" id="L007255">2002-12-17</a></h3>
+<dl>
+<dt><a name="L007256" id="L007256">defined? [compat]</a></dt>
+<dd>
+<p>属性代入、配列要素への代入に対して &quot;method&quot; でなく &quot;assignment&quot; を返
+すようになりました。</p>
+<pre>class Foo
+  attr_accessor :foo
+end
+p defined? Foo.new.foo = 1
+
+ary = []
+p defined? ary[2] = 1
+
+=&gt; ruby 1.6.8 (2002-12-24) [i586-linux]
+   &quot;method&quot;
+   &quot;method&quot;
+=&gt; ruby 1.8.0 (2003-03-12) [i586-linux]
+   &quot;assignment&quot;
+   &quot;assignment&quot;</pre>
+</dd>
+</dl>
+<h3><a name="L007255" id="L007255">2002-12-17</a></h3>
+<dl>
+<dt><a name="L007257" id="L007257"><a href="refm158.html">open-uri</a> [lib] [new]</a></dt>
+<dd>
+<p>追加</p>
+</dd>
+</dl>
+<h3><a name="L007258" id="L007258">2002-12-14</a></h3>
+<dl>
+<dt><a name="L007259" id="L007259">WindowsCE [platform]</a></dt>
+<dd>
+<p><a href="refm475.html">WindowsCE</a> のサポートパッチが取り込まれました。</p>
+</dd>
+</dl>
+<h3><a name="L007260" id="L007260">2002-12-11</a></h3>
+<dl>
+<dt><a name="L007261" id="L007261"><a href="refm045.html#L000992">IO#read</a> [compat]</a></dt>
+<dt><a name="L007262" id="L007262"><a href="refm045.html#L001044">IO#sysread</a> [compat]</a></dt>
+<dd>
+<p>IO#read, IO#sysread に第二引数追加(あらかじめ割り当てた読み込み用バッ
+ファの指定)</p>
+</dd>
+</dl>
+<h3><a name="L007263" id="L007263">2002-12-10</a></h3>
+<dl>
+<dt><a name="L007264" id="L007264"><a href="refm064.html#L001630">Thread#terminate</a> [new]</a></dt>
+<dd>
+<p>追加。Thread#kill と同じ。</p>
+</dd>
+</dl>
+<h3><a name="L007265" id="L007265">2002-12-07</a></h3>
+<dl>
+<dt><a name="L007266" id="L007266"><a href="refm081.html#L002039">Process.abort</a> [new]</a></dt>
+<dt><a name="L007267" id="L007267"><a href="refm081.html#L002042">Process.exit</a> [new]</a></dt>
+<dd>
+<p>追加。関数 abort, exit と同じ。</p>
+</dd>
+</dl>
+<h3><a name="L007268" id="L007268">2002-12-06</a></h3>
+<dl>
+<dt><a name="L007269" id="L007269"><a href="refm058.html#L001387">Process::Status#pid</a> [new]</a></dt>
+<dd>
+<p>追加</p>
+</dd>
+</dl>
+<h3><a name="L007270" id="L007270">2002-12-04</a></h3>
+<dl>
+<dt><a name="L007271" id="L007271">Object#copy_object</a></dt>
+<dd>
+<p>become から名前変更。(その後 1.8 で initialize_copy という名前になった)</p>
+</dd>
+</dl>
+<h3><a name="L007272" id="L007272">2002-11-27</a></h3>
+<dl>
+<dt><a name="L007273" id="L007273"><a href="refm113.html#L002252">SystemExit#initialize</a> [compat]</a></dt>
+<dd>
+<p>引数が追加されました。</p>
+<pre>ruby -e 'raise SystemExit.new(2)'
+echo $?
+# =&gt; 2</pre>
+</dd>
+</dl>
+<h3><a name="L007274" id="L007274">2002-11-19</a></h3>
+<dl>
+<dt><a name="L007275" id="L007275"><a href="refm036.html#L000799">Array#transpose</a> [new]</a></dt>
+<dd>
+<p>追加</p>
+<pre>p [[1,2,3],
+   [4,5,6],
+   [7,8,9]].transpose
+=&gt; ruby 1.7.3 (2002-12-11) [i586-linux]
+   [[1, 4, 7], [2, 5, 8], [3, 6, 9]]</pre>
+</dd>
+</dl>
+<h3><a name="XXINVALIDXX" id="XXINVALIDXX">2002-11-08 </a></h3>
+<dl>
+<dt><a name="L007277" id="L007277">[parser] [experimental]</a></dt>
+<dd>
+<p>実験的な修正のようです。</p>
+<pre>a = 1
+p a / 5
+  =&gt; ruby 1.6.8 (2002-12-24) [i586-linux]
+     0
+  =&gt; ruby 1.8.0 (2003-03-12) [i586-linux]
+     0
+
+a = 1
+p a /5
+  =&gt; -:2: warning: ambiguous first argument; make sure
+     -:2: unterminated regexp meets end of file
+     ruby 1.6.8 (2002-12-24) [i586-linux]
+  =&gt; ruby 1.8.0 (2003-03-12) [i586-linux]
+     0</pre>
+</dd>
+</dl>
+<h3><a name="L007278" id="L007278">2002-11-02</a></h3>
+<dl>
+<dt><a name="L007279" id="L007279"><a href="refm035.html#L000663">Object#object_id</a> [new]</a></dt>
+<dd>
+<p>追加 (Object#id は、obsolete)</p>
+<pre>p Object.new.id
+
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   537730140
+=&gt; -:1: warning: Object#id will be deprecated; use Object#object_id
+   ruby 1.7.3 (2002-12-04) [i586-linux]
+   537723790</pre>
+</dd>
+</dl>
+<h3><a name="L007278" id="L007278">2002-11-02</a></h3>
+<dl>
+<dt><a name="L007280" id="L007280"><a href="refm055.html#L001330">Fixnum#to_sym</a> [new]</a></dt>
+<dt><a name="L007280" id="L007280"><a href="refm061.html#L001516">String#to_sym</a> [new]</a></dt>
+<dd>
+<p>追加(Symbol#intern はなくなった)</p>
+</dd>
+</dl>
+<h3><a name="L007281" id="L007281">2002-11-01</a></h3>
+<dl>
+<dt><a name="L007282" id="L007282"><a href="refm070.html#L001772">Array#zip</a> [new]</a></dt>
+<dt><a name="L007282" id="L007282"><a href="refm070.html#L001772">Enumerable#zip</a> [new]</a></dt>
+<dd>
+<p>追加</p>
+<pre>p [1,2,3].zip([4,5,6], [7,8,9])
+
+=&gt; ruby 1.7.3 (2002-12-11) [i586-linux]
+   [[1, 4, 7], [2, 5, 8], [3, 6, 9]]
+
+p [1,2,3].zip([4,5,6], [7,8,9]) {|v| p v}
+
+=&gt; ruby 1.7.3 (2002-12-11) [i586-linux]
+   [1, 4, 7]
+   [2, 5, 8]
+   [3, 6, 9]
+   nil</pre>
+</dd>
+</dl>
+<h3><a name="L007283" id="L007283">2002-10-30</a></h3>
+<dl>
+<dt><a name="L007284" id="L007284"><a href="refm050.html#L001212">Module#private_method_defined?</a> [new]</a></dt>
+<dt><a name="L007285" id="L007285"><a href="refm050.html#L001213">Module#protected_method_defined?</a> [new]</a></dt>
+<dt><a name="L007286" id="L007286"><a href="refm050.html#L001214">Module#public_method_defined?</a> [new]</a></dt>
+<dt><a name="L007287" id="L007287"><a href="refm035.html#L000675">Object#methods</a> [change]</a></dt>
+<dt><a name="L007288" id="L007288"><a href="refm050.html#L001206">Module#instance_methods</a> [change]</a></dt>
+<dd>
+<p><a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/18606">ruby-dev:18606</a><sup class="outside"><small>[外部]</small></sup></p>
+<p><a href="refm050.html#L001212">Module#private_method_defined?</a>,
+<a href="refm050.html#L001213">Module#protected_method_defined?</a>,
+<a href="refm050.html#L001214">Module#public_method_defined?</a>
+追加</p>
+<p><a href="refm035.html#L000675">Object#methods</a>,
+<a href="refm050.html#L001206">Module#instance_methods</a>
+変更(Module#method_defined? と Module#instance_methods の関係と合うように)</p>
+<pre>class Foo
+  def public_m; end
+private
+  def private_m; end
+protected
+  def protected_m; end
+end
+
+foo = Foo.new
+
+m = %w(public_m private_m protected_m)
+
+p m.collect {|_| Foo.method_defined?(_)}
+if Foo.respond_to? :public_method_defined?
+  p m.collect {|_| Foo.public_method_defined?(_)}
+  p m.collect {|_| Foo.private_method_defined?(_)}
+  p m.collect {|_| Foo.protected_method_defined?(_)}
+end
+puts '---'
+p m.collect {|_| Foo.instance_methods.member?(_)}
+p m.collect {|_| Foo.public_instance_methods.member?(_)}
+p m.collect {|_| Foo.private_instance_methods.member?(_)}
+p m.collect {|_| Foo.protected_instance_methods.member?(_)}
+puts '---'
+p m.collect {|_| foo.methods.member?(_)}
+p m.collect {|_| foo.public_methods.member?(_)}
+p m.collect {|_| foo.private_methods.member?(_)}
+p m.collect {|_| foo.protected_methods.member?(_)}
+
+=&gt; ruby 1.6.8 (2002-12-24) [i586-linux]
+   [true, false, true]
+   ---
+   [true, false, false]
+   [true, false, false]
+   [false, true, false]
+   [false, false, true]
+   ---
+   [true, false, false]
+   [true, false, false]
+   [false, true, false]
+   [false, false, true]
+=&gt; ruby 1.8.0 (2003-03-09) [i586-linux]
+   [true, false, true]
+   [true, false, false]
+   [false, true, false]
+   [false, false, true]
+   ---
+   [true, false, true]
+   [true, false, false]
+   [false, true, false]
+   [false, false, true]
+   ---
+   [true, false, true]
+   [true, false, false]
+   [false, true, false]
+   [false, false, true]</pre>
+</dd>
+</dl>
+<h3><a name="L007289" id="L007289">2002-10-23</a></h3>
+<dl>
+<dt><a name="L007290" id="L007290">[parser] [new]</a></dt>
+<dd>
+<p>シンボルの拡張表記法が採用されました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/18537">ruby-dev:18537</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>p :&quot;foo#{&quot;bar&quot;}&quot;
+p :'foo#{&quot;bar&quot;}'
+p %s{foo#{&quot;bar&quot;}}
+
+=&gt; ruby 1.7.3 (2002-11-14) [i586-linux]
+   :foobar
+   :&quot;foo\#{\&quot;bar\&quot;}&quot;
+   :&quot;foo\#{\&quot;bar\&quot;}&quot;</pre>
+</dd>
+</dl>
+<h3><a name="L007291" id="L007291">2002-10-11</a></h3>
+<dl>
+<dt><a name="L007292" id="L007292">rescue修飾式 [parser] [change]</a></dt>
+<dd>
+<p>rescue 修飾式の優先度が変わりました。これは、実験的なもののようです。
+(1.8 リリースで残っているので正式採用のようです)</p>
+<pre>a = b rescue c</pre>
+<p>は、</p>
+<pre>(a = b) rescue c</pre>
+<p>でなく</p>
+<pre>a = (b rescue c)</pre>
+<p>と評価されます。if 修飾式などと比べて優先度が異なってしまいますが、b 
+が例外を起こしたときの値として、c を利用できるという利点があります。</p>
+<pre># 以下の実行結果では、以前の仕様(1.6 の結果)では代入が起こらず
+# 変数が定義されるだけとなり、結果 v は nil になっています。
+
+v = raise rescue true
+p v
+
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   nil
+=&gt; ruby 1.7.3 (2002-10-18) [i586-linux]
+   true</pre>
+</dd>
+</dl>
+<h3><a name="L007293" id="L007293">2002-10-02</a></h3>
+<dl>
+<dt><a name="L007294" id="L007294"><a href="refm035.html#L000651">Object#type</a> [obsolete]</a></dt>
+<dd>
+<p>使うと警告が出るようになりました。代わりに Object#class を使用してく
+ださい。</p>
+<pre>p Object.new.type
+=&gt; -:1: warning: Object#type is deprecated; use Object#class
+   ruby 1.7.3 (2002-10-08) [i586-linux]
+   Object</pre>
+</dd>
+</dl>
+<h3><a name="L007295" id="L007295">2002-09-27</a></h3>
+<dl>
+<dt><a name="L007296" id="L007296"><a href="refm051.html#L001254">Class#inherited</a> [change]</a></dt>
+<dd>
+<p>inherited メソッドはクラス定義式の終りに呼び出されるようになりました。
+<em class="XXINVALIDXX">ruby-bugs-ja:342</em></p>
+<pre>def Object.inherited(c)
+  p &quot;inherited!&quot;
+end
+class Foo
+  p &quot;defining Foo&quot;
+end
+
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   &quot;inherited!&quot;
+   &quot;defining Foo&quot;
+=&gt; ruby 1.7.3 (2002-10-04) [i586-linux]
+   &quot;defining Foo&quot;
+   &quot;inherited!&quot;</pre>
+</dd>
+</dl>
+<h3><a name="L007297" id="L007297">2002-09-26</a></h3>
+<dl>
+<dt><a name="L007298" id="L007298">[parser] [compat]</a></dt>
+<dd>
+<p>メソッド定義の外での return の呼び出しはコンパイル時でなく実行時に
+エラーになるようになりました。</p>
+<pre>p :doing
+return
+=&gt; -:2: return appeared outside of method
+   ruby 1.6.7 (2002-03-01) [i586-linux]
+=&gt; ruby 1.7.3 (2002-10-04) [i586-linux]
+   :doing
+   -:2: unexpected return</pre>
+</dd>
+</dl>
+<h3><a name="L007299" id="L007299">2002-09-13</a></h3>
+<dl>
+<dt><a name="L007300" id="L007300"><a href="refm025.html">||=</a> [bug]</a></dt>
+<dd>
+<p>未定義の変数に対して ||= で値を代入したときに、グローバル変数で警告
+が出ていました。また、クラス変数はエラーになっていました。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/18278">ruby-dev:18278</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>local ||= 1
+@instance ||= 1
+$global ||= 1
+@@class ||= 1
+
+=&gt; -:3: warning: global variable `$global' not initialized
+   -:4: uninitialized class variable @@class in Object (NameError)
+   ruby 1.6.7 (2002-03-01) [i586-linux]
+=&gt; ruby 1.7.3 (2002-09-13) [i586-linux]</pre>
+</dd>
+</dl>
+<h3><a name="L007301" id="L007301">2002-09-11</a></h3>
+<dl>
+<dt><a name="L007302" id="L007302"><a href="refm081.html#L002061">Process.pid</a> (win) [change]</a></dt>
+<dd>
+<p>mswin32 版と mingw32 版で、ruby 内部はプロセスIDを常に正の値に変換して
+扱うようになりました。
+NT系のOSでは従来と違いはありませんが、Win9x系のOSでは、OSの保持する
+プロセスIDが負値なので、符号変換して扱うようになります。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/18263">ruby-dev:18263</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+</dl>
+<h3><a name="L007301" id="L007301">2002-09-11</a></h3>
+<dl>
+<dt><a name="L007303" id="L007303">IO#read, gets ..., etc. [bug]</a></dt>
+<dd>
+<p>File::NONBLOCK を指定した IO の読み込みで EWOULDBLOCK が発生すると、
+途中まで読んだデータが失われることがありました。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/17855">ruby-dev:17855</a><sup class="outside"><small>[外部]</small></sup></p>
+<p>Thread を使ったプログラムで、ファイルからデータを読み込んでソケットに
+書き出していると、ごく稀に Socket#write が Errno::EINTR になってしまう
+ことがありました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/17878">ruby-dev:17878</a><sup class="outside"><small>[外部]</small></sup>, <em class="XXINVALIDXX">ruby-core:00444</em></p>
+</dd>
+</dl>
+<h3><a name="L007304" id="L007304">2002-09-05</a></h3>
+<dl>
+<dt><a name="L007305" id="L007305"><a href="refm077.html#L001975">Marshal.dump</a> [marshal] [change]</a></dt>
+<dd>
+<p>無名モジュールを include したオブジェクトがダンプできなくなりました。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/18186">ruby-dev:18186</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>class &lt;&lt; obj = Object.new
+  include Module.new
+end
+Marshal.dump(obj)
+
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+=&gt; -:4:in `dump': can't dump anonymous class #&lt;Module:0x401a871c&gt; (ArgumentError)
+        from -:4
+   ruby 1.7.3 (2002-09-06) [i586-linux]</pre>
+<p>名前付きモジュールを include したオブジェクトはダンプでき、include 
+したモジュールの情報をダンプフォーマットに保持するようになりました。</p>
+<pre>module M
+  def foo
+    p :foo
+  end
+end
+class &lt;&lt; obj = Object.new
+  include M
+end
+p dump = Marshal.dump(obj)
+p obj2 = Marshal.load(dump)
+class &lt;&lt; obj2
+   p included_modules
+end
+obj2.foo
+
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   &quot;\004\006o:\vObject\000&quot;
+   #&lt;Object:0x401a9630&gt;
+   [Kernel]
+   -:14: undefined method `foo' for #&lt;Object:0x401a9630&gt; (NameError)
+=&gt; ruby 1.7.3 (2002-09-06) [i586-linux]
+   &quot;\004\ae:\006Mo:\vObject\000&quot;
+   #&lt;Object:0x401a821c&gt;
+   [M, Kernel]
+   :foo</pre>
+<p>これらの変更によりフォーマットバージョンが 4.7 から 4.8 に上がりました。
+(2002-09-17)</p>
+</dd>
+</dl>
+<h3><a name="L007306" id="L007306">2002-09-03</a></h3>
+<dl>
+<dt><a name="L007307" id="L007307"><a href="refm343.html">mkmf</a>, extmk [lib] [compat]</a></dt>
+<dd>
+<p>extmk と mkmf をマージする作業が開始されました。extmk は 
+mkmf を利用するようになりました。mkmf もこれに伴い変更が行われ
+ています。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/18109">ruby-dev:18109</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+</dl>
+<h3><a name="L007308" id="L007308">2002-08-31</a></h3>
+<dl>
+<dt><a name="L007309" id="L007309">ruby interpreter [ruby] [change]</a></dt>
+<dd>
+<p>クラスの特異クラスの特異クラスは特異クラス自身であると定義されました
+<em class="XXINVALIDXX">ruby-bugs-ja:313</em>。なんだかよくわかりません(^^;</p>
+<pre>class &lt;&lt; Object
+  p [self.id, self]
+  class &lt;&lt; self
+    p [self.id, self]
+  end
+end
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   [537771634, Class]
+   [537742484, Class]
+=&gt; ruby 1.7.3 (2002-09-05) [i586-linux]
+   [537771634, #&lt;Class:Object&gt;]
+   [537771634, #&lt;Class:Object&gt;]</pre>
+<p>さらに、オブジェクトの特異クラスのスーパークラスの特異クラスと
+オブジェクトの特異クラスの特異クラスのスーパークラスは同じなのだそうです
+<em class="XXINVALIDXX">ruby-bugs-ja:324</em>。さあっぱりわかりません(^^;;</p>
+<pre>class &lt;&lt; Object.new
+  class &lt;&lt; self.superclass
+    p [self.id, self]
+  end
+  class &lt;&lt; self
+    p [self.superclass.id, self.superclass]
+  end
+end
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   [537771634, Class]
+   [537771644, Class]
+=&gt; ruby 1.7.3 (2002-09-05) [i586-linux]
+   [537771634, #&lt;Class:Object&gt;]
+   [537771634, #&lt;Class:Object&gt;]</pre>
+<p><em class="XXINVALIDXX">ruby-bugs-ja:336</em> のあたりでまた少し変わったかもしれません
+(2002-09-21 の ChangeLog 参照。まじめにおっかけるのに疲れたらしい
+^^;;)</p>
+</dd>
+</dl>
+<h3><a name="L007310" id="L007310">2002-08-30</a></h3>
+<dl>
+<dt><a name="L007311" id="L007311"><a href="refm269.html">set</a> [lib] [new]</a></dt>
+<dd>
+<p>追加</p>
+</dd>
+</dl>
+<h3><a name="L007312" id="L007312">2002-08-27</a></h3>
+<dl>
+<dt><a name="L007313" id="L007313">Object#become</a></dt>
+<dd>
+<p>追加(その後 copy_object という名前になった。その後 initialize_copy 
+という名前になった)</p>
+<pre>ary = [1,2,3]
+p ary, ary.id
+ary.become [3,2,1]
+p ary, ary.id
+
+=&gt; ruby 1.7.3 (2002-08-30) [i586-linux]
+   [1, 2, 3]
+   537743354
+   [3, 2, 1]
+   537743354
+
+ary = [1,2,3]
+p ary, ary.id
+ary.replace [3,2,1]
+p ary, ary.id
+=&gt; ruby 1.7.3 (2002-08-30) [i586-linux]
+   [1, 2, 3]
+   537743354
+   [3, 2, 1]
+   537743354
+
+obj = Object.new
+p obj, obj.id
+obj.become Object.new
+p obj, obj.id
+=&gt; ruby 1.7.3 (2002-08-30) [i586-linux]
+   #&lt;Object:0x401a9ff4&gt;
+   537743354
+   #&lt;Object:0x401a9ff4&gt;
+   537743354</pre>
+</dd>
+</dl>
+<h3><a name="L007314" id="L007314">2002-08-23</a></h3>
+<dl>
+<dt><a name="L007315" id="L007315">ruby interpreter (win32, MinGW) [ruby] [change]</a></dt>
+<dd>
+<p><a href="refm458.html">mswin32</a>版 ruby と <a href="refm459.html">MinGW</a>版 ruby で拡張ライブラリのバイナ
+リ互換を保つようになりました。Config::CONFIG['RUBY_SO_NAME'] が 
+msvcrt-ruby<var>XX</var> に(DLL 名になります)、Config::CONFIG['sitearch'] (拡張
+ライブラリの置き場所のパス要素)が &quot;i386-msvcrt&quot; に変更されました。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/17144">ruby-dev:17144</a><sup class="outside"><small>[外部]</small></sup>, <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/18047">ruby-dev:18047</a><sup class="outside"><small>[外部]</small></sup></p>
+<p>sitearch は、今回の件で新規追加されました(他の環境では 
+CONFIG['arch'] と同じ)</p>
+<p><a href="refm456.html">Win32ネイティブ版</a> の脚注も参照</p>
+</dd>
+</dl>
+<h3><a name="L007316" id="L007316">2002-08-20</a></h3>
+<dl>
+<dt><a name="L007317" id="L007317"><a href="refm045.html#L001028">IO#putc</a> [compat]</a></dt>
+<dd>
+<p>出力メソッドのうち putc だけが write メソッドを使用していませんでした。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/18038">ruby-dev:18038</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>class &lt;&lt; foo = STDOUT.dup
+  def write(s)
+    p &quot;foo&quot;
+  end
+end
+
+foo.putc(&quot;bar&quot;)
+puts
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   b
+=&gt; ruby 1.7.3 (2002-09-05) [i586-linux]
+   &quot;foo&quot;</pre>
+</dd>
+</dl>
+<h3><a name="L007318" id="L007318">2002-08-13</a></h3>
+<dl>
+<dt><a name="L007319" id="L007319"><a href="refm044.html#L000939">Hash#default_proc</a> [new]</a></dt>
+<dd>
+<p>追加 <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/17966">ruby-dev:17966</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+</dl>
+<h3><a name="L007320" id="L007320">2002-08-11</a></h3>
+<dl>
+<dt><a name="L007321" id="L007321"><a href="refm057.html#L001380">Proc#to_s</a> [compat]</a></dt>
+<dd>
+<p>Proc#to_s の結果にスクリプトのソースファイル名と行番号が付加されまし
+た。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/17968">ruby-dev:17968</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>p Proc.new {
+   2
+   3
+}.to_s
+=&gt; -:2: warning: useless use of a literal in void context
+   ruby 1.6.7 (2002-03-01) [i586-linux]
+   &quot;#&lt;Proc:0x401ab8b8&gt;&quot;
+=&gt; -:2: warning: useless use of a literal in void context
+   ruby 1.7.3 (2002-09-05) [i586-linux]
+   &quot;#&lt;Proc:0x0x401a87d0@-:2&gt;&quot;</pre>
+</dd>
+</dl>
+<h3><a name="L007322" id="L007322">2002-08-01</a></h3>
+<dl>
+<dt><a name="L007323" id="L007323"><a href="refm070.html#L001750">Enumerable#find</a> [change]</a></dt>
+<dd>
+<p>引数に文字列を指定できなくなりました。</p>
+<pre>[1,2,3].find(&quot;p :nothing&quot;) {|v| v &gt; 5}
+
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   :nothing
+
+=&gt; -:1:in `find': undefined method `call' for &quot;p :nothing&quot;:String (NoMethodError)
+        from -:1
+   ruby 1.7.2 (2002-08-01) [i586-linux]</pre>
+<p>また、要素が見つからなかった場合は、ifnone の結果を返すようになりました。</p>
+<pre>p [1,2,3].find(proc {:nothing}) {|v| v &gt; 5}
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   nil
+=&gt; ruby 1.7.2 (2002-08-01) [i586-linux]
+   :nothing</pre>
+</dd>
+</dl>
+<h3><a name="L007324" id="L007324">2002-07-27</a></h3>
+<dl>
+<dt><a name="L007325" id="L007325"><a href="refm052.html#L001278">Numeric#to_int</a> [new]</a></dt>
+<dt><a name="L007325" id="L007325"><a href="refm052.html#L001278">Float#to_int</a> [new]</a></dt>
+<dd>
+<p>追加。</p>
+</dd>
+</dl>
+<h3><a name="L007326" id="L007326">2002-07-26</a></h3>
+<dl>
+<dt><a name="L007327" id="L007327"><a href="refm029.html#L000478">rand</a> [compat]</a></dt>
+<dd>
+<p>乱数生成のアルゴリズムに
+<a href="http://www.math.keio.ac.jp/~matumoto/mt.html">Mersenne Twister</a><sup class="outside"><small>[外部]</small></sup>
+を使用するようになりました。</p>
+</dd>
+</dl>
+<h3><a name="L007328" id="L007328">2002-07-24</a></h3>
+<dl>
+<dt><a name="L007298" id="L007298">[parser] [compat]</a></dt>
+<dd>
+<p>ネストしたメソッド定義が許されるようになりました。</p>
+<pre>def func1
+  def func2
+    p :func2
+  end
+end
+func1
+func2
+
+=&gt; -:2: nested method definition
+   ruby 1.6.7 (2002-03-01) [i586-linux]
+=&gt; ruby 1.7.3 (2002-09-05) [i586-linux]
+   :func2</pre>
+<p>メソッド定義中での alias, undef も許可されました。</p>
+<pre>def bar
+end
+def foo
+  p :foo
+  undef bar
+end
+
+foo
+
+def bar
+  p :bar
+  alias foo bar
+end
+
+bar
+foo
+=&gt; -:5: undef within method
+   -:12: alias within method
+   ruby 1.6.7 (2002-03-01) [i586-linux]
+=&gt; ruby 1.7.3 (2002-09-05) [i586-linux]
+   :foo
+   -:10: warning: method redefined; discarding old bar
+   -:10: warning: overriding global function `bar'
+   :bar
+   :bar</pre>
+<p>メソッド定義の外での super の呼び出しはコンパイル時でなく実行時に
+エラーになるようになりました。</p>
+<pre>p 1
+super
+=&gt; -:2: super called outside of method
+   ruby 1.6.7 (2002-03-01) [i586-linux]
+=&gt; ruby 1.7.3 (2002-09-05) [i586-linux]
+   1
+   -:2: super called outside of method (NoMethodError)</pre>
+<p>おそらく、<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/16969">ruby-dev:16969</a><sup class="outside"><small>[外部]</small></sup> あたりが変更の理由なのではないかと思
+います。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/17882">ruby-dev:17882</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+</dl>
+<h3><a name="L007329" id="L007329">2002-07-19</a></h3>
+<dl>
+<dt><a name="L007330" id="L007330"><a href="refm024.html#L000324">数値リテラル</a> [compat]</a></dt>
+<dd>
+<p>10進<em>整数</em>リテラルの prefix として 0d が追加されました。</p>
+<pre>p 0d10
+=&gt; ruby 1.7.3 (2002-09-04) [i586-linux]
+   10
+
+p 0d10.1
+=&gt; -:1: parse error
+   ruby 1.7.3 (2002-09-04) [i586-linux]</pre>
+<p>大文字も許されます。</p>
+<pre>p 0D10
+=&gt; ruby 1.7.3 (2002-09-04) [i586-linux]
+   10</pre>
+<p>以下のようなことはできないようです。</p>
+<pre>p(/\d10/)
+p &quot;\d10&quot;
+=&gt; ruby 1.7.3 (2002-09-04) [i586-linux]
+   /\d10/
+   &quot;d10&quot;</pre>
+<p>リテラルで許されることは Integer() でも許されます。</p>
+<pre>p Integer(&quot;0d010&quot;)
+=&gt; ruby 1.7.3 (2002-09-04) [i586-linux]
+   10
+
+p Integer(&quot;0d010.1&quot;)
+=&gt; -:1:in `Integer': invalid value for Integer: &quot;0d010.1&quot; (ArgumentError)
+        from -:1
+   ruby 1.7.3 (2002-09-04) [i586-linux]</pre>
+<p>String#to_i、String#oct も</p>
+<pre>p &quot;0d010&quot;.to_i
+p &quot;0d010&quot;.oct
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   0
+   0
+=&gt; ruby 1.7.3 (2002-09-04) [i586-linux]
+   10
+   10</pre>
+</dd>
+</dl>
+<h3><a name="L007331" id="L007331">2002-07-18</a></h3>
+<dl>
+<dt><a name="L007332" id="L007332"><a href="refm201.html">net/ftp</a> [new]</a></dt>
+<dd>
+<p>メソッド set_socket 追加</p>
+</dd>
+</dl>
+<h3><a name="L007333" id="L007333">2002-07-17</a></h3>
+<dl>
+<dt><a name="L007330" id="L007330"><a href="refm024.html#L000324">数値リテラル</a> [compat]</a></dt>
+<dd>
+<p>8進リテラルの prefix として 0 以外に 0o が追加されました。</p>
+<pre>p 0o377
+=&gt; ruby 1.7.3 (2002-09-04) [i586-linux]
+   255</pre>
+<p>大文字も許されます。</p>
+<pre>p 0O377
+=&gt; ruby 1.7.3 (2002-09-04) [i586-linux]
+   255</pre>
+<p>以下のようなことはできないようです。</p>
+<pre>p(/\o377/)
+p &quot;\o377&quot;
+=&gt; ruby 1.7.3 (2002-09-04) [i586-linux]
+   /\o377/
+   &quot;o377&quot;</pre>
+<p>リテラルで許されることは Integer() でも許されます。</p>
+<pre>p Integer(&quot;0o377&quot;)
+=&gt; -:1:in `Integer': invalid value for Integer: &quot;0o377&quot; (ArgumentError)
+        from -:1
+   ruby 1.6.7 (2002-03-01) [i586-linux]
+=&gt; ruby 1.7.3 (2002-09-04) [i586-linux]
+   255</pre>
+<p>String#to_i、String#oct も</p>
+<pre>p &quot;0o377&quot;.oct
+p &quot;0o377&quot;.to_i(8)
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   0
+   -:2:in `to_i': wrong # of arguments(1 for 0) (ArgumentError)
+        from -:2
+=&gt; ruby 1.7.3 (2002-09-04) [i586-linux]
+   255
+   255</pre>
+</dd>
+</dl>
+<h3><a name="L007334" id="L007334">2002-07-11</a></h3>
+<dl>
+<dt><a name="L007335" id="L007335"><a href="refm061.html#L001530">String#scan</a> [change]</a></dt>
+<dt><a name="L007336" id="L007336"><a href="refm061.html#L001542">String#split</a> [change]</a></dt>
+<dt><a name="L007337" id="L007337"><a href="refm061.html#L001551">String#sub</a>, <a href="refm061.html#L001552">String#sub!</a> [change]</a></dt>
+<dt><a name="L007338" id="L007338"><a href="refm061.html#L001507">String#gsub</a>, <a href="refm061.html#L001508">String#gsub!</a> [change]</a></dt>
+<dt><a name="L007339" id="L007339"><a href="refm061.html#L001464">String#~</a> [change]</a></dt>
+<dt><a name="L007340" id="L007340"><em class="XXINVALIDXX">String#=~</em> [change]</a></dt>
+<dd>
+<p>pattern として正規表現でなく文字列を指定したとき、それを正規表現にコ
+ンパイルせず文字列そのものをパターンとして扱うようになりました。(よ
+り正確には、Regexp.compile(arg) でなく
+Regexp.compile(Regexp.quote(arg)) するようになりました)</p>
+<p>str =~ arg だけは、arg が文字列のとき、
+Regexp.compile(Regexp.quote(arg)) =~ str と等価な str.index(arg) が
+実行されます(したがって、$~ は設定されません)。</p>
+<pre>p &quot;aaaa*&quot;.scan(&quot;a*&quot;)
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   [&quot;aaaa&quot;, &quot;&quot;, &quot;&quot;]
+=&gt; -:1: warning: string pattern instead of regexp; metacharacters no longer effective
+   ruby 1.7.3 (2002-09-04) [i586-linux]
+   [&quot;a*&quot;]
+
+p &quot;aa*aa*aa*&quot;.split(&quot;a*&quot;)
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   [&quot;&quot;, &quot;*&quot;, &quot;*&quot;, &quot;*&quot;]
+=&gt; -:1: warning: string pattern instead of regexp; metacharacters no longer effective
+   ruby 1.7.3 (2002-09-04) [i586-linux]
+   [&quot;a&quot;, &quot;a&quot;, &quot;a&quot;]
+
+p &quot;aa*&quot;.sub('a*', '')
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   &quot;*&quot;
+=&gt; -:1: warning: string pattern instead of regexp; metacharacters no longer effective
+   ruby 1.7.3 (2002-09-04) [i586-linux]
+   &quot;a&quot;
+
+p &quot;aa*aa*aa*aa*&quot;.gsub('a*', '')
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   &quot;****&quot;
+=&gt; -:1: warning: string pattern instead of regexp; metacharacters no longer effective
+   ruby 1.7.3 (2002-09-04) [i586-linux]
+   &quot;aaaa&quot;
+
+$_ = &quot;aa*&quot;
+p ~&quot;a*&quot;
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   0
+=&gt; ruby 1.7.3 (2002-09-04) [i586-linux]
+   1</pre>
+</dd>
+</dl>
+<h3><a name="L007341" id="L007341">2002-07-03</a></h3>
+<dl>
+<dt><a name="L007342" id="L007342"><a href="refm201.html">net/ftp</a> [compat]</a></dt>
+<dd>
+<p>getbinaryfile() の第二引数(ローカルファイル名)が省略可能になりました。
+メソッド get(), put(), binary(), binary = 追加</p>
+</dd>
+</dl>
+<h3><a name="L007343" id="L007343">2002-06-29</a></h3>
+<dl>
+<dt><a name="L007344" id="L007344">双方向パイプ (win) [compat]</a></dt>
+<dd>
+<p>Win32用の双方向パイプサポートのパッチが取り込まれたのだそうです 
+<em class="XXINVALIDXX">ruby-win32:185</em></p>
+</dd>
+</dl>
+<h3><a name="L007345" id="L007345">2002-06-26</a></h3>
+<dl>
+<dt><a name="L007346" id="L007346"><a href="refm035.html#L000693">Object#to_a</a> [obsolete]</a></dt>
+<dd>
+<p>警告メッセージが出るようになりました。(<a href="refm393.html">obsolete</a> になるのだそうです)</p>
+<pre>p Object.new.to_a
+
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   [#&lt;Object:0x401ab8b8&gt;]
+=&gt; -:1: warning: default `to_a' will be obsolete
+   ruby 1.7.3 (2002-09-02) [i586-linux]
+   [#&lt;Object:0x401a88ac&gt;]</pre>
+</dd>
+</dl>
+<h3><a name="L007345" id="L007345">2002-06-26</a></h3>
+<dl>
+<dt><a name="L007347" id="L007347"><a href="refm029.html#L000428">Array</a>() [change]</a></dt>
+<dd>
+<p>Array() は、引数に nil を受け付けなくなりました。
+(ruby 1.8.0 (2003-05-29) あたりで、また受け付けるようになりました)</p>
+<pre>p Array(nil)
+
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   []
+=&gt; -:1:in `Array': cannot convert nil into Array (TypeError)
+        from -:1
+   ruby 1.7.3 (2002-09-02) [i586-linux]
+
+=&gt; ruby 1.8.0 (2003-05-29) [i586-linux]
+   []</pre>
+</dd>
+</dl>
+<h3><a name="L007345" id="L007345">2002-06-26</a></h3>
+<dl>
+<dt><a name="L007348" id="L007348"><a href="refm024.html#L000367">%W()</a> [parser]</a></dt>
+<dd>
+<p>%W(...) 配列リテラルが追加されました。%w() と異なりバックスラッシュ
+記法や式展開が有効です。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/15988">ruby-dev:15988</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>v = &quot;b c&quot;
+p %W(a #{v}d\se)
+
+=&gt; ruby 1.7.3 (2002-09-04) [i586-linux]
+   [&quot;a&quot;, &quot;b cd e&quot;]</pre>
+</dd>
+</dl>
+<h3><a name="L007349" id="L007349">2002-06-25</a></h3>
+<dl>
+<dt><a name="L007350" id="L007350"><a href="refm029.html#L000430">Integer</a>() [change]</a></dt>
+<dd>
+<p>数値や文字列以外のオブジェクトを整数に変換するときに to_i ではなく 
+to_int を使用するようになりました。</p>
+<pre>class &lt;&lt; obj = Object.new
+  def to_i()   0 end
+  def to_int() 1 end
+end
+
+p Integer(obj)
+
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   0
+=&gt; ruby 1.7.3 (2002-09-02) [i586-linux]
+   1</pre>
+</dd>
+</dl>
+<h3><a name="L007349" id="L007349">2002-06-25</a></h3>
+<dl>
+<dt><a name="L007351" id="L007351"><a href="refm068.html#L001728">NilClass#to_f</a> [new]</a></dt>
+<dd>
+<p>追加</p>
+<pre>p nil.to_f
+
+=&gt; -:1: undefined method `to_f' for nil (NameError)
+   ruby 1.6.7 (2002-03-01) [i586-linux]
+=&gt; ruby 1.7.3 (2002-09-02) [i586-linux]
+   0.0</pre>
+</dd>
+</dl>
+<h3><a name="L007349" id="L007349">2002-06-25</a></h3>
+<dl>
+<dt><a name="L007352" id="L007352"><a href="refm029.html#L000429">Float</a>() [change]</a></dt>
+<dd>
+<p>Float() は、引数に nil を受け付けなくなりました。</p>
+<pre>p Float(nil)
+
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   0.0
+=&gt; -:1:in `Float': cannot convert nil into Float (TypeError)
+        from -:1
+   ruby 1.7.3 (2002-09-02) [i586-linux]</pre>
+</dd>
+</dl>
+<h3><a name="L007353" id="L007353">2002-06-24</a></h3>
+<dl>
+<dt><a name="L007354" id="L007354"><a href="refm024.html#L000355">式展開</a> [parser]</a></dt>
+<dd>
+<p>#{ ... } の式展開中に文字列のデリミタを含めて任意の ruby プログラム
+をそのまま書けるようになりました。以前も同じでしたが、よりルールが明
+確になっているようです。つまり、式展開の中も外も同じ規則で、ruby プ
+ログラムはパースされます。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/17422">ruby-dev:17422</a><sup class="outside"><small>[外部]</small></sup></p>
+<p>(1.6 は、一時、逆の挙動でした)</p>
+<pre>p &quot;#{ &quot;foo&quot; }&quot;
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   &quot;foo&quot;
+=&gt; -:1: warning: bad substitution in string
+   -:1: parse error
+           p &quot;#{ &quot;foo&quot; }&quot;
+                     ^
+   ruby 1.6.7 (2002-08-21) [i586-linux]
+=&gt; ruby 1.6.8 (2002-12-24) [i586-linux]
+   &quot;foo&quot;
+=&gt; ruby 1.7.3 (2002-09-02) [i586-linux]
+   &quot;foo&quot;</pre>
+<p>以下のようなデリミタのエスケープはむしろ行うべきではありません。</p>
+<pre>p &quot;#{ \&quot;foo\&quot; }&quot;
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   &quot;foo&quot;
+=&gt; ruby 1.6.7 (2002-08-21) [i586-linux]
+   &quot;foo&quot;
+=&gt; -:1: warning: escaped terminator '&quot;' inside string interpolation
+   ruby 1.7.3 (2002-09-02) [i586-linux]
+   &quot;foo&quot;</pre>
+<p>式展開中のコメントは、 # から } までではなく # から改行までであるこ
+とに注意する必要があります。</p>
+<pre>p &quot;#{ &quot;foo&quot; # comment }&quot;
+
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   &quot;foo&quot;
+=&gt; -:1: parse error
+   ruby 1.7.3 (2002-09-02) [i586-linux]
+
+
+p &quot;#{ &quot;foo&quot; # comment
+   }&quot;
+
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   &quot;foo&quot;
+=&gt; ruby 1.7.3 (2002-09-02) [i586-linux]
+   &quot;foo&quot;</pre>
+</dd>
+</dl>
+<h3><a name="L007355" id="L007355">2002-06-21</a></h3>
+<dl>
+<dt><a name="L007298" id="L007298">[parser] [compat]</a></dt>
+<dd>
+<p>文字列リテラル中の行頭の __END__ は、スクリプトの終りとみなさなくな
+りました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/17513">ruby-dev:17513</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre># p &quot;
+#__END__
+#&quot;
+p eval(%Q(p &quot;\n__END__\n&quot;))
+=&gt; -:1: compile error (SyntaxError)
+   (eval):1: unterminated string meets end of file
+   ruby 1.6.7 (2002-03-01) [i586-linux]
+=&gt; ruby 1.7.3 (2002-09-02) [i586-linux]
+   &quot;\n__END__\n&quot;
+   nil</pre>
+</dd>
+</dl>
+<h3><a name="L007356" id="L007356">2002-06-15</a></h3>
+<dl>
+<dt><a name="L007357" id="L007357"><a href="refm024.html#L000324">?&lt;whitespace&gt;</a> [parser] [change]</a></dt>
+<dd>
+<p>?スペース、?改行、?TAB 等はリテラルとして無効になりました。必要なら 
+?\s, ?\n, ?\t 等を使用してください。(以下の例は前者がダブルクォート
+を使用していることに注意) <a href="http://www.ruby-lang.org/cgi-bin/ruby-bugs-ja?selectid=261">ruby-bugs-ja:PR#261</a><sup class="outside"><small>[外部]</small></sup>, <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/17446">ruby-dev:17446</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>p eval(&quot;?\t&quot;)
+p eval(&quot;?\n&quot;)
+p eval(&quot;?\v&quot;)
+p eval(&quot;?\f&quot;)
+p eval(&quot;?\r&quot;)
+p eval(&quot;? &quot;)
+
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   9
+   10
+   11
+   12
+   13
+   32
+
+=&gt; -:1: compile error (SyntaxError)
+   (eval):1: parse error
+   ruby 1.7.3 (2002-09-02) [i586-linux]
+
+p eval('?\t')
+p eval('?\n')
+p eval('?\v')
+p eval('?\f')
+p eval('?\r')
+p eval('?\s')
+
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   9
+   10
+   11
+   12
+   13
+   32
+=&gt; ruby 1.7.3 (2002-09-02) [i586-linux]
+   9
+   10
+   11
+   12
+   13
+   32</pre>
+</dd>
+</dl>
+<h3><a name="L007358" id="L007358">2002-06-11</a></h3>
+<dl>
+<dt><a name="L007359" id="L007359">Borland C++ サポート [platform]</a></dt>
+<dd>
+<p>bcc で ruby インタプリタをコンパイルするためのパッチがマージされまし
+た。</p>
+</dd>
+</dl>
+<h3><a name="L007360" id="L007360">2002-06-04</a></h3>
+<dl>
+<dt><a name="L007361" id="L007361"><em class="XXINVALIDXX">Range#max</em> [change]</a></dt>
+<dt><a name="L007362" id="L007362"><em class="XXINVALIDXX">Range#min</em> [change]</a></dt>
+<dt><a name="L007363" id="L007363"><a href="refm059.html#L001408">Range#include?</a> [change]</a></dt>
+<dt><a name="L007364" id="L007364"><em class="XXINVALIDXX">Range#member?</em> [change]</a></dt>
+<dd>
+<p>Range#max, Range#min, Range#include? が &lt;=&gt; メソッドによる範囲演算で
+求められるようになりました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/35253">ruby-list:35253</a><sup class="outside"><small>[外部]</small></sup>, <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/17228">ruby-dev:17228</a><sup class="outside"><small>[外部]</small></sup>
+(2003-03-18: min, max は元に戻りました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/19837">ruby-dev:19837</a><sup class="outside"><small>[外部]</small></sup>)</p>
+<p>Range#member? は each を利用して全要素を参照し、実際にメンバが存在するか
+確認します。(Enumerable#member? と同じ)</p>
+<p>1.6 までは、max, min, member? include? は、Enumerable のメソッドで、
+=== は、Range のメソッドです。1.7 では、max, min, member?, include?,
+=== はすべて Range のメソッドで、include? は === の別名になっていま
+す。(1.8 では、max, min は、Enumerable のメソッドに戻っています)</p>
+<p>これらの変更により以下のような挙動の違いがあります。</p>
+<pre>p((0.1 .. 2.0).include?(1.1))
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   false
+=&gt; ruby 1.7.3 (2002-09-02) [i586-linux]
+   true
+
+p((0.1 .. 2.0).member?(1.0))
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   true
+=&gt; -:1:in `member?': cannot iterate from Float (TypeError)
+        from -:1
+   ruby 1.7.3 (2002-09-02) [i586-linux]
+
+p &quot;b&quot; &lt; &quot;ba&quot;
+p((&quot;a&quot;...&quot;bc&quot;).max)
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   true
+   &quot;b&quot;
+=&gt; ruby 1.7.3 (2002-09-05) [i586-linux]
+   true
+   &quot;bc&quot;
+
+=&gt; ruby 1.8.0 (2003-03-20) [i586-linux]
+   true
+   &quot;b&quot;</pre>
+</dd>
+</dl>
+<h3><a name="L007365" id="L007365">2002-06-01</a></h3>
+<dl>
+<dt><a name="L007366" id="L007366"><a href="refm322.html">win32ole</a> [lib] [new]</a></dt>
+<dd>
+<p>追加</p>
+</dd>
+</dl>
+<h3><a name="L007367" id="L007367">2002-05-30</a></h3>
+<dl>
+<dt><a name="L007368" id="L007368"><a href="refm059.html#L001411">Range#each</a> [change]</a></dt>
+<dd>
+<p>Range#each は各要素の succ メソッドを使用してイテレーションするよう
+になりました。</p>
+<pre>(1.0 .. 2.0).each {|v| p v}
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   1
+   2
+=&gt; -:1:in `each': cannot iterate from Float (TypeError)
+        from -:1
+   ruby 1.7.3 (2002-09-02) [i586-linux]
+
+class Float
+  def succ
+   self + 1.0
+  end
+end
+(1.0 .. 2.0).each {|v| p v}
+
+=&gt; ruby 1.7.3 (2002-09-02) [i586-linux]
+   1.0
+   2.0</pre>
+</dd>
+</dl>
+<h3><a name="L007367" id="L007367">2002-05-30</a></h3>
+<dl>
+<dt><a name="L007369" id="L007369"><a href="refm059.html#L001416">Range#size</a>     [obsolete]</a></dt>
+<dt><a name="L007370" id="L007370"><a href="refm059.html#L001415">Range#length</a> [obsolete]</a></dt>
+<dd>
+<p>このメソッドはなくなりました。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/64479">ruby-talk:64479</a><sup class="outside"><small>[外部]</small></sup>, <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/72133">ruby-talk:72133</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>p((&quot;a&quot;..&quot;z&quot;).size)
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   26
+=&gt; -:1: undefined method `size' for #&lt;Range:0x401aa780&gt; (NoMethodError)
+   ruby 1.7.2 (2002-08-01) [i586-linux]</pre>
+<p>Range の要素数を得るには</p>
+<pre>p((&quot;a&quot;..&quot;z&quot;).to_a.size)
+
+=&gt; ruby 1.7.2 (2002-08-01) [i586-linux]
+   26</pre>
+<p>などとする必要があります。</p>
+</dd>
+</dl>
+<h3><a name="L007371" id="L007371">2002-05-29</a></h3>
+<dl>
+<dt><a name="L007372" id="L007372"><a href="refm057.html#L001378">Proc#binding</a> [new]</a></dt>
+<dd>
+<p>追加</p>
+</dd>
+</dl>
+<h3><a name="L007373" id="L007373">2002-05-28</a></h3>
+<dl>
+<dt><a name="L007374" id="L007374"><a href="refm024.html#L000324">負の数値リテラル</a></a></dt>
+<dd>
+<p><em>2003-01-21: この変更は元に戻ったようです</em></p>
+<p>-数値 のリテラルの字句解析部分が変わって、-数値は、常に一つのリテラ
+ルとして扱われるようになったようです(この文、予想で書いてます)。</p>
+<p>例えば、以下の式で結果が異なります。</p>
+<pre>p -2**2
+=&gt; -:1: warning: ambiguous first argument; make sure
+   ruby 1.6.7 (2002-03-01) [i586-linux]
+   -4
+=&gt; -:1: warning: ambiguous first argument; make sure
+   ruby 1.7.2 (2002-08-01) [i586-linux]
+   4
+
+=&gt; -:1: warning: ambiguous first argument; make sure
+   ruby 1.8.0 (2003-03-12) [i586-linux]
+   -4</pre>
+<p>以前は、-2**2 は、-(2**2) でした。これは演算子の優先順位によります
+(ホント？)。1.7 では、(-2)**2 となります。また、以下のように - と数
+値の間に空白をいれると - は単項演算子(メソッド)として振舞います。(こ
+れは以前と同じ)</p>
+<pre>p(- 2**2)
+
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   -4
+=&gt; ruby 1.7.2 (2002-08-01) [i586-linux]
+   -4
+
+=&gt; ruby 1.8.0 (2003-03-12) [i586-linux]
+   -4
+
+class Fixnum
+  def -@
+      1
+  end
+end
+
+p(- 2**2)
+=&gt; -:2: warning: discarding old -@
+   ruby 1.6.7 (2002-03-01) [i586-linux]
+   1
+=&gt; -:2: warning: method redefined; discarding old -@
+   ruby 1.7.2 (2002-08-01) [i586-linux]
+   1
+
+=&gt; -:2: warning: method redefined; discarding old -@
+   ruby 1.8.0 (2003-03-12) [i586-linux]
+   1</pre>
+</dd>
+</dl>
+<h3><a name="L007375" id="L007375">2002-05-23</a></h3>
+<dl>
+<dt><a name="L007376" id="L007376"><a href="refm045.html#L000995">IO.sysopen</a> [new]</a></dt>
+<dt><a name="L007377" id="L007377"><a href="refm168.html#L003171">Socket#sysaccept</a> [new]</a></dt>
+<dt><a name="L007377" id="L007377"><a href="refm163.html#L003094">TCPServer#sysaccept</a> [new]</a></dt>
+<dt><a name="L007377" id="L007377"><a href="refm167.html#L003140">UNIXServer#sysaccept</a> [new]</a></dt>
+<dd>
+<p>追加</p>
+</dd>
+</dl>
+<h3><a name="L007378" id="L007378">2002-05-13</a></h3>
+<dl>
+<dt><a name="L007379" id="L007379">[parser] [change]</a></dt>
+<dt><a name="L007380" id="L007380"><a href="refm061.html#L001558">String#to_f</a> [change]</a></dt>
+<dt><a name="L007352" id="L007352"><a href="refm029.html#L000429">Float</a>() [change]</a></dt>
+<dd>
+<p>文字列を浮動小数点数に変換する内部処理で、ライブラリ関数 strtod(3) 
+に依存しなくなりました。ロケールやライブラリの独自拡張により動作が変
+わることはなくなりました。</p>
+<pre>p &quot;0xa.a&quot;.to_f
+
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   10.625
+=&gt; ruby 1.7.2 (2002-08-01) [i586-linux]
+   0.0</pre>
+</dd>
+</dl>
+<h3><a name="L007378" id="L007378">2002-05-13</a></h3>
+<dl>
+<dt><a name="L007321" id="L007321"><em class="XXINVALIDXX">Float#to_s</em> [compat]</a></dt>
+<dd>
+<p>最大の精度を示すためのフォーマットが &quot;%.10g&quot; から &quot;%.16g&quot; に変わりま
+した。(2003-03-20: その後、&quot;%.15g&quot; になりました <a href="http://www.ruby-lang.org/cgi-bin/ruby-bugs-ja?selectid=406">ruby-bugs-ja:PR#406</a><sup class="outside"><small>[外部]</small></sup>)</p>
+<pre>p 1.0/3
+p 99.6
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   0.3333333333
+   99.6
+
+=&gt; ruby 1.7.2 (2002-08-01) [i586-linux]
+   0.3333333333333333
+   99.59999999999999
+
+=&gt; ruby 1.8.0 (2003-03-20) [i586-linux]
+   0.333333333333333
+   99.6</pre>
+</dd>
+</dl>
+<h3><a name="L007381" id="L007381">2002-05-10</a></h3>
+<dl>
+<dt><a name="L007382" id="L007382"><a href="refm064.html#L001632">Thread#join</a>  [compat]</a></dt>
+<dd>
+<p>スレッドを待ち合わせる時間を limit で指定できるようになりました。</p>
+</dd>
+</dl>
+<h3><a name="L007383" id="L007383">2002-04-26</a></h3>
+<dl>
+<dt><a name="L007384" id="L007384"><a href="refm070.html#L001765">Enumerable#partition</a> [new]</a></dt>
+<dd>
+<p>追加</p>
+</dd>
+</dl>
+<h3><a name="L007385" id="L007385">2002-04-22</a></h3>
+<dl>
+<dt><a name="L007386" id="L007386"><em class="XXINVALIDXX">メソッド引数の &amp; 修飾</em> [compat]</a></dt>
+<dt><a name="L007387" id="L007387"><a href="refm057.html#L001379">Proc#to_proc</a> [new]</a></dt>
+<dd>
+<p>メソッドに渡す引数に &amp; を修飾した場合、渡すオブジェクトが to_proc を
+持っていればそれを実行し、その結果をブロックとして渡すようになりまし
+た。以前は、&amp; 修飾できるのは Proc, Method オブジェクト限定でした。
+これに伴い Proc#to_proc が追加されました。</p>
+<pre>class Foo
+  def to_proc
+    p &quot;should generate Proc object&quot;
+  end
+end
+
+def foo
+end
+
+foo(&amp;Foo.new)
+
+=&gt; ruby 1.7.2 (2002-04-24) [i586-linux]
+   &quot;should generate Proc object&quot;
+   -:10: wrong argument type Foo (expected Proc) (TypeError)</pre>
+</dd>
+</dl>
+<h3><a name="L007388" id="L007388">2002-04-19</a></h3>
+<dl>
+<dt><a name="L007389" id="L007389"><a href="refm052.html#L001280">Numeric#step</a> [compat]</a></dt>
+<dd>
+<p><a href="refm055.html">Fixnum</a>, <a href="refm053.html">Integer</a> から移動しました。</p>
+</dd>
+</dl>
+<h3><a name="L007390" id="L007390">2002-04-18</a></h3>
+<dl>
+<dt><a name="L007391" id="L007391"><a href="refm060.html#L001439">Regexp#to_s</a> [new]</a></dt>
+<dd>
+<p>追加。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/16909">ruby-dev:16909</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>p /foo(bar)*/.to_s
+=&gt; &quot;(?-mix:foo(bar)*)&quot;</pre>
+</dd>
+</dl>
+<h3><a name="L007392" id="L007392">2002-04-09</a></h3>
+<dl>
+<dt><a name="L007393" id="L007393"><a href="refm046.html#L001073">File.extname</a> [new]</a></dt>
+<dd>
+<p>追加。ファイル名の拡張子を返します。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/37617">ruby-talk:37617</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+</dl>
+<h3><a name="L007394" id="L007394">2002-04-08</a></h3>
+<dl>
+<dt><a name="L007395" id="L007395"><a href="refm062.html#L001585">each_pair</a> [new]</a></dt>
+<dd>
+<p>追加。</p>
+</dd>
+</dl>
+<h3><a name="L007396" id="L007396">2002-04-06</a></h3>
+<dl>
+<dt><a name="L007397" id="L007397"><a href="refm054.html">Bignum</a> [bug]</a></dt>
+<dd>
+<p>-2147483648 より小さい数値の2進、8進、16進の表記がおかしくなっていました
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/34828">ruby-list:34828</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>p &quot;%b&quot; % -2147483648
+p &quot;%b&quot; % -2147483649
+p &quot;%b&quot; % -2147483650
+
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   &quot;..10000000000000000000000000000000&quot;
+   &quot;..1&quot;
+   &quot;..10&quot;
+
+=&gt; ruby 1.7.2 (2002-04-11) [i586-linux]
+   &quot;..10000000000000000000000000000000&quot;
+   &quot;..101111111111111111111111111111111&quot;
+   &quot;..101111111111111111111111111111110&quot;</pre>
+</dd>
+</dl>
+<h3><a name="L007394" id="L007394">2002-04-08</a></h3>
+<dl>
+<dt><a name="L007398" id="L007398">終了ステータス [compat]</a></dt>
+<dd>
+<p>raise SystemExit したときに終了ステータス 1 で終了するようになりました。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/16776">ruby-dev:16776</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+</dl>
+<h3><a name="L007399" id="L007399">2002-04-02</a></h3>
+<dl>
+<dt><a name="L007400" id="L007400"><a href="refm351.html">dl</a> [lib] [new]</a></dt>
+<dd>
+<p>追加</p>
+</dd>
+</dl>
+<h3><a name="L007401" id="L007401">2002-03-27</a></h3>
+<dl>
+<dt><a name="L007402" id="L007402"><a href="refm045.html#L001046">IO#sysseek</a>(offset, whence)  [new]</a></dt>
+<dd>
+<p>追加 <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/21612">ruby-talk:21612</a><sup class="outside"><small>[外部]</small></sup>, <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/36703">ruby-talk:36703</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+</dl>
+<h3><a name="L007403" id="L007403">2002-03-26</a></h3>
+<dl>
+<dt><a name="L007404" id="L007404"><a href="refm203.html">net/http</a> [compat]</a></dt>
+<dd>
+<p>Net::HTTP のクラスメソッドで <a href="refm170.html">URI</a> オブジェクトが使えるようになった。</p>
+<pre>Net::HTTP.get_print(URI.parse('http://www.ruby-lang.org/ja/'))</pre>
+<p>インスタンスメソッドでは使えないので注意。</p>
+</dd>
+</dl>
+<h3><a name="L007403" id="L007403">2002-03-26</a></h3>
+<dl>
+<dt><a name="L007405" id="L007405"><a href="refm026.html#L000388">rescue/ensure on begin .. end while</a> [compat]</a></dt>
+<dd>
+<p>rescue/ensure を持つ begin 式も while/until 修飾できるようになりまし
+た。</p>
+<p>以前は、rescue/ensure を持つ while/until 修飾式は、通常の begin 式に
+while/until 修飾していると見なされ本体が必ず最初に実行されるという振
+るまい(C の do ... while 構文と同じ)をしていませんでした。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/34618">ruby-list:34618</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>i = 0
+begin
+  p i
+  i += 1
+rescue
+end while i &lt; 0
+
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+
+=&gt; ruby 1.7.2 (2002-03-29) [i586-linux]
+   0</pre>
+</dd>
+</dl>
+<h3><a name="L007403" id="L007403">2002-03-26</a></h3>
+<dl>
+<dt><a name="L007406" id="L007406"><a href="refm028.html#L000411">rescue/ensure on class/module</a> [compat]</a></dt>
+<dd>
+<p>メソッド定義のほかにもクラス定義やモジュール定義にもrescue/ensureを
+つけられるようになりました。</p>
+<pre>class Foo
+  hogehoge
+rescue
+  p $!
+end
+
+=&gt; -:3: parse error
+   ruby 1.6.7 (2002-03-01) [i586-linux]
+=&gt; ruby 1.7.2 (2002-03-29) [i586-linux]
+   #&lt;NameError: undefined local variable or method `hogehoge' for Foo:Class&gt;</pre>
+</dd>
+</dl>
+<h3><a name="L007407" id="L007407">2002-03-25</a></h3>
+<dl>
+<dt><a name="L007408" id="L007408"><a href="refm064.html#L001618">Thread.list</a> [compat]</a></dt>
+<dt><a name="L007409" id="L007409"><a href="refm065.html#L001654">ThreadGroup#list</a> [compat]</a></dt>
+<dd>
+<p>終了中(aborting)のスレッドもリストに含まれるようになりました。
+<a href="http://www.freeml.com/ml_view.php?ml=rubyist&pg=1282">rubyist:1282</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>th = Thread.new {sleep}
+Thread.critical = true
+th.kill
+
+p Thread.list
+
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   [#&lt;Thread:0x401ba5c8 run&gt;]
+
+=&gt; ruby 1.7.2 (2002-03-29) [i586-linux]
+   [#&lt;Thread:0x401b0618 aborting&gt;, #&lt;Thread:0x401ba0b4 run&gt;]</pre>
+</dd>
+</dl>
+<h3><a name="L007407" id="L007407">2002-03-25</a></h3>
+<dl>
+<dt><a name="L007410" id="L007410"><a href="refm064.html#L001643">Thread#wakeup</a> [bug]</a></dt>
+<dt><a name="L007411" id="L007411"><a href="refm064.html#L001605">Thread#run</a> [bug]</a></dt>
+<dd>
+<p>終了中(aborting)のスレッドに対して実行するとスレッドが生き返る
+バグが修正されました。
+<a href="http://www.freeml.com/ml_view.php?ml=rubyist&pg=1282">rubyist:1282</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+</dl>
+<h3><a name="L007412" id="L007412">2002-03-22</a></h3>
+<dl>
+<dt><a name="L007413" id="L007413"><a href="refm029.html#L000488">sprintf</a>('%u') [compat]</a></dt>
+<dd>
+<p>sprintf の '%u' で、最上位ビットの繰り返しをあらわす &quot;..&quot;  は、付加
+されないようになりました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/16522">ruby-dev:16522</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>p sprintf(&quot;%u&quot;, -1)
+
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   &quot;..4294967295&quot;
+
+=&gt; -:1: warning: negative number for %u specifier
+   ruby 1.7.2 (2002-03-29) [i586-linux]
+   &quot;4294967295&quot;</pre>
+</dd>
+</dl>
+<h3><a name="L007412" id="L007412">2002-03-22</a></h3>
+<dl>
+<dt><a name="L007414" id="L007414"><a href="refm471.html">VMS</a> support [platform]</a></dt>
+<dd>
+<p><a href="refm471.html">VMS</a> のサポートパッチが取り込まれました。</p>
+</dd>
+<dt><a name="L007415" id="L007415">添付ライブラリ [lib] [new]</a></dt>
+<dd>
+<p>以下のライブラリが新たに追加されました。
+<a href="refm256.html">iconv</a>, <a href="refm270.html">tsort</a>, <a href="refm116.html">StringIO</a>, <a href="refm127.html">strscan</a>,
+<a href="refm152.html">fileutils</a>, racc/*</p>
+</dd>
+<dt><a name="L007416" id="L007416"><a href="refm041.html#L000839">Dir.glob</a> [compat]</a></dt>
+<dd>
+<p>Dir.glob に第2引数(マッチの挙動を変更するフラグ)を指定できるようにな
+りました。Dir[] にはこのフラグは指定できません。</p>
+<p>関連して定数 File::FNM_DOTMATCH (FNM_PERIOD の逆の意味)が追加されて
+います。</p>
+<pre>p Dir.glob(&quot;/*&quot;)
+=&gt; ruby 1.7.2 (2002-03-15) [i586-linux]
+   [&quot;/lost+found&quot;, &quot;/root&quot;, ...]
+
+p Dir.glob(&quot;/*&quot;, File::FNM_DOTMATCH)
+
+=&gt; ruby 1.7.2 (2002-03-15) [i586-linux]
+   [&quot;/.&quot;, &quot;/..&quot;, &quot;/lost+found&quot;, &quot;/root&quot;, &quot;/boot&quot;, ...]</pre>
+</dd>
+<dt><a name="L007417" id="L007417">large file [bug]</a></dt>
+<dd>
+<p>large file(サイズが 4G bytes 以上のファイル)を正しく扱うようになりま
+した(？)
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/35316">ruby-talk:35316</a><sup class="outside"><small>[外部]</small></sup>, <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/35470">ruby-talk:35470</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L007418" id="L007418"><a href="refm081.html#L002070">Process.kill</a>    [compat]</a></dt>
+<dd>
+<p><a href="refm458.html">mswin32</a>, <a href="refm460.html">mingw32</a> でも、Process.kill(9, pid) でプロセスを
+強制終了(TerminateProcess) できます。(Process.kill(&quot;KILL&quot;, pid) とは
+できないようです・・・2002-08-28 その後 &quot;KILL&quot; で指定できるようになっ
+たようです)</p>
+</dd>
+<dt><a name="L007419" id="L007419"><a href="refm338.html">benchmark</a> [new]</a></dt>
+<dd>
+<p>added</p>
+</dd>
+<dt><a name="L007420" id="L007420"><a href="refm029.html#L000432">abort</a> [compat]</a></dt>
+<dd>
+<p>終了メッセージを指定できるようになりました。</p>
+<pre>abort(&quot;abort!&quot;)
+=&gt; abort!
+   ruby 1.7.2 (2002-03-15) [i586-linux]</pre>
+<p>指定したメッセージは、例外 SystemExit オブジェクトの
+message 属性に設定されます。</p>
+<pre>begin
+  abort(&quot;abort!&quot;)
+rescue SystemExit
+  p $!.message
+end
+
+=&gt; abort!
+   ruby 1.7.2 (2002-03-29) [i586-linux]
+   &quot;abort!&quot;</pre>
+</dd>
+<dt><a name="L007421" id="L007421"><a href="refm283.html">gdbm</a>    [lib] [change]</a></dt>
+<dt><a name="L007422" id="L007422"><a href="refm282.html">dbm</a>     [lib] [change]</a></dt>
+<dt><a name="L007423" id="L007423"><a href="refm284.html">sdbm</a>    [lib] [change]</a></dt>
+<dd>
+<p><em>ドキュメント未反映</em>
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/16126">ruby-dev:16126</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L007424" id="L007424"><a href="refm050.html#L001228">Module#include</a> [change]</a></dt>
+<dt><a name="L007425" id="L007425"><a href="refm035.html#L000657">Object#extend</a>  [change]</a></dt>
+<dd>
+<p>複数のモジュールを渡したときにインクルードされる順序が変更されました。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/16035">ruby-dev:16035</a><sup class="outside"><small>[外部]</small></sup>
+extend も同様だそうです。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/16183">ruby-dev:16183</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>module Foo; end
+module Bar; end
+module Baz; end
+
+include Foo, Bar, Baz
+p Object.ancestors
+
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   [Object, Baz, Bar, Foo, Kernel]
+
+=&gt; ruby 1.7.2 (2002-03-01) [i586-linux]
+   [Object, Foo, Bar, Baz, Kernel]
+
+obj = Object.new
+module Foo; end
+module Bar; end
+module Baz; end
+
+obj.extend Foo, Bar, Baz
+class &lt;&lt; obj
+  p ancestors
+end
+
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   [Baz, Bar, Foo, Object, Kernel]
+
+=&gt; ruby 1.7.2 (2002-03-08) [i586-linux]
+   [Foo, Bar, Baz, Object, Kernel]</pre>
+<p>一つ一つ include した場合とは逆順になります。</p>
+<pre>module Foo; end
+module Bar; end
+module Baz; end
+
+include Foo
+include Bar
+include Baz
+p Object.ancestors
+
+=&gt; ruby 1.7.2 (2002-03-01) [i586-linux]
+   [Object, Baz, Bar, Foo, Kernel]</pre>
+</dd>
+<dt><a name="L007426" id="L007426"><a href="refm166.html#L003121">UNIXSocket.pair</a>              [new]</a></dt>
+<dt><a name="L007427" id="L007427"><a href="refm166.html#L003122">UNIXSocket.socketpair</a>        [new]</a></dt>
+<dt><a name="L007428" id="L007428"><a href="refm166.html#L003128">UNIXSocket#recv_io</a>   [new]</a></dt>
+<dt><a name="L007429" id="L007429"><a href="refm166.html#L003129">UNIXSocket#send_io</a>   [new]</a></dt>
+<dd>
+<p>追加</p>
+</dd>
+<dt><a name="L007430" id="L007430">Proc#yield</a></dt>
+<dd>
+<p><a href="http://www.ruby-lang.org/cgi-bin/ruby-bugs-ja?selectid=98">ruby-bugs-ja:PR#98</a><sup class="outside"><small>[外部]</small></sup>
+(2003-03-11: この変更はなくなった <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/19799">ruby-dev:19799</a><sup class="outside"><small>[外部]</small></sup>)
+(その後 Proc#yield はなくなった)</p>
+<pre>Proc.new { break }.call
+Proc.new { break }.yield
+
+=&gt; -:2:in `yield': break from proc-closure (LocalJumpError)
+        from -:2
+   ruby 1.7.3 (2002-09-05) [i586-linux]
+
+=&gt; ruby 1.8.0 (2003-03-12) [i586-linux]</pre>
+</dd>
+<dt><a name="L007431" id="L007431"><a href="refm036.html#L000776">Array#pack</a>         [compat]</a></dt>
+<dt><a name="L007432" id="L007432"><a href="refm061.html#L001567">String#unpack</a>   [compat]</a></dt>
+<dd>
+<p>pack/unpack のテンプレートにコメントを記述できるようになりました。</p>
+<pre>p [1,2,3,4].pack(&quot;s  # short (fixed 2 bytes)
+                  i  # int (machine dependent)
+                  l  # long (fixed 4 bytes)
+                  q  # quad (fixed 8 bytes)&quot;)
+=&gt; ruby 1.7.2 (2002-02-21) [i586-linux]
+   &quot;\001\000\002\000\000\000\003\000\000\000\004\000\000\000\000\000\000\000&quot;</pre>
+</dd>
+<dt><a name="L007433" id="L007433">LocalJumpError#exitstatus [new]</a></dt>
+<dd>
+<p>追加(その後、exit_value になった)</p>
+<pre>def foo
+  proc { return 10 }
+end
+
+begin
+  foo.call
+rescue LocalJumpError
+  p $!.exitstatus
+end
+
+=&gt; ruby 1.7.2 (2002-02-14) [i586-linux]
+   10</pre>
+</dd>
+<dt><a name="L007434" id="L007434"><a href="refm167.html#L003139">UNIXServer#listen</a>     [new]</a></dt>
+<dt><a name="L007435" id="L007435"><a href="refm163.html#L003093">TCPServer#listen</a>       [new]</a></dt>
+<dd>
+<p>追加。Socket#<a href="refm168.html#L003168">listen</a>と同じ。</p>
+</dd>
+<dt><a name="L007436" id="L007436"><a href="refm066.html#L001682">Time#getgm</a>           [new]</a></dt>
+<dt><a name="L007437" id="L007437"><a href="refm066.html#L001684">Time#getlocal</a>     [new]</a></dt>
+<dt><a name="L007438" id="L007438"><a href="refm066.html#L001683">Time#getutc</a>         [new]</a></dt>
+<dt><a name="L007439" id="L007439"><a href="refm066.html#L001703">Time#gmt_offset</a> [new]</a></dt>
+<dt><a name="L007440" id="L007440"><a href="refm066.html#L001704">Time#gmtoff</a>         [new]</a></dt>
+<dt><a name="L007441" id="L007441"><a href="refm066.html#L001702">Time#utc_offset</a> [new]</a></dt>
+<dd>
+<p>追加</p>
+</dd>
+</dl>
+<h3><a name="L007442" id="L007442">2002-05-21</a></h3>
+<dl>
+<dt><a name="L007443" id="L007443"><a href="refm050.html#L001182">Module#&lt;=&gt;</a>            [change]</a></dt>
+<dd>
+<p>継承関係のないクラス/モジュール同士の比較で nil を返すようになりました。</p>
+<pre>p Array &lt;=&gt; String
+
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   1
+=&gt; ruby 1.7.3 (2002-09-13) [i586-linux]
+   nil</pre>
+</dd>
+<dt><a name="L007444" id="L007444"><a href="refm045.html#L001011">IO#fsync</a>     [new]</a></dt>
+<dd>
+<p>追加</p>
+</dd>
+<dt><a name="L007431" id="L007431"><a href="refm036.html#L000776">Array#pack</a>         [compat]</a></dt>
+<dt><a name="L007432" id="L007432"><a href="refm061.html#L001567">String#unpack</a>   [compat]</a></dt>
+<dd>
+<p>64 bit 整数のテンプレート文字 Q/q が追加されました(Quad の意)。
+Q は unsigned、q は、signed です。
+perl と異なり 64 bit 整数をサポートしないプラットフォームでも
+使用できます。</p>
+<pre>p [ 1].pack(&quot;Q&quot;)
+p [-1].pack(&quot;Q&quot;)
+p [ 1].pack(&quot;q&quot;)
+p [-1].pack(&quot;q&quot;)
+
+p [ 1].pack(&quot;Q&quot;).unpack(&quot;Q&quot;)
+p [-1].pack(&quot;Q&quot;).unpack(&quot;Q&quot;)
+p [ 1].pack(&quot;q&quot;).unpack(&quot;q&quot;)
+p [-1].pack(&quot;q&quot;).unpack(&quot;q&quot;)
+
+=&gt; ruby 1.7.2 (2002-02-13) [i586-linux]
+   &quot;\001\000\000\000\000\000\000\000&quot;
+   &quot;\377\377\377\377\377\377\377\377&quot;
+   &quot;\001\000\000\000\000\000\000\000&quot;
+   &quot;\377\377\377\377\377\377\377\377&quot;
+   [1]
+   [18446744073709551615]
+   [1]
+   [-1]</pre>
+</dd>
+<dt><a name="L007445" id="L007445"><a href="refm048.html#L001160">Method#inspect</a>   [compat]</a></dt>
+<dd>
+<p>特異メソッドに対する出力形式がより意味のあるものになりました。
+<a href="http://www.ruby-lang.org/cgi-bin/ruby-bugs-ja?selectid=193">ruby-bugs-ja:PR#193</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>obj = []
+def obj.foo
+end
+p obj.method(:foo)
+
+=&gt; ruby 1.6.6 (2001-12-26) [i586-linux]
+   #&lt;Method: Array(Array)#foo&gt;
+
+=&gt; ruby 1.7.2 (2002-02-05) [i586-linux]
+   #&lt;Method: [].foo&gt;</pre>
+</dd>
+</dl>
+<h3><a name="L007446" id="L007446">2002-01-28</a></h3>
+<dl>
+<dt><a name="L007447" id="L007447"><a href="refm036.html#L000714">Array.new</a>         [compat]</a></dt>
+<dt><a name="L007448" id="L007448"><a href="refm036.html#L000753">Array#fill</a>   [compat]</a></dt>
+<dd>
+<p>ブロックの評価結果を fill する値として指定できるようになりました。ブ
+ロックは要素毎に評価されるので、下のような例では &quot;val&quot; が毎回生成さ
+れます。</p>
+<pre>ary = Array.new(3, &quot;val&quot;)
+p ary.collect {|v| v.id }       # =&gt; [537774036, 537774036, 537774036]
+ary = Array.new(3) { &quot;val&quot; }
+p ary.collect {|v| v.id }       # =&gt; [537770040, 537770028, 537770016]</pre>
+</dd>
+</dl>
+<h3><a name="L007446" id="L007446">2002-01-28</a></h3>
+<dl>
+<dt><a name="L007449" id="L007449"><a href="refm043.html#L000892">File::Stat#rdev_major</a> [new]</a></dt>
+<dt><a name="L007450" id="L007450"><a href="refm043.html#L000893">File::Stat#rdev_minor</a> [new]</a></dt>
+<dd>
+<p>追加</p>
+<pre>s = File.stat(&quot;/dev/null&quot;)
+p s.rdev_major
+p s.rdev_minor
+
+=&gt; ruby 1.7.2 (2002-01-28) [i686-linux]
+   1
+   3</pre>
+</dd>
+</dl>
+<h3><a name="L007451" id="L007451">2002-01-24</a></h3>
+<dl>
+<dt><a name="L007452" id="L007452"><a href="refm044.html#L000975">Hash#update</a> [compat]</a></dt>
+<dd>
+<p>ブロックを指定できるようになりました。重複したキーに対する振舞いを制
+御できます。</p>
+</dd>
+</dl>
+<h3><a name="L007453" id="L007453">2002-01-18</a></h3>
+<dl>
+<dt><a name="L007454" id="L007454"><a href="refm045.html#L000986">IO.open</a>  [new]</a></dt>
+<dd>
+<p>追加</p>
+</dd>
+</dl>
+<h3><a name="L007455" id="L007455">2002-01-14</a></h3>
+<dl>
+<dt><a name="L007456" id="L007456"><a href="refm057.html">Proc</a> [bug]</a></dt>
+<dd>
+<p>$SAFE が、1 or 2 のとき
+汚染された Proc は、ブロックにできなくなりました <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/15682">ruby-dev:15682</a><sup class="outside"><small>[外部]</small></sup>
+<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></p>
+<pre>$SAFE = 1
+proc = proc {}
+proc.taint
+p proc.tainted?
+def foo(&amp;b)
+  p b.tainted?
+end
+foo(&amp;proc)
+
+=&gt; ruby 1.6.8 (2003-08-03) [i586-linux]
+   true
+   true
+=&gt; ruby 1.7.2 (2002-01-23) [i586-linux]
+   true
+   true</pre>
+</dd>
+</dl>
+<h3><a name="L007457" id="L007457">2002-01-08</a></h3>
+<dl>
+<dt><a name="L007458" id="L007458"><a href="refm061.html#L001559">String#to_i</a> [compat]</a></dt>
+<dd>
+<p>引数に基数(2,8,10,16)を指定できるようになりました。
+(2002-01-26: 引数が 0 のときは prefix で基数を判定する)</p>
+<pre>p &quot;010&quot;.to_i(16)
+=&gt; ruby 1.7.2 (2002-01-11) [i586-linux]
+   16</pre>
+</dd>
+</dl>
+<h3><a name="L007459" id="L007459">2001-12-08</a></h3>
+<dl>
+<dt><a name="L007460" id="L007460"><a href="refm044.html#L000927">Hash.new</a>   [compat]</a></dt>
+<dd>
+<p>ハッシュのデフォルト値としてブロックを指定できるようになり
+ました。ブロックを指定すると空のハッシュ要素の参照に対して
+その都度ブロックを実行し、その結果を返します。
+ブロックにはハッシュ自身と、ハッシュを参照したときのキーが渡されます</p>
+<pre>h = Hash.new(&quot;foo&quot;)
+p h.default.id
+p h.default(0).id    # Hash#default はブロックに渡すキーを指定できます
+p h[0].id
+p h[0].id
+p h[1].id
+
+=&gt; ruby 1.7.2 (2001-12-10) [i586-linux]
+   537774276
+   537774276
+   537774276
+   537774276
+
+h = Hash.new { &quot;foo&quot; }
+p h.default.id
+p h.default(0).id
+p h[0].id
+p h[0].id
+p h[1].id
+
+=&gt; ruby 1.7.2 (2001-12-10) [i586-linux]
+   537770616
+   537770352
+   537770316
+   537770280
+
+h = Hash.new { raise IndexError, &quot;undefined!!&quot; }
+p h[0]
+
+=&gt; -:1: undefined!! (IndexError)
+        from -:1:in `yield'
+        from -:2:in `default'
+        from -:2:in `[]'
+        from -:2
+   ruby 1.7.2 (2001-12-10) [i586-linux]</pre>
+</dd>
+</dl>
+<h3><a name="L007461" id="L007461">2001-12-11</a></h3>
+<dl>
+<dt><a name="L007462" id="L007462">Array#select</a></dt>
+<dt><a name="L007463" id="L007463">Hash#select</a></dt>
+<dt><a name="L007464" id="L007464">ENV.select</a></dt>
+<dt><a name="L007465" id="L007465">MatchData#select</a></dt>
+<dt><a name="L007466" id="L007466">Struct::XXX#select</a></dt>
+<dd>
+<p>追加(その後、values_at というメソッドにとって変わられた)</p>
+<pre># ブロックを与えなかった場合は、indexes/indicies と同じです。
+# (注: indexes/indicies は obsolete となっています)
+
+p [1,2,3].select(0,1,2,3)
+p [1,2,3].select(-4,-3,-2,-1)
+
+p( {1=&gt;&quot;a&quot;, 2=&gt;&quot;b&quot;, 3=&gt;&quot;c&quot;}.select(3,2,1) )
+
+
+=&gt; ruby 1.7.2 (2001-12-10) [i586-linux]
+   [1, 2, 3, nil]
+   [nil, 1, 2, 3]
+   [&quot;c&quot;, &quot;b&quot;, &quot;a&quot;]
+
+# ブロックを与えた場合はこれまでの Enumerable#select と同じです。
+
+p [1,2,3,4,5].select {|v| v % 2 == 1}
+p( {1=&gt;&quot;a&quot;, 2=&gt;&quot;b&quot;, 3=&gt;&quot;c&quot;}.select {|k,v| k % 2 == 1} )
+
+=&gt; ruby 1.6.6 (2001-12-04) [i586-linux]
+   [1, 3, 5]
+   [[1, &quot;a&quot;], [3, &quot;c&quot;]]
+
+=&gt; ruby 1.7.2 (2001-12-10) [i586-linux]
+   [1, 3, 5]
+   [[1, &quot;a&quot;], [3, &quot;c&quot;]]
+
+m = /(foo)(bar)(baz)/.match(&quot;foobarbaz&quot;)
+p m.select(0,1,2,3,4)   # same as m.to_a.indexes(...)
+p m.select(-1,-2,-3)
+
+=&gt; ruby 1.7.2 (2001-12-10) [i586-linux]
+   [&quot;foobarbaz&quot;, &quot;foo&quot;, &quot;bar&quot;, &quot;baz&quot;, nil]
+   [&quot;baz&quot;, &quot;bar&quot;, &quot;foo&quot;]</pre>
+</dd>
+</dl>
+<h3><a name="L007461" id="L007461">2001-12-11</a></h3>
+<dl>
+<dt><a name="L007467" id="L007467">String#match(re)      [new]</a></dt>
+<dd>
+<p>追加 re.match(str) と同じ。</p>
+</dd>
+</dl>
+<h3><a name="L007468" id="L007468">2001-11-17</a></h3>
+<dl>
+<dt><a name="L007469" id="L007469"><a href="refm077.html">Marshal</a>         [marshal] [change]</a></dt>
+<dd>
+<p>Float のダンプが、sprintf(3) に依存しなくなりました。フォーマッ
+トバージョンが 4.6 から 4.7 に上がっています。
+(この後、strtod(3) の組み込みにより、読み込み時もシステムの strtod(3)
+に依存しなくなっています)</p>
+</dd>
+</dl>
+<h3><a name="L007470" id="L007470">2001-11-12</a></h3>
+<dl>
+<dt><a name="L007471" id="L007471"><a href="refm029.html#L000502">trap</a>       [bug]</a></dt>
+<dt><a name="L007472" id="L007472"><a href="refm029.html#L000500">trace_var</a>  [bug]</a></dt>
+<dd>
+<p>第二引数に汚染された文字列を渡すと例外 <a href="refm106.html">SecurityError</a> が
+起こるようになりました。1.6 では、汚染された文字列をセーフレ
+ベル4で評価するようになっていました。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/32215">ruby-list:32215</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+</dl>
+<h3><a name="L007473" id="L007473">2001-10-16</a></h3>
+<dl>
+<dt><a name="L007474" id="L007474"><a href="refm050.html#L001179">Module.new</a>       [compat]</a></dt>
+<dt><a name="L007475" id="L007475"><a href="refm051.html#L001247">Class.new</a>         [compat]</a></dt>
+<dd>
+<p>Module.new, Class.new でブロックが与えられた場合、生成した
+モジュール/クラスのコンテキストでブロックを実行するように
+なりました。</p>
+<pre>Module.new {|m| p m}
+
+=&gt; ruby 1.7.1 (2001-10-15) [i586-linux]
+   #&lt;Module:0x401afd5c&gt;</pre>
+</dd>
+</dl>
+<h3><a name="L007476" id="L007476">2001-10-10</a></h3>
+<dl>
+<dt><a name="L007477" id="L007477"><a href="refm035.html#L000652">Object#clone</a> [change]</a></dt>
+<dd>
+<p>Numeric など immutable なオブジェクトは clone できなくなりました。
+<a href="http://www.ruby-lang.org/cgi-bin/ruby-bugs-ja?selectid=94">ruby-bugs-ja:PR#94</a><sup class="outside"><small>[外部]</small></sup>, <a href="http://www.freeml.com/ml_view.php?ml=rubyist&pg=831">rubyist:0831</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>$DEBUG=true
+true.clone     rescue nil
+false.clone    rescue nil
+nil.clone      rescue nil
+:sym.clone     rescue nil
+(10**10).clone rescue nil
+0.clone        rescue nil
+
+=&gt; Exception `TypeError' at -:2 - can't clone true
+   Exception `TypeError' at -:3 - can't clone false
+   Exception `TypeError' at -:4 - can't clone nil
+   Exception `TypeError' at -:5 - can't clone Symbol
+   ruby 1.6.6 (2001-12-26) [i586-linux]
+
+=&gt; Exception `TypeError' at -:2 - can't clone TrueClass
+   Exception `TypeError' at -:3 - can't clone FalseClass
+   Exception `TypeError' at -:4 - can't clone NilClass
+   Exception `TypeError' at -:5 - can't clone Symbol
+   Exception `TypeError' at -:6 - can't clone Bignum
+   Exception `TypeError' at -:7 - can't clone Fixnum
+   ruby 1.7.1 (2001-10-10) [i586-linux]</pre>
+</dd>
+<dt><a name="L007478" id="L007478">puts</a></dt>
+<dt><a name="L007479" id="L007479">Array#to_s</a></dt>
+<dd>
+<p>puts は、配列を特別扱いしなくなり、<a href="refm036.html#L000798">Array#to_s</a> 
+が出力されるようになりました。<a href="refm036.html#L000798">Array#to_s</a> は、
+デフォルトで間に改行を挟んだ文字列を出力するように変更され
+たため挙動に違いはありません(ただし <a href="refm030.html#L000530">$,</a> の
+値に影響されます)。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/15043">ruby-dev:15043</a><sup class="outside"><small>[外部]</small></sup></p>
+<p>この変更は、まだ試験的ですが元に戻りそうな気配。。。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/15313">ruby-dev:15313</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>$, = &quot;,&quot;
+puts %w(foo bar baz)
+=&gt; ruby 1.6.5 (2001-11-01) [i586-linux]
+   foo
+   bar
+   baz
+=&gt; ruby 1.7.2 (2001-11-25) [i586-linux]
+   foo,bar,baz</pre>
+<p>・・・元に戻ったようです。</p>
+<pre>=&gt; ruby 1.7.2 (2001-12-10) [i586-linux]
+   foo
+   bar
+   baz</pre>
+</dd>
+<dt><a name="L007480" id="L007480"><a href="refm053.html#L001319">Integer#to_s</a>       [compat]</a></dt>
+<dd>
+<p>引数に基数を指定できるようになりました。</p>
+<pre>p 10.to_s(16)
+=&gt; ruby 1.7.2 (2001-11-25) [i586-linux]
+   &quot;a&quot;</pre>
+</dd>
+<dt><a name="L007481" id="L007481"><a href="refm061.html#L001489">String#chomp</a>       [change]</a></dt>
+<dt><a name="L007482" id="L007482"><a href="refm061.html#L001490">String#chomp!</a>     [change]</a></dt>
+<dt><a name="L007483" id="L007483"><a href="refm029.html#L000443">chomp</a>              [change]</a></dt>
+<dt><a name="L007484" id="L007484"><a href="refm029.html#L000444">chomp!</a>             [change]</a></dt>
+<dd>
+<p>$/ が &quot;\n&quot; (デフォルト)のとき、どの行末形式(&quot;\r\n&quot;, &quot;\r&quot;,
+&quot;\n&quot; のいずれでも)でもそれらを取り除くようになりました。</p>
+<pre>p &quot;aaa\r\n&quot;.chomp
+=&gt; ruby 1.6.5 (2001-11-01) [i586-linux]
+   &quot;aaa\r&quot;
+=&gt; ruby 1.7.2 (2001-11-25) [i586-linux]
+   &quot;aaa&quot;</pre>
+</dd>
+<dt><a name="L007485" id="L007485">Complex#to_i          [lib] [obsolete]</a></dt>
+<dt><a name="L007486" id="L007486">Complex#to_f          [lib] [obsolete]</a></dt>
+<dt><a name="L007487" id="L007487">Complex#to_r          [lib] [obsolete]</a></dt>
+<dd>
+<p>Complex#to_i, #to_f, #to_r はなくなりました。
+<a href="http://www.ruby-lang.org/cgi-bin/ruby-bugs-ja?selectid=102">ruby-bugs-ja:PR#102</a><sup class="outside"><small>[外部]</small></sup>, <a href="http://www.freeml.com/ml_view.php?ml=rubyist&pg=879">rubyist:0879</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L007488" id="L007488">メソッド呼び出し      [parser] [change]</a></dt>
+<dd>
+<p>メソッド名と括弧の間に空白があるとその括弧は引数を括る括弧ではなく
+式の括弧と解釈するようになりました。
+<a name="footmark:2" id="footmark:2" href="#foottext:2"><sup><small>*2</small></sup></a>
+<a name="footmark:3" id="footmark:3" href="#foottext:3"><sup><small>*3</small></sup></a></p>
+<pre>p (1+2)*3
+
+=&gt; -:1: warning: p (...) interpreted as method call
+   -:1: warning: useless use of * in void context
+   ruby 1.6.5 (2001-09-19) [i586-linux]
+   3
+   -:1: undefined method `*' for nil (NameError)
+
+=&gt; -:1: warning: p (...) interpreted as command call
+   ruby 1.7.1 (2001-06-05) [i586-linux]
+   9</pre>
+</dd>
+<dt><a name="L007489" id="L007489"><a href="refm077.html">Marshal</a>       [marshal] [bug]</a></dt>
+<dd>
+<p>構造体クラスのサブクラスをダンプしたものがロードできませんでした。
+<a href="http://www.ruby-lang.org/cgi-bin/ruby-bugs-ja?selectid=104">ruby-bugs-ja:PR#104</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>S = Struct.new(&quot;S&quot;, :a)
+class C &lt; S
+end
+p Marshal.load(Marshal.dump(C.new))
+
+=&gt; -:4: warning: instance variable __member__ not initialized
+   -:4:in `dump': uninitialized struct (TypeError)
+        from -:4
+   ruby 1.6.5 (2001-09-19) [i586-linux]
+
+=&gt; ruby 1.7.1 (2001-10-19) [i586-linux]
+   #&lt;C a=nil&gt;</pre>
+</dd>
+<dt><a name="L007490" id="L007490">alias         [bug]</a></dt>
+<dd>
+<p>グローバル変数のエイリアスが効いていませんでした。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/14922">ruby-dev:14922</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>$g2 = 1
+alias $g1 $g2
+p [$g1, $g2]
+$g2 = 2
+p [$g1, $g2]
+=&gt; ruby 1.6.5 (2001-09-19) [i586-linux]
+   [1, 1]
+   [1, 2]
+
+=&gt; ruby 1.7.1 (2001-10-19) [i586-linux]
+   [1, 1]
+   [2, 2]</pre>
+</dd>
+</dl>
+<h3><a name="L007491" id="L007491">2001-10-03</a></h3>
+<dl>
+<dt><a name="L007492" id="L007492"><a href="refm061.html#L001465">String#[]</a>     [new]</a></dt>
+<dt><a name="L007493" id="L007493"><a href="refm061.html#L001472">String#[]=</a>   [new]</a></dt>
+<dd>
+<p>追加</p>
+<pre>String#[re, idx]
+String#[re, idx] = val</pre>
+<p>正規表現を渡す形式で、オプションの第二引数 idx が追加されました。</p>
+<pre>p &quot;foobarbaz&quot;[/(foo)(bar)(baz)/, 1]
+p /(foo)(bar)(baz)/.match(&quot;foobarbaz&quot;).to_a[1]
+=&gt; -:2: warning: ambiguous first argument; make sure
+   ruby 1.7.1 (2001-10-05) [i586-linux]
+   &quot;foo&quot;
+   &quot;foo&quot;
+
+str = &quot;foobarbaz&quot;
+p str[/(foo)(bar)(baz)/, 2] = &quot;BAR&quot;  # =&gt; &quot;BAR&quot;
+p str                                # =&gt; &quot;fooBARbaz&quot;</pre>
+<p>str[/re/, 0] は、str[/re/] と同じです。</p>
+</dd>
+</dl>
+<h3><a name="L007494" id="L007494">2001-10-02</a></h3>
+<dl>
+<dt><a name="L007495" id="L007495"><a href="refm051.html#L001250">Class#allocate</a>    [new]</a></dt>
+<dd>
+<p>allocate と initialize の二つのメソッドでオブジェクトを
+生成するようになりました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/14847">ruby-dev:14847</a><sup class="outside"><small>[外部]</small></sup>
+rb_define_alloc_func() も参照。</p>
+</dd>
+</dl>
+<h3><a name="L007496" id="L007496">2001-09-24</a></h3>
+<dl>
+<dt><a name="L007497" id="L007497"><a href="refm036.html#L000714">Array.new</a>       [compat]</a></dt>
+<dd>
+<p>Array.new の引数に配列を渡すとそのコピーを生成するようになりました。</p>
+<pre>ary = [1,2,3]
+ary2 = Array.new ary
+p ary, ary2
+p ary.id, ary2.id
+
+=&gt; ruby 1.7.1 (2001-10-05) [i586-linux]
+   [1, 2, 3]
+   [1, 2, 3]
+   537758120
+   537755360</pre>
+</dd>
+</dl>
+<h3><a name="L007498" id="L007498">2001-09-18</a></h3>
+<dl>
+<dt><a name="L007499" id="L007499"><a href="refm061.html#L001451">String.new</a>      [compat]</a></dt>
+<dd>
+<p>String.new の引数を省略できるようになりました。</p>
+<pre>p String.new
+=&gt; -:1:in `initialize': wrong # of arguments(0 for 1) (ArgumentError)
+        from -:1:in `new'
+        from -:1
+   ruby 1.7.1 (2001-08-29) [i586-linux]
+
+=&gt; ruby 1.7.1 (2001-10-05) [i586-linux]
+   &quot;&quot;</pre>
+</dd>
+</dl>
+<h3><a name="L007500" id="L007500">2001-09-11</a></h3>
+<dl>
+<dt><a name="L007501" id="L007501"><a href="refm041.html#L000860">Dir#path</a>       [new]</a></dt>
+<dd>
+<p>追加</p>
+<pre>p Dir.open(&quot;.&quot;).path
+=&gt; ruby 1.7.1 (2001-10-05) [i586-linux]
+   &quot;.&quot;</pre>
+</dd>
+</dl>
+<h3><a name="L007502" id="L007502">2001-08-26</a></h3>
+<dl>
+<dt><a name="L007503" id="L007503"><a href="refm290.html">readline</a>                [change]</a></dt>
+<dd>
+<p>Readline.readline 実行中に Ctrl-C により中断した後でも、端末状態を
+復帰するようにしました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/14574">ruby-dev:14574</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+</dl>
+<h3><a name="L007504" id="L007504">2001-08-29</a></h3>
+<dl>
+<dt><a name="L007505" id="L007505"><a href="refm080.html">Precision</a>.included      [new]</a></dt>
+<dd>
+<p>追加(<a href="refm050.html">Module#included</a> の再定義)</p>
+</dd>
+</dl>
+<h3><a name="L007506" id="L007506">2001-08-23</a></h3>
+<dl>
+<dt><a name="L007507" id="L007507"><a href="refm085.html">Signal</a> モジュール       [new]</a></dt>
+<dd>
+<p>追加。</p>
+</dd>
+<dt><a name="L007508" id="L007508">while, until, class, def の値         [ruby] [change]</a></dt>
+<dd>
+<p>while, until, class, def が式として値を返すようになりました。</p>
+<p>class/module は最後に評価した式の結果を返します。def は nil を返しま
+す。while/until は、通常 nil を返しますが、break の引数により任意の
+値を返すことができます。</p>
+<pre>p(while false; p nil end)
+p(while true; break &quot;bar&quot; end)
+p(class Foo; true end)
+p(module Bar; true end)
+p(def foo; true end)
+=&gt; -:1: void value expression
+   -:2: void value expression
+   -:3: void value expression
+   -:4: void value expression
+   -:5: void value expression
+   ruby 1.7.1 (2001-08-20) [i586-linux]
+=&gt; -:1: warning: void value expression
+   -:2: warning: void value expression
+   -:3: warning: void value expression
+   -:4: warning: void value expression
+   -:5: warning: void value expression
+   ruby 1.7.1 (2001-08-23) [i586-linux]
+   false
+   &quot;bar&quot;
+   true
+   true
+   nil</pre>
+<p>while/until は途中で nil を返すように修正されました。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/15909">ruby-dev:15909</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>=&gt; -:1: warning: void value expression
+   -:2: warning: void value expression
+   -:3: warning: void value expression
+   -:4: warning: void value expression
+   -:5: warning: void value expression
+   ruby 1.7.2 (2002-02-20) [i586-linux]
+   nil
+   &quot;bar&quot;
+   true
+   true
+   nil</pre>
+</dd>
+<dt><a name="L007509" id="L007509"><a href="refm059.html">Range</a>#===</a></dt>
+<dd>
+<p>文字列の範囲オブジェクトと文字列との比較を行う場合に、
+以前は範囲の両端と比較していましたが、String#upto により1要素ずつ
+比較を行うようになりました。</p>
+<p>(2002-06-04: その後変更されている)</p>
+<pre>p((&quot;a&quot; .. &quot;ab&quot;) === &quot;aa&quot;)
+=&gt; ruby 1.7.1 (2001-08-20) [i586-linux]
+   true
+=&gt; ruby 1.7.1 (2001-08-23) [i586-linux]
+   false</pre>
+</dd>
+<dt><a name="L007510" id="L007510"><a href="refm070.html">Enumerable</a>#sort_by      [new]</a></dt>
+<dd>
+<p>追加。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/8986">ruby-dev:8986</a><sup class="outside"><small>[外部]</small></sup>以降で提案された Schwartzian transform
+を行うための sort です。</p>
+</dd>
+<dt><a name="L007511" id="L007511">Curses        [lib] [compat]</a></dt>
+<dd>
+<p>Updated.  New methods and constants for using the mouse, character
+attributes, colors and key codes have been added.</p>
+</dd>
+<dt><a name="L007512" id="L007512"><a href="refm059.html">Range</a>#step([step=1])    [new]</a></dt>
+<dd>
+<p>追加。step ごとの要素で繰り返します。</p>
+</dd>
+<dt><a name="L007513" id="L007513">条件式中の正規表現リテラル    [parser] [change]</a></dt>
+<dd>
+<p>条件式中の正規表現リテラルは警告が出るようになりました。</p>
+<p>$_ との正規表現マッチは、明示的に ~/re/ (単項の <a href="refm060.html#L001432">~</a> メソッ
+ド)などとすることが推奨されます。</p>
+<pre>$_ = &quot;foo&quot;
+p $_ if /foo/
+p $_ if /bar/
+
+=&gt; -:2: warning: regex literal in condition
+   -:3: warning: regex literal in condition
+   ruby 1.7.1 (2001-08-14) [i586-linux]
+   &quot;foo&quot;</pre>
+</dd>
+<dt><a name="L007514" id="L007514"><a href="refm061.html#L001547">String#lstrip</a>     [new]</a></dt>
+<dt><a name="L007515" id="L007515"><a href="refm061.html#L001549">String#rstrip</a>     [new]</a></dt>
+<dt><a name="L007516" id="L007516"><a href="refm061.html#L001548">String#lstrip!</a>     [new]</a></dt>
+<dt><a name="L007517" id="L007517"><a href="refm061.html#L001550">String#rstrip!</a>     [new]</a></dt>
+<dd>
+<p>追加。左端あるいは右端の空白類を取り除きます。</p>
+</dd>
+<dt><a name="L007518" id="L007518"><a href="refm168.html#L003155">Socket.pack_sockaddr_in</a>          [new]</a></dt>
+<dt><a name="L007519" id="L007519"><a href="refm168.html#L003160">Socket.unpack_sockaddr_in</a>        [new]</a></dt>
+<dd>
+<p>追加。ソケットアドレス構造体(INET domain)のpack/unpack。</p>
+</dd>
+<dt><a name="L007520" id="L007520"><a href="refm168.html#L003157">Socket.pack_sockaddr_un</a>      [new]</a></dt>
+<dt><a name="L007521" id="L007521"><a href="refm168.html#L003161">Socket.unpack_sockaddr_un</a>    [new]</a></dt>
+<dd>
+<p>追加。ソケットアドレス構造体(UNIX domain)のpack/unpack。</p>
+</dd>
+<dt><a name="L007522" id="L007522"><a href="refm061.html#L001482">String#casecmp</a>   [new]</a></dt>
+<dd>
+<p>追加。アルファベットの大小を無視した文字列比較。</p>
+</dd>
+<dt><a name="L007523" id="L007523"><em class="XXINVALIDXX">String#eql?</em>         [change]</a></dt>
+<dd>
+<p><a href="refm030.html">$=</a> の値に関らず常にアルファベットの大小を区別するよ
+うになりました。</p>
+</dd>
+<dt><a name="L007524" id="L007524"><a href="refm050.html#L001198">Module#include?</a> [new]</a></dt>
+<dd>
+<p>Added. <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/13941">ruby-dev:13941</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L007525" id="L007525"><a href="refm041.html#L000843">Dir.chdir</a>      [bug]</a></dt>
+<dd>
+<p>Changed to warn only when invoked from multiple threads or no block
+is given. <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/13823">ruby-dev:13823</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>Dir.chdir(&quot;/tmp&quot;)
+
+pwd = Dir.pwd       #=&gt; &quot;/tmp&quot;
+puts pwd
+
+Dir.chdir(&quot;foo&quot;) {
+  pwd = Dir.pwd     #=&gt; &quot;/tmp/foo&quot;
+  puts pwd
+
+  Dir.chdir(&quot;bar&quot;) {        # &lt;-- previously warned
+    pwd = Dir.pwd   #=&gt; &quot;/tmp/foo/bar&quot;
+    puts pwd
+  }
+
+  pwd = Dir.pwd     #=&gt; &quot;/tmp/foo&quot;
+  puts pwd
+}
+
+pwd = Dir.pwd       #=&gt; &quot;/tmp&quot;
+puts pwd</pre>
+</dd>
+<dt><a name="L007430" id="L007430">Proc#yield</a></dt>
+<dd>
+<p>追加 <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/13597">ruby-dev:13597</a><sup class="outside"><small>[外部]</small></sup>  (その後、削除された)</p>
+<p>引数の数をチェックしない点を除けば Proc#call と同じです。</p>
+</dd>
+<dt><a name="L007526" id="L007526"><a href="refm046.html#L001074">File.fnmatch</a>     [new]</a></dt>
+<dt><a name="L007527" id="L007527"><a href="refm046.html#L001075">File.fnmatch?</a>    [new]</a></dt>
+<dd>
+<p>追加</p>
+<p>このメソッドで使用するフラグ FNM_NOESCAPE, FNM_PATHNAME, FNM_PERIOD,
+FNM_CASEFOLD も<a href="refm073.html">File::Constants</a> モジュールに定義されました。</p>
+<pre>p %w(foo bar bar.bak).reject! { |fn| File.fnmatch?(&quot;*.bak&quot;, fn) }
+=&gt; ruby 1.7.1 (2001-06-12) [i586-linux]
+   [&quot;foo&quot;, &quot;bar&quot;]</pre>
+</dd>
+</dl>
+<h3><a name="L007528" id="L007528">2001-08-06</a></h3>
+<dl>
+<dt><a name="L007529" id="L007529"><a href="refm081.html#L002076">Process.wait</a>, <a href="refm081.html#L002079">Process.waitpid</a></a></dt>
+<dd>
+<p>unify され、waitpid は wait の alias になりました。</p>
+</dd>
+<dt><a name="L007530" id="L007530"><a href="refm081.html#L002077">Process.wait2</a>, <a href="refm081.html#L002080">Process.waitpid2</a></a></dt>
+<dd>
+<p>unify され、waitpid2 は wait2 の alias になりました。</p>
+</dd>
+</dl>
+<h3><a name="L007531" id="L007531">2001-06-12</a></h3>
+<dl>
+<dt><a name="L007532" id="L007532"><em class="XXINVALIDXX">Method#==</em> [new]</a></dt>
+<dd>
+<p>追加</p>
+</dd>
+</dl>
+<h3><a name="L007533" id="L007533">2001-06-12(?)</a></h3>
+<dl>
+<dt><a name="L007534" id="L007534">多重代入 [change]</a></dt>
+<dd>
+<p>多重代入の規則を見直しました。変更は以下の点だけです。</p>
+<pre>#
+*a = nil
+p a
+=&gt; ruby 1.7.1 (2001-06-05) [i586-linux]
+   [nil]
+=&gt; ruby 1.7.1 (2001-06-12) [i586-linux]
+   []
+=&gt; ruby 1.8.0 (2003-01-18) [i586-linux]
+   [nil]</pre>
+<p>が、この変更は戻ったようです。おそらく 2003-01-07 の eval.c の変更
+ブロックパラメータの場合と比較するとこの方が正しいのでしょう。</p>
+<pre>def foo
+  yield nil
+  yield
+end
+foo {|*a| p a}
+
+=&gt; ruby 1.6.8 (2002-12-24) [i586-linux]
+   [nil]
+   [nil]
+=&gt; ruby 1.8.0 (2003-08-04) [i586-linux]
+   [nil]
+   []</pre>
+</dd>
+</dl>
+<h3><a name="L007535" id="L007535">2001-06-05(?)</a></h3>
+<dl>
+<dt><a name="L007536" id="L007536">配列展開 [change]</a></dt>
+<dd>
+<p>以下の挙動を修正しました。
+現在は、1要素の配列も正常に展開されます。</p>
+<pre>a = *[1]
+p a #=&gt; [1]
+
+=&gt; ruby 1.6.8 (2002-12-24) [i586-linux]
+   [1]
+=&gt; ruby 1.7.1 (2001-06-05) [i586-linux]
+   1</pre>
+</dd>
+<dt><a name="L007537" id="L007537"><a href="refm100.html">NameError</a> &amp; <a href="refm101.html">NoMethodError</a> [change]</a></dt>
+<dd>
+<p>NameError を StandardError のサブクラスに戻しました。
+クラス階層は以下のようになりました。</p>
+<pre>NoMethodError &lt; NameError &lt; StandardError.</pre>
+</dd>
+<dt><a name="L007538" id="L007538"><a href="refm046.html#L001080">File.open</a>       [bug]</a></dt>
+<dd>
+<p>第2引数を数値(File::RDONLY|File::CREATとか)で指定した場合に限り、第3
+引数を用いていましたが、第3引数が与えられれば常に有効にするように
+しました。
+<a href="http://www.ruby-lang.org/cgi-bin/ruby-bugs-ja?selectid=54">ruby-bugs-ja:PR#54</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L007539" id="L007539">[ruby] [compat]</a></dt>
+<dd>
+<p>内部のハッシュテーブルを使用することにより定数参照の速度を改善したそうです。
+(ChangeLogの</p>
+<pre>Tue Jun  5 16:15:58 2001  Yukihiro Matsumoto  &lt;matz@ruby-lang.org&gt;</pre>
+<p>に該当するようです)</p>
+</dd>
+<dt><a name="L007540" id="L007540">文法  [parser] [change]</a></dt>
+<dd>
+<p>以下のようなコード(pの後の空白に注意)</p>
+<pre>p (&quot;xx&quot;*2).to_i</pre>
+<p>は、</p>
+<pre>(p(&quot;xx&quot;*2)).to_i</pre>
+<p>ではなく</p>
+<pre>p ((&quot;xx&quot;*2).to_i)</pre>
+<p>とみなすようになりました(これはまだ実験的な変更です)。</p>
+</dd>
+<dt><a name="L007541" id="L007541"><em class="XXINVALIDXX">Range#to_ary</em></a></dt>
+<dd>
+<p>追加。これにより(配列への暗黙の変換が適用されるので)以下のように書く
+ことができます。(2003-03-29: その後、Range#to_ary はなくなりました)</p>
+<pre>a, b, c = 1..3
+p [a, b, c]
+
+=&gt; ruby 1.6.8 (2002-12-24) [i586-linux]
+   [1..3, nil, nil]
+
+=&gt; ruby 1.7.3 (2002-12-11) [i586-linux]
+   [1, 2, 3]
+
+=&gt; ruby 1.8.0 (2003-03-29) [i586-linux]
+   [1..3, nil, nil]</pre>
+</dd>
+<dt><a name="L007542" id="L007542">break and next        [compat]</a></dt>
+<dd>
+<p>break, next は、引数を指定することでイテレータや yield の値を返す
+ことができるようになりました。(この機能はまだ実験です)</p>
+<p>break [n] はイテレータを終了させ、n がそのイテレータの戻り値になります。
+next [n] はブロックを抜け、n が yield の戻り値になります。</p>
+<pre>def foo
+  p yield
+end
+
+foo { next 1 }
+
+def bar
+  yield
+end
+
+p bar { break &quot;foo&quot; }
+
+=&gt; ruby 1.7.1 (2001-08-20) [i586-linux]
+   1
+   &quot;foo&quot;</pre>
+</dd>
+<dt><a name="L007543" id="L007543">to_str        [compat]</a></dt>
+<dd>
+<p>to_str を定義したオブジェクトはより広範囲にStringとして振舞うように
+なりました。</p>
+<p>文字列を引数に取るほとんどの組み込みメソッドは、to_str による暗黙の
+型変換を試みます。</p>
+<pre>foo = Object.new
+class &lt;&lt;foo
+  def to_str
+    &quot;foo&quot;
+  end
+end
+p File.open(foo)
+=&gt; -:7:in `open': wrong argument type Object (expected String) (TypeError)
+   ruby 1.6.4 (2001-04-19) [i586-linux]
+=&gt; -:7:in `open': No such file or directory - &quot;foo&quot; (Errno::ENOENT)
+   ruby 1.7.0 (2001-05-02) [i586-linux]</pre>
+</dd>
+<dt><a name="L007544" id="L007544">拡張ライブラリAPI(STR2CSTR()) [api] [new]</a></dt>
+<dd>
+<p>拡張ライブラリの API である STR2CSTR() は、与えられたオブジェクト
+が文字列でなくかつ to_str メソッドを持つ場合、内部で to_str を呼び
+出して暗黙の型変換を行います。この場合、変換結果が保持する文字列ポ
+インタを返しますが、このAPIでは暗黙の型変換結果のオブジェクトがど
+こからも参照されないため、型変換結果が GC される可能性があります。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/12731">ruby-dev:12731</a><sup class="outside"><small>[外部]</small></sup></p>
+<p>version 1.7 以降では代わりに StringValuePtr() を使用します。こちら
+は、引数の参照先が暗黙の型変換の結果に置き換わるため変換結果が GC 
+されません。(version 1.7 では、STR2CSTR() は、obsolete です)</p>
+<p>もう一つ新しく StringValue() という API が用意されています。こちら
+は、引数が to_str による暗黙の型変換を期待する場合に使用します。
+引数が文字列なら何もしません。
+文字列を受け取るメソッドの最初の方で読んでおくと便利です。</p>
+<p>なお、今のところ str2cstr() (Cポインタと文字列長を返す)の代わりに
+なる安全な API は用意されていません。(<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/15644">ruby-dev:15644</a><sup class="outside"><small>[外部]</small></sup>で提案は
+ありました)</p>
+</dd>
+<dt><a name="L007545" id="L007545">範囲演算子式中のリテラル [ruby] [change]</a></dt>
+<dd>
+<p>範囲演算子式中の単独の数値リテラルが <code>$.</code> と比較されるのは
+-e オプションによる1行スクリプトの中だけになりました。</p>
+</dd>
+<dt><a name="L007546" id="L007546">rescue 節の例外クラスと発生した例外オブジェクトの比較 [ruby] [change]</a></dt>
+<dd>
+<p>発生した例外 $! と rescue 節の例外クラスとは <a href="refm050.html#L001187">Module#===</a>
+を使って比較するようになりました。</p>
+<p>以前は kind_of? による比較なので基本的な動作に変わりはありませんが、
+SystemCallError.=== は特別に errno が一致する例外を同じと見なすよう
+に再定義されました。これにより、例えば Errno::EWOULDBLOCK と 
+Errno::EAGAIN が同じ意味(同じerrno)の場合にどちらを指定しても rescue 
+できるようになりました。</p>
+<p>その後、errno が一致する Errno::XXX オブジェクトは同一のオブジェクト
+になったのでこの変更の効果はなくなってますが、変更自体は残ってます。
+(ユーザで例外クラスを定義するのに使えるかもしれません)
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/19589">ruby-dev:19589</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L007547" id="L007547"><em class="XXINVALIDXX">Array#collect</em>   [bug]</a></dt>
+<dt><a name="L007548" id="L007548"><em class="XXINVALIDXX">Array#map</em>       [bug]</a></dt>
+<dd>
+<p>Array#collect がブロックを伴わない場合に self.dup を返していました。
+そのため、Array 以外を返すことがありました<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/30480">ruby-list:30480</a><sup class="outside"><small>[外部]</small></sup>。</p>
+<pre>Foo = Class.new Array
+
+a = Foo.new
+p a.map.class
+p a.collect.class
+
+=&gt; ruby 1.7.1 (2001-06-12) [i586-linux]
+   Array
+   Foo
+
+=&gt; ruby 1.7.1 (2001-07-31) [i586-linux]
+   Array
+   Array</pre>
+</dd>
+<dt><a name="L007549" id="L007549"><a href="refm036.html#L000735">Array#dup</a></a></dt>
+<dd>
+<p>dup のバグ修正 <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/30481">ruby-list:30481</a><sup class="outside"><small>[外部]</small></sup>
+(1.6 でも修正された)</p>
+<pre>class Foo &lt; Array
+  attr_accessor :foo
+end
+
+a = Foo.new
+a.foo = 1
+b = a.dup
+b.foo
+b.foo = 99
+p b.foo
+
+# =&gt; ruby 1.6.4 (2001-06-04) [i586-linux]
+     nil
+
+# =&gt; ruby 1.6.4 (2001-07-31) [i586-linux]
+     99</pre>
+</dd>
+<dt><a name="L007550" id="L007550"><a href="refm036.html#L000750">Array#fetch</a>     [new]</a></dt>
+<dd>
+<p>追加</p>
+</dd>
+<dt><a name="L007551" id="L007551"><a href="refm036.html#L000768">Array#insert</a>     [new]</a></dt>
+<dd>
+<p>追加 <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/14289">ruby-talk:14289</a><sup class="outside"><small>[外部]</small></sup></p>
+<p><code>ary[n,0] = [other,...]</code> と同じ(ただし self を返す)</p>
+<pre>ary = [0,1,2,3]
+ary[2, 0] = [4, 5, 6]
+p ary
+
+ary = [0,1,2,3]
+ary.insert(2, 4, 5, 6)
+p ary</pre>
+</dd>
+<dt><a name="L007552" id="L007552"><a href="refm036.html#L000776">Array#pack</a>      [change]</a></dt>
+<dt><a name="L007553" id="L007553"><a href="refm061.html#L001567">String#unpack</a>   [change]</a></dt>
+<dd>
+<p>Array#pack, String#unpack のテンプレート文字 &quot;p&quot;, &quot;P&quot; は、nil と
+NULLポインタの相互変換を行うようになりました<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/13017">ruby-dev:13017</a><sup class="outside"><small>[外部]</small></sup>。</p>
+<pre>p [nil].pack(&quot;p&quot;)
+p &quot;\0\0\0\0&quot;.unpack(&quot;p&quot;)
+
+=&gt; ruby 1.7.0 (2001-05-17) [i586-linux]
+   &quot;\000\000\000\000&quot;
+   [nil]</pre>
+</dd>
+<dt><a name="L007554" id="L007554"><a href="refm036.html#L000793">Array#sort!</a>     [change]</a></dt>
+<dd>
+<p>常にself返すようになりました。</p>
+<p>将来にわたってこのことが保証されるわけではないそうです <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/12506">ruby-dev:12506</a><sup class="outside"><small>[外部]</small></sup>。</p>
+</dd>
+<dt><a name="L007555" id="L007555"><em class="XXINVALIDXX">Class.inherited</em> [compat]</a></dt>
+<dd>
+<p>(注: Class#inherited ではありません)</p>
+<p>以前は、クラスのサブクラスの定義を禁止するために定義されていましたが、
+(<a href="refm111.html">TypeError</a>例外を発生させるメソッドとして定義されていました) こ
+の役割は Class.new が担保するようになりました。そのため、
+Class.inherited メソッドの定義はなくなりました。</p>
+<pre>class SubClass &lt; Class
+end
+
+#=&gt; -:1:in `inherited': can't make subclass of Class (TypeError)
+            from -:1
+    ruby 1.7.1 (2001-06-12) [i586-linux]
+
+#=&gt; -:1: can't make subclass of Class (TypeError)
+    ruby 1.7.1 (2001-07-31) [i586-linux]</pre>
+</dd>
+<dt><a name="L007556" id="L007556"><a href="refm041.html#L000855">Dir.open</a>        [change]</a></dt>
+<dd>
+<p>ブロックを伴う場合<a href="refm046.html">File</a>.openと同様に、ブロックの結果がメソッドの
+戻り値になりました。(1.6以前は <code>nil</code> 固定)</p>
+</dd>
+<dt><a name="L007557" id="L007557"><a href="refm041.html#L000843">Dir.chdir</a>       [compat]</a></dt>
+<dd>
+<p>ブロックを指定できるようになりました。</p>
+</dd>
+<dt><a name="L007558" id="L007558"><a href="refm041.html#L000839">Dir.glob</a>        [change]</a></dt>
+<dd>
+<p>先行するバックスラッシュにより、ワイルドカードをエスケープ
+できるようになりました。
+また、空白類に特殊な意味はなくなりました('\0'の効果は残っています)。</p>
+</dd>
+<dt><a name="L007559" id="L007559"><a href="refm070.html#L001743">Enumerable#all?</a>         [new]</a></dt>
+<dt><a name="L007560" id="L007560"><a href="refm070.html#L001745">Enumerable#any?</a>         [new]</a></dt>
+<dt><a name="L007561" id="L007561"><a href="refm070.html#L001756">Enumerable#inject</a>       [new]</a></dt>
+<dd>
+<p>追加</p>
+</dd>
+<dt><a name="L007562" id="L007562"><a href="refm046.html#L001066">File.lchmod</a>     [new]</a></dt>
+<dt><a name="L007563" id="L007563"><a href="refm046.html#L001068">File.lchown</a>     [new]</a></dt>
+<dd>
+<p>追加</p>
+</dd>
+<dt><a name="L007564" id="L007564"><a href="refm045.html#L000985">IO.for_fd</a>       [new]</a></dt>
+<dd>
+<p>追加</p>
+</dd>
+<dt><a name="L007565" id="L007565"><a href="refm045.html#L000992">IO.read</a>         [new]</a></dt>
+<dd>
+<p>追加。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/9460">ruby-talk:9460</a><sup class="outside"><small>[外部]</small></sup>が実装に至った経緯だと思う</p>
+</dd>
+<dt><a name="L007566" id="L007566"><a href="refm092.html">Interrupt</a>                       [change]</a></dt>
+<dd>
+<p>Interrupt は、<a href="refm091.html">SignalException</a>のサブクラスになりました。
+(1.6以前はExceptionのサブクラス)</p>
+</dd>
+<dt><a name="L007567" id="L007567"><a href="refm077.html#L001979">Marshal::MAJOR_VERSION</a>          [new]</a></dt>
+<dt><a name="L007568" id="L007568"><a href="refm077.html#L001980">Marshal::MINOR_VERSION</a>          [new]</a></dt>
+<dd>
+<p>追加。Marshal が出力するダンプフォーマットのバージョン番号です。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/14172">ruby-dev:14172</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L007541" id="L007541"><em class="XXINVALIDXX">MatchData#to_ary</em></a></dt>
+<dd>
+<p>追加 <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/12766">ruby-dev:12766</a><sup class="outside"><small>[外部]</small></sup>
+(2003-03-28: が、その後なくなりました)</p>
+<p>Regexp#match の利便のために用意されました。以前は、</p>
+<pre>foo, bar, baz = /(\w+?)\s+(\w+?)\s+(\w+)/.match(&quot;foo bar baz&quot;).to_a[1..-1]
+p [foo, bar, baz]</pre>
+<p>とする必要がありましたが、これにより</p>
+<pre>_, foo, bar, baz = /(\w+?)\s+(\w+?)\s+(\w+)/.match(&quot;foo bar baz&quot;)
+p [foo, bar, baz]</pre>
+<p>とすることができます。</p>
+</dd>
+<dt><a name="L007569" id="L007569"><a href="refm078.html#L001989">Math.acos</a>          [new]</a></dt>
+<dt><a name="L007570" id="L007570"><a href="refm078.html#L001990">Math.asin</a>          [new]</a></dt>
+<dt><a name="L007571" id="L007571"><a href="refm078.html#L001991">Math.atan</a>          [new]</a></dt>
+<dt><a name="L007572" id="L007572"><a href="refm078.html#L001999">Math.cosh</a>          [new]</a></dt>
+<dt><a name="L007573" id="L007573"><a href="refm078.html#L002000">Math.sinh</a>          [new]</a></dt>
+<dt><a name="L007574" id="L007574"><a href="refm078.html#L002001">Math.tanh</a>          [new]</a></dt>
+<dt><a name="L007575" id="L007575"><a href="refm078.html#L002006">Math.hypot</a>         [new]</a></dt>
+<dd>
+<p>追加</p>
+</dd>
+<dt><a name="L007576" id="L007576"><a href="refm050.html#L001229">Module#included</a>         [new]</a></dt>
+<dd>
+<p>追加。Module#append_feature の後に呼ばれるhook</p>
+</dd>
+<dt><a name="L007577" id="L007577"><a href="refm050.html#L001231">Module#method_removed</a>   [new]</a></dt>
+<dt><a name="L007578" id="L007578"><a href="refm050.html#L001232">Module#method_undefined</a> [new]</a></dt>
+<dd>
+<p>追加</p>
+</dd>
+<dt><a name="L007579" id="L007579">Numeric#/</a></dt>
+<dd>
+<p>追加。商を返します。</p>
+<p>(その後、div に変わった(?))</p>
+</dd>
+<dt><a name="L007580" id="L007580"><a href="refm101.html">NoMethodError</a>   [new]</a></dt>
+<dd>
+<p>追加 <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/12763">ruby-dev:12763</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L007581" id="L007581">NotImplementError             [obsolete]</a></dt>
+<dd>
+<p>旧称は削除されました。<a href="refm089.html">NotImplementedError</a>を使ってください</p>
+</dd>
+<dt><a name="L007582" id="L007582"><a href="refm035.html#L000704">Object#singleton_method_removed</a> [new]</a></dt>
+<dt><a name="L007583" id="L007583"><a href="refm035.html#L000705">Object#singleton_method_undefined</a> [new]</a></dt>
+<dd>
+<p>追加</p>
+</dd>
+<dt><a name="L007584" id="L007584"><a href="refm035.html#L000689">Object#singleton_methods</a>         [compat]</a></dt>
+<dd>
+<p>省略可能な引数 all が追加されました。</p>
+<pre>class Foo
+  def foo
+  end
+end
+obj = Foo.new
+
+module Bar
+  def bar
+  end
+end
+
+class &lt;&lt;obj
+  include Bar
+  def baz
+  end
+end
+p obj.singleton_methods      #=&gt; [&quot;baz&quot;]
+p obj.singleton_methods true #=&gt; [&quot;baz&quot;, &quot;bar&quot;]</pre>
+</dd>
+<dt><a name="L007585" id="L007585"><a href="refm081.html#L002075">Process.times</a>           [change]</a></dt>
+<dd>
+<p><a href="refm066.html#L001673">Time.times</a> から移動しました。
+(Time.times も残っていますが、warningが出ます)</p>
+</dd>
+<dt><a name="L007586" id="L007586"><a href="refm058.html">Process::Status</a>         [new]</a></dt>
+<dd>
+<p>追加。<code>$?</code> の値も整数からこのクラスのインスタンスになりました。</p>
+</dd>
+<dt><a name="L007587" id="L007587"><a href="refm081.html#L002078">Process.waitall</a>         [new]</a></dt>
+<dd>
+<p>追加</p>
+</dd>
+<dt><a name="L007588" id="L007588"><a href="refm059.html#L001408">Range#include?</a>          [new]</a></dt>
+<dt><a name="L007589" id="L007589"><em class="XXINVALIDXX">Range#member?</em>           [new]</a></dt>
+<dd>
+<p>追加</p>
+</dd>
+<dt><a name="L007590" id="L007590"><a href="refm060.html#L001426">Regexp.last_match</a>    [compat]</a></dt>
+<dd>
+<p>optional な引数が追加されました。</p>
+</dd>
+<dt><a name="L007591" id="L007591"><a href="refm060.html#L001437">Regexp#options</a>          [new]</a></dt>
+<dd>
+<p>追加</p>
+</dd>
+<dt><a name="L007522" id="L007522"><a href="refm061.html#L001482">String#casecmp</a>   [new]</a></dt>
+<dd>
+<p>追加。大文字小文字の区別をせずに文字列を比較。</p>
+</dd>
+<dt><a name="L007592" id="L007592"><a href="refm061.html#L001514">String#insert</a> [new]</a></dt>
+<dd>
+<p>追加</p>
+<p><code>str[n, 0] = other</code> と同じ(ただし self を返す)</p>
+</dd>
+<dt><a name="L007593" id="L007593"><a href="refm063.html#L001595">Symbol.all_symbols</a>      [new]</a></dt>
+<dd>
+<p>追加 <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/12921">ruby-dev:12921</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L007594" id="L007594"><em class="XXINVALIDXX">Symbol#intern</em></a></dt>
+<dd>
+<p>追加(・・・が、その後削除された)</p>
+</dd>
+<dt><a name="L007595" id="L007595"><em class="XXINVALIDXX">SystemCallError.===</em>     [new]</a></dt>
+<dd>
+<p>追加 (上記 「rescue 節の...」 を参照のこと)
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/12670">ruby-dev:12670</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L007596" id="L007596"><a href="refm113.html#L002254">SystemExit#status</a>       [new]</a></dt>
+<dd>
+<p>追加</p>
+</dd>
+<dt><a name="L007597" id="L007597"><a href="refm162.html#L003082">TCPSocket.new</a>   [compat]</a></dt>
+<dt><a name="L007598" id="L007598"><a href="refm162.html#L003081">TCPSocket.open</a>  [compat]</a></dt>
+<dd>
+<p>ローカル側アドレスを省略可能な第3,4引数で指定できるようになりました。</p>
+</dd>
+<dt><a name="L007599" id="L007599"><a href="refm064.html#L001635">Thread#keys</a>     [new]</a></dt>
+<dd>
+<p>追加。Thread固有データのキーの配列を返します。</p>
+</dd>
+<dt><a name="L007600" id="L007600"><a href="refm066.html">Time</a>            [compat]</a></dt>
+<dd>
+<p>負の time_t を扱えるようになりました(OSがサポートしている場合に限る)</p>
+<pre>p Time.at(-1)
+=&gt; Thu Jan 01 08:59:59 JST 1970</pre>
+</dd>
+<dt><a name="L007601" id="L007601"><a href="refm066.html#L001705">Time#to_a</a>       [change]</a></dt>
+<dt><a name="L007602" id="L007602"><a href="refm066.html#L001700">Time#zone</a>       [change]</a></dt>
+<dd>
+<p>gmtime なタイムゾーンに対して&quot;UTC&quot;を返すようになりました
+(以前は環境依存。大抵の場合&quot;GMT&quot;)</p>
+</dd>
+</dl>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>あらい 2003-08-06: できてる・・・？</small><br />
+<a name="foottext:2" id="foottext:2" href="#footmark:2"><sup><small>*2</small></sup></a><small>p (1, 2) とすると空白があっても引数を括る括弧になる</small><br />
+<a name="foottext:3" id="foottext:3" href="#footmark:3"><sup><small>*3</small></sup></a><small>なんか、うまい書き方ないですかねえ？<a href="http://www.freeml.com/ml_view.php?ml=rubyist&pg=894">rubyist:0894</a><sup class="outside"><small>[外部]</small></sup></small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm382.html">UP</a>][<a href="refm383.html">&lt;-PREV</a>][<a href="refm385.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

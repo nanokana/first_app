@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>WEBrick::GenericServer</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm175.html" rel="next" />
+<link href="refm173.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm173.html">UP</a>][<a href="refm173.html">&lt;-PREV</a>][<a href="refm175.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L003470" id="L003470">WEBrick::GenericServer</a></h1>
+<p><a href="refm002.html">執筆者募集</a></p>
+<p><a href="refm175.html">WEBrick::HTTPServer</a> のスーパークラス</p>
+<h2><a name="L003471" id="L003471">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L003472" id="L003472"><code>GenericServer.new(<var>config</var>={}, <var>default</var>=<var>WEBrick</var>::<var>Config</var>::<var>General</var>)</code></a></dt>
+<dd>
+<p>GenericServer オブジェクトを生成する。config は設定を保存したハッシュ。
+default にはデフォルトの設定を保存したハッシュを与える。デフォルト値は
+WEBrick::Config::General。</p></dd>
+</dl>
+<h2><a name="L003473" id="L003473">インスタンスメソッド</a></h2>
+<dl>
+<dt><a name="L003474" id="L003474"><code>[<var>key</var>]</code></a></dt>
+<dd>
+<p>self.config[key] と同値。</p></dd>
+<dt><a name="L003475" id="L003475"><code>config</code></a></dt>
+<dd>
+<p>サーバの設定を保存したハッシュを返す。</p></dd>
+<dt><a name="L003476" id="L003476"><code>listen(<var>address</var>, <var>port</var>)</code></a></dt>
+<dd>
+<p>与えられたアドレスとポートで listen を開始し listeners に加える。
+address は文字列。port は整数。listeners を返す。</p></dd>
+<dt><a name="L003477" id="L003477"><code>listeners</code></a></dt>
+<dd>
+<p>listen している <a href="refm163.html">TCPServer</a> オブジェクトの配列を返す。</p></dd>
+<dt><a name="L003478" id="L003478"><code>logger</code></a></dt>
+<dd>
+<p><a href="refm186.html">WEBrick::Log</a> のインスタンスを返す。</p></dd>
+<dt><a name="L003479" id="L003479"><code>shutdown</code></a></dt>
+<dd>
+<p>stop を呼び、全ての listeners を close する。</p></dd>
+<dt><a name="L003480" id="L003480"><code>start()</code></a>
+<dt><a name="L003481" id="L003481"><code>start(){|<var>soc</var>| ... }</code></a></dt>
+<dd>
+<p>サーバをスタートする。
+block が与えられた場合、block が実際のクライアントとの応答を担う。
+block は <a href="refm162.html">TCPSocket</a> オブジェクトを引数として呼び出される。</p></dd>
+<dt><a name="L003482" id="L003482"><code>status</code></a></dt>
+<dd>
+<p>現在のサーバのステータスを <a href="refm063.html">Symbol</a> オブジェクトで返す。値は :Running, :Stop, :Shutdown のいずれか。</p></dd>
+<dt><a name="L003483" id="L003483"><code>stop</code></a></dt>
+<dd>
+<p>サーバを停止する。</p></dd>
+<dt><a name="L003484" id="L003484"><code>tokens</code></a></dt>
+<dd>
+<p>MaxClient の設定のために使われる <a href="refm303.html">SizedQueue</a> オブジェクトを返す。 
+<a href="refm303.html">SizedQueue</a> オブジェクトのサイズは現在受け付けることのできるクライアントの数。</p>
+<p>MaxClient を知りたい場合は self.tokens.max。self.tokens.max - self.tokens.length が現在のクライアントの接続数。</p></dd>
+</dl>
+<h2><a name="L003485" id="L003485">WEBrick::Config::General</a></h2>
+<p>GenericServer.new(config) に与えた時に有効な設定とそのデフォルト値。</p>
+<p><a href="http://shogo.homelinux.org/~ysantoso/webrickguide/html/Server_Configuration.html">&lt;URL:http://shogo.homelinux.org/~ysantoso/webrickguide/html/Server_Configuration.html&gt;</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>WEBrick::Config::General = {
+  :ServerName     =&gt; Utils.getservername,
+  :BindAddress    =&gt; nil,   # &quot;0.0.0.0&quot; or &quot;::&quot; or nil
+  :Port           =&gt; nil,   # users MUST specifiy this!!
+  :MaxClients     =&gt; 100,   # maximum number of the concurrent connections
+  :ServerType     =&gt; nil,   # default: WEBrick::SimpleServer
+  :Logger         =&gt; nil,   # default: WEBrick::Log.new
+  :ServerSoftware =&gt; &quot;WEBrick/#{WEBrick::VERSION} &quot; +
+                     &quot;(Ruby/#{RUBY_VERSION}/#{RUBY_RELEASE_DATE})&quot;,
+  :TempDir        =&gt; ENV['TMPDIR']||ENV['TMP']||ENV['TEMP']||'/tmp',
+  :DoNotListen    =&gt; false,
+  :StartCallback  =&gt; nil,
+  :StopCallback   =&gt; nil,
+  :AcceptCallback =&gt; nil,
+  :DoNotReverseLookup =&gt; nil,
+}</pre>
+<dl>
+<dt><a name="L003486" id="L003486">:ServerName</a></dt>
+<dd>
+<p>サーバのホスト名を表す文字列。デフォルトの Utils.getservername は /etc/hostname
+に書かれている文字列を設定する。</p>
+</dd>
+<dt><a name="L003487" id="L003487">:BindAddress</a></dt>
+<dd>
+<p>サーバのアドレスを指定する。デフォルトの nil や &quot;0.0.0.0&quot;, &quot;::&quot; などを指定した
+場合は使用可能なすべてのネットワークインターフェースに対して listen を開始する。
+<a href="refm159.html#L003047">ホスト指定形式</a>を参照。</p>
+</dd>
+<dt><a name="L003488" id="L003488">:Port</a></dt>
+<dd>
+<p>サーバのポートを指定する。<a href="refm159.html#L003048">サービス指定形式</a>を参照。</p>
+</dd>
+<dt><a name="L003489" id="L003489">:MaxClients</a></dt>
+<dd>
+<p>クライアントの最大接続数を表す整数。</p>
+</dd>
+<dt><a name="L003490" id="L003490">:ServerType</a></dt>
+<dd>
+<p><a href="refm002.html">執筆者募集</a></p>
+</dd>
+<dt><a name="L003491" id="L003491">:Logger</a></dt>
+<dd>
+<p>ログをとるオブジェクト。Logger オブジェクトに定義されているべきメソッドに関しては
+<a href="refm186.html">WEBrick::Log</a> を参照。一般的には WEBrick::Log.new(log_file, level) と
+log_file と level を設定し直すだけで十分。</p>
+</dd>
+<dt><a name="L003492" id="L003492">:DoNotListen</a></dt>
+<dd>
+<p>true の場合、GenericServer オブジェクトを生成しただけでは listen を開始しない。</p>
+</dd>
+<dt><a name="L003493" id="L003493">:StartCallback</a></dt>
+<dd>
+<p>start 開始時に呼ばれる <a href="refm057.html">Proc</a> オブジェクト。呼ばれる時に引数は
+特に与えられない。</p>
+</dd>
+<dt><a name="L003494" id="L003494">:StopCallback</a></dt>
+<dd>
+<p>サーバを stop した時に呼ばれる <a href="refm057.html">Proc</a> オブジェクト。呼ばれる時に引数は
+特に与えられない。</p>
+</dd>
+<dt><a name="L003495" id="L003495">:AcceptCallback</a></dt>
+<dd>
+<p>クライアントからの接続を accept したときに呼ばれる <a href="refm057.html">Proc</a> オブジェクト。
+クライアントと接続された <a href="refm162.html">TCPSocket</a> オブジェクトを引数として呼ばれる。</p>
+</dd>
+<dt><a name="L003496" id="L003496">:DoNotReverseLookup</a></dt>
+<dd>
+<p>true の場合、ホスト名への逆引きを行わなくなる。
+<a href="refm160.html#L003055">BasicSocket#do_not_reverse_lookup</a>
+も参照。</p>
+</dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm173.html">UP</a>][<a href="refm173.html">&lt;-PREV</a>][<a href="refm175.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>FileTest</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm075.html" rel="next" />
+<link href="refm073.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm034.html">UP</a>][<a href="refm073.html">&lt;-PREV</a>][<a href="refm075.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L001935" id="L001935">FileTest</a></h1>
+<p><code>FileTest</code> はファイルの検査関数を集めたモジュールです。このモジュー
+ルはインクルードしても使えます。</p>
+<h2><a name="L001936" id="L001936">モジュール関数:</a></h2>
+<dl>
+<dt><a name="L001937" id="L001937"><code>FileTest.blockdev?(<var>filename</var>)</code></a></dt>
+<dd>
+<p><var>filename</var> がブロックスペシャルファイルである時、真を返します。</p></dd>
+<dt><a name="L001938" id="L001938"><code>FileTest.chardev?(<var>filename</var>)</code></a></dt>
+<dd>
+<p><var>filename</var> がキャラクタスペシャルファイルの時、真を返します。</p></dd>
+<dt><a name="L001939" id="L001939"><code>FileTest.executable?(<var>filename</var>)</code></a></dt>
+<dd>
+<p><var>filename</var> が実効ユーザ/グループ ID で実行できる時、真を返しま
+す。</p></dd>
+<dt><a name="L001940" id="L001940"><code>FileTest.executable_real?(<var>filename</var>)</code></a></dt>
+<dd>
+<p><var>filename</var> が実ユーザ/グループ ID で実行できる時、真を返します。</p></dd>
+<dt><a name="L001941" id="L001941"><code>FileTest.exist?(<var>filename</var>)</code></a></dt>
+<dd>
+<p><var>filename</var> が存在する時、真を返します。</p></dd>
+<dt><a name="L001942" id="L001942"><code>FileTest.grpowned?(<var>filename</var>)</code></a></dt>
+<dd>
+<p><var>filename</var> のグループ ID が実効グループ ID と等しい時、真を返
+します。</p></dd>
+<dt><a name="L001943" id="L001943"><code>FileTest.directory?(<var>filename</var>)</code></a></dt>
+<dd>
+<p><var>filename</var> がディレクトリの時、真を返します。</p></dd>
+<dt><a name="L001944" id="L001944"><code>FileTest.file?(<var>filename</var>)</code></a></dt>
+<dd>
+<p><var>filaname</var> が通常ファイルである時、真を返します。</p></dd>
+<dt><a name="L001945" id="L001945"><code>FileTest.identical?(<var>filename1</var>, <var>filename2</var>)    ((&lt;<var>ruby</var> <var>1</var>.<var>8</var>.<var>4</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p><var>filaname1</var> と <var>filename2</var> が同じファイルを指している時、真を返します。
+(ruby 1.8.3 以前では<code><a href="refm029.html#L000498">test</a>(?-, filename1, filename2)</code>を使ってください。)</p>
+<pre>open(&quot;a&quot;, &quot;w&quot;) {}
+p File.identical?(&quot;a&quot;, &quot;a&quot;)      #=&gt; true
+p File.identical?(&quot;a&quot;, &quot;./a&quot;)    #=&gt; true
+File.link(&quot;a&quot;, &quot;b&quot;)
+p File.identical?(&quot;a&quot;, &quot;b&quot;)      #=&gt; true
+File.symlink(&quot;a&quot;, &quot;c&quot;)
+p File.identical?(&quot;a&quot;, &quot;c&quot;)      #=&gt; true
+open(&quot;d&quot;, &quot;w&quot;) {}
+p File.identical?(&quot;a&quot;, &quot;d&quot;)      #=&gt; false</pre></dd>
+<dt><a name="L001946" id="L001946"><code>FileTest.pipe?(<var>filename</var>)</code></a></dt>
+<dd>
+<p><var>filename</var> が名前つきパイプ(FIFO)である時、真を返します。</p></dd>
+<dt><a name="L001947" id="L001947"><code>FileTest.socket?(<var>filename</var>)</code></a></dt>
+<dd>
+<p><var>filename</var> がソケットである時、真を返します。</p></dd>
+<dt><a name="L001948" id="L001948"><code>FileTest.owned?(<var>filename</var>)</code></a></dt>
+<dd>
+<p><var>filename</var> が自分のものである時に真を返します。</p></dd>
+<dt><a name="L001949" id="L001949"><code>FileTest.readable?(<var>filename</var>)</code></a></dt>
+<dd>
+<p><var>filename</var> を読み込み可能な時に真を返します。</p></dd>
+<dt><a name="L001950" id="L001950"><code>FileTest.readable_real?(<var>filename</var>)</code></a></dt>
+<dd>
+<p><var>filename</var> が実ユーザ/実グループによって読み込み可能な時に真を
+返します。</p></dd>
+<dt><a name="L001951" id="L001951"><code>FileTest.setuid?(<var>filename</var>)</code></a></dt>
+<dd>
+<p><var>filename</var> が <a href="refm535.html">setuid(2)</a> されている時に真を返
+します。</p></dd>
+<dt><a name="L001952" id="L001952"><code>FileTest.setgid?(<var>filename</var>)</code></a></dt>
+<dd>
+<p><var>filename</var> が <a href="refm535.html">setgid(2)</a> されている時に真を返
+します。</p></dd>
+<dt><a name="L001953" id="L001953"><code>FileTest.size(<var>filename</var>)</code></a></dt>
+<dd>
+<p><var>filename</var> のサイズを返します。<var>filename</var> が存在しなければ
+例外 <a href="refm108.html">Errno::EXXX</a>(おそらく <code>Errno::ENOENT</code>)が発生します。</p>
+<p><a href="#L001954">FileTest.size?</a>, <a href="#L001959">FileTest.zero?</a> も参
+照してください。</p></dd>
+<dt><a name="L001954" id="L001954"><code>FileTest.size?(<var>filename</var>)</code></a></dt>
+<dd>
+<p><var>filename</var> のサイズを返します。<var>filename</var> が存在しない時や 
+<var>filename</var> のサイズが0の時には <code>nil</code> を返します。</p>
+<p><a href="#L001953">FileTest.size</a>, <a href="#L001959">FileTest.zero?</a> も参照
+してください。</p></dd>
+<dt><a name="L001955" id="L001955"><code>FileTest.sticky?(<var>filename</var>)</code></a></dt>
+<dd>
+<p><var>filename</var> の sticky ビット(<a href="refm535.html">chmod(2)</a> 参照)が
+立っている時に真を返します。</p></dd>
+<dt><a name="L001956" id="L001956"><code>FileTest.symlink?(<var>filename</var>)</code></a></dt>
+<dd>
+<p><var>filename</var> がシンボリックリンクである時、真を返します。</p></dd>
+<dt><a name="L001957" id="L001957"><code>FileTest.writable?(<var>filename</var>)</code></a></dt>
+<dd>
+<p><var>filename</var> が書き込み可である時、真を返します。</p></dd>
+<dt><a name="L001958" id="L001958"><code>FileTest.writable_real?(<var>filename</var>)</code></a></dt>
+<dd>
+<p><var>filename</var> が実ユーザ/実グループによって書き込み可である時、真
+を返します。</p></dd>
+<dt><a name="L001959" id="L001959"><code>FileTest.zero?(<var>filename</var>)</code></a></dt>
+<dd>
+<p><var>filename</var> が存在して、そのサイズが 0 である時、真を返します。
+<var>filename</var> が存在しない場合は <code>false</code> を返します。</p>
+<p><a href="#L001953">FileTest.size</a>, <a href="#L001954">FileTest.size?</a>, も参
+照してください。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm034.html">UP</a>][<a href="refm073.html">&lt;-PREV</a>][<a href="refm075.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

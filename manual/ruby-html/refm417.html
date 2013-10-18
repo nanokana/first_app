@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>RubyTkFAQ::トラブルシューティング</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm418.html" rel="next" />
+<link href="refm416.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm408.html">UP</a>][<a href="refm416.html">&lt;-PREV</a>][<a href="refm418.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L009420" id="L009420">9. トラブルシューティング</a></h1>
+<h2><a name="XXINVALIDXX" id="XXINVALIDXX">9.1 </a></h2>
+<pre>#!/usr/bin/env ruby
+
+require 'tk'
+
+for i in [0, 1, 2]
+  p defined?(i)
+  TkButton.new {
+    text &quot;Button #{i}&quot;
+    command { puts &quot;click Button #{i}!!&quot; }
+    pack
+  }
+end
+
+Tk.mainloop</pre>
+<p>以下のように記述すれば、意図通りに動くでしょう。</p>
+<pre>#!/usr/bin/env ruby
+
+require 'tk'
+
+#i = 1
+
+[0, 1, 2].each do |i|
+  p defined?(i)
+  TkButton.new {
+    text &quot;Button #{i}&quot;
+    command { puts &quot;click Button #{i}!!&quot; }
+    pack
+  }
+end
+
+Tk.mainloop</pre>
+<h2><a name="XXINVALIDXX" id="XXINVALIDXX">9.2 </a></h2>
+<p>以下のように記述したところ、エラーが起きてうまく動きません。</p>
+<pre>#!/usr/bin/env ruby
+
+require &quot;tk&quot;
+
+class App
+  def initialize
+    TkButton.new {
+      text &quot;Push Me!&quot;
+      #command { p self }
+      command { push }
+      pack
+    }
+    Tk.mainloop
+  end
+
+  def push
+    puts &quot;push!&quot;
+  end
+end
+
+App.new</pre>
+<p>うまくいく例</p>
+<pre>#!/usr/bin/env ruby
+
+require &quot;tk&quot;
+
+class App
+  def initialize
+    b = TkButton.new
+    b.text &quot;Push Me!&quot;
+    #b.command { p self }
+    b.command { push }
+    b.pack
+    Tk.mainloop
+  end
+
+  def push
+    puts &quot;push!&quot;
+  end
+end
+
+App.new</pre>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm408.html">UP</a>][<a href="refm416.html">&lt;-PREV</a>][<a href="refm418.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

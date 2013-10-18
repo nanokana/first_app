@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>fileutils</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm153.html" rel="next" />
+<link href="refm151.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm151.html">&lt;-PREV</a>][<a href="refm153.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L002839" id="L002839">fileutils</a></h1>
+<p><a href="refm384.html">ruby 1.7 feature</a></p>
+<h2><a name="L002840" id="L002840">module FileUtils</a></h2>
+<p>基本的なファイル操作を集めたモジュールです。</p>
+<h3><a name="L002841" id="L002841">モジュール関数</a></h3>
+<dl>
+<dt><a name="L002842" id="L002842"><code>FileUtils.cd(<var>dir</var>, <var>options</var> = {})</code></a>
+<dt><a name="L002843" id="L002843"><code>FileUtils.cd(<var>dir</var>, <var>options</var> = {}) {|<var>dir</var>| .... }</code></a></dt>
+<dd>
+<p>プロセスのカレントディレクトリを dir に変更します。
+ブロックとともに呼び出された時はブロック終了後に
+元のディレクトリに戻ります。</p>
+<p>options には :verbose が指定できます。</p>
+<p><a href="refm389.html">ruby 1.8.3 feature</a> :noop オプションは廃止されました。</p>
+<pre>FileUtils.cd('/', {:verbose =&gt; true})   # chdir and report it</pre></dd>
+<dt><a name="L002844" id="L002844"><code>FileUtils.chmod(<var>mode</var>, <var>list</var>, <var>options</var> = {})</code></a></dt>
+<dd>
+<p>ファイル list[0], list[1], …… のパーミッションを mode に変更します。</p>
+<p>options には :noop と :verbose が指定可能です。</p>
+<pre>FileUtils.chmod(0644, 'my.rb', 'your.rb')
+FileUtils.chmod(0755, 'somecommand')
+FileUtils.chmod(0755, '/usr/bin/ruby', {:verbose =&gt; true})</pre></dd>
+<dt><a name="L002845" id="L002845"><code>FileUtils.chmod_R(<var>mode</var>, <var>list</var>, <var>options</var> = {})</code></a></dt>
+<dd>
+<p><a href="refm389.html">ruby 1.8.3 feature</a></p>
+<p>ファイル list[0], list[1], …… のパーミッションを再帰的に mode へ変更します。</p>
+<p>options には :noop と :verbose が指定可能です。</p>
+<pre>FileUtils.chmod_R(0700, '/tmp/removing')</pre></dd>
+<dt><a name="L002846" id="L002846"><code>FileUtils.chown(<var>user</var>, <var>group</var>, <var>list</var>, <var>options</var> = {})</code></a></dt>
+<dd>
+<p><a href="refm389.html">ruby 1.8.3 feature</a></p>
+<p>ファイル list[0], list[1], ... の
+所有ユーザと所有グループを user と group に変更します。
+user, group に nil または -1 を渡すとその項目は変更しません。</p>
+<p>options には :noop と :verbose が指定可能です。</p>
+<pre>FileUtils.chown 'root', 'staff', '/usr/local/bin/ruby'
+FileUtils.chown nil, 'bin', Dir.glob('/usr/bin/*'), :verbose =&gt; true</pre></dd>
+<dt><a name="L002847" id="L002847"><code>FileUtils.chown_R(<var>user</var>, <var>group</var>, <var>list</var>, <var>options</var> = {})</code></a></dt>
+<dd>
+<p><a href="refm389.html">ruby 1.8.3 feature</a></p>
+<p>list[0], list[1], ... 以下のファイルの所有ユーザと所有グループを
+user と group へ再帰的に変更します。
+user, group に nil または -1 を渡すとその項目は変更しません。</p>
+<p>options には :noop と :verbose が指定可能です。</p>
+<pre>FileUtils.chown 'root', 'staff', '/usr/local/bin/ruby'
+FileUtils.chown nil, 'bin', Dir.glob('/usr/bin/*'), :verbose =&gt; true
+
+FileUtils.chown_R 'www', 'www', '/var/www/htdocs'
+FileUtils.chown_R 'cvs', 'cvs', '/var/cvs', :verbose =&gt; true</pre></dd>
+<dt><a name="L002848" id="L002848"><code>FileUtils.cmp(<var>file_a</var>, <var>file_b</var>)</code></a>
+<dt><a name="L002849" id="L002849"><code>FileUtils.compare_file(<var>file_a</var>, <var>file_b</var>)</code></a>
+<dt><a name="L002850" id="L002850"><code>FileUtils.identical?(<var>file_a</var>, <var>file_b</var>)</code></a></dt>
+<dd>
+<p>ファイル a と b の内容が同じなら真。</p>
+<pre>FileUtils.cmp('somefile', 'somefile')  #=&gt; true
+FileUtils.cmp('/bin/cp', '/bin/mv')    #=&gt; maybe false.</pre></dd>
+<dt><a name="L002851" id="L002851"><code>FileUtils.compare_stream(<var>a</var>, <var>b</var>)</code></a></dt>
+<dd>
+<p><a href="refm045.html">IO</a> オブジェクト a と b の内容が同じなら真を返します。</p></dd>
+<dt><a name="L002852" id="L002852"><code>FileUtils.copy_entry(<var>src</var>, <var>dest</var>, <var>preserve</var> = <var>false</var>, <var>dereference_root</var> = <var>false</var>)</code></a></dt>
+<dd>
+<p><a href="refm389.html">ruby 1.8.3 feature</a></p>
+<p>ファイル src を dest にコピーします。src が普通のファイルでない場合は
+その種別まで含めて完全にコピーします。src がディレクトリの場合はその
+中身を再帰的にコピーします。</p>
+<p>preserve が真のときは更新時刻と、可能なら所有ユーザ・所有グループもコピーします。</p>
+<p>dereference_root が真のときは src についてだけシンボリックリンクの指す
+内容をコピーします。偽の場合はシンボリックリンク自体をコピーします。</p></dd>
+<dt><a name="L002853" id="L002853"><code>FileUtils.copy_file(<var>src</var>, <var>dest</var>, <var>preserve</var> = <var>false</var>, <var>dereference_root</var> = <var>true</var>)</code></a></dt>
+<dd>
+<p><a href="refm389.html">ruby 1.8.3 feature</a></p>
+<p>ファイル src の内容を dest にコピーします。</p>
+<p>preserve が真のときは更新時刻と、可能なら所有ユーザ・所有グループもコピーします。</p>
+<p>dereference_root が真のときは src についてだけシンボリックリンクの指す
+内容をコピーします。偽の場合はシンボリックリンク自体をコピーします。</p></dd>
+<dt><a name="L002854" id="L002854"><code>FileUtils.copy_stream(<var>src</var>, <var>dest</var>)</code></a></dt>
+<dd>
+<p><a href="refm389.html">ruby 1.8.3 feature</a></p>
+<p>src を dest にコピーします。
+src には read メソッド、dest には write メソッドが必要です。</p></dd>
+<dt><a name="L002855" id="L002855"><code>FileUtils.cp(<var>src</var>, <var>dest</var>, <var>options</var> = {})</code></a>
+<dt><a name="L002856" id="L002856"><code>FileUtils.copy(<var>src</var>, <var>dest</var>, <var>options</var> = {})</code></a></dt>
+<dd>
+<p>ファイル src を dest にコピーします。dest がディレクトリなら
+dest/src にコピーします。dest が既に存在ししかもディレクトリで
+ないときは上書きします。</p>
+<p>options には :preserve, :noop, :verbose が指定できます。</p>
+<pre>FileUtils.cp 'eval.c', 'eval.c.org'</pre></dd>
+<dt><a name="L002857" id="L002857"><code>FileUtils.cp(<var>list</var>, <var>dir</var>, <var>options</var> = {})</code></a></dt>
+<dd>
+<p>file1 を dir/file1 にコピー、file2 を dir/file2 にコピー、
+というように、ディレクトリ dir の中にファイル file1、file2 …を
+同じ名前でコピーします。dir がディレクトリでない場合は例外
+Errno::ENOTDIR が発生します。</p>
+<p>options には :preserve, :noop, :verbose が指定できます。</p>
+<pre>FileUtils.cp('cgi.rb', 'complex.rb', 'date.rb', '/usr/lib/ruby/1.6')
+FileUtils.cp(%w[cgi.rb complex.rb date.rb], '/usr/lib/ruby/1.6', {:verbose =&gt; true})</pre></dd>
+<dt><a name="L002858" id="L002858"><code>FileUtils.cp_r(<var>src</var>, <var>dest</var>, <var>options</var> = {})</code></a></dt>
+<dd>
+<p>src を dest にコピーします。src がディレクトリであったら再帰的に
+コピーします。その際 dest がディレクトリなら dest/src にコピーします。</p>
+<p>options には :preserve, :noop, :verbose が指定できます。</p>
+<pre># installing ruby library &quot;mylib&quot; under the site_ruby
+FileUtils.rm_r(site_ruby + '/mylib', {:force =&gt; true})
+FileUtils.cp_r('lib/', site_ruby + '/mylib')</pre></dd>
+<dt><a name="L002859" id="L002859"><code>FileUtils.cp_r(<var>list</var>, <var>dir</var>, <var>options</var> = {})</code></a></dt>
+<dd>
+<p>list[0]、list[1], list[2], ... をディレクトリ dir の中にコピーします。
+list[n] がディレクトリなら再帰的にコピーします。</p>
+<p>options には :preserve, :noop, :verbose を指定できます。</p>
+<pre>FileUtils.cp_r(%w[mail.rb field.rb debug/], site_ruby + '/tmail')
+FileUtils.cp_r(Dir.glob('*.rb'), '/home/taro/lib/ruby',
+               {:noop =&gt; true, :verbose =&gt; true})</pre></dd>
+<dt><a name="L002860" id="L002860"><code>FileUtils.install(<var>src</var>, <var>dest</var>, <var>options</var> = {})</code></a></dt>
+<dd>
+<p>src と dest の内容が違うときだけ src を dest にコピーします。</p>
+<p>options には :noop, :verbose, :mode を指定できます。
+mode オプションを指定した場合はコピー先ファイルのパーミッションを
+options[:mode] の値に設定します。</p>
+<pre>FileUtils.install('ruby', '/usr/local/bin/ruby', {:mode =&gt; 0755, :verbose =&gt; true})
+FileUtils.install('lib.rb', '/usr/local/lib/ruby/site_ruby'
+                          , {:verbose =&gt; true})</pre></dd>
+<dt><a name="L002861" id="L002861"><code>FileUtils.ln(<var>src</var>, <var>dest</var>, <var>options</var> = {})</code></a>
+<dt><a name="L002862" id="L002862"><code>FileUtils.link(<var>src</var>, <var>dest</var>, <var>options</var> = {})</code></a></dt>
+<dd>
+<p>src へのハードリンク dest を作成します。
+dest がすでに存在しディレクトリであるときは dest/src を作成します。
+dest がすでに存在しディレクトリでないならば例外 Errno::ENOTDIR が発生します。
+ただし :force オプションを指定したときは new を上書きします。</p>
+<p>options には :force, :noop, :verbose が指定できます。</p>
+<pre>FileUtils.ln('gcc', 'cc', {:verbose =&gt; true})
+FileUtils.ln('/usr/bin/emacs21', '/usr/bin/emacs')</pre></dd>
+<dt><a name="L002863" id="L002863"><code>FileUtils.ln(<var>list</var>, <var>destdir</var>, <var>options</var> = {})</code></a>
+<dt><a name="L002864" id="L002864"><code>FileUtils.link(<var>list</var>, <var>destdir</var>, <var>options</var> = {})</code></a></dt>
+<dd>
+<p>list[0] へのハードリンク destdir/list[0]、list[1] への
+ハードリンク destdir/list[1] …を作成します。
+destdir がディレクトリでない場合は例外 Errno::ENOTDIR が発生します。</p>
+<p>options には :force, :noop, :verbose が指定できます。</p>
+<pre>FileUtils.cd('/bin')
+FileUtils.ln(%w[cp mv mkdir], '/usr/bin')</pre></dd>
+<dt><a name="L002865" id="L002865"><code>FileUtils.ln_s(<var>src</var>, <var>dest</var>, <var>options</var> = {})</code></a>
+<dt><a name="L002866" id="L002866"><code>FileUtils.symlink(<var>src</var>, <var>dest</var>, <var>options</var> = {})</code></a></dt>
+<dd>
+<p>src へのシンボリックリンク dest を作成します。
+dest がすでに存在しディレクトリであるときは dest/src を作成します。
+dest がすでに存在しディレクトリでないならば例外 Errno::ENOTDIR が発生します。
+ただし :force オプションを指定したときは dest を上書きします。</p>
+<p>options には :force, :noop, :verbose を指定できます。</p>
+<pre>FileUtils.ln_s('/usr/bin/ruby', '/usr/local/bin/ruby')
+FileUtils.ln_s('verylongsourcefilename.c', 'c', {:force =&gt; true})</pre></dd>
+<dt><a name="L002867" id="L002867"><code>FileUtils.ln_s(<var>list</var>, <var>destdir</var>, <var>options</var> = {})</code></a>
+<dt><a name="L002868" id="L002868"><code>FileUtils.symlink(<var>list</var>, <var>destdir</var>, <var>options</var> = {})</code></a></dt>
+<dd>
+<p>list[0]、list[1] …へのシンボリックリンク dir/list[0], dir/list[1] …を
+作成します。destdir がディレクトリでない場合は例外 Errno::ENOTDIR が
+発生します。
+ただし :force オプションを指定したときは dest を上書きします。</p>
+<p>options には :noop, :verbose を指定できます。</p>
+<pre>FileUtils.ln_s(Dir.glob('bin/*.rb'), '/home/aamine/bin')</pre></dd>
+<dt><a name="L002869" id="L002869"><code>FileUtils.ln_sf(<var>src</var>, <var>dest</var>, <var>options</var> = {})</code></a></dt>
+<dd>
+<p>ln_s(src, dest, :force =&gt; true) と同じです。</p></dd>
+<dt><a name="L002870" id="L002870"><code>FileUtils.mkdir(<var>dir</var>, <var>options</var> = {})</code></a></dt>
+<dd>
+<p>ディレクトリ dir を作成します。</p>
+<p>options には :noop, :verbose が指定できます。</p>
+<pre>FileUtils.mkdir('test')
+FileUtils.mkdir(%w[ tmp data ])
+FileUtils.mkdir('notexist', {:noop =&gt; true})  # does not create really</pre></dd>
+<dt><a name="L002871" id="L002871"><code>FileUtils.mkdir_p(<var>dir</var>, <var>options</var> = {})</code></a>
+<dt><a name="L002872" id="L002872"><code>FileUtils.mkpath(<var>dir</var>, <var>options</var> = {})</code></a>
+<dt><a name="L002873" id="L002873"><code>FileUtils.makedirs(<var>dir</var>, <var>options</var> = {})</code></a></dt>
+<dd>
+<p>ディレクトリ dir とその親ディレクトリを全て作成します。
+例えば、</p>
+<pre>FileUtils.mkdir_p('/usr/local/lib/ruby')</pre>
+<p>は以下の全ディレクトリを (なければ) 作成します。</p>
+<ul>
+<li>/usr</li>
+<li>/usr/local</li>
+<li>/usr/local/bin</li>
+<li>/usr/local/bin/ruby</li>
+</ul>
+<p>options には :noop, :verbose が指定できます。</p></dd>
+<dt><a name="L002874" id="L002874"><code>FileUtils.mv(<var>src</var>, <var>dest</var>, <var>options</var> = {})</code></a>
+<dt><a name="L002875" id="L002875"><code>FileUtils.move(<var>src</var>, <var>dest</var>, <var>options</var> = {})</code></a></dt>
+<dd>
+<p>ファイル src を dest に移動します。
+dest がディレクトリなら dest/src に移動します。</p>
+<p>options には :noop と :verbose が指定できます。</p>
+<pre>FileUtils.mv('badname.rb', 'goodname.rb')
+FileUtils.mv('stuff.rb', 'lib/ruby', {:force =&gt; true})</pre></dd>
+<dt><a name="L002876" id="L002876"><code>FileUtils.mv(<var>list</var>, <var>dir</var>, <var>options</var> = {})</code></a>
+<dt><a name="L002877" id="L002877"><code>FileUtils.move(<var>list</var>, <var>dir</var>, <var>options</var> = {})</code></a></dt>
+<dd>
+<p>list[0], list[1], ... をディレクトリ dir の中に移動します。
+パーティションをまたいで移動するときはコピーします。</p>
+<p>options には :noop と :verbose が指定できます。</p>
+<pre>FileUtils.mv(['junk.txt', 'dust.txt'], &quot;#{ENV['HOME']}/.trash&quot;)
+FileUtils.mv(Dir.glob('test*.rb'), 'test', 
+             {:noop =&gt; true, :verbose =&gt; true} )</pre></dd>
+<dt><a name="L002878" id="L002878"><code>FileUtils.pwd</code></a>
+<dt><a name="L002879" id="L002879"><code>FileUtils.getwd</code></a></dt>
+<dd>
+<p>プロセスのカレントディレクトリを文字列で返します。</p></dd>
+<dt><a name="L002880" id="L002880"><code>FileUtils.rm(<var>list</var>, <var>options</var> = {})</code></a>
+<dt><a name="L002881" id="L002881"><code>FileUtils.remove(<var>list</var>, <var>options</var> = {})</code></a></dt>
+<dd>
+<p>list[0], list[1], ... を消去します。:force オプションが
+セットされた場合は作業中すべての StandardError を無視します。</p>
+<p>options には :force, :noop, :verbose が指定できます。</p>
+<pre>FileUtils.rm('junk.txt')
+FileUtils.rm(Dir.glob('*~'))
+FileUtils.rm('NotExistFile', {:force =&gt; true})    # never raises exception</pre></dd>
+<dt><a name="L002882" id="L002882"><code>FileUtils.rm_f(<var>list</var>, <var>options</var> = {})</code></a>
+<dt><a name="L002883" id="L002883"><code>FileUtils.safe_unlink(<var>list</var>, <var>options</var> = {})</code></a></dt>
+<dd>
+<p>FileUtils.rm(list, :force =&gt; true) と同じです。</p></dd>
+<dt><a name="L002884" id="L002884"><code>FileUtils.rm_r(<var>list</var>, <var>options</var> = {})</code></a></dt>
+<dd>
+<p>ファイルまたはディレクトリ list[0], list[1], ... を再帰的に消去します。
+force オプションを渡した場合は削除中に発生した StandardError を無視します。</p>
+<p>options には :force, :noop, :verbose を指定できます。</p>
+<pre>FileUtils.rm_r(Dir.glob('/tmp/*'))</pre>
+<p>このメソッドにはローカル脆弱性が存在します。
+詳しくは remove_entry_secure の項を参照してください。</p></dd>
+<dt><a name="L002885" id="L002885"><code>FileUtils.rm_rf(<var>list</var>, <var>options</var> = {})</code></a>
+<dt><a name="L002886" id="L002886"><code>FileUtils.rmtree(<var>list</var>, <var>options</var> = {})</code></a></dt>
+<dd>
+<p>rm_r(list, {:force =&gt; true}) と同じです。</p></dd>
+<dt><a name="L002887" id="L002887"><code>FileUtils.rmdir(<var>dir</var>, <var>options</var> = {})</code></a></dt>
+<dd>
+<p>ディレクトリ dir を削除します。</p>
+<p>options には :noop, :verbose が指定できます。</p>
+<pre>FileUtils.rmdir('somedir')
+FileUtils.rmdir(%w[somedir anydir otherdir])
+# does not remove directory really, outputing message.
+FileUtils.rmdir('somedir', {:verbose =&gt; true, :noop =&gt; true})</pre></dd>
+<dt><a name="L002888" id="L002888"><code>FileUtils.remove_entry(<var>path</var>, <var>force</var> = <var>false</var>)</code></a></dt>
+<dd>
+<p><a href="refm389.html">ruby 1.8.3 feature</a></p>
+<p>ファイル path を削除します。path がディレクトリなら再帰的に削除します。</p>
+<p>force が真のときは削除中に発生した StandardError を無視します。</p>
+<pre>FileUtils.remove_entry '/tmp/ruby.tmp.08883'</pre>
+<p>このメソッドにはローカル脆弱性が存在します。
+詳しくは remove_entry_secure の項を参照してください。</p></dd>
+<dt><a name="L002889" id="L002889"><code>FileUtils.remove_entry_secure(<var>path</var>, <var>force</var> = <var>false</var>)</code></a></dt>
+<dd>
+<p>ファイル path を削除します。path がディレクトリなら再帰的に削除します。</p>
+<p>force が真のときは削除中に発生した StandardError を無視します。</p>
+<p>rm_r および remove_entry には TOCTTOU (time-of-check to time-of-use)
+脆弱性が存在します。このメソッドはそれを防ぐために新設されました。
+rm_r および remove_entry は以下の条件が満たされるときにはセキュリティ
+ホールになりえます。</p>
+<ul>
+<li>親ディレクトリが全ユーザから書き込み可能 (/tmp を含む)</li>
+<li>path 以下のいずれかのディレクトリが全ユーザから書き込み可能</li>
+<li>システムがシンボリックリンクを持つ</li>
+</ul>
+<p>この脆弱性を防ぐため、remove_entry_secure は削除前に path 以下の
+ディレクトリのオーナーとパーミッションを変更し、上記の条件を回避します。
+ただし remove_entry_secure は親ディレクトリが以下の条件を満たすことを
+仮定しています。</p>
+<ul>
+<li>UNIX システムおよびそれに類する環境では、sticky ビットが立っていること。</li>
+<li>全ユーザが書き込み可能であるのは、直接の親ディレクトリのみであること。
+        例えば、/var/tmp のパーミッションが 1777 であるのは問題ありませんが、
+        その場合 / や /var が全ユーザから書き込み可能であってはなりません。</li>
+</ul>
+<p>この条件が満たされない場合 remove_entry_secure は安全ではありません。</p></dd>
+<dt><a name="L002890" id="L002890"><code>FileUtils.remove_file(<var>path</var>, <var>force</var> = <var>false</var>)</code></a></dt>
+<dd>
+<p>ファイル path を削除します。</p>
+<p>force が真のときは削除中に発生した StandardError を無視します。</p></dd>
+<dt><a name="L002891" id="L002891"><code>FileUtils.touch(<var>list</var>, <var>options</var> = {})</code></a></dt>
+<dd>
+<p>list[0], list[1], ... の最終変更時刻 (mtime) と
+アクセス時刻 (atime) を変更します。
+list[n] が存在しない場合は空のファイルを作成します。</p>
+<p>option には :noop と :verbose が指定できます。</p>
+<pre>FileUtils.touch('timestamp')
+FileUtils.touch(Dir.glob('*.c'))</pre></dd>
+<dt><a name="L002892" id="L002892"><code>FileUtils.uptodate?(<var>newer</var>, <var>older_list</var>)</code></a></dt>
+<dd>
+<p>newer が、older_list に含まれるすべてのファイルより新しいとき真。
+存在しないファイルは無限に古いとみなされます。</p>
+<pre>FileUtils.uptodate?('hello.o', ['hello.c', 'hello.h']) or system('make')</pre></dd>
+</dl>
+<h2><a name="L002893" id="L002893">module FileUtils::Verbose</a></h2>
+<p>FileUtils と同じメソッドが定義されており全く同じ動作をしますが、
+しようとしていることを実行前に表示します。</p>
+<h2><a name="L002894" id="L002894">module FileUtils::NoWrite</a></h2>
+<p>FileUtils と同じメソッドが定義されていますが、
+実際にファイルを変更する操作は実行しません。</p>
+<h2><a name="L002895" id="L002895">module FileUtils::DryRun</a></h2>
+<p>FileUtils と同じメソッドが定義されていますが、
+実際にファイルを変更する操作は実行せず、操作を表示します。</p>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm151.html">&lt;-PREV</a>][<a href="refm153.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

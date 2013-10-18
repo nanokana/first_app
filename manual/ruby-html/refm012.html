@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>環境変数</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm013.html" rel="next" />
+<link href="refm011.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm007.html">UP</a>][<a href="refm011.html">&lt;-PREV</a>][<a href="refm013.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L000156" id="L000156">環境変数</a></h1>
+<p>Rubyインタプリタは以下の環境変数を参照します。</p>
+<dl>
+<dt><a name="L000157" id="L000157"><code>RUBYOPT</code></a></dt>
+<dd>
+<p>Rubyインタプリタにデフォルトで渡すオプションを指定します。</p>
+<ul>
+<li><p><code>sh系</code></p>
+<pre>RUBYOPT='-Ke -rkconv'
+export RUBYOPT</pre></li>
+<li><p><code>csh系</code></p>
+<pre>setenv RUBYOPT '-Ke -rkconv'</pre></li>
+<li><p><code>MS-DOS系</code></p>
+<pre>set RUBYOPT=-Ke -rkconv</pre></li>
+</ul>
+</dd>
+<dt><a name="L000158" id="L000158"><code>RUBYPATH</code></a></dt>
+<dd>
+<p><a href="refm011.html#L000143">-S</a> オプション指定時に、環境変数 <code>PATH</code> による 
+Ruby スクリプトの探索に加えて、この環境変数で指定したディレクトリも
+探索対象になります。(<code>PATH</code> の値よりも優先します)。</p>
+<ul>
+<li><p><code>sh系</code></p>
+<pre>RUBYPATH=$HOME/ruby:/opt/ruby
+export RUBYPATH</pre></li>
+<li><p><code>csh系</code></p>
+<pre>setenv RUBYPATH $HOME/ruby:/opt/ruby</pre></li>
+<li><p><code>MS-DOS系</code></p>
+<pre>set RUBYPATH=%HOME%\ruby:\opt\ruby</pre></li>
+</ul>
+</dd>
+<dt><a name="L000159" id="L000159"><code>RUBYLIB</code></a></dt>
+<dd>
+<p>Rubyライブラリの探索パス<a href="refm030.html#L000541">$:</a>のデフォル
+ト値の前にこの環境変数の値を付け足します。</p>
+<ul>
+<li><p><code>sh系</code></p>
+<pre>RUBYLIB=$HOME/ruby/lib:/opt/ruby/lib
+export RUBYLIB</pre></li>
+<li><p><code>csh系</code></p>
+<pre>setenv RUBYLIB $HOME/ruby/lib:/opt/ruby/lib</pre></li>
+<li><p><code>MS-DOS系</code></p>
+<pre>set RUBYLIB=%HOME%\ruby\lib:\opt\ruby\lib</pre></li>
+</ul>
+</dd>
+<dt><a name="L000160" id="L000160"><code>RUBYLIB_PREFIX</code></a></dt>
+<dd>
+<p>この環境変数は <a href="refm467.html">DJGPP</a>版、<a href="refm463.html">Cygwin</a>版、<a href="refm458.html">mswin32</a>版、
+<a href="refm460.html">mingw32</a>版のrubyでのみ有効です。</p>
+<p>この環境変数の値は、path1;path2 あるいは path1 path2 という形式で、
+Rubyライブラリの探索パス<a href="refm030.html#L000541">$:</a>の先頭部分
+がpath1にマッチした場合に、これをpath2に置き換えます。
+<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></p>
+<ul>
+<li><p><code>MS-DOS系</code></p>
+<pre>set RUBYLIB_PREFIX=/usr/local/lib/ruby;d:/ruby</pre></li>
+</ul>
+</dd>
+<dt><a name="L000161" id="L000161"><code>RUBYSHELL</code></a></dt>
+<dd>
+<p>この環境変数は <a href="refm468.html">OS2</a>版、<a href="refm458.html">mswin32</a>版、<a href="refm460.html">mingw32</a>版のrubyで
+のみ有効です。</p>
+<p><a href="refm029.html#L000496">system</a> でコマンドを実行するときに使用するシェル
+を指定します。この環境変数が省略されていれば<code>COMSPEC</code>の値を
+使用します。</p>
+</dd>
+<dt><a name="L000162" id="L000162"><code>PATH</code></a></dt>
+<dd>
+<p><a href="refm029.html#L000496">system</a>などでコマンドを実行するときに検索するパスです。
+設定されていないとき(nilのとき)は
+<code>&quot;/usr/local/bin:/usr/ucb:/usr/bin:/bin:.&quot;</code>
+で検索されます。</p>
+</dd>
+</dl>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>現在の実装ではライブラリのパスの prefix を ruby.exe や ruby.dll のある位置から
+相対的に求めるのでこの環境変数の必要性はなくなっています</small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm007.html">UP</a>][<a href="refm011.html">&lt;-PREV</a>][<a href="refm013.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

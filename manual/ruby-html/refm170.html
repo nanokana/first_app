@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>URI</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm171.html" rel="next" />
+<link href="refm169.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm169.html">&lt;-PREV</a>][<a href="refm171.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L003216" id="L003216">URI</a></h1>
+<p>URI (Uniform Resource Identifier) サポートライブラリ</p>
+<h2><a name="L003217" id="L003217">クラス階層</a></h2>
+<ul>
+<li><a href="refm170.html">URI</a> Module</li>
+<li><a href="#L003232">URI::Generic</a> Class
+<ul>
+<li><a href="#L003282">URI::FTP</a> Class</li>
+<li><a href="#L003289">URI::HTTP</a> Class
+<ul>
+<li><a href="#L003294">URI::HTTPS</a> Class</li>
+</ul></li>
+<li><a href="#L003295">URI::LDAP</a> Class</li>
+<li><a href="#L003309">URI::MailTo</a> Class</li>
+</ul></li>
+</ul>
+<h3><a name="L003218" id="L003218">クラス変数</a></h3>
+<dl>
+<dt><a name="L003219" id="L003219"><code>@@schemes</code></a></dt>
+<dd>
+<p>モジュール関数 <code>parse</code> によって生成可能なクラスを値とするハッシュ。
+キーはスキームを大文字だけで表した文字列。
+<code>URI::Generic</code>を継承する場合にこのハッシュにエントリを追加すると
+そのクラスが <code>URI.parse</code> によってサポートされます。</p></dd>
+</dl>
+<h3><a name="L003220" id="L003220">モジュールメソッド:</a></h3>
+<dl>
+<dt><a name="L003221" id="L003221"><code>URI.split(<var>url</var>)</code></a></dt>
+<dd>
+<p>URI を以下の要素に分割した配列を返します。</p>
+<ul>
+<li>scheme</li>
+<li>userinfo</li>
+<li>host</li>
+<li>port</li>
+<li>registry</li>
+<li>path</li>
+<li>opaque</li>
+<li>query</li>
+<li>fragment</li>
+</ul>
+<p>例:</p>
+<pre>require 'uri'
+p URI.split(&quot;http://www.ruby-lang.org/&quot;)
+# =&gt; [&quot;http&quot;, nil, &quot;www.ruby-lang.org&quot;, nil, nil, &quot;/&quot;, nil, nil, nil]</pre></dd>
+<dt><a name="L003222" id="L003222"><code>URI.parse(<var>uri_str</var>)</code></a>
+<dt><a name="L003223" id="L003223"><code>URI(<var>uri_str</var>)  ((&lt;<var>ruby</var> <var>1</var>.<var>8</var>.<var>2</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>与えられた URI から該当する URI サブクラスのインスタンスを生成して
+返します。</p>
+<pre>require 'uri'
+p uri = URI.parse(&quot;http://www.ruby-lang.org/&quot;)
+
+# =&gt; #&lt;URI::HTTP:0x201002a6 URL:http://www.ruby-lang.org/&gt;
+p uri.scheme    # =&gt; &quot;http&quot;
+p uri.host      # =&gt; &quot;www.ruby-lang.org&quot;
+p uri.port      # =&gt; 80
+p uri.path      # =&gt; &quot;/&quot;</pre></dd>
+<dt><a name="L003224" id="L003224"><code>URI.join(<var>uri_str</var>[, <var>str</var>, ...])</code></a></dt>
+<dd>
+<p>文字列 <var>uri_str</var> と <var>str</var> ... をURIとして連結して得られる
+URIオブジェクトを返します。</p>
+<p>以下と等価です</p>
+<pre>URI.parse(uri_str) + str + ....</pre>
+<p>例</p>
+<pre>require 'uri'
+p URI.join('http://www.ruby-lang.org/', '/ja/man-1.6/')
+=&gt; #&lt;URI::HTTP:0x2010017a URL:http://www.ruby-lang.org/ja/man-1.6/&gt;</pre></dd>
+<dt><a name="L003225" id="L003225"><code>URI.extract(<var>str</var>[, <var>schemes</var>])</code></a>
+<dt><a name="L003226" id="L003226"><code>URI.extract(<var>str</var>[, <var>schemes</var>]) {|<var>uri_str</var>| ... }</code></a></dt>
+<dd>
+<p>文字列 <var>str</var> に対してパターンマッチングを試み、
+絶対URIにマッチした部分文字列からなる配列として返します。
+抽出する URI がなければ空の配列を返します。</p>
+<p>第2引数に文字列の配列 <var>schemes</var> が与えられた場合は
+そのスキームだけを検索します。</p>
+<p>ブロックが与えられた場合は <code>String#scan</code> と同様で、
+マッチした部分がみつかるたびに <var>uri_str</var> に
+その部分を代入してブロックを評価します。
+このときの値は <code>nil</code> です。</p>
+<pre># つまらんサンプルだ・・・
+require 'uri'
+str = &quot;
+        http://www.ruby-lang.org/
+        http://www.ruby-lang.org/man-1.6/
+&quot;
+p URI.extract(str, %w[http])
+=&gt; [&quot;http://www.ruby-lang.org/&quot;, &quot;http://www.ruby-lang.org/man-1.6/&quot;]</pre></dd>
+<dt><a name="L003227" id="L003227"><code>URI.regexp([<var>match_schemes</var>])</code></a></dt>
+<dd>
+<p><a href="refm387.html">ruby 1.8.1 feature</a>:</p>
+<p>URIにマッチする正規表現を返します。</p>
+<p>引数に文字列の配列 match_schemes を与えた場合は、
+その文字列で指定されるスキームの URI のみにマッチする
+正規表現を返します。</p>
+<p>いずれの場合も返り値の正規表現は不定数の正規表現グループ
+(括弧) を含みます。この括弧の数はバージョンによって変動
+する可能性があるので、それに依存したコードを書くべきでは
+ありません。</p></dd>
+<dt><a name="L003228" id="L003228"><code>URI.escape(<var>str</var>[, <var>unsafe</var>])</code></a>
+<dt><a name="L003229" id="L003229"><code>URI.encode(<var>str</var>[, <var>unsafe</var>])</code></a></dt>
+<dd>
+<p>URI 文字列をエンコードした文字列を返します。<var>unsafe</var> には、URI 
+として指定できない文字を正規表現か文字列で指定します(デフォルトは、
+定数 URI::UNSAFE</p>
+<pre>/[^-_.!~*'()a-zA-Z\d;\/?:@&amp;=+$,\[\]]/n</pre>
+<p>です)。</p>
+<pre>require 'uri'
+$KCODE = 'EUC'
+p URI.escape('http://www.ruby-lang.org/ja/man-1.6/?cmd=view;name=Rubyリファレンスマニュアル')
+
+=&gt; &quot;http://www.ruby-lang.org/ja/man-1.6/?cmd=view;name=Ruby%A5%EA%A5%D5%A5%A1%A5%EC%A5%F3%A5%B9%A5%DE%A5%CB%A5%E5%A5%A2%A5%EB&quot;</pre></dd>
+<dt><a name="L003230" id="L003230"><code>URI.unescape(<var>str</var>)</code></a>
+<dt><a name="L003231" id="L003231"><code>URI.decode(<var>str</var>)</code></a></dt>
+<dd>
+<p>URI 文字列をデコードした文字列を返します。</p>
+<pre>require 'uri'
+$KCODE = 'EUC'
+p URI.unescape('http://www.ruby-lang.org/ja/man-1.6/?cmd=view;name=Ruby%A5%EA%A5%D5%A5%A1%A5%EC%A5%F3%A5%B9%A5%DE%A5%CB%A5%E5%A5%A2%A5%EB')
+
+=&gt; &quot;http://www.ruby-lang.org/ja/man-1.6/?cmd=view;name=Rubyリファレンスマニュアル&quot;</pre></dd>
+</dl>
+<h2><a name="L003232" id="L003232">URI::Generic</a></h2>
+<p>すべての URI クラスの基底クラスです。</p>
+<h3><a name="L003233" id="L003233">クラスメソッド:</a></h3>
+<dl>
+<dt><a name="L003234" id="L003234"><code>URI::Generic.default_port</code></a></dt>
+<dd>
+<p>スキームに対応するデフォルトのポート番号を返します。</p>
+<pre>require 'uri'
+p URI::Generic.default_port     # =&gt; nil
+p URI::HTTP.default_port        # =&gt; 80</pre></dd>
+<dt><a name="L003235" id="L003235"><code>URI::Generic.component</code></a></dt>
+<dd>
+<p>URI の構成要素の配列を返します。</p>
+<pre>require 'uri'
+p URI::Generic.component
+p URI::MailTo.component
+
+# =&gt; [:scheme, :userinfo, :host, :port, :registry, :path, :opaque, :query, :fragment]
+# =&gt; [:scheme, :to, :headers]</pre></dd>
+<dt><a name="L003236" id="L003236"><code>URI::Generic.use_registry</code></a></dt>
+<dd>
+<p><code>registry</code> 部を利用するか否かを表す真偽値。
+この値が偽のとき、<code>new</code> に偽でない <code>registry</code> 部が与えられると
+例外 <code>URI::InvalidURIError</code> が起こります。</p></dd>
+<dt><a name="L003237" id="L003237"><code>URI::Generic.build2(<var>ary</var>)</code></a>
+<dt><a name="L003238" id="L003238"><code>URI::Generic.build2(<var>hash</var>)</code></a></dt>
+<dd>
+<p>URI::Generic.build と同じですが、例外 URI::InvalidComponentError 
+が発生した場合に、引数の各要素を URI.escape して再度 build を試み
+ます。</p></dd>
+<dt><a name="L003239" id="L003239"><code>URI::Generic.build(<var>ary</var>)</code></a>
+<dt><a name="L003240" id="L003240"><code>URI::Generic.build(<var>hash</var>)</code></a></dt>
+<dd>
+<p>引数で与えられた URI 構成要素から URI::Generic オブジェクトを生成します。
+構成要素は、</p>
+<pre>[scheme, userinfo, host, port, registry, path, opaque, query, fragment]</pre>
+<p>を配列かハッシュで与えます。</p></dd>
+<dt><a name="L003241" id="L003241"><code>URI::Generic.new(<var>scheme</var>, <var>userinfo</var>, <var>host</var>, <var>port</var>, <var>registry</var>, <var>path</var>, <var>opaque</var>, <var>query</var>, <var>fragment</var>[, <var>arg_check</var>])</code></a></dt>
+<dd>
+<p>各引数を成分とする汎用URIオブジェクトを生成して返します。</p>
+<p><code>use_registry</code> が偽のとき、<code>new</code> に偽でない <code>registry</code> 
+部が与えられると例外 <code>URI::InvalidURIError</code> が起こります。</p>
+<p>第10引数<var>arg_check</var>として真が与えられた場合は、
+値を返す前に各引数が字句規則に適合しているか否かを検査し、
+適合しない場合は例外 <code>URI::InvalidComponentError</code> が起ります。</p></dd>
+</dl>
+<h3><a name="L003242" id="L003242">メソッド:</a></h3>
+<dl>
+<dt><a name="L003243" id="L003243"><code>URI::Generic#default_port</code></a></dt>
+<dd>
+<p><code>self.class.default_port</code> です。</p></dd>
+<dt><a name="L003244" id="L003244"><code>URI::Generic#component</code></a></dt>
+<dd>
+<p><code>self.class.component</code> です。</p></dd>
+<dt><a name="L003245" id="L003245"><code>URI::Generic#scheme</code></a>
+<dt><a name="L003246" id="L003246"><code>URI::Generic#scheme=(<var>v</var>)</code></a>
+<dt><a name="L003247" id="L003247"><code>URI::Generic#userinfo</code></a>
+<dt><a name="L003248" id="L003248"><code>URI::Generic#userinfo=(<var>v</var>)</code></a>
+<dt><a name="L003249" id="L003249"><code>URI::Generic#user</code></a>
+<dt><a name="L003250" id="L003250"><code>URI::Generic#user=(<var>v</var>)</code></a>
+<dt><a name="L003251" id="L003251"><code>URI::Generic#password</code></a>
+<dt><a name="L003252" id="L003252"><code>URI::Generic#password=(<var>v</var>)</code></a>
+<dt><a name="L003253" id="L003253"><code>URI::Generic#host</code></a>
+<dt><a name="L003254" id="L003254"><code>URI::Generic#host=(<var>v</var>)</code></a>
+<dt><a name="L003255" id="L003255"><code>URI::Generic#port</code></a>
+<dt><a name="L003256" id="L003256"><code>URI::Generic#port=(<var>v</var>)</code></a>
+<dt><a name="L003257" id="L003257"><code>URI::Generic#registry</code></a>
+<dt><a name="L003258" id="L003258"><code>URI::Generic#registry=(<var>v</var>)</code></a>
+<dt><a name="L003259" id="L003259"><code>URI::Generic#path</code></a>
+<dt><a name="L003260" id="L003260"><code>URI::Generic#path=(<var>v</var>)</code></a>
+<dt><a name="L003261" id="L003261"><code>URI::Generic#query</code></a>
+<dt><a name="L003262" id="L003262"><code>URI::Generic#query=(<var>v</var>)</code></a>
+<dt><a name="L003263" id="L003263"><code>URI::Generic#opaque</code></a>
+<dt><a name="L003264" id="L003264"><code>URI::Generic#opaque=(<var>v</var>)</code></a>
+<dt><a name="L003265" id="L003265"><code>URI::Generic#fragment</code></a>
+<dt><a name="L003266" id="L003266"><code>URI::Generic#fragment=(<var>v</var>)</code></a></dt>
+<dd>
+<p>各構成要素の属性メソッドです。属性設定では、引数の正当性をチェック
+し不正な引数に対して例外 URI::InvalidComponentError を発生させます。
+<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></p></dd>
+<dt><a name="L003267" id="L003267"><code>URI::Generic#hierarchical?</code></a></dt>
+<dd>
+<p>path が真なら真です。</p></dd>
+<dt><a name="L003268" id="L003268"><code>URI::Generic#absolute?</code></a></dt>
+<dd>
+<p>scheme が真なら真です。</p></dd>
+<dt><a name="L003269" id="L003269"><code>URI::Generic#relative?</code></a></dt>
+<dd>
+<p>scheme が偽なら真です。</p></dd>
+<dt><a name="L003270" id="L003270"><code>URI::Generic#merge(<var>rel</var>)</code></a>
+<dt><a name="L003271" id="L003271"><code>URI::Generic#+(<var>rel</var>)</code></a></dt>
+<dd>
+<p><code>rel</code> を連結する。
+<code>rel</code> が文字列の場合は <code>URI.parse(</code><var>rel</var><code>)</code> によって、
+URI に変換してから連結する。</p>
+<pre>require 'uri'
+p URI.parse('http://www.ruby-lang.org/') + '/en/raa.html'
+=&gt; #&lt;URI::HTTP:0x201001c0 URL:http://www.ruby-lang.org/en/raa.html&gt;</pre></dd>
+<dt><a name="L003272" id="L003272"><code>URI::Generic#route_from(<var>src</var>)</code></a>
+<dt><a name="L003273" id="L003273"><code>URI::Generic#-(<var>src</var>)</code></a></dt>
+<dd>
+<p><var>src</var>からの相対パスを返します。</p>
+<pre>require 'uri'
+p URI.parse('http://www.ruby-lang.org/en/raa.html') - 'http://www.ruby-lang.org/'
+=&gt; #&lt;URI::Generic:0x20100256 URL:en/raa.html&gt;</pre></dd>
+<dt><a name="L003274" id="L003274"><code>URI::Generic#route_to(<var>dst</var>)</code></a></dt>
+<dd>
+<p><var>dst</var>への相対パスを返します。</p>
+<pre>require 'uri'
+p URI.parse('http://www.ruby-lang.org/').route_to('http://www.ruby-lang.org/en/raa.html')
+
+=&gt; #&lt;URI::Generic:0x20100198 URL:en/raa.html&gt;</pre></dd>
+<dt><a name="L003275" id="L003275"><code>URI::Generic#normalize</code></a>
+<dt><a name="L003276" id="L003276"><code>URI::Generic#normalize!</code></a></dt>
+<dd>
+<p>URI オブジェクトを正規化して返します。ホスト名を小文字にし、path 
+構成要素がなければ '/' をセットします。</p></dd>
+<dt><a name="L003277" id="L003277"><code>URI::Generic#to_s</code></a>
+<dt><a name="L003278" id="L003278"><code>URI::Generic#to_str</code></a></dt>
+<dd>
+<p>URI を返します。</p></dd>
+<dt><a name="L003279" id="L003279"><code>URI::Generic#==(<var>uri</var>)</code></a></dt>
+<dd>
+<p>引数に指定した URI (文字列またはURIオブジェクト)との一致判定を行い
+ます。URI は正規化して比較されます。</p></dd>
+<dt><a name="L003280" id="L003280"><code>URI::Generic#to_a</code></a>
+<dt><a name="L003281" id="L003281"><code>URI::Generic#to_ary</code></a></dt>
+<dd>
+<p>URI オブジェクトの構成要素の配列を返します。</p></dd>
+</dl>
+<h2><a name="L003282" id="L003282">URI::FTP</a></h2>
+<h3><a name="L003283" id="L003283">スーパークラス:</a></h3>
+<p><a href="#L003232">URI::Generic</a></p>
+<h3><a name="L003233" id="L003233">クラスメソッド:</a></h3>
+<dl>
+<dt><a name="L003284" id="L003284"><code>URI::FTP.build(<var>ary</var>)</code></a>
+<dt><a name="L003285" id="L003285"><code>URI::FTP.build(<var>hash</var>)</code></a></dt>
+<dd>
+<p>引数で与えられた URI 構成要素から URI::FTP オブジェクトを生成します。
+構成要素は、</p>
+<pre>[userinfo, host, port, path, typecode]</pre>
+<p>を配列かハッシュで与えます。typecode は、&quot;a&quot;、&quot;i&quot; あるいは &quot;d&quot; です。
+&quot;a&quot; はテキスト、&quot;i&quot; はバイナリ、&quot;d&quot; はディレクトリを表します。
+&quot;a&quot; がテキストで、&quot;i&quot; がバイナリなのは、それぞれのデータタイプが
+FTPのプロトコルで ASCII と IMAGE と呼ばれていたためです。</p></dd>
+<dt><a name="L003286" id="L003286"><code>URI::FTP.new(<var>scheme</var>, <var>userinfo</var>, <var>host</var>, <var>port</var>, <var>registry</var>, <var>path</var>, <var>opaque</var>, <var>query</var>, <var>fragment</var>[, <var>arg_check</var>])</code></a></dt>
+<dd>
+<p>汎用的な構成要素から URI::FTP オブジェクトを生成します。build
+と異なり、引数の正当性を検査しません。</p>
+<pre>require 'uri'
+p ftp = URI.parse(&quot;ftp://ftp.ruby-lang.org/pub/ruby/;type=d&quot;)
+p ftp.typecode
+=&gt; #&lt;URI::FTP:0x2010029c URL:ftp://ftp.ruby-lang.org/pub/ruby/;type=d&gt;
+   &quot;d&quot;</pre></dd>
+<dt><a name="L003287" id="L003287"><code>URI::FTP#typecode</code></a>
+<dt><a name="L003288" id="L003288"><code>URI::FTP#typecode=(<var>v</var>)</code></a></dt>
+<dd>
+<p>各構成要素の属性メソッドです。属性設定では、引数の正当性をチェック
+し不正な引数に対して例外 URI::InvalidComponentError を発生させます。</p></dd>
+</dl>
+<h2><a name="L003289" id="L003289">URI::HTTP</a></h2>
+<h3><a name="L003283" id="L003283">スーパークラス:</a></h3>
+<p><a href="#L003232">URI::Generic</a></p>
+<h3><a name="L003233" id="L003233">クラスメソッド:</a></h3>
+<dl>
+<dt><a name="L003290" id="L003290"><code>URI::HTTP.build(<var>ary</var>)</code></a>
+<dt><a name="L003291" id="L003291"><code>URI::HTTP.build(<var>hash</var>)</code></a></dt>
+<dd>
+<p>引数で与えられた URI 構成要素から URI::HTTP オブジェクトを生成します。
+構成要素は、</p>
+<pre>[userinfo, host, port, path, query, fragment]</pre>
+<p>を配列かハッシュで与えます。</p></dd>
+<dt><a name="L003292" id="L003292"><code>URI::HTTP.new(<var>scheme</var>, <var>userinfo</var>, <var>host</var>, <var>port</var>, <var>registry</var>, <var>path</var>, <var>opaque</var>, <var>query</var>, <var>fragment</var>[, <var>arg_check</var>])</code></a></dt>
+<dd>
+<p>汎用的な構成要素から URI::HTTP オブジェクトを生成します。build
+と異なり、引数の正当性を検査しません。</p></dd>
+</dl>
+<h3><a name="L003242" id="L003242">メソッド:</a></h3>
+<dl>
+<dt><a name="L003293" id="L003293"><code>URI::HTTP#request_uri</code></a></dt>
+<dd>
+<p><code>path + '?' + query</code> を返します。</p></dd>
+</dl>
+<h2><a name="L003294" id="L003294">URI::HTTPS</a></h2>
+<h3><a name="L003283" id="L003283">スーパークラス:</a></h3>
+<p><a href="#L003289">URI::HTTP</a></p>
+<h2><a name="L003295" id="L003295">URI::LDAP</a></h2>
+<p>LDAP URI SCHEMA (described in <em class="XXINVALIDXX">RFC:2255</em>)</p>
+<pre>ldap://&lt;host&gt;/&lt;dn&gt;[?&lt;attrs&gt;[?&lt;scope&gt;[?&lt;filter&gt;[?&lt;extensions&gt;]]]]</pre>
+<h3><a name="L003283" id="L003283">スーパークラス:</a></h3>
+<p><a href="#L003232">URI::Generic</a></p>
+<h3><a name="L003233" id="L003233">クラスメソッド:</a></h3>
+<dl>
+<dt><a name="L003296" id="L003296"><code>URI::LDAP.build(<var>ary</var>)</code></a>
+<dt><a name="L003297" id="L003297"><code>URI::LDAP.build(<var>hash</var>)</code></a>
+<dt><a name="L003298" id="L003298"><code>URI::LDAP.new(<var>scheme</var>, <var>userinfo</var>, <var>host</var>, <var>port</var>, <var>registry</var>, <var>path</var>, <var>opaque</var>, <var>query</var>, <var>fragment</var>[, <var>arg_check</var>])</code></a>
+</dl>
+<h3><a name="L003242" id="L003242">メソッド:</a></h3>
+<dl>
+<dt><a name="L003299" id="L003299"><code>URI::LDAP#dn</code></a>
+<dt><a name="L003300" id="L003300"><code>URI::LDAP#dn=(<var>v</var>)</code></a>
+<dt><a name="L003301" id="L003301"><code>URI::LDAP#attributes</code></a>
+<dt><a name="L003302" id="L003302"><code>URI::LDAP#attributes=(<var>v</var>)</code></a>
+<dt><a name="L003303" id="L003303"><code>URI::LDAP#scope</code></a>
+<dt><a name="L003304" id="L003304"><code>URI::LDAP#scope=(<var>v</var>)</code></a>
+<dt><a name="L003305" id="L003305"><code>URI::LDAP#filter</code></a>
+<dt><a name="L003306" id="L003306"><code>URI::LDAP#filter=(<var>v</var>)</code></a>
+<dt><a name="L003307" id="L003307"><code>URI::LDAP#extensions</code></a>
+<dt><a name="L003308" id="L003308"><code>URI::LDAP#extensions=(<var>v</var>)</code></a>
+</dl>
+<h2><a name="L003309" id="L003309">URI::MailTo</a></h2>
+<p><em class="XXINVALIDXX">RFC:2368</em>, The mailto URL scheme</p>
+<h3><a name="L003283" id="L003283">スーパークラス:</a></h3>
+<p><a href="#L003232">URI::Generic</a></p>
+<h3><a name="L003233" id="L003233">クラスメソッド:</a></h3>
+<dl>
+<dt><a name="L003310" id="L003310"><code>URI::MailTo.build(<var>ary</var>)</code></a>
+<dt><a name="L003311" id="L003311"><code>URI::MailTo.build(<var>hash</var>)</code></a></dt>
+<dd>
+<p>引数で与えられた URI 構成要素から URI::MailTo オブジェクトを生成します。
+構成要素は、</p>
+<pre>[to, headers]</pre>
+<p>を配列かハッシュで与えます。headers は、以下のような文字列か配列で
+与えます。</p>
+<pre>&quot;subject=subscribe&amp;cc=addr&quot;
+
+[[&quot;subject&quot;, &quot;subscribe&quot;], [&quot;cc&quot;, &quot;addr&quot;]]</pre></dd>
+<dt><a name="L003312" id="L003312"><code>URI::MailTo.new(<var>scheme</var>, <var>userinfo</var>, <var>host</var>, <var>port</var>, <var>registry</var>, <var>path</var>, <var>opaque</var>, <var>query</var>, <var>fragment</var>[, <var>arg_check</var>])</code></a></dt>
+<dd>
+<p>汎用的な構成要素から URI::MailTo オブジェクトを生成します。build 
+と異なり、引数の正当性を検査しません。</p></dd>
+</dl>
+<h3><a name="L003242" id="L003242">メソッド:</a></h3>
+<dl>
+<dt><a name="L003313" id="L003313"><code>URI::MailTo#to</code></a>
+<dt><a name="L003314" id="L003314"><code>URI::MailTo#to=(<var>v</var>)</code></a>
+<dt><a name="L003315" id="L003315"><code>URI::MailTo#headers</code></a>
+<dt><a name="L003316" id="L003316"><code>URI::MailTo#headers=(<var>v</var>)</code></a></dt>
+<dd>
+<p>各構成要素の属性メソッドです。属性設定では、引数の正当性をチェック
+し不正な引数に対して例外 URI::InvalidComponentError を発生させます。</p></dd>
+<dt><a name="L003317" id="L003317"><code>URI::MailTo#to_mailtext</code></a>
+<dt><a name="L003318" id="L003318"><code>URI::MailTo#to_rfc822text</code></a></dt>
+<dd>
+<p>URI オブジェクトからメールテキスト文字列を生成します。</p>
+<pre>require 'uri'
+p mailto = URI.parse(&quot;mailto:ruby-list@ruby-lang.org?subject=subscribe&amp;cc=myaddr&quot;)
+print mailto.to_mailtext
+
+=&gt; #&lt;URI::MailTo:0x20104a0e URL:mailto:ruby-list@ruby-lang.org?subject=subscribe&amp;cc=myaddr&gt;
+   To: ruby-list@ruby-lang.org
+   Subject: subscribe
+   Cc: myaddr</pre></dd>
+</dl>
+<h2><a name="L003319" id="L003319">例外クラス</a></h2>
+<ul>
+<li>URI::Error
+<ul>
+<li>URI::InvalidURIError</li>
+<li>URI::InvalidComponentError</li>
+<li>URI::BadURIError</li>
+</ul></li>
+</ul>
+<dl>
+<dt><a name="L003320" id="L003320"><code>URI::Error</code></a></dt>
+<dd>
+<p>すべての URI 例外クラスの基底クラスです。</p></dd>
+<dt><a name="L003321" id="L003321"><code>URI::InvalidURIError</code></a></dt>
+<dd>
+<p>不正な URI を指定したときに発生します。</p></dd>
+<dt><a name="L003322" id="L003322"><code>URI::InvalidComponentError</code></a></dt>
+<dd>
+<p>不正な構成要素を指定したときに発生します。</p></dd>
+<dt><a name="L003323" id="L003323"><code>URI::BadURIError</code></a></dt>
+<dd>
+<p>URI として正しいが、使い方が悪いときに発生します。</p></dd>
+</dl>
+<h2><a name="L003324" id="L003324">関連 RFC</a></h2>
+<ul>
+<li><em class="XXINVALIDXX">RFC:1738</em> Uniform Resource Locators (URL)</li>
+<li><em class="XXINVALIDXX">RFC:1808</em> Relative Uniform Resource Locators</li>
+<li><em class="XXINVALIDXX">RFC:2255</em> The LDAP URL Format</li>
+<li><em class="XXINVALIDXX">RFC:2368</em> The mailto URL scheme</li>
+<li><em class="XXINVALIDXX">RFC:2373</em> IP Version 6 Addressing Architecture</li>
+<li><em class="XXINVALIDXX">RFC:2396</em> Uniform Resource Identifiers (URI): Generic Syntax</li>
+<li><em class="XXINVALIDXX">RFC:2732</em> Format for Literal IPv6 Addresses in URL's</li>
+</ul>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>あらい 2002-09-24: InvalidURIError を起こすものもあるのはわざと？</small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm169.html">&lt;-PREV</a>][<a href="refm171.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

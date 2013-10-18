@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>trap::Array</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm433.html" rel="next" />
+<link href="refm431.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm421.html">UP</a>][<a href="refm431.html">&lt;-PREV</a>][<a href="refm433.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L009467" id="L009467">trap::Array</a></h1>
+<ul>
+<li><p>Array.new([size[, val]])</p>
+<p>初期値 <var>val</var> は、そのコピーで初期化するわけではないことに注
+意してください。以下のようにすべての要素は同じオブジェクトを指し
+ます。</p>
+<pre>ary = Array.new(3, &quot;foo&quot;)
+p ary   # =&gt; [&quot;foo&quot;, &quot;foo&quot;, &quot;foo&quot;]
+ary.each {|v| p v.object_id}
+# =&gt; 537713734
+     537713734
+     537713734</pre>
+<p>したがって、このような配列の要素のうち1つを破壊的に変更すれば、
+すべての要素が変更されます。</p>
+<pre>ary = Array.new(3, &quot;foo&quot;)
+ary[0].replace &quot;bar&quot;
+p ary
+# =&gt; [&quot;bar&quot;, &quot;bar&quot;, &quot;bar&quot;]</pre>
+<p>これを避けるには例えば以下のようにします。</p>
+<pre>ary = Array.new(3).collect { &quot;foo&quot; }
+ary[0].replace &quot;bar&quot;
+p ary
+# =&gt; [&quot;bar&quot;, &quot;foo&quot;, &quot;foo&quot;]</pre>
+<p><a href="refm384.html">ruby 1.7 feature</a>: version 1.7 では、ブロックを指定することでこ
+れを避けることができます。</p>
+<pre>ary = Array.new(3) { &quot;foo&quot; }
+p ary   # =&gt; [&quot;foo&quot;, &quot;foo&quot;, &quot;foo&quot;]
+ary.each {|v| p v.object_id}
+# =&gt; 537770556
+     537770436
+     537770424</pre></li>
+<li><p>self * times</p>
+<p>Array.new と同様です。</p>
+<pre>ary = [&quot;foo&quot;] * 3
+ary[0].replace &quot;bar&quot;
+p ary
+# =&gt; [&quot;bar&quot;, &quot;bar&quot;, &quot;bar&quot;]</pre></li>
+<li><p>Array#fill(val)</p>
+<p>Array.new と同様です。</p>
+<pre>ary = Array.new(3).fill(&quot;foo&quot;)
+ary[0].replace &quot;bar&quot;
+p ary
+# =&gt; [&quot;bar&quot;, &quot;bar&quot;, &quot;bar&quot;]</pre>
+<p><a href="refm384.html">ruby 1.7 feature</a>: Array.new と同様、ブロックでこれを避けること
+ができます。</p>
+<pre>ary = Array.new(3).fill { &quot;foo&quot; }
+ary[0].replace &quot;bar&quot;
+p ary
+# =&gt; [&quot;bar&quot;, &quot;foo&quot;, &quot;foo&quot;]</pre></li>
+<li><p>Array#&lt;=&gt;</p>
+<p>Arrayは<code>&lt;=&gt;</code>メソッドを持っていますが、Comparableではありません。
+(<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/18470">ruby-list:18470</a><sup class="outside"><small>[外部]</small></sup>,<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/8261">ruby-dev:8261</a><sup class="outside"><small>[外部]</small></sup>,<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/2173">ruby-dev:2173</a><sup class="outside"><small>[外部]</small></sup>)</p></li>
+<li><p>Array#uniq</p>
+<p><a href="refm035.html#L000660">hash</a>メソッドと<a href="refm035.html#L000655">eql?</a>を再定義していないクラスの
+オブジェクトを要素として持つ場合、思ったほど要素が減らないことがあります。</p>
+<pre>[Hash.new, Hash.new].uniq #=&gt; [{}, {}]</pre></li>
+</ul>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm421.html">UP</a>][<a href="refm431.html">&lt;-PREV</a>][<a href="refm433.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

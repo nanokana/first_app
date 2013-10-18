@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>執筆者募集</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm003.html" rel="next" />
+<link href="index.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="index.html">&lt;-PREV</a>][<a href="refm003.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L000007" id="L000007">執筆者募集</a></h1>
+<p>下の「<a href="index.cgi?cmd=view;name=%BC%B9%C9%AE%BC%D4%CA%E7%BD%B8;num_links=all%23link#link">Link</a><sup class="outside"><small>[外部]</small></sup>」で参照されるページにRubyリファレンスマニュアルの記述が不完
+全な部分が含まれています。</p>
+<p>あなたの記述をみんな待ってます。よろしくお願いします。</p>
+<p><a href="refm003.html">RD</a>というフォーマットで書きます。</p>
+<h2><a name="L000008" id="L000008">執筆の心得</a></h2>
+<ol>
+<li>できるだけリンクを張る。(ただし同じ言葉に対してのリンクはうるさくなら
+    ないように)
+<ul>
+<li><p>リンクの張り方</p>
+<p><a href="refm061.html">String</a></p>
+<pre>((&lt;String&gt;))</pre>
+<p><a href="refm061.html#L001507">String#gsub</a></p>
+<pre>((&lt;String#gsub|String/gsub&gt;))</pre>
+<p><a href="refm061.html#L001507">gsub</a></p>
+<pre>((&lt;String/gsub&gt;))</pre>
+<p><a href="refm144.html">mailread</a></p>
+<pre>((&lt;mailread&gt;))</pre>
+<p><a href="refm144.html#L002777">Mail.new</a></p>
+<pre>((&lt;mailread/Mail.new&gt;))</pre>
+<p><a href="refm203.html">net/http</a></p>
+<pre>((&lt;&quot;net/http&quot;&gt;))</pre>
+<p><a href="http://www.ruby-lang.org/ja/man/">&lt;URL:http://www.ruby-lang.org/ja/man/&gt;</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>((&lt;URL:http://www.ruby-lang.org/ja/man/&gt;))</pre>
+<p><a href="http://www.ruby-lang.org/ja/man/">Rubyリファレンスマニュアル</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>((&lt;Rubyリファレンスマニュアル|URL:http://www.ruby-lang.org/ja/man/&gt;))</pre>
+<p><a href="http://www.ruby-lang.org/ja/man/">縦棒「|」を含むリンク</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>((&lt;&quot;縦棒「|」を含むリンク&quot;|URL:http://www.ruby-lang.org/ja/man/&gt;))</pre>
+<p><em class="XXINVALIDXX">ruby-src:sample/sieve.rb</em></p>
+<pre>((&lt;&quot;ruby-src:sample/sieve.rb&quot;&gt;))</pre></li>
+</ul></li>
+<li>記述を追加したいが内容に関していまいち自信がなかったりする場合、以下の
+    いずれかの方法で問い合わせる
+<ul>
+<li>footnote に ((- これであってる？-)) などと書く</li>
+<li>マニュアル執筆編集に関する議論をするためのメーリングリスト
+      rubyist@freeml.com(<a href="http://www.freeml.com/ml_info.php?ml=rubyist">参加方法</a><sup class="outside"><small>[外部]</small></sup>, <a href="http://www.freeml.com/ctrl/html/MessageListForm/rubyist@freeml.com">アーカイブ</a><sup class="outside"><small>[外部]</small></sup>)
+      に確認する。</li>
+<li>広くRubyコミュニティと議論したい場合は
+      <a href="http://www.ruby-lang.org/ja/20020104.html">ruby-list ML</a><sup class="outside"><small>[外部]</small></sup> に
+      「この記述怪しいんですが…。」などと問い合わせる。</li>
+<li>MLに参加してない人は<a href="mailto:jca02266@nifty.ne.jp">あらい</a><sup class="outside"><small>[外部]</small></sup>宛
+      に直接問い合わせても構わないです。
+<ul>
+<li>記述内容にわかりにくい箇所とかもあれば上記の方法で問い合わせてくだ
+        さいませ。できるだけ改善したいと思います。</li>
+</ul></li>
+</ul></li>
+<li>メソッドの記述には「---」ではじめるリストMethodListを使います。以下の例を参照して下さい。</li>
+</ol>
+<pre>#
+--- Array#each {|i| ... } 
+    各項目に対してブロックを評価する。</pre>
+<dl>
+<dt><a name="L000009" id="L000009"><code>Array#each {|<var>i</var>| ... }</code></a></dt>
+<dd>
+<p>各項目に対してブロックを評価する。</p></dd>
+</dl>
+<p>さらに詳しくは <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/24445">ruby-list:24445</a><sup class="outside"><small>[外部]</small></sup> などを参照して下さい。</p>
+<p>文章中の引数名に関しては ((|variable|)) と書くと、 
+<var>variable</var> (&lt;var&gt;variable&lt;/var&gt;) とマークアップされます。</p>
+<h2><a name="L000010" id="L000010">その他雑多なこと</a></h2>
+<p>その他雑多なことに関しては <a href="http://pub.cozmixng.org/~the-rwiki/rw-cgi.rb?cmd=view;name=Manuals%27+style">Manuals' style</a><sup class="outside"><small>[外部]</small></sup>も参照してください。</p>
+<p><em class="XXINVALIDXX">作業中のページ</em></p>
+<p><a href="refm004.html">ToDo</a></p>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="index.html">&lt;-PREV</a>][<a href="refm003.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

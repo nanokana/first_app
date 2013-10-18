@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Struct</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm063.html" rel="next" />
+<link href="refm061.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm035.html">UP</a>][<a href="refm061.html">&lt;-PREV</a>][<a href="refm063.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L001572" id="L001572">Struct</a></h1>
+<p>構造体クラス。<code>Struct.new</code> はこのクラスのサブクラスを新たに生成し
+ます。個々の構造体はサブクラスから <code>new</code> を使って生成します。個々
+の構造体サブクラスでは構造体のメンバに対するアクセスメソッドが定義され
+ています。</p>
+<h2><a name="L001573" id="L001573">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm035.html">Object</a></li>
+</ul>
+<h2><a name="L001574" id="L001574">インクルードしているモジュール:</a></h2>
+<ul>
+<li><a href="refm070.html">Enumerable</a></li>
+</ul>
+<h2><a name="L001575" id="L001575">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L001576" id="L001576"><code>Struct.new([<var>name</var>,] <var>member</var> ... )</code></a></dt>
+<dd>
+<p><code>Struct</code> クラスに <var>name</var> という名前の新しいサブクラスを作っ
+て、それを返します。サブクラスでは構造体のメンバに対するアクセスメ
+ソッドが定義されています。例えば:</p>
+<pre>dog = Struct.new(&quot;Dog&quot;, :name, :age)
+fred = dog.new(&quot;fred&quot;, 5)
+fred.age=6
+printf &quot;name:%s age:%d&quot;, fred.name, fred.age</pre>
+<p>は <code>&quot;name:fred age:6&quot;</code> を出力します。</p>
+<p>構造体名 <var>name</var> はStructのクラス定数名になりますので大文字で始
+まる必要があります。<var>member</var> は、<a href="refm063.html">Symbol</a> か文字列で指定し
+ます。</p>
+<p>第一引数が文字列の場合、クラス名として扱おうとするため以下のような
+指定はエラーになります。したがってメンバは <a href="refm063.html">Symbol</a> を指定する
+のが無難です<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></p>
+<pre>p Struct.new('foo', 'bar')
+# =&gt; -:1:in `new': identifier foo needs to be constant (NameError)</pre>
+<p><var>name</var> を省略した場合(第一引数が <a href="refm063.html">Symbol</a> の場合)、生成し
+た構造体クラスは名前のないクラスとなります。名前のないクラスは、最
+初に名前を求める際に代入されている定数名を検索し、見つかった定数名
+をクラス名とします(<a href="refm051.html#L001247">Class.new</a>を参照)。</p>
+<p>例: 構造体クラスのクラス名</p>
+<pre>p Struct.new(&quot;Foo&quot;, :foo, :bar)
+=&gt; Struct::Foo
+
+p Foo = Struct.new(:foo, :bar)
+=&gt; Foo</pre></dd>
+</dl>
+<h2><a name="L001577" id="L001577">構造体クラスのクラスメソッド:</a></h2>
+<dl>
+<dt><a name="L001578" id="L001578"><code>Struct::XXX.new(<var>value</var>,...)</code></a>
+<dt><a name="L001579" id="L001579"><code>Struct::XXX[value,...]</code></a></dt>
+<dd>
+<p>構造体オブジェクトを生成して返します。引数は構造体の初期値です。構
+造体のメンバの数よりも多く指定するとと 例外 <a href="refm094.html">ArgumentError</a> が
+発生します。メンバの初期値は指定されなければ <code>nil</code> です。</p>
+<pre>Foo = Struct.new(:foo, :bar)
+foo = Foo.new(1)
+p foo.values      # =&gt; [1, nil]</pre></dd>
+<dt><a name="L001580" id="L001580"><code>Struct::XXX.members</code></a></dt>
+<dd>
+<p>構造体のメンバの名前(文字列)の配列を返します。</p>
+<pre>Foo = Struct.new(:foo, :bar)
+p Foo.members      # =&gt; [&quot;foo&quot;, &quot;bar&quot;]</pre></dd>
+</dl>
+<h2><a name="L001581" id="L001581">メソッド:</a></h2>
+<dl>
+<dt><a name="L001582" id="L001582"><code>self[nth]</code></a></dt>
+<dd>
+<p>構造体の <var>nth</var> 番目のメンバの値を返します。<var>nth</var> が文字列
+または <a href="refm063.html">Symbol</a> の場合はその名前のメンバの値を返します。</p>
+<p>存在しないメンバを指定した場合、例外 <a href="refm095.html">IndexError</a> あるいは 
+<a href="refm100.html">NameError</a> が発生します。</p>
+<pre>Foo = Struct.new(:foo, :bar)
+obj = Foo.new('FOO', 'BAR')
+
+p obj[:foo]     # =&gt; &quot;FOO&quot;
+p obj['bar']    # =&gt; &quot;BAR&quot;
+# p obj[:baz]     # =&gt; in `[]': no member 'baz' in struct (NameError)
+p obj[0]        # =&gt; &quot;FOO&quot;
+p obj[1]        # =&gt; &quot;BAR&quot;
+p obj[-1]       # =&gt; &quot;BAR&quot;    # Array のように負のインデックスも指定できます。
+p obj[2]        # =&gt; in `[]': offset 2 too large for struct(size:2) (IndexError)</pre></dd>
+<dt><a name="L001583" id="L001583"><code>self[nth]=value</code></a></dt>
+<dd>
+<p>構造体の <var>nth</var> 番目のメンバの値を <var>value</var> にして 
+<var>value</var> を返します。<var>nth</var> が文字列または <a href="refm063.html">Symbol</a> の場
+合はその名前のメンバの値を <var>value</var> にします。</p>
+<p>存在しないメンバを指定した場合、例外 <a href="refm095.html">IndexError</a> あるいは 
+<a href="refm100.html">NameError</a> が発生します。</p></dd>
+<dt><a name="L001584" id="L001584"><code>each {|<var>value</var>| ... }</code></a></dt>
+<dd>
+<p>構造体の各メンバに対して繰り返します。</p>
+<p><code>self</code> を返します。</p></dd>
+<dt><a name="L001585" id="L001585"><code>each_pair {|<var>member</var>, <var>value</var>| ... }    ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>構造体のメンバ名(<a href="refm063.html">Symbol</a>)と値の組を引数にブロックを繰り返し実
+行します。</p>
+<p><code>self</code> を返します。</p>
+<pre>Foo = Struct.new(:foo, :bar)
+Foo.new('FOO', 'BAR').each_pair {|m, v| p [m,v]}
+
+# =&gt; [:foo, &quot;FOO&quot;]
+     [:bar, &quot;BAR&quot;]</pre></dd>
+<dt><a name="L001586" id="L001586"><code>length</code></a>
+<dt><a name="L001587" id="L001587"><code>size</code></a></dt>
+<dd>
+<p>構造体のメンバの数を返します。</p></dd>
+<dt><a name="L001580" id="L001580"><code>members</code></a></dt>
+<dd>
+<p>構造体のメンバの名前(文字列)の配列を返します。</p>
+<pre>Foo = Struct.new(:foo, :bar)
+p Foo.new.members  # =&gt; [&quot;foo&quot;, &quot;bar&quot;]</pre></dd>
+<dt><a name="L001588" id="L001588"><code>values</code></a>
+<dt><a name="L001589" id="L001589"><code>to_a</code></a></dt>
+<dd>
+<p>構造体のメンバの値を配列にいれて返します。例えば以下のようにして
+passwd のエントリ(<a href="refm318.html">etc</a> 参照)を出力できます。</p>
+<pre>require 'etc'
+print Etc.getpwuid.values.join(&quot;:&quot;), &quot;\n&quot;</pre></dd>
+<dt><a name="L001590" id="L001590"><code>values_at(<var>member_1</var>, ... <var>member_n</var>)</code></a></dt>
+<dd>
+<p><a href="refm385.html">ruby 1.8 feature</a></p>
+<p>引数で指定されたメンバ(数値、文字列あるいは <a href="refm063.html">Symbol</a>)の値の配
+列を返します。存在しないメンバを指定した場合は例外 
+<a href="refm095.html">IndexError</a> あるいは <a href="refm100.html">NameError</a> が発生します。</p>
+<pre>Foo = Struct.new(:foo, :bar, :baz)
+obj = Foo.new('FOO', 'BAR', 'BAZ')
+
+p obj.values_at(0, :bar, 'baz')    # =&gt; [&quot;FOO&quot;, &quot;BAR&quot;, &quot;BAZ&quot;]</pre></dd>
+</dl>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>実装の都合により、クラス名の省略は後づけの機能でし
+た。メンバ名に文字列を指定できるのは後方互換性のためだと考えた方が
+良いでしょう</small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm035.html">UP</a>][<a href="refm061.html">&lt;-PREV</a>][<a href="refm063.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

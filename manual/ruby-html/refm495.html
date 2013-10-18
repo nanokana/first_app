@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>object.c</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm496.html" rel="next" />
+<link href="refm494.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm488.html">UP</a>][<a href="refm494.html">&lt;-PREV</a>][<a href="refm496.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L010331" id="L010331">object.c</a></h1>
+<dl>
+<dt><a name="L010332" id="L010332">static VALUE boot_defclass(char *name, VALUE super)</a></dt>
+<dd>
+<p>(まだ) メタクラスを持たないクラスを作成します。
+三つのメタオブジェクト <code>Object</code> <code>Module</code> <code>Class</code> を
+作成するのに使います。</p>
+</dd>
+<dt><a name="L010333" id="L010333">static VALUE convert_type(VALUE val, const char *tname, const char *method, int raise)</a></dt>
+<dt><a name="L010334" id="L010334">static VALUE false_and(VALUE obj, VALUE obj2)</a></dt>
+<dt><a name="L010335" id="L010335">static VALUE false_or(VALUE obj, VALUE obj2)</a></dt>
+<dt><a name="L010336" id="L010336">static VALUE false_to_s(VALUE obj)</a></dt>
+<dt><a name="L010337" id="L010337">static VALUE false_xor(VALUE obj, VALUE obj2)</a></dt>
+<dt><a name="L010338" id="L010338">static int inspect_i(ID id, VALUE value, VALUE str)</a></dt>
+<dt><a name="L010339" id="L010339">static VALUE inspect_obj(VALUE obj, VALUE str)</a></dt>
+<dt><a name="L010340" id="L010340">static VALUE main_to_s(VALUE obj)</a></dt>
+<dt><a name="L010341" id="L010341">static VALUE nil_inspect(VALUE obj)</a></dt>
+<dt><a name="L010342" id="L010342">static VALUE nil_plus(VALUE x, VALUE y)</a></dt>
+<dt><a name="L010343" id="L010343">static VALUE nil_to_a(VALUE obj)</a></dt>
+<dt><a name="L010344" id="L010344">static VALUE nil_to_f(VALUE obj)</a></dt>
+<dt><a name="L010345" id="L010345">static VALUE nil_to_i(VALUE obj)</a></dt>
+<dt><a name="L010346" id="L010346">static VALUE nil_to_s(VALUE obj)</a></dt>
+<dt><a name="L010347" id="L010347">static VALUE rb_any_to_a(VALUE obj)</a></dt>
+<dt><a name="L010348" id="L010348">VALUE rb_any_to_s(VALUE obj)</a></dt>
+<dt><a name="L010349" id="L010349">VALUE rb_Array(VALUE obj)</a></dt>
+<dd>
+<p><var>obj</var> が <code>Array</code> でない場合は <var>to_a</var> を使って
+<code>Array</code> に変換します。</p>
+</dd>
+<dt><a name="L010350" id="L010350">VALUE rb_check_convert_type(VALUE val, int type, const char *tname, const char *method)</a></dt>
+<dd>
+<p><var>val</var>.<var>method</var> を実行してクラス <var>tname</var> のインスタンスを返します。
+<var>val</var> がメソッド <var>method</var> を持たなければ nil を返します。</p>
+<p><var>type</var> は、T_ARRAY, T_STRING などの構造体を表す ID です。
+<var>method</var> の結果の型が <var>type</var> でなければ例外 TypeError が発生します。</p>
+</dd>
+<dt><a name="L010351" id="L010351">static VALUE rb_class_allocate_instance(VALUE klass)</a></dt>
+<dd>
+<p><code>Class#allocate</code> の実体。</p>
+</dd>
+<dt><a name="L010352" id="L010352">static VALUE rb_class_initialize(int argc, VALUE *argv, VALUE klass)</a></dt>
+<dd>
+<p><code>Class#initialize</code> の実体。</p>
+</dd>
+<dt><a name="L010353" id="L010353">VALUE rb_class_new_instance(int argc, VALUE *argv, VALUE klass)</a></dt>
+<dd>
+<p><code>Class#new</code> の実体。</p>
+</dd>
+<dt><a name="L010354" id="L010354">VALUE rb_class_real(VALUE cl)</a></dt>
+<dd>
+<p>特異クラスや化身クラス (T_ICLASS) を飛ばして <var>cl</var> の
+スーパークラスを辿り、Ruby レベルに露出してもよいクラスを返します。</p>
+<p>例:</p>
+<pre>rb_class_real(RBASIC(klass)-&gt;super)</pre>
+<p>rb_obj_class(obj) は、obj のクラスを返す汎用の関数(Object#type と
+同じ)だが、obj が Qtrue などでない RBasic 構造のものであることが
+わかっているなら</p>
+<pre>rb_class_real(RBASIC(obj)-&gt;klass)</pre>
+<p>でも良い。(が、やはり rb_obj_class(obj) を使う方が無難だろう)</p>
+</dd>
+<dt><a name="L010355" id="L010355">static VALUE rb_class_s_new(int argc, VALUE *argv)</a></dt>
+<dt><a name="L010356" id="L010356">static VALUE rb_class_superclass(VALUE klass)</a></dt>
+<dt><a name="L010357" id="L010357">VALUE rb_convert_type(VALUE val, int type, const char *tname, const char *method)</a></dt>
+<dd>
+<p>オブジェクト<var>val</var>をクラス<var>type</var>のインスタンスに変換します。
+変換には、<var>val</var>.<var>method</var>の戻り値が使われます。</p>
+<p><var>val</var>がもともと<var>type</var>クラスのインスタンスなら<var>val</var>を
+そのまま返します。</p>
+</dd>
+<dt><a name="L010358" id="L010358">double rb_cstr_to_dbl(const char *p, int badcheck)</a></dt>
+<dt><a name="L010359" id="L010359">VALUE rb_eql(VALUE obj1, VALUE obj2)</a></dt>
+<dd>
+<p><code>obj1.equal? obj2</code> ならば <code>Qtrue</code>、
+そうでないならば <code>Qfalse</code>。</p>
+</dd>
+<dt><a name="L010360" id="L010360">VALUE rb_equal(VALUE obj1, VALUE obj2)</a></dt>
+<dd>
+<p><code>obj1 == obj2</code> ならば <code>Qtrue</code>、
+そうでないならば <code>Qfalse</code>。</p>
+</dd>
+<dt><a name="L010361" id="L010361">static VALUE rb_f_array(VALUE obj, VALUE arg)</a></dt>
+<dt><a name="L010362" id="L010362">static VALUE rb_f_float(VALUE obj, VALUE arg)</a></dt>
+<dt><a name="L010363" id="L010363">static VALUE rb_f_integer(VALUE obj, VALUE arg)</a></dt>
+<dt><a name="L010364" id="L010364">static VALUE rb_f_string(VALUE obj, VALUE arg)</a></dt>
+<dt><a name="L010365" id="L010365">static VALUE rb_false(VALUE obj)</a></dt>
+<dt><a name="L010366" id="L010366">VALUE rb_Float(VALUE val)</a></dt>
+<dt><a name="L010367" id="L010367">VALUE rb_inspect(VALUE obj)</a></dt>
+<dd>
+<p><code>obj.inspect</code> の実体。</p>
+</dd>
+<dt><a name="L010368" id="L010368">VALUE rb_Integer(VALUE obj)</a></dt>
+<dd>
+<p><var>obj</var> が Ruby の整数でない場合は <var>to_i</var> を使って
+<code>Integer</code> に変換します。</p>
+</dd>
+<dt><a name="L010369" id="L010369">static VALUE rb_mod_attr(int argc, VALUE *argv, VALUE klass)</a></dt>
+<dt><a name="L010370" id="L010370">static VALUE rb_mod_attr_accessor(int argc, VALUE *argv, VALUE klass)</a></dt>
+<dt><a name="L010371" id="L010371">static VALUE rb_mod_attr_reader(int argc, VALUE *argv, VALUE klass)</a></dt>
+<dt><a name="L010372" id="L010372">static VALUE rb_mod_attr_writer(int argc, VALUE *argv, VALUE klass)</a></dt>
+<dt><a name="L010373" id="L010373">static VALUE rb_mod_cmp(VALUE mod, VALUE arg)</a></dt>
+<dt><a name="L010374" id="L010374">static VALUE rb_mod_const_defined(VALUE mod, VALUE name)</a></dt>
+<dt><a name="L010375" id="L010375">static VALUE rb_mod_const_get(VALUE mod, VALUE name)</a></dt>
+<dt><a name="L010376" id="L010376">static VALUE rb_mod_const_set(VALUE mod, VALUE name, VALUE value)</a></dt>
+<dt><a name="L010377" id="L010377">static VALUE rb_mod_eqq(VALUE mod, VALUE arg)</a></dt>
+<dt><a name="L010378" id="L010378">static VALUE rb_mod_ge(VALUE mod, VALUE arg)</a></dt>
+<dt><a name="L010379" id="L010379">static VALUE rb_mod_gt(VALUE mod, VALUE arg)</a></dt>
+<dt><a name="L010380" id="L010380">static VALUE rb_mod_initialize(VALUE module)</a></dt>
+<dt><a name="L010381" id="L010381">static VALUE rb_mod_le(VALUE mod, VALUE arg)</a></dt>
+<dt><a name="L010382" id="L010382">static VALUE rb_mod_lt(VALUE mod, VALUE arg)</a></dt>
+<dt><a name="L010383" id="L010383">static VALUE rb_mod_to_s(VALUE klass)</a></dt>
+<dt><a name="L010384" id="L010384">static VALUE rb_module_s_alloc(VALUE klass)</a></dt>
+<dt><a name="L010385" id="L010385">double rb_num2dbl(VALUE val)</a></dt>
+<dd>
+<p>任意の Numeric のオブジェクトを double に変換します。</p>
+</dd>
+<dt><a name="L010386" id="L010386">VALUE rb_obj_alloc(VALUE klass)</a></dt>
+<dd>
+<p><var>klass</var> のインスタンスを作成する。</p>
+</dd>
+<dt><a name="L010387" id="L010387">VALUE rb_obj_class(VALUE obj)</a></dt>
+<dd>
+<p><code>Object#class</code> の実体です。</p>
+</dd>
+<dt><a name="L010388" id="L010388">VALUE rb_obj_clone(VALUE obj)</a></dt>
+<dd>
+<p><code>Object#clone</code> の実体です。</p>
+</dd>
+<dt><a name="L010389" id="L010389">static VALUE rb_obj_dummy(void)</a></dt>
+<dt><a name="L010390" id="L010390">VALUE rb_obj_dup(VALUE obj)</a></dt>
+<dd>
+<p><code>Object#dup</code> の実体です。</p>
+</dd>
+<dt><a name="L010391" id="L010391">static VALUE rb_obj_equal(VALUE obj1, VALUE obj2)</a></dt>
+<dd>
+<p>obj1 と obj2 が同一のオブジェクトなら真。</p>
+</dd>
+<dt><a name="L010392" id="L010392">VALUE rb_obj_freeze(VALUE obj)</a></dt>
+<dd>
+<p><code>obj.freeze</code></p>
+</dd>
+<dt><a name="L010393" id="L010393">VALUE rb_obj_frozen_p(VALUE obj)</a></dt>
+<dd>
+<p><code>obj.frozen?</code></p>
+</dd>
+<dt><a name="L010394" id="L010394">VALUE rb_obj_id(VALUE obj)</a></dt>
+<dd>
+<p><code>Object#id</code> の実体。</p>
+</dd>
+<dt><a name="L010395" id="L010395">static VALUE rb_obj_inspect(VALUE obj)</a></dt>
+<dd>
+<p><code>Object#inspect</code> の実体。</p>
+</dd>
+<dt><a name="L010396" id="L010396">VALUE rb_obj_is_instance_of(VALUE obj, VALUE klass)</a></dt>
+<dd>
+<p><var>obj</var> がクラス <var>klass</var> のインスタンスならば真。</p>
+</dd>
+<dt><a name="L010397" id="L010397">VALUE rb_obj_is_kind_of(VALUE obj, VALUE klass)</a></dt>
+<dd>
+<p><var>obj</var> がクラス <var>klass</var> およびそのサブクラスの
+インスタンスのとき真。</p>
+</dd>
+<dt><a name="L010398" id="L010398">static VALUE rb_obj_methods(VALUE obj)</a></dt>
+<dd>
+<p><code>Object#methods</code> の実体。</p>
+</dd>
+<dt><a name="L010399" id="L010399">static VALUE rb_obj_private_methods(VALUE obj)</a></dt>
+<dd>
+<p><code>Object#private_methods</code> の実体。</p>
+</dd>
+<dt><a name="L010400" id="L010400">static VALUE rb_obj_protected_methods(VALUE obj)</a></dt>
+<dd>
+<p><code>Object#protected_methods</code> の実体。</p>
+</dd>
+<dt><a name="L010401" id="L010401">VALUE rb_obj_taint(VALUE obj)</a></dt>
+<dd>
+<p><code>obj.taint</code></p>
+</dd>
+<dt><a name="L010402" id="L010402">VALUE rb_obj_tainted(VALUE obj)</a></dt>
+<dd>
+<p><code>obj.tainted?</code></p>
+</dd>
+<dt><a name="L010403" id="L010403">VALUE rb_obj_untaint(VALUE obj)</a></dt>
+<dd>
+<p><code>obj.untaint</code></p>
+</dd>
+<dt><a name="L010404" id="L010404">char *rb_str2cstr(VALUE str, int *len)</a></dt>
+<dd>
+<p><var>strl</var> を C の文字列に変換します。第二引数も与えると
+<var>*len</var> にバイト長を書き込みます。<var>str</var> が <code>String</code>
+でない場合は <var>to_str</var> での変換を試みます。</p>
+</dd>
+<dt><a name="L010405" id="L010405">double rb_str_to_dbl(VALUE str, int badcheck)</a></dt>
+<dt><a name="L010406" id="L010406">VALUE rb_String(VALUE val)</a></dt>
+<dd>
+<p><code>Kernel#String</code> の実体。
+<var>val</var> を文字列に変換します。</p>
+</dd>
+<dt><a name="L010407" id="L010407">VALUE rb_to_id(VALUE name)</a></dt>
+<dd>
+<p><code>String</code>・<code>Fixnum</code>・<code>Symbol</code> を <code>ID</code> に変換します。</p>
+</dd>
+<dt><a name="L010408" id="L010408">VALUE rb_to_int(VALUE val)</a></dt>
+<dd>
+<p><var>val</var> を to_int メソッドを使って Ruby の整数に変換します。</p>
+</dd>
+<dt><a name="L010409" id="L010409">static VALUE rb_to_integer(VALUE val, char *method)</a></dt>
+<dt><a name="L010410" id="L010410">static VALUE rb_true(VALUE obj)</a></dt>
+<dd>
+<p><code>Qtrue</code> を返します。</p>
+</dd>
+<dt><a name="L010411" id="L010411">static VALUE sym_inspect(VALUE sym)</a></dt>
+<dt><a name="L010412" id="L010412">static VALUE sym_intern(VALUE sym)</a></dt>
+<dt><a name="L010413" id="L010413">static VALUE sym_to_i(VALUE sym)</a></dt>
+<dt><a name="L010414" id="L010414">static VALUE sym_to_s(VALUE sym)</a></dt>
+<dt><a name="L010415" id="L010415">static VALUE true_and(VALUE obj, VALUE obj2)</a></dt>
+<dt><a name="L010416" id="L010416">static VALUE true_or(VALUE obj, VALUE obj2)</a></dt>
+<dt><a name="L010417" id="L010417">static VALUE true_to_s(VALUE obj)</a></dt>
+<dt><a name="L010418" id="L010418">static VALUE true_xor(VALUE obj, VALUE obj2)</a></dt>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm488.html">UP</a>][<a href="refm494.html">&lt;-PREV</a>][<a href="refm496.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

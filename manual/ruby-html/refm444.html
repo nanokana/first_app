@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>trap::CGI</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm445.html" rel="next" />
+<link href="refm443.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm421.html">UP</a>][<a href="refm443.html">&lt;-PREV</a>][<a href="refm445.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L009500" id="L009500">trap::CGI</a></h1>
+<ul>
+<li><p><a href="refm171.html#L003352">CGI#out</a> は標準出力への出力を行いますが、 <a href="refm171.html#L003351">CGI#header</a> では
+  出力を行いません。ただ文字列を返すだけです。</p>
+<p>そのため</p>
+<pre>cgi = CGI.new
+cgi.out({&quot;charset&quot; =&gt; &quot;shift_jis&quot;}){
+  &quot;&lt;html&gt;&lt;head&gt;&lt;title&gt;TITLE&lt;/title&gt;&lt;/head&gt;&lt;body&gt;BODY&lt;/body&gt;&lt;/html&gt;\r\n&quot;
+}</pre>
+<p>は正しい例ですが</p>
+<pre>cgi = CGI.new
+cgi.header({&quot;charset&quot; =&gt; &quot;shift_jis&quot;})
+print &quot;&lt;html&gt;&lt;head&gt;&lt;title&gt;TITLE&lt;/title&gt;&lt;/head&gt;&lt;body&gt;BODY&lt;/body&gt;&lt;/html&gt;\r\n&quot;</pre>
+<p>は間違った例です。</p></li>
+</ul>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm421.html">UP</a>][<a href="refm443.html">&lt;-PREV</a>][<a href="refm445.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

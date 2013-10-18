@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>組み込みクラス／モジュール／例外クラス</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm035.html" rel="next" />
+<link href="refm033.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm033.html">&lt;-PREV</a>][<a href="refm035.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L000636" id="L000636">組み込みクラス／モジュール／例外クラス</a></h1>
+<h2><a name="L000637" id="L000637">組み込みクラス</a></h2>
+<ul>
+<li><a href="refm035.html">Object</a>
+<ul>
+<li><a href="refm036.html">Array</a></li>
+<li><a href="refm037.html">Binding</a></li>
+<li><a href="refm038.html">Continuation</a></li>
+<li><a href="refm039.html">Data</a></li>
+<li><a href="refm040.html">Exception</a> (<a href="#L000639">例外クラス</a>参照)</li>
+<li><a href="refm041.html">Dir</a></li>
+<li><a href="refm043.html">File::Stat</a></li>
+<li><a href="refm044.html">Hash</a></li>
+<li><a href="refm045.html">IO</a>
+<ul>
+<li><a href="refm046.html">File</a></li>
+</ul></li>
+<li><a href="refm047.html">MatchData</a></li>
+<li><a href="refm048.html">Method</a>
+<ul>
+<li>(<a href="refm049.html">UnboundMethod</a>)  (<a href="refm384.html">ruby 1.7 feature</a> <em>version 1.6以前の位置</em>)</li>
+</ul></li>
+<li><a href="refm050.html">Module</a>
+<ul>
+<li><a href="refm051.html">Class</a></li>
+</ul></li>
+<li><a href="refm052.html">Numeric</a>
+<ul>
+<li><a href="refm053.html">Integer</a>
+<ul>
+<li><a href="refm054.html">Bignum</a></li>
+<li><a href="refm055.html">Fixnum</a></li>
+</ul></li>
+<li><a href="refm056.html">Float</a></li>
+</ul></li>
+<li><a href="refm057.html">Proc</a></li>
+<li><a href="refm058.html">Process::Status</a>  (<a href="refm384.html">ruby 1.7 feature</a>)</li>
+<li><a href="refm059.html">Range</a></li>
+<li><a href="refm060.html">Regexp</a></li>
+<li><a href="refm061.html">String</a></li>
+<li><a href="refm062.html">Struct</a></li>
+<li><a href="refm063.html">Symbol</a></li>
+<li><a href="refm064.html">Thread</a></li>
+<li><a href="refm065.html">ThreadGroup</a></li>
+<li><a href="refm066.html">Time</a></li>
+<li><a href="refm049.html">UnboundMethod</a>         (<a href="refm384.html">ruby 1.7 feature</a>)</li>
+<li><a href="refm067.html">TrueClass</a></li>
+<li><a href="refm042.html">FalseClass</a></li>
+<li><a href="refm068.html">NilClass</a></li>
+</ul></li>
+</ul>
+<h2><a name="L000638" id="L000638">組み込みモジュール</a></h2>
+<ul>
+<li><a href="refm069.html">Comparable</a></li>
+<li><a href="refm070.html">Enumerable</a></li>
+<li><a href="refm072.html">Errno</a></li>
+<li><a href="refm073.html">File::Constants</a></li>
+<li><a href="refm074.html">FileTest</a></li>
+<li><a href="refm075.html">GC</a></li>
+<li><a href="refm076.html">Kernel</a></li>
+<li><a href="refm077.html">Marshal</a></li>
+<li><a href="refm078.html">Math</a></li>
+<li><a href="refm079.html">ObjectSpace</a></li>
+<li><a href="refm080.html">Precision</a></li>
+<li><a href="refm081.html">Process</a></li>
+<li><a href="refm082.html">Process::GID</a>  (<a href="refm385.html">ruby 1.8 feature</a>)</li>
+<li><a href="refm083.html">Process::Sys</a>  (<a href="refm385.html">ruby 1.8 feature</a>)</li>
+<li><a href="refm084.html">Process::UID</a>  (<a href="refm385.html">ruby 1.8 feature</a>)</li>
+<li><a href="refm085.html">Signal</a>        (<a href="refm384.html">ruby 1.7 feature</a>)</li>
+</ul>
+<h2><a name="L000639" id="L000639">例外クラス</a></h2>
+<ul>
+<li><a href="refm035.html">Object</a>
+<ul>
+<li><a href="refm040.html">Exception</a>
+<ul>
+<li>(<a href="refm092.html">Interrupt</a>) (<a href="refm384.html">ruby 1.7 feature</a> <em>version 1.6以前の位置</em>)</li>
+<li><a href="refm086.html">NoMemoryError</a></li>
+<li><a href="refm087.html">ScriptError</a>
+<ul>
+<li><a href="refm088.html">LoadError</a></li>
+<li>(<a href="refm100.html">NameError</a>)  (<a href="refm384.html">ruby 1.7 feature</a> <em>version 1.6以前の位置</em>)</li>
+<li><a href="refm089.html">NotImplementedError</a></li>
+<li><a href="refm090.html">SyntaxError</a></li>
+</ul></li>
+<li><a href="refm091.html">SignalException</a>
+<ul>
+<li><a href="refm092.html">Interrupt</a> (<a href="refm384.html">ruby 1.7 feature</a>)</li>
+</ul></li>
+<li><a href="refm093.html">StandardError</a>
+<ul>
+<li><a href="refm094.html">ArgumentError</a></li>
+<li><a href="refm095.html">IndexError</a>
+<ul>
+<li><a href="refm096.html">KeyError</a>        (<a href="refm392.html">ruby 1.9 feature</a>)</li>
+</ul></li>
+<li><a href="refm097.html">IOError</a>
+<ul>
+<li><a href="refm098.html">EOFError</a></li>
+</ul></li>
+<li><a href="refm099.html">LocalJumpError</a></li>
+<li><a href="refm100.html">NameError</a>  (<a href="refm384.html">ruby 1.7 feature</a>)
+<ul>
+<li><a href="refm101.html">NoMethodError</a> (<a href="refm384.html">ruby 1.7 feature</a>)</li>
+</ul></li>
+<li><a href="refm102.html">RangeError</a>
+<ul>
+<li><a href="refm103.html">FloatDomainError</a></li>
+</ul></li>
+<li><a href="refm104.html">RegexpError</a></li>
+<li><a href="refm105.html">RuntimeError</a></li>
+<li><a href="refm106.html">SecurityError</a></li>
+<li><a href="refm107.html">SystemCallError</a>
+<ul>
+<li><a href="refm108.html">Errno::EXXX</a></li>
+</ul></li>
+<li><a href="refm109.html">SystemStackError</a></li>
+<li><a href="refm110.html">ThreadError</a></li>
+<li><a href="refm111.html">TypeError</a></li>
+<li><a href="refm112.html">ZeroDivisionError</a></li>
+</ul></li>
+<li><a href="refm113.html">SystemExit</a></li>
+<li><a href="refm114.html">fatal</a></li>
+</ul></li>
+</ul></li>
+</ul>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm033.html">&lt;-PREV</a>][<a href="refm035.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

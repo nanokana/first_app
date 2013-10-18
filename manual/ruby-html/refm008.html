@@ -1,0 +1,531 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>irb</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm009.html" rel="next" />
+<link href="refm007.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm007.html">UP</a>][<a href="refm007.html">&lt;-PREV</a>][<a href="refm009.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L000046" id="L000046">irb</a></h1>
+<p>Author: Keiju ISHITSUKA</p>
+<ul>
+<li><a href="#L000047">irbとは?</a></li>
+<li><a href="#L000048">起動</a></li>
+<li><a href="#L000049">使い方</a></li>
+<li><a href="#L000050">コマンドオプション</a></li>
+<li><a href="#L000051">コンフィギュレーション</a></li>
+<li><a href="#L000054">コマンド</a></li>
+<li><a href="#L000096">システム変数</a></li>
+<li><a href="#L000099">履歴の保存</a></li>
+<li><a href="#L000100">使用例</a></li>
+<li><a href="#L000101">使用上の制限</a></li>
+<li>irb 関連ライブラリ
+<ul>
+<li><a href="#L000105">xmp.rb</a></li>
+<li><a href="#L000110">frame.rb</a></li>
+<li><a href="#L000111">completion.rb</a></li>
+</ul></li>
+</ul>
+<h2><a name="L000047" id="L000047">irbとは?</a></h2>
+<p>irbはinteractive rubyの略です. rubyの式を標準入力から簡単に入力/実行する
+ためのツールです.</p>
+<h2><a name="L000048" id="L000048">起動</a></h2>
+<pre>% irb</pre>
+<p>で行ないます. </p>
+<h2><a name="L000049" id="L000049">使い方</a></h2>
+<p>irbの使い方は, Rubyさえ知っていればいたって簡単です. 基本的には irb と
+いうコマンドを実行するだけです. irbを実行すると, 以下のようなプロンプ
+トが表れてきます. 後は, rubyの式を入れて下さい. 式が完結した時点で実行
+されます.</p>
+<pre>dim% irb
+irb(main):001:0&gt; 1+2
+3
+irb(main):002:0&gt; class Foo
+irb(main):003:1&gt;  def foo
+irb(main):004:2&gt;    print 1
+irb(main):005:2&gt;  end
+irb(main):006:1&gt; end
+nil
+irb(main):007:0&gt; </pre>
+<p>また, irb は <a href="refm290.html">readline</a> ライブラリにも対応しています. <a href="refm290.html">readline</a> ライブラリが
+インストールされている時には, それを使うのが標準の動作になります.</p>
+<h2><a name="L000050" id="L000050">コマンドオプション</a></h2>
+<pre>irb [options] file_name opts
+options:
+-f                ~/.irbrc を読み込まない.
+-m                bcモード(分数, 行列の計算ができる)
+-d                $DEBUG をtrueにする(ruby -d と同じ)
+-Kc               ruby -Kcと同じ
+-r load-module    ruby -r と同じ.
+-I                ruby -I と同じ. ((&lt;ruby 1.8.2 feature&gt;))
+--verbose         これから実行する行を表示する(デフォルト)
+--noverbose       これから実行する行を表示しない
+--echo            実行結果を表示する(デフォルト)
+--noecho          実行結果を表示しない
+--inspect         結果出力にinspectを用いる(bcモード以外はデフォルト). 
+--noinspect       結果出力にinspectを用いない.
+--readline        readlineライブラリを利用する.
+--noreadline      readlineライブラリを利用しない. デフォルトの動作は,
+                  inf-ruby-mode以外でreadlineライブラリを利用しよう
+                  とする. 
+--prompt prompt-mode
+--prompt-mode prompt-mode
+                  プロンプトモードを切替えます. 現在定義されているプ
+                  ロンプトモードは, default, simple, xmp, inf-rubyが
+                  用意されています. デフォルトはdefaultプロンプトモー
+                  ドになっています.
+
+--inf-ruby-mode   emacsのinf-ruby-mode用のプロンプト表示を行なう. 特
+                  に指定がない限り, readlineライブラリは使わなくなる.
+--simple-prompt
+                  非常にシンプルなプロンプトを用いるモードです.
+--noprompt        プロンプト表示を行なわない.
+--tracer          コマンド実行時にトレースを行なう.
+--back-trace-limit n
+                  バックトレース表示をバックトレースの頭から n, 後ろ
+                  からnだけ行なう. デフォルトは16 
+--irb_debug n     irbのデバッグデバッグレベルをnに設定する(利用しな
+                  い方が無難でしょう).
+-v, --version     irbのバージョンを表示する</pre>
+<h2><a name="L000051" id="L000051">コンフィギュレーション</a></h2>
+<p>irb 起動時に ~/.irbrc を読み込みます. もし存在しない場合は,
+カレントディレクトリの .irbrc,  irb.rc , _irbrc, $irbrc の load を順に試みます.</p>
+<p>オプションを設定する代わりに, 以下のコマンドでもデフォルトの動作を設定
+できます.</p>
+<pre>IRB.conf[:AUTO_INDENT] = false
+IRB.conf[:BACK_TRACE_LIMIT]=16
+IRB.conf[:DEBUG_LEVEL]=1
+IRB.conf[:ECHO] = nil
+IRB.conf[:EVAL_HISTORY] = nil
+IRB.conf[:HISTORY_FILE] = nil ((&lt;ruby 1.9 feature&gt;))
+IRB.conf[:IGNORE_EOF] = false
+IRB.conf[:IGNORE_EOF]=false
+IRB.conf[:IGNORE_SIGINT] = true
+IRB.conf[:IGNORE_SIGINT]=true
+IRB.conf[:INSPECT_MODE]=nil
+IRB.conf[:IRB_NAME]=&quot;irb&quot;
+IRB.conf[:IRB_RC] = nil
+IRB.conf[:MATH_MODE]=false
+IRB.conf[:PROMPT] = {...}
+IRB.conf[:PROMPT_MODE] = :DEFALUT
+IRB.conf[:SINGLE_IRB] = false
+IRB.conf[:SAVE_HISTORY] = nil  ((&lt;ruby 1.9 feature&gt;))
+IRB.conf[:USE_LOADER] = false
+IRB.conf[:USE_LOADER]=false
+IRB.conf[:USE_READLINE] = nil
+IRB.conf[:USE_TRACER] = false
+IRB.conf[:USE_TRACER]=false
+IRB.conf[:VERBOSE]=true</pre>
+<h3><a name="L000052" id="L000052">プロンプトの設定</a></h3>
+<p>プロンプトをカスタマイズしたい時には, </p>
+<pre>IRB.conf[:PROMPT]</pre>
+<p>を用います. 例えば, .irbrc の中で下のような式を記述します:</p>
+<pre>IRB.conf[:PROMPT][:MY_PROMPT] = { # プロンプトモードの名前
+  :PROMPT_I =&gt; nil,                  # 通常のプロンプト
+  :PROMPT_S =&gt; nil,                  # 文字列などの継続行のプロンプト
+  :PROMPT_C =&gt; nil,                  # 式が継続している時のプロンプト
+  :RETURN =&gt; &quot;    ==&gt;%s\n&quot;          # リターン時のプロンプト
+}</pre>
+<p>プロンプトモードを指定したい時には,</p>
+<pre>irb --prompt my-prompt</pre>
+<p>でそのプロンプトモードで起動されます. または, .irbrc に下式を記述しても
+OKです.</p>
+<pre>IRB.conf[:PROMPT_MODE] = :MY_PROMPT</pre>
+<p>PROMPT_I, PROMPT_S, PROMPT_Cは, フォーマットを指定します.</p>
+<pre>%N        起動しているコマンド名が出力される.
+%m        mainオブジェクト(self)がto_sで出力される.
+%M        mainオブジェクト(self)がinspectされて出力される.
+%l        文字列中のタイプを表す(&quot;, ', /, ], `]'は%wの中の時)
+%NNi        インデントのレベルを表す. NNは数字が入りprintfの%NNdと同じ. 省
+      略可能
+%NNn        行番号を表します.
+%%    %</pre>
+<p>例えば, デフォルトのプロンプトモードは:</p>
+<pre>IRB.conf[:PROMPT_MODE][:DEFAULT] = {
+    :PROMPT_I =&gt; &quot;%N(%m):%03n:%i&gt; &quot;,
+    :PROMPT_S =&gt; &quot;%N(%m):%03n:%i%l &quot;,
+    :PROMPT_C =&gt; &quot;%N(%m):%03n:%i* &quot;,
+    :RETURN =&gt; &quot;%s\n&quot;
+} </pre>
+<p>となっています. :DEFAULT の他に、:NULL, :CLASSIC, :SIMPLE, :XMP が定義されています。
+<em class="XXINVALIDXX">ruby-src:lib/irb/init.rb</em></p>
+<p>RETURNは, 現在のところprintf形式です. 将来仕様が変わるかも知れません.</p>
+<h3><a name="L000053" id="L000053">サブirbの設定</a></h3>
+<p>コマンドラインオプションおよび <code>IRB.conf</code> は(サブ)irb起動時のデフォルトの
+設定を決めるもので, <a href="#L000054">irb/コマンド</a> にある conf で
+個別の(サブ)irbの設定ができるようになっています.</p>
+<p><code>IRB.conf[:IRB_RC]</code> に <var>proc</var> が設定されていると, サブirbを起動する時にその
+proc を irb のコンテキストを引数として呼び出します. これによって個別のサ
+ブirbごとに設定を変えることができるようになります.</p>
+<h2><a name="L000054" id="L000054">コマンド</a></h2>
+<p>irb拡張コマンドは, 簡単な名前と頭に`irb_'をつけた名前と両方定義されて
+います. これは, 簡単な名前がoverrideされた時のためです.</p>
+<dl>
+<dt><a name="L000055" id="L000055"><code>exit</code></a>
+<dt><a name="L000056" id="L000056"><code>quit</code></a>
+<dt><a name="L000057" id="L000057"><code>irb_exit</code></a></dt>
+<dd>
+<p>終了する. 
+サブirbの場合, そのサブirbを終了する.</p></dd>
+<dt><a name="L000058" id="L000058"><code>conf</code></a>
+<dt><a name="L000059" id="L000059"><code>irb_context</code></a></dt>
+<dd>
+<p>irbの現在の設定を表示する. 設定の変更は, confにメッセージを送るこ
+とによって行なえる. </p></dd>
+<dt><a name="L000060" id="L000060"><code>conf.eval_history = <var>N</var></code></a></dt>
+<dd>
+<p>実行結果のヒストリ機能の設定.
+nnは整数かnilで nn&gt;0 であればその数だけヒストリにためる。nn==0の時は
+無制限に記憶する、nilだとヒストリ機能はやめる(デフォルト). </p></dd>
+<dt><a name="L000061" id="L000061"><code>Conf.back_trace_limit</code></a></dt>
+<dd>
+<p>バックトレース表示をバックトレースの頭からn, 後ろからnだけ行なう.
+デフォルトは16</p></dd>
+<dt><a name="L000062" id="L000062"><code>conf.debug_level = <var>N</var></code></a></dt>
+<dd>
+<p>irb用のデバッグレベルの設定</p></dd>
+<dt><a name="L000063" id="L000063"><code>conf.ignore_eof = <var>true</var>/<var>false</var></code></a></dt>
+<dd>
+<p>^Dが入力された時の動作を設定する. trueの時は^Dを無視する, falseの
+時はirbを終了する. </p></dd>
+<dt><a name="L000064" id="L000064"><code>conf.ignore_sigint= <var>true</var>/<var>false</var></code></a></dt>
+<dd>
+<p>^Cが入力された時の動作を設定する. false時は, irbを終了する. trueの
+時の動作は以下のようになる:</p>
+<pre>入力中: これまで入力したものをキャンセルしトップレベルに戻る. 
+実行中: 実行を中止する.</pre></dd>
+<dt><a name="L000065" id="L000065"><code>conf.inf_ruby_mode = <var>true</var>/<var>false</var></code></a></dt>
+<dd>
+<p>inf-ruby-mode用のプロンプト表示を行なう. デフォルトはfalse.</p></dd>
+<dt><a name="L000066" id="L000066"><code>conf.inspect_mode = <var>true</var>/<var>false</var>/<var>nil</var></code></a></dt>
+<dd>
+<p>インスペクトモードを設定する.</p>
+<pre>true: インスペクトして表示する.
+false: 通常のprintで表示する.
+nil: 通常モードであれば, inspect modeとなり, mathモードの時は, non inspect modeとなる.   </pre></dd>
+<dt><a name="L000067" id="L000067"><code>conf.math_mode</code></a></dt>
+<dd>
+<p>参照のみ. bcモード(分数, 行列の計算ができます)かどうか?</p></dd>
+<dt><a name="L000068" id="L000068"><code>conf.use_loader = <var>true</var>/<var>false</var></code></a></dt>
+<dd>
+<p>load/require時にirbのfile読み込み機能を用いるモードのスイッチ(デフォ
+ルトは用いない). このモードはIRB全体に反映される.</p></dd>
+<dt><a name="L000069" id="L000069"><code>conf.prompt_c</code></a></dt>
+<dd>
+<p>ifの直後など, 行が継続している時のプロンプト.</p></dd>
+<dt><a name="L000070" id="L000070"><code>conf.prompt_i</code></a></dt>
+<dd>
+<p>通常のプロンプト.</p></dd>
+<dt><a name="L000071" id="L000071"><code>conf.prompt_s</code></a></dt>
+<dd>
+<p>文字列中などを表すプロンプト.</p></dd>
+<dt><a name="L000072" id="L000072"><code>conf.rc</code></a></dt>
+<dd>
+<p>~/.irbrcを読み込んだかどうか?</p></dd>
+<dt><a name="L000073" id="L000073"><code>conf.use_prompt = <var>true</var>/<var>false</var></code></a></dt>
+<dd>
+<p>プロンプト表示するかどうか? デフォルトではプロンプトを表示する.</p></dd>
+<dt><a name="L000074" id="L000074"><code>conf.use_readline = <var>true</var>/<var>false</var>/<var>nil</var></code></a></dt>
+<dd>
+<p>readlineを使うかどうか?</p>
+<pre>true: readlineを使う.
+false: readlineを使わない.
+nil: (デフォルト)inf-ruby-mode以外でreadlineライブラリを利用しようとする.  </pre></dd>
+<dt><a name="L000075" id="L000075"><code>cws([<var>obj</var>])</code></a>
+<dt><a name="L000076" id="L000076"><code>chws([<var>obj</var>])</code></a>
+<dt><a name="L000077" id="L000077"><code>irb_cws([<var>obj</var>])</code></a>
+<dt><a name="L000078" id="L000078"><code>irb_chws([<var>obj</var>])</code></a>
+<dt><a name="L000079" id="L000079"><code>irb_change_workspace([<var>obj</var>])</code></a></dt>
+<dd>
+<p>objをselfとする. objが省略されたときは, home workspace, すなわち
+irbを起動したときのmain objectをselfとする.</p></dd>
+<dt><a name="L000080" id="L000080"><code>pushws([<var>obj</var>])</code></a>
+<dt><a name="L000081" id="L000081"><code>irb_pushws([<var>obj</var>])</code></a>
+<dt><a name="L000082" id="L000082"><code>irb_push_workspace([<var>obj</var>])</code></a></dt>
+<dd>
+<p>UNIXシェルコマンドのpushdと同様.</p></dd>
+<dt><a name="L000083" id="L000083"><code>popws</code></a>
+<dt><a name="L000084" id="L000084"><code>irb_popws</code></a>
+<dt><a name="L000085" id="L000085"><code>irb_pop_workspace</code></a></dt>
+<dd>
+<p>UNIXシェルコマンドのpopdと同様.</p></dd>
+<dt><a name="L000086" id="L000086"><code>irb [<var>obj</var>]</code></a></dt>
+<dd>
+<p>サブirbを立ちあげる. objが指定された時は, そのobjをselfとする.</p></dd>
+<dt><a name="L000087" id="L000087"><code>jobs</code></a>
+<dt><a name="L000088" id="L000088"><code>irb_jobs</code></a></dt>
+<dd>
+<p>サブirbのリスト</p></dd>
+<dt><a name="L000089" id="L000089"><code>fg <var>n</var></code></a>
+<dt><a name="L000090" id="L000090"><code>irb_fg <var>n</var></code></a></dt>
+<dd>
+<p>指定したサブirbにスイッチする. nは, 次のものを指定する.</p>
+<pre>irb番号
+スレッド
+irbオブジェクト
+self(irb objで起動した時のobj)</pre></dd>
+<dt><a name="L000091" id="L000091"><code>kill <var>n</var></code></a>
+<dt><a name="L000092" id="L000092"><code>irb_kill <var>n</var></code></a></dt>
+<dd>
+<p>サブirbをkillする. nはfgと同じ.</p></dd>
+<dt><a name="L000093" id="L000093"><code>souce <var>path</var></code></a>
+<dt><a name="L000094" id="L000094"><code>irb_source  <var>path</var></code></a></dt>
+<dd>
+<p>UNIXシェルコマンドのsourceと似ている. 現在の環境上でpath内のスクリ
+プトを評価する.</p></dd>
+<dt><a name="L000095" id="L000095"><code>irb_load <var>path</var>, <var>prev</var></code></a></dt>
+<dd>
+<p>Rubyのloadのirb版.</p></dd>
+</dl>
+<h2><a name="L000096" id="L000096">システム変数</a></h2>
+<dl>
+<dt><a name="L000097" id="L000097"><code>_</code></a></dt>
+<dd>
+<p>前の計算の実行結果を覚えている(ローカル変数).</p>
+<pre>$ irb
+irb(main):001:0&gt; 10
+=&gt; 10
+irb(main):002:0&gt; 2**32
+=&gt; 4294967296
+irb(main):003:0&gt; _
+=&gt; 4294967296
+irb(main):004:0&gt; _ - 2**31
+=&gt; 2147483648
+irb(main):005:0&gt; </pre></dd>
+<dt><a name="L000098" id="L000098"><code>__</code></a></dt>
+<dd>
+<p>実行結果の履歴を覚えている.
+__[line_no] で、その行で実行した結果を得ることができる. line_no が負の
+時には、最新の結果から -line_no 前の結果を得ることができる.</p>
+<p>デフォルトでは使えません。
+使用するには、IRB.conf[:EVAL_HISTORY] = 100 などと ~/.irbrc で
+設定しておく必要があります。</p>
+<pre>$ irb
+irb(main):001:0&gt; conf.eval_history = 100
+=&gt; 100
+irb(main):002:0&gt; 1 + 2
+=&gt; 3
+irb(main):003:0&gt; 'hoge' + 'foo'
+=&gt; &quot;hogefoo&quot;
+irb(main):004:0&gt; __[2]
+=&gt; 3
+irb(main):005:0&gt; __[3]
+=&gt; &quot;hogefoo&quot;
+irb(main):006:0&gt; __[-1]
+=&gt; &quot;hogefoo&quot;
+irb(main):007:0&gt; </pre></dd>
+</dl>
+<h2><a name="L000099" id="L000099">履歴の保存</a></h2>
+<p><a href="refm392.html">ruby 1.9 feature</a>
+<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></p>
+<p>設定ファイルに </p>
+<pre>IRB.conf[:SAVE_HISTORY] = 100</pre>
+<p>などと書いておくとヒストリーファイルにコマンドの履歴が記録されます。ヒストリーファイルはデフォルトでは ~/.irb_history です。ヒストリーファイルは IRB.conf[:HISTORY_FILE] で設定することができます。</p>
+<h2><a name="L000100" id="L000100">使用例</a></h2>
+<p>以下のような感じです.</p>
+<pre>dim% irb
+irb(main):001:0&gt; irb                        # サブirbの立ちあげ
+irb#1(main):001:0&gt; jobs                     # サブirbのリスト
+#0-&gt;irb on main (#&lt;Thread:0x400fb7e4&gt; : stop)
+#1-&gt;irb#1 on main (#&lt;Thread:0x40125d64&gt; : running)
+nil
+irb#1(main):002:0&gt; fg 0                     # jobのスイッチ
+nil
+irb(main):002:0&gt; class Foo;end
+nil
+irb(main):003:0&gt; irb Foo                    # Fooをコンテキストしてirb
+                                            # 立ちあげ
+irb#2(Foo):001:0&gt; def foo                   # Foo#fooの定義
+irb#2(Foo):002:1&gt;   print 1
+irb#2(Foo):003:1&gt; end
+nil
+irb#2(Foo):004:0&gt; fg 0                      # jobをスイッチ
+nil
+irb(main):004:0&gt; jobs                       # jobのリスト
+#0-&gt;irb on main (#&lt;Thread:0x400fb7e4&gt; : running)
+#1-&gt;irb#1 on main (#&lt;Thread:0x40125d64&gt; : stop)
+#2-&gt;irb#2 on Foo (#&lt;Thread:0x4011d54c&gt; : stop)
+nil
+irb(main):005:0&gt; Foo.instance_methods       # Foo#fooがちゃんと定義さ
+                                            # れている
+[&quot;foo&quot;]
+irb(main):006:0&gt; fg 2                       # jobをスイッチ
+nil
+irb#2(Foo):005:0&gt; def bar                   # Foo#barを定義
+irb#2(Foo):006:1&gt;  print &quot;bar&quot;
+irb#2(Foo):007:1&gt; end
+nil
+irb#2(Foo):010:0&gt;  Foo.instance_methods
+[&quot;bar&quot;, &quot;foo&quot;]
+irb#2(Foo):011:0&gt; fg 0                      
+nil
+irb(main):007:0&gt; f = Foo.new
+#&lt;Foo:0x4010af3c&gt;
+irb(main):008:0&gt; irb f                      # Fooのインスタンスでirbを
+                                            # 立ちあげる.
+irb#3(#&lt;Foo:0x4010af3c&gt;):001:0&gt; jobs
+#0-&gt;irb on main (#&lt;Thread:0x400fb7e4&gt; : stop)
+#1-&gt;irb#1 on main (#&lt;Thread:0x40125d64&gt; : stop)
+#2-&gt;irb#2 on Foo (#&lt;Thread:0x4011d54c&gt; : stop)
+#3-&gt;irb#3 on #&lt;Foo:0x4010af3c&gt; (#&lt;Thread:0x4010a1e0&gt; : running)
+nil
+irb#3(#&lt;Foo:0x4010af3c&gt;):002:0&gt; foo         # f.fooの実行
+nil
+irb#3(#&lt;Foo:0x4010af3c&gt;):003:0&gt; bar         # f.barの実行
+barnil
+irb#3(#&lt;Foo:0x4010af3c&gt;):004:0&gt; kill 1, 2, 3# jobのkill
+nil
+irb(main):009:0&gt; jobs
+#0-&gt;irb on main (#&lt;Thread:0x400fb7e4&gt; : running)
+nil
+irb(main):010:0&gt; exit                       # 終了
+dim% </pre>
+<h2><a name="L000101" id="L000101">使用上の制限</a></h2>
+<p>irbは, 評価できる時点(式が閉じた時点)での逐次実行を行ないます. したがっ
+て, rubyを直接使った時と, 若干異なる動作を行なう場合があります.</p>
+<p>現在明らかになっている問題点を説明します.</p>
+<h3><a name="L000102" id="L000102">ローカル変数の宣言</a></h3>
+<p>rubyでは, 以下のプログラムはエラーになります.</p>
+<pre>eval &quot;foo = 0&quot;
+foo
+--
+-:2: undefined local variable or method `foo' for #&lt;Object:0x40283118&gt; (NameError)
+---
+NameError</pre>
+<p>ところが, irbを用いると</p>
+<pre>&gt;&gt; eval &quot;foo = 0&quot;
+=&gt; 0
+&gt;&gt; foo
+=&gt; 0</pre>
+<p>となり, エラーを起こしません. これは, rubyが最初にスクリプト全体をコン
+パイルしてローカル変数を決定するからです. それに対し, irbは実行可能に
+なる(式が閉じる)と自動的に評価しているからです. 上記の例では, </p>
+<pre>evel &quot;foo = 0&quot; </pre>
+<p>を行なった時点で評価を行ない, その時点で変数が定義されるため, 次式で 
+変数fooは定義されているからです.</p>
+<p>このようなrubyとirbの動作の違いを解決したい場合は, begin...endで括って
+バッチ的に実行して下さい:</p>
+<pre>&gt;&gt; begin
+?&gt;   eval &quot;foo = 0&quot;
+&gt;&gt;   foo
+&gt;&gt; end
+NameError: undefined local variable or method `foo' for #&lt;Object:0x4013d0f0&gt;
+(irb):3
+(irb_local_binding):1:in `eval'</pre>
+<h3><a name="L000103" id="L000103">ヒアドキュメント</a></h3>
+<p>現在のところヒアドキュメントの実装は不完全です. </p>
+<h3><a name="L000104" id="L000104">シンボル</a></h3>
+<p>シンボルであるかどうかの判断を間違えることがあります. 具体的には式が完了
+しているのに継続行と見なすことがあります.</p>
+<h2><a name="L000105" id="L000105">xmp.rb</a></h2>
+<p>ごとけんxmpの上位互換バージョンです. ただ, 非常に重いのでごとけんxmpで
+は対応できない時に, 使用すると良いでしょう.</p>
+<h3><a name="L000049" id="L000049">使い方</a></h3>
+<h4><a name="L000106" id="L000106">関数として使う.</a></h4>
+<pre>require &quot;irb/xmp&quot;
+xmp &lt;&lt;END
+foo = 1
+foo
+END
+---
+foo = 1
+    ==&gt;1
+foo
+    ==&gt;1</pre>
+<h4><a name="L000107" id="L000107">XMPインスタンスを用いる.</a></h4>
+<p>この場合は, XMPがコンテキスト情報を持つので, 変数の値などを保持してい
+ます.</p>
+<pre>require &quot;irb/xmp&quot;
+xmp = XMP.new
+xmp.puts &lt;&lt;END
+foo = 1
+foo
+END
+xmp.puts &lt;&lt;END
+foo
+END
+===
+foo = 1
+    ==&gt;1
+foo
+    ==&gt;1
+foo
+    ==&gt;1</pre>
+<h3><a name="L000108" id="L000108">コンテキストに関して</a></h3>
+<p>XMPメソッド群のコンテキストは, 呼び出す前のコンテキストで評価されます.
+明示的にコンテキストを指定するとそのコンテキストで評価します.</p>
+<p>例:</p>
+<pre>xmp &quot;foo&quot;, an_binding</pre>
+<dl>
+<dt><a name="L000109" id="L000109">注:</a></dt>
+</dl>
+<p>マルチスレッドには対応していません.</p>
+<h2><a name="L000110" id="L000110">frame.rb</a></h2>
+<p>現在実行中のフレーム情報を取り扱うためのクラスです. </p>
+<ul>
+<li>IRB::Frame.top(n = 0)
+  上からn番目のコンテキストを取り出します. nは0が最上位になります.</li>
+<li>IRB::Frame.bottom(n = 0)
+  下からn番目のコンテキストを取り出します. nは0が最下位になります.</li>
+<li>IRB::Frame.sender
+  センダになっているオブジェクトを取り出します. センダとは, そのメソッ
+  ドを呼び出した側のselfのことです.</li>
+</ul>
+<dl>
+<dt><a name="L000109" id="L000109">注:</a></dt>
+</dl>
+<p>set_trace_funcを用いてRubyの実行をトレースしています. マルチスレッドに
+は対応していません.</p>
+<h2><a name="L000111" id="L000111">completion.rb</a></h2>
+<p>irbのcompletion機能を提供するものです. </p>
+<h3><a name="L000049" id="L000049">使い方</a></h3>
+<pre>% irb -r irb/completion</pre>
+<p>とするか, ~/.irbrc 中に</p>
+<pre>require &quot;irb/completion&quot;</pre>
+<p>を入れてください. irb実行中に require &quot;irb/completion&quot; してもよいです.</p>
+<p>irb実行中に (TAB) を押すとコンプレーションします.</p>
+<p>トップレベルで(TAB)を押すとすべての構文要素, クラス, メソッドの候補がで
+ます. 候補が唯一ならば完全に補完します.</p>
+<pre>irb(main):001:0&gt; in    
+in                    inspect               instance_eval
+include               install_alias_method  instance_of?
+initialize            install_aliases       instance_variables
+irb(main):001:0&gt; inspect
+&quot;main&quot;
+irb(main):002:0&gt; foo = Object.new
+#&lt;Object:0x4027146c&gt;</pre>
+<p><var>変数名.</var>の後に(TAB)を押すと, そのオブジェクトのメソッド一覧がでま
+す.</p>
+<pre>irb(main):003:0&gt; foo.
+foo.==                  foo.frozen?             foo.protected_methods
+foo.===                 foo.hash                foo.public_methods
+foo.=~                  foo.id                  foo.respond_to?
+foo.__id__              foo.inspect             foo.send
+foo.__send__            foo.instance_eval       foo.singleton_methods
+foo.class               foo.instance_of?        foo.taint
+foo.clone               foo.instance_variables  foo.tainted?
+foo.display             foo.is_a?               foo.to_a
+foo.dup                 foo.kind_of?            foo.to_s
+foo.eql?                foo.method              foo.type
+foo.equal?              foo.methods             foo.untaint
+foo.extend              foo.nil?                
+foo.freeze              foo.private_methods     </pre>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small> 1.8.2 に入っていない理由は <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/25595">ruby-dev:25595</a><sup class="outside"><small>[外部]</small></sup> を参照してください。 </small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm007.html">UP</a>][<a href="refm007.html">&lt;-PREV</a>][<a href="refm009.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

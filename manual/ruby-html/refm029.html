@@ -1,0 +1,1072 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>組み込み関数</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm030.html" rel="next" />
+<link href="refm028.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm028.html">&lt;-PREV</a>][<a href="refm030.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L000426" id="L000426">組み込み関数</a></h1>
+<p>Ruby には厳密な意味では関数はありませんが、<a href="refm076.html">Kernel</a> モジュールで
+定義されているメソッドは (どこからでも関数形式で呼び出せるので)
+他言語における関数のように使えます。これらのメソッドを再定義する
+場合は他の場所への影響を考えて行なう必要があります。</p>
+<dl>
+<dt><a name="L000427" id="L000427"><code>` <var>str</var></code></a></dt>
+<dd>
+<p>文字列 <var>str</var> を外部コマンドとして実行し、その出力を文字列として
+返します。このメソッドは <code>`str`</code> の形式で呼ばれます
+(<a href="refm024.html#L000367">%x(...)</a> という表記によっても呼び出せます。
+詳細は <a href="refm024.html#L000356">コマンド出力</a> を参照してください)。</p>
+<p>実行したコマンドの終了ステータスは <a href="refm030.html#L000522">$?</a> で参照できます。</p>
+<p>コマンドの出力を得る必要がなく、単にコマンドを実行したいだけなら
+<a href="#L000496">system</a> を使います。特に端末を制御するコマンドでは
+<code>`command`</code> は失敗するかもしれません。</p></dd>
+<dt><a name="L000428" id="L000428"><code>Array(<var>arg</var>)</code></a></dt>
+<dd>
+<p><var>arg</var>.to_ary か <var>arg</var>.to_a を呼び出して引数を配
+列に変換した結果を返します。
+変換した結果が配列でなければ例外 <a href="refm111.html">TypeError</a> が発生
+します。</p>
+<p><var>arg</var> に to_ary, to_a のいずれのメソッドもない場合は
+一要素の配列 [<var>arg</var>] を返します。</p></dd>
+<dt><a name="L000429" id="L000429"><code>Float(<var>arg</var>)</code></a></dt>
+<dd>
+<p>引数を浮動小数点数(<a href="refm056.html">Float</a>)に変換した結果を返します。</p>
+<p>整数や浮動小数点数と見なせない文字列を引数に指定した場合、例外
+<a href="refm094.html">ArgumentError</a> が発生します。</p>
+<p><a href="refm061.html#L001558">String#to_f</a> も参照してください。</p>
+<pre>p Float(&quot;10&quot;)    # =&gt; 10.0
+p Float(&quot;10e2&quot;)  # =&gt; 1000.0
+p Float(&quot;1e-2&quot;)  # =&gt; 0.01
+p Float(&quot;.1&quot;)    # =&gt; 0.1
+
+p Float(&quot;nan&quot;)   # =&gt; NaN         (ruby 1.7 feature: =&gt; invalid value (ArgumentError))
+p Float(&quot;INF&quot;)   # =&gt; Infinity    (ruby 1.7 feature: =&gt; invalid value (ArgumentError))
+p Float(&quot;-Inf&quot;)  # =&gt; -Infinity   (ruby 1.7 feature: =&gt; invalid value (ArgumentError))
+p Float((&quot;10&quot; * 1000).to_f) # =&gt; Infinity
+
+p Float(&quot;0xa.a&quot;) # =&gt; 10.625     # (ruby 1.7 feature: =&gt; invalid value (ArgumentError))
+p Float(&quot; \n10&quot;) # =&gt; 10.0       # 先頭の空白は無視される
+p Float(&quot;1_0_0&quot;) # =&gt; 100.0      # `_' も数値要素とみなす
+p Float(&quot;&quot;)      # =&gt; invalid value (ArgumentError)
+p Float(nil)     # =&gt; 0.0       # ruby 1.7 feature: cannot convert nil into Float (TypeError)
+
+p Float(Object.new) # =&gt; cannot convert Object into Float (TypeError)</pre></dd>
+<dt><a name="L000430" id="L000430"><code>Integer(<var>arg</var>)</code></a></dt>
+<dd>
+<p>引数を整数(<a href="refm055.html">Fixnum</a>,<a href="refm054.html">Bignum</a>)に変換した結果を返します。
+数値、文字列以外のオブジェクトに対しては <code>to_i</code> メソッドを
+使用します(<a href="refm384.html">ruby 1.7 feature</a>: 1.7 では、<code>to_int</code>)。
+変換した結果が整数(<a href="refm053.html">Integer</a>のサブクラス)でなければ
+例外 <a href="refm111.html">TypeError</a> が発生します。</p>
+<p>引数が文字列であった場合には、0x, 0b, 0 などの接頭辞に応じて
+それぞれ 16 進、2 進、8 進数として変換します。</p>
+<p>整数と見なせない文字列を引数に指定した場合、例外 <a href="refm094.html">ArgumentError</a>
+が発生します。</p>
+<pre>p Integer(10.1)       # =&gt; 10
+p Integer(10.8)       # =&gt; 10
+p Integer(&quot;10&quot;)       # =&gt; 10
+p Integer(&quot;10_0_0&quot;)   # =&gt; 1000
+p Integer(&quot;10__0&quot;)    # =&gt; 100
+                      # =&gt; invalid value for Integer: &quot;10__0&quot; (ArgumentError) (ruby 1.7 feature)
+p Integer(&quot;_10&quot;)      # =&gt; invalid value for Integer: &quot;_10&quot; (ArgumentError)
+p Integer(&quot;10_&quot;)      # =&gt; invalid value for Integer: &quot;10_&quot; (ArgumentError)
+p Integer(&quot;0d10&quot;)     # =&gt; invalid value for Integer: &quot;0d10&quot; (ArgumentError)
+                      # =&gt; 10 (ruby 1.7 feature)
+p Integer(&quot;010&quot;)      # =&gt; 8
+p Integer(&quot;0o10&quot;)     # =&gt; invalid value for Integer: &quot;0o10&quot; (ArgumentError) (ruby 1.7 feature)
+                      # =&gt; 8
+p Integer(&quot;0x10&quot;)     # =&gt; 16
+p Integer(&quot;0b10&quot;)     # =&gt; 2
+p Integer(&quot; \n10\t &quot;) # =&gt; 10
+p Integer(&quot;&quot;)         # =&gt; `Integer': invalid value for Integer: &quot;&quot; (ArgumentError)
+p Integer(nil)        # =&gt; 0
+
+p Integer(Object.new) # =&gt; cannot convert Object into Integer (TypeError)</pre>
+<p><a href="refm061.html#L001511">String#hex</a>,
+<a href="refm061.html#L001525">String#oct</a>,
+<a href="refm061.html#L001559">String#to_i</a> も参照してください。</p></dd>
+<dt><a name="L000431" id="L000431"><code>String(<var>arg</var>)</code></a></dt>
+<dd>
+<p><var>arg</var>.<code>to_s</code> を呼び出して引数を文字列に変換した
+結果を返します。
+変換した結果が文字列でなければ例外 <a href="refm111.html">TypeError</a> が発
+生します。
+<var>arg</var> が文字列の場合、何もせず <var>arg</var> を返します。</p></dd>
+<dt><a name="L000432" id="L000432"><code>abort</code></a>
+<dt><a name="L000433" id="L000433"><code>abort(<var>message</var>)      ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>Ruby プログラムを異常終了します。<a href="#L000448">exit</a> との違いは、
+呼び出し時に <a href="refm030.html#L000523">$!</a> が <code>nil</code> でなければその例外の
+メッセージを標準エラー出力に出力することと、プログラムの終了ステー
+タスが EXIT_FAILURE(ほとんどの環境では1) 固定であることです。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>: 引数 <var>message</var> を指定すると
+<a href="refm113.html">SystemExit</a>#<a href="refm040.html#L000828">message</a> に <var>message</var> を設定し
+て標準エラー出力に出力します。</p></dd>
+<dt><a name="L000434" id="L000434"><code>at_exit { .... }</code></a></dt>
+<dd>
+<p>与えられたブロックをインタプリタ終了時に実行します。<code>at_exit</code>
+がメソッドである点を除けば、<a href="refm026.html#L000403">END</a> ブロックによる終了
+処理の登録と同等です。登録した処理を取り消すことはできません。
+<a href="refm016.html">終了処理</a>も参照してください。</p>
+<p>登録した処理を <a href="refm057.html">Proc</a> オブジェクトで返します。</p></dd>
+<dt><a name="L000435" id="L000435"><code>autoload(<var>const_name</var>, <var>feature</var>)</code></a>
+<dt><a name="L000436" id="L000436"><code>autoload?(<var>const_name</var>)            ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>定数 <var>const_name</var> を最初に参照した時に <var>feature</var> を
+<a href="#L000480">require</a> するように設定します。<var>const_name</var>
+は文字列または <a href="refm063.html">Symbol</a> で指定します。
+なお、<var>const_name</var> には、&quot;::&quot; 演算子を含めることはできません
+(つまり、トップレベルの定数しか指定できません)。</p>
+<p><code>nil</code> を返します。</p>
+<p><a href="refm385.html">ruby 1.8 feature</a>: 任意のクラス／モジュールの定数を autoload 
+できます。やはり、<var>const_name</var> に &quot;::&quot; 演算子を含めることはで
+きませんが、以下のように定義する事ができます。(実際には、
+<a href="refm050.html#L001189">Module#autoload</a> が呼ばれます)</p>
+<pre>------- /tmp/foo.rb ---------
+class Foo
+  class Bar
+  end
+end
+----- end of /tmp/foo.rb ----
+
+class Foo
+  autoload :Bar, '/tmp/foo'
+end
+p Foo::Bar</pre>
+<p>あるいは、以下のようにもできます。</p>
+<pre>class Foo
+end
+Foo.autoload :Bar, '/tmp/foo'
+p Foo::Bar</pre>
+<p><code>autoload?</code> は、autoload 定数がまだ定義されてない(ロードされて
+いない)ときにそのパス名を返します。また、ロード済みなら nil を返し
+ます。</p>
+<pre>------- /tmp/foo.rb ---------
+class Foo
+  class Bar
+  end
+end
+----- end of /tmp/foo.rb ----
+
+class Foo
+end
+Foo.autoload :Bar, '/tmp/foo'
+p Foo.autoload?(:Bar)         # =&gt; &quot;/tmp/foo&quot;
+p Foo::Bar                    # =&gt; Foo::Bar
+p Foo.autoload?(:Bar)         # =&gt; nil</pre>
+<p>以下のように、autoload したライブラリがネストした定数を定義しない場
+合、一見、正常に動作しているように見えるので注意が必要です(警告メッ
+セージが出ています)。</p>
+<pre>------- /tmp/bar.rb ---------
+class Bar
+end
+----- end of /tmp/bar.rb ----
+
+class Foo
+  autoload :Bar, '/tmp/bar.rb'
+end
+p Foo::Bar
+p Foo.autoload?(:Bar)
+
+# =&gt; -:4: warning: toplevel constant Bar referenced by Foo::Bar
+     Bar
+     nil</pre>
+<p>これは以下のようにネストせずに定義したのと同じことです。</p>
+<pre>class Foo
+end
+class Bar
+end
+p Foo::Bar
+
+# =&gt; -:5: warning: toplevel constant Bar referenced by Foo::Bar
+     Bar</pre></dd>
+<dt><a name="L000437" id="L000437"><code>binding</code></a></dt>
+<dd>
+<p>変数・メソッドなどの環境情報を含んだ <a href="refm037.html">Binding</a> オブジェクトを
+生成して返します。通常、<a href="#L000445">eval</a> の第二引数として使います。</p></dd>
+<dt><a name="L000438" id="L000438"><code>caller([<var>level</var>])</code></a></dt>
+<dd>
+<p><var>level</var> 段上(引数省略時は、1)の呼び出し元の情報を <a href="refm030.html#L000524">$@</a>
+の形式のバックトレース(文字列の配列)として返します。トップレベルで
+は空の配列を返します。caller の戻り値を <code>$@</code> に代入することで
+例外の発生位置を設定できます。</p>
+<pre>def foo
+  p caller(0)
+  p caller(1)
+  p caller(2)
+  p caller(3)
+end
+
+def bar
+  foo
+end
+
+bar
+
+=&gt; [&quot;-:2:in `foo'&quot;, &quot;-:9:in `bar'&quot;, &quot;-:12&quot;]
+   [&quot;-:9:in `bar'&quot;, &quot;-:12&quot;]
+   [&quot;-:12&quot;]
+   []</pre>
+<p>以下の関数は、caller の要素から [ファイル名, 行番号, メソッド名] 
+を取り出して返します。</p>
+<pre>def parse_caller(at)
+  if /^(.+?):(\d+)(?::in `(.*)')?/ =~ at
+    file = $1
+    line = $2.to_i
+    method = $3
+    [file, line, method]
+  end
+end
+
+def foo
+  p parse_caller(caller.first)
+end
+
+def bar
+  foo
+  p parse_caller(caller.first)
+end
+
+bar
+p parse_caller(caller.first)
+
+=&gt; [&quot;-&quot;, 15, &quot;bar&quot;]
+   [&quot;-&quot;, 19, nil]
+   nil</pre>
+<p>以下は、<a href="refm030.html#L000545">$DEBUG</a> が真の場合に役に立つ debug 関数
+のサンプルです。</p>
+<pre>def debug(*args)
+  p [caller.first, *args] if $DEBUG
+end
+
+debug &quot;debug information&quot;
+
+=&gt; [&quot;-:5&quot;, &quot;debug information&quot;]</pre></dd>
+<dt><a name="L000439" id="L000439"><code>callcc {|<var>cont</var>| .... }</code></a></dt>
+<dd>
+<p><a href="refm038.html">Continuation</a> を参照してください。</p></dd>
+<dt><a name="L000440" id="L000440"><code>catch(<var>tag</var>) {|<var>tag</var>| .... }</code></a></dt>
+<dd>
+<p>ブロックを実行してその値を返します。ブロックの実行中に
+<var>tag</var> と同じ名前の <a href="#L000499">throw</a> が行われた
+場合は、その <code>throw</code> の第二引数を戻り値とします。</p>
+<p>例えば以下のコードを実行すると <var>some_process</var> は
+呼び出されず、また catch の戻り値は 10 ではなく 25 に
+なります。</p>
+<pre>ret = catch(:exit) {
+   throw :exit, 25
+   some_process()
+   10
+}
+p ret   #=&gt; 25</pre>
+<p>ネストしたループは <a href="refm026.html#L000392">break</a> によって一気に抜
+けることはできません。
+このような場合、catch や <a href="refm026.html#L000398">例外</a> を使用します。</p>
+<pre>catch(:loop1) {
+  for i in 1..2
+    for j in 1..2
+      throw :loop1, j
+    end
+  end
+}</pre></dd>
+<dt><a name="L000441" id="L000441"><code>chop</code></a>
+<dt><a name="L000442" id="L000442"><code>chop!</code></a></dt>
+<dd>
+<p>組み込み変数 <a href="refm030.html#L000512">$_</a> を最後の文字を取り除いたものにし
+ます(終端が&quot;\r\n&quot;であれば2文字取り除きます)。
+<code>chop!</code> は文字列そのものを変更しその結果を返しますが、
+取り除く文字列がなければ <code>nil</code> を返します。</p>
+<p>詳細は <a href="refm061.html#L001491">String#chop</a> を参照してください。
+<code>$_.chop</code> と関数 <code>chop</code> では以下の点で違いがあります。</p>
+<ul>
+<li><code>chop</code> は <code>$_</code> の値をコピーして、コピーの方を更新し、
+      <code>$_</code> に<em>再代入</em>します。</li>
+</ul></dd>
+<dt><a name="L000443" id="L000443"><code>chomp([<var>rs</var>])</code></a>
+<dt><a name="L000444" id="L000444"><code>chomp!([<var>rs</var>])</code></a></dt>
+<dd>
+<p>組み込み変数 <a href="refm030.html#L000512">$_</a> を <var>rs</var> で指定される末尾
+の文字列を取り除いたものにします。
+<code>chomp!</code> は文字列そのものを変更しその結果を返しますが、
+取り除く文字列がなければ <code>nil</code> を返します。
+<var>rs</var> のデフォルト値は <a href="refm030.html#L000528">$/</a> です。</p>
+<p>詳細は <a href="refm061.html#L001489">String#chomp</a> を参照してください。
+<code>$_.chomp</code> と関数 <code>chomp</code> では以下の点で違いがあります。</p>
+<ul>
+<li><code>chomp</code> は <code>$_</code> の値をコピーして、コピーの方を更新し、
+      <code>$_</code> に<em>再代入</em>します。</li>
+</ul></dd>
+<dt><a name="L000445" id="L000445"><code>eval(<var>expr</var>[, <var>binding</var>[, <var>fname</var>[, <var>lineno</var>=<var>1</var>]]])</code></a></dt>
+<dd>
+<p>文字列 <var>expr</var> を Ruby プログラムとして評価してその結果を返しま
+す。第2引数に <a href="refm057.html">Proc</a> オブジェクトまたは <a href="refm037.html">Binding</a> オブジェ
+クトを与えた場合、そのオブジェクトを生成したコンテキストで文字列を
+評価します。<a href="#L000437">binding</a> も参照してください。</p>
+<pre>def foo
+  a = 1
+  binding
+end
+
+eval(&quot;p a&quot;, foo)  # =&gt; 1</pre>
+<p><var>fname</var> と <var>lineno</var> が与えられた場合には、ファイル
+<var>fname</var> 行番号 <var>lineno</var> に文字列があるかのように
+コンパイルされ、スタックトレースの表示などを差し替えることが
+できます。</p></dd>
+<dt><a name="L000446" id="L000446"><code>exec(<var>command</var>)</code></a>
+<dt><a name="L000447" id="L000447"><code>exec(<var>program</var>[, <var>arg1</var>[, <var>arg2</var>[, ...]]])</code></a></dt>
+<dd>
+<p><var>command</var> で指定されたコマンドを実行します。プロセスの実行コー
+ドはそのコマンド(あるいは shell。後述)になるので、起動に成功した場
+合、この関数からは戻りません。起動に失敗し、ruby インタプリタに制
+御が戻った場合は、例外 <a href="refm108.html">Errno::EXXX</a> が発生します。</p>
+<p>一番目の形式では <var>command</var> が shell のメタ文字
+(<code>* ? {} [] &lt;&gt; () ~ &amp; | \ $ ; ' ` &quot; \n</code>)を含む場合、
+shell 経由で実行されます。そうでなければインタプリタから直接
+実行されます。</p>
+<p>二番目の形式では、常に shell を経由せずに実行されます。
+この場合には空白や shell のメタキャラクタもそのまま
+<var>program</var> の引数に渡されます。
+先頭の引数が2要素の配列であった場合、第1要素の文字列が実際に
+起動するプログラムのパスであり、第2要素が「みせかけ」のプロ
+グラム名になります。</p>
+<p><a href="refm385.html">ruby 1.8 feature</a>: このとき、第1要素をフルパスで指定しなくても
+環境変数 PATH から探します。</p>
+<p>コマンドの引数がない場合も含めて shell を経由せずにプログラムを実行させたい場合、
+以下のように exec を呼び出します。</p>
+<pre>exec [program, program], *args</pre></dd>
+<dt><a name="L000448" id="L000448"><code>exit([<var>status</var>])</code></a></dt>
+<dd>
+<p>Rubyプログラムの実行を終了します。<var>status</var> として整
+数が与えられた場合、その値を Ruby コマンドの終了ステータスとし
+ます。デフォルトの終了ステータスは 0 です。</p>
+<p><code>exit</code> は例外 <a href="refm113.html">SystemExit</a> を発生させ
+ることによってプログラムの実行を終了させますので、
+必要に応じて <a href="refm026.html#L000398">rescue</a> 節で捕捉することができます。</p>
+<p><a href="refm385.html">ruby 1.8 feature</a>: <var>status</var>が<code>true</code>の場合、<code>EXIT_SUCCESS</code>を
+終了ステータスとします。<var>status</var>が<code>false</code>の場合、<code>EXIT_FAILURE</code>を
+終了ステータスとします。デフォルトの終了ステータスは<code>EXIT_SUCCESS</code>に
+変更されています。</p></dd>
+<dt><a name="L000449" id="L000449"><code>exit!([<var>status</var>])</code></a></dt>
+<dd>
+<p>整数 <var>status</var> を終了ステータスとして、Ruby プログラム
+の実行を終了します。デフォルトの終了ステータスは -1 です。</p>
+<p><code>exit!</code> は <code>exit</code> とは違って、例外処理などは一切行ないませ
+ん。<a href="#L000450">fork</a>の後、子プロセスを終了させる時などに用
+いられます。</p>
+<p><a href="refm385.html">ruby 1.8 feature</a>: <var>status</var>が<code>true</code>の場合、<code>EXIT_SUCCESS</code>を
+終了ステータスとします。<var>status</var>が<code>false</code>の場合、<code>EXIT_FAILURE</code>を
+終了ステータスとします。デフォルトの終了ステータスは<code>EXIT_FAILURE</code>に
+変更されています。</p></dd>
+<dt><a name="L000450" id="L000450"><code>fork</code></a>
+<dt><a name="L000451" id="L000451"><code>fork { ... }</code></a></dt>
+<dd>
+<p><a href="refm535.html">fork(2)</a> システムコールを使ってプロセスの複製を作
+ります。親プロセスでは子プロセスのプロセスIDを、子プロセスでは
+<code>nil</code> を返します。ブロックを指定して呼び出した場合には、生成し
+た子プロセスでブロックを評価します。</p>
+<p><a href="refm388.html">ruby 1.8.2 feature</a>: fork 前に STDOUT と STDERR を
+<a href="refm045.html#L001014">flush</a> します。</p></dd>
+<dt><a name="L000452" id="L000452"><code>gets([<var>rs</var>])</code></a>
+<dt><a name="L000453" id="L000453"><code>readline([<var>rs</var>])</code></a></dt>
+<dd>
+<p>Ruby インタプリタ実行時に引数として与えられたファイル(なければ標準
+入力)をつなげた仮想的なファイル(組み込み変数 <a href="refm030.html#L000533">$&lt;</a>
+や <a href="refm032.html">ARGF</a> でアクセスできる) から一行読み込んで、文字列を返しま
+す。ファイルの終りに到達した時には <code>nil</code> を返します。</p>
+<p>行の区切りは引数 <var>rs</var> で指定した文字列になります。<var>rs</var> の
+デフォルト値は組み込み変数 <a href="refm030.html#L000528">$/</a> の値です。読み込
+んだ文字列は組み込み変数 <a href="refm030.html#L000512">$_</a> にもセットされます。</p>
+<p><var>rs</var> に <code>nil</code> を指定すると行区切りなしとみなしてファイルの内容を
+すべて読み込みます。
+空文字列 <code>&quot;&quot;</code> を指定すると連続する改行を行の区切りとみなします
+(パラグラフモード)。</p>
+<p><code>readline</code> は <code>gets</code> と同じ働きをしますが、
+ファイルの最後まで読むと例外 <a href="refm098.html">EOFError</a> を発生させます。</p></dd>
+<dt><a name="L000454" id="L000454"><code>global_variables</code></a></dt>
+<dd>
+<p>プログラム中で定義されているグローバル変数(`$'で始まる変数)名の
+配列を返します。</p>
+<p><a href="#L000462">local_variables</a>,
+<a href="refm035.html#L000670">Object#instance_variables</a>,
+<a href="refm050.html#L001177">Module.constants</a>,
+<a href="refm050.html#L001177">Module#constants</a>,
+<a href="refm050.html#L001193">Module#class_variables</a>
+も参照してください。</p></dd>
+<dt><a name="L000455" id="L000455"><code>gsub(<var>pattern</var>[, <var>replace</var>])</code></a>
+<dt><a name="L000456" id="L000456"><code>gsub!(<var>pattern</var>[, <var>replace</var>])</code></a>
+<dt><a name="L000457" id="L000457"><code>gsub(<var>pattern</var>) {|<var>matched</var>| ... }</code></a>
+<dt><a name="L000458" id="L000458"><code>gsub!(<var>pattern</var>) {|<var>matched</var>| ... }</code></a></dt>
+<dd>
+<p>組み込み変数 <a href="refm030.html#L000512">$_</a> の指す文字列内で <var>pattern</var> に
+マッチする部分を全て <var>replace</var> に置き換えた文字列を返します。
+引数 <var>replace</var> が省略された時にはイテレータとして動作し、ブロッ
+クを評価した結果で置換を行います。ブロックには引数としてマッチした
+文字列が渡されます。</p>
+<pre>$_ = &quot;foobar&quot;
+p gsub(/o+/) {|m|
+  m.upcase
+}
+# =&gt; &quot;fOObar&quot;</pre>
+<p><code>gsub!</code> は <code>$_</code> の指している文字列そのものを書き換えます。
+詳細は、<a href="refm061.html#L001507">String#gsub</a> を参照してください。
+<code>String#gsub</code> と関数 <code>gsub</code> では以下の点で違いがあります。</p>
+<ul>
+<li><code>gsub</code>メソッドは <code>$_</code> の値をコピーして、コピーの方を更新し、
+      <code>$_</code> に<em>再代入</em>します。</li>
+</ul></dd>
+<dt><a name="L000459" id="L000459"><code>iterator?           ((&lt;<var>obsolete</var>&gt;))</code></a>
+<dt><a name="L000460" id="L000460"><code>block_given?</code></a></dt>
+<dd>
+<p>メソッドにブロックが与えられている時には真、そうでない時に偽
+を返します。</p></dd>
+<dt><a name="L000461" id="L000461"><code>load(<var>file</var>[, <var>priv</var>])</code></a></dt>
+<dd>
+<p>Ruby プログラム <var>file</var> をロードして実行します。
+<var>file</var> が絶対パスのときは <var>file</var> からロードします。
+<var>file</var> が相対パスのときは組み込み変数 <a href="refm030.html#L000541">$:</a>
+に示されるパスを順番に探し、最初に見付かったファイルを
+ロードします。このとき、$: の要素文字列の先頭文字が
+`<code>~</code>' (チルダ) だと、環境変数 HOME の値に展開されます。</p>
+<p>省略可能な引数 <var>priv</var> が真のとき、
+ロード・実行は内部的に生成される無名モジュールを
+トップレベルとして行われ、グローバルな名前空間を汚染しません。</p>
+<p>ロードに成功した場合は <code>true</code> を返します。
+失敗した場合は例外 <a href="refm088.html">LoadError</a> が発生します。</p>
+<p>[require と load の違いについて]</p>
+<p>require は同じファイルは一度だけしかロードしませんが、
+load は無条件にロードします。また、require は拡張子
+.rb や .so を自動的に補完しますが、load は行いません。
+require はライブラリのロード、load は設定ファイルの
+読み込みなどに使うのが典型的な用途です。</p>
+<pre># 使用例
+load &quot;#{ENV['HOME']}/.myapprc&quot;
+load &quot;/etc/myapprc&quot;</pre>
+<p>なお、特定のディレクトリからファイルをロードしたい場合、
+load 'filename' とするのは不適切です。必ず絶対パスを
+使ってください。</p></dd>
+<dt><a name="L000462" id="L000462"><code>local_variables</code></a></dt>
+<dd>
+<p>現在のスコープで定義されているローカル変数名の配列を返します。</p>
+<p><a href="#L000454">global_variables</a>,
+<a href="refm035.html#L000670">Object#instance_variables</a>,
+<a href="refm050.html#L001177">Module.constants</a>,
+<a href="refm050.html#L001177">Module#constants</a>,
+<a href="refm050.html#L001193">Module#class_variables</a>
+も参照してください。</p></dd>
+<dt><a name="L000463" id="L000463"><code>loop { ... }</code></a></dt>
+<dd>
+<p>(中断されない限り)永遠にブロックの評価を繰り返します。</p></dd>
+<dt><a name="L000464" id="L000464"><code>open(<var>file</var>[, <var>mode</var>[, <var>perm</var>]])</code></a>
+<dt><a name="L000465" id="L000465"><code>open(<var>file</var>[, <var>mode</var>[, <var>perm</var>]]) {|<var>io</var>| ... }</code></a></dt>
+<dd>
+<p><var>file</var> をオープンして、<a href="refm046.html">File</a> オブジェクトを返します。
+<var>mode</var> は、以下の文字列か整数(<a href="refm073.html">File::Constants</a> モジュール
+の定数の論理和)を指定します。省略時は <code>&quot;r&quot;</code> が指定されたもの
+とみなします。</p>
+<ul>
+<li>&quot;r&quot;, RDONLY: ファイルを読み込みモードでオープンします。</li>
+<li>&quot;w&quot;, WRONLY|CREAT|TRUNC: ファイルを書き込みモードでオー
+      プンします。オープン時にファイルがすでに存在していれば
+      その内容を空にします。</li>
+<li>&quot;a&quot;, WRONLY|CREAT|APPEND: ファイルを書き込みモードでオー
+      プンします。出力は<em>常に</em>ファイルの末尾に追加されま
+      す
+      <a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></li>
+</ul>
+<p>&quot;+&quot; があれば、ファイルは読み書き両用モード(RDWR)でオープ
+ンされます。</p>
+<ul>
+<li>&quot;r+&quot;: ファイルの読み書き位置は先頭にセットされます。</li>
+<li>&quot;w+&quot;: &quot;r+&quot; と同じですが、オープン時にファイルがすでに
+      存在していればその内容を空にします。</li>
+<li>&quot;a+&quot;: &quot;r+&quot; と同じですが、オープン時にファイルがすでに
+      存在していれば読み書き位置がファイルの末尾にセットされ
+      ます。</li>
+</ul>
+<p>これらのいずれに対しても &quot;b&quot; フラグを(&quot;r+b&quot;のように)つけることがで
+きます(整数なら File::BINARY)。この場合、バイナリモードでオープン
+します(ただし、システムがテキスト／バイナリでファイルを区別する場
+合に限ります)</p>
+<p>第 3 引数 <var>perm</var> は <a href="refm535.html">open(2)</a> の第 3 引数と同
+じく、<code>CREAT</code> 時のファイルのアクセス権を整数で指定します。
+この引数は、第 2 引数が数値形式でなければ無視されます<a name="footmark:2" id="footmark:2" href="#foottext:2"><sup><small>*2</small></sup></a>。
+デフォルトは 0666 です。</p>
+<p>ファイル名が `<code>|</code>' で始まる時には続く文字列をコマンドとして起
+動し、コマンドの標準入出力に対してパイプラインを生成します</p>
+<p>ファイル名が <code>&quot;|-&quot;</code> である時、<code>open</code> は Ruby の子プロセス
+を生成し、その子プロセスとの間のパイプ(<a href="refm045.html">IO</a>オブジェクト)を返し
+ます。(このときの動作は、<a href="refm045.html#L000990">IO.popen</a> と同じです。
+<a href="refm046.html#L001080">File.open</a> にはパイプラインを生成する機能はありません)。</p>
+<p><em>注意</em>: Perlと異なりコマンドは常に `<code>|</code>' で始まります。</p>
+<p><code>open</code> がブロックとともに呼び出された時、<code>open</code> はファイル
+をオープンしてブロックを実行し、ブロックの実行が終了するとファイル
+をクローズします。この場合はブロックを評価した結果を返します。つま
+り、以下のようになります。</p>
+<pre>open(path, mode) do |f|
+   ...
+end
+
+# 上記とほぼ同じコード
+f = open(path, mode)
+begin
+   ...
+ensure
+  f.close
+end</pre></dd>
+<dt><a name="L000466" id="L000466"><code>p(<var>obj</var>, [<var>obj2</var>, ...])</code></a></dt>
+<dd>
+<p><var>obj</var> を人間に読みやすい形で出力します。以下のコードと同じです。
+(<a href="refm035.html#L000664">Object#inspect</a>参照)</p>
+<pre>print obj.inspect, &quot;\n&quot;, obj2.inspect, &quot;\n&quot;, ...</pre>
+<p><code>nil</code> を返します。</p></dd>
+<dt><a name="L000467" id="L000467"><code>print([<var>arg1</var>[, <var>arg2</var>, ...]])</code></a></dt>
+<dd>
+<p>引数を順に出力します。引数が与えられない時には変数
+<a href="refm030.html#L000512">$_</a> の値を出力します。
+文字列以外のオブジェクトが引数として与えられた場合には、
+当該オブジェクトを <code>to_s</code> メソッドにより文字列に変換
+してから出力します。
+ただし、<code>nil</code> に対しては文字列 <code>&quot;nil&quot;</code> を出力します</p>
+<p>変数 <a href="refm030.html#L000530">$,</a> (出力フィールドセパレータ)に <code>nil</code> で
+ない値がセットされている時には、各引数の間にその文字列を出力します。
+変数 <a href="refm030.html#L000529">$\</a> (出力レコードセパレータ)に <code>nil</code> でな
+い値がセットされている時には、最後にそれを出力します。</p>
+<p><code>nil</code> を返します。</p></dd>
+<dt><a name="L000468" id="L000468"><code>printf([<var>port</var>, ]<var>format</var>[, <var>arg</var>[, ...]])</code></a></dt>
+<dd>
+<p>C 言語の printf と同じように、<var>format</var> に従い引数を文字列に変
+換して <a href="refm030.html">$&gt;</a> に出力します。第一引数が <a href="refm045.html">IO</a> のサ
+ブクラスのインスタンスであった場合はそのオブジェクトに対して出力を
+行ないます<a name="footmark:3" id="footmark:3" href="#foottext:3"><sup><small>*3</small></sup></a>。
+引数を 1 つも指定しなければ何もしません
+<a name="footmark:4" id="footmark:4" href="#foottext:4"><sup><small>*4</small></sup></a>。</p>
+<p>Ruby における format 文字列の拡張については<a href="refm452.html">sprintfフォーマット</a>
+の項を参照してください。</p>
+<p><code>nil</code> を返します。</p></dd>
+<dt><a name="L000469" id="L000469"><code>proc { ... }</code></a>
+<dt><a name="L000470" id="L000470"><code>lambda { ... }</code></a>
+<dt><a name="L000469" id="L000469"><code>proc</code></a>
+<dt><a name="L000470" id="L000470"><code>lambda</code></a></dt>
+<dd>
+<p>与えられたブロックから手続きオブジェクト (<a href="refm057.html">Proc</a> のインスタンス)
+を生成して返します(<a href="refm057.html#L001372">Proc.new</a>と同じです)。</p>
+<p>ブロックが指定されなければ、呼び出し元のメソッドで指定されたブロック
+を手続きオブジェクトとして返します。呼び出し元のメソッドがブロックなし
+で呼ばれると <a href="refm094.html">ArgumentError</a> 例外が発生します。</p></dd>
+<dt><a name="L000471" id="L000471"><code>putc(<var>ch</var>)</code></a></dt>
+<dd>
+<p>文字 <var>ch</var> を <a href="refm030.html">$&gt;</a> に出力します。
+<var>ch</var> が数字なら 0 〜 255 の範囲の対応する文字を出力
+します。<var>ch</var> が文字列なら、その先頭の文字を出力します。</p>
+<p><var>ch</var> を返します。</p>
+<pre>putc(&quot;ch&quot;)
+putc(?c)
+putc(99)
+# =&gt; ccc</pre></dd>
+<dt><a name="L000472" id="L000472"><code>puts([<var>obj</var>[, <var>obj2</var>[, ....]]] )</code></a></dt>
+<dd>
+<p><var>obj</var> と改行を順番に <a href="refm030.html">$&gt;</a> に出力します。
+引数がなければ改行のみを出力します。</p>
+<p>引数が配列の場合、その要素と改行を順に出力します。
+配列や文字列以外のオブジェクトが引数として与えられた場合には、
+当該オブジェクトを最初に <code>to_ary</code> により配列へ、
+次に <code>to_s</code> メソッドにより文字列へ変換を試みます。
+ただし、<code>nil</code> に対しては文字列 <code>&quot;nil&quot;</code> を出力します</p>
+<p>末尾が改行で終っている引数に対しては <code>puts</code> 自身
+は改行を出力しません。</p>
+<pre>puts &quot;foo&quot;, &quot;bar\n&quot;, &quot;baz&quot;
+puts &quot;&quot;    # 改行のみ出力
+puts       # 改行のみ出力
+puts &quot;foo&quot;
+=&gt; foo
+   bar
+   baz
+
+
+   foo</pre>
+<p><code>nil</code> を返します。</p>
+<p><a href="#L000467">print</a>, <a href="#L000505">warn</a> も参照。</p></dd>
+<dt><a name="L000473" id="L000473"><code>raise</code></a>
+<dt><a name="L000474" id="L000474"><code>raise(<var>exception</var>)</code></a>
+<dt><a name="L000475" id="L000475"><code>raise(<var>message</var>)</code></a>
+<dt><a name="L000476" id="L000476"><code>raise(<var>error_type</var>, <var>message</var> [, <var>backtrace</var>])</code></a>
+<dt><a name="L000477" id="L000477"><code>fail(<var>error_type</var>, <var>message</var> [, <var>backtrace</var>])</code></a></dt>
+<dd>
+<p>例外を発生させます。</p>
+<p>引数が無い場合は、同スレッドの同じブロック内で最後に rescue された
+例外オブジェクト (<a href="refm030.html#L000523">$!</a>) を再発生させます。そのような
+例外が存在しないときは例外 <a href="refm105.html">RuntimeError</a> を発生させます。</p>
+<pre>begin
+  open(&quot;nonexist&quot;)
+rescue
+  raise   # =&gt; `open': No such file or directory - &quot;nonexist&quot; (Errno::ENOENT)
+end</pre>
+<p>引数が一つの場合、引数が文字列であれば、その文字列をメッ
+セージとする <code>RuntimeError</code> 例外を発生させます。引数
+が例外クラスまたは例外オブジェクトであった場合にはその例
+外を発生させます。</p>
+<pre>raise &quot;error message&quot;    # =&gt; -:1: error message (RuntimeError)
+
+raise ArgumentError      # =&gt; -:1: ArgumentError (ArgumentError)
+
+raise ArgumentError.new  # =&gt; -:1: ArgumentError (ArgumentError)</pre>
+<p>引数が二つまたは三つの場合、第一引数で指定された例外を、第二引数に
+与えたメッセージとともに発生させます。この場合、例外は例外クラスまたは
+例外オブジェクトで指定します。第三引数は例外発生時のスタックトレース
+で、<a href="#L000438">caller</a> の戻り値と同じ形式でなければいけません。</p>
+<pre>raise ArgumentError, &quot;error message&quot;
+# =&gt; -:1: error message (ArgumentError)
+
+raise ArgumentError, &quot;error message&quot;, [&quot;file1:99&quot;,
+                                       &quot;file2:999:in `method'&quot;]
+
+# =&gt; file1:99: error message (ArgumentError)
+              from file2:999:in `method'</pre>
+<p>例外ではないクラスやオブジェクトを第一引数に指定した場合、実際に
+発生する例外はそのオブジェクトの <code>exception</code> メソッドが
+返す値になります。</p>
+<pre>class MyException
+  def exception
+    ArgumentError.new
+  end
+end
+
+raise MyException.new
+
+# =&gt; -:7: ArgumentError (ArgumentError)</pre>
+<p>第二の形式で引数を指定した場合は、<code>exception</code> メソッ
+ドにその引数が渡されます。</p>
+<pre>class MyException
+  def exception(mesg)
+    ArgumentError.new(mesg)
+  end
+end
+
+raise MyException.new, &quot;error message&quot;
+
+# =&gt; -:7: error message (ArgumentError)</pre>
+<p><code>exception</code> メソッドは必ず例外オブジェクトを返さなければいけ
+ません。そうでない場合は <a href="refm111.html">TypeError</a> が発生します。</p>
+<p>発生した例外は変数 <a href="refm030.html#L000523">$!</a> に格納されます。また例外が
+発生した時のスタックトーレスが変数 <a href="refm030.html#L000524">$@</a> に格納され
+ます。</p></dd>
+<dt><a name="L000478" id="L000478"><code>rand([<var>max</var>=<var>0</var>])</code></a></dt>
+<dd>
+<p>0 以上 <var>max</var> 未満の範囲の整数の乱数を発生します。ま
+だ<a href="#L000490">srand</a> が呼ばれていなければ自動的に
+<code>srand</code> を呼び出します。</p>
+<p><var>max</var> に <code>nil</code> または 0 を指定すると 0 以上 1 未
+満の実数値 <a href="refm056.html">Float</a> で乱数を与えます。</p></dd>
+<dt><a name="L000479" id="L000479"><code>readlines([<var>rs</var>])</code></a></dt>
+<dd>
+<p>コマンドライン引数として与えられたファイル(なければ標準入力) をつ
+なげた仮想的なファイル(<em class="XXINVALIDXX">ARGF</em>を全て読み込んで、その
+各行を要素としてもつ配列を返します。</p>
+<p>行の区切りは引数 <var>rs</var> で指定した文字列になります。<var>rs</var> の
+デフォルト値は組み込み変数 <a href="refm030.html#L000528">$/</a> の値です。</p>
+<p><var>rs</var> に <code>nil</code> を指定すると行区切りなしとみなします。
+空文字列 <code>&quot;&quot;</code> を指定すると連続する改行を行の区切りとみなします
+(パラグラフモード)。</p></dd>
+<dt><a name="L000480" id="L000480"><code>require(<var>feature</var>)</code></a></dt>
+<dd>
+<p>Ruby ライブラリ <var>feature</var> をロードパス <a href="refm030.html#L000541">$:</a> 上
+から探し、同じライブラリがまだロードされていなかった時だけロードし
+ます。</p>
+<p>Ruby ライブラリとは Ruby スクリプト (<code>*.rb</code>) か拡張ライブラリ
+(<code>*.so</code>) であり、<var>feature</var> の拡張子が省略された場合はその
+両方から探します(検索順序に関しては <a href="refm030.html#L000541">$:</a> を参照して
+ください)。省略されなかった場合は指定された種別のみを探します。ま
+た拡張ライブラリの拡張子にはアーキテクチャで実際に使われる拡張子に
+関らず常に <code>.so</code> を用います。</p>
+<p>実際にライブラリをロードした時には <code>true</code>、既にロードされてい
+る時には <code>false</code> を返します。ロードに失敗した場合は、例外
+<a href="refm088.html">LoadError</a> が発生します。ロードした <var>feature</var> の名前を(拡
+張子も含めて)、変数 <a href="refm030.html#L000543">$&quot;</a> に追加します。</p></dd>
+<dt><a name="L000481" id="L000481"><code>scan(<var>re</var>)</code></a>
+<dt><a name="L000482" id="L000482"><code>scan(<var>re</var>) {|<var>matched</var>| ... }</code></a></dt>
+<dd>
+<p><a href="refm030.html#L000512">$_</a>.<a href="refm061.html#L001530">scan</a> と同じです。</p></dd>
+<dt><a name="L000483" id="L000483"><code>select(<var>reads</var>[, <var>writes</var>[, <var>excepts</var>[, <var>timeout</var>]]])</code></a></dt>
+<dd>
+<p><a href="refm045.html#L000994">IO.select</a> と同じです。</p></dd>
+<dt><a name="L000484" id="L000484"><code>set_trace_func(<var>trace_proc</var>)</code></a></dt>
+<dd>
+<p>Ruby インタプリタがプログラムを実行する過程で、メソッドの呼び出しや
+式の評価などのイベントが発生する度に手続きオブジェクト <var>trace_proc</var>
+を実行します。標準添付の<a href="refm339.html">デバッガ</a>、<a href="refm340.html">トレーサ</a>、
+<a href="refm342.html">プロファイラ</a>はこの組み込み関数を利用して実現されています。</p>
+<p>例:</p>
+<pre>set_trace_func lambda {|event, file, line, id, binding, klass|
+    # ....
+}</pre>
+<p>ブロック引数の意味は以下の通りです。</p>
+<dl>
+<dt><a name="XXINVALIDXX" id="XXINVALIDXX">event</a></dt>
+<dd>
+<p>実行のタイプを表す、以下のいずれかの文字列。</p>
+<ul>
+<li>&quot;line&quot; ... 式の評価。</li>
+<li>&quot;call&quot; ... メソッドの呼び出し。</li>
+<li>&quot;return&quot; ... メソッド呼び出しからのリターン。</li>
+<li>&quot;c-call&quot; ... Cで記述されたメソッドの呼び出し。</li>
+<li>&quot;c-return&quot; ... Cで記述されたメソッド呼び出しからのリターン。</li>
+<li>&quot;class&quot; ... クラス定義、特異クラス定義、モジュール定義への突入。</li>
+<li>&quot;end&quot; ... クラス定義、特異クラス定義、モジュール定義の終了。</li>
+<li>&quot;raise&quot; ... 例外の発生。</li>
+</ul>
+</dd>
+<dt><a name="XXINVALIDXX" id="XXINVALIDXX">file</a></dt>
+<dd>
+<p>実行中のプログラムのソースファイル名 (文字列)。</p>
+</dd>
+<dt><a name="XXINVALIDXX" id="XXINVALIDXX">line</a></dt>
+<dd>
+<p>実行中のプログラムのソースファイル上の行番号 (整数)。</p>
+</dd>
+<dt><a name="XXINVALIDXX" id="XXINVALIDXX">id</a></dt>
+<dd>
+<p><var>event</var> に応じ、以下のものが渡されます。
+第六ブロック引数の <var>klass</var> と対応しています。</p>
+<dl>
+<dt><a name="XXINVALIDXX" id="XXINVALIDXX">line</a></dt>
+<dd>
+<p>最後に呼び出されたメソッドを表す <a href="refm063.html">Symbol</a> オブジェクト。
+トップレベルでは <code>nil</code>。</p>
+</dd>
+<dt><a name="XXINVALIDXX" id="XXINVALIDXX">call/return/c-call/c-return</a></dt>
+<dd>
+<p>呼び出された/リターンするメソッドを表す <a href="refm063.html">Symbol</a> オブジェクト。</p>
+</dd>
+<dt><a name="XXINVALIDXX" id="XXINVALIDXX">class/end</a></dt>
+<dd>
+<p><code>nil</code>。</p>
+</dd>
+<dt><a name="L000473" id="L000473">raise</a></dt>
+<dd>
+<p>最後に呼び出されたメソッドを表す <a href="refm063.html">Symbol</a> オブジェクト。
+トップレベルでは <code>nil</code>。</p>
+</dd>
+</dl>
+</dd>
+<dt><a name="L000437" id="L000437">binding</a></dt>
+<dd>
+<p>実行中のプログラムのコンテキストを表す <a href="refm037.html">Binding</a> オブジェクト。</p>
+</dd>
+<dt><a name="XXINVALIDXX" id="XXINVALIDXX">klass</a></dt>
+<dd>
+<p><var>event</var> に応じ、以下のものが渡されます。
+第四ブロック引数の <var>id</var> と対応しています。</p>
+<dl>
+<dt><a name="XXINVALIDXX" id="XXINVALIDXX">line</a></dt>
+<dd>
+<p>最後に呼び出されたメソッドが属するクラスを表す
+<a href="refm051.html">Class</a> オブジェクト。トップレベルでは
+<code>false</code>。</p>
+</dd>
+<dt><a name="XXINVALIDXX" id="XXINVALIDXX">call/return/c-call/c-return</a></dt>
+<dd>
+<p>呼び出された/リターンするメソッドが属するクラス
+を表す <a href="refm051.html">Class</a> オブジェクト。</p>
+</dd>
+<dt><a name="XXINVALIDXX" id="XXINVALIDXX">class/end</a></dt>
+<dd>
+<p><code>false</code>。</p>
+</dd>
+<dt><a name="L000473" id="L000473">raise</a></dt>
+<dd>
+<p>最後に呼び出されたメソッドが属するクラスを表す
+<a href="refm051.html">Class</a>オブジェクト。トップレベルでは
+<code>false</code>。</p>
+</dd>
+</dl>
+</dd>
+</dl></dd>
+<dt><a name="L000485" id="L000485"><code>sleep([<var>sec</var>])</code></a></dt>
+<dd>
+<p><var>sec</var> 秒だけプログラムの実行を停止します。<var>sec</var>
+には浮動小数点数も指定できます。<var>sec</var> が省略された場
+合、他スレッドからの
+<a href="refm064.html#L001605">Thread#run</a> などで明示的に起こさない限り永
+久にスリープします。戻り値は実際に停止していた秒数(整数)です。</p></dd>
+<dt><a name="L000486" id="L000486"><code>spawn(<var>cmd</var>, [<var>arg</var>, ...])      ((&lt;<var>ruby</var> <var>1</var>.<var>9</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>子プロセスの終了を待ち合わせないことを除けば、<a href="#L000496">system</a>
+と同じです。生成した子プロセスのプロセスIDを返します。</p></dd>
+<dt><a name="L000487" id="L000487"><code>split([<var>sep</var>[, <var>limit</var>]])</code></a></dt>
+<dd>
+<p><var>$_</var> の示す文字列をパターン <var>sep</var> によって
+<var>limit</var> 個の文字列に分割し、その配列を返します。詳細
+は <a href="refm061.html#L001542">String#split</a> を参照してください。</p></dd>
+<dt><a name="L000488" id="L000488"><code>sprintf(<var>format</var> ... )</code></a>
+<dt><a name="L000489" id="L000489"><code>format(<var>format</var> ... )</code></a></dt>
+<dd>
+<p><var>format</var> 文字列を C 言語の <code>sprintf</code> と同じよう
+に解釈し、引数をフォーマットした文字列を返します。
+<var>format</var> 指定子は C 言語の <code>sprintf</code> が受け付け
+るものとほとんど同じです。</p>
+<p>Ruby には整数の大きさに上限がないので、<code>%b, %o, %x</code>
+に負の数を与えると(左側に無限に1が続くとみなせるので)
+<code>..f</code> のような表示をします。絶対値に符号を付けた形式
+で出力するためには<code>%+x</code>、<code>% x</code>のように指定します。</p>
+<p>詳細は<a href="refm452.html">sprintfフォーマット</a>を参照してください。</p></dd>
+<dt><a name="L000490" id="L000490"><code>srand([<var>seed</var>])</code></a></dt>
+<dd>
+<p><a href="#L000478">rand</a> の乱数の種を設定し、古い初期値を返します
+(ただし最初だけは0を返します)。初期値が省略された時には現在の時刻
+やプロセスID、srand を呼び出した回数、
+また可能なら /dev/urandom から読み出したデータなどを元に種を作ります。</p>
+<p><a href="refm385.html">ruby 1.8 feature</a>:
+1.8.3 からは、seed として unsigned long よりも大きな値を与えることが出来ます。</p></dd>
+<dt><a name="L000491" id="L000491"><code>sub(<var>pattern</var>[, <var>replace</var>])</code></a>
+<dt><a name="L000492" id="L000492"><code>sub!(<var>pattern</var>[, <var>replace</var>])</code></a>
+<dt><a name="L000493" id="L000493"><code>sub(<var>pattern</var>) {|<var>matched</var>| ... }</code></a>
+<dt><a name="L000494" id="L000494"><code>sub!(<var>pattern</var>) {|<var>matched</var>| ... }</code></a></dt>
+<dd>
+<p>組み込み変数 <a href="refm030.html#L000512">$_</a> の指す文字列内で <var>pattern</var> に
+マッチする最初の部分を <var>replace</var> に置き換えた文字列を返します。
+引数 <var>replace</var> が省略された時にはイテレータとして動作し、ブロッ
+クを評価した結果で置換を行います。ブロックには引数としてマッチした
+文字列が渡されます。</p>
+<p><code>sub!</code> は <code>$_</code> の指している文字列そのものを書き換えます。
+詳細は、<a href="refm061.html#L001551">String#sub</a> を参照してください。
+<code>String#sub</code> と関数 <code>sub</code> では以下の点で違いがあります。</p>
+<ul>
+<li><code>sub</code>メソッドは <code>$_</code> の値をコピーして、コピーの方を更新し、
+      <code>$_</code> に<em>再代入</em>します。</li>
+</ul></dd>
+<dt><a name="L000495" id="L000495"><code>syscall(<var>num</var>, <var>arg</var> ... )</code></a></dt>
+<dd>
+<p><var>num</var>で指定された番号のシステムコールを実行します。
+第2引数以降をシステムコールの引数として渡します。引数は文字
+列または整数でなければなりません。</p>
+<p>どの数値がどのシステムコールに対応するかは、
+<a href="refm535.html">syscall(2)</a> や
+<code>/usr/include/sys/syscall.h</code> を参照してください。</p>
+<p>システムコールの慣習に従い、<a href="refm535.html">syscall(2)</a>
+が -1 を返す場合には例外 <a href="refm108.html">Errno::EXXX</a> が発生します。
+それ以外では、返した値をそのまま数値で返します。</p></dd>
+<dt><a name="L000496" id="L000496"><code>system(<var>command</var>)</code></a>
+<dt><a name="L000497" id="L000497"><code>system(<var>program</var>[, <var>arg1</var>[, <var>arg2</var>[, ...]]])</code></a></dt>
+<dd>
+<p><var>command</var> を実行して、成功した時(子プロセスが終了ステータス 0
+で終了した時)には真を、失敗した時(コマンドが実行できなかった場合も
+含む)には偽を返します。終了ステータスは変数 <a href="refm030.html#L000522">$?</a> で
+参照できます。</p>
+<p>コマンドを実行することができなかった場合、多くのシェルはステータス
+127 を返します。(したがって <code>$?</code> の数値は、0x7f00)、シェルを介
+さない場合は Ruby の子プロセスがステータス 127 で終了します。コマ
+ンドが実行できなかったのか、コマンドが失敗したのかは、普通
+<code>$?</code> を参照することで判別可能です。</p>
+<p><a href="refm392.html">ruby 1.9 feature</a>:
+コマンドを実行できないときに例外 <a href="refm108.html">Errno::EXXX</a> が発生します。
+シェルを介する場合は、上述の通りです。</p>
+<p>その他の挙動に関しては <a href="#L000446">exec</a> を参照して
+ください。</p>
+<p><em class="XXINVALIDXX">`command`</em>, <a href="#L000464">open</a> も参照してくだ
+さい。</p></dd>
+<dt><a name="L000498" id="L000498"><code>test(<var>cmd</var>, <var>file1</var> [, <var>file2</var>])</code></a></dt>
+<dd>
+<p>ファイルテストを行います。<var>cmd</var> は以下に示す
+<a href="refm024.html#L000324">数値リテラル</a>か文字列です(文字列の場合はそ
+の先頭の文字だけをコマンドとみなします)。</p>
+<ul>
+<li>1つの引数を取るもの
+<ul>
+<li><p><code>?r</code></p>
+<p>ファイルを実効 uid で読むことができる</p></li>
+<li><p><code>?w</code></p>
+<p>ファイルに実効 uid で書くことができる</p></li>
+<li><p><code>?x</code></p>
+<p>ファイルを実効 uid で実行することができる</p></li>
+<li><p><code>?o</code></p>
+<p>ファイルの所有者が実効 uid である</p></li>
+<li><p><code>?G</code></p>
+<p>ファイルのグループ所有者が実効 gid である</p></li>
+<li><p><code>?R</code></p>
+<p>ファイルを実 uid で読むことができる</p></li>
+<li><p><code>?W</code></p>
+<p>ファイルに実 uid で書くことができる</p></li>
+<li><p><code>?X</code></p>
+<p>ファイルを実 uid で実行することができる</p></li>
+<li><p><code>?O</code></p>
+<p>ファイルの所有者が実 uid である</p></li>
+<li><p><code>?e</code></p>
+<p>ファイルが存在する</p></li>
+<li><p><code>?z</code></p>
+<p>ファイルサイズが 0 である</p></li>
+<li><p><code>?s</code></p>
+<p>ファイルサイズが 0 でない(ファイルサイズを返す)</p></li>
+<li><p><code>?f</code></p>
+<p>ファイルはプレーンファイルである</p></li>
+<li><p><code>?d</code></p>
+<p>ファイルはディレクトリである</p></li>
+<li><p><code>?l</code></p>
+<p>ファイルはシンボリックリンクである</p></li>
+<li><p><code>?p</code></p>
+<p>ファイルは名前つきパイプ(FIFO)である</p></li>
+<li><p><code>?S</code></p>
+<p>ファイルはソケットである</p></li>
+<li><p><code>?b</code></p>
+<p>ファイルはブロック特殊ファイルである</p></li>
+<li><p><code>?c</code></p>
+<p>ファイルはキャラクター特殊ファイルである</p></li>
+<li><p><code>?u</code></p>
+<p>ファイルに setuid ビットがセットされている</p></li>
+<li><p><code>?g</code></p>
+<p>ファイルに setgid ビットがセットされている</p></li>
+<li><p><code>?k</code></p>
+<p>ファイルに sticky ビットがセットされている</p></li>
+<li><p><code>?M</code></p>
+<p>ファイルの最終更新時刻を返す</p></li>
+<li><p><code>?A</code></p>
+<p>ファイルの最終アクセス時刻を返す</p></li>
+<li><p><code>?C</code></p>
+<p>ファイルの inode 変更時刻を返す</p></li>
+</ul></li>
+<li>2つの引数を取るもの
+<ul>
+<li><p><code>?=</code></p>
+<p>ファイル1とファイル2の最終更新時刻が等しい</p></li>
+<li><p><code>?&gt;</code></p>
+<p>ファイル1の方がファイル2より最終更新時刻が新しい</p></li>
+<li><p><code>?&lt;</code></p>
+<p>ファイル1の方がファイル2より最終更新時刻が古い</p></li>
+<li><p><code>?-</code></p>
+<p>ファイル1とファイル2が同一のファイルである</p></li>
+</ul></li>
+</ul></dd>
+<dt><a name="L000499" id="L000499"><code>throw(<var>tag</var>[, <var>value</var>=<var>nil</var>])</code></a></dt>
+<dd>
+<p>同じ <var>tag</var> を指定した <a href="#L000440">catch</a> のブロックの
+終わりまで(メソッドを越えて)脱出します。もし同じ <var>tag</var> で
+待っている <code>catch</code> が存在しない場合は <a href="refm100.html">NameError</a> で
+スレッドが終了します。<var>tag</var> は文字列またはシンボルです。
+<var>value</var> は <code>catch</code> の戻り値になります。</p>
+<p>例:</p>
+<pre>ret = catch(:exit) {
+   throw :exit, 25
+   some_process()    # 絶対に実行されない
+   10
+}
+p ret   #=&gt; 25</pre></dd>
+<dt><a name="L000500" id="L000500"><code>trace_var(<var>varname</var>, <var>hook</var>)</code></a>
+<dt><a name="L000501" id="L000501"><code>trace_var(<var>varname</var>) {|<var>newval</var>| .... }</code></a></dt>
+<dd>
+<p>グローバル変数 <var>varname</var> への代入のフックを登録します。
+<var>varname</var> は文字列か <a href="refm063.html">Symbol</a> で指定します。</p>
+<p>ここでの「グローバル変数」は、<a href="refm030.html">特殊変数</a>も含めた`$'
+で始まる変数のことです。</p>
+<p>この呼び出し以降、<var>varname</var> で指定したグローバル変数に
+代入が起こると文字列または <a href="refm057.html">Proc</a> オブジェクト <var>hook</var>
+が評価されます。フックが <code>Proc</code> オブジェクトなら
+ブロック引数に代入された値が渡されます。またフックは複数
+登録できます。</p>
+<p>トレースを解除するには、<var>hook</var> に <code>nil</code> を
+指定するか、<a href="#L000504">untrace_var</a> を用います。</p>
+<p>例:</p>
+<pre>trace_var(:$v) {|val| puts &quot;$v=#{val.inspect}&quot; }
+$v = &quot;foo&quot;   #=&gt; $v=&quot;foo&quot;
+$v = 1       #=&gt; $v=1</pre>
+<p><var>hook</var> が <code>nil</code> ならば、設定されていた
+<var>hook</var> の配列を返します(ブロックで登録されていれば
+<a href="refm057.html">Proc</a> オブジェクトで返されます)
+それ以外は、<code>nil</code> を返します。</p></dd>
+<dt><a name="L000502" id="L000502"><code>trap(<var>signal</var>, <var>command</var>)</code></a>
+<dt><a name="L000503" id="L000503"><code>trap(<var>signal</var>) { ... }</code></a></dt>
+<dd>
+<p>※ Ruby 1.8 以降では <a href="refm085.html#L002144">Signal.trap</a> を推奨します。</p>
+<p><var>signal</var> で指定された割り込みにたいするハンドラとして
+<var>command</var> を登録します。<var>signal</var> はシグナル名の
+文字列か <a href="refm063.html">Symbol</a>、またはシグナル番号で指定します。</p>
+<p><var>command</var> は文字列またはブロックで指定します。
+<code>nil</code>、空文字列<code>&quot;&quot;</code>、<code>&quot;SIG_IGN&quot;</code> または
+<code>&quot;IGNORE&quot;</code> を指定した時は、そのシグナルを無視します
+(可能ならば)。
+<code>&quot;SIG_DFL&quot;</code> または <code>&quot;DEFAULT&quot;</code> を指定した時は、
+デフォルトの動作を行なうようになります。
+<code>&quot;EXIT&quot;</code>を指定した時は、シグナルを受け取ると<a href="refm016.html">終了処理</a>を
+行ったあとステータス 0 で終了します。</p>
+<p>また <var>signal</var> の特別な値として 0 または <code>&quot;EXIT&quot;</code>
+を指定できます。これは「プログラムの終了時」を表します。</p>
+<p>いくつかのシグナルに対して、Ruby インタプリタは例外 <a href="refm092.html">Interrupt</a> や
+<a href="refm091.html">SignalException</a> を発生させます。このようなシグナルは例外処理によっ
+て捕捉することもできます。</p>
+<pre>begin
+  Process.kill :QUIT, $$   # 自身にSIGQUITを送信
+rescue SignalException
+  puts &quot;rescue #$!&quot;
+end
+# =&gt; rescue SIGQUIT</pre>
+<p>trap() により捕捉されたシグナルは例外を発生させません。</p>
+<p>trap は既にシグナルに対応する <var>command</var> が登録されて
+いれば、それを返します(ブロックは <a href="refm057.html">Proc</a> オブジェク
+トとして返されます。&quot;IGNORE&quot; や &quot;DEFAULT&quot; に対しては
+<code>nil</code> を返します)。何も登録されていなければ
+<code>nil</code> を返します。</p>
+<p><a href="refm385.html">ruby 1.8 feature</a>:
+trap 実行前に、&quot;IGNORE&quot; や &quot;DEFAULT&quot; が登録されていたなら、
+&quot;IGNORE&quot;、&quot;DEFAULT&quot; を返します。ruby インタプリタが知り得ない
+シグナルハンドラが登録されていた場合<a name="footmark:5" id="footmark:5" href="#foottext:5"><sup><small>*5</small></sup></a>は <code>nil</code> を返します。</p>
+<pre>p trap(:INT, &quot;p true&quot;)     # =&gt; nil
+p trap(:INT) { }           # =&gt; &quot;p true&quot;
+p trap(:INT, &quot;SIG_IGN&quot;)    # =&gt; #&lt;Proc:0x401b1328&gt;
+p trap(:INT, &quot;DEFAULT&quot;)    # =&gt; nil
+p trap(:INT, &quot;EXIT&quot;)       # =&gt; nil
+p trap(:INT, nil)          # =&gt; &quot;EXIT&quot;</pre>
+<p>存在しないシグナルを指定した場合は、例外 <a href="refm094.html">ArgumentError</a> が発
+生します<a name="footmark:6" id="footmark:6" href="#foottext:6"><sup><small>*6</small></sup></a></p></dd>
+<dt><a name="L000504" id="L000504"><code>untrace_var(<var>varname</var>[, <var>hook</var>])</code></a></dt>
+<dd>
+<p>グローバル変数 <var>varname</var> に関連付けられたフックを
+解除します。<var>hook</var> が指定された場合にはそのフックだけを
+解除します。<var>hook</var> が省略されるかまたは <code>nil</code> を
+与えた場合は <var>varname</var> のフックを全て解除します。
+解除されたフックの配列を返します。</p>
+<p>例:</p>
+<pre>$v = nil
+trace_var(:$v) {|val| puts &quot;$v=#{val.inspect}&quot; }
+$v = 'str'        #=&gt; $v=&quot;str&quot;
+untrace_var :$v
+$v = 'str'        # なにも出力されない</pre></dd>
+<dt><a name="L000505" id="L000505"><code>warn(<var>mesg</var>)</code></a></dt>
+<dd>
+<p><a href="refm385.html">ruby 1.8 feature</a></p>
+<p><var>mesg</var> と改行を順番に <a href="refm030.html#L000549">$stderr</a> に出力します。
+組み込み変数 <a href="refm030.html#L000550">$VERBOSE</a> が <code>nil</code> のときは何も
+出力しません。</p>
+<pre>$stderr.print mesg, &quot;\n&quot; unless $VERBOSE.nil?</pre>
+<p>と同じです。<code>nil</code> を返します。</p></dd>
+</dl>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>例えば、ファイルオープン中にファイルのサイズが小さ
+      くなってもその末尾に出力されます。このことはログ出力な
+      どでプログラムを実行したままそのログを小さくしたい場合
+      に利用されます</small><br />
+<a name="foottext:2" id="foottext:2" href="#footmark:2"><sup><small>*2</small></sup></a><small>version 1.7
+では第 2 引数によらず指定されれば有効になります</small><br />
+<a name="foottext:3" id="foottext:3" href="#footmark:3"><sup><small>*3</small></sup></a><small>第一引数に IO を渡すインタフェースは obsolete と明言
+されています(あらい 2002-01-07 どこで言ってたっけ？確か「デスクトッ
+プリファレンスにはこのことは載ってなかったという話だったはず)</small><br />
+<a name="foottext:4" id="foottext:4" href="#footmark:4"><sup><small>*4</small></sup></a><small>あらい 2002-01-07: IO#printfとは違う</small><br />
+<a name="foottext:5" id="foottext:5" href="#footmark:5"><sup><small>*5</small></sup></a><small>ちょっとウソ</small><br />
+<a name="foottext:6" id="foottext:6" href="#footmark:6"><sup><small>*6</small></sup></a><small>なお、Windows (<a href="refm458.html">mswin32</a>, <a href="refm460.html">mingw32</a>)では、INT
+ILL FPE SEGV TERM BREAK ABRT そして EXIT しか指定できません。</small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm028.html">&lt;-PREV</a>][<a href="refm030.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

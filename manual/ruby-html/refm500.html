@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>variable.c</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm501.html" rel="next" />
+<link href="refm499.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm488.html">UP</a>][<a href="refm499.html">&lt;-PREV</a>][<a href="refm501.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L010652" id="L010652">variable.c</a></h1>
+<dl>
+<dt><a name="L010653" id="L010653">static int autoload_i(ID key, const char *name, st_table *tbl)</a></dt>
+<dt><a name="L010654" id="L010654">static VALUE classname(VALUE klass)</a></dt>
+<dt><a name="L010655" id="L010655">static int cv_i(ID key, VALUE value, VALUE ary)</a></dt>
+<dt><a name="L010656" id="L010656">static void cvar_override_check(VALUE id, VALUE a)</a></dt>
+<dt><a name="L010657" id="L010657">static int fc_i(ID key, VALUE value, struct fc_result *res)</a></dt>
+<dt><a name="L010658" id="L010658">static VALUE fc_path(struct fc_result *fc, ID name)</a></dt>
+<dt><a name="L010659" id="L010659">static VALUE find_class_path(VALUE klass)</a></dt>
+<dd>
+<p>クラス <var>klass</var> のクラスパスを探索し、Ruby の文字列で返します。</p>
+</dd>
+<dt><a name="L010660" id="L010660">static VALUE generic_ivar_defined(VALUE obj, ID id)</a></dt>
+<dt><a name="L010661" id="L010661">static VALUE generic_ivar_get(VALUE obj, ID id)</a></dt>
+<dt><a name="L010662" id="L010662">static int generic_ivar_remove(VALUE obj, ID id, VALUE *valp)</a></dt>
+<dt><a name="L010663" id="L010663">static void generic_ivar_set(VALUE obj, ID id, VALUE val)</a></dt>
+<dt><a name="L010664" id="L010664">static int givar_i(VALUE obj, st_table *tbl)</a></dt>
+<dt><a name="L010665" id="L010665">static int givar_mark_i(ID key, VALUE value)</a></dt>
+<dt><a name="L010666" id="L010666">static ID global_id(const char *name)</a></dt>
+<dt><a name="L010667" id="L010667">static int gvar_i(ID key, struct global_entry *entry, VALUE ary)</a></dt>
+<dt><a name="L010668" id="L010668">void Init_var_tables(void)</a></dt>
+<dt><a name="L010669" id="L010669">static int ivar_i(ID key, struct global_entry *entry, VALUE ary)</a></dt>
+<dt><a name="L010670" id="L010670">static int list_i(ID key, ID value, VALUE ary)</a></dt>
+<dt><a name="L010671" id="L010671">static int mark_global_entry(ID key, struct global_entry *entry)</a></dt>
+<dt><a name="L010672" id="L010672">static void mod_av_set(VALUE klass, ID id, VALUE val, int isconst)</a></dt>
+<dt><a name="L010673" id="L010673">static VALUE original_module(VALUE c)</a></dt>
+<dt><a name="L010674" id="L010674">void rb_alias_variable(ID name1, ID name2)</a></dt>
+<dt><a name="L010675" id="L010675">void rb_autoload(const char *klass, const char *filename)</a></dt>
+<dt><a name="L010676" id="L010676">int rb_autoload_defined(ID id)</a></dt>
+<dt><a name="L010677" id="L010677">static void rb_autoload_id(ID id, const char *filename)</a></dt>
+<dt><a name="L010678" id="L010678">void rb_autoload_load(ID id)</a></dt>
+<dt><a name="L010679" id="L010679">char *rb_class2name(VALUE klass)</a></dt>
+<dd>
+<p><var>klass</var> の名前を返します。
+返り値の内容を変更したり <code>free</code> してはいけません。</p>
+<pre>RSTRING(rb_class_path(klass))-&gt;ptr</pre>
+<p>と同じです。</p>
+</dd>
+<dt><a name="L010680" id="L010680">VALUE rb_class_path(VALUE klass)</a></dt>
+<dd>
+<p><var>klass</var> の名前を返します．<var>klass</var>が無名クラス、無名モジュー
+ルの場合 #&lt;Class 0xXXXX&gt;, #&lt;Module 0xXXXX&gt; の形式で返します。</p>
+<p>Module#to_s の定義は</p>
+<pre>rb_str_dup(rb_class_path(klass));</pre>
+<p>です。</p>
+</dd>
+<dt><a name="L010681" id="L010681">void rb_const_assign(VALUE klass, ID id, VALUE val)</a></dt>
+<dt><a name="L010682" id="L010682">int rb_const_defined(VALUE klass, ID id)</a></dt>
+<dd>
+<p><var>klass</var> とそのスーパークラスに定数 <var>id</var> が定義されていれば真。</p>
+</dd>
+<dt><a name="L010683" id="L010683">int rb_const_defined_at(VALUE klass, ID id)</a></dt>
+<dd>
+<p><var>klass</var> 自体に定数 <var>id</var> が定義されていれば真。</p>
+</dd>
+<dt><a name="L010684" id="L010684">VALUE rb_const_get(VALUE klass, ID name)</a></dt>
+<dd>
+<p>定数 <code><var>klass</var>::<var>name</var></code> の値を取得します。</p>
+</dd>
+<dt><a name="L010685" id="L010685">VALUE rb_const_get_at(VALUE klass, ID name)</a></dt>
+<dd>
+<p>クラス <var>klass</var> で定義された定数 <var>name</var> の値を取得します
+(祖先や外のクラスは調べない)。</p>
+</dd>
+<dt><a name="L010686" id="L010686">VALUE rb_const_list(void *data)</a></dt>
+<dt><a name="L010687" id="L010687">void rb_const_set(VALUE klass, ID name, VALUE val)</a></dt>
+<dd>
+<p>定数 <code><var>klass</var>::<var>name</var></code> の値を <var>val</var> として定義します。</p>
+</dd>
+<dt><a name="L010688" id="L010688">void rb_copy_generic_ivar(VALUE clone, VALUE obj)</a></dt>
+<dt><a name="L010689" id="L010689">VALUE rb_cv_get(VALUE klass, char *name)</a></dt>
+<dd>
+<p><var>klass</var> のクラス変数 <var>name</var> の値を
+取得します。</p>
+</dd>
+<dt><a name="L010690" id="L010690">void rb_cv_set(VALUE klass, char *name, VALUE val)</a></dt>
+<dd>
+<p><var>klass</var> のクラス変数 <var>name</var> に <var>val</var> を代入します。
+変数がまだ定義されていない場合は <code>NameError</code> を発生します。</p>
+</dd>
+<dt><a name="L010691" id="L010691">void rb_cvar_declear(VALUE klass, ID name, VALUE val)</a></dt>
+<dd>
+<p><var>klass</var> のクラス変数 <var>name</var> に <var>val</var> を代入します。</p>
+</dd>
+<dt><a name="L010692" id="L010692">VALUE rb_cvar_defined(VALUE klass, ID id)</a></dt>
+<dt><a name="L010693" id="L010693">VALUE rb_cvar_get(VALUE klass, ID name)</a></dt>
+<dd>
+<p><var>klass</var> のクラス変数 <var>name</var> の値を
+取得します。</p>
+</dd>
+<dt><a name="L010694" id="L010694">void rb_cvar_set(VALUE klass, ID name, VALUE val)</a></dt>
+<dd>
+<p><var>klass</var> のクラス変数 <var>name</var> に <var>val</var> を代入します。
+変数がまだ定義されていない場合は <code>NameError</code> を発生します。</p>
+</dd>
+<dt><a name="L010695" id="L010695">void rb_define_class_variable(VALUE klass, const char *name, VALUE val)</a></dt>
+<dd>
+<p>クラス <var>klass</var> のクラス変数 <var>name</var> を初期値 <var>val</var> で
+定義します。既に同名の変数が定義されていたら警告します。</p>
+</dd>
+<dt><a name="L010696" id="L010696">void rb_define_const(VALUE klass, const char *name, VALUE val)</a></dt>
+<dd>
+<p>クラス <var>klass</var> の定数 <var>name</var> を初期値 <var>val</var> で
+定義します。既に同名の定数が定義されていたら警告します。</p>
+</dd>
+<dt><a name="L010697" id="L010697">void rb_define_global_const(const char *name, VALUE val)</a></dt>
+<dd>
+<p>トップレベル (現在は Object) の定数 <var>name</var> を初期値 <var>val</var> で
+定義します。既に同名の定数が定義されていたら警告します。</p>
+</dd>
+<dt><a name="L010698" id="L010698">void rb_define_hooked_variable(const char *name, VALUE *var, VALUE (*getter)(), VALUE (*setter)())</a></dt>
+<dt><a name="L010699" id="L010699">void rb_define_readonly_variable(const char *name, VALUE *var)</a></dt>
+<dt><a name="L010700" id="L010700">void rb_define_variable(const char *name, VALUE *var)</a></dt>
+<dt><a name="L010701" id="L010701">void rb_define_virtual_variable(const char *name, VALUE (*getter)(), VALUE (*setter)())</a></dt>
+<dt><a name="L010702" id="L010702">VALUE rb_f_autoload(VALUE obj, VALUE klass, VALUE file)</a></dt>
+<dt><a name="L010703" id="L010703">VALUE rb_f_global_variables(void)</a></dt>
+<dt><a name="L010704" id="L010704">VALUE rb_f_trace_var(int argc, VALUE *argv)</a></dt>
+<dt><a name="L010705" id="L010705">VALUE rb_f_untrace_var(int argc, VALUE *argv)</a></dt>
+<dt><a name="L010706" id="L010706">void rb_free_generic_ivar(VALUE obj)</a></dt>
+<dt><a name="L010707" id="L010707">void rb_gc_mark_global_tbl(void)</a></dt>
+<dt><a name="L010708" id="L010708">st_table *rb_generic_ivar_table(VALUE obj)</a></dt>
+<dt><a name="L010709" id="L010709">struct global_entry *rb_global_entry(ID id)</a></dt>
+<dt><a name="L010710" id="L010710">VALUE rb_gv_get(const char *name) [1.5 feature]</a></dt>
+<dd>
+<p>Ruby のグローバル変数の値を取得します。</p>
+<p>使用例</p>
+<pre>VALUE v = rb_gv_get(&quot;$!&quot;)</pre>
+</dd>
+<dt><a name="L010711" id="L010711">VALUE rb_gv_set(const char *name, VALUE val) [1.5 feature]</a></dt>
+<dd>
+<p>Ruby のグローバル変数 <var>name</var> に <var>val</var> を代入します。
+<var>val</var> を返します。</p>
+</dd>
+<dt><a name="L010712" id="L010712">VALUE rb_gvar_defined(struct global_entry *entry)</a></dt>
+<dd>
+<p><var>entry</var> で示されるグローバル変数が定義されているなら真。</p>
+</dd>
+<dt><a name="L010713" id="L010713">VALUE rb_gvar_get(struct global_entry *entry)</a></dt>
+<dd>
+<p>グローバル変数のエントリ <var>entry</var> から値を取得します。</p>
+</dd>
+<dt><a name="L010714" id="L010714">VALUE rb_gvar_set(struct global_entry *entry, VALUE val)</a></dt>
+<dd>
+<p>グローバル変数のエントリ <var>entry</var> に値を代入します。</p>
+</dd>
+<dt><a name="L010715" id="L010715">VALUE rb_iv_get(VALUE obj, char *name)</a></dt>
+<dd>
+<p>オブジェクト <var>obj</var> のインスタンス変数 <var>name</var> の値を
+取得します。</p>
+</dd>
+<dt><a name="L010716" id="L010716">VALUE rb_iv_set(VALUE obj, char *name, VALUE val)</a></dt>
+<dd>
+<p>オブジェクト <var>obj</var> のインスタンス変数 <var>name</var> に
+<var>val</var> を代入します。</p>
+</dd>
+<dt><a name="L010717" id="L010717">VALUE rb_ivar_defined(VALUE obj, ID id)</a></dt>
+<dd>
+<p>オブジェクト <var>obj</var> のインスタンス変数 <var>name</var> が
+定義されていれば真。</p>
+</dd>
+<dt><a name="L010718" id="L010718">VALUE rb_ivar_get(VALUE obj, ID name)</a></dt>
+<dd>
+<p>オブジェクト <var>obj</var> のインスタンス変数 <var>name</var> の値を
+取得します。</p>
+</dd>
+<dt><a name="L010719" id="L010719">VALUE rb_ivar_set(VALUE obj, ID name, VALUE val)</a></dt>
+<dd>
+<p>オブジェクト <var>obj</var> のインスタンス変数 <var>name</var> に
+<var>val</var> を代入します。</p>
+</dd>
+<dt><a name="L010720" id="L010720">void rb_mark_generic_ivar(VALUE obj)</a></dt>
+<dt><a name="L010721" id="L010721">void rb_mark_generic_ivar_tbl(void)</a></dt>
+<dt><a name="L010722" id="L010722">VALUE rb_mod_class_variables(VALUE obj)</a></dt>
+<dt><a name="L010723" id="L010723">void *rb_mod_const_at(VALUE mod, void *data)</a></dt>
+<dt><a name="L010724" id="L010724">void *rb_mod_const_of(VALUE mod, void *data)</a></dt>
+<dt><a name="L010725" id="L010725">VALUE rb_mod_constants(VALUE mod)</a></dt>
+<dt><a name="L010726" id="L010726">VALUE rb_mod_name(VALUE mod)</a></dt>
+<dd>
+<p><code>Module#name</code> の実体です。
+無名クラス、無名モジュールに対しては空文字列を返します。</p>
+</dd>
+<dt><a name="L010727" id="L010727">VALUE rb_mod_remove_const(VALUE mod, VALUE name)</a></dt>
+<dt><a name="L010728" id="L010728">VALUE rb_mod_remove_cvar(VALUE mod, VALUE name)</a></dt>
+<dt><a name="L010729" id="L010729">void rb_name_class(VALUE klass, ID id)</a></dt>
+<dd>
+<p>クラス <var>klass</var> を <var>id</var> と命名します。</p>
+</dd>
+<dt><a name="L010730" id="L010730">VALUE rb_obj_instance_variables(VALUE obj)</a></dt>
+<dt><a name="L010731" id="L010731">VALUE rb_obj_remove_instance_variable(VALUE obj, VALUE name)</a></dt>
+<dt><a name="L010732" id="L010732">VALUE rb_path2class(const char *path)</a></dt>
+<dt><a name="L010733" id="L010733">void rb_set_class_path(VALUE klass, VALUE under, const char *name)</a></dt>
+<dt><a name="L010734" id="L010734">static void rb_trace_eval(VALUE cmd, VALUE val)</a></dt>
+<dt><a name="L010735" id="L010735">static void readonly_setter(VALUE val, ID id, void *var)</a></dt>
+<dt><a name="L010736" id="L010736">static void remove_trace(struct global_variable *var)</a></dt>
+<dt><a name="L010737" id="L010737">static int sv_i(ID key, VALUE value, st_table *tbl)</a></dt>
+<dt><a name="L010738" id="L010738">static int top_const_get(ID id, VALUE *klassp)</a></dt>
+<dd>
+<p>トップレベルの定数 <var>id</var> を参照します。
+定数 <var>id</var> が定義されていたら真を返し <var>klassp</var> に
+その値を書き込みます。未定義なら偽を返します。</p>
+</dd>
+<dt><a name="L010739" id="L010739">static VALUE trace_en(struct global_variable *var)</a></dt>
+<dt><a name="L010740" id="L010740">static VALUE trace_ev(struct trace_data *data)</a></dt>
+<dt><a name="L010741" id="L010741">static VALUE undef_getter(ID id)</a></dt>
+<dt><a name="L010742" id="L010742">static void undef_marker(void)</a></dt>
+<dt><a name="L010743" id="L010743">static void undef_setter(VALUE val, ID id, void *data, struct global_variable *var)</a></dt>
+<dt><a name="L010744" id="L010744">static VALUE val_getter(ID id, VALUE val)</a></dt>
+<dt><a name="L010745" id="L010745">static void val_marker(VALUE data)</a></dt>
+<dt><a name="L010746" id="L010746">static void val_setter(VALUE val, ID id, void *data, struct global_variable *var)</a></dt>
+<dt><a name="L010747" id="L010747">static VALUE var_getter(ID id, VALUE *var)</a></dt>
+<dt><a name="L010748" id="L010748">static void var_marker(VALUE *var)</a></dt>
+<dt><a name="L010749" id="L010749">static void var_setter(VALUE val, ID id, VALUE *var)</a></dt>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm488.html">UP</a>][<a href="refm499.html">&lt;-PREV</a>][<a href="refm501.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

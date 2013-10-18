@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>プログラム</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm023.html" rel="next" />
+<link href="refm021.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm020.html">UP</a>][<a href="refm021.html">&lt;-PREV</a>][<a href="refm023.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L000302" id="L000302">プログラム</a></h1>
+<ul>
+<li><a href="#L000303">式</a></li>
+<li><a href="#L000306">プログラムの終り</a></li>
+</ul>
+<p>プログラムは<a href="#L000303">式</a>を並べたものです。式と式の間はセミコロ
+ン(;)または改行で区切ります。ただし、バックスラッシュに続く改行は文
+の区切りにならず、次の行へ継続します。</p>
+<p>例:</p>
+<pre>print &quot;hello world!\n&quot;</pre>
+<h2><a name="L000303" id="L000303">式</a></h2>
+<p>例:</p>
+<pre>true
+(1+2)*3
+foo()
+if test then ok else ng end</pre>
+<p>Ruby の式には、<a href="refm023.html">変数と定数</a>、さまざまな<a href="refm024.html">リテラル</a>、それらの
+<a href="refm025.html">演算や代入</a>、if や while などの<a href="refm026.html">制御構造</a>、
+<a href="refm027.html">メソッド呼び出し</a>、<a href="refm028.html">クラス／メソッドの定義</a>があります。</p>
+<p>式は括弧によってグルーピングすることができます。</p>
+<p>空の式 () は nil を返します。</p>
+<p>Rubyの式には値を返す式と返さない式があります。</p>
+<dl>
+<dt><a name="L000304" id="L000304">値を返さない式の例</a></dt>
+<dd>
+<ul>
+<li>while, until, while 修飾式, until 修飾式</li>
+</ul>
+</dd>
+</dl>
+<p>また、メソッドの引数に指定できない式と指定できる式があります(このよう
+な式を「文」と呼び分ける場合があります)。</p>
+<dl>
+<dt><a name="L000305" id="L000305">メソッドの引数に指定できない式の例</a></dt>
+<dd>
+<ul>
+<li>and, or, not</li>
+<li>if/unless/rescue 修飾式, ...</li>
+</ul>
+</dd>
+</dl>
+<p>メソッドの引数に指定できない式は、括弧によるグルーピングを行うことで普
+通の式として使用することができます。</p>
+<h2><a name="L000306" id="L000306">プログラムの終り</a></h2>
+<p>Rubyインタプリタはプログラムを読みこんでいる際に以下のものに出あうとそこ
+で読みこみを終了します。</p>
+<ul>
+<li>ファイルの終り(文字列をevalしている場合は文字列の終り)</li>
+<li><code>^D</code>(コントロールD) 、<code>^Z</code>(コントロールZ)</li>
+<li><code>__END__</code>のみの行(前後に空白があると認識されません)</li>
+</ul>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm020.html">UP</a>][<a href="refm021.html">&lt;-PREV</a>][<a href="refm023.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

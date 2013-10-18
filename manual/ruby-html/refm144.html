@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>mailread</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm145.html" rel="next" />
+<link href="refm143.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm143.html">&lt;-PREV</a>][<a href="refm145.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L002774" id="L002774">mailread</a></h1>
+<p>Unix mbox 形式のメールファイルを解析するライブラリ</p>
+<h2><a name="L002775" id="L002775">mailread の使い方</a></h2>
+<pre>require 'mailread'
+
+m = Mail.new('/var/mail/foo')
+puts 'From: ' + m['From'],
+     'Subject: ' + m['Subject'],
+     '--',
+     m.body[0,5]</pre>
+<h2><a name="L002776" id="L002776">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L002777" id="L002777"><code>Mail.new(<var>f</var>)</code></a></dt>
+<dd>
+<p>メールを解析する。
+<var>f</var> はファイル名か <a href="refm045.html">IO</a> オブジェクト。
+このメソッドを実行した時点でヘッダと本文が切り分けられ、
+ヘッダのハッシュ(ヘッダフィールド単位)と本文の配列(行単位)が作られる。</p>
+<p>1ファイル複数メールの形式(Unix mbox 形式)に対応しており
+(この場合 open 済みの IO を渡す必要があることに注意)、
+例えば以下のようにして各メールの Subject を表示できる。</p>
+<pre>require 'mailread'
+require 'nkf'
+
+mailbox = File.open('/var/mail/foo')
+until (m = Mail.new(mailbox)).header.empty?
+  puts NKF.nkf('-me', m['subject'])
+end</pre></dd>
+</dl>
+<h2><a name="L002778" id="L002778">メソッド:</a></h2>
+<dl>
+<dt><a name="L002779" id="L002779"><code>Mail#header</code></a></dt>
+<dd>
+<p>ヘッダを <a href="refm044.html">Hash</a> で返す。
+キーは 'From'、'Subject' などのフィールド名で、すべてのキーは 
+<a href="refm061.html">String#capitalize</a> されている。</p>
+<p>値の末尾の改行は削除される。
+複数行に分かれている場合、間に改行をはさむ(継続行を表す空白は削除される)。
+MIME encoded-word のデコードなどを行いたい場合は <a href="refm260.html">nkf</a> などを使用すること。</p></dd>
+<dt><a name="L002780" id="L002780"><code>Mail#body</code></a></dt>
+<dd>
+<p>本文を行単位の <a href="refm036.html">Array</a> で返す。</p></dd>
+<dt><a name="L002781" id="L002781"><code>Mail#[<var>field</var>]</code></a></dt>
+<dd>
+<p>ヘッダの <var>field</var> の値を返す。
+m.header[<var>field</var>.capitalize] と同じなので値取得の際は、
+フィールド名のアルファベットの大小を気にする必要はない。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm143.html">&lt;-PREV</a>][<a href="refm145.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

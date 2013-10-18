@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>CSV</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm147.html" rel="next" />
+<link href="refm145.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm145.html">UP</a>][<a href="refm145.html">&lt;-PREV</a>][<a href="refm147.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L002785" id="L002785">CSV</a></h1>
+<p><a href="refm145.html">csv</a> / <a href="refm146.html">CSV</a> / <a href="refm147.html">CSV::Reader</a> /
+<a href="refm148.html">CSV::StringReader</a> / <a href="refm149.html">CSV::IOReader</a> /<a href="refm150.html">CSV::Writer</a> / <a href="refm151.html">CSV::BasicWriter</a></p>
+<p>CSV (Comma Separated Value) を扱うクラスです。</p>
+<h2><a name="L002786" id="L002786">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm035.html">Object</a></li>
+</ul>
+<h2><a name="L002787" id="L002787">クラスメソッド:</a></h2>
+<pre>mode 
+  'r', 'w', 'rb', 'wb' から指定可能。
+
+    - 'r' 読み込み
+    - 'w' 書き込み
+    - 'b' バイナリモード
+
+fs
+  フィールドの区切り文字
+  デフォルトは ','
+
+rs
+  行区切り文字。nil(デフォルト)で CrLf / Lf。 
+  Cr で区切りたい場合は ?\r を渡す。</pre>
+<dl>
+<dt><a name="L002788" id="L002788"><code>CSV.open(<var>path</var>, <var>mode</var>[, <var>fs</var> = <var>nil</var>[, <var>rs</var> = <var>nil</var>]]){ ... }</code></a></dt>
+<dd>
+<p>読み込み：path にあるファイルを開き各行を配列として
+ブロックに渡す</p>
+<pre>CSV.open(&quot;/temp/test.csv&quot;, 'r') do |row|
+  puts row.join(&quot;&lt;&gt;&quot;)
+end</pre>
+<p>ブロックを渡さなかった場合 CSV::Reader を返す</p>
+<p>書き込み：path にあるファイルを開き CSV::Writer をブロックに渡す。</p>
+<pre>CSV.open(&quot;/temp/test.csv&quot;, 'w') do |writer|
+  writer &lt;&lt; [&quot;ruby&quot;, &quot;perl&quot;, &quot;python&quot;]
+  writer &lt;&lt; [&quot;java&quot;, &quot;C&quot;, &quot;C++&quot;]
+end</pre>
+<p>ブロック未指定の場合 CSV::Writer を返す</p></dd>
+<dt><a name="L002789" id="L002789"><code>CSV.foreach(<var>path</var>[, <var>rs</var> = <var>nil</var>]) { ... }</code></a></dt>
+<dd>
+<p>読み込みモードでファイルを開き、各行を配列でブロックに渡す</p>
+<pre>CSV.foreach('test.csv'){|row|
+  puts row.join('&lt;&gt;')
+}</pre></dd>
+<dt><a name="L002790" id="L002790"><code>CSV.read(<var>path</var>[, <var>length</var> = <var>nil</var>[, <var>offset</var> = <var>nil</var>]])</code></a>
+<dt><a name="L002791" id="L002791"><code>CSV.readlines(<var>path</var>[, <var>rs</var> = <var>nil</var>])</code></a></dt>
+<dd>
+<p>path で指定されたCSVファイルを読み込み 配列の配列でデータを返す</p></dd>
+<dt><a name="L002792" id="L002792"><code>CSV.generate(<var>path</var>[, <var>fs</var> = <var>nil</var>[, <var>rs</var> = <var>nil</var>]]) { ... }</code></a>
+<dt><a name="L002793" id="L002793"><code>CSV.parse(<var>str_or_readable</var>[, <var>fs</var> = <var>nil</var>[, <var>rs</var> = <var>nil</var>]])</code></a>
+<dt><a name="L002794" id="L002794"><code>CSV.parse_line(<var>src</var>[, <var>fs</var> = <var>nil</var>[, <var>rs</var> = <var>nil</var>]])</code></a>
+<dt><a name="L002795" id="L002795"><code>CSV.generate_line(<var>row</var>[, <var>fs</var> = <var>nil</var>[, <var>rs</var> = <var>nil</var>]])</code></a>
+<dt><a name="L002796" id="L002796"><code>CSV.parse_row(<var>src</var>, <var>index</var>, <var>out_dev</var>[, <var>fs</var> = <var>nil</var>[, <var>rs</var> = <var>nil</var>]])</code></a>
+<dt><a name="L002797" id="L002797"><code>CSV.generate_row(<var>src</var>, <var>cells</var>, <var>out_dev</var>[, <var>fs</var> = <var>nil</var>[, <var>rs</var> = <var>nil</var>]])</code></a>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm145.html">UP</a>][<a href="refm145.html">&lt;-PREV</a>][<a href="refm147.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

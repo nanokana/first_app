@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>TMail::Mail</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm506.html" rel="next" />
+<link href="refm504.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm486.html">UP</a>][<a href="refm504.html">&lt;-PREV</a>][<a href="refm506.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<p><a href="http://www.loveruby.net/ja/man/tmail/index.html">TMail ユーザーマニュアル</a><sup class="outside"><small>[外部]</small></sup>も参照してください。</p>
+<h1><a name="L011136" id="L011136">TMail::Mailクラス</a></h1>
+<h2><a name="L011137" id="L011137">スーパークラス</a></h2>
+<p>Object</p>
+<h2><a name="L011138" id="L011138">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L011139" id="L011139"><code>TMail::Mail.new( ((|<var>port</var>|)), ((|<var>strict</var>|)) = <var>false</var> )</code></a></dt>
+<dd>
+<p>新しい Mail オブジェクトを返します。
+引数は<a href="port.html">Port</a><sup class="outside"><small>[外部]</small></sup>です。</p>
+<p>strict が真のときはヘッダをパースできなかったときに、
+例外 ParseError を発生します。偽のときはエラーを無視します。</p></dd>
+<dt><a name="L011140" id="L011140"><code>TMail::Mail.load_from( ((|<var>filename</var>|)) )</code></a></dt>
+<dd>
+<p>新しい Mail オブジェクトを返します。引数 filename は mh などのように、
+メール一通がファイルひとつに対応するファイルの名前でなければいけません。
+UNIX mbox のような形式は単独では対応していないので、
+別途<a href="loader.html">ローダー</a><sup class="outside"><small>[外部]</small></sup>を使ってください。</p></dd>
+<dt><a name="L011141" id="L011141"><code>TMail::Mail.boundary</code></a></dt>
+<dd>
+<p>新しいバウンダリを作成して返します。</p></dd>
+<dt><a name="L011142" id="L011142"><code>TMail::Mail.msgid</code></a></dt>
+<dd>
+<p>新しいMessage-IDを作成して返します。
+ホスト名が取得できれば'&lt;ランダム文字列@ホスト名&gt;'の形式で作成します。
+取得できないときはかわりに'tmail.on.ruby'を使います。</p></dd>
+<dt><a name="L011143" id="L011143"><code>TMail::Mail.msgid?( ((|<var>str</var>|)) )</code></a></dt>
+<dd>
+<p>文字列 str が正しいメッセージ ID 形式かどうかを返します。</p></dd>
+<dt><a name="L011144" id="L011144"><code>TMail::Mail.zonestr2i( ((|<var>str</var>|)) )</code></a></dt>
+<dd>
+<p>タイムゾーンを表す文字列 str を整数に変換します。単位は分です。</p></dd>
+<dt><a name="L011145" id="L011145"><code>TMail::Mail.time2str( ((|<var>time</var>|)) )</code></a></dt>
+<dd>
+<p>Time オブジェクトを RFC822 形式の文字列に変換します。</p></dd>
+<dt><a name="L011146" id="L011146"><code>TMail::Mail.quote( ((|<var>str</var>|)) )</code></a></dt>
+<dd>
+<p>文字列 str がメールヘッダで特殊な意味を持つとき、「&quot;」でクオートします。
+そうでないときは str をそのまま返します。</p></dd>
+<dt><a name="L011147" id="L011147"><code>TMail::Mail.encoded?( ((|<var>str</var>|)) )</code></a></dt>
+<dd>
+<p>文字列 str にヘッダ用の MIME エンコードがなされていると思われる時、真。</p></dd>
+</dl>
+<h2><a name="L011148" id="L011148">メソッド</a></h2>
+<dl>
+<dt><a name="L011149" id="L011149"><code>TMail::Mail#body_port</code></a></dt>
+<dd>
+<p>TMail が本文を保存している<a href="port.html">ポート</a><sup class="outside"><small>[外部]</small></sup>を返します。</p>
+<p>ただし、ここに書きこんでも実際のメールは変更されません。実際に変更するためには
+このポートに書きこんだ後 write_back メソッドを呼ぶ必要があります。</p></dd>
+<dt><a name="L011150" id="L011150"><code>TMail::Mail#each</code></a></dt>
+<dd>
+<p>body_port.each と同じです。</p></dd>
+<dt><a name="L011151" id="L011151"><code>TMail::Mail#body</code></a>
+<dt><a name="L011152" id="L011152"><code>TMail::Mail#preamble</code></a></dt>
+<dd>
+<p>メールボディ(本文)全てを文字列で返します。
+MIMEマルチパートメールのときはpreambleに相当します。</p></dd>
+<dt><a name="L011153" id="L011153"><code>TMail::Mail#parts</code></a></dt>
+<dd>
+<p>メールがMIMEマルチパートメールの時、
+各パートが TMail::Mail の配列として格納されています。
+マルチパートメールでないときは空の配列です。</p>
+<p>この配列を変更しても実際のメールには反映されません。
+反映させるには write_back を呼びます。</p></dd>
+<dt><a name="L011154" id="L011154"><code>TMail::Mail#epilogue, <var>epilogue</var>=</code></a></dt>
+<dd>
+<p>MIMEマルチパートメールでの epilogue に相当する文字列です。
+通常のメールのときは空文字列がはいっています。</p>
+<p>この文字列を変更しても実際のメールには反映されません。
+反映させるには write_back を呼びます。</p></dd>
+<dt><a name="L011155" id="L011155"><code>TMail::Mail#multipart?</code></a></dt>
+<dd>
+<p>メールがMIMEマルチパートのとき true。
+このメソッドは Content-Type ヘッダの内容で真偽を判断します。</p></dd>
+<dt><a name="L011156" id="L011156"><code>TMail::Mail#encoded( ((|<var>eol</var>|)) = &quot;\<var>n</var>&quot;, ((|<var>charset</var>|)) = '<var>j</var>', ((|<var>ret</var>|)) = '', ((|<var>sep</var>|)) = '' )</code></a></dt>
+<dd>
+<p>適宜エンコードを行いつつメールを ret に書きこみます。
+その際、ヘッダの行末コードを eol に、
+ヘッダ内のエンコード前の日本語の文字コードを charset にセットし、
+ヘッダと本文の間に文字列 sep をはさみます(たとえば Mh 形式なら'----')。</p>
+<p>このメソッドは 0.7 までは to_s と呼ばれていたものですが、
+今後は encoded を推奨します。
+将来のバージョンでは to_s は decoded の別名になります。</p></dd>
+<dt><a name="L011157" id="L011157"><code>TMail::Mail#decoded( ((|<var>eol</var>|)) = &quot;\<var>n</var>&quot;, ((|<var>charset</var>|)) = '<var>e</var>', ((|<var>ret</var>|)) = '', ((|<var>sep</var>|)) = '' )</code></a></dt>
+<dd>
+<p>メールを文字列に変換します。
+ヘッダがデコードされたものになること以外は encoded と同じです。</p>
+<p>0.7 まではこのメソッドは inspect と呼ばれていましたが、
+今後は decoded を使うことを勧めます。
+将来のバージョンでは inspect はまったく違う意味になります。</p></dd>
+<dt><a name="L011158" id="L011158"><code>TMail::Mail#to( <var>default</var> = '' )</code></a></dt>
+<dd>
+<p>Toヘッダの一番最初のアドレスを返します。
+Toが存在しないときはdefaultを返します。</p></dd>
+<dt><a name="L011159" id="L011159"><code>TMail::Mail#to=( <var>str</var> )</code></a></dt>
+<dd>
+<p>To ヘッダにに str をセットします。</p></dd>
+<dt><a name="L011160" id="L011160"><code>TMail::Mail#from( <var>default</var> = '' )</code></a></dt>
+<dd>
+<p>From の一番最初のアドレスを返します。
+From が存在しないときは default を返します。</p></dd>
+<dt><a name="L011161" id="L011161"><code>TMail::Mail#from_phrase( <var>default</var> = '' )</code></a></dt>
+<dd>
+<p>From の一番最初のアドレスの phrase 部分を返します。
+From が存在しないときは default を返します。</p></dd>
+<dt><a name="L011162" id="L011162"><code>TMail::Mail#from=( <var>str</var> )</code></a></dt>
+<dd>
+<p>From に str を使います。</p></dd>
+<dt><a name="L011163" id="L011163"><code>TMail::Mail#subject( <var>default</var> = '' )</code></a></dt>
+<dd>
+<p>Subject を返します。Subject ヘッダがないときは default を返します。</p></dd>
+<dt><a name="L011164" id="L011164"><code>TMail::Mail#subject=( <var>str</var> )</code></a></dt>
+<dd>
+<p>Subject ヘッダを str にセットします。</p></dd>
+<dt><a name="L011165" id="L011165"><code>TMail::Mail#msgid( <var>default</var> = '' )</code></a></dt>
+<dd>
+<p>メッセージID を返します。</p></dd>
+<dt><a name="L011166" id="L011166"><code>TMail::Mail#msgid=( <var>str</var> )</code></a></dt>
+<dd>
+<p>メッセージID に str をセットします。</p></dd>
+<dt><a name="L011167" id="L011167"><code>TMail::Mail#maintype( <var>default</var> = <var>nil</var> )</code></a></dt>
+<dd>
+<p>メール内容のメインタイプを返します。</p></dd>
+<dt><a name="L011168" id="L011168"><code>TMail::Mail#subtype( <var>default</var> = <var>nil</var> )</code></a></dt>
+<dd>
+<p>メール内容のサブタイプを返します。</p></dd>
+<dt><a name="L011169" id="L011169"><code>TMail::Mail#charset( <var>default</var> = <var>nil</var> )</code></a></dt>
+<dd>
+<p>charset が設定されていればそれを返します。</p></dd>
+<dt><a name="L011170" id="L011170"><code>TMail::Mail#charset=( <var>str</var> )</code></a></dt>
+<dd>
+<p>charset を str に設定します。</p></dd>
+<dt><a name="L011171" id="L011171"><code>TMail::Mail#set_contenttype( <var>main</var>, <var>sub</var>, <var>params</var> = <var>nil</var> )</code></a></dt>
+<dd>
+<p>コンテントタイプを main/sub; param ; param ; ... のように設定します。
+params は Hash です。</p></dd>
+<dt><a name="L011172" id="L011172"><code>TMail::Mail#encoding( <var>default</var> = <var>nil</var> )</code></a></dt>
+<dd>
+<p>転送用エンコーディングを返します。</p></dd>
+<dt><a name="L011173" id="L011173"><code>TMail::Mail#encoding=( <var>str</var> )</code></a></dt>
+<dd>
+<p>転送用エンコーディングを設定します。</p></dd>
+<dt><a name="L011174" id="L011174"><code>TMail::Mail#each_dest{|<var>addr</var>| ....}</code></a></dt>
+<dd>
+<p>全ての宛先に対するくりかえし。</p></dd>
+<dt><a name="L011175" id="L011175"><code>TMail::Mail#clear</code></a></dt>
+<dd>
+<p>ヘッダを全て消去します。</p></dd>
+<dt><a name="L011176" id="L011176"><code>TMail::Mail#keys</code></a></dt>
+<dd>
+<p>ヘッダ名の配列を返します。</p></dd>
+<dt><a name="L011177" id="L011177"><code>TMail::Mail#self[ <var>key</var> ]</code></a></dt>
+<dd>
+<p>ヘッダ名からヘッダオブジェクトを返します。</p></dd>
+<dt><a name="L011178" id="L011178"><code>TMail::Mail#self[ <var>key</var> ]= <var>val</var></code></a></dt>
+<dd>
+<p>keyヘッダの内容としてvalヘッダオブジェクトを使います。</p></dd>
+<dt><a name="L011179" id="L011179"><code>TMail::Mail#delete( <var>key</var> )</code></a></dt>
+<dd>
+<p>keyヘッダを消します。</p></dd>
+<dt><a name="L011180" id="L011180"><code>TMail::Mail#delete_if{|<var>key</var>, <var>val</var>| ..... }</code></a></dt>
+<dd>
+<p>ヘッダ名とヘッダを与えてブロックを評価し、真ならその関連づけを消します。</p></dd>
+<dt><a name="L011181" id="L011181"><code>TMail::Mail#each_header{|<var>name</var>, <var>field</var>| ... }</code></a>
+<dt><a name="L011182" id="L011182"><code>TMail::Mail#each_pair{|<var>name</var>, <var>field</var>| ... }</code></a></dt>
+<dd>
+<p>全てのヘッダ名とヘッダオブジェクトに対するくりかえし。</p></dd>
+<dt><a name="L011183" id="L011183"><code>TMail::Mail#each_header_name{|<var>header_name</var>| .....}</code></a></dt>
+<dd>
+<p>全てのヘッダ名に対するくりかえし。</p></dd>
+<dt><a name="L011184" id="L011184"><code>TMail::Mail#each_field{|<var>field</var>| ... }</code></a>
+<dt><a name="L011185" id="L011185"><code>TMail::Mail#each_value{|<var>field</var>| ... }</code></a></dt>
+<dd>
+<p>全てのヘッダオブジェクトに対するくりかえし。</p></dd>
+<dt><a name="L011186" id="L011186"><code>TMail::Mail#fetch( <var>key</var>, <var>default_body</var> )</code></a>
+<dt><a name="L011187" id="L011187"><code>TMail::Mail#fetch( <var>key</var> ){ ... }</code></a></dt>
+<dd>
+<p>keyヘッダに対応するヘッダオブジェクトを返します。配列 TMail::Mail::USE_ARRAY に
+名前が設定されているヘッダに対しては('Received'など)、ヘッダオブジェクトの
+配列が返ります。keyヘッダが存在しない場合はdefault_bodyに与えられた文字列を
+ヘッダボディとして登録したうえでそのヘッダオブジェクトを返します。
+default_bodyが省略され、ブロックが与えられたときは、そのブロックを評価した結果を
+default_bodyとして使います。</p></dd>
+<dt><a name="L011188" id="L011188"><code>TMail::Mail#has_key?( <var>name</var> )</code></a>
+<dt><a name="L011189" id="L011189"><code>TMail::Mail#include?( <var>name</var> )</code></a>
+<dt><a name="L011190" id="L011190"><code>TMail::Mail#key?( <var>name</var> )</code></a></dt>
+<dd>
+<p>name ヘッダがあれば真。</p></dd>
+<dt><a name="L011191" id="L011191"><code>TMail::Mail#has_value?( <var>field</var> )</code></a>
+<dt><a name="L011192" id="L011192"><code>TMail::Mail#value?( <var>field</var> )</code></a></dt>
+<dd>
+<p>field ヘッダオブジェクトがあれば真。</p></dd>
+<dt><a name="L011193" id="L011193"><code>TMail::Mail#indexes( *<var>keys</var> )</code></a>
+<dt><a name="L011194" id="L011194"><code>TMail::Mail#indices( *<var>keys</var> )</code></a></dt>
+<dd>
+<p>全てのkeysについてfetchした結果の配列を返します。</p></dd>
+<dt><a name="L011195" id="L011195"><code>TMail::Mail#store( <var>fname</var>, <var>fbody</var> )</code></a></dt>
+<dd>
+<p>fname ヘッダを fbody に設定します。fbody は文字列、HeaderField オブジェクトです。
+Received: など一部のヘッダに対してはさらにその配列も与えることができます。</p></dd>
+<dt><a name="L011196" id="L011196"><code>TMail::Mail#values</code></a></dt>
+<dd>
+<p>登録されている全てのヘッダオブジェクトの配列を返します。</p></dd>
+</dl>
+<p>Copyright (c) 1998-2000 Minero Aoki
+<a href="mailto:aamine@dp.u-netsurf.ne.jp">aamine@dp.u-netsurf.ne.jp</a><sup class="outside"><small>[外部]</small></sup></p>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm486.html">UP</a>][<a href="refm504.html">&lt;-PREV</a>][<a href="refm506.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

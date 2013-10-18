@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ARGF</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm033.html" rel="next" />
+<link href="refm031.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm031.html">UP</a>][<a href="refm031.html">&lt;-PREV</a>][<a href="refm033.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L000585" id="L000585">ARGF</a></h1>
+<p>スクリプトに指定した引数 (<a href="refm031.html#L000574">ARGV</a> を参照) をファイル名と
+みなして、それらのファイルを連結した 1 つの仮想ファイルを表すオブジェ
+クトです。<code>ARGV</code> が空なら標準入力を対象とします。<code>ARGV</code> を変更
+すればこのオブジェクトの動作に影響します。</p>
+<pre>while line = ARGF.gets
+  ..
+end</pre>
+<p>は、</p>
+<pre>while argv = ARGV.shift
+  File.open(argv) {|file|
+    while line = file.gets
+      ..
+    end
+  }
+end</pre>
+<p>のように動作します。</p>
+<p><code>ARGF</code> を処理するごとに <code>ARGV</code> の要素は一つずつ取り除かれます。</p>
+<pre>ARGV.replace %w[/tmp/foo /tmp/bar]
+ARGF.each {|line|
+    # 処理中の ARGV の内容を表示
+    p [ARGF.filename, ARGV];
+    ARGF.skip
+}
+# 最後まで読んだ後(ARGVが空)の動作
+p ARGF.gets
+p ARGF.filename
+
+# =&gt; [&quot;/tmp/foo&quot;, [&quot;/tmp/bar&quot;]]
+     [&quot;/tmp/bar&quot;, []]
+     nil
+     &quot;/tmp/bar&quot;</pre>
+<p><a href="refm029.html#L000452">gets</a> など一部の<a href="refm029.html">組み込み関数</a>は <code>ARGF.gets</code> な
+どこのオブジェクトをレシーバとしたメソッドの省略形です。</p>
+<h2><a name="L000586" id="L000586">メソッド:</a></h2>
+<p><a href="refm045.html">IO</a> オブジェクトのメソッドに加えて、以下のメソッドを持ちます。</p>
+<dl>
+<dt><a name="L000587" id="L000587"><code>ARGF.to_s</code></a>
+<dt><a name="L000588" id="L000588"><code>ARGF.filename</code></a>
+<dt><a name="L000589" id="L000589"><code>ARGF.path   ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>処理対象のファイル名を返します。標準入力に対しては <code>-</code> を返し
+ます。組み込み変数 <a href="refm030.html#L000546">$FILENAME</a> と同じです。</p>
+<p><a href="refm385.html">ruby 1.8 feature</a>:
+to_s は、常に文字列 &quot;ARGF&quot; を返します。</p></dd>
+<dt><a name="L000590" id="L000590"><code>ARGF.file</code></a></dt>
+<dd>
+<p>処理対象の <a href="refm046.html">File</a> オブジェクト(または <a href="refm045.html">IO</a> オブジェクト)を
+返します。</p></dd>
+<dt><a name="L000591" id="L000591"><code>ARGF.lineno</code></a></dt>
+<dd>
+<p>全引数ファイルを一つのファイルとみなしたときの現在の行番号を返しま
+す。個々の引数ファイル毎の行番号を得るには <code>ARGF.file.lineno</code> 
+とします。</p></dd>
+<dt><a name="L000592" id="L000592"><code>ARGF.skip</code></a></dt>
+<dd>
+<p>処理対象のファイルをクローズします。次回の読み込みは次の引数が処理
+対象になります。<code>self</code> を返します。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm031.html">UP</a>][<a href="refm031.html">&lt;-PREV</a>][<a href="refm033.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

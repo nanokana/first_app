@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>shim</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm006.html" rel="next" />
+<link href="refm004.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm004.html">UP</a>][<a href="refm004.html">&lt;-PREV</a>][<a href="refm006.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L000017" id="L000017">shim</a></h1>
+<ul>
+<li><a href="http://www.ruby-lang.org/~knu/cgi-bin/cvsweb.cgi/shim/">&lt;URL:http://www.ruby-lang.org/~knu/cgi-bin/cvsweb.cgi/shim/&gt;</a><sup class="outside"><small>[外部]</small></sup></li>
+<li><a href="http://www.pl.freebsd.org/ja/ports/lang.html#ruby-shim-ruby18-1.8.0.p2.2003.04.19_1">FreeBSD保守</a><sup class="outside"><small>[外部]</small></sup></li>
+<li><a href="http://raa.ruby-lang.org/project/ruby-sumo/">RAA - ruby-sumo</a><sup class="outside"><small>[外部]</small></sup></li>
+<li>古いバージョンの Ruby に新しいバージョンで導入された新機能や
+  新モジュールを付加・提供するものです。ちょうど詰め木の役割をする
+  ことから、「Ruby Shim」と名付けられました。</li>
+</ul>
+<h2><a name="L000018" id="L000018">背景</a></h2>
+<p>巷の声を聞くに曰く:</p>
+<p>「こんな機能が欲しい、と要望したら、開発版ではこう実現されている、
+と教えてもらった。でも、安定版で使えないんじゃ救われない！」</p>
+<p>「結局、便利だから開発版の機能を安定版でも実装して使うことにした。
+でも、きっとみんな同じようなことをやっているんだろうな。。」</p>
+<p>「開発版の追っかけをしていて、自分用のプログラムやライブラリでは
+新機能をどんどん使っている。でも安定版じゃ動かないから、人には
+使ってもらいにくい。」</p>
+<p>「開発版にしかないモジュールをいくつか使いたいが、個別に入手して
+インストールするのは大変。それに、開発版にしかないこのモジュール、
+そのままじゃ安定版で動かないよね。。」</p>
+<h2><a name="L000019" id="L000019">目的</a></h2>
+<ol>
+<li>Ruby 開発版の新機能のうち、安定版でも実現・追加可能なものを
+    実装する。また新規追加モジュール群も安定版用にアレンジし、
+    これらをすべて一まとめにして配布する。</li>
+<li>1. により、開発版の新機能の早期のテスト・評価・利用を促進し、
+    来たる次期安定版の品質の向上を図りつつ、ユーザのスムーズな
+    版の移行をサポートする。</li>
+<li>各拡張ごとの独立性を確保し、テスト済みの実装を提供することで、
+    部分的に切り取っての利用にも対応する。(段階的な移行に役立つ)</li>
+</ol>
+<h2><a name="L000020" id="L000020">名前</a></h2>
+<p>「Ruby Shim」 shim : 隙間に入れる詰め木の意</p>
+<h2><a name="L000021" id="L000021">方針</a></h2>
+<h3><a name="L000022" id="L000022">互換レイヤについて</a></h3>
+<ol>
+<li>安定版の挙動は極力変えない。追加や拡張にとどめる。名前空間も
+    むやみに汚染しない。これにより、動いていたものが動かなくなる
+    という心配をせずに Shim を使える。</li>
+<li>Shim で追加・拡張された部分の後方互換性は追わない。開発版の
+    仕様に追随する。</li>
+<li>できるだけ、(だいたいクラス・モジュール単位で見て)拡張同士が
+    依存しないようにして、部分的な利用も可能にしておく。</li>
+<li>完璧は目指さない。無理もしない。Shim で実装されないことが我慢
+    できないほど開発版の機能に浸かってしまった人には、少々の追加
+    リスクとコストを負って移行してもらえばいい。</li>
+</ol>
+<h3><a name="L000023" id="L000023">追加モジュールについて</a></h3>
+<ol>
+<li>各モジュールのメンテナに一任。開発版と同期するもよし、安定版
+    向けリリースということで慎重に保守するもよし。</li>
+<li>メンテナが、安定版用のものは保守するつもりがないという場合、
+    Shim の committer が適宜開発版と同期する。(意思の表明がない
+    場合のデフォルト - 負担は強いません)</li>
+</ol>
+<h2><a name="L000024" id="L000024">その他</a></h2>
+<p>開発版で廃止・変更された機能を使うと警告を出すようなオプション
+またはツールを作ると、移行に大いに役立つかもしれない。余力が出て
+きたら考えよう。</p>
+<p>あまりに違いが大きかったり、実装が難しいクラス・モジュールは、
+場合によってはまるごと拡張モジュールとして(クラス名の頭に Ruby18
+などと付けて)提供する手もあるかも。ただし、需要と余力次第。</p>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm004.html">UP</a>][<a href="refm004.html">&lt;-PREV</a>][<a href="refm006.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

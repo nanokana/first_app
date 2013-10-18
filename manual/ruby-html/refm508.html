@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ruby-src:doc/irb/irb-tools.rd.ja</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm509.html" rel="next" />
+<link href="refm507.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm507.html">&lt;-PREV</a>][<a href="refm509.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<dl>
+<dt><a name="L011275" id="L011275">コマンド:</a></dt>
+</dl>
+<ul>
+<li>rtags		-- ruby tags command</li>
+</ul>
+<dl>
+<dt><a name="L011276" id="L011276">関数ライブラリ:</a></dt>
+</dl>
+<ul>
+<li>xmp		-- irb version of gotoken xmp-function</li>
+</ul>
+<dl>
+<dt><a name="L011277" id="L011277">クラスライブラリ:</a></dt>
+</dl>
+<ul>
+<li>frame.rb      -- frame tracer</li>
+<li>completion.rb -- irb completor</li>
+</ul>
+<h1><a name="L011278" id="L011278">rtags</a></h1>
+<p>rtagsはemacs及びvi用の, TAGファイルをつくるコマンドです.</p>
+<h2><a name="L011279" id="L011279">使い方</a></h2>
+<pre>rtags [-vi] file....</pre>
+<p>カレントディレクトリにemacs用のTAGSファイルができます. -viオプションを
+つけた時にはvi用のtagsファイルを作成します.</p>
+<p>emacsの場合, 通常のetags.elがそのまま使えます. 検索可能なのは,</p>
+<ul>
+<li>クラス</li>
+<li>メソッド</li>
+<li>特異メソッド</li>
+<li>alias</li>
+<li>attrで宣言されたアクセサ(パラメータがシンボルか文字列リテラルに限る)</li>
+<li>attr_XXXで宣言されたアクセサ(パラメータがシンボルか文字列リテラルに限る)</li>
+</ul>
+<p>です.</p>
+<p>Cなどで使っているのと違うのは, コンプリーションに関する部分で,</p>
+<p>関数名は,</p>
+<pre>関数名(</pre>
+<p>クラスは,</p>
+<dl>
+<dt><a name="L011280" id="L011280">:クラス名::....::クラス名</a></dt>
+</dl>
+<p>メソッドは,</p>
+<dl>
+<dt><a name="L011281" id="L011281">:クラス名::....::クラス名#メソッド名</a></dt>
+</dl>
+<p>特異メソッド(クラスメソッド)は</p>
+<dl>
+<dt><a name="L011282" id="L011282">:クラス名::....::クラス名.メソッド名</a></dt>
+</dl>
+<p>でコンプリーションを行なうところです.</p>
+<h1><a name="L011283" id="L011283">xmp.rb</a></h1>
+<p>ごとけんxmpの上位互換バージョンです. ただ, 非常に重いのでごとけんxmpで
+は対応できない時に, 使用すると良いでしょう.</p>
+<h2><a name="L011279" id="L011279">使い方</a></h2>
+<h3><a name="L011284" id="L011284">関数として使う.</a></h3>
+<pre>require &quot;irb/xmp&quot;
+xmp &lt;&lt;END
+foo = 1
+foo
+END
+---
+foo = 1
+    ==&gt;1
+foo</pre>
+<pre>==&gt;1</pre>
+<h3><a name="L011285" id="L011285">XMPインスタンスを用いる.</a></h3>
+<p>この場合は, XMPがコンテキスト情報を持つので, 変数の値などを保持してい
+ます.</p>
+<pre>require &quot;irb/xmp&quot;
+xmp = XMP.new
+xmp.puts &lt;&lt;END
+foo = 1
+foo
+END
+xmp.puts &lt;&lt;END
+foo
+END
+===
+foo = 1
+    ==&gt;1
+foo
+    ==&gt;1
+foo
+    ==&gt;1</pre>
+<h2><a name="L011286" id="L011286">コンテキストに関して</a></h2>
+<p>XMPメソッド群のコンテキストは, 呼び出す前のコンテキストで評価されます.
+明示的にコンテキストを指定するとそのコンテキストで評価します.</p>
+<p>例:</p>
+<pre>xmp &quot;foo&quot;, an_binding</pre>
+<dl>
+<dt><a name="L011287" id="L011287">注:</a></dt>
+</dl>
+<p>マルチスレッドには対応していません.</p>
+<h1><a name="L011288" id="L011288">frame.rb</a></h1>
+<p>現在実行中のフレーム情報を取り扱うためのクラスです. </p>
+<ul>
+<li>IRB::Frame.top(n = 0)
+  上からn番目のコンテキストを取り出します. nは0が最上位になります.</li>
+<li>IRB::Frame.bottom(n = 0)
+  下からn番目のコンテキストを取り出します. nは0が最下位になります.</li>
+<li>IRB::Frame.sender
+  センダになっているオブジェクトを取り出します. センダとは, そのメソッ
+  ドを呼び出した側のselfのことです.</li>
+</ul>
+<dl>
+<dt><a name="L011287" id="L011287">注:</a></dt>
+</dl>
+<p>set_trace_funcを用いてRubyの実行をトレースしています. マルチスレッドに
+は対応していません.</p>
+<h1><a name="L011289" id="L011289">completion.rb</a></h1>
+<p>irbのcompletion機能を提供するものです. </p>
+<h2><a name="L011279" id="L011279">使い方</a></h2>
+<pre>% irb -r irb/completion</pre>
+<p>とするか, ~/.irbrc 中に</p>
+<pre>require &quot;irb/completion&quot;</pre>
+<p>を入れてください. irb実行中に require &quot;irb/completion&quot; してもよいです.</p>
+<p>irb実行中に (TAB) を押すとコンプレーションします.</p>
+<p>トップレベルで(TAB)を押すとすべての構文要素, クラス, メソッドの候補がで
+ます. 候補が唯一ならば完全に補完します.</p>
+<pre>irb(main):001:0&gt; in    
+in                    inspect               instance_eval
+include               install_alias_method  instance_of?
+initialize            install_aliases       instance_variables
+irb(main):001:0&gt; inspect
+&quot;main&quot;
+irb(main):002:0&gt; foo = Object.new
+#&lt;Object:0x4027146c&gt;
+
+((|変数名.|))の後に(TAB)を押すと, そのオブジェクトのメソッド一覧がでま
+す.
+
+irb(main):003:0&gt; foo.
+foo.==                  foo.frozen?             foo.protected_methods
+foo.===                 foo.hash                foo.public_methods
+foo.=~                  foo.id                  foo.respond_to?
+foo.__id__              foo.inspect             foo.send
+foo.__send__            foo.instance_eval       foo.singleton_methods
+foo.class               foo.instance_of?        foo.taint
+foo.clone               foo.instance_variables  foo.tainted?
+foo.display             foo.is_a?               foo.to_a
+foo.dup                 foo.kind_of?            foo.to_s
+foo.eql?                foo.method              foo.type
+foo.equal?              foo.methods             foo.untaint
+foo.extend              foo.nil?                
+foo.freeze              foo.private_methods     </pre>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm507.html">&lt;-PREV</a>][<a href="refm509.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

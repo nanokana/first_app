@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Class</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm052.html" rel="next" />
+<link href="refm050.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm050.html">UP</a>][<a href="refm050.html">&lt;-PREV</a>][<a href="refm052.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L001244" id="L001244">Class</a></h1>
+<p>クラスのクラス。より正確に言えば、個々のクラスはそれぞれメタクラスと呼
+ばれる名前のないクラスをクラスとして持っていて、<code>Class</code> はそのメタ
+クラスのクラスです。この関係は少し複雑ですが、Ruby を利用するにあたっ
+ては特に重要ではありません。</p>
+<p>クラスは、モジュールとは</p>
+<ul>
+<li>インスタンスを作成できる</li>
+<li><a href="refm050.html#L001228">include</a> による Mix-in ができない</li>
+</ul>
+<p>という違いがありますが、それ以外のほとんどの機能は <a href="refm050.html">Module</a> から継
+承されています。<code>Module</code> のメソッドのうち</p>
+<ul>
+<li><a href="refm050.html#L001233">Module#module_function</a></li>
+<li><a href="refm050.html#L001226">Module#extend_object</a></li>
+<li><a href="refm050.html#L001217">Module#append_features</a></li>
+</ul>
+<p>は <code>Class</code> では未定義にされています。</p>
+<h2><a name="L001245" id="L001245">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm050.html">Module</a></li>
+</ul>
+<h2><a name="L001246" id="L001246">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L001247" id="L001247"><code>Class.new([<var>superclass</var>])</code></a>
+<dt><a name="L001248" id="L001248"><code>Class.new([<var>superclass</var>]) {|<var>klass</var>| ... }</code></a></dt>
+<dd>
+<p>新しく名前の付いていない <var>superclass</var> のサブクラスを生成します。
+<var>superclass</var> が省略された時には<code>Object</code> のサブクラスを生成
+します。</p>
+<p>名前のないクラスは、最初に名前を求める際に代入されている定数名を検
+索し、見つかった定数名をクラス名とします。</p>
+<pre>p foo = Class.new   # =&gt; #&lt;Class:0x401b90f8&gt;
+p foo.name          # =&gt; &quot;&quot;
+Foo = foo           # ここで p foo すれば &quot;Foo&quot; 固定
+Bar = foo
+p foo.name          # =&gt; &quot;Bar&quot;  (&quot;Foo&quot; になるか &quot;Bar&quot; になるかは不定)</pre>
+<p><a href="refm384.html">ruby 1.7 feature</a>:
+ブロックが与えられると生成したクラスをブロックの引数に渡し、クラス
+のコンテキストでブロックを実行します。この場合も生成したクラスを返
+します。</p>
+<pre>klass = Class.new(super)
+klass.module_eval {|m| ... }
+klass</pre>
+<p>と同じです。ブロックの実行は Module#initialize が行います。</p></dd>
+</dl>
+<h2><a name="L001249" id="L001249">メソッド:</a></h2>
+<dl>
+<dt><a name="L001250" id="L001250"><code>allocate    ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>クラスのインスタンスを生成して返します。生成したオブジェクトは
+(通常)クラスのインスタンスであること以外には何も特性を持ちません。</p></dd>
+<dt><a name="L001251" id="L001251"><code>new( ... )</code></a></dt>
+<dd>
+<p>クラスのインスタンスを生成して返します。このメソッドの引数はブロック引数も
+含め <a href="refm035.html#L000700">initialize</a> に渡されます。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>: version 1.7 では、new は、allocate でイン
+スタンスを生成し、initialize で初期化を行うメソッドです。</p></dd>
+<dt><a name="L001252" id="L001252"><code>superclass</code></a></dt>
+<dd>
+<p>クラスのスーパークラスを返します。</p></dd>
+</dl>
+<h2><a name="L001253" id="L001253">プライベートメソッド:</a></h2>
+<dl>
+<dt><a name="L001254" id="L001254"><code>inherited(<var>subclass</var>)</code></a></dt>
+<dd>
+<p>クラスのサブクラスが定義された時、新しく生成されたサブクラスを引数
+にインタプリタから呼び出されます。このメソッドが呼ばれるタイミングは
+クラス定義文の実行直前です。</p>
+<pre>class Foo
+  def Foo.inherited(subclass)
+    puts &quot;class \&quot;#{self}\&quot; was inherited by \&quot;#{subclass}\&quot;&quot;
+  end
+end
+class Bar &lt; Foo
+  puts &quot;executing class body&quot;
+end
+
+# =&gt; class &quot;Foo&quot; was inherited by &quot;Bar&quot;
+     executing class body</pre></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm050.html">UP</a>][<a href="refm050.html">&lt;-PREV</a>][<a href="refm052.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

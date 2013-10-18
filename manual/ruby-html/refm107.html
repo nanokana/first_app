@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SystemCallError</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm108.html" rel="next" />
+<link href="refm106.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm093.html">UP</a>][<a href="refm106.html">&lt;-PREV</a>][<a href="refm108.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L002221" id="L002221">SystemCallError</a></h1>
+<p>システムコールが失敗した時に発生する例外です。実際には 
+<code>SystemCallError</code> そのものではなく、サブクラスである <a href="refm072.html">Errno</a> 
+モジュールの内部クラス(各<code>errno</code>と同じ名前)です。</p>
+<h2><a name="L002222" id="L002222">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm093.html">StandardError</a></li>
+</ul>
+<h2><a name="L002223" id="L002223">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L002224" id="L002224"><code>SystemCallError.new(<var>error_message</var>)</code></a>
+<dt><a name="L002225" id="L002225"><code>SystemCallError.new(<var>error_message</var>, <var>errno</var>)    ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a>
+<dt><a name="L002226" id="L002226"><code>SystemCallError.new(<var>errno</var>)                   ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p><var>errno</var> を指定しない一番目の形式では、<code>SystemCallError</code> オ
+ブジェクトを生成して返します。それ以外では、整数 <var>errno</var> に該
+当する<a href="refm108.html">Errno::EXXX</a> オブジェクトを生成して返します。</p>
+<pre>p SystemCallError.new(&quot;message&quot;)
+p SystemCallError.new(&quot;message&quot;, 2)
+p SystemCallError.new(2)
+p SystemCallError.new(256)
+
+# =&gt; #&lt;SystemCallError: unknown error - message&gt;
+     #&lt;Errno::ENOENT: No such file or directory - message&gt;
+     #&lt;Errno::ENOENT: No such file or directory&gt;
+     #&lt;SystemCallError: Unknown error 256&gt;</pre></dd>
+<dt><a name="L002227" id="L002227"><code>SystemCallError === <var>other</var>  ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p><var>other</var> が <code>SystemCallError</code> のサブクラスであれば真です。
+(<a href="refm050.html#L001187">Module#===</a> と同じ)。</p>
+<p>また、左辺が SystemCallError のサブクラスである場合、
+<var>other</var>.<code>errno</code> の値(<code>nil</code> ならば そのクラスの
+<a href="refm108.html#L002234">Errno</a> 定数の値)が 
+<code>self::Errno</code> と同じ場合に真を返します。</p>
+<p>このメソッドにより、システムによって errno が同じ値の例外に対して
+以下の例のように捕捉できるようになっていま<em>した</em>。</p>
+<pre>p Errno::EAGAIN::Errno
+p Errno::EWOULDBLOCK::Errno
+begin
+  raise Errno::EAGAIN, &quot;pseudo error&quot;
+rescue Errno::EWOULDBLOCK
+  p $!
+end
+
+# =&gt; 11
+     11
+     #&lt;Errno::EAGAIN: pseudo error&gt;</pre>
+<p>現在、 SystemCallError#=== のこの特徴は特に意味がありません。
+(以下のように同一のオブジェクトになっているからです)</p>
+<pre>p Errno::EAGAIN
+p Errno::EWOULDBLOCK
+p Errno::EWOULDBLOCK.object_id
+p SystemCallError.new(11).class.object_id
+
+=&gt; Errno::EAGAIN
+   Errno::EAGAIN
+   537747360
+   537747360</pre></dd>
+</dl>
+<h2><a name="L002228" id="L002228">メソッド:</a></h2>
+<dl>
+<dt><a name="L002229" id="L002229"><code>errno</code></a></dt>
+<dd>
+<p>システムから返された errno の値を返します。
+実際にシステムコールエラーが発生してなければ <code>nil</code> を返します。</p>
+<p>例:</p>
+<pre>二つ目の例のように raiseによって故意にエラーが発生しているかのように
+見せかける場合は注意してください。
+
+  begin
+    open(&quot;nonexistent file&quot;)
+  rescue Errno::ENOENT
+    p Errno::ENOENT::Errno      # =&gt; 2
+    p $!.errno                  # =&gt; 2
+  end
+
+  begin
+    raise Errno::ENOENT
+  rescue Errno::ENOENT
+    p Errno::ENOENT::Errno      # =&gt; 2
+    p $!.errno                  # =&gt; nil
+  end
+
+((&lt;ruby 1.8 feature&gt;)): Errno::EXXX 例外オブジェクトは対応する 
+errno 値を初期化時に設定するようになりました。
+
+  begin
+    raise Errno::ENOENT
+  rescue Errno::ENOENT
+    p Errno::ENOENT::Errno      # =&gt; 2
+    p $!.errno                  # =&gt; 2
+  end</pre>
+<p>まだ発生してない例外に対応する errno の値を知りたい場合は
+<a href="refm108.html#L002234">Errno::EXXX::Errno</a> 定数を使用してください。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm093.html">UP</a>][<a href="refm106.html">&lt;-PREV</a>][<a href="refm108.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

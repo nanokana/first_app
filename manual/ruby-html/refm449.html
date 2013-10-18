@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>trap::NKF</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm450.html" rel="next" />
+<link href="refm448.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm421.html">UP</a>][<a href="refm448.html">&lt;-PREV</a>][<a href="refm450.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L009509" id="L009509">trap::NKF</a></h1>
+<ul>
+<li><p>-m0をつけないとBエンコードなどのMIME encodeがデコードされてしまいます。</p>
+<pre>NKF.nkf(&quot;-e&quot;, &quot;foo&quot;) #=&gt; foo
+NKF.nkf(&quot;-e -m0&quot;, &quot;foo&quot;) #=&gt; &quot;foo&quot;</pre></li>
+<li>1.8.2から中のNKFのバージョンが1.7相当から2.0相当にあがったため、
+  <a href="refm260.html#L005166">NKF.guess</a>などの挙動が変わっています。
+<ul>
+<li>必要なら<code>defined?(NKF::UTF8)</code>で場合分けして対応してください。</li>
+<li>古い挙動が必要なら<a href="refm260.html#L005167">NKF.guess1</a>を使ってください。</li>
+</ul></li>
+</ul>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm421.html">UP</a>][<a href="refm448.html">&lt;-PREV</a>][<a href="refm450.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

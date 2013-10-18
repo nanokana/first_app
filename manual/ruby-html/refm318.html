@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>etc</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm319.html" rel="next" />
+<link href="refm317.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm317.html">&lt;-PREV</a>][<a href="refm319.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006168" id="L006168">etc</a></h1>
+<p><code>/etc</code> に存在するデータベースから情報を得るためのモジュール。
+クラスにインクルードして使うこともできる。</p>
+<h2><a name="L006169" id="L006169">使い方:</a></h2>
+<pre>require 'etc'
+p Etc.getlogin</pre>
+<h2><a name="L006170" id="L006170">モジュール関数:</a></h2>
+<dl>
+<dt><a name="L006171" id="L006171"><code>Etc.endgrent                ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a>
+<dt><a name="L006172" id="L006172"><code>Etc.endpwent                ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a>
+<dt><a name="L006173" id="L006173"><code>Etc.getgrent                ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a>
+<dt><a name="L006174" id="L006174"><code>Etc.getpwent                ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a>
+<dt><a name="L006175" id="L006175"><code>Etc.setgrent                ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a>
+<dt><a name="L006176" id="L006176"><code>Etc.setpwent                ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p><a href="refm385.html">ruby 1.8 feature</a></p></dd>
+<dt><a name="L006177" id="L006177"><code>Etc.getlogin</code></a></dt>
+<dd>
+<p>自分の login 名を返す。得られなかった場合は nil を返す。</p>
+<p>getlogin は su などでログイン時のユーザとは異なるユーザになっている場合、
+現在ではなくログイン時のユーザを返します。</p>
+<p>このメソッドが失敗した場合は <a href="#L006179">Etc.getpwuid</a> に
+フォールバックするとよい。</p>
+<p>たとえば、環境変数 USER などもあわせて、以下のようにフォールバックできます。</p>
+<pre>login_user = ENV['USER'] || ENV['LOGNAME'] || Etc.getlogin || Etc.getpwuid.name</pre></dd>
+<dt><a name="L006178" id="L006178"><code>Etc.getpwnam(<var>name</var>)</code></a></dt>
+<dd>
+<p>passwd データベースを検索し、
+名前が <var>name</var> である passwd エントリを返す。
+戻り値は passwd 構造体で、以下のメンバを持つ。</p>
+<pre>struct passwd
+  name        # ユーザ名(文字列)
+  passwd      # パスワード(文字列)
+  uid         # ユーザID(整数)
+  gid         # グループID(整数)
+  gecos       # gecosフィールド(文字列)
+  dir         # ホームディレクトリ(文字列)
+  shell       # ログインシェル(文字列)
+  # 以降のメンバはシステムによっては提供されない
+  change      # パスワード変更時間(整数)
+  quota       # クォータ(整数)
+  age         # エージ(整数)
+  class       # ユーザアクセスクラス(文字列)
+  comment     # コメント(文字列)
+  expire      # アカウント有効期限(整数)          
+end</pre>
+<p>名前が <var>name</var> である passwd エントリがなかった場合、
+ArgumentError を発生する。</p>
+<p>詳細は <a href="refm535.html">getpwnam(3)</a> を参照のこと。</p></dd>
+<dt><a name="L006179" id="L006179"><code>Etc.getpwuid([<var>uid</var>])</code></a></dt>
+<dd>
+<p>passwd データベースを検索し、
+ユーザ ID が <var>uid</var> である passwd エントリを返す。
+戻り値は <a href="#L006178">Etc.getpwnam</a> と同様である。
+引数を省略した場合には <a href="refm535.html">getuid(2)</a> の値を用いる。</p>
+<p>詳細は <a href="refm535.html">getpwuid(3)</a> を参照のこと。</p></dd>
+<dt><a name="L006180" id="L006180"><code>Etc.getgrgid(<var>gid</var>)</code></a></dt>
+<dd>
+<p>group データベースを検索し、グループ ID が <var>gid</var>
+であるグループエントリを返す。
+戻り値は group 構造体で、以下のメンバを持つ。</p>
+<pre>struct group
+  name        # グループ名(文字列)
+  passwd      # グループのパスワード(文字列)
+  gid         # グループID(整数)
+  mem         # グループメンバ名の配列
+end</pre>
+<p>詳細は <a href="refm535.html">getgrgid(3)</a> を参照のこと。</p></dd>
+<dt><a name="L006181" id="L006181"><code>Etc.getgrnam(<var>name</var>)</code></a></dt>
+<dd>
+<p><var>name</var> という名前のグループエントリを返す。
+戻り値は <a href="#L006180">Etc.getgrgid</a> と同様である。</p>
+<p>詳細は<a href="refm535.html">getgrnam(3)</a> を参照のこと。</p></dd>
+<dt><a name="L006182" id="L006182"><code>Etc.group</code></a>
+<dt><a name="L006183" id="L006183"><code>Etc.group {|<var>group</var>| ... }</code></a></dt>
+<dd>
+<p>全てのグループエントリを順にアクセスするためのイテレータ。</p></dd>
+<dt><a name="L006184" id="L006184"><code>Etc.passwd</code></a>
+<dt><a name="L006185" id="L006185"><code>Etc.passwd {|<var>passwd</var>| ... }</code></a></dt>
+<dd>
+<p>全てのpasswdエントリを順にアクセスするためのイテレータ。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm317.html">&lt;-PREV</a>][<a href="refm319.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

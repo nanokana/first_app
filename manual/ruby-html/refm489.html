@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>array.c</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm490.html" rel="next" />
+<link href="refm488.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm488.html">UP</a>][<a href="refm488.html">&lt;-PREV</a>][<a href="refm490.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L009897" id="L009897">array.c</a></h1>
+<dl>
+<dt><a name="L009898" id="L009898">VALUE rb_ary_new()</a></dt>
+<dd>
+<p>空の Ruby の配列を作成し返します。</p>
+<p>対応するRubyコード</p>
+<pre>ary = Array.new または
+ary = []</pre>
+<p>使用例</p>
+<pre>VALUE ary;
+ary = rb_ary_new();</pre>
+</dd>
+<dt><a name="L009899" id="L009899">VALUE rb_ary_new2(long len)</a></dt>
+<dd>
+<p>長さ <var>len</var> 分だけメモリを確保した、
+長さゼロの Ruby の配列を作成し返します。</p>
+<p>対応するRubyコード</p>
+<pre>ary = Array.new(len)</pre>
+<p>使用例</p>
+<pre>VALUE ary;
+long len;
+...
+ary = rb_ary_new2(len);</pre>
+</dd>
+<dt><a name="L009900" id="L009900">VALUE rb_ary_new3(long n, VALUE i0, i1, i2...)</a></dt>
+<dd>
+<p>長さ <var>n</var> で要素に <var>i0</var> <var>i1</var> <var>i2</var> …を格納した
+Ruby の配列を作成し返します。</p>
+<p>対応するRubyコード</p>
+<pre>ary = Array[i0, i1, i2...] または
+ary = [i0, i1, i2...]</pre>
+<p>使用例</p>
+<pre>VALUE ary;
+int i[3] = { 1, 2, 3 };
+ary = rb_ary_new3(3, INT2FIX(i[0]), INT2FIX(i[1]), INT2FIX(i[2]));</pre>
+</dd>
+<dt><a name="L009901" id="L009901">VALUE rb_assoc_new(VALUE a, VALUE b)</a></dt>
+<dd>
+<p><code>[<var>a</var>,<var>b</var>]</code> を返します。</p>
+<p>対応するRubyコード</p>
+<pre>[a, b]</pre>
+<p>使用例</p>
+<pre>VALUE assoc_string(VALUE str_a, VALUE str_b)
+{
+  Check_Type(str_a, T_STRING);
+  Check_Type(str_b, T_STRING);
+  return rb_assoc_new(str_a, str_b);
+}</pre>
+</dd>
+<dt><a name="L009902" id="L009902">VALUE rb_ary_entry(VALUE ary, long offset)</a></dt>
+<dd>
+<p><var>ary</var> のインデックス <var>offset</var> の要素を返します。</p>
+<p>インデックスが範囲を越えるときは <code>Qnil</code> を返します。
+負のインデックスも使えます。</p>
+<p>対応するRubyコード</p>
+<pre>ary[offset] または
+ary.at(offset)</pre>
+<p>使用例</p>
+<pre>VALUE num;
+num = rb_ary_entry(ary, offset); 
+printf(&quot;%d\n&quot;, FIX2INT(num));
+
+キャストを使った要素の参照方法
+
+VALUE num = RARRAY(ary)-&gt;ptr[offset];</pre>
+</dd>
+<dt><a name="L009903" id="L009903">VALUE rb_ary_aref(int argc, VALUE *argv, VALUE ary)</a></dt>
+<dd>
+<p><var>argc</var> が 1 のときは <code>ary[*argv]</code>、
+2 のときは <code>ary[argv[0], argv[1]]</code> を返します。</p>
+</dd>
+<dt><a name="L009904" id="L009904">void rb_ary_store(VALUE ary, long idx, VALUE val)</a></dt>
+<dd>
+<p>配列 <var>ary</var> のインデックス <var>idx</var> に
+<var>val</var> を格納します。<var>idx</var> が範囲を越えるときは
+Ruby レベルと同じく自動的にサイズが拡張されます。</p>
+<p>対応するRubyコード</p>
+<pre>ary[idx] = val</pre>
+<p>使用例</p>
+<pre>VALUE ary;
+int idx;
+int n[5] = { 1, 2, 3, 4, 5 };
+ary = rb_ary_new();
+for (idx=0; idx&lt;5; idx++) rb_ary_store(ary, idx, INT2FIX(n[idx])); </pre>
+</dd>
+<dt><a name="L009905" id="L009905">VALUE rb_ary_push(VALUE ary, VALUE item)</a></dt>
+<dd>
+<p>配列 <var>ary</var> の末尾に <var>item</var> を追加します。</p>
+<p>対応するRubyコード</p>
+<pre>ary.push(item) または
+ary &lt;&lt; item</pre>
+<p>使用例</p>
+<pre>VALUE ary = rb_ary_new();
+char line[4096];
+while ((gets(line)) != NULL){
+  item = process_apache_log(line);
+  rb_ary_push(ary, item);
+}</pre>
+</dd>
+<dt><a name="L009906" id="L009906">VALUE rb_ary_pop(VALUE ary)</a></dt>
+<dd>
+<p>配列 <var>ary</var> の末尾の要素をとりのぞき返します。
+空配列のときは <code>Qnil</code> を返します。</p>
+<p>対応するRubyコード</p>
+<pre>val = ary.pop</pre>
+<p>使用例</p>
+<pre>last_error = rb_ary_pop(err_ary);
+VALUE str = rb_funcall(last_error, rb_intern(&quot;to_s&quot;), 0);</pre>
+</dd>
+<dt><a name="L009907" id="L009907">VALUE rb_ary_shift(VALUE ary)</a></dt>
+<dd>
+<p>配列 <var>ary</var> の先頭の要素を取り除き返します。
+空配列のときは <code>Qnil</code> を返します。</p>
+<p>対応するRubyコード</p>
+<pre>val = ary.shift</pre>
+</dd>
+<dt><a name="L009908" id="L009908">VALUE rb_ary_unshift(VALUE ary, VALUE item)</a></dt>
+<dd>
+<p>配列 <var>ary</var> の先頭に <var>item</var> を挿入します。</p>
+</dd>
+<dt><a name="L009909" id="L009909">VALUE rb_ary_to_s(VALUE ary)</a></dt>
+<dd>
+<p><code>ary.to_s</code></p>
+<p>使用例</p>
+<pre>void debug_print(VALUE ary)
+{
+  Check_Type(ary, T_ARRAY);
+  printf(&quot;%s&quot;, STR2CSTR(rb_ary_to_s(ary)));
+}</pre>
+</dd>
+<dt><a name="L009910" id="L009910">VALUE rb_ary_sort(VALUE ary)</a></dt>
+<dd>
+<p><code>ary.sort</code></p>
+</dd>
+<dt><a name="L009911" id="L009911">VALUE rb_ary_includes(ary, item)</a></dt>
+<dd>
+<p><code>ary.include? item</code></p>
+</dd>
+<dt><a name="L009912" id="L009912">VALUE rb_ary_delete(VALUE ary, VALUE item)</a></dt>
+<dd>
+<p><code>ary.delete</code></p>
+</dd>
+<dt><a name="L009913" id="L009913">VALUE rb_ary_clear(VALUE ary)</a></dt>
+<dd>
+<p><code>ary.clear</code></p>
+</dd>
+<dt><a name="L009914" id="L009914">VALUE rb_ary_concat(VALUE ary, VALUE x)</a></dt>
+<dd>
+<p><code>ary.concat x</code></p>
+</dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm488.html">UP</a>][<a href="refm488.html">&lt;-PREV</a>][<a href="refm490.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

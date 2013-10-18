@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Binding</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm038.html" rel="next" />
+<link href="refm036.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm035.html">UP</a>][<a href="refm036.html">&lt;-PREV</a>][<a href="refm038.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L000806" id="L000806">Binding</a></h1>
+<p>ローカル変数のテーブルと <code>self</code>、モジュールのネストなどの情報を保
+持するオブジェクトのクラス。組み込み関数 <a href="refm029.html#L000437">binding</a> によっ
+てのみ生成され、<a href="refm029.html#L000445">eval</a> の第 2 引数に使用します。</p>
+<p>また<a href="refm477.html#L009734">トップレベル</a>の Binding オブジェクトとして組み込み定数 
+<a href="refm031.html#L000576">TOPLEVEL_BINDING</a> が用意されています。</p>
+<h2><a name="L000807" id="L000807">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm035.html">Object</a></li>
+</ul>
+<h2><a name="L000808" id="L000808">メソッド:</a></h2>
+<dl>
+<dt><a name="L000809" id="L000809"><code>eval(<var>expr</var>[, <var>fname</var>[, <var>lineno</var>=<var>1</var>]])</code></a></dt>
+<dd>
+<p><a href="refm392.html">ruby 1.9 feature</a></p>
+<p>組み込み関数 eval を使って
+<code>eval(expr, self, fname, lineno)</code> とするのと同じです。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm035.html">UP</a>][<a href="refm036.html">&lt;-PREV</a>][<a href="refm038.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>trap::Numeric</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm438.html" rel="next" />
+<link href="refm436.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm421.html">UP</a>][<a href="refm436.html">&lt;-PREV</a>][<a href="refm438.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L009477" id="L009477">Numeric</a></h1>
+<ul>
+<li><p>リテラルの符号は、単項演算子 `<code>-</code>', `<code>+</code>' のメソッド呼び出しでは
+  ありません。</p>
+<pre>class Fixnum
+  def -@
+    &quot;negative #{self}&quot;
+  end
+end
+
+p -10   # =&gt; -10
+
+n = 10
+p -n    # =&gt; &quot;negative 10&quot;</pre>
+<p>この違いは結合強度にも影響します。</p>
+<pre>p -10.abs   # =&gt; 10
+
+n = 10
+p -n.abs    # =&gt; -10</pre></li>
+<li><p>実際の数値クラスの親クラスに当たるNumeric や Integer のメソッドを
+  alias などで定義する場合には、その元のメソッドがどのクラスで
+  定義されているものか、注意する必要があります。</p>
+<p>例えば、Integer のクラスに to_s の alias を加えても、Fixnum や Bignum では
+意図したような動作になりません。</p>
+<pre>class Integer
+  alias_method :foo, :to_s
+  alias :bar :to_s
+  def baz; to_s; end
+end
+
+1.class  #=&gt; Fixnum
+1.to_s   #=&gt; &quot;1&quot;
+1.foo    #=&gt; &quot;#&lt;Fixnum:0x3&gt;&quot;   ... 1.to_s ではない
+1.bar    #=&gt; &quot;#&lt;Fixnum:0x3&gt;&quot;   ... 1.to_s ではない
+1.baz    #=&gt; &quot;1&quot;</pre>
+<p>これは、Fixnum#foo が（定義されている）Fixnum#to_s ではなく、
+（定義されていない）Integer#to_s、すなわち Object#to_s を
+呼び出しているためです。</p>
+<p>どのメソッドがどのクラスで定義されているかは、<a href="refm052.html">Numeric</a> に記されています。</p></li>
+<li><p>整数(Integer)に対する除法(割り算) `/' は本来の値を超えない最大の整数を返し
+  ます(整除)。特に、負の符合を扱う時は、取り扱いに注意が必要かも知れません。</p>
+<pre>p( 5/2 )       # =&gt; 2
+p( 1/2 )       # =&gt; 0
+p( -1/2 )      # =&gt; -1
+p( -(1/2) )    # =&gt; 0
+p( (-1)/2 )    # =&gt; -1
+p( (-1)/(-2) ) # =&gt; 0
+p( 1/(-2) )    # =&gt; -1
+p( -(1/(-2)) ) # =&gt; 1</pre>
+<p>整除でなく、`普通の'数字を返して欲しい時は、<a href="refm268.html">mathn</a> をrequire
+すると幸せになれるかも知れません。</p></li>
+</ul>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm421.html">UP</a>][<a href="refm436.html">&lt;-PREV</a>][<a href="refm438.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

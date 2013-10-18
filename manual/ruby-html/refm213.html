@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>openssl</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm214.html" rel="next" />
+<link href="refm212.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm212.html">&lt;-PREV</a>][<a href="refm214.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L004215" id="L004215">openssl</a></h1>
+<p><a href="http://www.openssl.org">OpenSSL</a><sup class="outside"><small>[外部]</small></sup> support library for Ruby.
+動作や使える暗号方式は</p>
+<p><a href="refm002.html">執筆者募集</a></p>
+<h2><a name="L004216" id="L004216">Components</a></h2>
+<ul>
+<li><a href="refm214.html">OpenSSL</a></li>
+<li>OpenSSL::Cipher
+<ul>
+<li><a href="refm215.html">OpenSSL::Cipher::Cipher</a></li>
+<li>以下のクラスは Cipher を継承している。使い方は Chipher を参照。</li>
+<li>OpenSSL::Cipher::AES</li>
+<li>OpenSSL::Cipher::BF</li>
+<li>OpenSSL::Cipher::CAST5</li>
+<li>OpenSSL::Cipher::DES</li>
+<li>OpenSSL::Cipher::IDEA</li>
+<li>OpenSSL::Cipher::RC2</li>
+<li>OpenSSL::Cipher::RC4</li>
+<li>OpenSSL::Cipher::RC5</li>
+</ul></li>
+<li>OpenSSL::Digest
+<ul>
+<li><a href="refm216.html">OpenSSL::Digest::Digest</a></li>
+<li>以下のクラスは Digest を継承している。使い方は Digest を参照。</li>
+<li>OpenSSL::Digest::DSS1</li>
+<li>OpenSSL::Digest::MD2</li>
+<li>OpenSSL::Digest::MD4</li>
+<li>OpenSSL::Digest::MD5</li>
+<li>OpenSSL::Digest::MDC2</li>
+<li>OpenSSL::Digest::RIPEMD160</li>
+<li>OpenSSL::Digest::SHA</li>
+<li>OpenSSL::Digest::SHA1</li>
+<li>OpenSSL::Digest::SHA224</li>
+<li>OpenSSL::Digest::SHA256</li>
+<li>OpenSSL::Digest::SHA384</li>
+<li>OpenSSL::Digest::SHA512</li>
+</ul></li>
+<li>OpenSSL::X509
+<ul>
+<li><a href="refm218.html">OpenSSL::X509::Certificate</a></li>
+<li><a href="refm219.html">OpenSSL::X509::CRL</a></li>
+<li><a href="refm220.html">OpenSSL::X509::Extension</a></li>
+<li><a href="refm222.html">OpenSSL::X509::Name</a></li>
+<li><a href="refm223.html">OpenSSL::X509::Store</a></li>
+<li><a href="refm224.html">OpenSSL::X509::StoreContext</a></li>
+</ul></li>
+<li><a href="refm226.html">OpenSSL::SSL</a>
+<ul>
+<li><a href="refm229.html">OpenSSL::SSL::SSLContext</a></li>
+<li><a href="refm228.html">OpenSSL::SSL::SSLServer</a></li>
+<li><a href="refm227.html">OpenSSL::SSL::SSLSocket</a></li>
+</ul></li>
+<li><a href="refm230.html">OpenSSL::PKCS7</a>
+<ul>
+<li><a href="refm231.html">OpenSSL::PKCS7::PKCS7</a></li>
+</ul></li>
+<li>OpenSSL::PKey
+<ul>
+<li><a href="refm232.html">OpenSSL::PKey::PKey</a></li>
+<li><a href="refm233.html">OpenSSL::PKey::RSA</a></li>
+<li><a href="refm234.html">OpenSSL::PKey::DSA</a></li>
+<li><a href="refm235.html">OpenSSL::PKey::DH</a></li>
+</ul></li>
+<li>OpenSSL::Config</li>
+<li>OpenSSL::Engine</li>
+<li><a href="refm236.html">OpenSSL::ASN1</a>
+<ul>
+<li><a href="refm237.html">OpenSSL::ASN1::ASN1Data</a>
+<ul>
+<li><a href="refm238.html">OpenSSL::ASN1::Primitive</a>
+<ul>
+<li>OpenSSL::ASN1::Boolean</li>
+<li>OpenSSL::ASN1::Integer</li>
+<li>OpenSSL::ASN1::Enumerated</li>
+<li>OpenSSL::ASN1::BitString</li>
+<li>OpenSSL::ASN1::OctetString</li>
+<li>OpenSSL::ASN1::UTF8String</li>
+<li>OpenSSL::ASN1::NumericString</li>
+<li>OpenSSL::ASN1::PrintableString</li>
+<li>OpenSSL::ASN1::T61String</li>
+<li>OpenSSL::ASN1::VideotexString</li>
+<li>OpenSSL::ASN1::IA5String</li>
+<li>OpenSSL::ASN1::GraphicString</li>
+<li>OpenSSL::ASN1::ISO64String</li>
+<li>OpenSSL::ASN1::GeneralString</li>
+<li>OpenSSL::ASN1::UniversalString</li>
+<li>OpenSSL::ASN1::BMPString</li>
+<li>OpenSSL::ASN1::Null</li>
+<li><a href="refm239.html">OpenSSL::ASN1::ObjectId</a></li>
+<li>OpenSSL::ASN1::UTCTime</li>
+<li>OpenSSL::ASN1::GeneralizedTime</li>
+</ul></li>
+<li><a href="refm240.html">OpenSSL::ASN1::Constructive</a>
+<ul>
+<li>OpenSSL::ASN1::Sequence</li>
+<li>OpenSSL::ASN1::Set</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+<h2><a name="L004217" id="L004217">例</a></h2>
+<p>自己署名証明書の作成。自分の秘密鍵で自分の公開鍵に署名しているから自己署名。</p>
+<pre>require 'openssl'
+
+key = OpenSSL::PKey::RSA.new(1024)
+digest = OpenSSL::Digest::SHA1.new()
+
+issu = sub = OpenSSL::X509::Name.new()
+sub.add_entry('C', 'JP')
+sub.add_entry('ST', 'Shimane')
+sub.add_entry('CN', 'Ruby Taro')
+
+cer = OpenSSL::X509::Certificate.new()
+cer.not_before = Time.at(0)
+cer.not_after = Time.at(0)
+cer.public_key = key  # &lt;= 署名する対象となる公開鍵 
+cer.serial = 1
+cer.issuer = issu
+cer.subject = sub
+
+cer.sign(key, digest) # &lt;= 署名するのに使う秘密鍵とハッシュ関数
+print cer.to_text</pre>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm212.html">&lt;-PREV</a>][<a href="refm214.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

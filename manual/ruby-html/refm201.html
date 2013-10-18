@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>net/ftp</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm202.html" rel="next" />
+<link href="refm200.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm200.html">&lt;-PREV</a>][<a href="refm202.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L003809" id="L003809">net/ftp</a></h1>
+<h2><a name="L003810" id="L003810">Net::FTP</a></h2>
+<h3><a name="L003811" id="L003811">スーパークラス</a></h3>
+<p><code>Object</code></p>
+<h3><a name="L003812" id="L003812">クラスメソッド</a></h3>
+<dl>
+<dt><a name="L003813" id="L003813"><code>Net::FTP.new(<var>host</var>=<var>nil</var>, <var>user</var>=<var>nil</var>, <var>passwd</var>=<var>nil</var>, <var>acct</var>=<var>nil</var>)</code></a></dt>
+<dd>
+<p>新しいインスタンスを生成します。 </p>
+<p>hostが指定された場合、生成されたインスタンスに対して connectを呼び出し、
+さらにuserが指定された場合は loginを呼び出します。 </p></dd>
+<dt><a name="L003814" id="L003814"><code>Net::FTP.open(<var>host</var>, <var>user</var>=<var>nil</var>, <var>passwd</var>=<var>nil</var>, <var>acct</var>=<var>nil</var>)</code></a></dt>
+<dd>
+<p>hostを省略できない以外は newと同じです。 </p></dd>
+</dl>
+<h3><a name="L003815" id="L003815">メソッド</a></h3>
+<dl>
+<dt><a name="L003816" id="L003816"><code>Net::FTP#connect(<var>host</var>, <var>port</var> = <var>FTP_PORT</var>)</code></a></dt>
+<dd>
+<p>hostで指定されたホストに接続します。 </p></dd>
+<dt><a name="L003817" id="L003817"><code>Net::FTP#sendcmd(<var>cmd</var>)</code></a></dt>
+<dd>
+<p>cmdで指定されたコマンドをサーバーに送り、 サーバーからの応答を返します。 </p>
+<p>応答コードが4xxの場合は例外FTPTermErrorが、5xxの場合は
+例外FTPPermErrorが発生します。
+応答コードの最初の数字が1から5のどれでもない場合は
+例外FTPProtoErrorが発生します。 </p></dd>
+<dt><a name="L003818" id="L003818"><code>Net::FTP#voidcmd(<var>cmd</var>)</code></a></dt>
+<dd>
+<p>sendcmdと同様にサーバーにコマンドを送りますが、nilを返す点と、
+応答コードが2xx以外の場合、例外FTPReplyErrorが発生する点が異なります。 </p></dd>
+<dt><a name="L003819" id="L003819"><code>Net::FTP#login(<var>user</var> = &quot;<var>anonymous</var>&quot;, <var>passwd</var> = <var>nil</var>, <var>acct</var> = <var>nil</var>)</code></a></dt>
+<dd>
+<p>ログイン処理を行ないます。 </p>
+<p>userが省略された場合、anonymousでログインします。 </p></dd>
+<dt><a name="L003820" id="L003820"><code>Net::FTP#retrbinary(<var>cmd</var>, <var>blocksize</var>, <var>rest_offset</var> = <var>nil</var>, <var>callback</var> = <var>Proc</var>.<var>new</var>)</code></a></dt>
+<dd>
+<p>サーバーにcmdで指定されたコマンドを送り、バイナリデータを 取り寄せます。
+blocksizeで指定されたバイト単位でデータを
+読み込み、callbackで指定されたProcオブジェクトまたは
+ブロックに読み込んだデータを渡します。 </p></dd>
+<dt><a name="L003821" id="L003821"><code>Net::FTP#retrlines(<var>cmd</var>, <var>callback</var> = <var>nil</var>)</code></a></dt>
+<dd>
+<p>サーバーにcmdで指定されたコマンドを送り、テキストデータを
+取り寄せます。一行ずつテキストを読み込み、callbackで指定された
+Procオブジェクトまたはブロックに読み込んだ行を渡します。 </p>
+<p>callbackもブロックも省略された場合は読み込んだ行をprintします。 </p></dd>
+<dt><a name="L003822" id="L003822"><code>Net::FTP#storbinary(<var>cmd</var>, <var>file</var>, <var>blocksize</var>, <var>rest_offset</var> = <var>nil</var>, <var>callback</var> = <var>nil</var>)</code></a></dt>
+<dd>
+<p>サーバーにcmdで指定されたコマンドを送り、バイナリデータを
+送ります。blocksizeで指定されたバイト単位で
+fileからデータを読み込み、サーバーに送ります。 </p>
+<p>callbackやブロックが指定された場合はデータが
+送信されるごとにそれを呼び出します。 </p></dd>
+<dt><a name="L003823" id="L003823"><code>Net::FTP#storlines(<var>cmd</var>, <var>file</var>, <var>callback</var> = <var>nil</var>)</code></a></dt>
+<dd>
+<p>サーバーにcmdで指定されたコマンドを送り、テキストデータを
+送ります。一行ずつでfileからテキストを読み込み、
+サーバーに送ります。 </p>
+<p>callbackやブロックが指定された場合はデータが
+送信されるごとにそれを呼び出します。 </p></dd>
+<dt><a name="L003824" id="L003824"><code>Net::FTP#getbinaryfile(<var>remotefile</var>, <var>localfile</var>, <var>blocksize</var> = <var>DEFAULT_BLOCKSIZE</var>, <var>callback</var> = <var>nil</var>)</code></a></dt>
+<dd>
+<p>サーバー上のバイナリファイルをgetします。 </p>
+<p>callbackやブロックが指定された場合は
+データが送信されるごとにそれを呼び出します。 </p>
+<p><a href="refm384.html">ruby 1.7 feature</a>: localfile は省略可能になりました。
+File.basename(remotefile) が省略時の値になります。</p></dd>
+<dt><a name="L003825" id="L003825"><code>Net::FTP#gettextfile(<var>remotefile</var>, <var>localfile</var>, <var>callback</var> = <var>nil</var>)</code></a></dt>
+<dd>
+<p>サーバー上のテキストファイルをgetします。 </p>
+<p>callbackやブロックが指定された場合は
+データが送信されるごとにそれを呼び出します。 </p></dd>
+<dt><a name="L003826" id="L003826"><code>Net::FTP#putbinaryfile(<var>localfile</var>, <var>remotefile</var>, <var>blocksize</var> = <var>DEFAULT_BLOCKSIZE</var>, <var>callback</var> = <var>nil</var>)</code></a></dt>
+<dd>
+<p>サーバーにバイナリファイルをputします。 </p>
+<p>callbackやブロックが指定された場合は
+データが送信されるごとにそれを呼び出します。 </p></dd>
+<dt><a name="L003827" id="L003827"><code>Net::FTP#puttextfile(<var>localfile</var>, <var>remotefile</var>, <var>callback</var> = <var>nil</var>)</code></a></dt>
+<dd>
+<p>サーバーにテキストファイルをputします。 </p>
+<p>callbackやブロックが指定された場合は
+データが送信されるごとにそれを呼び出します。 </p></dd>
+<dt><a name="L003828" id="L003828"><code>Net::FTP#acct(<var>account</var>)</code></a></dt>
+<dd>
+<p>サーバーにアカウント情報を送ります。 </p></dd>
+<dt><a name="L003829" id="L003829"><code>Net::FTP#nlst(<var>dir</var> = <var>nil</var>)</code></a></dt>
+<dd>
+<p>dirで指定したディレクトリのファイルの配列を返します。
+dirを省略した場合カレントディレクトリが指定されます。 </p></dd>
+<dt><a name="L003830" id="L003830"><code>Net::FTP#list(*<var>args</var>, &amp;<var>block</var>)</code></a>
+<dt><a name="L003831" id="L003831"><code>Net::FTP#ls(*<var>args</var>, &amp;<var>block</var>)</code></a>
+<dt><a name="L003832" id="L003832"><code>Net::FTP#dir(*<var>args</var>, &amp;<var>block</var>)</code></a></dt>
+<dd>
+<p>LISTコマンドを送信し、結果を返します。 </p>
+<p>ブロックとともに呼び出された場合は各行に対してブロックを
+実行します。 </p></dd>
+<dt><a name="L003833" id="L003833"><code>Net::FTP#rename(<var>fromname</var>, <var>toname</var>)</code></a></dt>
+<dd>
+<p>ファイルをリネームします。 </p></dd>
+<dt><a name="L003834" id="L003834"><code>Net::FTP#delete(<var>filename</var>)</code></a></dt>
+<dd>
+<p>ファイルを削除します。 </p></dd>
+<dt><a name="L003835" id="L003835"><code>Net::FTP#chdir(<var>dirname</var>)</code></a></dt>
+<dd>
+<p>カレントディレクトリをdirnameに変更します。 </p></dd>
+<dt><a name="L003836" id="L003836"><code>Net::FTP#size(<var>filename</var>)</code></a></dt>
+<dd>
+<p>ファイルのサイズを返します。 </p></dd>
+<dt><a name="L003837" id="L003837"><code>Net::FTP#mtime(<var>filename</var>, <var>local</var> = <var>false</var>)</code></a></dt>
+<dd>
+<p>filenameの更新時刻をTimeオブジェクトで返します。
+localは、更新時刻をローカル時刻とみなすかどうかの
+フラグです。(省略したときのデフォルト値はfalseです)。 </p></dd>
+<dt><a name="L003838" id="L003838"><code>Net::FTP#mkdir(<var>dirname</var>)</code></a></dt>
+<dd>
+<p>ディレクトリを作成します。 </p></dd>
+<dt><a name="L003839" id="L003839"><code>Net::FTP#rmdir(<var>dirname</var>)</code></a></dt>
+<dd>
+<p>ディレクトリを削除します。 </p></dd>
+<dt><a name="L003840" id="L003840"><code>Net::FTP#pwd</code></a>
+<dt><a name="L003841" id="L003841"><code>Net::FTP#getdir</code></a></dt>
+<dd>
+<p>カレントディレクトリを返します。 </p></dd>
+<dt><a name="L003842" id="L003842"><code>Net::FTP#system</code></a></dt>
+<dd>
+<p>サーバーのOSのタイプを返します。 </p></dd>
+<dt><a name="L003843" id="L003843"><code>Net::FTP#abort</code></a></dt>
+<dd>
+<p>データの転送を中止します。 </p></dd>
+<dt><a name="L003844" id="L003844"><code>Net::FTP#status</code></a></dt>
+<dd>
+<p>現在の状態を返します。 </p></dd>
+<dt><a name="L003845" id="L003845"><code>Net::FTP#mdtm(<var>filename</var>)</code></a></dt>
+<dd>
+<p>MDTMコマンドを送信し、結果を返します。 </p></dd>
+<dt><a name="L003846" id="L003846"><code>Net::FTP#passive</code></a></dt>
+<dd>
+<p>passive モードの状態を真偽値で返します。</p></dd>
+<dt><a name="L003847" id="L003847"><code>Net::FTP#passive = <var>bool</var></code></a></dt>
+<dd>
+<p>passive モードの状態を設定します。新しい状態を返します。</p></dd>
+<dt><a name="L003848" id="L003848"><code>Net::FTP#return_code</code></a></dt>
+<dd>
+<p>現在のセッションの改行コードを返します。</p></dd>
+<dt><a name="L003849" id="L003849"><code>Net::FTP#return_code = <var>string</var></code></a></dt>
+<dd>
+<p>現在のセッションの改行コードを設定します。新しい改行コードを返します。</p></dd>
+<dt><a name="L003850" id="L003850"><code>Net::FTP#lastresp</code></a></dt>
+<dd>
+<p>サーバからの最後の応答を返します(string)。</p>
+<p>(例): ファイルが正常に転送された時は、&quot;226&quot;。数字の意味は<em class="XXINVALIDXX">RFC:959</em>参照。</p></dd>
+<dt><a name="L003851" id="L003851"><code>Net::FTP#welcome</code></a></dt>
+<dd>
+<p>サーバのウェルカムメッセージを返します。</p></dd>
+<dt><a name="L003852" id="L003852"><code>Net::FTP#help(<var>arg</var> = <var>nil</var>)</code></a></dt>
+<dd>
+<p>help情報を返します。 </p></dd>
+<dt><a name="L003853" id="L003853"><code>Net::FTP#quit</code></a></dt>
+<dd>
+<p>ログアウトします。</p></dd>
+<dt><a name="L003854" id="L003854"><code>Net::FTP#close</code></a></dt>
+<dd>
+<p>接続を切ります。 </p></dd>
+<dt><a name="L003855" id="L003855"><code>Net::FTP#closed?</code></a></dt>
+<dd>
+<p>接続が切れている時に真を返します。</p></dd>
+<dt><a name="L003856" id="L003856"><code>Net::FTP#resume</code></a></dt>
+<dd>
+<p>現在のリジュームモードを返します。リジュームモードとは途中で中断された
+データ転送を再開するためのものです。デフォルトの値は <code>false</code> です。
+この値が真であるとき、いくつかの転送メソッドは事前に REST コマンドを
+発行することによって転送元と転送元のオフセットをセットします。
+これにより、すでに転送されたデータは転送されなくなります。
+具体的には以下のメソッドが影響を受けます。</p>
+<p><code>getbinaryfile</code> はローカルファイルのサイズをオフセットとします。</p>
+<p><code>putbinaryfile</code> はリモートファイルのサイズをオフセットとします。</p></dd>
+<dt><a name="L003857" id="L003857"><code>Net::FTP#resume = <var>boolean</var></code></a></dt>
+<dd>
+<p><code>resume</code> の値を設定します。</p></dd>
+<dt><a name="L003858" id="L003858"><code>Net::FTP#debug_mode</code></a></dt>
+<dd>
+<p>デバッグモードであるか否かを表す真偽値です。
+値が真であるとき、送受信の記録と ABOR, STAT の結果が標準出力に
+随時表示されます。</p></dd>
+<dt><a name="L003859" id="L003859"><code>Net::FTP#debug_mode = <var>boolean</var></code></a></dt>
+<dd>
+<p>デバッグモードの値を設定します。</p></dd>
+<dt><a name="L003860" id="L003860"><code>Net::FTP#set_socket(<var>sock</var>, <var>get_greeting</var> = <var>true</var>)</code></a></dt>
+<dd>
+<p>通信先を <code>TCPSocket</code> オブジェクト <var>sock</var> に設定します。
+省略可能な第2引数 <var>get_greeting</var> に偽が与えられると、
+<code>set_socket</code> は通信先を設定するだけで <var>sock</var> に対する操作を
+何も行ないません。このとき値として <code>nil</code> を返します。
+<var>get_greeting</var> が真(デフォルト)ならば、通信先を <var>sock</var> に
+設定したあと、通常FTPサーバが接続時に送ってくるメッセージを読み込み、
+このメッセージを値として返します。 </p></dd>
+<dt><a name="L003861" id="L003861"><code>Net::FTP#get(<var>remotefile</var>, <var>localfile</var> = <var>File</var>.<var>basename</var>(<var>remotefile</var>), <var>blocksize</var> = <var>DEFAULT_BLOCKSIZE</var>)</code></a>
+<dt><a name="L003862" id="L003862"><code>Net::FTP#get(<var>remotefile</var>, <var>localfile</var> = <var>File</var>.<var>basename</var>(<var>remotefile</var>), <var>blocksize</var> = <var>DEFAULT_BLOCKSIZE</var>) { |<var>data</var>| .... }</code></a></dt>
+<dd>
+<p><code>binary</code>の値に従ってリモートファイルを取得し、
+<var>localfile</var>をファイル名とするローカルファイルに保存します。
+<var>remotefile</var>が省略されると<var>localfile</var>のベースネームが
+仮定されます。
+<var>block_size</var>が省略されると<code>DEFAULT_BLOCLSIZE</code>が仮定されます。
+この値は <code>binary</code> が真であるときのみ有効です。</p>
+<p>ブロックが与えられた場合はそのデータをファイルに書きこむごとに、
+書き込んだデータを <var>data</var> に代入してブロックが評価されます。
+ブロックを最後に評価したときに得られた値が <code>get</code> の値になります。</p>
+<p>ブロックが与えられなかった場合の <code>get</code> の値は <code>nil</code> です。</p></dd>
+<dt><a name="L003863" id="L003863"><code>Net::FTP#put(<var>localfile</var>, <var>remotefile</var> = <var>File</var>.<var>basename</var>(<var>localfile</var>), <var>blocksize</var> = <var>DEFAULT_BLOCKSIZE</var>)</code></a>
+<dt><a name="L003864" id="L003864"><code>Net::FTP#put(<var>localfile</var>, <var>remotefile</var> = <var>File</var>.<var>basename</var>(<var>localfile</var>), <var>blocksize</var> = <var>DEFAULT_BLOCKSIZE</var>) { |<var>data</var>| .... }</code></a></dt>
+<dd>
+<p><code>binary</code>の値に従ってローカルファイル <var>localfile</var> を送信し、
+<var>remotefile</var> をファイル名とするリモートファイルに保存します。
+<var>remotefile</var>が省略されると<var>localfile</var>のベースネームが
+仮定されます。
+<var>block_size</var>が省略されると<code>DEFAULT_BLOCLSIZE</code>が仮定されます。
+この値は <code>binary</code> が真であるときのみ有効です。</p>
+<p>ブロックが与えられた場合はそのデータを送信するごとに、
+送信したデータを <var>data</var> に代入してブロックが評価されます。
+ブロックを最後に評価したときに得られた値が <code>put</code> の値になります。</p>
+<p>ブロックが与えられなかった場合の <code>put</code> の値は <code>nil</code> です。</p></dd>
+<dt><a name="L003865" id="L003865"><code>Net::FTP#binary</code></a></dt>
+<dd>
+<p>表現タイプがバイナリ(IMAGE)であるか否かを表す真偽値です。
+<code>get</code> と <code>put</code> が影響を受けます。
+デフォルトの値は <code>true</code> です。
+偽の場合、ASCIIが仮定されます。
+EBCDIC や LOCAL など他の表現タイプはサポートされていません。</p></dd>
+<dt><a name="L003866" id="L003866"><code>Net::FTP#binary = <var>bool</var></code></a></dt>
+<dd>
+<p>表現タイプがバイナリ(IMAGE)であるか否かを設定します。</p>
+<p><a href="refm002.html">執筆者募集</a></p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm200.html">&lt;-PREV</a>][<a href="refm202.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

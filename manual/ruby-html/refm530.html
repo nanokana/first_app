@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ruby-src:sample/getopts.test</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm531.html" rel="next" />
+<link href="refm529.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm529.html">&lt;-PREV</a>][<a href="refm531.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1>ruby-src:sample/getopts.test</h1>
+#!&nbsp;/usr/local/bin/ruby<br />
+<br />
+load(&quot;parsearg.rb&quot;)<br />
+<br />
+def&nbsp;usage()<br />
+&nbsp;&nbsp;printf&nbsp;&quot;Usage:\n&quot;<br />
+&nbsp;&nbsp;printf&nbsp;&quot;%s&nbsp;-d&nbsp;[-x&nbsp;x]&nbsp;[-y&nbsp;y]&nbsp;[--geometry&nbsp;geom]&nbsp;[--version]&nbsp;[string&nbsp;...]\n&quot;,&nbsp;$0<br />
+end<br />
+<br />
+$USAGE&nbsp;=&nbsp;'usage'<br />
+parseArgs(0,&nbsp;&quot;d&amp;(x|y)&quot;,&nbsp;&quot;dfg&quot;,&nbsp;&quot;x:&quot;,&nbsp;&quot;y:&quot;,&nbsp;&quot;geometry:800x600&quot;,&nbsp;&quot;version&quot;)<br />
+if&nbsp;($OPT_d)<br />
+&nbsp;&nbsp;if&nbsp;$OPT_version<br />
+&nbsp;&nbsp;&nbsp;&nbsp;printf&nbsp;&quot;version&nbsp;1.0\n&quot;<br />
+&nbsp;&nbsp;end<br />
+&nbsp;&nbsp;if&nbsp;($OPT_x)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;x&nbsp;=&nbsp;%d\n&quot;,&nbsp;$OPT_x.to_i)<br />
+&nbsp;&nbsp;end<br />
+&nbsp;&nbsp;if&nbsp;($OPT_y)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;y&nbsp;=&nbsp;%d\n&quot;,&nbsp;$OPT_y.to_i)<br />
+&nbsp;&nbsp;end<br />
+&nbsp;&nbsp;if&nbsp;($OPT_geometry)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;geometry&nbsp;=&nbsp;%s\n&quot;,&nbsp;$OPT_geometry)<br />
+&nbsp;&nbsp;end<br />
+&nbsp;&nbsp;if&nbsp;$OPT_f<br />
+&nbsp;&nbsp;&nbsp;&nbsp;printf&nbsp;&quot;f&nbsp;=&nbsp;TRUE\n&quot;<br />
+&nbsp;&nbsp;end<br />
+&nbsp;&nbsp;if&nbsp;$OPT_g<br />
+&nbsp;&nbsp;&nbsp;&nbsp;printf&nbsp;&quot;g&nbsp;=&nbsp;TRUE\n&quot;<br />
+&nbsp;&nbsp;end<br />
+end<br />
+<br />
+while&nbsp;(ARGV.length&nbsp;!=&nbsp;0)<br />
+&nbsp;&nbsp;print&nbsp;&quot;other&nbsp;=&nbsp;&quot;,&nbsp;ARGV[0],&nbsp;&quot;\n&quot;<br />
+&nbsp;&nbsp;ARGV.shift<br />
+end<br />
+
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm529.html">&lt;-PREV</a>][<a href="refm531.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

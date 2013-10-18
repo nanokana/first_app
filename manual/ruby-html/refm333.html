@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>observable</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm334.html" rel="next" />
+<link href="refm332.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm332.html">&lt;-PREV</a>][<a href="refm334.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006419" id="L006419">Observable</a></h1>
+<h2><a name="L006420" id="L006420">目的・概要</a></h2>
+<p>Mix-inによりobserverパターンを提供する。</p>
+<p>Observableモジュールをincludeしたクラスは
+Observable#changedメソッドにより更新フラグを立て、
+Observable#notify_observers()が呼び出されると
+更新フラグが立っている場合はオブザーバに通知する
+(オブザーバのupdateメソッドを呼び出す)。
+Observable#notify_observers()の引数は
+そのままオブザーバのupdateメソッドに渡される。</p>
+<h2><a name="L006421" id="L006421">サンプルコード</a></h2>
+<pre>require 'observer'
+class AObservable
+  include Observable
+  ...
+end
+class AObserver
+  def update(arg)
+    ...
+  end
+  ...
+end
+obj = AObservable.new
+observer = AObserver.new
+obj.add_observer(observer)
+obj.changed
+obj.notify_observers(args)</pre>
+<h2><a name="L006422" id="L006422">モジュールメソッド</a></h2>
+<dl>
+<dt><a name="L006423" id="L006423"><code>Observable#add_observer(<var>observer</var>)</code></a></dt>
+<dd>
+<p>オブザーバを追加する。
+オブザーバは<code>update</code>メソッドを備えている必要がある。</p>
+<p><var>observer</var>が<code>update</code>メソッドを持たないときは
+例外NoMethodErrorを発生する。</p></dd>
+<dt><a name="L006424" id="L006424"><code>Observable#delete_observer(<var>observer</var>)</code></a></dt>
+<dd>
+<p>オブザーバを削除する。</p></dd>
+<dt><a name="L006425" id="L006425"><code>Observable#delete_observers</code></a></dt>
+<dd>
+<p>オブザーバをすべて削除する。</p></dd>
+<dt><a name="L006426" id="L006426"><code>Observable#count_observers</code></a></dt>
+<dd>
+<p>オブザーバの数を返す。</p></dd>
+<dt><a name="L006427" id="L006427"><code>Observable#changed(<var>state</var>=<var>true</var>)</code></a></dt>
+<dd>
+<p>更新フラグを立てる。</p></dd>
+<dt><a name="L006428" id="L006428"><code>Observable#changed?</code></a></dt>
+<dd>
+<p>更新フラグの状態を返す。</p></dd>
+<dt><a name="L006429" id="L006429"><code>Observable#notify_observers(*<var>arg</var>)</code></a></dt>
+<dd>
+<p>更新フラグが立っていたら、オブザーバの<code>update</code>メソッドを呼び出す。
+与えられた引数はその<code>update</code>メソッドに渡される。
+更新フラグは<code>false</code>になる。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm332.html">&lt;-PREV</a>][<a href="refm334.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

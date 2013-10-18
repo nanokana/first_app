@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Rinda::Tuple</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm200.html" rel="next" />
+<link href="refm198.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm198.html">&lt;-PREV</a>][<a href="refm200.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L003792" id="L003792">Rinda::Tuple</a></h1>
+<p><a href="refm195.html">Rinda</a></p>
+<p>Tuple のためのクラスです。</p>
+<h2><a name="L003793" id="L003793">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L003794" id="L003794"><code>Tuple.new(<var>ah</var>)</code></a></dt>
+<dd>
+<p>Tuple オブジェクトを生成します。<var>ah</var> には <a href="refm036.html">Array</a> オブジェクトか
+<a href="refm044.html">Hash</a> オブジェクトを与えます。<a href="refm044.html">Hash</a> オブジェクトを与える場合、キーは
+すべて文字列でなければいけません。</p></dd>
+</dl>
+<h2><a name="L003795" id="L003795">メソッド</a></h2>
+<dl>
+<dt><a name="L003796" id="L003796"><code>self[k]</code></a></dt>
+<dd>
+<p>ハッシュキー <var>k</var> に対応する要素を返します。self が <a href="refm036.html">Array</a> オブジェクト
+から生成された場合は、整数 <var>k</var> を与えるとそのインデックスに対応する要素を
+返します。</p></dd>
+<dt><a name="L003797" id="L003797"><code>each{|<var>k</var>, <var>v</var>| ... }</code></a></dt>
+<dd>
+<p>各ハッシュキーと値のペアを引数としてブロックを評価します。self が <a href="refm036.html">Array</a>
+オブジェクトから生成された場合は、インデックスと値のペアを引数としてブロックを
+評価します。</p></dd>
+<dt><a name="L003798" id="L003798"><code>fetch(<var>k</var>)</code></a></dt>
+<dd>
+<p><var>k</var> に対応する要素を返します。</p></dd>
+<dt><a name="L003799" id="L003799"><code>size</code></a></dt>
+<dd>
+<p>サイズを整数で返します。</p></dd>
+<dt><a name="L003800" id="L003800"><code>value</code></a></dt>
+<dd>
+<p>自身が保持しているハッシュか配列を返します。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm198.html">&lt;-PREV</a>][<a href="refm200.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

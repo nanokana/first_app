@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Zlib::ZStream</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm138.html" rel="next" />
+<link href="refm136.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm135.html">UP</a>][<a href="refm136.html">&lt;-PREV</a>][<a href="refm138.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L002647" id="L002647">Zlib::ZStream</a></h1>
+<p><a href="refm134.html">zlib</a></p>
+<p>圧縮データを扱うストリームを表す抽象クラス。
+具体的な圧縮/展開の操作は、それぞれサブクラスの <a href="refm138.html">Zlib::Deflate</a>,
+<a href="refm139.html">Zlib::Inflate</a> で定義されています。</p>
+<p>Zlib::ZStream オブジェクトは、ストリーム (struct zstream) の
+入力側 (next_in) と出力側 (next_out) にそれぞれ可変長の
+バッファを持ちます。以下、入力側のバッファを「入力バッファ」、
+出力側のバッファを「出力バッファ」と呼びます。</p>
+<p>Zlib::ZStream オブジェクトに入力されたデータは、一旦入力バッファの
+末尾にストアされた後、ストリームからの出力がなくなるまで
+(処理後 avail_out &gt; 0 となるまで) 入力バッファの先頭から順に処理されます。
+処理の間、出力バッファは全出力を保持するために必要に応じて自動的に
+確保・拡張されます。</p>
+<p>いくつかのメソッドは、出力バッファ内のデータを取り出し、
+String オブジェクトとして返します。</p>
+<p>以上を図示すると次のようになります:</p>
+<pre>+================ an instance of Zlib::ZStream ================+
+||                                                            ||
+||     +--------+          +-------+          +--------+      ||
+||  +--| output |&lt;---------|zstream|&lt;---------| input  |&lt;--+  ||
+||  |  | buffer |  next_out+-------+next_in   | buffer |   |  ||
+||  |  +--------+                             +--------+   |  ||
+||  |                                                      |  ||
++===|======================================================|===+
+    |                                                      |
+    v                                                      |
+&quot;output data&quot;                                         &quot;input data&quot;</pre>
+<p>入力バッファの内容を処理している最中にエラーが発生した場合、
+<a href="refm136.html">Zlib::Error</a> のサブクラスの例外が発生します。その時、
+入力/出力バッファは共に、エラーが発生した時点の状態をそのまま
+保持します。</p>
+<h2><a name="L002648" id="L002648">スーパークラス</a></h2>
+<ul>
+<li>Object</li>
+</ul>
+<h2><a name="L002649" id="L002649">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L002650" id="L002650"><code>ZStream.new</code></a></dt>
+<dd>
+<p><a href="refm138.html#L002674">Zlib::Deflate.new</a> 及び <a href="refm139.html#L002688">Zlib::Inflate.new</a> を参照。</p></dd>
+</dl>
+<h2><a name="L002651" id="L002651">メソッド:</a></h2>
+<dl>
+<dt><a name="L002652" id="L002652"><code>avail_in</code></a></dt>
+<dd>
+<p>入力バッファに溜っているデータのバイト数を返します。通常は 0 です。</p></dd>
+<dt><a name="L002653" id="L002653"><code>avail_out</code></a></dt>
+<dd>
+<p>出力バッファの空き用量をバイト数で返します。
+空きは必要な時に動的に確保されるため、通常は 0 です。</p></dd>
+<dt><a name="L002654" id="L002654"><code>avail_out = <var>size</var></code></a></dt>
+<dd>
+<p>出力側のバッファに <var>size</var> バイトの空きを確保します。
+すでに <var>size</var> バイト以上の空きがある場合、バッファは
+縮められます。空きは必要な時に動的に確保されるため、通常
+このメソッドを使う必要はありません。</p></dd>
+<dt><a name="L002655" id="L002655"><code>flush_next_in</code></a></dt>
+<dd>
+<p>入力バッファに残っているデータを強制的に取り出します。</p></dd>
+<dt><a name="L002656" id="L002656"><code>flush_next_out</code></a></dt>
+<dd>
+<p>出力バッファに残っているデータを強制的に取り出します。</p></dd>
+<dt><a name="L002657" id="L002657"><code>total_in</code></a></dt>
+<dd>
+<p>ストリームに入力されたデータの総バイト数を返します。</p></dd>
+<dt><a name="L002658" id="L002658"><code>total_out</code></a></dt>
+<dd>
+<p>ストリームの出力したデータの総バイト数を返します。</p></dd>
+<dt><a name="L002659" id="L002659"><code>data_type</code></a></dt>
+<dd>
+<p>ストリームに入力されたデータの形式を推測します。
+返り値は Zlib::BINARY, Zlib::ASCII, Zlib::UNKNOWN の
+いずれかです。</p></dd>
+<dt><a name="L002660" id="L002660"><code>adler</code></a></dt>
+<dd>
+<p>alder-32 チェックサムを返します。</p></dd>
+<dt><a name="L002661" id="L002661"><code>reset</code></a></dt>
+<dd>
+<p>ストリームの状態をリセットします。
+入力/出力バッファ内に残っていたデータは破棄されます。</p></dd>
+<dt><a name="L002662" id="L002662"><code>finish</code></a></dt>
+<dd>
+<p>ストリームへの入力を終了し、出力バッファをフラッシュします。
+より具体的な振る舞いは <a href="refm138.html#L002680">Zlib::Deflate#finish</a>,
+<a href="refm139.html#L002691">Zlib::Inflate#finish</a> を参照して下さい。</p></dd>
+<dt><a name="L002663" id="L002663"><code>finished?</code></a>
+<dt><a name="L002664" id="L002664"><code>stream_end?</code></a></dt>
+<dd>
+<p>ストリームへの入力が終了している時に真を返します。</p></dd>
+<dt><a name="L002665" id="L002665"><code>close</code></a>
+<dt><a name="L002666" id="L002666"><code>end</code></a></dt>
+<dd>
+<p>ストリームを閉じます。
+以後、このストリームにアクセスすることはできなくなります。</p></dd>
+<dt><a name="L002667" id="L002667"><code>closed?</code></a>
+<dt><a name="L002668" id="L002668"><code>ended?</code></a></dt>
+<dd>
+<p>ストリームが閉じられている時に真を返します。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm135.html">UP</a>][<a href="refm136.html">&lt;-PREV</a>][<a href="refm138.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

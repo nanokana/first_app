@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>optparse::チュートリアル</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm350.html" rel="next" />
+<link href="refm348.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm347.html">UP</a>][<a href="refm348.html">&lt;-PREV</a>][<a href="refm350.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006727" id="L006727">optparse::チュートリアル</a></h1>
+<p><a href="refm348.html">OptionParser</a></p>
+<p>optparse を使う場合、基本的には</p>
+<ol>
+<li>OptionParser オブジェクト opt を生成する。</li>
+<li>オプションを取り扱うブロックを opt に登録する。</li>
+<li>opt.parse(ARGV) でコマンドラインを実際に parse する。</li>
+</ol>
+<p>というような流れになります。</p>
+<ul>
+<li><a href="#L006728">オプションの定義</a></li>
+<li><a href="#L006729">別の書き方</a></li>
+<li><a href="#L006730">ARGV の機能</a></li>
+<li><a href="#L006731">オプションの引数</a></li>
+<li><a href="#L006732">ロングオプション</a></li>
+<li><a href="#L006733">ヘルプ</a></li>
+<li><a href="#L006734">サブコマンド</a></li>
+<li><a href="#L006735">'-'で始まるファイル名</a></li>
+</ul>
+<h2><a name="L006728" id="L006728">オプションの定義</a></h2>
+<ul>
+<li><p>以下はオプション -a, -b を受け付けるコマンドを作成する例です。</p>
+<pre>require 'optparse'
+opt = OptionParser.new
+
+opt.on('-a') {|v| p v }
+opt.on('-b') {|v| p v }
+
+opt.parse!(ARGV)
+p ARGV
+
+ruby sample.rb -a foo bar -b baz
+# =&gt; true
+     true
+     [&quot;foo&quot;, &quot;bar&quot;, &quot;baz&quot;]</pre>
+<p>on() メソッドの引数でオプションを定義し、引数が指定された時の処理を
+ブロックで記述します。ブロックの引数にはオプションが指定されたことを
+示す true が渡されます(<a href="#L006731">オプションの引数</a>も参照)。</p>
+<p>Enumerable#each などと違い、on() メソッドが呼ばれた時点ではブロックは実行されません。
+あくまで登録されるだけです。
+parse が呼ばれた時に、コマンドラインにオプションが指定されていれば実行されます。</p></li>
+<li><p>オプションの指定はコマンドの直後である必要はありません(上の例で、-b はオプションと
+  して認識されている)。ただし、環境変数 POSIXLY_CORRECT が定義してあると
+  この挙動は変更されます。</p>
+<pre>env POSIXLY_CORRECT=1 ruby ./sample.rb -a foo bar -b baz
+# =&gt; true                               # -a はオプションと解釈
+     [&quot;foo&quot;, &quot;bar&quot;, &quot;-b&quot;, &quot;baz&quot;]        # -b は非オプションと解釈</pre></li>
+<li><p>parse!() により、コマンドライン(ARGV)の解析を行います。
+  parse!() では、ARGV からオプションが取り除かれます。
+  これを避けるには parse() を使います。</p>
+<pre>require 'optparse'
+opt = OptionParser.new
+
+opt.on('-a') {|v| p v }
+opt.on('-b') {|v| p v }
+
+# parse() の場合、ARGVは変更されない。
+# オプションを取り除いた結果は argv に設定される。
+argv = opt.parse(ARGV)
+
+p argv</pre></li>
+<li><p>定義していないオプションを指定すると例外 OptionParser::InvalidOption が
+  発生する。</p>
+<pre>ruby ./sample.rb -c
+/usr/local/lib/ruby/1.9/optparse.rb:1428:in `complete': invalid option: -c (OptionParser::InvalidOption)
+        from /usr/local/lib/ruby/1.9/optparse.rb:1426:in `catch'
+        from /usr/local/lib/ruby/1.9/optparse.rb:1426:in `complete'
+        from /usr/local/lib/ruby/1.9/optparse.rb:1287:in `order!'
+        from /usr/local/lib/ruby/1.9/optparse.rb:1256:in `catch'
+        from /usr/local/lib/ruby/1.9/optparse.rb:1256:in `order!'
+        from /usr/local/lib/ruby/1.9/optparse.rb:1336:in `permute!'
+        from /usr/local/lib/ruby/1.9/optparse.rb:1363:in `parse!'
+        from /usr/local/lib/ruby/1.9/optparse.rb:1356:in `parse'
+        from ./sample.rb:9</pre></li>
+<li><p>OptionParser 自体は、どのオプションが指定されたかを記憶しない。
+  後の処理の方で、オプションによる条件判断を加えるには、
+  他のコンテナに格納する。</p>
+<pre>require 'optparse'
+opt = OptionParser.new
+
+OPTS = {}
+
+opt.on('-a') {|v| OPTS[:a] = v }
+opt.on('-b') {|v| OPTS[:b] = v }
+
+opt.parse!(ARGV)
+p ARGV
+p OPTS
+
+ruby sample.rb -a foo bar -b baz
+# =&gt; [&quot;foo&quot;, &quot;bar&quot;, &quot;baz&quot;]
+     {:a=&gt;true, :b=&gt;true}</pre></li>
+</ul>
+<h2><a name="L006729" id="L006729">別の書き方</a></h2>
+<p>OprionParser.new はブロックを受け付ける。ブロックの引数は生成した
+インスタンスなので、以下の書き方ができる。</p>
+<pre>require 'optparse'
+OptionParser.new {|opt|
+
+  opt.on('-a') {|v| p v }
+  opt.on('-b') {|v| p v }
+
+  opt.parse!(ARGV)
+}
+p ARGV</pre>
+<p>この書き方の利点は、</p>
+<ul>
+<li>OptionParser に関する記述をブロックの範囲で明示する(見やすくなる?)。</li>
+<li>変数 opt をブロックローカルにする。</li>
+</ul>
+<p>ぐらいか？</p>
+<h2><a name="L006730" id="L006730">ARGV の機能</a></h2>
+<p>optparse.rb を require すると、ARGV に OptionParser::Arguable の機能
+が加わる。このことにより、以下の書き方ができるようになる。</p>
+<pre>require 'optparse'
+ARGV.options {|opt|
+
+    opt.on('-a') {|v| p v }
+    opt.on('-b') {|v| p v }
+
+    opt.parse!
+}
+p ARGV
+
+ruby sample.rb -a foo bar -b baz
+# =&gt; true
+     true
+     [&quot;foo&quot;, &quot;bar&quot;, &quot;baz&quot;]</pre>
+<p><a href="#L006729">別の書き方</a>で示した例に比べて、</p>
+<ul>
+<li>ARGV.options メソッドのブロックでオプション定義を記述する</li>
+<li>opt.parse! の引数が ARGV 固定になる。</li>
+</ul>
+<p>といった違いがある。</p>
+<p>特に利点があるわけではないが、optparse 添付のサンプルはこの書
+き方になっている。</p>
+<h2><a name="L006731" id="L006731">オプションの引数</a></h2>
+<ul>
+<li><p>on() メソッドのオプション定義で末尾に何かを書くと、そのオプション
+  は引数を受け付けることの指定となる。</p>
+<pre>require 'optparse'
+opt = OptionParser.new
+
+opt.on('-a VAL') {|v| p v }         # &lt;- &quot; VAL&quot; を追加
+opt.on('-b') {|v| p v }
+
+opt.parse!(ARGV)
+p ARGV
+
+ruby sample.rb -a foo bar -b baz
+
+# =&gt; &quot;foo&quot;
+     true
+     [&quot;bar&quot;, &quot;baz&quot;]</pre>
+<p>オプションの末尾の書き方の基準は、「<a href="#L006733">ヘルプ</a>
+の見栄えが良くなるように書く」である。</p></li>
+<li><p>オプションの引数を省略すると例外 OptionParser::MissingArgument が発生する。</p>
+<pre>ruby ./sample.rb -a
+/usr/local/lib/ruby/1.9/optparse.rb:455:in `parse': missing argument: -a (OptionParser::MissingArgument)
+        from /usr/local/lib/ruby/1.9/optparse.rb:1295:in `order!'
+        from /usr/local/lib/ruby/1.9/optparse.rb:1256:in `catch'
+        from /usr/local/lib/ruby/1.9/optparse.rb:1256:in `order!'
+        from /usr/local/lib/ruby/1.9/optparse.rb:1336:in `permute!'
+        from /usr/local/lib/ruby/1.9/optparse.rb:1363:in `parse!'
+        from ./sample.rb:7</pre></li>
+<li><p>オプションの引数が必須でないことを示すには、&quot; [&quot; を付ける</p>
+<pre>require 'optparse'
+opt = OptionParser.new
+
+opt.on('-a [VAL]') {|v| p v }          # &lt;- [VAL] を追加
+opt.on('-b') {|v| p v }
+
+opt.parse!(ARGV)
+p ARGV
+
+ruby sample.rb -a
+
+# =&gt; nil
+     []</pre>
+<p>同様に、ヘルプの見栄えが良いように &quot;VAL]&quot; を付加している。</p></li>
+<li>ショートオプションの引数指定は使いにくいので、このような場合はロング
+  オプションの方が使う方もわかりやすい。例えば、上記の場合、-ab を
+  指定すると -a b と解釈される。-a が引数を持たない最初の例なら -a -b と
+  解釈される。</li>
+</ul>
+<h2><a name="L006732" id="L006732">ロングオプション</a></h2>
+<ul>
+<li><p>ロングオプションは、on() の引数に '--'で始まるオプションを指定する。</p>
+<pre>require 'optparse'
+opt = OptionParser.new
+
+opt.on('-a', '--foo') {|v| p v }
+opt.on('--bar') {|v| p v }
+
+opt.parse!(ARGV)
+p ARGV
+
+ruby sample.rb -a foo bar --bar baz
+# =&gt; true
+     true
+     [&quot;foo&quot;, &quot;bar&quot;, &quot;baz&quot;]</pre></li>
+<li><p>--[no-]...などとすることで、否定型のオプションを指定することができる。</p>
+<pre>require 'optparse'
+opt = OptionParser.new
+
+opt.on('-a', '--foo') {|v| p v }
+opt.on('--[no-]bar') {|v| p v }
+
+opt.parse!(ARGV)
+p ARGV
+
+ruby sample.rb -a foo bar --bar baz --no-bar
+# =&gt; true
+     true
+     false                              # &lt;- --no-bar の指定による。
+     [&quot;foo&quot;, &quot;bar&quot;, &quot;baz&quot;]</pre></li>
+<li><p>オプションに対する引数も指定できる。ショートオプションと同じだが、
+  GNUの慣習にあわせて</p>
+<pre>opt.on('-a', '--foo=VAL') {|v| p v }
+opt.on('--[no-]bar[=VAL]') {|v| p v }</pre>
+<p>と &quot;=&quot; を使うのが良いと思われる。</p></li>
+<li><p>オプションを指定する時は、どのオプションか一意に決まる長さまで指定す
+  れば良い。</p>
+<pre>require 'optparse'
+opt = OptionParser.new
+
+opt.on('-a', '--foo') {|v| p v }
+opt.on('--[no-]bar') {|v| p v }
+
+opt.parse!(ARGV)
+p ARGV
+
+ruby sample.rb --fo</pre>
+<p>この例では、--fo は、--foo を指定したのと同じになる。この例なら --f 
+まで省略できる。</p></li>
+</ul>
+<h2><a name="L006733" id="L006733">ヘルプ</a></h2>
+<ul>
+<li><p>デフォルトで、--help と --version オプションを認識する。</p>
+<pre>ruby ./sample.rb --help
+# =&gt; Usage: sample [options]
+
+ruby ./sample.rb --version
+# =&gt; *出力なし*</pre></li>
+<li><p>--version は、トップレベルに Version 定数が定義されていると出力される。
+  (優先度は低いが VERSION 定数も参照する。Ruby のバージョンを示す VERSION
+  定数が ruby 1.8 までは定義されているので注意)</p>
+<pre>require 'optparse'
+opt = OptionParser.new
+Version = &quot;1.2.3&quot;       # opt.version = &quot;1.2.3&quot;
+opt.parse!(ARGV)
+
+ruby ./sample.rb --version
+# =&gt; sample 1.2.3</pre></li>
+<li><p>on の引数にそのオプションの説明を加えると --help の出力に反映される。</p>
+<pre>require 'optparse'
+opt = OptionParser.new
+
+opt.on('-a', 'description of -a') {|v| p v }
+opt.on('-b', 'description of -b') {|v| p v }
+
+opt.parse!(ARGV)
+p ARGV
+
+ruby ./sample.rb --help
+# =&gt; Usage: sample [options]        
+        -a                               description of -a
+        -b                               description of -b</pre>
+<p>が、1.8.2より前のバージョンではこれだけだとダメらしい。  </p>
+<pre>ruby ./sample.rb --help
+# =&gt; Usage: sample [options]</pre>
+<p>になる。</p>
+<pre>opt.on('--help', 'show this message') { puts opt; exit }</pre>
+<p>をオプション定義に追加するか、<a href="#L006730">ARGVを使った書き方</a>
+にする(以下)。</p>
+<pre>require 'optparse'
+ARGV.options {|opt|
+
+  opt.on('-a', 'description of -a') {|v| p v }
+  opt.on('-b', 'description of -b') {|v| p v }
+
+  opt.parse!
+}
+p ARGV
+
+ruby ./sample.rb --help
+# =&gt; Usage: sample [options]
+       -a                               description of -a
+       -b                               description of -b</pre></li>
+</ul>
+<h2><a name="L006734" id="L006734">サブコマンド</a></h2>
+<p>以下は cvs や svn のようにサブコマンドを解釈する例である。</p>
+<pre>#! /usr/bin/ruby
+# contributed by Minero Aoki.
+
+require 'optparse'
+
+parser = OptionParser.new
+parser.on('-i') { puts &quot;-i&quot; }
+parser.on('-o') { puts '-o' }
+
+subparsers = Hash.new {|h,k|
+  $stderr.puts &quot;no such subcommand: #{k}&quot;
+  exit 1
+}
+subparsers['add'] = OptionParser.new.on('-i') { puts &quot;add -i&quot; }
+subparsers['del'] = OptionParser.new.on('-i') { puts &quot;del -i&quot; }
+subparsers['list'] = OptionParser.new.on('-i') { puts &quot;list -i&quot; }
+
+parser.order!(ARGV)
+subparsers[ARGV.shift].parse!(ARGV) unless ARGV.empty?</pre>
+<p>実行すると以下のようになる。</p>
+<pre>$ ruby subcom.rb -i add -i
+-i
+add -i
+
+$ ruby subcom.rb list -i
+list -i</pre>
+<p><a href="refm348.html#L006696">OptionParser#order!</a> がオプションではない
+コマンドの引数に出会うとそこでパースを中断することを利用している。</p>
+<h2><a name="L006735" id="L006735">'-'で始まるファイル名</a></h2>
+<p>'-'で始まるファイル名をコマンドに渡したい場合は以下のように間に&quot;--&quot;を挟む。</p>
+<pre>$ ruby sample.rb -- -a </pre>
+<p>&quot;-a&quot; がオプションではない引数として解釈される。
+これは POSIX.2 の getopt(3) に由来する。&quot;--&quot; 以降はすべてオプションではない引数として解釈される。</p>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm347.html">UP</a>][<a href="refm348.html">&lt;-PREV</a>][<a href="refm350.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

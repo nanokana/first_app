@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>trap::破壊的メソッド</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm428.html" rel="next" />
+<link href="refm426.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm421.html">UP</a>][<a href="refm426.html">&lt;-PREV</a>][<a href="refm428.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L009456" id="L009456">破壊的メソッド</a></h1>
+<ul>
+<li><p>変更しなかったときにnilを返す。</p>
+<pre>'a'.sub!(/a/,'b') #=&gt; &quot;b&quot;
+'b'.sub!(/a/,'b') #=&gt; nil</pre></li>
+<li><p>破壊的メソッドの定義</p>
+<pre>class String
+  def sample!
+    self.replace('sample')
+#    self = 'sample' # これは誤り
+  end
+end</pre></li>
+</ul>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm421.html">UP</a>][<a href="refm426.html">&lt;-PREV</a>][<a href="refm428.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

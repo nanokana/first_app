@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Process::UID</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm085.html" rel="next" />
+<link href="refm083.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm034.html">UP</a>][<a href="refm083.html">&lt;-PREV</a>][<a href="refm085.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L002128" id="L002128">Process::UID</a></h1>
+<p><a href="refm385.html">ruby 1.8 feature</a></p>
+<p>ユーザ ID を操作するメソッドを集めたモジュール。
+<a href="refm082.html">Process::GID</a> と同じメソッドが定義されています。</p>
+<h3><a name="L002129" id="L002129">モジュール関数</a></h3>
+<dl>
+<dt><a name="L002130" id="L002130"><code>rid</code></a></dt>
+<dd>
+<p>現在の実ユーザ ID を返します。</p></dd>
+<dt><a name="L002131" id="L002131"><code>eid</code></a></dt>
+<dd>
+<p>現在の実効ユーザ ID を返します。</p></dd>
+<dt><a name="L002132" id="L002132"><code>change_privilege(<var>id</var>)</code></a></dt>
+<dd>
+<p>実ユーザ ID・実効ユーザ ID・保存ユーザ ID のすべてを
+放棄して他のユーザになります。成功したら id を返します。</p>
+<p>完全放棄できない場合 (一部ユーザ ID の変更ができない場合)
+は例外 <a href="refm094.html">ArgumentError</a> が発生します。例外の発生時に
+このメソッドを呼び出す前の各ユーザ ID の値が保存されて
+いるかどうかは保証されません．</p>
+<p><a href="refm081.html#L002064">Process.uid=</a> とは互換性がないことに注意してください．
+setreuid(id,-1) によって実装されていたものを用いていた場合、
+例えば次のように書き換える必要があります．</p>
+<pre>Process::UID.re_exchange  # (r,e,s)==(u1,u2,??) ==&gt; (u2,u1,??)
+Process::UID.eid = id     # (u2,u1,??) ==&gt; (u2,id,??)
+Process::UID.re_exchange  # (u2,id,??) ==&gt; (id,u2,??)</pre></dd>
+<dt><a name="L002133" id="L002133"><code>grant_privilege(<var>id</var>)</code></a>
+<dt><a name="L002134" id="L002134"><code>eid=(<var>id</var>)</code></a></dt>
+<dd>
+<p>実効ユーザ ID を変更します。成功したら id を返します。</p>
+<p>保存ユーザ ID が変化するかどうかは Process::UID.re_exchangeable?
+が true を返すかどうかで決まります。re_exchangeable? が
+false の環境では保存ユーザ ID は変化しません。
+true の環境では、実ユーザ ID と異なる値を設定した場合、
+保存ユーザ ID は新しい実効ユーザ ID の値に設定されます。</p>
+<p>設定できない場合は例外 Errno::EPERM を発生します。</p></dd>
+<dt><a name="L002135" id="L002135"><code>re_exchange</code></a></dt>
+<dd>
+<p>実ユーザ ID と実効ユーザ ID とを入れ換えます。
+保存ユーザ ID は新しい実効ユーザ ID と同じになります。
+環境依存により実装されていない場合は例外を発生します。</p>
+<p>新しい実効ユーザ ID を返します。</p></dd>
+<dt><a name="L002136" id="L002136"><code>re_exchangeable?</code></a></dt>
+<dd>
+<p>実ユーザ ID と実効ユーザ ID との入れ換えが可能な環境かどうか
+(Process::UID.re_exchange が実装されているか) を真偽値で返します。
+入れ換え可能なら true を返します。</p></dd>
+<dt><a name="L002137" id="L002137"><code>sid_available?</code></a></dt>
+<dd>
+<p>保存ユーザ ID を持つ環境かどうかを真偽値で返します。
+保存ユーザ ID を持つなら true を返します。
+ただし、このメソッドの値には保証がありません。
+現在は次の条件のいずれかが満足される場合には
+保存ユーザ ID を持つものと判定しています。</p>
+<ul>
+<li>setresuid() を持つ</li>
+<li>seteuid() を持つ</li>
+<li>_POSIX_SAVED_IDS が真として定義されている</li>
+</ul></dd>
+<dt><a name="L002138" id="L002138"><code>switch</code></a>
+<dt><a name="L002139" id="L002139"><code>switch { .... }</code></a></dt>
+<dd>
+<p>ユーザ権限を一時的に変更します。</p>
+<p>ブロックなしの場合は、呼び出すごとに実効ユーザ ID を
+実ユーザ ID または保存ユーザ ID に変更します。
+結果として、このメソッドを二回呼ぶと、その間だけ
+実効ユーザ ID が実ユーザ ID に変更されることにになります。</p>
+<p>ブロック付きの場合は、実効ユーザ ID を実ユーザ ID へ
+変更し、ブロックを実行したあとで実効ユーザ ID を元の
+値に戻します。</p>
+<p>ブロックなしの場合は元に戻せる (変更できる) ID を返します。
+ブロック付きの場合はブロックの値を返します。</p>
+<p>各ユーザ ID がこのメソッドを実行するのに適切な状態でない場合、
+つまり、実ユーザ ID・実効ユーザ ID・保存ユーザ ID が全て同じ
+場合には例外 Errno::EPERM を発生します。また、このメソッドを
+実装できない環境では例外 NotImplementedError が発生します。</p>
+<p>ブロック付きの場合は、なんらかの原因で元の権限に復帰できない
+ときにも例外 Errno::EPERM を発生します。原因としては例えば
+ブロック内でユーザ ID が変更されたなどの理由が挙げられます。</p>
+<p>なお、保存ユーザ ID を持たない環境でこのメソッドを実行すると
+実ユーザ ID が変化します。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm034.html">UP</a>][<a href="refm083.html">&lt;-PREV</a>][<a href="refm085.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

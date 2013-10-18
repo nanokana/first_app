@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ruby-src:doc/irb/irb.rd</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm510.html" rel="next" />
+<link href="refm508.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm508.html">&lt;-PREV</a>][<a href="refm510.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L011291" id="L011291">What is irb?</a></h1>
+<p>irb stands for `interactive ruby'. irb is a tool to execute interactively
+ruby expressions read from stdin. </p>
+<h1><a name="L011292" id="L011292">Invoking</a></h1>
+<pre>% irb</pre>
+<h1><a name="L011293" id="L011293">Usage</a></h1>
+<p>Use of irb is easy if you know ruby.  Executing irb, prompts are 
+displayed as follows. Then, enter expression of ruby. A input is
+executed when it is syntacticaly completed. </p>
+<pre>dim% irb
+irb(main):001:0&gt; 1+2
+3
+irb(main):002:0&gt; class Foo
+irb(main):003:1&gt;  def foo
+irb(main):004:2&gt;    print 1
+irb(main):005:2&gt;  end
+irb(main):006:1&gt; end
+nil
+irb(main):007:0&gt; </pre>
+<p>And, Readline extesion module can be used with irb. Using Readline
+is the standard default action if Readline is installed. </p>
+<h1><a name="L011294" id="L011294">Command line option</a></h1>
+<pre>irb.rb [options] file_name opts
+options:
+-f		    suppress read ~/.irbrc 
+-m		    bc mode (fraction or matrix are available)
+-d                set $DEBUG  to true (same as `ruby -d')
+-Kc		    same as `ruby -Kc'
+-r load-module    same as `ruby -r'
+--verbose	    command input is echoed(default)
+--noverbose	    command input isn't echoed
+--echo	    commands are echoed immediately before execution(default)
+--noecho	    commands aren't echoed immediately before execution
+--inspect	    uses `inspect' for output (the default except bc mode)
+--noinspect	    doesn't uses inspect for output
+--readline	    uses Readline extension module
+--noreadline	    doesn't use Readline extension module
+--prompt prompt-mode
+--prompt-mode prompt-mode</pre>
+<pre>switches prompt mode. Pre-defined prompt modes are
+`default', `simple', `xmp' and `inf-ruby'</pre>
+<pre>--inf-ruby-mode   uses prompt appreciate for inf-ruby-mode on emacs. </pre>
+<pre>Suppresses --readline. </pre>
+<pre>--simple-prompt   simple prompt mode
+--noprompt	    no prompt
+--tracer	    display trace for each execution of commands.
+--back-trace-limit n</pre>
+<pre>displayes backtrace top n and tail n. The default
+value is 16. </pre>
+<pre>--irb_debug n	    sets internal debug level to n (It shouldn't be used)
+-v, --version	    prints the version of irb</pre>
+<h1><a name="L011295" id="L011295">Configurations</a></h1>
+<p>irb reads `~/.irbrc' when it is invoked. If `~/.irbrb' doesn't exist
+irb try to read in the order `.irbrc', `irb.rc', `_irbrc' then `$irbrc'. </p>
+<p>The following is altanative to the command line option. To use them
+type as follows in an irb session. </p>
+<pre>IRB.conf[:IRB_NAME]=&quot;irb&quot;
+IRB.conf[:MATH_MODE]=false
+IRB.conf[:USE_TRACER]=false
+IRB.conf[:USE_LOADER]=false
+IRB.conf[:IGNORE_SIGINT]=true
+IRB.conf[:IGNORE_EOF]=false
+IRB.conf[:INSPECT_MODE]=nil
+IRB.conf[:IRB_RC] = nil
+IRB.conf[:BACK_TRACE_LIMIT]=16
+IRB.conf[:USE_LOADER] = false
+IRB.conf[:USE_READLINE] = nil
+IRB.conf[:USE_TRACER] = false
+IRB.conf[:IGNORE_SIGINT] = true
+IRB.conf[:IGNORE_EOF] = false
+IRB.conf[:PROMPT_MODE] = :DEFALUT
+IRB.conf[:PROMPT] = {...}
+IRB.conf[:DEBUG_LEVEL]=0
+IRB.conf[:VERBOSE]=true</pre>
+<h2><a name="L011296" id="L011296">Customizing prompt</a></h2>
+<p>To costomize the prompt you set a variable</p>
+<pre>IRB.conf[:PROMPT]</pre>
+<p>For example, describe as follows in `.irbrc'. </p>
+<pre>IRB.conf[:PROMPT][:MY_PROMPT] = { # name of prompt mode
+  :PROMPT_I =&gt; nil,		  # normal prompt
+  :PROMPT_S =&gt; nil,		  # prompt for continuated strings
+  :PROMPT_C =&gt; nil,		  # prompt for continuated statement
+  :RETURN =&gt; &quot;    ==&gt;%s\n&quot;	  # format to return value
+}</pre>
+<p>Then, invoke irb with the above prompt mode by</p>
+<pre>% irb --prompt my-prompt</pre>
+<p>Or add the following in `.irbrc'. </p>
+<pre>IRB.conf[:PROMPT_MODE] = :MY_PROMPT</pre>
+<p>Constants PROMPT_I, PROMPT_S and PROMPT_C specifies the format. 
+In the prompt specification, some special strings are available. </p>
+<pre>%N	command name which is running
+%m	to_s of main object (self)
+%M	inspect of main object (self)
+%l	type of string(&quot;, ', /, ]), `]' is inner %w[...]
+%NNi	indent level. NN is degits and means as same as printf(&quot;%NNd&quot;). 
+      It can be ommited
+%NNn	line number. 
+%%    %</pre>
+<p>For instance, the default prompt mode is defined as follows:</p>
+<p>IRB.conf[:PROMPT_MODE][:DEFAULT] = {</p>
+<dl>
+<dt><a name="L011297" id="L011297">PROMPT_I =&gt; &quot;%N(%m):%03n:%i&gt; &quot;,</a></dt>
+<dt><a name="L011298" id="L011298">PROMPT_S =&gt; &quot;%N(%m):%03n:%i%l &quot;,</a></dt>
+<dt><a name="L011299" id="L011299">PROMPT_C =&gt; &quot;%N(%m):%03n:%i* &quot;,</a></dt>
+<dt><a name="L011300" id="L011300">RETURN =&gt; &quot;%s\n&quot;</a></dt>
+</dl>
+<p>} </p>
+<p>RETURN is used to printf. </p>
+<h2><a name="L011301" id="L011301">Configurating subirb</a></h2>
+<p>The command line option or IRB.conf specify the default behavior of
+(sub)irb. On the other hand, each conf of in the next sction `6. Command' 
+is used to individually configurate (sub)irb. </p>
+<p>If proc is set to IRB.conf[:IRB_RC], its subirb will be invoked after
+execution of that proc under giving the context of irb as its
+aregument. By this mechanism each subirb can be configurated. </p>
+<h1><a name="L011302" id="L011302">Command</a></h1>
+<p>For irb commands, both simple name and `irb_'-prefixed name are prepared. </p>
+<dl>
+<dt><a name="L011303" id="L011303"><code>exit, <var>quit</var>, <var>irb_exit</var></code></a></dt>
+<dd>
+<p>Quits (sub)irb. </p></dd>
+<dt><a name="L011304" id="L011304"><code>conf, <var>irb_context</var></code></a></dt>
+<dd>
+<p>Displays current configuration. Modifing the configuration is
+achieved by sending message to `conf'. </p></dd>
+<dt><a name="L011305" id="L011305"><code>conf.eval_history = <var>N</var></code></a></dt>
+<dd>
+<p>Sets execution result history.
+N is a integer or nil. If N &gt; 0, the number of historys is N. 
+If N == 0, the number of historys is unlimited. If N is nill,
+execution result history isn't used(default).</p></dd>
+<dt><a name="L011306" id="L011306"><code>conf.back_trace_limit</code></a></dt>
+<dd>
+<p>Sets display lines of backtrace as top n and tail n. 
+The default value is 16.</p></dd>
+<dt><a name="L011307" id="L011307"><code>conf.debug_level = <var>N</var></code></a></dt>
+<dd>
+<p>Sets debug level of irb. </p></dd>
+<dt><a name="L011308" id="L011308"><code>conf.ignore_eof = <var>true</var>/<var>false</var></code></a></dt>
+<dd>
+<p>Whether ^D (control-d) will be ignored or not. 
+If false is set, ^D means quit. </p></dd>
+<dt><a name="L011309" id="L011309"><code>conf.ignore_sigint= <var>true</var>/<var>false</var></code></a></dt>
+<dd>
+<p>Whether ^C (control-c) will be ignored or not. 
+If false is set, ^D means quit.  If true, </p>
+<pre>during input:   cancel inputing then return to top level. 
+during execute: abondon current execution. </pre></dd>
+<dt><a name="L011310" id="L011310"><code>conf.inf_ruby_mode = <var>true</var>/<var>false</var></code></a></dt>
+<dd>
+<p>Whether inf-ruby-mode or not. The default value is false.</p></dd>
+<dt><a name="L011311" id="L011311"><code>conf.inspect_mode = <var>true</var>/<var>false</var>/<var>nil</var></code></a></dt>
+<dd>
+<p>Specifies inspect mode. 
+true:  display inspect
+false: display to_s
+nil:   inspect mode in non math mode, </p>
+<pre>non inspect mode in math mode. </pre></dd>
+<dt><a name="L011312" id="L011312"><code>conf.math_mode</code></a></dt>
+<dd>
+<p>Whether bc mode or not. </p></dd>
+<dt><a name="L011313" id="L011313"><code>conf.use_loader = <var>true</var>/<var>false</var></code></a></dt>
+<dd>
+<p>Whether irb's own file reader method is used when load/require or not. 
+This mode is globaly affected (irb wide). </p></dd>
+<dt><a name="L011314" id="L011314"><code>conf.prompt_c</code></a></dt>
+<dd>
+<p>prompt for a continuating statement (e.g, immediately after of `if')</p></dd>
+<dt><a name="L011315" id="L011315"><code>conf.prompt_i</code></a></dt>
+<dd>
+<p>standard prompt</p></dd>
+<dt><a name="L011316" id="L011316"><code>conf.prompt_s</code></a></dt>
+<dd>
+<p>prompt for a continuating string</p></dd>
+<dt><a name="L011317" id="L011317"><code>conf.rc</code></a></dt>
+<dd>
+<p>Whether ~/.irbrc is read or not. </p></dd>
+<dt><a name="L011318" id="L011318"><code>conf.use_prompt = <var>true</var>/<var>false</var></code></a></dt>
+<dd>
+<p>Prompting or not. </p></dd>
+<dt><a name="L011319" id="L011319"><code>conf.use_readline = <var>true</var>/<var>false</var>/<var>nil</var></code></a></dt>
+<dd>
+<p>Whether readline is used or not. 
+true: uses 
+false: doen't use
+nil: intends to use readline except for inf-ruby-mode (default)</p></dd>
+<dt><a name="L011320" id="L011320"><code>cws, <var>chws</var>, <var>irb_change_workspace</var> [<var>obj</var>]</code></a></dt>
+<dd>
+<p>obj will be self. If obj is omitted, self will be home-object, or
+the main object of first started irb.</p></dd>
+<dt><a name="L011321" id="L011321"><code>pushws, <var>irb_pushws</var>, <var>irb_push_workspace</var> [<var>obj</var>]</code></a></dt>
+<dd>
+<p>same as UNIX-shell command pushd.</p></dd>
+<dt><a name="L011322" id="L011322"><code>popws, <var>irb_popws</var>, <var>irb_pop_workspace</var></code></a></dt>
+<dd>
+<p>same as UNIX-shell command popd</p></dd>
+<dt><a name="L011323" id="L011323"><code>irb [<var>obj</var>]</code></a></dt>
+<dd>
+<p>Invoke subirb. If obj is given, obj will be self. </p></dd>
+<dt><a name="L011324" id="L011324"><code>jobs, <var>irb_jobs</var></code></a></dt>
+<dd>
+<p>List of subirb</p></dd>
+<dt><a name="L011325" id="L011325"><code>fg <var>n</var>, <var>irb_fg</var> <var>n</var></code></a></dt>
+<dd>
+<p>Switch into specified subirb. The following is candidates of n:</p>
+<pre>irb number
+thhread
+irb object
+self(obj which is specified of irb obj)</pre></dd>
+<dt><a name="L011326" id="L011326"><code>kill <var>n</var>, <var>irb_kill</var> <var>n</var></code></a></dt>
+<dd>
+<p>Kill subirb. The means of n is as same as the case of irb_fg. </p></dd>
+<dt><a name="L011327" id="L011327"><code>souce, <var>irb_source</var>  <var>path</var></code></a></dt>
+<dd>
+<p>This is a like UNIX-shell command source. evaluate script in path
+on current context.</p></dd>
+<dt><a name="L011328" id="L011328"><code>irb_load <var>path</var>, <var>prev</var></code></a></dt>
+<dd>
+<p>irb-version of Ruby's load.</p></dd>
+</dl>
+<h1><a name="L011329" id="L011329">System variable</a></h1>
+<dl>
+<dt><a name="L011330" id="L011330"><code>_  <var>The</var> <var>latest</var> <var>value</var> <var>of</var> <var>evaluation</var> (<var>it</var> <var>is</var> <var>local</var>)</code></a>
+<dt><a name="L011331" id="L011331"><code>__ <var>The</var> <var>history</var> <var>of</var> <var>evaluation</var> <var>values</var>.</code></a></dt>
+<dd>
+<p>__[line_no] return an evaluation value of line number&lt;line_no&gt;. If
+line_no is a negative, return value before -&lt;line_no&gt; from latest
+value.</p></dd>
+</dl>
+<h1><a name="L011332" id="L011332">Session Example</a></h1>
+<pre>dim% ruby irb.rb
+irb(main):001:0&gt; irb                        # invoke subirb
+irb#1(main):001:0&gt; jobs                     # list of subirbs
+#0-&gt;irb on main (#&lt;Thread:0x400fb7e4&gt; : stop)
+#1-&gt;irb#1 on main (#&lt;Thread:0x40125d64&gt; : running)
+nil
+irb#1(main):002:0&gt; fg 0                     # switch job
+nil
+irb(main):002:0&gt; class Foo;end
+nil
+irb(main):003:0&gt; irb Foo                    # invoke subirb which has the </pre>
+<pre>#              context of Foo</pre>
+<pre>irb#2(Foo):001:0&gt; def foo                   # define Foo#foo
+irb#2(Foo):002:1&gt;   print 1
+irb#2(Foo):003:1&gt; end
+nil
+irb#2(Foo):004:0&gt; fg 0                      # switch job
+nil
+irb(main):004:0&gt; jobs                       # list of job
+#0-&gt;irb on main (#&lt;Thread:0x400fb7e4&gt; : running)
+#1-&gt;irb#1 on main (#&lt;Thread:0x40125d64&gt; : stop)
+#2-&gt;irb#2 on Foo (#&lt;Thread:0x4011d54c&gt; : stop)
+nil
+irb(main):005:0&gt; Foo.instance_methods       # Foo#foo is defined asurely
+[&quot;foo&quot;]
+irb(main):006:0&gt; fg 2                       # switch job
+nil
+irb#2(Foo):005:0&gt; def bar                   # define Foo#bar
+irb#2(Foo):006:1&gt;  print &quot;bar&quot;
+irb#2(Foo):007:1&gt; end
+nil
+irb#2(Foo):010:0&gt;  Foo.instance_methods
+[&quot;bar&quot;, &quot;foo&quot;]
+irb#2(Foo):011:0&gt; fg 0                      
+nil
+irb(main):007:0&gt; f = Foo.new
+#&lt;Foo:0x4010af3c&gt;
+irb(main):008:0&gt; irb f                      # invoke subirb which has the</pre>
+<pre>#  context of f (instance of Foo)</pre>
+<pre>irb#3(#&lt;Foo:0x4010af3c&gt;):001:0&gt; jobs
+#0-&gt;irb on main (#&lt;Thread:0x400fb7e4&gt; : stop)
+#1-&gt;irb#1 on main (#&lt;Thread:0x40125d64&gt; : stop)
+#2-&gt;irb#2 on Foo (#&lt;Thread:0x4011d54c&gt; : stop)
+#3-&gt;irb#3 on #&lt;Foo:0x4010af3c&gt; (#&lt;Thread:0x4010a1e0&gt; : running)
+nil
+irb#3(#&lt;Foo:0x4010af3c&gt;):002:0&gt; foo         # evaluate f.foo
+1nil
+irb#3(#&lt;Foo:0x4010af3c&gt;):003:0&gt; bar         # evaluate f.bar
+barnil
+irb#3(#&lt;Foo:0x4010af3c&gt;):004:0&gt; kill 1, 2, 3# kill job
+nil
+irb(main):009:0&gt; jobs
+#0-&gt;irb on main (#&lt;Thread:0x400fb7e4&gt; : running)
+nil
+irb(main):010:0&gt; exit                       # exit
+dim% </pre>
+<h1><a name="L011333" id="L011333">Restrictions</a></h1>
+<p>Because irb evaluates the inputs immediately after the imput is
+syntactically completed, irb gives slight different result than
+directly use ruby. Known difference is pointed out here. </p>
+<h2><a name="L011334" id="L011334">Declaration of the local variable</a></h2>
+<p>The following causes an error in ruby:</p>
+<pre>eval &quot;foo = 0&quot;
+foo
+--
+-:2: undefined local variable or method `foo' for #&lt;Object:0x40283118&gt; (NameError)
+---
+NameError</pre>
+<p>Though, the above will successfully done by irb. </p>
+<pre>&gt;&gt; eval &quot;foo = 0&quot;</pre>
+<pre>=&gt; 0
+&gt;&gt; foo
+=&gt; 0</pre>
+<p>Ruby evaluates a code after reading entire of code and determination
+of the scope of local variables. On the other hand, irb do
+immediately. More precisely, irb evaluate at first</p>
+<pre>evel &quot;foo = 0&quot; </pre>
+<p>then foo is defined on this timing. It is because of this
+incompatibility.</p>
+<p>If you'd like to detect those differences, begin...end can be used:</p>
+<pre>&gt;&gt; begin
+?&gt;   eval &quot;foo = 0&quot;
+&gt;&gt;   foo
+&gt;&gt; end
+NameError: undefined local variable or method `foo' for #&lt;Object:0x4013d0f0&gt;
+(irb):3
+(irb_local_binding):1:in `eval'</pre>
+<h2><a name="L011335" id="L011335">Here-document</a></h2>
+<p>Implementation of Here-document is incomplete. </p>
+<h2><a name="L011336" id="L011336">Symbol</a></h2>
+<p>Irb can not always recognize a symbol as to be Symbol. Concretely, an
+expression have completed, however Irb regard it as continuation line.</p>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm508.html">&lt;-PREV</a>][<a href="refm510.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

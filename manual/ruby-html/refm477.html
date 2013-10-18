@@ -1,0 +1,818 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Ruby用語集</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm478.html" rel="next" />
+<link href="refm476.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm476.html">&lt;-PREV</a>][<a href="refm478.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L009614" id="L009614">Ruby用語集</a></h1>
+<h2><a name="L009615" id="L009615">A</a></h2>
+<dl>
+<dt><a name="L009616" id="L009616">AWK</a></dt>
+<dd>
+<p>エイホ(A)、ワインバーガー(W)、カーニハン(K)による
+小型の<a href="#L009711">スクリプト言語</a>。</p>
+</dd>
+</dl>
+<h2><a name="L009617" id="L009617">B</a></h2>
+<dl>
+<dt><a name="L009618" id="L009618">blade</a></dt>
+<dd>
+<p>ml archive (<a href="http://blade.nagaokaut.ac.jp/ruby/">blade/ruby</a><sup class="outside"><small>[外部]</small></sup>)</p>
+</dd>
+</dl>
+<h2><a name="L009619" id="L009619">C</a></h2>
+<dl>
+<dt><a name="L009620" id="L009620">Coerce</a></dt>
+<dd>
+<p>数値の型変換を行うメソッド。数値計算のメソッドは自分の知らな
+いインスタンスが引数として渡された時には<code>coerce</code>
+メソッドを使って変換を行うように取り決められている。
+<code>coerce</code>メソッドは引数として与えられた値(を変換し
+た値)と自分(必要ならば変換した値)のペアを返す。</p>
+<p>Rubyのライブラリの数値型の変換順序は</p>
+<pre>Fixnum -&gt; Bignum -&gt; Rational -&gt; Float -&gt; Complex</pre>
+<p>になっている。</p>
+</dd>
+</dl>
+<h2><a name="L009621" id="L009621">D</a></h2>
+<dl>
+<dt><a name="L009622" id="L009622">Data</a></dt>
+<dd>
+<p>CレベルのポインタをRubyオブジェクトとして見せるためのラッパー。
+Cポインタと、mark関数、free関数から作る。Cを使ってRubyに機能
+を追加しようとする人はぜひこのクラスの使い方をマスターする必
+要がある。逆にいうとそういう予定のない人には用事がないクラス
+でもある。</p>
+</dd>
+<dt><a name="L009623" id="L009623"><code>defined?</code></a></dt>
+<dd>
+<p>いろいろなもの(式)が本当に定義されているかどうか調べてくれる
+演算子。定義されていなければ<code>nil</code>、定義されてい
+ればその式の種別を示す文字列を返す。<code>defined?</code>は
+メソッドのようにみえるがRubyの文法に組み込まれた演算子で、引
+数の評価を行わない。よって</p>
+<pre>defined? print(&quot;abc\n&quot;)</pre>
+<p>はなにも出力しない。</p>
+</dd>
+</dl>
+<h2><a name="L009624" id="L009624">E</a></h2>
+<dl>
+<dt><a name="L009625" id="L009625">Eiffel</a></dt>
+<dd>
+<p>オブジェクト指向プログラミング言語。matzは昔この言語の作者の
+本(Object-oriented Software Construction 邦訳「オブジェクト
+指向入門」)を読んで目から鱗が落ちたらしい。その割にはRubyは
+Eiffelに似ていない。似ているのはブロックが<code>end</code>で
+終るところと、<code>rescue</code>という予約語だけか。</p>
+</dd>
+<dt><a name="L009626" id="L009626"><code>end</code></a></dt>
+<dd>
+<p>ブロック構造を終える予約語。ある統計によればRubyを最初に見た
+人の33%がこれを見てPascalを連想するという(嘘)。しかし、実際
+にはbeginと対にならないこの形式はPascalというよりAdaやEiffel
+に近い。</p>
+<p>RubyがCやPerlで慣れ親しんだ <code>{}</code>を使わなかったの
+は以下の理由である</p>
+<ul>
+<li><p>単文・複文問題の回避</p>
+<p>たとえばCでは</p>
+<pre>if (a==b)
+   c();</pre>
+<p>に文を追加しようとして</p>
+<pre>if (a==b)
+   c();
+   d();</pre>
+<p>などとするとややこしいバグの元になる。この問題はPascalにも存
+在する。</p></li>
+<li><p>ぶらさがり<code>else</code>問題の回避</p>
+<p>上記と類似だが、</p>
+<pre>if (a==b)
+   if (c==d) foo();
+else bar();</pre>
+<p>などと書いてしまうと面倒なことになる。上のプログラムは実は</p>
+<pre>if (a==b) {
+   if (c==d) foo();
+   else bar();
+}</pre>
+<p>という意味である。</p></li>
+<li><p>可読性の向上</p>
+<p>異論はあるようだが、endという単語でブロックを閉じた方がプロ
+グラムが読みやすいと考えている人がいる。</p></li>
+<li><p><code>begin</code>, <code>case</code>の構文上の問題</p>
+<p>正直言うと、matzはendという名前の変数を使おうとして痛い目に
+あったことが何度かある。そこで、一度は <code>{ }</code>を使っ
+た文法にしようと検討したが、<code>begin</code>と<code>case</code>
+の文法がきれいにまとまらずに断念した。実をいうとこれが最大の
+理由であったりする。</p></li>
+</ul>
+</dd>
+<dt><a name="L009627" id="L009627"><code>ENV</code></a></dt>
+<dd>
+<p>環境変数をアクセスするための<a href="refm044.html">Hash</a>
+と同様の動作をするオブジェクト。実際には特異メソッドを付加し
+た<a href="refm035.html">Object</a>クラスのイン
+スタンスである。このオブジェクトによって
+<a href="#L009692">環境変数</a>を変更すると、
+Rubyの子プロセスにも引き継がれる。</p>
+</dd>
+</dl>
+<h2><a name="L009628" id="L009628">F</a></h2>
+<dl>
+<dt><a name="L009629" id="L009629">FAQ</a></dt>
+<dt><a name="L009630" id="L009630">Frequently Asked Questions</a></dt>
+<dd>
+<p>よくある質問とその答え集。
+<a href="refm395.html">Ruby FAQ</a>はまだまだ発展途上である。質問と答えは随時募集中。</p>
+</dd>
+</dl>
+<h2><a name="L009631" id="L009631">G</a></h2>
+<dl>
+<dt><a name="L009632" id="L009632">goto</a></dt>
+<dd>
+<p>Rubyにないもの。gotoがないのはそれが「あるべきでないから」ではなく、
+「実装するのが面倒だったから」である。
+gotoの代りは<code>catch/throw</code>や例外で実現する。</p>
+</dd>
+</dl>
+<h2><a name="L009633" id="L009633">H</a></h2>
+<h2><a name="L009634" id="L009634">I</a></h2>
+<h2><a name="L009635" id="L009635">J</a></h2>
+<dl>
+<dt><a name="L009636" id="L009636">JARH</a></dt>
+<dt><a name="L009637" id="L009637">Just another Ruby hacker,</a></dt>
+</dl>
+<h2><a name="L009638" id="L009638">K</a></h2>
+<h2><a name="L009639" id="L009639">L</a></h2>
+<h2><a name="L009640" id="L009640">M</a></h2>
+<dl>
+<dt><a name="L009641" id="L009641"><code>main</code></a></dt>
+<dd>
+<p><a href="#L009734">トップレベル</a>での<a href="#L009659">self</a>。
+<code>self</code>がないわけにはいかないので、ただそこにある
+ためだけの単なる<code>Object</code>クラスのインスタンスであるが、
+Objectクラスを操作するため、いくつかの特異メソッドを定義して
+ある。</p>
+<p>定義されている特異メソッド</p>
+<ul>
+<li>private</li>
+<li>public</li>
+<li>include</li>
+</ul>
+</dd>
+<dt><a name="L009642" id="L009642">matz</a></dt>
+<dd>
+<p>Rubyの作者。まつもと ゆきひろとも言う。
+<a href="http://cmail.sourceforge.jp/">&lt;URL:http://cmail.sourceforge.jp/&gt;</a><sup class="outside"><small>[外部]</small></sup>
+と4人の子供の父親でもある。</p>
+</dd>
+<dt><a name="L009643" id="L009643">ミックスイン</a></dt>
+<dt><a name="L009644" id="L009644">Mix-in</a></dt>
+<dd>
+<p>アイスクリームにいろんなものをまぜて新しい味を作ること。転じ
+て<em class="XXINVALIDXX">モジュール</em>をクラスに混ぜて機能を追加
+すること。<a href="#L009700">継承</a>を参照。</p>
+<p>Rubyでは多重継承を採用せず、is-aの関係のための継承と、機能の
+共有のためのMix-inを用意している。これは多重継承を濫用すると
+関係が混乱するというmatzの信念のためである。</p>
+</dd>
+</dl>
+<h2><a name="L009645" id="L009645">N</a></h2>
+<h2><a name="L009646" id="L009646">O</a></h2>
+<h2><a name="L009647" id="L009647">P</a></h2>
+<dl>
+<dt><a name="L009648" id="L009648">Perl</a></dt>
+<dd>
+<p>何だったっけ？</p>
+</dd>
+<dt><a name="L009649" id="L009649">POLS</a></dt>
+<dd>
+<p>Principle of least surprise</p>
+</dd>
+<dt><a name="L009650" id="L009650">Python</a></dt>
+<dd>
+<p>Rubyのライバル。「年を経た蛇」。matzがPythonに満足していれば
+Rubyは生まれなかったであろう。一番気になっているのは名前の長
+さ(6文字)である。</p>
+</dd>
+</dl>
+<h2><a name="L009651" id="L009651">Q</a></h2>
+<h2><a name="L009652" id="L009652">R</a></h2>
+<dl>
+<dt><a name="L009653" id="L009653">RAA</a></dt>
+<dd>
+<p>Ruby Application Archive(<a href="http://www.ruby-lang.org/en/raa.html">RAA</a><sup class="outside"><small>[外部]</small></sup>)</p>
+</dd>
+<dt><a name="L009654" id="L009654">RCR</a></dt>
+<dd>
+<p>Ruby Change Request</p>
+</dd>
+<dt><a name="L009655" id="L009655">RD</a></dt>
+<dd>
+<p>Ruby Document</p>
+</dd>
+<dt><a name="L009656" id="L009656">Ruby</a></dt>
+<dd>
+<p>オブジェクト指向スクリプト言語。Rubyの名前は「Perlに続く
+(pearlは6月の誕生石、Rubyは7月の誕生石)」という程度の意味で
+名付けられた。Rubyは別に何かの略ではない。</p>
+</dd>
+</dl>
+<h2><a name="L009657" id="L009657">S</a></h2>
+<dl>
+<dt><a name="L009658" id="L009658">Sather</a></dt>
+<dd>
+<p>オブジェクト指向プログラミング言語。matzは
+<a href="#L009625">Eiffel</a>よりもSatherが好きだ。しかし、
+SatherもやっぱりRubyには全然似ていない。</p>
+</dd>
+<dt><a name="L009659" id="L009659"><code>self</code></a></dt>
+<dd>
+<p><a href="#L009768">レシーバ</a>を参照する式。なぜ
+<code>self</code>かというと、<a href="#L009760">メソッド</a>
+を動詞と考えるとレシーバは主語に当たり、メソッドから見ると
+<em>自分</em>であるからという説があるが、Rubyでは深
+く考えず、単に<a href="#L009660">Smalltalk</a>を真似ただけ
+だ、という説が有力である。</p>
+</dd>
+<dt><a name="L009660" id="L009660">Smalltalk</a></dt>
+<dd>
+<p>オブジェクト指向プログラミング言語。現在の
+<a href="#L009682">オブジェクト指向</a>と
+いう<a href="#L009744">パラダイム</a>の基礎を築いた言語。</p>
+</dd>
+<dt><a name="L009661" id="L009661"><code>super</code></a></dt>
+<dd>
+<p>オーバーライドしたメソッドから上位のメソッドを呼び出す方法。
+引数を省略した時には呼び出し元のメソッドと同じ引数で呼び出さ
+れる。</p>
+<ul>
+<li><p>問題:</p>
+<p>引数として与えられた変数の値を変更した場合には、
+<code>super</code>で元の値が渡るか、変更した値が渡るか。</p>
+<pre>def foo(a)
+   print a
+end
+def self.foo(a)
+  a=25
+  super
+end
+foo(5)    # 5 or 25??</pre></li>
+<li><p>答え:</p>
+<p>変更した値(25)<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></p></li>
+</ul>
+</dd>
+</dl>
+<h2><a name="L009662" id="L009662">T</a></h2>
+<dl>
+<dt><a name="L009663" id="L009663">Thread</a></dt>
+<dd>
+<p>もとはThread of controlの略。一連の制御の流れのこと。Rubyでは
+一つのプログラムの中に複数のスレッドが存在できる。</p>
+</dd>
+</dl>
+<h2><a name="L009664" id="L009664">U</a></h2>
+<dl>
+<dt><a name="L009665" id="L009665"><code>undef</code></a></dt>
+<dd>
+<p>メソッドを未定義状態にすること。<a href="#L009700">継承</a>
+も<a href="#L009644">Mix-in</a>もクラスにメソッドを追加するこ
+とだが、<code>undef</code>を使えばメソッドを取り除くことがで
+きる。ただし、クラスの実装に必要なメソッド(メソッド内部から
+呼ばれているメソッド)を外してしまうと痛い目に遭う。</p>
+</dd>
+</dl>
+<h2><a name="L009666" id="L009666">V</a></h2>
+<h2><a name="L009667" id="L009667">W</a></h2>
+<h2><a name="L009668" id="L009668">X</a></h2>
+<h2><a name="L009669" id="L009669">Y</a></h2>
+<h2><a name="L009670" id="L009670">Z</a></h2>
+<h2><a name="L009671" id="L009671">あ</a></h2>
+<dl>
+<dt><a name="L009672" id="L009672">イテレータ</a></dt>
+<dt><a name="L009673" id="L009673">Iterator</a></dt>
+<dd>
+<p><a href="#L009752">ブロック付きメソッド呼び出し</a>のこと。
+ブロック付きメソッドは当初繰り返し処理を行うために作られたため、
+未だにイテレータと呼ぶことがある。
+繰り返しを意図したメソッドをイテレータと呼ぶのはかまわないが、
+ブロック付きメソッド呼び出し全般をイテレータと呼ぶと混乱の元
+になるので気を付けるように。</p>
+</dd>
+<dt><a name="L009674" id="L009674">インスタンス</a></dt>
+<dt><a name="L009675" id="L009675">Instance</a></dt>
+<dd>
+<p><a href="#L009680">オブジェクト</a>のこと。オブジェクトがある
+クラスに所属することを強調する意味あいがあるらしい。オブジェ
+クトなんだかインスタンスなんだか混乱してオブジェクト指向に挫
+折する人は多いと聞く。</p>
+</dd>
+<dt><a name="L009676" id="L009676">インスタンス変数</a></dt>
+<dt><a name="L009677" id="L009677">Instance Variable</a></dt>
+<dd>
+<p>オブジェクトに固有の変数のこと。Rubyのインスタンス変数は識別
+子の直前に<code>@</code>をつけたものであり、メソッドの中から
+しか参照できない。</p>
+</dd>
+<dt><a name="L009678" id="L009678">オーバーライド</a></dt>
+<dt><a name="L009679" id="L009679">Override</a></dt>
+<dd>
+<p><a href="#L009703">再定義</a>のこと。スーパークラスまた
+は<em class="XXINVALIDXX">include</em>しているモジュールで定義され
+ているメソッドと同じ名前のメソッドを定義すること。オーバーラ
+イドした上位のメソッドは
+<a href="#L009661">super</a>を使って呼び出すこと
+ができる。</p>
+</dd>
+<dt><a name="L009680" id="L009680">オブジェクト</a></dt>
+<dt><a name="L009681" id="L009681">Object</a></dt>
+<dd>
+<p><em>もの</em>のこと。「愛」は多分オブジェクトではな
+いが、「ラブレター」はオブジェクトである。あるものがものであ
+るか、そうでないかは多分に哲学的である。この辺がオブジェクト
+指向は難しいといわれる原因かも知れない。コンピュータ業界では
+メモリ中の特定の空間のことをオブジェクトと呼ぶ人がいたりする
+人がいる。困ったものだ。<a href="#L009690">カプセル化</a>、
+<a href="#L009722">抽象データ型</a>参照。</p>
+</dd>
+<dt><a name="L009682" id="L009682">オブジェクト指向</a></dt>
+<dd>
+<p>オブジェクトを基本にした<a href="#L009744">パラダイム</a>。
+英語の&quot;Object-Oriented&quot;という形容詞が、日本に来て名詞化した。
+オブジェクトを考え方の中心に置けば、なんでも良いようにも思え
+るが、一般的には</p>
+<ul>
+<li><a href="#L009700">継承</a></li>
+<li><a href="#L009690">カプセル化</a></li>
+<li><p><a href="#L009755">ポリモルフィズム</a></p>
+<p>(あるいは<a href="#L009726">動的結合</a>)</p></li>
+</ul>
+<p>が必要らしい。
+なんでも解決できる「魔法」のように考える人もいるが、世の中そ
+んなに甘くない。誕生から20数年を経てようやっと実用的に使われ
+るようになった…んだろうな、多分。</p>
+</dd>
+<dt><a name="L009683" id="L009683">オブジェクト指向設計</a></dt>
+<dt><a name="L009684" id="L009684">Object-Oriented Design</a></dt>
+<dd>
+<p>オブジェクトを基本にしたシステム設計</p>
+</dd>
+<dt><a name="L009685" id="L009685">オブジェクト指向プログラミング</a></dt>
+<dt><a name="L009686" id="L009686">Object-Oriented Programming</a></dt>
+<dd>
+<p>オブジェクトを基本にしたプログラミング。</p>
+</dd>
+<dt><a name="L009687" id="L009687">オブジェクト指向分析</a></dt>
+<dt><a name="L009688" id="L009688">Object-Oriented Analysis</a></dt>
+<dd>
+<p>オブジェクトを基本にしたシステム分析。</p>
+</dd>
+</dl>
+<h2><a name="L009689" id="L009689">か</a></h2>
+<dl>
+<dt><a name="L009690" id="L009690">カプセル化</a></dt>
+<dt><a name="L009691" id="L009691">Encapsulation</a></dt>
+<dd>
+<p>データに対する直接的な操作はデータの型に付随する特定の手続き
+(<a href="#L009760">メソッド</a>と呼ぶ)からだけ行うことにより、
+内部構造や処理のアルゴリズムを外部から隠してしまうこと。
+<a href="#L009722">抽象データ型</a>参照。</p>
+<p>Rubyはインスタンス変数はメソッドからしか参照できないので、カ
+プセル化が強制されているといえる。</p>
+</dd>
+<dt><a name="L009692" id="L009692">環境変数</a></dt>
+<dt><a name="L009693" id="L009693">Environment Variable</a></dt>
+<dd>
+<p>親プロセスから子プロセスに対して受け渡される値。
+<a href="#L009627">ENV</a>でアクセスされる。
+子プロセスに渡るのは環境変数のコピーなので、子プロセスから親
+プロセスに環境変数を使って情報を受け渡すことはできない。
+親はなかなか子供に耳を傾けないものである。</p>
+</dd>
+<dt><a name="L009694" id="L009694">関数</a></dt>
+<dt><a name="L009695" id="L009695">Function</a></dt>
+<dd>
+<p>厳密にいうとRubyに関数はない。しかし、レシーバを省略したメソッ
+ド呼び出しは外見が関数に似ているし、
+<a href="#L009659">self</a>やインスタンス変数など
+レシーバの情報を全く参照しない事実上の関数として働いていると
+いっても良いメソッドもある。だから厳密でない言い方としてそう
+いうメソッドを関数と呼ぶこともある。</p>
+<p>そういう関数(的メソッド)は大抵レシーバを省略した形式でしか呼
+び出せないように<em class="XXINVALIDXX">可視性</em>がprivateに
+設定してある。このようなメソッドの代表として
+<a href="#L009758">モジュール関数</a>がある。</p>
+</dd>
+<dt><a name="L009696" id="L009696">クラスメソッド</a></dt>
+<dt><a name="L009697" id="L009697">Class Method</a></dt>
+<dd>
+<p>クラスのメソッド。全てのクラスのクラス
+<a href="refm051.html">Class</a>で定義されている
+全てのクラスで共有されているメソッドとクラスそれぞれが固有に持っている
+<a href="#L009730">特異メソッド</a>とがあるが、そんな
+ことは大した問題ではない。
+クラスメソッド内での<code>self</code>はクラスであるので勘違いしないように。</p>
+</dd>
+<dt><a name="L009698" id="L009698">グローバル変数</a></dt>
+<dt><a name="L009699" id="L009699">Global Variable</a></dt>
+<dd>
+<p>プログラム全体から参照できる変数。危険。多用しないこと。</p>
+</dd>
+<dt><a name="L009700" id="L009700">継承</a></dt>
+<dt><a name="L009701" id="L009701">Inheritance</a></dt>
+<dd>
+<p>先祖や親戚から受け継いだものに頼り切って、
+自分では最低限のことしかしないこと。現実世界では嫌な奴。
+転じて、ある<em class="XXINVALIDXX">クラス</em>に機能を追加した新しいクラス
+を作ること。継承はis-aの関係を表現するのに有効である。たとえ
+ば、学生一般の性質を記述した「学生」クラスを継承して、実験に
+苦しめられる「工学部生」クラスを作ることができる。is-aの関係
+がなく、単に性質や機能を共有する場合には<a href="#L009644">Mix-in</a>
+を使うことが望ましいとされる。</p>
+</dd>
+</dl>
+<h2><a name="L009702" id="L009702">さ</a></h2>
+<dl>
+<dt><a name="L009703" id="L009703">再定義</a></dt>
+<dt><a name="L009704" id="L009704">Redefinition</a></dt>
+<dd>
+<p><a href="#L009678">オーバーライド</a>のこと。</p>
+</dd>
+<dt><a name="L009705" id="L009705">辞書</a></dt>
+<dt><a name="L009706" id="L009706">Dictionary</a></dt>
+<dd>
+<p>項目からその定義を取り出すことができるもの。転じて
+<a href="#L009742">ハッシュ</a>の別名。オブジェクト指向の起源と
+も呼べる<a href="#L009660">Smalltalk</a>においてハッシュに
+相当するデータ構造が「辞書」と呼ばれていたせいで辞書という用
+語になじんでいる一群の人々がいる。</p>
+</dd>
+<dt><a name="L009707" id="L009707">初期化</a></dt>
+<dt><a name="L009708" id="L009708">Initialize</a></dt>
+<dd>
+<p>オブジェクト(あるいは「なにか」)を「使える」状態にすること。
+インスタンスの初期化には
+<a href="refm035.html">Object#initialize</a>
+メソッドを再定義する。クラスのメソッド
+<a href="refm051.html">Class#new</a>のデフォルトの
+定義は新たに生成したインスタンスに対して、
+<code>initialize</code>を実行する。<code>new</code>への
+引数はそのまま<code>initialize</code>に渡される。また、
+<code>new</code>がブロックとともに呼び出された時には
+<code>initialize</code>にそのブロックがそのまま与えられる。</p>
+<p>ということは<a href="refm051.html">Class#new</a>
+を再定義する必要はないはずだ。</p>
+</dd>
+<dt><a name="L009709" id="L009709">スクリプト</a></dt>
+<dt><a name="L009710" id="L009710">Script</a></dt>
+<dd>
+<p>台本。転じて、インタープリタが解釈する比較的短いプログラムの
+こと。もちろん中には超大作の台本もある。</p>
+</dd>
+<dt><a name="L009711" id="L009711">スクリプト言語</a></dt>
+<dt><a name="L009712" id="L009712">Script Language</a></dt>
+<dd>
+<p><a href="#L009709">スクリプト</a>に従ってバッチ処理を行うイン
+タープリタのこと。人間も台本を読むという点においてスクリプト
+言語である。</p>
+</dd>
+<dt><a name="L009713" id="L009713">即値</a></dt>
+<dt><a name="L009714" id="L009714">Immediate Value</a></dt>
+<dd>
+<p><em class="XXINVALIDXX">参照</em>ではなく、実際の値が変数に格納さ
+れるもの。Rubyの現在の実装ではFixnum、Symbolとnil/true/falseだけが即
+値である。しかし、Fixnumが即値でないRubyの実装があっても構わ
+ないし、モデル上全ての値がオブジェクトへの参照であると考えて
+も差し支えない。</p>
+</dd>
+<dt><a name="L009715" id="L009715">ソート</a></dt>
+<dt><a name="L009716" id="L009716">Sort</a></dt>
+<dd>
+<p>順番に並べ替えること。Ruby は数え上げる事ができて
+(<code>Enumerable</code> がincludeされていて)、各要素に順序
+が定義されて(&lt;=&gt; が定義されて)いれば、配列に限らずどん
+な複雑なオブジェクトの集まりもソートしてくれる。</p>
+</dd>
+</dl>
+<h2><a name="L009717" id="L009717">た</a></h2>
+<dl>
+<dt><a name="L009718" id="L009718">大域脱出</a></dt>
+<dt><a name="L009719" id="L009719">Non-Local Exit</a></dt>
+<dd>
+<p><a href="refm026.html#L000392">break</a>,
+<a href="refm026.html#L000393">next</a>,
+<a href="refm026.html#L000394">redo</a>,
+<a href="refm026.html#L000395">retry</a>,
+<a href="refm026.html#L000401">return</a>
+などのメソッドの範囲内での脱出ではなく、捕捉されない限りメソッ
+ド呼び出しの階層を遡って中断するタイプのものを大域脱出と呼ぶ。
+Rubyの大域脱出には、例外によるものと<code>catch/throw</code>がある。</p>
+<p>ほとんどの例外は(<code>exit</code>で発生する<code>SystemExit</code>
+を含めて<em class="XXINVALIDXX">rescue</em>
+で捕捉できるが、捕捉することに意味がない例外
+(例:メモリ割当に失敗した/インタプリタそのもののバグ)は
+捕捉の対象にならない。</p>
+<p><code>catch/throw</code>はthrowされると指定されたタグと同じ
+タグを持つcatchまで一気にジャンプするものである。</p>
+</dd>
+<dt><a name="L009720" id="L009720">ダイナミックローカル変数</a></dt>
+<dt><a name="L009721" id="L009721">Dynamic Local Variable</a></dt>
+<dd>
+<p><a href="#L009772">ローカル変数</a> の一種。Rubyのローカル変数はスコープが
+静的に決まるためコンパイル時に変数が作成されるが、ダイナミックローカ
+ル変数は、実行の都度変数が作成される。ブロックの中で初めて代入された
+ローカル変数はダイナミックローカル変数となり、そのスコープはブロック
+の中だけとなる。これは、<a href="#L009663">Thread</a> 毎に独立した変数を持
+つためにある。</p>
+</dd>
+<dt><a name="L009722" id="L009722">抽象データ型</a></dt>
+<dt><a name="L009723" id="L009723">Abstract Data Type</a></dt>
+<dd>
+<p>データの構造とそのデータに対する操作をひとまとめにしたものを
+抽象データ型と呼ぶ。抽象データに対する操作は必ずその操作を経
+由する必要がある。結果、データ構造は外部からは直接参照されず、
+内部構造の変更が外部に悪影響を及ぼさない。このことを
+<a href="#L009690">カプセル化</a>と呼ぶ。</p>
+</dd>
+<dt><a name="L009724" id="L009724">定数</a></dt>
+<dt><a name="L009725" id="L009725">Constant</a></dt>
+<dd>
+<p>一度定義したら値を変えることができない<a href="#L009753">変数</a>。
+でも、この定義は矛盾しているなあ。</p>
+</dd>
+<dt><a name="L009726" id="L009726">動的結合</a></dt>
+<dt><a name="L009727" id="L009727">Dynamic Binding</a></dt>
+<dd>
+<p>操作の対象のデータ型に合わせて適切な手続き(メソッド)が実行時
+に選択されること。プログラムの柔軟性を高める働きがある。
+オブジェクト指向の要件のひとつ。
+Rubyでは<a href="#L009753">変数</a>に型が無いので動的結合は必然である。</p>
+</dd>
+<dt><a name="L009728" id="L009728">特異クラス</a></dt>
+<dt><a name="L009729" id="L009729">Singleton Class</a></dt>
+<dd>
+<p>ある特定のオブジェクトだけのための仮想的なクラス。</p>
+</dd>
+<dt><a name="L009730" id="L009730">特異メソッド</a></dt>
+<dt><a name="L009731" id="L009731">Singleton Method</a></dt>
+<dd>
+<p>ある特定のオブジェクトにだけ定義されたメソッド。
+<a href="#L009760">メソッド</a>参照。
+特異メソッドは以下の場合に他のオブジェクトにも引き継がれる。</p>
+<ul>
+<li><a href="refm035.html">Kernel#clone</a>した場合</li>
+<li>サブクラスを作った場合</li>
+</ul>
+<p>特異メソッドで元のクラスのメソッドをオーバーライドした場合は
+もとのメソッドは<a href="refm027.html#L000406">super</a>で呼び
+出すことができる。</p>
+</dd>
+<dt><a name="L009732" id="L009732">ドキュメント</a></dt>
+<dt><a name="L009733" id="L009733">Document</a></dt>
+<dd>
+<p>matzの苦手なもの。彼は普段から「ソースがドキュメントだ。バグ
+も完全に記述されている」と主張しているが、誰も受け入れない。
+当り前だ。</p>
+</dd>
+<dt><a name="L009734" id="L009734">トップレベル</a></dt>
+<dt><a name="L009735" id="L009735">Top Level</a></dt>
+<dd>
+<p>クラス／モジュール定義の一番外側のコンテキスト。Rubyスクリプトはトップレベルの
+コンテキストから処理が始まる。</p>
+<p>いきなり、</p>
+<pre>print &quot;on Toplevel&quot;</pre>
+<p>というスクリプトを書いたとき、print メソッドはトップレベルから呼ばれている。</p>
+<p>トップレベルの <a href="#L009659">self</a> は <a href="#L009641">main</a> を指す。</p>
+</dd>
+</dl>
+<h2><a name="L009736" id="L009736">な</a></h2>
+<h2><a name="L009737" id="L009737">は</a></h2>
+<dl>
+<dt><a name="L009738" id="L009738">バイトオーダー</a></dt>
+<dt><a name="L009739" id="L009739">Byte Order</a></dt>
+<dd>
+<p><code>0x01020304</code>という4バイトデータを<code>1,2,3,4</code>
+と配置するか、<code>4,3,2,1</code>と配置するかということ。前
+者を<a href="#L009746">ビッグエンディアン</a>、後者を
+<a href="#L009764">リトルエンディアン</a>と呼ぶ。どちらが
+良いかという論争は時のはじめから続いていてまだ結論が出ていない。</p>
+</dd>
+<dt><a name="L009740" id="L009740">破壊的</a></dt>
+<dt><a name="L009741" id="L009741">Destructive</a></dt>
+<dd>
+<p><a href="refm061.html">String#chop!</a>,
+<a href="refm036.html">Array#concat</a> などの
+メソッドは、レシーバの状態を変化させるので、
+「破壊的な作用をする」という。
+めったにコンピュータを壊すことはない。</p>
+</dd>
+<dt><a name="L009742" id="L009742">ハッシュ</a></dt>
+<dt><a name="L009743" id="L009743">Hash</a></dt>
+<dd>
+<p>Rubyにおけるキーから値へのマッピングを表すデータ構造。
+<a href="#L009770">連想配列</a>とか
+<a href="#L009705">辞書</a>とも呼ばれる。ハッシュがハッシュ
+と呼ばれるのはその実現に「ハッシュ表」と呼ばれるアルゴリズム
+が使われているからである。ハッシュというのは「切り刻む」とい
+う意味で、「ハッシュド・ビーフ」の「ハッシュ」である。</p>
+</dd>
+<dt><a name="L009744" id="L009744">パラダイム</a></dt>
+<dt><a name="L009745" id="L009745">Paradigm</a></dt>
+<dd>
+<p>「考え方」の難しい表現。素直に分かりやすい言葉を使えばいいのに…。</p>
+</dd>
+<dt><a name="L009746" id="L009746">ビッグエンディアン</a></dt>
+<dt><a name="L009747" id="L009747">Big Endian</a></dt>
+<dd>
+<p>アメリカ大陸原住民…はインディアン。
+こっちはエンディアンで語源はスウィフトの「ガリバー旅行記」に出て来る
+卵を丸い端から食べる人たちである。
+当然、尖った端から食べる人たちは
+<a href="#L009764">リトルエンディアン</a>である。
+コンピュータ業界ではCPUなどがデータを並べる時の形式のひとつで、
+ネットワーク族はビッグエンディアンを好むという。
+<a href="#L009738">バイトオーダー</a>参照</p>
+</dd>
+<dt><a name="L009748" id="L009748">ビルトインクラス</a></dt>
+<dt><a name="L009749" id="L009749">Built-In Class</a></dt>
+<dd>
+<p>Rubyインタプリタ組み込みでインスタンスの構造が
+通常のオブジェクトと異なるクラス。
+これらのクラスを継承したクラスを定義することはお勧めしない。
+Rubyのビルトインクラスは以下の通りである
+(本当はもっとあるけど気にしないように、ちゃんと
+<a href="refm034.html">組み込みクラス／モジュール／例外クラス</a>
+に列挙されてるのだから)</p>
+<ul>
+<li><a href="refm036.html">Array</a></li>
+<li><a href="refm054.html">Bignum</a></li>
+<li><a href="refm051.html">Class</a></li>
+<li><a href="refm039.html">Data</a></li>
+<li><a href="refm042.html">FalseClass</a></li>
+<li><a href="refm046.html">File</a></li>
+<li><a href="refm055.html">Fixnum</a></li>
+<li><a href="refm056.html">Float</a></li>
+<li><a href="refm044.html">Hash</a></li>
+<li><a href="refm045.html">IO</a></li>
+<li><a href="refm047.html">MatchData</a></li>
+<li><a href="refm050.html">Module</a></li>
+<li><a href="refm068.html">NilClass</a></li>
+<li><a href="refm057.html">Proc</a></li>
+<li><a href="refm060.html">Regexp</a></li>
+<li><a href="refm061.html">String</a></li>
+<li><a href="refm062.html">Struct</a></li>
+<li><a href="refm064.html">Thread</a></li>
+<li><a href="refm067.html">TrueClass</a></li>
+</ul>
+</dd>
+<dt><a name="L009750" id="L009750">ブロック</a></dt>
+<dt><a name="L009751" id="L009751">Block</a></dt>
+<dd>
+<p>ループを構成したり、家や塀を建てたり、人を殴ったりするもの。</p>
+</dd>
+<dt><a name="L009752" id="L009752">ブロック付きメソッド呼び出し</a></dt>
+<dd>
+<p>コードの集まり(ブロック)を受け取ることのできるメソッドを
+ブロック付きメソッド呼び出しと呼ぶ。</p>
+<p>ブロック付きメソッドの中では<a href="refm027.html#L000408">yield</a>を使って
+ブロックを実行することができる。</p>
+<p>当然のことながら、与えられたブロックをどのように処理するかは
+メソッド側に委ねられている。ので、内部でブロックを評価しない
+メソッドにブロックを与えてもなにも起きない。エラーも起きない。</p>
+</dd>
+<dt><a name="L009753" id="L009753">変数</a></dt>
+<dt><a name="L009754" id="L009754">Variable</a></dt>
+<dd>
+<p>オブジェクトにつける名札。Rubyの変数には
+<a href="#L009698">グローバル変数</a>、
+<a href="#L009772">ローカル変数</a>、
+<a href="#L009676">インスタンス変数</a>がある。
+それと<a href="#L009724">定数</a>は値を変えることができない
+ので、<em>変</em>数ではないが、名札であるという点に
+おいては変数と同じである。</p>
+</dd>
+<dt><a name="L009755" id="L009755">ポリモルフィズム</a></dt>
+<dt><a name="L009756" id="L009756">多態, Polymorphism</a></dt>
+<dd>
+<p>対象になるオブジェクトによって実際の操作が決定されること。
+Rubyでは<a href="#L009768">レシーバ</a>のオブジェクトに応じ
+てメソッドが選択されることによって実現されている。</p>
+<ul>
+<li><p>例</p>
+<pre>obj = &quot;abc&quot;
+print obj.length, &quot;\n&quot;          # =&gt; 3
+obj = [1,2,3,4]
+print obj.length, &quot;\n&quot;          # =&gt; 4</pre></li>
+</ul>
+</dd>
+</dl>
+<h2><a name="L009757" id="L009757">ま</a></h2>
+<dl>
+<dt><a name="L009758" id="L009758">モジュール関数</a></dt>
+<dt><a name="L009759" id="L009759">Module Function</a></dt>
+<dd>
+<p><a href="#L009694">関数</a>のように用いられるメソッドの中で、
+モジュールのメソッドとしても、特異メソッドとしても定義されて
+いるものはモジュール関数と呼ばれる。例えば
+<a href="refm078.html">Math</a>モジュールのほとんどのメソッドは
+モジュール関数である。これらのメソッドは、例えば</p>
+<pre>Math.sqrt(2)</pre>
+<p>という形式でも</p>
+<pre>include Math
+sqrt(2)</pre>
+<p>という形式でも使えて便利である。</p>
+</dd>
+<dt><a name="L009760" id="L009760">メソッド</a></dt>
+<dt><a name="L009761" id="L009761">Method</a></dt>
+<dd>
+<p><a href="#L009680">オブジェクト</a>に対する操作。操作対象のオ
+ブジェクト(<a href="#L009768">レシーバ</a>)は
+<a href="#L009659">self</a>で参照できる。
+Rubyの場合<a href="#L009748">ビルトインクラス</a>のオブ
+ジェクトを除けば、オブジェクトの構造は動的に決まるので、ある
+オブジェクトの性質はそのオブジェクトに定義されているメソッド
+によって決定される。</p>
+</dd>
+</dl>
+<h2><a name="L009762" id="L009762">や</a></h2>
+<h2><a name="L009763" id="L009763">ら</a></h2>
+<dl>
+<dt><a name="L009764" id="L009764">リトルエンディアン</a></dt>
+<dt><a name="L009765" id="L009765">Little Endian</a></dt>
+<dd>
+<p>最初10人いて段々減っていく。コンピュータ業界ではデータを並べ
+る時の形式のひとつで、非常に大きなシェアを持つあるCPUメーカー
+はリトルエンディアンを好むという。<a href="#L009738">バイトオーダー</a>参照</p>
+</dd>
+<dt><a name="L009766" id="L009766">例外</a></dt>
+<dt><a name="L009767" id="L009767">Exception</a></dt>
+<dd>
+<p>例外的な状況で発生するもの。例外が発生すると
+<a href="refm026.html#L000398">begin</a>の
+<code>rescue</code>節を使って明示的に捕捉されない限り、
+呼び出し階層を遡ってプログラム(thread)の実行は中断される。例外の
+おかげでRubyプログラムはほとんどの場合例外的な状況についていちいち
+チェックせずにすむ。例外の発生した場所の情報は
+<a href="refm030.html">$@</a>に、例外そのものに関する情報は<a href="refm030.html">$!</a>
+に格納されている。</p>
+</dd>
+<dt><a name="L009768" id="L009768">レシーバ</a></dt>
+<dt><a name="L009769" id="L009769">Receiver</a></dt>
+<dd>
+<p>メソッドの実行主体。メソッド呼び出し式の`<code>.</code>'の左
+側にあるもの。メソッド内では
+<a href="#L009659">self</a>で参照できる。レシーバ
+の<a href="#L009676">インスタンス変数</a>は
+<code>@変数名</code>という形式でアクセスできる。</p>
+</dd>
+<dt><a name="L009770" id="L009770">連想配列</a></dt>
+<dt><a name="L009771" id="L009771">Associative Array</a></dt>
+<dd>
+<p><a href="#L009742">ハッシュ</a>の別名。ハッシュが任意のキーから
+値を取り出すことができるので、「連想」と、またハッシュは添字
+が数字でない配列とみなすことができるので「配列」と呼ぶらしい。
+昔々は連想配列(連想記憶と呼ばれていた)はハードウェアによって
+実現されるものだと考えられていたが、計算速度の向上や適切なア
+ルゴリズムの発見(「ハッシュ表」と呼ぶ。ハッシュの語源)により
+ソフトウェアのみによって実現されるようになった。</p>
+</dd>
+<dt><a name="L009772" id="L009772">ローカル変数</a></dt>
+<dt><a name="L009773" id="L009773">Local Variable</a></dt>
+<dd>
+<p>ある範囲内でのみ参照可能な変数。その範囲をスコープと呼ぶ。
+Rubyのスコープは</p>
+<ul>
+<li>プログラム全体</li>
+<li>クラス・モジュール定義</li>
+<li>メソッド定義</li>
+<li>ブロック</li>
+</ul>
+<p>で、ブロックだけは外側のスコープのローカル変数もアクセスでき
+る。ローカル変数の有効範囲はスコープでの最初の代入が現れた場
+所からスコープの終りまでである。有効範囲は静的に決まり、実際
+に実行されるかどうかは関係ない。</p>
+</dd>
+</dl>
+<h2><a name="L009774" id="L009774">わ</a></h2>
+<h2><a name="L009775" id="L009775">Symbol</a></h2>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>古いバージョンでは 5 を返すという仕様だった。現在
+はこの問題自体にあまり意味がないかも知れない</small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm476.html">&lt;-PREV</a>][<a href="refm478.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

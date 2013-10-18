@@ -1,0 +1,707 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ruby 1.8.2 feature</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm389.html" rel="next" />
+<link href="refm387.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm382.html">UP</a>][<a href="refm387.html">&lt;-PREV</a>][<a href="refm389.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L008384" id="L008384">ruby 1.8.2 feature</a></h1>
+<p>ruby 1.8.2 での ruby 1.8.1 からの変更点です。</p>
+<p>掲載方針</p>
+<ul>
+<li>バグ修正の影響も含めて動作が変わるものを収録する。</li>
+<li>単にバグを直しただけのものは収録しない。</li>
+<li>ライブラリへの単なる定数の追加は収録しない。</li>
+</ul>
+<p>以下は各変更点に付けるべきタグです。</p>
+<ul>
+<li>カテゴリ
+<ul>
+<li>[ruby]: ruby インタプリタの変更</li>
+<li>[api]: 拡張ライブラリ API</li>
+<li>[lib]: ライブラリ</li>
+</ul></li>
+<li>レベル
+<ul>
+<li>[bug]: バグ修正</li>
+<li>[new]: 追加されたクラス／メソッドなど</li>
+<li>[compat]: 変更されたクラス／メソッドなど
+<ul>
+<li>互換性のある変更</li>
+<li>only backward-compatibility</li>
+<li>影響の範囲が小さいと思われる変更</li>
+</ul></li>
+<li>[change]: 変更されたクラス／メソッドなど(互換性のない変更)</li>
+<li>[experimental]: 変更の中でも特に実験的なもの(将来再考して欲しいもの？)</li>
+<li>[obsolete]: 廃止された(される予定の)機能</li>
+<li>[platform]: 対応プラットフォームの追加</li>
+</ul></li>
+</ul>
+<h2><a name="XXINVALIDXX" id="XXINVALIDXX">1.8.1 (2003-12-25) -&gt; 1.8.2 (2004-12-25) </a></h2>
+<ul>
+<li>cgi/session においてクライアントからセッション ID を指定できてしまうバグが
+  修正されました。</li>
+<li>cgi/session においてセッション情報を保存するファイル名にセッション ID が
+  使われるバグが修正されました。</li>
+<li>cgi の無限ループに陥る可能性のあるバグが修正されました。
+  <a href="http://www.debian.org/security/2004/dsa-586">&lt;URL:http://www.debian.org/security/2004/dsa-586&gt;</a><sup class="outside"><small>[外部]</small></sup></li>
+<li>一連の core dumps バグが修正されました。
+  <a href="http://jp.rubyist.net/magazine/?0002-RubyCore">&lt;URL:http://jp.rubyist.net/magazine/?0002-RubyCore&gt;</a><sup class="outside"><small>[外部]</small></sup></li>
+<li>tk の変更点は 
+  <a href="http://jp.rubyist.net/magazine/?0003-RubyTkMovement">&lt;URL:http://jp.rubyist.net/magazine/?0003-RubyTkMovement&gt;</a><sup class="outside"><small>[外部]</small></sup> 
+  を参照して下さい。</li>
+<li>soap, wsdl の変更点は
+  <a href="http://rrr.jin.gr.jp/projects/soap4r/wiki/Changes-ruby181_ruby182">&lt;URL:http://rrr.jin.gr.jp/projects/soap4r/wiki/Changes-ruby181_ruby182&gt;</a><sup class="outside"><small>[外部]</small></sup>
+  を参照して下さい。</li>
+<li>rss, rdoc, yaml の変更点は収録していません。</li>
+</ul>
+<h3><a name="L008386" id="L008386">日時未詳</a></h3>
+<dl>
+<dt><a name="L008387" id="L008387">CGI#server_port [lib] [bug]</a></dt>
+<dd>
+<p>常に 0 を返すバグが修正されました。</p>
+</dd>
+</dl>
+<h3><a name="L008388" id="L008388">2004-12-19</a></h3>
+<dl>
+<dt><a name="L008389" id="L008389">OpenSSL::X509::Store#time=           [lib] [new]</a></dt>
+<dt><a name="L008390" id="L008390">OpenSSL::X509::StoreContext#time=    [lib] [new]</a></dt>
+<dd>
+<p>追加。</p>
+</dd>
+<dt><a name="L008391" id="L008391">OpenSSL::X509::Name::RFC2253DN       [lib] [new]</a></dt>
+<dd>
+<p>module for RFC2253 DN format.</p>
+</dd>
+<dt><a name="L008392" id="L008392">OpenSSL::X509::Name.parse_rfc2253    [lib] [new]</a></dt>
+<dd>
+<p>new method to parse RFC2253 DN format.</p>
+</dd>
+</dl>
+<h3><a name="L008393" id="L008393">2004-12-18</a></h3>
+<dl>
+<dt><a name="L008394" id="L008394">Object#id [ruby] [obsolete]</a></dt>
+<dd>
+<p>常に警告がでるようになりました。Object#object_id を使って下さい。</p>
+</dd>
+</dl>
+<h3><a name="L008395" id="L008395">2004-12-17</a></h3>
+<dl>
+<dt><a name="L008396" id="L008396">CGI::Session#initialize [lib] [compat]</a></dt>
+<dd>
+<p>'no_hidden' オプションを指定できるようになりました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/123850">ruby-talk:123850</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+</dl>
+<h3><a name="L008397" id="L008397">2004-12-16</a></h3>
+<dl>
+<dt><a name="L008398" id="L008398">Hash#eql? [ruby] [obsolete]</a></dt>
+<dt><a name="L008399" id="L008399">Hash#hash [ruby] [obsolete]</a></dt>
+<dd>
+<p>削除
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/25206">ruby-dev:25206</a><sup class="outside"><small>[外部]</small></sup>?</p>
+</dd>
+</dl>
+<h3><a name="L008400" id="L008400">2004-12-14</a></h3>
+<dl>
+<dt><a name="L008401" id="L008401">CGI::Session.initialize [lib] [change]</a></dt>
+<dd>
+<p>存在しないセッション ID がクライアントから送られてきた場合
+例外を投げずに新しいセッションを作成するようになりました。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/40368">ruby-list:40368</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+</dl>
+<h3><a name="L008402" id="L008402">2004-12-09</a></h3>
+<dl>
+<dt><a name="L008403" id="L008403">eval('Foo #@ bar'.inspect) [ruby] [bug]</a></dt>
+<dd>
+<p>シンタックスエラーにならないように修正しました。
+<em class="XXINVALIDXX">ruby-core:03922</em></p>
+</dd>
+<dt><a name="L008404" id="L008404">String#inspect [ruby] [bug]</a></dt>
+<dd>
+<p>式展開になる '#'がエスケープされるようになりました。 
+<em class="XXINVALIDXX">ruby-core:03922</em></p>
+<pre>$ ruby1.8.1 -e &quot;puts '# #{}'.inspect&quot;
+&quot;# #{}&quot;
+
+$ ruby1.8.2 -e &quot;puts '# #{}'.inspect&quot;
+&quot;# \#{}&quot;</pre>
+</dd>
+<dt><a name="L008405" id="L008405">String#dump [ruby] [bug]</a></dt>
+<dd>
+<p>式展開にならない '#'がエスケープされないようになりました。 
+<em class="XXINVALIDXX">ruby-core:03922</em></p>
+<pre>$ ruby1.8.1 -e &quot;puts '# #{}'.dump&quot;
+&quot;\# \#{}&quot;
+
+$ ruby1.8.2 -e &quot;puts '# #{}'.dump&quot;
+&quot;# \#{}&quot;</pre>
+</dd>
+</dl>
+<h3><a name="L008406" id="L008406">2004-12-08</a></h3>
+<dl>
+<dt><a name="L008407" id="L008407">rss/rss [lib] [obsolete]</a></dt>
+<dd>
+<p>#item=/#set_item and so on are obsolete.</p>
+</dd>
+</dl>
+<h3><a name="XXINVALIDXX" id="XXINVALIDXX">2004-12-06 </a></h3>
+<dl>
+<dt><a name="L008409" id="L008409">Hash#hash [ruby] [new]</a></dt>
+<dd>
+<p>追加</p>
+<p><a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/122482">ruby-talk:122482</a><sup class="outside"><small>[外部]</small></sup></p>
+<p>Hash#hash は 2004-12-16 に削除されました。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/25206">ruby-dev:25206</a><sup class="outside"><small>[外部]</small></sup>?</p>
+</dd>
+<dt><a name="L008410" id="L008410">OpenSSL::PKey::RSA.public_encrypt   [lib] [compat]</a></dt>
+<dt><a name="L008411" id="L008411">OpenSSL::PKey::RSA.public_decrypt   [lib] [compat]</a></dt>
+<dt><a name="L008412" id="L008412">OpenSSL::PKey::RSA.private_encrypt  [lib] [compat]</a></dt>
+<dt><a name="L008413" id="L008413">OpenSSL::PKey::RSA.private_decrypt  [lib] [compat]</a></dt>
+<dd>
+<p>パディングを指定出来るようになりました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/122539">ruby-talk:122539</a><sup class="outside"><small>[外部]</small></sup>。PKCS1_PADDING, SSLV23_PADDING, NO_PADDING and PKCS1_OAEP_PADDING under OpenSSL::PKey::RSA.</p>
+</dd>
+</dl>
+<h3><a name="L008414" id="L008414">2004-12-05</a></h3>
+<dl>
+<dt><a name="L008415" id="L008415">OptionParser::Completion#complete [lib] [compat]</a></dt>
+<dd>
+<p>new parameter to direct case insensitiveness.</p>
+</dd>
+<dt><a name="L008416" id="L008416">OptionParser#order!               [lib] [change]</a></dt>
+<dd>
+<p><a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/25048">ruby-dev:25048</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+</dl>
+<h3><a name="L008417" id="L008417">2004-12-04</a></h3>
+<dl>
+<dt><a name="L008418" id="L008418">NKF.guess [lib] [compat]</a></dt>
+<dd>
+<p>NKF.guess は NKF.guess2 の alias になりました。 従来のものを使いたい場合は
+NKF.guess1 を使って下さい。</p>
+</dd>
+</dl>
+<h3><a name="L008419" id="L008419">2004-11-20</a></h3>
+<dl>
+<dt><a name="L008420" id="L008420">ext/nkf/nkf-utf8/  [lib] [new]</a></dt>
+<dd>
+<p>utf8 対応 nkf (nkf 2.x) の追加。</p>
+</dd>
+<dt><a name="L008421" id="L008421">kconv [lib] [new]</a></dt>
+<dt><a name="L008422" id="L008422">Kconv.guess_old(str)</a></dt>
+<dt><a name="L008423" id="L008423">Kconv.toutf8(str)</a></dt>
+<dt><a name="L008424" id="L008424">Kconv.toutf16(str)</a></dt>
+<dt><a name="L008425" id="L008425">String#toutf8,</a></dt>
+<dt><a name="L008426" id="L008426">String#toutf16</a></dt>
+<dt><a name="L008427" id="L008427">String#iseuc</a></dt>
+<dt><a name="L008428" id="L008428">String#issjis</a></dt>
+<dt><a name="L008429" id="L008429">String#isutf8</a></dt>
+</dl>
+<h3><a name="L008430" id="L008430">2004-11-18</a></h3>
+<dl>
+<dt><a name="L008431" id="L008431">StringIO.new   [lib] [compat]</a></dt>
+<dd>
+<p>StringIO.newの第二引数にIO.newと同様、Fixnum も指定できるようになりました。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/24896">ruby-dev:24896</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+</dl>
+<h3><a name="L008432" id="L008432">2004-11-16</a></h3>
+<dl>
+<dt><a name="L008433" id="L008433">Test::Unit::AutoRunner.options [lib] [compat]</a></dt>
+<dd>
+<p>add new option --exclude (-x). <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/24865">ruby-dev:24865</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L008434" id="L008434">CGI::Session.initialize [lib] [compat]</a></dt>
+<dd>
+<p>'sufix' オプションを設定できるようになりました。</p>
+</dd>
+</dl>
+<h3><a name="L008435" id="L008435">2004-11-10</a></h3>
+<dl>
+<dt><a name="L008436" id="L008436">Array#pack [ruby] [change]</a></dt>
+<dd>
+<p>P 指定子以外では nil を 0 に変換しなくなりました。</p>
+<pre>$ ruby-1.8.1 -e 'p [nil].pack(&quot;L&quot;)'
+&quot;\000\000\000\000&quot;
+
+$ ruby-1.8.2 -e 'p [nil].pack(&quot;L&quot;)'
+-e:1:in `pack': cannot convert nil into Integer (TypeError)
+    from -e:1
+
+$ ruby-1.8.2 -e 'p [nil].pack(&quot;P&quot;)'
+&quot;\000\000\000\000&quot;</pre>
+</dd>
+</dl>
+<h3><a name="L008437" id="L008437">2004-10-27</a></h3>
+<dl>
+<dt><a name="L008438" id="L008438">CGI [lib] [bug]</a></dt>
+<dd>
+<p>無限ループに陥る可能性のあるバグを修正しました。
+<a href="http://www.debian.org/security/2004/dsa-586">&lt;URL:http://www.debian.org/security/2004/dsa-586&gt;</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+</dl>
+<h3><a name="L008439" id="L008439">2004-10-21</a></h3>
+<dl>
+<dt><a name="L008440" id="L008440">PStore#transaction  [lib] [compat]</a></dt>
+<dd>
+<p>PStore.new に指定したファイルがまだ存在しない場合に、PStore#transaction(true) を呼
+び出しても例外 Errno::ENOENT が発生しなくなりました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/24561">ruby-dev:24561</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+</dl>
+<h3><a name="L008441" id="L008441">2004-10-20</a></h3>
+<dl>
+<dt><a name="L008442" id="L008442">Proc#dup [new]</a></dt>
+<dd>
+<p>追加 <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/116915">ruby-talk:116915</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+</dl>
+<h3><a name="L008443" id="L008443">2004-10-19</a></h3>
+<dl>
+<dt><a name="L008444" id="L008444">ARGF [change]</a></dt>
+<dd>
+<p>コマンドライン引数に与えたファイルを読んだ後には標準入力を読まなくなりました。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/24452">ruby-dev:24452</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L008445" id="L008445">IO#gets [ruby] [bug]</a></dt>
+<dd>
+<p>&quot;\377&quot; を引数に受け取っても適切に振舞うようになりました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/24460">ruby-dev:24460</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L008446" id="L008446">Dir.glob [change]</a></dt>
+<dd>
+<p>ブロックを渡したとき、false ではなく nil を返すようになりました。また、readdir しながらブロックを呼ぶのではなく、全部を配列に貯めてから each するようになりました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/24528">ruby-dev:24528</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+</dl>
+<h3><a name="L008447" id="L008447">2004-10-18</a></h3>
+<dl>
+<dt><a name="L008448" id="L008448">WEBrick::HTTPRequest [lib] [new]</a></dt>
+<dd>
+<p>new methods. accept, accept_charset, accept_encoding, accept_language, 
+content_length and content_type.</p>
+</dd>
+<dt><a name="L008449" id="L008449">WEBrick::HTTPResponse#content_length= [lib] [new]</a></dt>
+<dt><a name="L008450" id="L008450">WEBrick::HTTPResponse#content_type= [lib] [new]</a></dt>
+<dt><a name="L008451" id="L008451">WEBrick::HTTPUtils.parse_qvalues [lib] [new]</a></dt>
+<dt><a name="L008452" id="L008452">WEBrick::HTTPServer#virtual_host [lib] [new]</a></dt>
+<dt><a name="L008453" id="L008453">WEBrick::HTTPServer#lookup_server [lib] [new]</a></dt>
+<dt><a name="L008454" id="L008454">WEBrick::HTTPServlet::FileHandler#get_servlet [lib] [new]</a></dt>
+</dl>
+<h3><a name="L008455" id="L008455">2004-09-03</a></h3>
+<dl>
+<dt><a name="L008456" id="L008456">Struct.new  [ruby] [bug]</a></dt>
+<dd>
+<p>同じ名前で二度定義したときのバグを修正しました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/24210">ruby-dev:24210</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+</dl>
+<h3><a name="L008457" id="L008457">2004-08-24</a></h3>
+<dl>
+<dt><a name="L008458" id="L008458">CGI::Session::FileStore#initialize [lib] [bug]</a></dt>
+<dd>
+<p>セッションを保存するファイル名にセッション ID が使われるバグを修正しました。</p>
+</dd>
+</dl>
+<h3><a name="L008459" id="L008459">2004-08-23</a></h3>
+<dl>
+<dt><a name="L008460" id="L008460">OpenSSL::SSL#pending [lib] [new]</a></dt>
+</dl>
+<h3><a name="L008461" id="L008461">2004-08-14</a></h3>
+<dl>
+<dt><a name="L008462" id="L008462">FileUtils.copy_entry [lib] [new]</a></dt>
+<dt><a name="L008463" id="L008463">FileUtils::DryRun [lib] [new]</a></dt>
+<dd>
+<p>追加。</p>
+</dd>
+<dt><a name="L008464" id="L008464">FileUtils.mv [lib] [compat]</a></dt>
+<dd>
+<p>mv が :force オプションを受け付けるようになりました。</p>
+</dd>
+</dl>
+<h3><a name="L008465" id="L008465">2004-08-07</a></h3>
+<dl>
+<dt><a name="L008466" id="L008466">Zlib::GzipReader#read(0) [lib] [compat]</a></dt>
+<dd>
+<p>Zlib::GzipReader#read(0) が nil ではなく &quot;&quot; を返すようになりました。</p>
+</dd>
+</dl>
+<h3><a name="L008467" id="L008467">2004-07-28</a></h3>
+<dl>
+<dt><a name="L008468" id="L008468">CGI::CGI_PARAMS [lib] [obsolete]</a></dt>
+<dt><a name="L008469" id="L008469">CGI::CGI_COOKIES [lib] [obsolete]</a></dt>
+<dd>
+<p>常に警告がでるようになりました。</p>
+</dd>
+</dl>
+<h3><a name="L008470" id="L008470">2004-07-23</a></h3>
+<dl>
+<dt><a name="L008471" id="L008471">Net::IMAP#disconnected? [lib] [new]</a></dt>
+<dt><a name="L008472" id="L008472">CGI::Session::FileStore#update [lib] [compat]</a></dt>
+<dd>
+<p>セッションを保存するファイルの mode をデフォルトで 0600 に
+セットするようになりました。</p>
+</dd>
+</dl>
+<h3><a name="L008473" id="L008473">2004-07-16</a></h3>
+<dl>
+<dt><a name="L008474" id="L008474"><a href="refm113.html#L002255">SystemExit#success?</a> [ruby] [new]</a></dt>
+<dd>
+<p>追加。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/23912">ruby-dev:23912</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L008475" id="L008475">File::Stat#dev_major [ruby] [new]</a></dt>
+<dt><a name="L008476" id="L008476">File::Stat#dev_minor [ruby] [new]</a></dt>
+<dd>
+<p><em class="XXINVALIDXX">ruby-core:03195</em></p>
+</dd>
+</dl>
+<h3><a name="L008477" id="L008477">2004-07-05</a></h3>
+<dl>
+<dt><a name="L008478" id="L008478">Kernel#URI    [lib] [new]</a></dt>
+<dd>
+<p>uri で追加。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/23784">ruby-dev:23784</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+</dl>
+<h3><a name="L008479" id="L008479">2004-07-01</a></h3>
+<dl>
+<dt><a name="L008480" id="L008480">OpenSSL::Cipher::Cipher#pkcs5_keyivgen  [lib] [new]</a></dt>
+<dt><a name="L008481" id="L008481">OpenSSL::Cipher::Cipher#key_len=        [lib] [new]</a></dt>
+<dd>
+<p>new methods.</p>
+</dd>
+<dt><a name="L008482" id="L008482">OpenSSL::PKey::DH                       [lib] [new]</a></dt>
+<dt><a name="L008483" id="L008483">OpenSSL::PKey::DSA                      [lib] [new]</a></dt>
+<dd>
+<p>many new methods. p, p=, g, g=, pub_key, pub_key=, priv_key, priv_key=.</p>
+</dd>
+</dl>
+<h3><a name="L008479" id="L008479">2004-07-01</a></h3>
+<dl>
+<dt><a name="L008484" id="L008484">PStore [lib] [change]</a></dt>
+<dd>
+<p>データベースの更新が成功したらバックアップファイルを残さず削除するようになりました。
+ファイル名に &quot;~&quot; が付いたバックアップファイルは残されません。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/39102">ruby-list:39102</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+</dl>
+<h3><a name="L008485" id="L008485">2004-06-29</a></h3>
+<dl>
+<dt><a name="L008486" id="L008486">misc</a></dt>
+<dd>
+<p>$SAFEが保存されない問題を修正しました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/23829">ruby-dev:23829</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+</dl>
+<h3><a name="L008487" id="L008487">2004-06-23</a></h3>
+<dl>
+<dt><a name="L008488" id="L008488">net/imap [lib] [new]</a></dt>
+<dd>
+<p>added new option --ssl</p>
+</dd>
+</dl>
+<h3><a name="L008489" id="L008489">2004-06-16</a></h3>
+<dl>
+<dt><a name="L008490" id="L008490">object.c     [ruby] [bug]</a></dt>
+<dd>
+<p>特異クラスが特異オブジェクトのクラスを継承していると見なされて
+いるバグを修正しました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/23690">ruby-dev:23690</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>$ ruby1.8.1 -e 'class X;end; x=X.new; class &lt;&lt; x;p self &lt; X; end' 
+true
+
+$ ruby1.8.2 -e 'class X;end; x=X.new; class &lt;&lt; x;p self &lt; X; end' 
+nil</pre>
+</dd>
+</dl>
+<h3><a name="L008491" id="L008491">2004-06-04</a></h3>
+<dl>
+<dt><a name="L008492" id="L008492">IO#gets, $_ [ruby] [change]</a></dt>
+<dd>
+<p>gets の返り値が nil でも、$_ に nil がセットされるようになりました。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/23663">ruby-dev:23663</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+</dl>
+<h3><a name="L008493" id="L008493">2004-05-27</a></h3>
+<dl>
+<dt><a name="L008494" id="L008494">CSV.parse  [lib] [change]</a></dt>
+<dd>
+<p>引数としてファイル名を受け付けなくなりました。
+文字列が渡されると、それをパースすべき文字列だと解釈します。</p>
+<pre>CSV.parse(&quot;1,2\n3,r&quot;) #=&gt; [['1', '2'], ['3', 'r']]</pre>
+</dd>
+<dt><a name="L008495" id="L008495">CSV::Row   [lib] [obsolete]</a></dt>
+<dt><a name="L008496" id="L008496">CSV::Cell  [lib] [obsolete]</a></dt>
+<dd>
+<p>CSV::Row と CSV::Cell が deprecated になりました。</p>
+</dd>
+<dt><a name="L008497" id="L008497">CSV.open, CSV.parse, and CSV,generate</a></dt>
+<dd>
+<p>必要ならばユーザが binmode をセットしなければならなくなりました。</p>
+</dd>
+<dt><a name="L008498" id="L008498">CSV.read      [lib] [new]</a></dt>
+<dt><a name="L008499" id="L008499">CSV.readlines [lib] [new]</a></dt>
+<dd>
+<p>追加。</p>
+</dd>
+<dt><a name="L008500" id="L008500">Marshal.dump [ruby] [bug]</a></dt>
+<dd>
+<p>特異メソッドを定義されていないオブジェクトを dump できない場合があったのを
+修正しました。 <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/22631">ruby-dev:22631</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L008500" id="L008500">Marshal.dump [ruby] [bug]</a></dt>
+<dd>
+<p>特異クラス内のクラスを dump するとエラーになるようになりました。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/22588">ruby-dev:22588</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+</dl>
+<h3><a name="L008501" id="L008501">2004-05-16</a></h3>
+<dl>
+<dt><a name="L008502" id="L008502">DBM.open              [lib] [compat]</a></dt>
+<dt><a name="L008503" id="L008503">DBM::READER           [lib] [new]</a></dt>
+<dt><a name="L008504" id="L008504">DBM::WRITER           [lib] [new]</a></dt>
+<dt><a name="L008505" id="L008505">DBM::WRCREAT          [lib] [new]</a></dt>
+<dt><a name="L008506" id="L008506">DBM::NEWDB            [lib] [new]</a></dt>
+<dd>
+<p>DBM.open に第3引数を追加し、DBM::READER,
+DBM::WRITER, DBM::WRCREAT, DBM::NEWDB を指定できるようになりました。  
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/23520">ruby-dev:23520</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+</dl>
+<h3><a name="L008507" id="L008507">2004-05-13</a></h3>
+<dl>
+<dt><a name="L008508" id="L008508">Net::Telnet#login    [lib] [compat]</a></dt>
+<dd>
+<p>&quot;options&quot; でログインプロンプトとパスワードプロンプトのための正規表現を
+指定できるようになりました。</p>
+</dd>
+<dt><a name="L008509" id="L008509">String#unpack [ruby] [change]</a></dt>
+<dd>
+<p>Z* が最初の null までしかマッチしないようになりました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/98281">ruby-talk:98281</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>$ ruby1.8.1 -e 'p &quot;abc\000def\000&quot;.unpack(&quot;Z*Z*&quot;)' 
+[&quot;abc\000def&quot;, &quot;&quot;]
+
+$ ruby1.8.2 -e 'p &quot;abc\000def\000&quot;.unpack(&quot;Z*Z*&quot;)' 
+[&quot;abc&quot;, &quot;def&quot;]</pre>
+</dd>
+</dl>
+<h3><a name="L008510" id="L008510">2004-05-10</a></h3>
+<dl>
+<dt><a name="L008511" id="L008511">superclass mismatch [ruby] [change]</a></dt>
+<dd>
+<p>親クラスの違う同じ名前のクラスを再定義した時  TypeError を投げるようになりました。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/39567">ruby-list:39567</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>$ ruby-1.8.2 -e '
+class Foo
+  Bar = 1
+end
+
+class Foo &lt; String
+  Baz = 2
+end
+'
+-e:6: superclass mismatch for class Foo (TypeError)</pre>
+</dd>
+</dl>
+<h3><a name="L008512" id="L008512">2004-04-19</a></h3>
+<dl>
+<dt><a name="L008513" id="L008513">Hash#==   [change]</a></dt>
+<dt><a name="L008514" id="L008514">Hash#eql? [new]</a></dt>
+<dd>
+<p>Hash#== は内容が一致していれば真に、Hash#eql? は、さらに 
+ハッシュのデフォルト値が同じ(==)なら真になるよう定義されました。</p>
+<pre>h1 = Hash.new(&quot;a&quot;)
+h2 = Hash.new(&quot;a&quot;)
+h3 = Hash.new(&quot;b&quot;)
+
+p h1 == h2
+p h1.eql?(h2)
+
+p h1 == h3
+p h1.eql?(h3)
+
+# =&gt; ruby 1.8.1 (2003-12-25) [i586-linux]
+     true
+     false
+     false
+     false
+# =&gt; ruby 1.8.2 (2004-07-17) [i586-linux]
+     true
+     true
+     true
+     false
+# =&gt; ruby 1.9.0 (2004-07-17) [i586-linux]
+     true
+     true
+     true
+     false</pre>
+<p><a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/97559">ruby-talk:97559</a><sup class="outside"><small>[外部]</small></sup></p>
+<p>Hash#eql? は 2004-12-16 に削除されました。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/25206">ruby-dev:25206</a><sup class="outside"><small>[外部]</small></sup>?</p>
+</dd>
+</dl>
+<h3><a name="L008515" id="L008515">2004-04-16</a></h3>
+<dl>
+<dt><a name="L008516" id="L008516">String#== [lib] [change]</a></dt>
+<dd>
+<p>nil を返さず、常に false か true を返すようになりました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/23404">ruby-dev:23404</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>$ ruby1.8.1 -e 'p &quot;a&quot; == :a'
+nil
+
+$ ruby1.8.2 -e 'p &quot;a&quot; == :a'
+false</pre>
+</dd>
+</dl>
+<h3><a name="L008517" id="L008517">2004-04-15</a></h3>
+<dl>
+<dt><a name="L008518" id="L008518">GDBM::READER          [lib] [new]</a></dt>
+<dt><a name="L008519" id="L008519">GDBM::WRITER          [lib] [new]</a></dt>
+<dt><a name="L008520" id="L008520">GDBM::WRCREAT         [lib] [new]</a></dt>
+<dt><a name="L008521" id="L008521">GDBM::NEWDB           [lib] [new]</a></dt>
+<dd>
+<p>GDBM に read only などで access できるようになりました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/23381">ruby-dev:23381</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L008522" id="L008522">Process::Status#success? [ruby][new]</a></dt>
+<dd>
+<p><a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/23385">ruby-dev:23385</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+</dl>
+<h3><a name="L008523" id="L008523">2004-04-11</a></h3>
+<dl>
+<dt><a name="L008524" id="L008524">ruby.c    [ruby] [bug]</a></dt>
+<dd>
+<p>オプション --with-static-linked-ext 付きでコンパイルした時の、
+-r オプションのエラーメッセージを修正。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/23357">ruby-dev:23357</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+</dl>
+<h3><a name="L008525" id="L008525">2004-03-8</a></h3>
+<dl>
+<dt><a name="L008526" id="L008526">WEBrick::Config::HTTP [lib] [change]</a></dt>
+<dd>
+<p>オプション :RequestHander は :RequestCallback に名前が変わりました。
+オプション :ServerAlias が追加されました。</p>
+</dd>
+</dl>
+<h3><a name="L008527" id="L008527">2004-02-24</a></h3>
+<dl>
+<dt><a name="L008528" id="L008528">OpenSSL::Config#each [lib] [new]</a></dt>
+<dt><a name="L008529" id="L008529">Dir.glob [ruby] [change]</a></dt>
+<dd>
+<p>File::FNM_DOTMATCH がセットされない限り Dir.glob('test/**/') は 'test/.test/' などに
+マッチしなくなりました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/23014">ruby-dev:23014</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+</dl>
+<h3><a name="L008530" id="L008530">2004-02-20</a></h3>
+<dl>
+<dt><a name="L008531" id="L008531">irb [lib] [new]</a></dt>
+<dd>
+<p>-I オプションが使えるようになりました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/39243">ruby-list:39243</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+</dl>
+<h3><a name="L008532" id="L008532">2004-02-18</a></h3>
+<dl>
+<dt><a name="L008533" id="L008533">StringScanner#peep [lib] [obsolete]</a></dt>
+<dd>
+<p>$VERVOSE が設定されている時に警告がでるようになりました。use #peek.</p>
+</dd>
+<dt><a name="L008534" id="L008534">StringScanner#empty? [lib] [obsolete]</a></dt>
+<dd>
+<p>$VERVOSE が設定されている時に警告がでるようになりました。use #eos?.</p>
+</dd>
+<dt><a name="L008535" id="L008535">StringScanner#clear [lib] [obsolete]</a></dt>
+<dd>
+<p>$VERVOSE が設定されている時に警告がでるようになりました。use #terminate.</p>
+</dd>
+<dt><a name="L008536" id="L008536">StringScanner#getbyte [lib] [obsolete]</a></dt>
+<dd>
+<p>$VERVOSE が設定されている時に警告がでるようになりました。use #get_byte.</p>
+</dd>
+<dt><a name="L008537" id="L008537">StringScanner#restsize [lib] [obsolete]</a></dt>
+<dd>
+<p>$VERVOSE が設定されている時に警告がでるようになりました。use #rest_size.</p>
+</dd>
+<dt><a name="L008538" id="L008538">StringScanner#matchedsize [lib] [obsolete]</a></dt>
+<dd>
+<p>$VERVOSE が設定されている時に警告がでるようになりました。use #matched_size.</p>
+</dd>
+<dt><a name="L008539" id="L008539">ScanError  [lib] [obsolete]</a></dt>
+<dd>
+<p>use StringScanner::Error.</p>
+</dd>
+</dl>
+<h3><a name="L008540" id="L008540">2004-02-10</a></h3>
+<dl>
+<dt><a name="L008541" id="L008541"><a href="refm061.html#L001464">String#~</a>  [obsolete]</a></dt>
+<dt><a name="L008542" id="L008542"><em class="XXINVALIDXX">String#=~</em> [obsolete]</a></dt>
+<dd>
+<p>String#~ は削除されました。また、str =~ str を実行すると例外
+が発生するようになりました。
+<a href="refm385.html#L007712">2003-07-19</a>, <a href="refm385.html#L007782">2003-05-26</a>、
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/22851">ruby-dev:22851</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+</dl>
+<h3><a name="L008543" id="L008543">2004-02-09</a></h3>
+<dl>
+<dt><a name="L008544" id="L008544">File.fnmatch  [ruby] [bug]</a></dt>
+<dd>
+<p>適切にマッチしないバグを修正しました。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/22815">ruby-dev:22815</a><sup class="outside"><small>[外部]</small></sup> <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/22819">ruby-dev:22819</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+</dl>
+<h3><a name="L008545" id="L008545">2004-02-06</a></h3>
+<dl>
+<dt><a name="L008546" id="L008546">PrettyPrint#first? [lib] [obsolete]</a></dt>
+</dl>
+<h3><a name="L008547" id="L008547">2004-02-05</a></h3>
+<dl>
+<dt><a name="L008548" id="L008548">PrettyPrint#seplist [lib] [new]</a></dt>
+</dl>
+<h3><a name="L008549" id="L008549">2004-01-29</a></h3>
+<dl>
+<dt><a name="L008550" id="L008550">OpenSSL::X509::Name#add_entry [lib] [new]</a></dt>
+</dl>
+<h3><a name="L008551" id="L008551">2004-01-26</a></h3>
+<dl>
+<dt><a name="L008552" id="L008552">Regexp.new [ruby] [obsolete]</a></dt>
+<dd>
+<p>「{,m}」表記の場合と「{n,m}」の n,m が数字でない場合に警告を出力するようになりました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/22626">ruby-dev:22626</a><sup class="outside"><small>[外部]</small></sup></p>
+<p>文字「}」がエスケープされていない場合に警告を出力するようになりました。 <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/22627">ruby-dev:22627</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+</dl>
+<h3><a name="L008553" id="L008553">2004-01-08</a></h3>
+<dl>
+<dt><a name="L008554" id="L008554">OpenSSL::PKey::DH#to_der [lib] [new]</a></dt>
+<dt><a name="L008555" id="L008555">OpenSSL::PKey::DSA#to_der [lib] [new]</a></dt>
+<dt><a name="L008556" id="L008556">OpenSSL::PKey::RSA#to_der [lib] [new]</a></dt>
+</dl>
+<h3><a name="L008557" id="L008557">2003-12-31</a></h3>
+<dl>
+<dt><a name="L008558" id="L008558">ARGF.each_byte [ruby] [compat]</a></dt>
+<dd>
+<p>nil ではなく ARGF を返すようになりました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/22465">ruby-dev:22465</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+</dl>
+<h3><a name="L008559" id="L008559">2003-12-27</a></h3>
+<dl>
+<dt><a name="L008560" id="L008560">ruby -i.bak [ruby] [compat]</a></dt>
+<dd>
+<p>inplace edit mode で標準入力から読み込んだ時常に警告を
+出力するようになりました。</p>
+</dd>
+</dl>
+<h3><a name="L008561" id="L008561">2003-12-26</a></h3>
+<dl>
+<dt><a name="L008562" id="L008562">ARGF.read(nil)</a></dt>
+<dd>
+<p>引数に nil を許すようになりました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/22433">ruby-dev:22433</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm382.html">UP</a>][<a href="refm387.html">&lt;-PREV</a>][<a href="refm389.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

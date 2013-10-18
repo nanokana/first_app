@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>FAQ::構文</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm401.html" rel="next" />
+<link href="refm399.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm395.html">UP</a>][<a href="refm399.html">&lt;-PREV</a>][<a href="refm401.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L009260" id="L009260">4. 構文</a></h1>
+<ul>
+<li><a href="#L009261">4.1 <code>:exit</code>等の<code>:</code>のついた識別子は何ですか</a></li>
+<li><a href="#L009262">4.2 シンボルと同名の変数の値を取り出すにはどうすればいいですか</a></li>
+<li><a href="#L009263">4.3 <code>loop</code>は制御構造ですか</a></li>
+<li><a href="#L009264">4.4 <code>a +b</code>がエラーになりますが</a></li>
+<li><a href="#L009265">4.5 <code>s = &quot;x&quot;; puts s *10</code> がエラーになりますが</a></li>
+<li><a href="#L009266">4.6 <code>p {}</code>で何も表示されません</a></li>
+<li><a href="#L009267">4.7 pos=() という setter メソッドがあるのに、pos = 1 としてもなにも起こっていないように見える</a></li>
+<li><a href="#L009268">4.8 <code>'\1'</code>と<code>'\\1'</code>はどう違いますか</a></li>
+<li><a href="#L009269">4.9 <code>p true or true and false</code>は<code>true</code>を表示するのに、<code>a=true if true or true and false</code>では、<code>a</code>に<code>true</code>が代入されません。</a></li>
+<li><a href="#L009270">4.10 <code>p(nil || &quot;&quot;)</code> はなんでもないのに、 <code>p(nil or &quot;&quot;)</code> はパースエラーだと言われます</a></li>
+</ul>
+<h2><a name="L009261" id="L009261">4.1 <code>:exit</code>等の<code>:</code>のついた識別子は何ですか</a></h2>
+<p>シンボルと呼ばれる、識別子と1対1対応するオブジェクトです
+<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a>。
+&quot;exit&quot;.internとしても求められます。catch, throw, autoloadなどでは、
+引数として文字列もシンボルも使えます。</p>
+<h2><a name="L009262" id="L009262">4.2 シンボルと同名の変数の値を取り出すにはどうすればいいですか</a></h2>
+<p><code>symbol</code>のスコープで<code>eval( (:symbol).id2name)</code>とすると、
+値が取り出せます。</p>
+<pre>a = 'This is the content of &quot;a&quot;'
+b = eval(:a.id2name)
+a.object_id == b.object_id</pre>
+<h2><a name="L009263" id="L009263">4.3 <code>loop</code>は制御構造ですか</a></h2>
+<p>メソッドです。ブロックは新しいローカル変数のスコープを導入します。</p>
+<h2><a name="L009264" id="L009264">4.4 <code>a +b</code>がエラーになりますが</a></h2>
+<p><code>a(+b)</code>と解析されています。<code>+</code>の両側の空白をなくすか、いれるか
+のどちらかにしてください。</p>
+<h2><a name="L009265" id="L009265">4.5 <code>s = &quot;x&quot;; puts s *10</code> がエラーになりますが</a></h2>
+<p><code>puts s *10</code> のところが、s(*10)というメソッド呼び出しと解析されて
+しまいます。<code>s*10</code>にするか、<code>s * 10</code>にしてください。</p>
+<p><a href="refm385.html">ruby 1.8 feature</a>: 1.8(?) 以降ではエラーになりません。</p>
+<h2><a name="L009266" id="L009266">4.6 <code>p {}</code>で何も表示されません</a></h2>
+<p>{}がハッシュのコンストラクタではなく、ブロックと解析されています。
+p({}) か p Hash.new のようにして回避してください。</p>
+<h2><a name="L009267" id="L009267">4.7 pos=() という setter メソッドがあるのに、pos = 1 としてもなにも起こっていないように見える</a></h2>
+<p>これは以下のような例です。</p>
+<pre>class C
+  attr_reader :pos
+  def pos=(n)
+    @pos = n * 3
+  end
+
+  def set
+    pos = 1   #A
+  end
+end
+
+a = C.new
+a.set
+p a.pos    #=&gt; nil (3 を期待していた)</pre>
+<p>最後の行で 3 を期待しても、実際には nil になります。
+Ruby は A の行をローカル変数への代入と解釈するからです。
+pos=() の呼びだしにするには <code>self.pos = 1</code> としてください。</p>
+<h2><a name="L009268" id="L009268">4.8 <code>'\1'</code>と<code>'\\1'</code>はどう違いますか</a></h2>
+<p>同じです。シングルクォートの中では、<code>\'</code>と<code>\\</code>、行末の<code>\</code>
+(改行を無効にします)だけが解釈され、それ以外は解釈されません。
+<a name="footmark:2" id="footmark:2" href="#foottext:2"><sup><small>*2</small></sup></a></p>
+<h2><a name="L009269" id="L009269">4.9 <code>p true or true and false</code>は<code>true</code>を表示するのに、<code>a=true if true or true and false</code>では、<code>a</code>に<code>true</code>が代入されません。</a></h2>
+<p>最初の式は、<code>(p true) or true and false</code>と解釈されます。
+<code>and/or</code>は
+文の構成要素として解釈され、<code>p</code>の引数を結ぶ演算子としては解釈され
+ません。</p>
+<p>2番目のは、<code>a=true if (true or true and false)</code>と解釈されています。
+<code>if</code>の方が<code>and/or</code>より優先順位が低いこと、
+<code>or</code>と<code>and</code>の優先順位が同じなので、
+左から順に解釈されることによります。</p>
+<h2><a name="L009270" id="L009270">4.10 <code>p(nil || &quot;&quot;)</code> はなんでもないのに、 <code>p(nil or &quot;&quot;)</code> はパースエラーだと言われます</a></h2>
+<p>|| は引数を結ぶことができますが、or は文と文を結ぶことしかできず、
+引数を結ぶことができないからです。この違いは、たとえば以下のふたつの
+式の結果がどうなるか試してみればわかります。</p>
+<pre>p nil || &quot;&quot;
+p nil or &quot;&quot;</pre>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>version 1.4 以前はシンボルは整数(Fixnum)で実装されていました。現在はSymbolクラスのインスタンスです</small><br />
+<a name="foottext:2" id="foottext:2" href="#footmark:2"><sup><small>*2</small></sup></a><small><a href="refm385.html">ruby 1.8 feature</a>: 1.8.1(?) 以降ではシングルクォートで囲まれ
+た文字列では行末の\は \ そのものとして解釈されます。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/21339">ruby-dev:21339</a><sup class="outside"><small>[外部]</small></sup></small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm395.html">UP</a>][<a href="refm399.html">&lt;-PREV</a>][<a href="refm401.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

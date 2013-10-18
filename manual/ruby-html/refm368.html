@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>logger</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm369.html" rel="next" />
+<link href="refm367.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm367.html">&lt;-PREV</a>][<a href="refm369.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006946" id="L006946">Logger</a></h1>
+<p>ログを記録するためのクラスです。</p>
+<h2><a name="L006947" id="L006947">使い方</a></h2>
+<p>5段階の重要度に分けてログを記録します。</p>
+<ul>
+<li>FATAL: プログラムをクラッシュさせるような制御不可能なエラー</li>
+<li>ERROR: エラー</li>
+<li>WARN: 警告</li>
+<li>INFO: 一般的な情報</li>
+<li>DEBUG: 低レベルの情報</li>
+</ul>
+<p>全てのメッセージは必ず重要度を持ちます。また Logger オブジェクトも同じように
+重要度を持ちます。メッセージの重要度が Logger オブジェクトの重要度よりも
+低い場合メッセージは記録されません。</p>
+<p>普段は INFO しか記録していないけど、デバッグ情報が必要になった時には、
+Logger オブジェクトの重要度を DEBUG に下げるなどという使い方をします。</p>
+<pre>require 'logger'
+log = Logger.new(STDOUT)
+log.level = Logger::WARN
+
+log.debug(&quot;Created logger&quot;)
+log.info(&quot;Program started&quot;)
+log.warn(&quot;Nothing to do!&quot;)</pre>
+<p>上の例ではログには WARN のみが記録されます。下が出力例です。</p>
+<pre>W, [2005-02-10T20:03:56.489954 #12469]  WARN -- : Nothing to do!</pre>
+<p>例外オブジェクトも記録するメッセージとして使えます。</p>
+<pre>require 'logger'
+log = Logger.new(STDOUT)
+log.level = Logger::ERROR
+
+begin
+  File.each_line(path) do |line|
+    unless line =~ /^(\w+) = (.*)$/
+      log.error(&quot;Line in wrong format: #{line}&quot;)
+    end
+  end
+rescue =&gt; err
+  log.fatal(&quot;Caught exception; exiting&quot;)
+  log.fatal(err)
+end</pre>
+<h2><a name="L006948" id="L006948">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L006949" id="L006949"><code>Logger.new(<var>logdev</var>, <var>shift_age</var> = <var>0</var>, <var>shift_size</var> = <var>1048576</var>)</code></a></dt>
+<dd>
+<p>Logger オブジェクトを生成する。<var>logdev</var> には
+記録するファイル名か、write と close が定義されたオブジェクト(IO
+オブジェクトなど)を与えます。</p>
+<pre>logger = Logger.new(STDERR)
+logger = Logger.new(STDOUT)
+logger = Logger.new('logfile.log')</pre>
+<p><var>shift_age</var> に <a href="refm053.html">Integer</a> を与えた場合は、rotate したログファイルの
+残す個数と解釈されます。<var>shift_size</var> 毎に rotate されます。
+<var>shift_age</var> に 'daily', 'weekly', 'monthly' のいずれかの文字列を
+与えた場合は、その間隔毎にログは rotate されます。</p>
+<pre>file = File.open('foo.log', File::WRONLY | File::APPEND)
+logger = Logger.new(file, 'daily')</pre>
+<p><var>shift_size</var> は <var>shift_age</var> に <a href="refm053.html">Integer</a> を与えた場合にのみ
+有効です。</p></dd>
+</dl>
+<h2><a name="L006950" id="L006950">メソッド</a></h2>
+<dl>
+<dt><a name="L006951" id="L006951"><code>add(<var>severity</var>, <var>message</var> = <var>nil</var>, <var>progname</var> = @<var>progname</var>)</code></a>
+<dt><a name="L006952" id="L006952"><code>add(<var>severity</var>){ ... }</code></a></dt>
+<dd>
+<p>メッセージをログに記録します。<var>message</var> は文字列か例外オブジェクトです。
+<var>severity</var> にはメッセージの
+重要度を DEBUG  = 0 から UNKNOWN = 5 までの定数で指定します。数字が
+大きいほど重要度も高くなります。メッセージの重要度 <var>severity</var> が
+Logger オブジェクトの level よりも低い場合、メッセージは記録されません。
+<var>progname</var> にはログにメッセージと一緒に記録するプログラム名を与えます。
+デフォルトはインスタンス変数 @progname です。</p>
+<p>ブロックを与えた場合はブロックを評価した返り値をメッセージとしてログに記録します。</p>
+<p>ユーザがこのメソッドを直接使うことはあまりありません</p></dd>
+<dt><a name="L006953" id="L006953"><code>datetime_format</code></a>
+<dt><a name="L006954" id="L006954"><code>datetime_format=</code></a></dt>
+<dd>
+<p>ログに記録する時の日付のフォーマットです。デフォルトでは &quot;%Y-%m-%dT%H:%M:%S.%06d &quot;
+です。<a href="refm066.html#L001687">Time#strftime</a> を参照して下さい。</p></dd>
+<dt><a name="L006955" id="L006955"><code>debug?</code></a></dt>
+<dd>
+<p>現在の Logger オブジェクトが DEBUG 以上の重要度のメッセージを記録するなら
+真を返します。</p></dd>
+<dt><a name="L006956" id="L006956"><code>info?</code></a></dt>
+<dd>
+<p>現在の Logger オブジェクトが INFO 以上の重要度のメッセージを記録するなら
+真を返します。</p></dd>
+<dt><a name="L006957" id="L006957"><code>warn?</code></a></dt>
+<dd>
+<p>現在の Logger オブジェクトが WARN 以上の重要度のメッセージを記録するなら
+真を返します。</p></dd>
+<dt><a name="L006958" id="L006958"><code>error?</code></a></dt>
+<dd>
+<p>現在の Logger オブジェクトが ERROR 以上の重要度のメッセージを記録するなら
+真を返します。</p></dd>
+<dt><a name="L006959" id="L006959"><code>fatal?</code></a></dt>
+<dd>
+<p>現在の Logger オブジェクトが FATAL 以上の重要度のメッセージを記録するなら
+真を返します。</p></dd>
+<dt><a name="L006960" id="L006960"><code>debug(<var>progname</var> = <var>nil</var>){ ... }</code></a>
+<dt><a name="L006961" id="L006961"><code>debug(<var>message</var> = <var>nil</var>)</code></a>
+<dt><a name="L006962" id="L006962"><code>debug{ ... }</code></a></dt>
+<dd>
+<p>DEBUG 情報 <var>message</var> を記録します。ブロックを与えた場合は、ブロックを評価した
+返り値をメッセージとして記録します。現在の Logger の重要度が DEBUG よりも高い場合、
+メッセージは記録されません。</p>
+<pre>logger.debug &quot;Waiting for input from user&quot;
+# ...
+logger.debug { &quot;User typed #{input}&quot; }</pre>
+<p>引数とブロックを同時に与えた場合は、<var>progname</var> はプログラム名、ブロックを評価した
+返り値がメッセージとなります。</p>
+<pre>logger.debug(&quot;MainApp&quot;) { &quot;Received connection from #{ip}&quot; }</pre></dd>
+<dt><a name="L006963" id="L006963"><code>info(<var>progname</var> = <var>nil</var>){ ... }</code></a>
+<dt><a name="L006964" id="L006964"><code>info(<var>message</var> = <var>nil</var>)</code></a>
+<dt><a name="L006965" id="L006965"><code>info{ ... }</code></a></dt>
+<dd>
+<p>INFO 情報を記録します。debug を参照して下さい。</p></dd>
+<dt><a name="L006966" id="L006966"><code>warn(<var>progname</var> = <var>nil</var>){ ... }</code></a>
+<dt><a name="L006967" id="L006967"><code>warn(<var>message</var> = <var>nil</var>)</code></a>
+<dt><a name="L006968" id="L006968"><code>warn{ ... }</code></a></dt>
+<dd>
+<p>WARN 情報を記録します。debug を参照して下さい。</p></dd>
+<dt><a name="L006969" id="L006969"><code>error(<var>progname</var> = <var>nil</var>){ ... }</code></a>
+<dt><a name="L006970" id="L006970"><code>error(<var>message</var> = <var>nil</var>)</code></a>
+<dt><a name="L006971" id="L006971"><code>error{ ... }</code></a></dt>
+<dd>
+<p>ERROR 情報を記録します。debug を参照して下さい。</p></dd>
+<dt><a name="L006972" id="L006972"><code>fatal(<var>progname</var> = <var>nil</var>){ ... }</code></a>
+<dt><a name="L006973" id="L006973"><code>fatal(<var>message</var> = <var>nil</var>)</code></a>
+<dt><a name="L006974" id="L006974"><code>fatal{ ... }</code></a></dt>
+<dd>
+<p>FATAL 情報を記録します。debug を参照して下さい。</p></dd>
+<dt><a name="L006975" id="L006975"><code>level</code></a>
+<dt><a name="L006976" id="L006976"><code>level=</code></a></dt>
+<dd>
+<p>Logger オブジェクトの重要度を設定します。重要度がこれより低いメッセージは
+記録されません。</p></dd>
+<dt><a name="L006977" id="L006977"><code>sev_threshold</code></a>
+<dt><a name="L006978" id="L006978"><code>sev_threshold=</code></a></dt>
+<dd>
+<p>level の別名です。</p></dd>
+<dt><a name="L006979" id="L006979"><code>progname</code></a>
+<dt><a name="L006980" id="L006980"><code>progname=</code></a></dt>
+<dd>
+<p>ログに記録するプログラム名を設定します。</p></dd>
+</dl>
+<h2><a name="L006981" id="L006981">定数</a></h2>
+<dl>
+<dt><a name="L006982" id="L006982"><code>DEBUG</code></a>
+<dt><a name="L006983" id="L006983"><code>INFO</code></a>
+<dt><a name="L006984" id="L006984"><code>WARN</code></a>
+<dt><a name="L006985" id="L006985"><code>ERROR</code></a>
+<dt><a name="L006986" id="L006986"><code>FATAL</code></a>
+<dt><a name="L006987" id="L006987"><code>UNKNOWN</code></a></dt>
+<dd>
+<p>重要度を表す定数です。</p></dd>
+</dl>
+<h2><a name="L006988" id="L006988">例外</a></h2>
+<dl>
+<dt><a name="L006989" id="L006989"><code>Logger::Error</code></a></dt>
+<dd>
+<p>RuntimeError を継承しています。</p></dd>
+<dt><a name="L006990" id="L006990"><code>Logger::ShiftingError</code></a></dt>
+<dd>
+<p>Logger::Error を継承しています。</p></dd>
+</dl>
+<h2><a name="L006991" id="L006991">参考</a></h2>
+<ul>
+<li><a href="http://jp.rubyist.net/magazine/">Rubyist Magazine</a><sup class="outside"><small>[外部]</small></sup>
+<ul>
+<li><a href="http://jp.rubyist.net/magazine/?0008-BundledLibraries">標準添付ライブラリ紹介【第 2 回】 Logger</a><sup class="outside"><small>[外部]</small></sup></li>
+</ul></li>
+</ul>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm367.html">&lt;-PREV</a>][<a href="refm369.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

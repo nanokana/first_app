@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>net/https</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm208.html" rel="next" />
+<link href="refm206.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm206.html">&lt;-PREV</a>][<a href="refm208.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L003957" id="L003957">net/https</a></h1>
+<p>SSL/TLS enhancement for Net::HTTP.</p>
+<h2><a name="L003958" id="L003958">class Net::HTTP</a></h2>
+<p><a href="refm203.html">net/http</a> も参照。</p>
+<p>注意。net/https は RFC2818 の 3.1 に定められた 「サーバーの証明書に記載された身元のチェック」を自らはしない。接続しているはずのサーバのホスト名と証明書に記載されているホスト名が一致するかをライブラリの使用者が各自実装する必要がある。</p>
+<p><a href="http://www.ipa.go.jp/security/rfc/RFC2818JA.html#31">&lt;URL:http://www.ipa.go.jp/security/rfc/RFC2818JA.html#31&gt;</a><sup class="outside"><small>[外部]</small></sup></p>
+<p><a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/25254">ruby-dev:25254</a><sup class="outside"><small>[外部]</small></sup></p>
+<h2><a name="L003959" id="L003959">Example</a></h2>
+<p>簡単な例。verify_mode に指定する定数に関しては <a href="refm226.html">OpenSSL::SSL</a> を参照。
+必ず use_ssl = true を呼ばなければいけないところに注意。</p>
+<pre>require 'net/https'
+https = Net::HTTP.new('www.example.com',443)
+https.use_ssl = true
+https.ca_file = '/usr/share/ssl/cert.pem'
+https.verify_mode = OpenSSL::SSL::VERIFY_PEER
+https.verify_depth = 5
+https.start { |w|
+  response = w.get('/')
+  puts response.body
+}</pre>
+<p>proxy 経由でアクセス。proxy 経由でも通信路は暗号化される。<a href="http://www21.ocn.ne.jp/~k-west/SSLandTLS/draft-luotonen-ssl-tunneling-03-Ja.txt">WWWプロキシにおけるSSLトンネリング</a><sup class="outside"><small>[外部]</small></sup>を参照。</p>
+<pre>require 'net/https'
+proxy_addr = 'proxy.example.com'
+proxy_port = 3128
+https = Net::HTTP::Proxy(proxy_addr, proxy_port).new('www.example.com',443)
+https.use_ssl = true
+https.ca_file = '/usr/share/ssl/cert.pem'
+https.verify_mode = OpenSSL::SSL::VERIFY_PEER
+https.verify_depth = 5
+https.start {|w|
+  response = w.get('/')
+  puts response.body
+}</pre>
+<h2><a name="L003960" id="L003960">インスタンスメソッド</a></h2>
+<dl>
+<dt><a name="L003961" id="L003961"><code>use_ssl?</code></a></dt>
+<dd>
+<p>HTTP で SSL/TLS を使うなら true を返す。</p></dd>
+<dt><a name="L003962" id="L003962"><code>use_ssl=(<var>true_or_false</var>)</code></a></dt>
+<dd>
+<p>HTTP で SSL/TLS を使うかどうかを設定する。使う場合は true を代入する。デフォルトでは false。つまり SSL/TLS を有効にするには必ず use_ssl = true を呼ぶ必要がある。</p></dd>
+<dt><a name="L003963" id="L003963"><code>peer_cert</code></a></dt>
+<dd>
+<p>サーバが送ってきた X.509 証明書を OpenSSL::X509::Certificate オブジェクトとして返す。</p></dd>
+<dt><a name="L003964" id="L003964"><code>key</code></a>
+<dt><a name="L003965" id="L003965"><code>key=(<var>key</var>)</code></a></dt>
+<dd>
+<p><a href="refm233.html">OpenSSL::PKey::RSA</a> オブジェクトか <a href="refm234.html">OpenSSL::PKey::DSA</a> オブジェクトを設定する。
+(This method is appeared in Michal Rokos's OpenSSL extention.)</p></dd>
+<dt><a name="L003966" id="L003966"><code>cert</code></a>
+<dt><a name="L003967" id="L003967"><code>cert=(<var>cert</var>)</code></a></dt>
+<dd>
+<p>クライアント証明書として <a href="refm218.html">OpenSSL::X509::Certificate</a> オブジェクトを設定する。
+(This method is appeared in Michal Rokos's OpenSSL extention.)</p></dd>
+<dt><a name="L003968" id="L003968"><code>ca_file</code></a>
+<dt><a name="L003969" id="L003969"><code>ca_file=(<var>path</var>)</code></a></dt>
+<dd>
+<p>PEM 形式で保存された CA 証明書ファイルのパスを設定する。
+ファイルには複数の CA 証明書が含まれていても良い。</p></dd>
+<dt><a name="L003970" id="L003970"><code>ca_path</code></a>
+<dt><a name="L003971" id="L003971"><code>ca_path=(<var>path</var>)</code></a></dt>
+<dd>
+<p>PEM 形式で保存された CA 証明書ファイルが存在するディレクトリを設定する。</p></dd>
+<dt><a name="L003972" id="L003972"><code>verify_mode</code></a>
+<dt><a name="L003973" id="L003973"><code>verify_mode=(<var>mode</var>)</code></a></dt>
+<dd>
+<p>サーバ証明書に対する検証モードを設定する。
+OpenSSL::SSL::VERIFY_NONE か OpenSSL::SSL::VERIFY_PEER が設定可能。
+<a href="refm226.html">OpenSSL::SSL</a> も参照。</p></dd>
+<dt><a name="L003974" id="L003974"><code>verify_callback</code></a>
+<dt><a name="L003975" id="L003975"><code>verify_callback=(<var>proc</var>)</code></a></dt>
+<dd>
+<p>通常のサーバ証明書の検証に加えてさらに適用される
+<a href="refm057.html">Proc</a> オブジェクトを設定する。</p></dd>
+<dt><a name="L003976" id="L003976"><code>verify_depth</code></a>
+<dt><a name="L003977" id="L003977"><code>verify_depth=(<var>num</var>)</code></a></dt>
+<dd>
+<p>サーバ証明書を検証する時の証明書チェーンの最大の深さを設定する。</p></dd>
+<dt><a name="L003978" id="L003978"><code>cert_store</code></a>
+<dt><a name="L003979" id="L003979"><code>cert_store=(<var>store</var>)</code></a></dt>
+<dd>
+<p>サーバ証明書の検証のために使う信頼している CA 証明書のストレージ
+<a href="refm223.html">OpenSSL::X509::Store</a> オブジェクトを設定する。
+通常は ca_path=(path) や ca_file=(path) を使う。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm206.html">&lt;-PREV</a>][<a href="refm208.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Method</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm049.html" rel="next" />
+<link href="refm047.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm035.html">UP</a>][<a href="refm047.html">&lt;-PREV</a>][<a href="refm049.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L001153" id="L001153">Method</a></h1>
+<p><a href="refm035.html#L000673">obj.method(:method_name)</a> によりオブジェクト化され
+たメソッドオブジェクトのクラスです。メソッドの実体（名前でなく）とレシー
+バの組を封入します。<a href="refm057.html">Proc</a> オブジェクトと違ってコンテキストを保持
+しません。</p>
+<p><a href="refm057.html">Proc</a> との差…<code>Method</code> は取り出しの対象であるメソッドが
+なければ作れませんが、<code>Proc</code> は準備なしに作れます。その点から
+<code>Proc</code> は使い捨てに向き、<code>Method</code> は何度も繰り返し生成する
+場合に向くと言えます。また内包するコードの大きさという点では
+<code>Proc</code> は小規模、<code>Method</code> は大規模コードに向くと言えます。</p>
+<p>例:</p>
+<ul>
+<li><p>既存のメソッドを Method オブジェクト化する
+  (<a href="refm035.html#L000673">Object#method</a> を参照)</p>
+<pre>class Foo
+  def foo(arg)
+    &quot;foo called with arg #{arg}&quot;
+  end
+end
+
+m = Foo.new.method(:foo)
+
+p m             # =&gt; #&lt;Method: Foo#foo&gt;
+p m.call(1)     # =&gt; &quot;foo called with arg 1&quot;</pre></li>
+<li><p>名前のないメソッド(の代わり)が必要なら <a href="refm057.html">Proc</a> を使うと良い</p>
+<pre>pr = Proc.new {|arg|
+  &quot;proc called with arg #{arg}&quot;
+}
+
+p pr            # =&gt; #&lt;Proc:0x401b1fcc&gt;
+p pr.call(1)    # =&gt; &quot;proc called with arg 1&quot;</pre></li>
+<li><p>Method オブジェクトが有用なのは以下のような場合</p>
+<pre>class Foo
+  def foo() &quot;foo&quot; end
+  def bar() &quot;bar&quot; end
+  def baz() &quot;baz&quot; end
+end
+
+obj = Foo.new
+
+# 任意のキーとメソッドの関係をハッシュに保持しておく
+methods = {1 =&gt; obj.method(:foo),
+           2 =&gt; obj.method(:bar),
+           3 =&gt; obj.method(:baz)}
+
+# キーを使って関連するメソッドを呼び出す
+p methods[1].call       # =&gt; &quot;foo&quot;
+p methods[2].call       # =&gt; &quot;bar&quot;
+p methods[3].call       # =&gt; &quot;baz&quot;</pre></li>
+<li><p>が、レシーバを固定させる(Method オブジェクトはレシーバを保持する)必
+  要がないなら <a href="refm035.html#L000685">Object#send</a>を使う方法も有用。</p>
+<pre>class Foo
+  def foo() &quot;foo&quot; end
+  def bar() &quot;bar&quot; end
+  def baz() &quot;baz&quot; end
+end
+
+# 任意のキーとメソッド(の名前)の関係をハッシュに保持しておく
+# レシーバの情報がここにはないことに注意
+methods = {1 =&gt; :foo,
+           2 =&gt; :bar,
+           3 =&gt; :baz}
+
+# キーを使って関連するメソッドを呼び出す
+# レシーバは任意(Foo クラスのインスタンスである必要もない)
+p Foo.new.send(methods[1])      # =&gt; &quot;foo&quot;
+p Foo.new.send(methods[2])      # =&gt; &quot;bar&quot;
+p Foo.new.send(methods[3])      # =&gt; &quot;baz&quot;</pre></li>
+</ul>
+<h2><a name="L001154" id="L001154">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm035.html">Object</a></li>
+</ul>
+<h2><a name="L001155" id="L001155">メソッド:</a></h2>
+<dl>
+<dt><a name="L001156" id="L001156"><code>self[arg, ...]</code></a>
+<dt><a name="L001157" id="L001157"><code>call(<var>arg</var> ... )</code></a>
+<dt><a name="L001158" id="L001158"><code>call(<var>arg</var> ... ) { ... }</code></a></dt>
+<dd>
+<p>メソッドオブジェクトに封入されているメソッドを起動します。
+引数やブロックはそのままメソッドに渡されます。</p>
+<p><code>self[]</code> の形の呼び出しは通常のメソッド呼び出しに見た目を
+近付けるためだけに用意されたもので、<var>Array#[]</var>のような
+他の <var>[]</var> メソッドとの意味的な関連性はありません。</p>
+<p>メソッドオブジェクトが汚染されている場合、そのメソッドは、セーフレ
+ベル 4 で実行されます
+(<a href="refm018.html#L000237">セーフレベルに関するその他の詳細</a>を参照)。</p></dd>
+<dt><a name="L001159" id="L001159"><code>arity</code></a></dt>
+<dd>
+<p>メソッドオブジェクトの引数の数を返します。<code>self</code> が引数の数を
+可変長で受け取れる場合</p>
+<pre>-(最低限必要な数 + 1)</pre>
+<p>を返します。</p></dd>
+<dt><a name="L001160" id="L001160"><code>inspect</code></a></dt>
+<dd>
+<p><a href="refm035.html#L000664">Object#inspect</a> 参照。以下の形式の文字列を返し
+ます。</p>
+<pre>#&lt;Method: klass1(klass2)#method&gt;                (形式1)</pre>
+<p>klass1 は、Method#inspect では、レシーバのクラス名、
+<a href="refm049.html">UnboundMethod</a>#inspect では、UnboundMethod オブジェクトの生成
+元となったクラス／モジュール名です。</p>
+<p>klass2 は、実際にそのメソッドを定義しているクラス／モジュール名、
+method は、メソッド名を表します。</p>
+<pre>module Foo
+  def foo
+    &quot;foo&quot;
+  end
+end
+class Bar
+  include Foo
+  def bar
+  end
+end
+
+p Bar.new.method(:foo)        # =&gt; #&lt;Method: Bar(Foo)#foo&gt;
+p Bar.new.method(:bar)        # =&gt; #&lt;Method: Bar(Bar)#bar&gt;</pre>
+<p><a href="refm384.html">ruby 1.7 feature</a>:
+klass1 と klass2 が同じ場合は以下の形式になります。</p>
+<pre>#&lt;Method: klass1#method&gt;                        (形式2)</pre>
+<p><a href="refm384.html">ruby 1.7 feature</a>:
+特異メソッドに対しては、</p>
+<pre>#&lt;Method: obj.method&gt;                           (形式3)
+#&lt;Method: klass1(klass2).method&gt;                (形式4)</pre>
+<p>という形式の文字列を返します。二番目の形式では klass1 はレシーバ、
+klass2 は実際にそのメソッドを定義しているオブジェクトになります。</p>
+<pre># オブジェクトの特異メソッド
+obj = &quot;&quot;
+class &lt;&lt;obj
+  def foo
+  end
+end
+p obj.method(:foo)      # =&gt; #&lt;Method: &quot;&quot;.foo&gt;
+
+# クラスメソッド(クラスの特異メソッド)
+class Foo
+  def Foo.foo
+  end
+end
+p Foo.method(:foo)      # =&gt; #&lt;Method: Foo.foo&gt;
+
+# スーパークラスのクラスメソッド
+class Bar &lt; Foo
+end
+p Bar.method(:foo)      # =&gt; #&lt;Method: Bar(Foo).foo&gt;
+
+# 以下は(形式1)の出力になる
+module Baz
+  def baz
+  end
+end
+
+class &lt;&lt;obj
+  include Baz
+end
+p obj.method(:baz)      # =&gt; #&lt;Method: Object(Baz)#baz&gt;</pre></dd>
+<dt><a name="L001161" id="L001161"><code>to_proc</code></a></dt>
+<dd>
+<p><code>self</code> を <code>call</code> する <a href="refm057.html">Proc</a> オブジェクトを生成して返
+します。</p></dd>
+<dt><a name="L001162" id="L001162"><code>unbind</code></a></dt>
+<dd>
+<p><code>self</code> のレシーバとの関連を取り除いた <a href="refm049.html">UnboundMethod</a> オブ
+ジェクトを生成して返します。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm035.html">UP</a>][<a href="refm047.html">&lt;-PREV</a>][<a href="refm049.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

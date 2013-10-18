@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>はじめに</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm007.html" rel="next" />
+<link href="refm005.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm002.html">UP</a>][<a href="refm005.html">&lt;-PREV</a>][<a href="refm007.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L000026" id="L000026">はじめに</a></h1>
+<p>Rubyは手軽なオブジェクト指向プログラミングのためのインタプリタ言語です。
+Rubyは(Perlのような)テキスト処理やシステム管理のための豊富な機能を持っています。
+また、Rubyは単純で、分かりやすく、簡単に拡張できます。</p>
+<p>もし、簡単なオブジェクト指向のための言語を求めていたり、
+Perlは見にくいと感じていたり、
+Lispの考え方は好きだがあの括弧の多さには困ると感じているなら、
+Rubyはまさにぴったりです。</p>
+<p>Rubyの特長は次の通りです。</p>
+<dl>
+<dt><a name="L000027" id="L000027">インタプリタ</a></dt>
+<dd>
+<p>Rubyはインタプリタ言語ですので
+プログラムを実行するためにコンパイルする必要はありません。</p>
+</dd>
+<dt><a name="L000028" id="L000028">変数に型が無い (動的型付け)</a></dt>
+<dd>
+<p>Rubyの変数はどのような型のデータも格納する事ができますので、
+変数の型について心配する必要はありません。
+半面、コンパイル時のチェックは弱くなります。</p>
+</dd>
+<dt><a name="L000029" id="L000029">変数宣言が不要</a></dt>
+<dd>
+<p>Rubyでは変数を宣言無しで使う事ができます。
+変数の種類(ローカル変数、グローバル変数、インスタンス変数など)は
+変数名から知る事ができます。</p>
+</dd>
+<dt><a name="L000030" id="L000030">単純な文法</a></dt>
+<dd>
+<p>Rubyの文法はEiffelからわずかに影響を受けた単純なものです。</p>
+</dd>
+<dt><a name="L000031" id="L000031">ユーザによるメモリ管理が不要</a></dt>
+<dd>
+<p>Rubyはメモリ管理を自動的に行います。
+どこからもアクセスされなくなったオブジェクトは
+インタプリタに組み込みのガーベージコレクタによって回収されます。</p>
+</dd>
+<dt><a name="L000032" id="L000032">全てがオブジェクト</a></dt>
+<dd>
+<p>Rubyははじめから純粋なオブジェクト指向言語として設計されています。
+整数のような基本的なデータ型をはじめとして、
+全てのデータをオブジェクトとして統一的に取り扱えます。</p>
+</dd>
+<dt><a name="L000033" id="L000033">クラス、継承、メソッド</a></dt>
+<dd>
+<p>Rubyは
+クラス、継承、メソッドのようなオブジェクト指向言語として基本的な機能は
+当然持っています。</p>
+</dd>
+<dt><a name="L000034" id="L000034">特異メソッド</a></dt>
+<dd>
+<p>ある特定のオブジェクトにメソッドを付加することができます。
+たとえば、GUIのあるボタンを押された時の動作を
+メソッドとして記述するような使い方ができますし、
+これを応用してプロトタイプベースの
+オブジェクト指向プログラミングも可能です(やりたければね)。</p>
+</dd>
+<dt><a name="L000035" id="L000035">モジュールによるMix-in</a></dt>
+<dd>
+<p>Rubyは多重継承は複雑さの源であるという見地から、
+意図的に多重継承を持っていませんが、
+モジュールを使ってクラス階層を横断して実装を共有できます。
+この機能を&quot;Mix-in&quot;と呼びます。</p>
+</dd>
+<dt><a name="L000036" id="L000036">ブロック付きメソッド呼び出し(イテレータ)</a></dt>
+<dd>
+<p>制御構造の抽象化を援助するブロック付きメソッド呼び出しという機能があります。</p>
+</dd>
+<dt><a name="L000037" id="L000037">クロージャ</a></dt>
+<dd>
+<p>手続きをオブジェクトとして扱う機能があります。
+このオブジェクト化された手続きのことをクロージャと呼びます。</p>
+</dd>
+<dt><a name="L000038" id="L000038">強力な文字列操作/正規表現</a></dt>
+<dd>
+<p>Perlをお手本とした強力な文字列操作や正規表現検索の機能があります。</p>
+</dd>
+<dt><a name="L000039" id="L000039">多倍長整数</a></dt>
+<dd>
+<p>組み込みの多倍長整数機能がありますので、
+メモリが許す限り、非常に大きな整数の演算もできます。
+たとえば、400の階乗なども簡単に計算できます。</p>
+</dd>
+<dt><a name="L000040" id="L000040">例外処理機能</a></dt>
+<dd>
+<p>例外処理機能は例外的な状況への対処が簡単に書けます。</p>
+</dd>
+<dt><a name="L000041" id="L000041">OSへの直接アクセス</a></dt>
+<dd>
+<p>Rubyは(UNIXの)ほとんどのシステムコールの呼び出し機能を持っています。
+Rubyだけでシステムプログラミングも可能です。</p>
+</dd>
+<dt><a name="L000042" id="L000042">ダイナミックローディング</a></dt>
+<dd>
+<p>OSが許せば、オブジェクトファイルを実行時に読み込む機能が提供されます。</p>
+</dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm002.html">UP</a>][<a href="refm005.html">&lt;-PREV</a>][<a href="refm007.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

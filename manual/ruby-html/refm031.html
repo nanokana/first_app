@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>組み込み定数</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm032.html" rel="next" />
+<link href="refm030.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm030.html">&lt;-PREV</a>][<a href="refm032.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L000565" id="L000565">組み込み定数</a></h1>
+<dl>
+<dt><a name="L000566" id="L000566"><code>TRUE        ((&lt;<var>obsolete</var>&gt;))</code></a></dt>
+<dd>
+<p>代表的な真の値。<code>true</code> と同じ。Ruby では偽でない値(<code>false</code> 
+でも <code>nil</code> でもない値)は全て真とみなされます。
+(<a href="refm393.html">obsolete</a>も参照してください。)</p></dd>
+<dt><a name="L000567" id="L000567"><code>FALSE       ((&lt;<var>obsolete</var>&gt;))</code></a></dt>
+<dd>
+<p>偽の値。<code>false</code> と同じ。
+(<a href="refm393.html">obsolete</a>も参照してください。)</p></dd>
+<dt><a name="L000568" id="L000568"><code>NIL         ((&lt;<var>obsolete</var>&gt;))</code></a></dt>
+<dd>
+<p><code>nil</code> と同じ。
+(<a href="refm393.html">obsolete</a>も参照してください。)</p></dd>
+<dt><a name="L000569" id="L000569"><code>STDIN</code></a></dt>
+<dd>
+<p>標準入力。<a href="refm030.html#L000547">$stdin</a> のデフォルト値。</p></dd>
+<dt><a name="L000570" id="L000570"><code>STDOUT</code></a></dt>
+<dd>
+<p>標準出力。<a href="refm030.html#L000548">$stdout</a> のデフォルト値。</p></dd>
+<dt><a name="L000571" id="L000571"><code>STDERR</code></a></dt>
+<dd>
+<p>標準エラー出力。<a href="refm030.html#L000549">$stderr</a> のデフォルト値。</p></dd>
+<dt><a name="L000572" id="L000572"><code>ENV</code></a></dt>
+<dd>
+<p>環境変数を表す(疑似)連想配列(詳細は <a href="refm033.html">ENV</a> を参照)。この連想配
+列の値を変更すると子プロセスの環境として引き継がれます。</p></dd>
+<dt><a name="L000573" id="L000573"><code>ARGF</code></a></dt>
+<dd>
+<p>引数(なければ標準入力)で構成される仮想ファイル (詳細は <a href="refm032.html">ARGF</a> 
+を参照)。つまり <a href="refm029.html#L000452">gets</a> は <em class="XXINVALIDXX">ARGF.gets</em> と同
+じ意味です。<a href="refm032.html#L000590">ARGF.file</a> で現在読み込み中のファイルオブジェ
+クトが、<a href="refm032.html#L000588">ARGF.filename</a> で現在読み込み中のファイル名が得
+られます。</p></dd>
+<dt><a name="L000574" id="L000574"><code>ARGV</code></a></dt>
+<dd>
+<p>Rubyスクリプトに与えられた引数。組み込み変数 <a href="refm030.html#L000539">$*</a> の
+別名。Ruby自身に対する引数は取り除かれています。</p></dd>
+<dt><a name="L000575" id="L000575"><code>DATA</code></a></dt>
+<dd>
+<p>スクリプトの <code>__END__</code> 
+(<a href="refm022.html#L000306">スクリプトの終り</a>)
+以降をアクセスする <a href="refm046.html">File</a> オブジェクト。</p>
+<p><em>注意</em>:</p>
+<ul>
+<li><code>DATA.rewind</code> で移動する読みとり位置は、<code>__END__</code> 直後で
+      はなく、スクリプトファイルの先頭です。</li>
+<li>スクリプトが標準入力から読みこまれた場合は標準入力になります。</li>
+<li>スクリプトがファイルや標準入力から読みこまれなかった場合や、
+      <code>__END__</code> で終っていない場合には定義されません。</li>
+<li><a href="refm029.html#L000480">require</a> や <a href="refm029.html#L000461">load</a> で
+      読み込まれたファイルの中であってもそのファイル(<code>__FILE__</code>)
+      ではなく実行されたファイル(<code>$0</code>)を指します。</li>
+</ul></dd>
+<dt><a name="L000576" id="L000576"><code>TOPLEVEL_BINDING</code></a></dt>
+<dd>
+<p><a href="refm477.html#L009734">トップレベル</a>での <a href="refm037.html">Binding</a> オブジェクト。</p></dd>
+<dt><a name="L000577" id="L000577"><code>RUBY_VERSION</code></a></dt>
+<dd>
+<p>Ruby のバージョンを示す文字列。Ruby のバージョンは、
+<var>major</var>.<var>minor</var>.<var>teeny</var> という形式です。それぞれの番号
+は(今のところ)二桁以上にならないと約束されていますので、</p>
+<pre>if RUBY_VERSION &gt;= '1.6.7'
+  # バージョン 1.6.7 以降で有効な処理
+else
+  # それ以前のバージョンで有効な処理
+end</pre>
+<p>とバージョンの違いによる処理の分岐を書くことができます。</p>
+<p>version 1.8 までは、minor が奇数のバージョンは開発版、
+minor が偶数のバージョンは安定版です。1.9.0 以降は、
+teeny が 0 のバージョンが開発版となる予定です。</p></dd>
+<dt><a name="L000578" id="L000578"><code>RUBY_RELEASE_DATE</code></a></dt>
+<dd>
+<p>Ruby のリリース日を示す文字列。</p></dd>
+<dt><a name="L000579" id="L000579"><code>RUBY_PLATFORM</code></a></dt>
+<dd>
+<p>プラットフォームを示す文字列。</p></dd>
+<dt><a name="L000580" id="L000580"><code>VERSION             ((&lt;<var>obsolete</var>&gt;))</code></a>
+<dt><a name="L000581" id="L000581"><code>RELEASE_DATE        ((&lt;<var>obsolete</var>&gt;))</code></a>
+<dt><a name="L000582" id="L000582"><code>PLATFORM            ((&lt;<var>obsolete</var>&gt;))</code></a></dt>
+<dd>
+<p>これらは、上記の定数 <code>RUBY_XXX</code> の古い名前です。
+<a href="refm393.html">obsolete</a>も参照してください。</p>
+<p><a href="refm392.html">ruby 1.9 feature</a>: これらの定数は削除されました。</p></dd>
+<dt><a name="L000583" id="L000583"><code>SCRIPT_LINES__</code></a></dt>
+<dd>
+<p>この定数は、デフォルトでは定義されていません。</p>
+<p>この定数がハッシュとして定義された後に、ソースが<em>コンパイル</em>さ
+れると、そのソースファイル名をキーに、ソースを行毎に分割した配列を値
+にしたハッシュ要素が設定されます。この定数はデバッガ(<a href="refm339.html">debug</a>)
+などで利用されています。</p>
+<pre>SCRIPT_LINES__ = {}
+require 'English'
+
+p SCRIPT_LINES__
+
+# 注: 出力は加工してあります。
+# =&gt; {&quot;/usr/local/lib/ruby/1.6/English.rb&quot;=&gt;
+      [&quot;alias $ERROR_INFO              $!\n&quot;,
+       &quot;alias $ERROR_POSITION          $@\n&quot;,
+       &quot;alias $LOADED_FEATURES         $\&quot;\n&quot;,
+                :
+                :
+       &quot;alias $POSTMATCH               $'\n&quot;,
+       &quot;alias $LAST_PAREN_MATCH        $+\n&quot;]}</pre>
+<p>なお、<a href="refm030.html#L000525">$SAFE</a>レベルが 0 でなければ有効にはなりませ
+ん。また、<a href="refm029.html#L000445">eval</a> によるコンパイルは対象にはなりませ
+ん。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm030.html">&lt;-PREV</a>][<a href="refm032.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

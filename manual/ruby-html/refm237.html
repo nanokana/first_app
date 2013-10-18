@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>OpenSSL::ASN1::ASN1Data</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm238.html" rel="next" />
+<link href="refm236.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm236.html">UP</a>][<a href="refm236.html">&lt;-PREV</a>][<a href="refm238.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L004772" id="L004772">OpenSSL::ASN1::ASN1Data</a></h1>
+<p>ASN.1データ型のスーパークラス</p>
+<p>継承の関係</p>
+<pre>OpenSSL::ASN1::ASN1Data
+  +-&gt; OpenSSL::ASN1::Primitive
+  |     +-&gt; OpenSSL::ASN1::Boolean
+  |     +-&gt; OpenSSL::ASN1::Integer
+  |     +-&gt; OpenSSL::ASN1::Enumerated
+  |     +-&gt; OpenSSL::ASN1::BitString
+  |     +-&gt; OpenSSL::ASN1::OctetString
+  |     +-&gt; OpenSSL::ASN1::UTF8String
+  |     +-&gt; OpenSSL::ASN1::NumericString
+  |     +-&gt; OpenSSL::ASN1::PrintableString
+  |     +-&gt; OpenSSL::ASN1::T61String
+  |     +-&gt; OpenSSL::ASN1::VideotexString
+  |     +-&gt; OpenSSL::ASN1::IA5String
+  |     +-&gt; OpenSSL::ASN1::GraphicString
+  |     +-&gt; OpenSSL::ASN1::ISO64String
+  |     +-&gt; OpenSSL::ASN1::GeneralString
+  |     +-&gt; OpenSSL::ASN1::UniversalString
+  |     +-&gt; OpenSSL::ASN1::BMPString
+  |     +-&gt; OpenSSL::ASN1::Null
+  |     +-&gt; OpenSSL::ASN1::ObjectId
+  |     +-&gt; OpenSSL::ASN1::UTCTime
+  |     `-&gt; OpenSSL::ASN1::GeneralizedTime
+  `-&gt; OpenSSL::ASN1::Constructive
+        +-&gt; OpenSSL::ASN1::Set
+        `-&gt; OpenSSL::ASN1::Sequence</pre>
+<h2><a name="L004773" id="L004773">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L004774" id="L004774"><code>ASN1Data.new(<var>value</var>, <var>tag</var>, <var>tag_class</var>)</code></a></dt>
+<dd>
+<p>ASN1Data オブジェクトを生成する。</p></dd>
+</dl>
+<h2><a name="L004775" id="L004775">メソッド</a></h2>
+<dl>
+<dt><a name="L004776" id="L004776"><code>value</code></a>
+<dt><a name="L004777" id="L004777"><code>values=</code></a></dt>
+<dd>
+<p>ASN.1データの表現する値。</p></dd>
+<dt><a name="L004778" id="L004778"><code>tag</code></a>
+<dt><a name="L004779" id="L004779"><code>tag=</code></a></dt>
+<dd>
+<p>タグ番号。Universal 型の場合は BOOLEAN = 1 から BMPSTRING = 30 のいずれか。
+あらかじめ定義されているタグ番号の定数に関しては <a href="refm236.html">OpenSSL::ASN1</a> の
+定数の項を参照。</p></dd>
+<dt><a name="L004780" id="L004780"><code>tag_class</code></a>
+<dt><a name="L004781" id="L004781"><code>tag_class=</code></a></dt>
+<dd>
+<p><a href="refm063.html">Symbol</a> オブジェクト :UNIVERSAL、:ONTEXT_SPECIFIC、:APPLICATION
+のいずれか。</p></dd>
+<dt><a name="L004782" id="L004782"><code>to_der</code></a></dt>
+<dd>
+<p>ASN.1 データの DER 表現。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm236.html">UP</a>][<a href="refm236.html">&lt;-PREV</a>][<a href="refm238.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

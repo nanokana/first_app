@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>メソッド呼び出し</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm028.html" rel="next" />
+<link href="refm026.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm020.html">UP</a>][<a href="refm026.html">&lt;-PREV</a>][<a href="refm028.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L000405" id="L000405">メソッド呼び出し</a></h1>
+<ul>
+<li><a href="#L000406">super</a></li>
+<li><a href="#L000407">ブロック付きメソッド呼び出し</a></li>
+<li><a href="#L000408">yield</a></li>
+</ul>
+<p>例:</p>
+<pre>foo.bar()
+foo.bar
+bar()
+print &quot;hello world\n&quot;
+print
+Class.new
+Class::new</pre>
+<p>文法:</p>
+<pre>[式  `.'] 識別子 [`(' 式 ... [`*' [式]],[`&amp;' 式] `)']
+[式 `::'] 識別子 [`(' 式 ... [`*' [式]],[`&amp;' 式] `)']</pre>
+<p>メソッド呼び出し式はレシーバ(<code>`.'</code> の左側の式の値)のメソッドを呼び
+出します。レシーバが指定されない時は <code>self</code> のメソッドを呼び出しま
+す。</p>
+<p>`<code>.</code>' と `<code>::</code>' とはほぼ同じ意味です。但し、定数を表す場合は、
+`<code>::</code>' を使わなければいけません(例: <a href="refm078.html#L002013">Math::PI</a>,
+<a href="refm108.html#L002234">Errno::ERANGE</a>)。逆に、</p>
+<pre>Klass::Foo</pre>
+<p>とした場合、常に定数と見なされるという制限があります。
+`<code>::</code>' を、クラスメソッ
+ド呼び出しに使うという流儀がありますが<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a>、この点は要注意です。
+大文字で始まるメソッド名を使用する場合は</p>
+<pre>Klass.Foo</pre>
+<p>と `<code>.</code>' を使うか、</p>
+<pre>Klass::Foo()</pre>
+<p>と括弧でメソッド呼び出しであることを明示する必要があります。</p>
+<p>メソッド名には通常の識別子の他、識別子に <code>?</code> または <code>!</code> の続い
+たものが許されます。慣習として、述語(真偽値を返すメソッド)には <code>?</code> 
+を、同名の(<code>!</code> の無い)メソッドに比べてより破壊的な作用をもつメソッ
+ド(例: <code>tr</code> と <code>tr!</code>)には <code>!</code> をつけるようになっています。</p>
+<p>最後の引数の直前に <code>*</code> がついている場合、その引数の値が展開されて
+渡されます<a name="footmark:2" id="footmark:2" href="#foottext:2"><sup><small>*2</small></sup></a>。つまり:</p>
+<pre>foo(1,*[2,3,4])
+foo(1,*[])</pre>
+<p>は、それぞれ</p>
+<pre>foo(1,2,3,4)
+foo(1)</pre>
+<p>と同じです。</p>
+<p>最後の引数の直前に <code>&amp;</code> がついている場合、その引数で指定した手続き
+オブジェクト(<a href="refm057.html">Proc</a>)やメソッドオブジェクト(<a href="refm048.html">Method</a>)がブロック
+としてメソッドに渡されます。詳細は<em class="XXINVALIDXX">イテレータ</em>を参
+照してください。</p>
+<p>メソッド呼び出しの際、<var>private</var> なメソッドは関数形式(レシーバを省
+略した形式)でしか呼び出すことができません。また <var>protected</var> なメソッ
+ドはそのメソッドを持つオブジェクトのメソッド定義式内でなければ呼び出せ
+ません。(<a href="refm028.html#L000420">呼び出し制限</a>を参照)</p>
+<h2><a name="L000406" id="L000406">super</a></h2>
+<p>例:</p>
+<pre>super
+super(1,2,3)</pre>
+<p>文法:</p>
+<pre>super
+super(式, ... )</pre>
+<p><code>super</code> は現在のメソッドがオーバーライドしているメソッドを呼び出し
+ます。括弧と引数が省略された場合には現在のメソッドの引数がそのまま引き
+渡されます。引数を渡さずにオーバーライドしたメソッドを呼び出すには 
+<code>super()</code> と括弧を明示します。</p>
+<p>例:</p>
+<pre>class Foo
+  def foo(arg=nil)
+    p arg
+  end
+end
+
+class Bar &lt; Foo
+  def foo(arg)
+    super(5)       # 5 を引数にして呼び出す
+    super(arg)     # 5 を引数にして呼び出す
+    super          # 5 を引数にして呼び出す super(arg) の略記法
+    arg = 1
+    super          # 1 を引数にして呼び出す super(arg) の略記法
+    super()        # 引数なしで呼び出す
+  end
+end
+Bar.new.foo 5</pre>
+<h2><a name="L000407" id="L000407">ブロック付きメソッド呼び出し</a></h2>
+<p>例:</p>
+<pre>[1,2,3].each do |i| print i*2, &quot;\n&quot; end
+[1,2,3].each {|i| print i*2, &quot;\n&quot; }</pre>
+<p>文法:</p>
+<pre>method(arg1, arg2, ...)  do [`|' 式 ... `|'] 式 ... end
+method(arg1, arg2, ...) `{' [`|' 式 ... `|'] 式 ... `}'
+method(arg1, arg2, ..., `&amp;' proc_object)</pre>
+<p>ブロック付きメソッドとは制御構造の抽象化のために用いられる
+メソッドです。最初はループの抽象化のために用いられていたため、
+特にイテレータと呼ばれることもあります。
+<code>do ... end</code> または <code>{ ... } </code> で囲まれたコードの断片
+(ブロックと呼ばれる)を後ろに付けてメソッドを呼び出すと、その
+メソッドの内部からブロックを評価できます。
+ブロック付きメソッドを自分で定義するには <a href="#L000408">yield</a> 式を使います。</p>
+<p><code>{ ...  }</code> の方が <code>do ...  end</code> ブロックよりも強く結合します
+<a name="footmark:3" id="footmark:3" href="#foottext:3"><sup><small>*3</small></sup></a>。
+次に例を挙げますが、このような違いが影響するコードは読み辛いので避けましょう:</p>
+<pre>foobar a, b do .. end   # foobarの引数はa, bの値とブロック
+foobar a, b { .. }      # ブロックはメソッドbの引数、aの値とbの返り値とがfoobarの引数</pre>
+<p>ブロックの中で初めて代入された(宣言された)ローカル変数はその
+ブロックの中でだけ有効です。例えば:</p>
+<pre>foobar {
+  i = 20                # ローカル変数 `i' が宣言された
+   ...
+}
+print defined? i        # `i' はここでは未定義なので false
+foobar a, b do
+  i = 11                # まったく別の変数 i の宣言
+   ...
+end</pre>
+<p>以下は逆にブロック外でも有効な例です。</p>
+<pre>i = 10
+[1,2,3].each do |m|
+  p i * m               # いきなり i を使える
+end</pre>
+<p>ブロックの部分だけを先に定義して変数に保存しておき、後からブロック付きメソッドに渡すことも出来ます。
+それを実現するのが手続きオブジェクト(<a href="refm057.html">Proc</a>)です。
+それをブロックとして渡すにはブロック付きメソッドの最後の引数として `<code>&amp;</code>' で修飾した手続きオブジェクトを渡
+します。<code>Proc</code> の代わりにメソッドオブジェクト(<a href="refm048.html">Method</a>)を渡す
+ことも出来ます。この場合、そのメソッドを呼ぶ手続きオブジェクトが生成さ
+れ渡されます。</p>
+<pre># 1引数の手続き(その働きは引数をpで印字すること)を生成し、変数pobjに格納
+pobj = proc {|v|
+  p v
+}
+
+[1,2,3].each(&amp;pobj) # 手続きオブジェクトをブロックの代わりに渡している
+=&gt; 1
+   2
+   3</pre>
+<p><a href="refm384.html">ruby 1.7 feature</a>:
+version 1.7 では、to_proc メソッドを持つオブジェクトならば、`<code>&amp;</code>' 
+修飾した引数として渡すことができます(デフォルトで Proc、Method オブジェ
+クトは共に to_proc メソッドを持ちます)。to_proc はメソッド呼び出し時に実
+行され、Proc オブジェクトを返すことが期待されます。</p>
+<pre>class Foo
+  def to_proc
+    Proc.new {|v| p v}
+  end
+end
+
+[1,2,3].each(&amp;Foo.new)
+
+=&gt; 1
+   2
+   3</pre>
+<p>ブロック付きメソッドの戻り値は、通常のメソッドと同様ですが、ブロックの中から
+<a href="refm026.html#L000392">break</a> により中断された場合は <code>nil</code> を返します。
+<a href="refm384.html">ruby 1.7 feature</a>: <code>break</code> に引数を指定した場合はその値が
+ブロック付きメソッドの戻り値になります。</p>
+<h2><a name="L000408" id="L000408">yield</a></h2>
+<p>自分で定義したブロック付きメソッドでブロックを呼び出すときに使います。
+yield に渡された値はブロック記法において <code>|</code> と <code>|</code> の間にはさまれた
+変数(ブロックの引数)に代入されます。</p>
+<p>例:</p>
+<pre>yield data</pre>
+<p>文法:</p>
+<pre>yield `(' [式 [`,' 式 ... ]] `)'
+yield [式 [`,' 式 ... ]]</pre>
+<p>引数をブロックの引数として渡してブロックを評価します。<code>yield</code> は
+<em class="XXINVALIDXX">イテレータ</em>を定義するために
+<a href="refm028.html#L000414">メソッド定義</a>内で使用します。</p>
+<pre># ブロック付きメソッドの定義、
+# その働きは与えられたブロック(手続き)に引数1, 2を渡して実行すること
+def foo
+  yield(1,2)
+end
+
+# fooに「2引数手続き、その働きは引数を配列に括ってpで印字する」というものを渡して実行させる
+foo {|a,b|
+  p [a, b]
+}  # =&gt; [1, 2] (要するに p [1, 2] を実行した)
+
+# 今度は「2引数手続き、その働きは足し算をしてpで印字する」というものを渡して実行させる
+foo {|a, b|
+  p a + b
+}  # =&gt; 3 (要するに p 1 + 2 を実行した)
+
+# 今度のブロック付きメソッドの働きは、
+# 与えられたブロックに引数10を渡して起動し、続けざまに引数20を渡して起動し、
+# さらに引数30を渡して起動すること
+def bar
+  yield 10
+  yield 20
+  yield 30
+end
+
+# barに「1引数手続き、その働きは引数に3を足してpで印字する」というものを渡して実行させる
+bar {|v|
+  p v + 3
+}
+# =&gt; 13
+#    23
+#    33 (同じブロックが3つのyieldで3回起動された。
+#        具体的には p 10 + 3; p 20 + 3; p 30 + 3 を実行した)
+
+# Array#eachの(粗製乱造の)類似品
+def iich(arr) # 引数に配列を取る
+  idx = 0
+  while idx &lt; arr.size
+    yield(arr[idx]) # 引数の各要素毎に、その要素を引数にしてブロックを起動
+    idx += 1
+  end
+end
+
+sum = 0
+iich([1, 4, 9, 16, 25]) {|elem|
+  sum += elem
+}
+p sum # =&gt; 55</pre>
+<p>ブロック引数の代入は<a href="refm025.html#L000372">多重代入</a>と同じルールで行われます。
+また <code>yield</code> を実行したメソッドにブロックが渡されていない
+(イテレータではない) 時は例外 <a href="refm099.html">LocalJumpError</a> が発生します。</p>
+<p><code>yield</code> はブロック内で最後に評価した式の値を返します。また、
+<a href="refm026.html#L000393">next</a> によりブロックの実行が中断された場合は <code>nil</code> 
+を返します。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>:
+<code>next</code> に引数を指定した場合はその値が <code>yield</code> の戻り値になりま
+す。</p>
+<p><a href="refm385.html">ruby 1.8 feature</a>:
+ブロックパラメータの受渡しは、以下の点に関して将来変更されるかもしれま
+せん(警告が出ます)。</p>
+<pre>def foo
+  yield 1,2,3
+end
+
+foo {|v| p v}
+
+# =&gt; -:5: warning: multiple values for a block parameter (3 for 1)
+     [1, 2, 3]</pre>
+<p>これは、</p>
+<pre>yield [1,2,3]</pre>
+<p>あるいは</p>
+<pre>foo {|*v| p v}</pre>
+<p>とするべきです。同様の多重代入</p>
+<pre>v = 1,2,3</pre>
+<p>は現在のところ警告は出ませんが使用しない方がよいでしょう。
+<a name="footmark:4" id="footmark:4" href="#foottext:4"><sup><small>*4</small></sup></a></p>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>あらい 2002-04-21: このマニュ
+アルでは `::' の流儀を積極的には使いません。クラスメソッドとインスタン
+スメソッドの表記を使い分けるのは難しいと考えている(実際、同じスクリプ
+ト内で `::' を使ったり、`.' を使ったりと一貫しない例は良く見かける)の
+と、クラスが普通のオブジェクトと同様オブジェクトであることの理解を妨げ
+る。大文字のメソッドに関してここに書いた制限があるのが煩わしい。という
+個人的な考えからです</small><br />
+<a name="foottext:2" id="foottext:2" href="#footmark:2"><sup><small>*2</small></sup></a><small>展開は<code>to_a</code>を経由して行なわれます。</small><br />
+<a name="foottext:3" id="foottext:3" href="#footmark:3"><sup><small>*3</small></sup></a><small>version 1.6.0 から 1.6.2 まではこの結合強度の違いがなくなっていまし
+たが、これはバグです。version 1.6.3 で修正されました</small><br />
+<a name="foottext:4" id="foottext:4" href="#footmark:4"><sup><small>*4</small></sup></a><small><a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/20358">ruby-dev:20358</a><sup class="outside"><small>[外部]</small></sup>, <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/20409">ruby-dev:20409</a><sup class="outside"><small>[外部]</small></sup></small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm020.html">UP</a>][<a href="refm026.html">&lt;-PREV</a>][<a href="refm028.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

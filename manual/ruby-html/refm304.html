@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>timeout</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm305.html" rel="next" />
+<link href="refm303.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm303.html">&lt;-PREV</a>][<a href="refm305.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006049" id="L006049">timeout</a></h1>
+<p>タイムアウトを行うライブラリ。</p>
+<h2><a name="L006050" id="L006050">定数:</a></h2>
+<dl>
+<dt><a name="L006051" id="L006051"><a href="refm306.html">TimeoutError</a></a></dt>
+</dl>
+<h2><a name="L006052" id="L006052">関数:</a></h2>
+<dl>
+<dt><a name="L006053" id="L006053"><code>timeout(<var>sec</var>) {|<var>i</var>| .... }</code></a>
+<dt><a name="L006054" id="L006054"><code>timeout(<var>sec</var>, <var>exception_class</var>) {|<var>i</var>| .... }  ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>ブロックを <var>sec</var> 秒の期限付きで実行します。
+ブロックの実行時間が制限を過ぎたときは例外
+<a href="refm306.html">TimeoutError</a> が発生します。
+<var>exception_class</var> を指定した場合には <a href="refm306.html">TimeoutError</a> の代わりに
+その例外が発生します。</p>
+<p>また <var>sec</var> が <code>nil</code> のときは制限時間なしで
+ブロックを実行します。</p>
+<dl>
+<dt><a name="L006055" id="L006055">注意</a></dt>
+<dd>
+<p>timeout による割り込みは Thread によって実現されています。C 言語
+レベルで実装され、Ruby のスレッドが割り込めない処理<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a>に対して 
+timeout は無力です。その処理を Ruby で実装しなおすか C 側で Ruby 
+のスレッドを意識してあげる必要があります。
+<a href="refm445.html">timeoutの落し穴</a>も参照</p>
+</dd>
+</dl></dd>
+</dl>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>そのような
+ものは実用レベルでは少ないのですが、例をあげると Socket などは 
+DNSの名前解決に時間がかかった場合割り込めません。
+<a href="refm241.html">resolv-replace</a> を使用する必要があります</small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm303.html">&lt;-PREV</a>][<a href="refm305.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

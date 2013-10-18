@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>importenv</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm373.html" rel="next" />
+<link href="refm371.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm371.html">&lt;-PREV</a>][<a href="refm373.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L007011" id="L007011">importenv</a></h1>
+<p><code>require 'importenv'</code>を加えるだけで環境変数をグローバル変数としてアクセスすることができるようになる。</p>
+<h2><a name="L007012" id="L007012">使用例</a></h2>
+<pre>require 'importenv'
+p $USER              # =&gt; &quot;matz&quot; (自分のユーザ名)
+$USER = &quot;matz-2.0&quot;
+p ENV[&quot;USER&quot;]        # =&gt; &quot;matz-2.0&quot;
+p $USER              # =&gt; &quot;matz-2.0&quot; (*)</pre>
+<h3><a name="L007013" id="L007013">注意</a></h3>
+<p>Ruby 1.6.2までは(*)の出力が自分のユーザ名になってしまうバグがあったが、それは1.6.3で修正されている。</p>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm371.html">&lt;-PREV</a>][<a href="refm373.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Rational</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm265.html" rel="next" />
+<link href="refm263.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm263.html">UP</a>][<a href="refm263.html">&lt;-PREV</a>][<a href="refm265.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L005241" id="L005241">Rational</a></h1>
+<h2><a name="L005242" id="L005242">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm052.html">Numeric</a></li>
+</ul>
+<h2><a name="L005243" id="L005243">インクルードしているモジュール:</a></h2>
+<ul>
+<li><a href="refm069.html">Comparable</a></li>
+</ul>
+<h2><a name="L005244" id="L005244">メソッド:</a></h2>
+<p>Integer &lt; Rational &lt; Float の順に強いです。つまり other が Float なら、
+self を Float に変換してから演算子を適用します。other が Integer なら other を
+Rational に変換してから演算子を適用します。冪乗は例外です。</p>
+<dl>
+<dt><a name="L005245" id="L005245"><code>numerator</code></a></dt>
+<dd>
+<p>分子を Fixnum として返します。</p></dd>
+<dt><a name="L005246" id="L005246"><code>denominator</code></a></dt>
+<dd>
+<p>分母を Fixnum として返します。</p></dd>
+<dt><a name="L005247" id="L005247"><code><var>self</var> + <var>other</var></code></a></dt>
+<dd>
+<p>和を計算します。</p>
+<pre>Rational(3, 4) + 2               # =&gt; Rational(11, 4)
+Rational(3, 4) + Rational(2, 1)  # =&gt; Rational(11, 4)
+Rational(3, 4) + 2.0             # =&gt; 2.75</pre></dd>
+<dt><a name="L005248" id="L005248"><code><var>self</var> - <var>other</var></code></a></dt>
+<dd>
+<p>差を計算します。</p></dd>
+<dt><a name="L005249" id="L005249"><code><var>self</var> * <var>other</var></code></a></dt>
+<dd>
+<p>積を計算します。</p></dd>
+<dt><a name="L005250" id="L005250"><code><var>self</var> / <var>other</var></code></a></dt>
+<dd>
+<p>商を計算します。
+other が 0 の時は、例外 <a href="refm112.html">ZeroDivisionError</a> を投げます。</p>
+<pre>Rational(3, 4) / 2              # =&gt; Rational(3, 8)
+Rational(3, 4) / Rational(2, 1) # =&gt; Rational(3, 8)
+Rational(3, 4) / 2.0            # =&gt; 0.375</pre></dd>
+<dt><a name="L005251" id="L005251"><code><var>self</var> % <var>other</var></code></a></dt>
+<dd>
+<p>剰余を計算します。絶対値が self の絶対値を越えない、符合が self と同じ
+Numeric を返します。</p>
+<pre>Rational(3, 4) % 2               # =&gt; Rational(3, 4)
+Rational(3, 4) % Rational(2, 1)  # =&gt; Rational(3, 4)
+Rational(3, 4) % 2.0             # =&gt; 0.75</pre></dd>
+<dt><a name="L005252" id="L005252"><code><var>self</var> ** <var>other</var></code></a></dt>
+<dd>
+<p>冪を計算します。</p>
+<pre>Rational(3, 4) ** 2              # =&gt; Rational(9, 16)
+Rational(3, 4) ** Rational(2, 1) # =&gt; 0.5625
+Rational(3, 4) ** 2.0            # =&gt; 0.5625</pre></dd>
+<dt><a name="L005253" id="L005253"><code>divmod(<var>other</var>)</code></a></dt>
+<dd>
+<p>self を other で割った、商と余りの配列を返します。
+商は Fixnum、余りは絶対値が other の絶対値を越えず、符合が other と同じ
+Numeric です。<a href="refm052.html#L001273">Numeric#divmod</a> も参照して下さい。</p>
+<pre>Rational(3,4).divmod(Rational(2,3))  # =&gt; [1, Rational(1, 12)]
+Rational(-3,4).divmod(Rational(2,3)) # =&gt; [-2, Rational(7, 12)]     
+Rational(3,4).divmod(Rational(-2,3)) # =&gt; [-2, Rational(-7, 12)]
+
+Rational(9,4).divmod(2)              # =&gt; [1, Rational(1, 4)]
+Rational(9,4).divmod(Rational(2, 1)) # =&gt; [1, Rational(1, 4)]
+Rational(9,4).divmod(2.0)            # =&gt; [1, 0.25]</pre></dd>
+<dt><a name="L005254" id="L005254"><code>abs</code></a></dt>
+<dd>
+<p>self が正なら self、負なら -1 * self を返します。</p></dd>
+<dt><a name="L005255" id="L005255"><code><var>self</var> &lt;=&gt; <var>other</var></code></a></dt>
+<dd>
+<p>other と比べて self が大きいなら 1、同じなら 0、小さいなら -1 を返します。</p></dd>
+<dt><a name="L005256" id="L005256"><code>to_i</code></a></dt>
+<dd>
+<p><a href="refm055.html">Fixnum</a> に変換します。</p></dd>
+<dt><a name="L005257" id="L005257"><code>to_f</code></a></dt>
+<dd>
+<p><a href="refm056.html">Float</a> に変換します。</p></dd>
+<dt><a name="L005258" id="L005258"><code>to_s</code></a></dt>
+<dd>
+<p>文字列に変換します。</p>
+<pre>Rational(-3,4).to_s # =&gt; &quot;-3/4&quot;</pre></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm263.html">UP</a>][<a href="refm263.html">&lt;-PREV</a>][<a href="refm265.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>WEBrick::HTTPServlet::ProcHandler</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm191.html" rel="next" />
+<link href="refm189.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm187.html">UP</a>][<a href="refm189.html">&lt;-PREV</a>][<a href="refm191.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L003732" id="L003732">WEBrick::HTTPServlet::ProcHandler</a></h1>
+<p><a href="refm057.html">Proc</a> を扱うためのサーブレット。</p>
+<p><a href="refm175.html#L003503">WEBrick::HTTPServer#mount</a> に引数として与えることは
+出来ない。<a href="refm175.html#L003504">WEBrick::HTTPServer#mount_proc</a>を使う。</p>
+<h2><a name="L003733" id="L003733">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L003734" id="L003734"><code>WEBrick::HTTPServlet::ProcHandler.new(<var>proc</var>)</code></a></dt>
+<dd>
+<p>proc には呼び出したい <a href="refm057.html">Proc</a> オブジェクトを与える。proc はクライアントからの
+リクエストがあった時、proc.call(request, response) のように呼び出される。
+<a href="refm177.html">WEBrick::HTTPResponse</a> オブジェクトと <a href="refm178.html">WEBrick::HTTPRequest</a> オブジェクト。</p></dd>
+</dl>
+<h2><a name="L003735" id="L003735">スーパークラス</a></h2>
+<p><a href="refm187.html">WEBrick::HTTPServlet::AbstractServlet</a></p>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm187.html">UP</a>][<a href="refm189.html">&lt;-PREV</a>][<a href="refm191.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

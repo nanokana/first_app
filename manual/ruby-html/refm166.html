@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>UNIXSocket</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm167.html" rel="next" />
+<link href="refm165.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm160.html">UP</a>][<a href="refm165.html">&lt;-PREV</a>][<a href="refm167.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L003116" id="L003116">UNIXSocket</a></h1>
+<p>UNIXドメインのストリーム型ソケットのクラス。通常の
+<a href="refm045.html">IO</a>クラスのサブクラスと同様の
+入出力ができます。</p>
+<h2><a name="L003117" id="L003117">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm160.html">BasicSocket</a></li>
+</ul>
+<h2><a name="L003118" id="L003118">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L003119" id="L003119"><code>UNIXSocket.open(<var>path</var>)</code></a>
+<dt><a name="L003120" id="L003120"><code>UNIXSocket.new(<var>path</var>)</code></a></dt>
+<dd>
+<p><var>path</var>で指定したパス名を用いて接続したソケットを返
+します。</p></dd>
+<dt><a name="L003121" id="L003121"><code>UNIXSocket.pair([<var>type</var>[, <var>protocol</var>]])  ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a>
+<dt><a name="L003122" id="L003122"><code>UNIXSocket.socketpair([<var>type</var>[, <var>protocol</var>]])  ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>相互に結合されたUNIXソケットのペアを含む2要素の配列を返します。
+<var>type</var> が省略された場合、Socket::SOCK_STREAM が使われます。
+<var>protocol</var> が省略された場合、0 が使われます。</p></dd>
+</dl>
+<h2><a name="L003123" id="L003123">メソッド:</a></h2>
+<dl>
+<dt><a name="L003124" id="L003124"><code>addr</code></a></dt>
+<dd>
+<p>ソケットの接続情報を表す配列を返します。配列の各要素は第1要
+素が文字列 &quot;AF_UNIX&quot;、第2要素がパスを表す文字列です。</p>
+<pre>UNIXServer.open(&quot;/tmp/s&quot;) {|serv|
+  p serv.addr     #=&gt; [&quot;AF_UNIX&quot;, &quot;/tmp/s&quot;]
+}</pre></dd>
+<dt><a name="L003125" id="L003125"><code>path</code></a></dt>
+<dd>
+<p>UNIXソケットのパスを返します。</p>
+<pre>UNIXServer.open(&quot;/tmp/s&quot;) {|serv|
+  p serv.path     #=&gt; &quot;/tmp/s&quot;
+}</pre></dd>
+<dt><a name="L003126" id="L003126"><code>peeraddr</code></a></dt>
+<dd>
+<p>接続相手先ソケットの情報を表す配列を返します。配列の各要素は
+<a href="#L003124">UNIXSocket#addr</a>メソッドが返す配列
+と同じです。</p>
+<pre>UNIXServer.open(&quot;/tmp/s&quot;) {|serv|
+  c = UNIXSocket.open(&quot;/tmp/s&quot;)
+  p c.peeraddr    #=&gt; [&quot;AF_UNIX&quot;, &quot;/tmp/s&quot;]
+}</pre></dd>
+<dt><a name="L003127" id="L003127"><code>recvfrom(<var>maxlen</var>[, <var>flags</var>])</code></a></dt>
+<dd>
+<p><code>recv</code>と同様にソケットからデータを受け取りますが、
+戻り値は文字列と相手ソケットのパスのペアです。引数につい
+てはrecvと同様です。</p>
+<pre>UNIXServer.open(&quot;/tmp/s&quot;) {|serv|
+  c = UNIXSocket.open(&quot;/tmp/s&quot;)
+  s = serv.accept
+  s.send &quot;a&quot;, 0
+  p c.recvfrom(10)[0]     #=&gt; &quot;a&quot;
+}</pre></dd>
+<dt><a name="L003128" id="L003128"><code>recv_io([<var>klass</var>[, <var>mode</var>]])  ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>ソケットの接続先からファイルディスクリプタを受け取ります。</p>
+<p><var>klass</var> が nil の場合、ファイルディスクリプタが Fixnum として
+返されます。</p>
+<p><var>klass</var> が nil でない場合、
+<code><var>klass</var>.for_fd(fd[, <var>mode</var>])</code> が呼ばれ、その値が返されます。
+<var>klass</var> が省略された場合は <code>IO</code> が指定されたものとみなされ、
+<code>IO.for_fd(fd[, <var>mode</var>])</code> が呼ばれます。</p>
+<pre>s1, s2 = UNIXSocket.pair         
+s1.send_io STDOUT
+io = s2.recv_io
+p File.identical?(io, STDOUT)     #=&gt; true</pre></dd>
+<dt><a name="L003129" id="L003129"><code>send_io(<var>io</var>)  ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>IO や Fixnum に対応するファイルディスクリプタをソケットの接続先に送ります。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm160.html">UP</a>][<a href="refm165.html">&lt;-PREV</a>][<a href="refm167.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

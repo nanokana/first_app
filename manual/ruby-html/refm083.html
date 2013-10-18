@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Process::Sys</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm084.html" rel="next" />
+<link href="refm082.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm034.html">UP</a>][<a href="refm082.html">&lt;-PREV</a>][<a href="refm084.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L002110" id="L002110">Process::Sys</a></h1>
+<p><a href="refm385.html">ruby 1.8 feature</a></p>
+<p><a href="refm084.html">Process::UID</a>, <a href="refm082.html">Process::GID</a> と異なり、
+ユーザ ID・グループ ID を操作するシステムコールを
+集めたモジュール。</p>
+<h2><a name="L002111" id="L002111">モジュール関数</a></h2>
+<dl>
+<dt><a name="L002112" id="L002112"><code>getuid</code></a></dt>
+<dd>
+<p>プロセスの実ユーザ ID を返します。
+C の getuid() と同じです。</p></dd>
+<dt><a name="L002113" id="L002113"><code>geteuid</code></a></dt>
+<dd>
+<p>プロセスの実効ユーザ ID を返します。
+C の geteuid() と同じです。</p></dd>
+<dt><a name="L002114" id="L002114"><code>getgid</code></a></dt>
+<dd>
+<p>プロセスの実グループ ID を返します。
+C の getguid() と同じです。</p></dd>
+<dt><a name="L002115" id="L002115"><code>getegid</code></a></dt>
+<dd>
+<p>プロセスの実効グループ ID を返します。
+C の getegid() と同じです。</p></dd>
+<dt><a name="L002116" id="L002116"><code>setuid(<var>id</var>)</code></a></dt>
+<dd>
+<p>C の setuid() と同じです。</p></dd>
+<dt><a name="L002117" id="L002117"><code>setgid(<var>id</var>)</code></a></dt>
+<dd>
+<p>C の setgid() と同じです。</p></dd>
+<dt><a name="L002118" id="L002118"><code>setruid(<var>id</var>)</code></a></dt>
+<dd>
+<p>C の setgid() と同じです。</p></dd>
+<dt><a name="L002119" id="L002119"><code>setrgid(<var>id</var>)</code></a></dt>
+<dd>
+<p>C の setgid() と同じです。</p></dd>
+<dt><a name="L002120" id="L002120"><code>seteuid(<var>id</var>)</code></a></dt>
+<dd>
+<p>C の seteuid() と同じです。</p></dd>
+<dt><a name="L002121" id="L002121"><code>setegid(<var>id</var>)</code></a></dt>
+<dd>
+<p>C の setegid() と同じです。</p></dd>
+<dt><a name="L002122" id="L002122"><code>setreuid(<var>rid</var>, <var>eid</var>)</code></a></dt>
+<dd>
+<p>C の setreuid() と同じです。</p></dd>
+<dt><a name="L002123" id="L002123"><code>setregid(<var>rid</var>, <var>eid</var>)</code></a></dt>
+<dd>
+<p>C の setregid() と同じです。</p></dd>
+<dt><a name="L002124" id="L002124"><code>setresuid(<var>rid</var>, <var>eid</var>, <var>sid</var>)</code></a></dt>
+<dd>
+<p>C の setresuid() と同じです。</p></dd>
+<dt><a name="L002125" id="L002125"><code>setresgid(<var>rid</var>, <var>eid</var>, <var>sid</var>)</code></a></dt>
+<dd>
+<p>C の setresgid() と同じです。</p></dd>
+<dt><a name="L002126" id="L002126"><code>issetugid</code></a></dt>
+<dd>
+<p>プロセスが setuid もしくは setgid ビットを使って
+起動されている場合に真を返します。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm034.html">UP</a>][<a href="refm082.html">&lt;-PREV</a>][<a href="refm084.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

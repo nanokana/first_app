@@ -1,0 +1,762 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>クラス／メソッドの定義</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm029.html" rel="next" />
+<link href="refm027.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm020.html">UP</a>][<a href="refm027.html">&lt;-PREV</a>][<a href="refm029.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L000410" id="L000410">クラス／メソッドの定義</a></h1>
+<ul>
+<li><a href="#L000411">クラス定義</a></li>
+<li><a href="#L000412">特異クラス定義</a></li>
+<li><a href="#L000413">モジュール定義</a></li>
+<li><a href="#L000414">メソッド定義</a>
+<ul>
+<li><a href="#L000415">演算子式の定義</a></li>
+<li><a href="#L000416">メソッド定義のネスト</a></li>
+<li><a href="#L000417">メソッドの評価</a></li>
+</ul></li>
+<li><a href="#L000418">特異メソッド定義</a></li>
+<li><a href="#L000419">クラスメソッドの定義</a></li>
+<li><a href="#L000420">呼び出し制限</a></li>
+<li><a href="#L000421">定義に関する操作</a>
+<ul>
+<li><a href="#L000422">alias</a></li>
+<li><a href="#L000423">undef</a></li>
+<li><a href="#L000424">defined?</a></li>
+</ul></li>
+</ul>
+<h2><a name="L000411" id="L000411">クラス定義</a></h2>
+<p>例:</p>
+<pre>class Foo &lt; Super
+  def test
+     :
+  end
+     :
+end</pre>
+<p>文法:</p>
+<pre>class 識別子 [`&lt;' superclass ]
+  式..
+end</pre>
+<p>文法:<a href="refm384.html">ruby 1.7 feature</a></p>
+<pre>class 識別子 [`&lt;' superclass ]
+  式..
+[rescue [error_type,..] [=&gt; evar] [then]
+  式..]..
+[else
+  式..]
+[ensure
+  式..]
+end</pre>
+<p>クラスを定義します。クラス名はアルファベットの大文字で始まる識別子です。
+<a href="refm384.html">ruby 1.7 feature</a>: version 1.7 では、rescue/ensure 節を指定で
+きます。</p>
+<p>クラス定義は、識別子で指定した定数へのクラスの代入になります
+(Ruby では、クラスもオブジェクトの一つで <a href="refm051.html">Class</a>クラスの
+インスタンスです)。</p>
+<p>クラスが既に定義されているとき、さらに同じクラス名でクラス定義を書くとク
+ラスの定義の追加になります。ただし、元のクラスと異なるスーパークラスを
+明示的に指定して定義すると、元のクラスとは異なる新たなクラスを同名で定
+義することになります(このとき、クラス名の定数を上書きすることになるの
+で警告メッセージが出ます)。</p>
+<pre>class Foo &lt; Array
+  def foo
+  end
+end
+
+# 定義を追加(スーパークラス Array を明示的に指定しても同じ)
+class Foo
+  def bar
+  end
+end
+
+# 別のクラスを定義(スーパークラスが異なるので)
+class Foo &lt; String
+end
+# =&gt; warning: already initialized constant Foo</pre>
+<p>クラス定義式の中は <code>self</code> がそのクラスであることと、
+<a href="#L000420">呼び出し制限</a>のデフォルトが異なること以外
+にトップレベルとの違いはありません。クラス定義式中には任意の式を書くこ
+とができクラス定義の際に実行されます。</p>
+<p>クラス定義はネスト(入れ子)にして定義できます。以下の例で入れ子の外側の
+クラス Foo と内側のクラス Bar の間には(定数 Bar が Foo の中の定数 
+Foo::Bar であること以外には)継承関係などの機能的な関連はまったくありま
+せん。</p>
+<pre>class Foo
+  class Bar
+  end
+end</pre>
+<p><a href="refm385.html">ruby 1.8 feature</a>: クラス Foo が既に定義されていれば、以下の書き
+方もできます。</p>
+<pre>class Foo
+end
+
+class Foo::Bar
+end</pre>
+<p>クラスのネストは、意味的に関連するクラスを外側のクラス／モジュールでひ
+とまとまりにしたり、包含関係を表すために使用されます。</p>
+<pre># 関連するクラスを Net というカテゴリにまとめる
+# このような場合は外側は普通モジュールが利用される
+# (Net のインスタンスがない。Net を include できるなどのため)
+module Net
+  class HTTP
+  end
+  class FTP
+  end
+end
+
+obj = Net::HTTP.new
+
+# あるいは
+
+include Net
+obj = HTTP.new
+
+# 以下のような使い方は組み込みのクラスにも見られる
+# 利用者は File::Constants を include することで、
+# File::RDONLY などと書かずに直接 RDONLY と書くことができる。
+class File
+  module Constants
+     RDONLY = 0
+     WRONLY = 1
+  end
+  include Constants
+end
+
+File.open(&quot;foo&quot;, File::RDONLY)
+
+# あるいは
+
+include File::Constants
+File.open(&quot;foo&quot;, RDONLY)
+
+# 上記はあくまでも例である。実際の File.open ではより簡便な 
+# File.open(&quot;foo&quot;, &quot;r&quot;) という形式が使われる</pre>
+<p>クラス定義式は値を返しません。
+<a href="refm384.html">ruby 1.7 feature</a>:
+クラス定義式は、最後に評価した式の結果を返します。最後に評価した式
+が値を返さない場合は nil を返します。</p>
+<h2><a name="L000412" id="L000412">特異クラス定義</a></h2>
+<p>例:</p>
+<pre>obj = Object.new # obj = nil でも可
+class &lt;&lt; obj
+  def test
+     :
+  end
+     :
+end</pre>
+<p>文法:</p>
+<pre>class `&lt;&lt;' expr
+  式..
+end</pre>
+<p>文法:<a href="refm384.html">ruby 1.7 feature</a></p>
+<pre>class `&lt;&lt;' expr
+  式..
+[rescue [error_type,..] [=&gt; evar] [then]
+  式..]..
+[else
+  式..]
+[ensure
+  式..]
+end</pre>
+<p>クラス定義と同じ構文で特定のオブジェクトにメソッドやインスタンス変数を
+定義/追加します。この構文の内部で定義したメソッドや定数は指定した
+オブジェクトに対してだけ有効になります。
+Object#clone で生成したオブジェクトには引き継がれますが，
+Object#dup で生成したオブジェクトには引き継がれません．
+<a href="refm384.html">ruby 1.7 feature</a>: version 1.7 では、rescue/ensure 節を指定で
+きます。</p>
+<p>特異クラス定義式は、最後に評価した式の結果を返します。最後に評価した式
+が値を返さない場合は nil を返します。</p>
+<h2><a name="L000413" id="L000413">モジュール定義</a></h2>
+<p>例:</p>
+<pre>module Foo
+  def test
+     :
+  end
+     :
+end</pre>
+<p>文法:</p>
+<pre>module 識別子
+  式..
+end</pre>
+<p>文法:<a href="refm384.html">ruby 1.7 feature</a></p>
+<pre>module 識別子
+  式..
+[rescue [error_type,..] [=&gt; evar] [then]
+  式..]..
+[else
+  式..]
+[ensure
+  式..]
+end</pre>
+<p>モジュールを定義します。モジュール名はアルファベットの大文字
+で始まる識別子です。
+<a href="refm384.html">ruby 1.7 feature</a>: version 1.7 では、rescue/ensure 節を指定で
+きます。</p>
+<p>モジュール定義は、識別子で指定した定数へのモジュールの代入になります
+(Ruby では、モジュールもオブジェクトの一つで <a href="refm050.html">Module</a> クラスのイン
+スタンスです)。</p>
+<p>モジュールが既に定義されいるとき、さらに同じモジュール名でモジュール定
+義を書くとモジュールの定義の追加になります。</p>
+<p>モジュール定義式は値を返しません。
+<a href="refm384.html">ruby 1.7 feature</a>:
+モジュール定義式は、最後に評価した式の結果を返します。最後に評価した式
+が値を返さない場合は nil を返します。</p>
+<h2><a name="L000414" id="L000414">メソッド定義</a></h2>
+<p>例:</p>
+<pre>def fact(n)
+  if n == 1 then
+     1
+  else
+    n * fact(n-1)
+  end
+end</pre>
+<p>文法:</p>
+<pre>def メソッド名 [`(' [arg0 ['=' default0]] ... [`,' `*' rest_args] [',' '&amp;' block_arg]`)']
+  式.. (body)
+[rescue [error_type,..] [=&gt; evar] [then]
+  式..]..
+[else
+  式..]
+[ensure
+  式..]
+end</pre>
+<p>この定義のある場所にメソッドを定義します。すなわち、クラス/モジュール
+定義中ならばそのクラス/モジュールのメソッドを定義します。トップレベル
+ならばどこからでも呼べるメソッドを定義します。このようなメソッドは結果
+として他の言語における「関数」のように使えます。</p>
+<p>例:</p>
+<pre>def hello    # 引数のないメソッド。
+  puts &quot;Hello, world!&quot;
+end
+
+def foo(a, b)    # 引数のあるメソッド。括弧を省いてdef foo a, bとも
+  a + 3 * b
+end</pre>
+<p>メソッド名としては通常の識別子の他に、再定義可能な演算子(例: ==, +, - 
+など <a href="refm025.html">演算子式</a> を参照)も指定できます(<a href="#L000415">演算子式の定義</a>参照)。</p>
+<p>例:</p>
+<pre>class Vector2D
+  attr_accessor :x, :y   # インスタンス変数@x, @yに対応するゲッタとセッタを定義
+  def initialize(x, y)   # コンストラクタ
+    @x = x; @y = y   # @がつくのがインスタンス変数（メンバ変数）
+  end
+  def ==(other_vec)   # いわゆる演算子オーバーライド
+    other_vec.x == @x &amp;&amp; other_vec.y == @y
+  end
+  def +(other_vec)
+    Vector2D.new(other_vec.x + @x, other_vec.y + @y)
+  end
+  ...
+end
+vec0 = Vector2D.new(10, 20); vec1 = Vector2D.new(20, 30)
+p vec0 + vec1 == Vector2D.new(30, 50) #=&gt; true</pre>
+<p>仮引数にデフォルト式が与えられた場合、メソッド呼び出しで実引数を省略し
+たときのデフォルト値になります。
+ただし実引数との対応を取るため、i番目の引数にデフォルト値を指定したならば、
+i+1番目以降でも全てデフォルト値を指定するか、可変長引数を利用しなければなりません（詳細は後述）。
+デフォルト式の評価は呼び出し時にメソッド定義内のコンテキストで行われます。</p>
+<p>例:</p>
+<pre>def foo(x, y = 1)    # 2番目の引数yにデフォルト値を指定
+  10 * x + y
+end
+p foo(1, 5)  #=&gt; 15
+p foo(3)     #=&gt; 31
+p foo        #=&gt; ArgumentError (wrong number of arguments)
+
+$gvar = 3
+def bar(x, y = $gvar)  # 確かに定義時には$gvar == 3だが
+  10 * x + y
+end
+$gvar = 7
+# 呼び出し時の$gvarの値が使われる
+p bar(5)   #=&gt; 57 (!= 53)</pre>
+<p>最後の仮引数の直前に <code>*</code> がある場合には残りの実引数はみな配列とし
+てこの引数に格納されます。
+可変長引数などと呼ばれる機能です。</p>
+<p>例:</p>
+<pre>def foo(x, *xs)
+  puts &quot;#{x} : #{xs.inspect}&quot;   # Object#inspect は p のような詳細な内部表示
+end
+foo(1)        #=&gt; 1 : []
+foo(1, 2)     #=&gt; 1 : [2]
+foo(1, 2, 3)  #=&gt; 1 : [2, 3]</pre>
+<p>最後の仮引数の直前に <code>&amp;</code> があるとこのメソッドに与えられているブロッ
+クが手続きオブジェクト(<a href="refm057.html">Proc</a>)としてこの引数に格納されます。これは、
+<em class="XXINVALIDXX">イテレータ</em>を定義する方法の一つです。(イテレータを
+定義する代表的な方法は <a href="refm027.html#L000408">yield</a> を呼び出すことです。
+他に <a href="refm057.html#L001372">Proc.new</a>/<a href="refm029.html#L000469">proc</a> を使う方法などもありま
+す。)
+ブロックが与えられなかった場合のブロック引数の値は<code>nil</code>です。</p>
+<p>例:</p>
+<pre>def foo(cnt, &amp;block_arg)
+  cnt.times { block_arg.call } # ブロックに収まったProcオブジェクトはcallで実行
+end
+foo(3) { print &quot;Ruby! &quot; } #=&gt; Ruby! Ruby! Ruby! </pre>
+<p>メソッド定義において、仮引数はその種類毎に以下の順序でしか指定すること
+はできません。いずれも省略することは可能です。</p>
+<ul>
+<li>デフォルト式のない引数(複数指定可)</li>
+<li>デフォルト式のある引数(複数指定可)</li>
+<li><code>*</code> を伴う引数(1つだけ指定可)</li>
+<li><code>&amp;</code> を伴う引数(1つだけ指定可)</li>
+</ul>
+<p>例:</p>
+<pre># すべて持つ
+def foo(arg0, arg1, arg2 = 10, *rest, &amp;block)
+  block.call if block
+  puts &quot;#{arg0}: #{arg1}: #{arg2}?: #{rest.inspect}&quot;
+end
+foo(1, 2, 3, 4, 5) { print &quot;Args are &quot; }  #=&gt; Args are 1: 2: 3?: [4, 5]</pre>
+<p>例: イテレータの定義</p>
+<pre># yield を使う
+def foo
+# block_given? は、メソッドがブロックを渡されて
+# 呼ばれたかどうかを判定する組み込み関数
+  if block_given?
+    yield(1,2)
+  end
+end
+
+# Proc.new を使う
+def bar
+  if block_given?
+    Proc.new.call(1,2)    # proc.call(1,2) でも同じ(proc は組み込み関数)
+  end
+end
+
+# 応用: 引数として Proc オブジェクトとブロックの
+# 両方を受け付けるイテレータを定義する例
+def foo(block = Proc.new)
+  block.call(1,2)
+end
+foo(proc {|a,b| p [a,b]})
+foo {|a,b| p [a,b]}
+
+# ブロック引数を使う
+def baz(&amp;block)
+  if block
+    block.call(1,2)
+  end
+end</pre>
+<p>またメソッド実行時の例外を捕捉するために <a href="refm026.html#L000398">begin</a> 式と同様
+の<code>rescue</code>, <code>else</code>, <code>ensure</code> 節を指定できます。</p>
+<p>メソッド定義式は値を返しません。
+<a href="refm384.html">ruby 1.7 feature</a>:
+メソッド定義式は、nil を返します。</p>
+<h3><a name="L000415" id="L000415">演算子式の定義</a></h3>
+<p><a href="refm025.html">演算子式</a>において、「再定義可能な演算子」に分類された演算子の実装
+はメソッドなので、定義することが可能です。</p>
+<p>これらの演算子式を定義する例を以下に挙げます。</p>
+<pre># 二項演算子
+def +(other)                # obj + other
+def -(other)                # obj - other
+
+# 単項プラス/マイナス
+def +@                      # +obj
+def -@                      # -obj
+
+# 要素代入
+def foo=(value)             # obj.foo = value
+
+# [] と []=
+def [](key)                 # obj[key]
+def []=(key, value)         # obj[key] = value
+def []=(key, key2, value)   # obj[key, key2] = value
+
+# バッククォート記法
+def `(arg)                  # `arg` または %x(arg)</pre>
+<p>バッククォート記法の実装はメソッドなのでこのように再定義が可能です。普
+通はこのメソッドを再定義するべきではありませんが、まれにOS(シェル)のコ
+マンド実行の挙動に不具合がある場合などに利用できます<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a>。</p>
+<h3><a name="L000416" id="L000416">メソッド定義のネスト</a></h3>
+<p><a href="#L000418">特異メソッド定義</a>を除くメソッド定義式は
+ネストできません。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>: 1.7 以降ネスト可能になりました。ネストされた定
+義式はそれを定義したメソッドが実行された時に定義されます。このことを除
+けば、普通のメソッド定義式と同じです。以下の例を参照してください。
+<a name="footmark:2" id="footmark:2" href="#foottext:2"><sup><small>*2</small></sup></a></p>
+<pre>class Foo
+  def foo
+    def bar
+      p :bar
+    end
+  end
+
+  def Foo.method_added(name)
+    puts &quot;method \&quot;#{name}\&quot; was added&quot;
+  end
+end
+obj = Foo.new
+obj.bar rescue nil # =&gt; undefined method `bar' for #&lt;Foo:0x4019eda4&gt;
+obj.foo            # =&gt; method &quot;bar&quot; was added
+obj.foo            # =&gt; warning: method redefined; discarding old bar
+Foo.new.bar        # =&gt; :bar  (他のインスタンスでも定義済み)</pre>
+<p>version 1.6 以前は、同じことを行うのに <a href="refm035.html#L000665">instance_eval</a> を使
+う必要がありました(この場合特異メソッドが定義されるので少し異なります)。</p>
+<pre>class Foo
+  def foo
+    instance_eval &lt;&lt;-END
+      def bar
+        p :bar
+      end
+    END
+  end
+end
+
+obj = Foo.new
+def obj.singleton_method_added(name)
+    puts &quot;singleton method \&quot;#{name}\&quot; was added&quot;
+end                # =&gt; singleton method &quot;singleton_method_added&quot; was added
+
+obj.bar rescue nil # =&gt; undefined method `bar' for #&lt;Foo:0x4019eda4&gt;
+obj.foo            # =&gt; singleton method &quot;bar&quot; was added
+
+obj.foo            # =&gt; warning: method redefined; discarding old bar
+                   # =&gt; singleton method &quot;bar&quot; was added
+Foo.new.bar        # =&gt; undefined method `bar' for #&lt;Foo:0x4019eda4&gt;</pre>
+<p>または、以下のように書くこともできます。<a name="footmark:3" id="footmark:3" href="#foottext:3"><sup><small>*3</small></sup></a></p>
+<pre>class Foo
+   def foo
+     instance_eval {
+       def bar
+         p :bar
+       end
+     }
+   end
+ end</pre>
+<h3><a name="L000417" id="L000417">メソッドの評価</a></h3>
+<p>メソッドが呼び出されると、以下の順で式が評価されます。</p>
+<ul>
+<li>指定されていれば引数のデフォルト式</li>
+<li>メソッドの本体 body</li>
+<li>指定されていれば例外の発生の有無によりメソッド定義式の <code>rescue</code> 
+  節または <code>else</code> 節</li>
+<li>指定されていれば <code>ensure</code> 節</li>
+</ul>
+<p>引数のデフォルト式も含め、すべてそのメソッドのコンテキストで評価されま
+す。</p>
+<p>メソッドの戻り値は <a href="refm026.html#L000401">return</a> に渡した値です。<code>return</code> 
+が呼び出されなかった場合は、body の最後の式の値を返します。</p>
+<p>body の最後の式が(<a href="refm026.html#L000387">while</a>など)値を返さない式の場合は 
+<code>nil</code> を返します。</p>
+<p>またメソッドは定義する前に呼び出すことはできません。例えば</p>
+<pre>foo          # &lt;- foo は未定義
+def foo
+  print &quot;foo\n&quot;
+end</pre>
+<p>は未定義メソッドの呼び出しで例外 <a href="refm100.html">NameError</a> を発生させます。</p>
+<h2><a name="L000418" id="L000418">特異メソッド定義</a></h2>
+<p>例:</p>
+<pre>def foo.test
+  print &quot;this is foo\n&quot;
+end</pre>
+<p>文法:</p>
+<pre>def 式 `.' 識別子 [`(' [引数 [`=' default]] ... [`,' `*' 引数 ]`)']
+  式..
+[rescue [error_type,..] [=&gt; evar] [then]
+  式..]..
+[else
+  式..]
+[ensure
+  式..]
+end</pre>
+<p>特異メソッドとはクラスではなくある特定のオブジェクトに固有の
+メソッドです。特異メソッドの定義はネストできます。</p>
+<p>クラスの特異メソッドはそのサブクラスにも継承されます。言い替
+えればクラスの特異メソッドは他のオブジェクト指向システムにお
+けるクラスメソッドの働きをすることになります。</p>
+<p>特異メソッド定義式は値を返しません。
+<a href="refm384.html">ruby 1.7 feature</a>:
+特異メソッド定義式は、nil を返します。</p>
+<h2><a name="L000419" id="L000419">クラスメソッドの定義</a></h2>
+<p>Ruby におけるクラスメソッドとはクラスの特異メソッドのことです。Ruby で
+は、クラスもオブジェクトなので、普通のオブジェクトと同様に特異メソッド
+を定義できます。</p>
+<p>したがって、何らかの方法でクラスオブジェクトにメソッドを定義すれば、そ
+れがクラスメソッドとなります。具体的には以下のようにして定義することが
+出来ます(モジュールも同様です)。</p>
+<pre># 特異メソッド方式。
+class Hoge
+  def Hoge.foo
+  end
+end
+
+# クラス定義の外でも良い
+def Hoge.bar
+end
+
+# 以下のようにすればクラス名が変わってもメソッド部の変更が不要
+class Hoge
+  def self.baz
+    'To infinity and beyond!'
+  end
+end
+
+# 特異クラス方式。複数のメソッドを一度に定義するとき向き
+class &lt;&lt; Hoge
+  def bar
+    'bar'
+  end
+end
+
+# モジュールをクラスに extend すれば、モジュールのインスタンス
+# メソッドがクラスメソッドになる
+module Foo
+  def foo
+  end
+end
+class Hoge
+  extend Foo
+end</pre>
+<p><code>extend</code> については、<a href="refm035.html#L000657">Object#extend</a> を参照して
+ください。</p>
+<h2><a name="L000420" id="L000420">呼び出し制限</a></h2>
+<p>メソッドは <code>public</code>、<code>private</code>、<code>protected</code> の三通りの
+呼び出し制限を持ちます。</p>
+<ul>
+<li><code>public</code> に設定されたメソッドは制限なしに呼び出せます。</li>
+<li><code>private</code> に設定されたメソッドは関数形式でしか呼び出せません。</li>
+<li><code>protected</code> に設定されたメソッドは、そのメソッドを持つオブジェクト
+  のメソッド定義式内でなければ呼び出せません。</li>
+</ul>
+<p>例: protected の可視性</p>
+<pre>class Foo
+  def foo
+   p caller.last
+  end
+  protected :foo
+end
+
+obj = Foo.new
+
+# そのままでは呼べない
+obj.foo rescue nil    # =&gt; -:11 - private method `foo' called for #&lt;Foo:0x401a1860&gt; (NameError)
+
+# クラス定義内でも呼べない
+class Foo
+  Foo.new.foo rescue nil # =&gt; -:15 - protected method `foo' called for #&lt;Foo:0x4019eea8&gt;
+  # メソッド定義式内で呼べる
+  def bar
+    self.foo
+  end
+end
+Foo.new.bar             # =&gt; [&quot;-:21&quot;]
+
+# 特異メソッド定義式内でも呼べる
+def obj.bar
+  self.foo rescue nil
+end
+obj.bar                 # =&gt; [&quot;-:27&quot;]</pre>
+<p>デフォルトでは <code>def</code> 式がクラス定義の外(トップレベル)にあれば 
+<code>private</code>、クラス定義の中にあれば <code>public</code> に定義します。これは
+<a href="refm050.html#L001236">Module#public</a>、<a href="refm050.html#L001234">Module#private</a>、
+<a href="refm050.html#L001235">Module#protected</a> を用いて変更できます。ただし 
+<a href="refm035.html#L000700">initialize</a> という名前のメソッドと 
+<a href="refm035.html#L000701">initialize_copy</a>(<a href="refm385.html">ruby 1.8 feature</a>)という名前のメソッ
+ドは定義する場所に関係なく常に <code>private</code> になります。</p>
+<p>例:</p>
+<pre>def foo           # デフォルトは private
+end
+
+class C
+  def bar         # デフォルトは public
+  end
+
+  def ok          # デフォルトは public
+  end
+  private :ok     # …だが、ここで private に変わる
+
+  def initialize  # initialize は private
+  end
+end</pre>
+<p><code>private</code> と <code>protected</code> は同じ目的(そのメソッドを隠し外から呼
+べないようにする)で使用されますが、以下のような例では、<code>private</code> 
+は使えず、<code>protected</code> を利用する必要があります。
+<a name="footmark:4" id="footmark:4" href="#foottext:4"><sup><small>*4</small></sup></a></p>
+<pre>class Foo
+  def _val
+    @val
+  end
+  protected :_val
+
+  def op(other)
+
+    # other も Foo のインスタンスを想定
+    # _val が private だと関数形式でしか呼べないため
+    # このように利用できない
+
+    self._val + other._val
+  end
+end</pre>
+<h2><a name="L000421" id="L000421">定義に関する操作</a></h2>
+<h3><a name="L000422" id="L000422">alias</a></h3>
+<p>例:</p>
+<pre>alias foo bar
+alias :foo :bar
+alias $MATCH $&amp;</pre>
+<p>文法:</p>
+<pre>alias 新メソッド名 旧メソッド名
+alias 新グローバル変数名 旧グローバル変数名</pre>
+<p>メソッドあるいはグローバル変数に別名をつけます。メソッド名に
+は識別子そのものか <a href="refm063.html">Symbol</a> を指定します(obj.method のよ
+うな式を書くことはできません)。<code>alias</code> の引数はメソッド
+呼び出し等の一切の評価は行われません。</p>
+<p>メソッドの定義内で別名を付けるには<a href="refm050.html">Module</a>クラスのメソッド
+<a href="refm050.html#L001216">Module#alias_method</a>
+を利用して下さい。</p>
+<p>別名を付けられたメソッドは、その時点でのメソッド定義を引き継
+ぎ、元のメソッドが再定義されても、再定義前の古いメソッドと同
+じ働きをします。あるメソッドの動作を変え、再定義するメソッド
+で元のメソッドの結果を利用したいときなどに利用されます。</p>
+<pre># メソッド foo を定義
+def foo
+  &quot;foo&quot;
+end
+
+# 別名を設定(メソッド定義の待避)
+alias :_orig_foo :foo
+
+# foo を再定義(元の定義を利用)
+def foo
+  _orig_foo * 2
+end
+
+p foo  # =&gt; &quot;foofoo&quot;</pre>
+<p>グローバル変数の alias を設定するとまったく同じ変数が定義されます。こ
+のことは一方の変数への代入は他方の変数にも反映されるようになることを意
+味します。
+添付ライブラリの <a href="refm372.html">importenv</a> はこのことを利用して<a href="refm030.html">組み込み変数</a> 
+に英語名をつけます。
+<a href="refm384.html">ruby 1.7 feature</a>: version 1.6 では、グローバル変数の別名づけは、
+特定の組み込み変数だけが対象でした。version 1.7 ではこの制限は取り除か
+れています。</p>
+<pre># 特殊な変数のエイリアスは一方の変更が他方に反映される
+$_ = 1
+alias $foo $_
+$_ = 2
+p [$foo, $_]   # =&gt; [2, 2]
+
+# こちらは通常の変数のエイリアスで本当の意味での
+# エイリアスにはならない。これは、version 1.6 ま
+# での制限
+$bar = 3
+alias $foo $bar
+$bar = 4
+p [$foo, $bar] # =&gt; [3, 4]</pre>
+<p>ただし、正規表現の部分文字列に対応する変数 
+<code>$1</code>,<code>$2</code>, ... には別名を付けることができません。ま
+た、インタプリタに対して重要な意味のあるグローバル変数
+(<a href="refm030.html">組み込み変数</a>を参照)を再定義すると動作に支障を来す場合が
+あります。</p>
+<p><code>alias</code> 式は nil を返します。</p>
+<h3><a name="L000423" id="L000423">undef</a></h3>
+<p>例:</p>
+<pre>undef bar</pre>
+<p>文法:</p>
+<pre>undef メソッド名[, メソッド名[, ...]]</pre>
+<p>メソッドの定義を取り消します。メソッド名には識別子そのもの
+か <a href="refm063.html">Symbol</a> を指定します(obj.method のような式を書くことはできません)。
+<code>undef</code> の引数はメソッド呼び出し等の一切の評価は行われません。</p>
+<p>メソッドの定義内で定義を取り消すには<a href="refm050.html">Module</a>クラスのメソッ
+ド <a href="refm050.html#L001241">Module#undef_method</a> を利用して下
+さい。</p>
+<p><code>undef</code> のより正確な動作は、メソッド名とメソッド定義との
+関係を取り除き、そのメソッド名を特殊な定義と関連づけます。この状態の
+メソッドの呼び出しは例えスーパークラスに同名のメソッドがあっても例外 
+<a href="refm100.html">NameError</a> を発生させます。
+(一方、メソッド 
+<a href="refm050.html#L001239">Module#remove_method</a> は、関係を取
+り除くだけです。この違いは重要です)。</p>
+<p><code>alias</code>による別名定義と
+<code>undef</code>による定義取り消しによってクラスのインタフェー
+スをスーパークラスと独立に変更することができます。ただし、メ
+ソッドがselfにメッセージを送っている場合もあるので、よく注意
+しないと既存のメソッドが動作しなくなる可能性があります。</p>
+<p><code>undef</code> 式は nil を返します。</p>
+<h3><a name="L000424" id="L000424">defined?</a></h3>
+<p>例:</p>
+<pre>defined? print
+defined? File.print
+defined?(foobar)
+defined?($foobar)
+defined?(@foobar)
+defined?(Foobar)</pre>
+<p>文法:</p>
+<pre>defined? 式</pre>
+<p>式が定義されていなければ、偽を返します。定義されていれば式の種別
+を表す文字列を返します。</p>
+<p>定義されていないメソッド、undef されたメソッド、
+<a href="refm050.html#L001239">Module#remove_method</a> により削除さ
+れたメソッドのいずれに対しても <code>defined?</code> は偽を返します。</p>
+<p>特別な用法として以下があります。</p>
+<pre>defined? yield</pre>
+<p>yield の呼び出しが可能なら真(文字列 &quot;yield&quot;)を返します。
+<a href="refm029.html#L000460">block_given?</a> と同様にメソッドがブロック付きで呼ばれたか
+を判断する方法になります。</p>
+<pre>defined? super</pre>
+<p><a href="refm027.html#L000406">super</a> の実行が可能なら真(文字列 &quot;super&quot;)を返します。</p>
+<pre>defined? a = 1
+p a # =&gt; nil</pre>
+<p>&quot;assignment&quot; を返します。実際に代入は行いませんがローカル変数は定義されます。</p>
+<pre>/(.)/ =~ &quot;foo&quot;
+p defined? $&amp;  # =&gt; &quot;$&amp;&quot;
+p defined? $1  # =&gt; &quot;$1&quot;
+p defined? $2  # =&gt; nil</pre>
+<p>$&amp;, $1, $2, などは直前のマッチの結果値が設定された場合だけ真を返します。</p>
+<pre>def Foo(a,b)
+end
+p defined? Foo       # =&gt; nil
+p defined? Foo()     # =&gt; &quot;method&quot;
+Foo = 1
+p defined? Foo       # =&gt; &quot;constant&quot;</pre>
+<p>大文字で始まるメソッド名に対しては <code>()</code> を明示しなければ定数の判定
+を行ってしまいます。</p>
+<p>以下は、defined? が返す値の一覧です。</p>
+<ul>
+<li>&quot;super&quot;</li>
+<li>&quot;method&quot;</li>
+<li>&quot;yield&quot;</li>
+<li>&quot;self&quot;</li>
+<li>&quot;nil&quot;</li>
+<li>&quot;true&quot;</li>
+<li>&quot;false&quot;</li>
+<li>&quot;assignment&quot;</li>
+<li>&quot;local-variable&quot;</li>
+<li>&quot;local-variable(in-block)&quot;</li>
+<li>&quot;global-variable&quot;</li>
+<li>&quot;instance-variable&quot;</li>
+<li>&quot;constant&quot;</li>
+<li>&quot;class variable&quot;</li>
+<li>&quot;$&amp;&quot;, &quot;$`&quot;, &quot;$1&quot;, &quot;$2&quot;, ...</li>
+<li>&quot;expression&quot;</li>
+</ul>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small> 実際の応用例が
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/10006">ruby-talk:10006</a><sup class="outside"><small>[外部]</small></sup>,<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/12829">ruby-dev:12829</a><sup class="outside"><small>[外部]</small></sup>にあります</small><br />
+<a name="foottext:2" id="foottext:2" href="#footmark:2"><sup><small>*2</small></sup></a><small>version 1.8.0 には、ネストして定義したメソッドが Object のインスタンス
+メソッドになるというバグがありました</small><br />
+<a name="foottext:3" id="foottext:3" href="#footmark:3"><sup><small>*3</small></sup></a><small>1.6 以前は、def 式内の def 式が
+parser で許されなかったのでこのように書くことはできませんでした</small><br />
+<a name="foottext:4" id="foottext:4" href="#footmark:4"><sup><small>*4</small></sup></a><small>正確には、<code>private</code> には<em>関数</em>を定義する目的があるが、呼び
+出し制限の目的でも(ここに挙げた制限があるにもかかわらず)
+<code>protected</code> よりは <code>private</code> が使われることの方が多いようだ</small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm020.html">UP</a>][<a href="refm027.html">&lt;-PREV</a>][<a href="refm029.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

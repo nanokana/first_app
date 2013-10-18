@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Monitor</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm310.html" rel="next" />
+<link href="refm308.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm307.html">UP</a>][<a href="refm308.html">&lt;-PREV</a>][<a href="refm310.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006081" id="L006081">Monitor</a></h1>
+<p>スレッドの同期機構としてのモニター機能を提供するクラスです。
+また同じスレッドから何度も lock できる Mutex としての機能も提供します。</p>
+<h2><a name="L006082" id="L006082">例</a></h2>
+<pre>require 'monitor'
+
+buf = []
+mon = Monitor.new
+empty_cond = mon.new_cond
+
+# consumer
+Thread.start do
+  loop do
+    buf.synchronize do
+      empty_cond.wait_while { buf.empty? }
+      print buf.shift
+    end
+  end
+end
+
+# producer
+while line = ARGF.gets
+  buf.synchronize do
+    buf.push(line)
+    empty_cond.signal
+  end
+end</pre>
+<p>2回ロックしてもデッドロックにならない例です。</p>
+<pre>require 'monitor'
+mon = Monitor.new
+mon.synchronize {
+  mon.synchronize{
+
+  }
+}</pre>
+<p><a href="refm301.html">Mutex</a> ではデッドロックになります。</p>
+<pre>require 'thread'
+mx = Mutex.new
+mx.synchronize {
+  mx.synchronize{
+
+  }
+}
+# =&gt; deadlock; recursive locking (ThreadError)</pre>
+<h2><a name="L006083" id="L006083">インクルードしているモジュール</a></h2>
+<p><a href="refm308.html">MonitorMixin</a></p>
+<h2><a name="L006084" id="L006084">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L006085" id="L006085"><code>Monitor.new</code></a></dt>
+<dd>
+<p>Monitor オブジェクトを生成します。</p></dd>
+</dl>
+<h2><a name="L006086" id="L006086">メソッド</a></h2>
+<dl>
+<dt><a name="L006087" id="L006087"><code>mon_enter</code></a>
+<dt><a name="L006088" id="L006088"><code>enter</code></a></dt>
+<dd>
+<p>モニターをロックします。<a href="refm308.html#L006074">MonitorMixin#mon_enter</a> を
+参照して下さい。</p></dd>
+<dt><a name="L006089" id="L006089"><code>mon_exit</code></a>
+<dt><a name="L006090" id="L006090"><code>exit</code></a></dt>
+<dd>
+<p>モニターを解放します。<a href="refm308.html#L006075">MonitorMixin#mon_exit</a> を
+参照して下さい。</p></dd>
+<dt><a name="L006091" id="L006091"><code>mon_synchronize { ... }</code></a>
+<dt><a name="L006092" id="L006092"><code>synchronize     { ... }</code></a></dt>
+<dd>
+<p><a href="refm308.html#L006076">MonitorMixin#mon_synchronize</a> を参照して下さい。</p></dd>
+<dt><a name="L006093" id="L006093"><code>mon_try_enter</code></a>
+<dt><a name="L006094" id="L006094"><code>try_enter</code></a></dt>
+<dd>
+<p><a href="refm308.html#L006078">MonitorMixin#mon_try_enter</a> を参照して下さい。</p></dd>
+<dt><a name="L006095" id="L006095"><code>new_cond</code></a></dt>
+<dd>
+<p><a href="refm308.html#L006079">MonitorMixin#new_cond</a> を参照して下さい。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm307.html">UP</a>][<a href="refm308.html">&lt;-PREV</a>][<a href="refm310.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

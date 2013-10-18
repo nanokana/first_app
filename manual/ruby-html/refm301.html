@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Mutex</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm302.html" rel="next" />
+<link href="refm300.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm299.html">UP</a>][<a href="refm300.html">&lt;-PREV</a>][<a href="refm302.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006007" id="L006007">Mutex</a></h1>
+<p>Mutex(Mutal Exclusion = 相互排他ロック)は共有データを並行アクセスから保護する
+ためにあります。Mutex の典型的な使い方は(<var>m</var>を
+<code>Mutex</code>オブジェクトとします):</p>
+<pre>m.lock
+begin
+  # mによって保護されたクリティカルセクション
+ensure
+  m.unlock
+end</pre>
+<p>または、より簡単に</p>
+<pre>m.synchronize {
+  # mによって保護されたクリティカルセクション
+}</pre>
+<h2><a name="L006008" id="L006008">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm035.html">Object</a></li>
+</ul>
+<h2><a name="L006009" id="L006009">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L006010" id="L006010"><code>Mutex.new</code></a></dt>
+<dd>
+<p>新しい mutex を生成して返します。</p></dd>
+</dl>
+<h2><a name="L006011" id="L006011">メソッド:</a></h2>
+<dl>
+<dt><a name="L006012" id="L006012"><code>exclusive_unlock { ... }</code></a></dt>
+<dd>
+<p>ロックを解放し、ロック待ちになっているスレッドを実行可能状態に
+した後、ブロックを実行します。</p>
+<p>ブロックの実行が終了するまで、スレッドは切り替わりません。</p>
+<p><code>self</code> がロックされていなければ <code>nil</code> を返します。そうでな
+ければ<code>self</code> を返します。</p></dd>
+<dt><a name="L006013" id="L006013"><code>lock</code></a></dt>
+<dd>
+<p>mutex オブジェクトをロックします。一度に一つのス
+レッドだけが mutex をロックできます。既にロックされている mutex 
+に対してロックを行おうとしたスレッドは mutex のロックが解放さ
+れるまで、実行が停止されます。</p>
+<p><code>self</code> を返します。</p></dd>
+<dt><a name="L006014" id="L006014"><code>locked?</code></a></dt>
+<dd>
+<p>mutex がロックされている時、真を返します。</p></dd>
+<dt><a name="L006015" id="L006015"><code>synchronize { ... }</code></a></dt>
+<dd>
+<p>mutex をロックし、ブロックを実行します。実行後に必ず mutex のロッ
+クを解放します。</p></dd>
+<dt><a name="L006016" id="L006016"><code>try_lock</code></a></dt>
+<dd>
+<p>mutex をロックしようとして、ロックが成功した場合、真を返しま
+す。ロックできなかった場合にはブロックせず偽を返します。</p></dd>
+<dt><a name="L006017" id="L006017"><code>unlock</code></a></dt>
+<dd>
+<p>mutex のロックを解放します。mutex のロック待ちになっていたスレッ
+ドの実行は再開されます。</p>
+<p><code>self</code> がロックされていなければ <code>nil</code> を返します。そうでな
+ければ<code>self</code> を返します。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm299.html">UP</a>][<a href="refm300.html">&lt;-PREV</a>][<a href="refm302.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

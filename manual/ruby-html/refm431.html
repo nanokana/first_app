@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>trap::暗黙の$_</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm432.html" rel="next" />
+<link href="refm430.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm421.html">UP</a>][<a href="refm430.html">&lt;-PREV</a>][<a href="refm432.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L009465" id="L009465">暗黙の $_</a></h1>
+<p>以下は、少なくとも Ruby 1.8.4 (2005-12-24) では当てはまりません。
+どこかで変更されたのでしょう。(どの段階で?)</p>
+<p>以下の式の結果は、/foobar/ ではなく nil になります。<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a>
+<a name="footmark:2" id="footmark:2" href="#foottext:2"><sup><small>*2</small></sup></a>
+<a name="footmark:3" id="footmark:3" href="#foottext:3"><sup><small>*3</small></sup></a>
+<a name="footmark:4" id="footmark:4" href="#foottext:4"><sup><small>*4</small></sup></a></p>
+<pre>nil || /foobar/    #=&gt; nil (少なくとも Ruby 1.8.4 では /foobar/)</pre>
+<p>これは、「条件式に単体の正規表現リテラルだけを書くと$_との正規表現マッ
+チを行う」というルールがあるためです。つまり、上記の式は</p>
+<pre>nil || /foobar/ =~ $_</pre>
+<p>のように解釈されています。</p>
+<p>これを避けるには現状</p>
+<pre>nil || Regexp.new(&quot;foobar&quot;)</pre>
+<p>のように単体の正規表現リテラルを書かないようにするしか方法がありません。</p>
+<p>論理演算子式の項に現れた正規表現リテラルの特殊解釈はなくす方向で検討さ
+れています<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/30836">ruby-list:30836</a><sup class="outside"><small>[外部]</small></sup> (→ 少なくとも Ruby 1.8.4 ではそうなっているようです)</p>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>$_ に foobar が含まれていた場合は?</small><br />
+<a name="foottext:2" id="foottext:2" href="#footmark:2"><sup><small>*2</small></sup></a><small>あらい 2001-10-07: 下でどう解釈されているか説明されてるから
+わかりますよね？ダメ？あんまりくどいのも嫌でしょう？</small><br />
+<a name="foottext:3" id="foottext:3" href="#footmark:3"><sup><small>*3</small></sup></a><small>実際の挙動はその解釈とは異なる</small><br />
+<a name="foottext:4" id="foottext:4" href="#footmark:4"><sup><small>*4</small></sup></a><small>あらい 2001-10-07: ？ごめんもっとわかりやすく</small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm421.html">UP</a>][<a href="refm430.html">&lt;-PREV</a>][<a href="refm432.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

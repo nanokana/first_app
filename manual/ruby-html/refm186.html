@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>WEBrick::Log</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm187.html" rel="next" />
+<link href="refm185.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm173.html">UP</a>][<a href="refm185.html">&lt;-PREV</a>][<a href="refm187.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L003680" id="L003680">WEBrick::Log</a></h1>
+<p><a href="refm173.html">webrick</a></p>
+<h2><a name="L003681" id="L003681">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L003682" id="L003682"><code>Log.new(<var>log_file</var>=<var>nil</var>, <var>level</var>=<var>nil</var>)</code></a></dt>
+<dd>
+<p>Log オブジェクトを生成する。log_file はメソッド &lt;&lt; が定義されたオブジェクト。
+普通は <a href="refm061.html">String</a> オブジェクトか <a href="refm045.html">IO</a> オブジェクト。</p>
+<p>level には Log オブジェクトのログレベルを定数で指定する。
+このログレベルと同じか より重要なレベルの data を Log オブジェクトは記録する。</p>
+<p>デフォルトではログレベル INFO が設定される。
+ログレベルは FATAL, ERROR, WARN, INFO, DEBUG の5段階。定数として
+以下のように定義されている。小さい方が重要度が大きい。</p>
+<pre>FATAL, ERROR, WARN, INFO, DEBUG = 1, 2, 3, 4, 5</pre></dd>
+</dl>
+<h2><a name="L003683" id="L003683">メソッド</a></h2>
+<dl>
+<dt><a name="L003684" id="L003684"><code>&lt;&lt;(<var>data</var>)</code></a></dt>
+<dd>
+<p>data をログレベル INFO でログに記録する。</p></dd>
+<dt><a name="L003685" id="L003685"><code>close</code></a></dt>
+<dd>
+<p>Log オブジェクトを閉じる。</p></dd>
+<dt><a name="L003686" id="L003686"><code>fatal(<var>data</var>)</code></a>
+<dt><a name="L003687" id="L003687"><code>error(<var>data</var>)</code></a>
+<dt><a name="L003688" id="L003688"><code>warn(<var>data</var>)</code></a>
+<dt><a name="L003689" id="L003689"><code>info(<var>data</var>)</code></a>
+<dt><a name="L003690" id="L003690"><code>debug(<var>data</var>)</code></a></dt>
+<dd>
+<p>該当するログレベルで log(level, data）を呼ぶ。</p></dd>
+<dt><a name="L003691" id="L003691"><code>fatal?</code></a>
+<dt><a name="L003692" id="L003692"><code>error?</code></a>
+<dt><a name="L003693" id="L003693"><code>warn?</code></a>
+<dt><a name="L003694" id="L003694"><code>info?</code></a>
+<dt><a name="L003695" id="L003695"><code>debug?</code></a></dt>
+<dd>
+<p>Log オブジェクトが log(level,data) を呼んだ時に
+該当するログレベルの data を記録するなら true を返す。</p></dd>
+<dt><a name="L003696" id="L003696"><code>level</code></a></dt>
+<dd>
+<p>ログレベルを返す。</p></dd>
+<dt><a name="L003697" id="L003697"><code>level=</code></a></dt>
+<dd>
+<p>ログレベルを指定する。</p></dd>
+<dt><a name="L003698" id="L003698"><code>log(<var>level</var>, <var>data</var>)</code></a></dt>
+<dd>
+<p>data をログに記録する。level は data のログレベル。
+data のログレベルが Log オブジェクトのログレベルと同じか、より重要な時
+data はログに記録される。</p></dd>
+<dt><a name="L003699" id="L003699"><code>time_format</code></a>
+<dt><a name="L003700" id="L003700"><code>time_format=</code></a></dt>
+<dd>
+<p>時間を記録するフォーマットを文字列で指定する。
+<a href="refm066.html#L001687">Time#strftime</a> を参照。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm173.html">UP</a>][<a href="refm185.html">&lt;-PREV</a>][<a href="refm187.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

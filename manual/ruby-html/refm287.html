@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>curses</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm288.html" rel="next" />
+<link href="refm286.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm286.html">&lt;-PREV</a>][<a href="refm288.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L005670" id="L005670">curses</a></h1>
+<p>端末操作ライブラリ curses の Ruby インターフェイスです。</p>
+<ul>
+<li><a href="#L005671">Curses モジュール</a></li>
+<li><a href="#L005705">Curses::Window クラス</a></li>
+</ul>
+<h2><a name="L005671" id="L005671">Curses モジュール</a></h2>
+<h3><a name="L005672" id="L005672">モジュール関数</a></h3>
+<dl>
+<dt><a name="L005673" id="L005673">init_screen</a></dt>
+<dd>
+<p>スクリーンを curses のために初期化します。
+<code>Curses</code> モジュールのすべてのメソッドはこのメソッドを
+呼び出してからでないと使えません。</p>
+</dd>
+<dt><a name="L005674" id="L005674">close_screen</a></dt>
+<dd>
+<p>curses スクリーンを閉じます。これ以後 <code>Curses</code> モジュール
+のメソッドを呼び出すとすべて例外になります。</p>
+</dd>
+<dt><a name="L005675" id="L005675">stdscr</a></dt>
+<dd>
+<p>画面全体を表す <code>Curses::Window</code> オブジェクトを返します。</p>
+</dd>
+<dt><a name="L005676" id="L005676">refresh</a></dt>
+<dd>
+<p>stdscr の表示を更新します。</p>
+</dd>
+<dt><a name="L005677" id="L005677">doupdate</a></dt>
+<dd>
+<p>？</p>
+</dd>
+<dt><a name="L005678" id="L005678">clear</a></dt>
+<dd>
+<p><code>stdscr</code> の文字を消去します。
+この消去は <code>refresh</code> を待たずにすぐ実行されます。</p>
+</dd>
+<dt><a name="L005679" id="L005679">echo</a></dt>
+<dd>
+<p>入力のエコーを有効にします。</p>
+</dd>
+<dt><a name="L005680" id="L005680">noecho</a></dt>
+<dd>
+<p>入力のエコーをやめます。</p>
+</dd>
+<dt><a name="L005681" id="L005681">cbreak</a></dt>
+<dt><a name="L005682" id="L005682">crmode</a></dt>
+<dd>
+<p>キーボード入力のバッファリングをやめます。</p>
+</dd>
+<dt><a name="L005683" id="L005683">nocbreak</a></dt>
+<dt><a name="L005684" id="L005684">nocrmode</a></dt>
+<dd>
+<p>キーボード入力のバッファリングを有効にします。</p>
+</dd>
+<dt><a name="L005685" id="L005685">nl</a></dt>
+<dd>
+<p>cooked モードのとき、return キーの入力に対して
+LF (Ctrl-j) を返すようにします。</p>
+</dd>
+<dt><a name="L005686" id="L005686">nonl</a></dt>
+<dd>
+<p>cooked モードのとき、return キーの入力に対して
+CR (Ctrl-m) を返すようにします。</p>
+</dd>
+<dt><a name="L005687" id="L005687">raw</a></dt>
+<dd>
+<p>キーボード入力のバッファリングと Ctrl-C などの
+特殊キーの処理をやめます (raw モード)。</p>
+</dd>
+<dt><a name="L005688" id="L005688">noraw</a></dt>
+<dd>
+<p>キーボード入力のバッファリングと Ctrl-C など
+特殊キーの処理を行うようにします (cooked モード)。</p>
+</dd>
+<dt><a name="L005689" id="L005689">beep</a></dt>
+<dd>
+<p>音を出します。
+この機能がないところでは単に無視されます。</p>
+</dd>
+<dt><a name="L005690" id="L005690">flash</a></dt>
+<dd>
+<p>画面を一瞬点滅させます。
+この機能がないところでは単に無視されます。</p>
+</dd>
+<dt><a name="L005691" id="L005691">getch</a></dt>
+<dd>
+<p>標準入力から 1 バイト読み込みます。
+戻り値は ASCII コードを表す整数です。</p>
+</dd>
+<dt><a name="L005692" id="L005692">getstr</a></dt>
+<dd>
+<p>標準入力から一行読み込みます。
+戻り値は文字列です。</p>
+<p>このメソッドは <code>getnstr()</code> が実装されていない
+プラットホームではバッファオーバーフローをおこす恐れが
+あります。</p>
+</dd>
+<dt><a name="L005693" id="L005693">ungetch(ch)</a></dt>
+<dd>
+<p>文字 <var>ch</var> (ASCII コードを示す整数) をストリームに戻します。</p>
+</dd>
+<dt><a name="L005694" id="L005694">setpos(y, x)</a></dt>
+<dd>
+<p><code>stdscr</code> のカーソルを座標 (x,y) に移動します。
+座標はともに 0 が始点です。</p>
+<p>文字がない場所に <code>setpos</code> した場合の挙動は OS に依存します。</p>
+</dd>
+<dt><a name="L005695" id="L005695">standout</a></dt>
+<dd>
+<p>以降書き込む文字を強調します。
+「強調」は反転であることが多いようですが、
+そう決められているわけではありません。</p>
+</dd>
+<dt><a name="L005696" id="L005696">standend</a></dt>
+<dd>
+<p>強調する文字の書き込みを終えます。</p>
+</dd>
+<dt><a name="L005697" id="L005697">addch(ch)</a></dt>
+<dd>
+<p>stdscr のカーソルの位置に <var>ch</var> (1 バイト) を上書きします。</p>
+</dd>
+<dt><a name="L005698" id="L005698">insch(ch)</a></dt>
+<dd>
+<p>stdscr のカーソルの位置に <var>ch</var> (1 バイト) を挿入します。</p>
+</dd>
+<dt><a name="L005699" id="L005699">addstr(str)</a></dt>
+<dd>
+<p>stdscr のカーソルの位置に文字列 str を挿入します。</p>
+</dd>
+<dt><a name="L005700" id="L005700">delch</a></dt>
+<dd>
+<p>stdscr のカーソルの位置から 1 バイト削除します。</p>
+</dd>
+<dt><a name="L005701" id="L005701">deleteln</a></dt>
+<dd>
+<p>stdscr のカーソルがある行を削除し、後の行を上に詰めます。</p>
+</dd>
+<dt><a name="L005702" id="L005702">lines</a></dt>
+<dd>
+<p>画面に表示可能な行数を返します。</p>
+</dd>
+<dt><a name="L005703" id="L005703">cols</a></dt>
+<dd>
+<p>画面に表示可能な桁数(バイト)を返します。
+ただし実際にはもう 1 バイト少なくしか表示できないライブラリが
+あるようです。</p>
+</dd>
+<dt><a name="L005704" id="L005704">inch</a></dt>
+<dd>
+<p>stdscr のカーソル位置から 1 バイト読みとって返します。</p>
+</dd>
+</dl>
+<h2><a name="L005705" id="L005705">Curses::Window クラス</a></h2>
+<h3><a name="L005706" id="L005706">クラスメソッド</a></h3>
+<dl>
+<dt><a name="L005707" id="L005707">new(height, width, y, x)</a></dt>
+<dd>
+<p>画面の座標 (x,y) を左上端とし、幅 <var>width</var>
+高さ <var>height</var> とする curses のトップレベルウィンドウを
+作成し、それを表現する <code>Curses::Window</code> オブジェクトを
+返します。</p>
+</dd>
+</dl>
+<h3><a name="L005708" id="L005708">メソッド</a></h3>
+<dl>
+<dt><a name="L005709" id="L005709">subwin(height, width, y, x)</a></dt>
+<dd>
+<p>画面の座標 (x,y) を左上端とし、幅 <var>width</var>
+高さ <var>height</var> とするサブウィンドウを作成し、
+それを表現する <code>Curses::Window</code> オブジェクトを返します。</p>
+</dd>
+<dt><a name="L005710" id="L005710">close</a></dt>
+<dd>
+<p>ウィンドウを閉じます。以降のこのウィンドウオブジェクトに
+対する操作は例外を発生します。</p>
+</dd>
+<dt><a name="L005678" id="L005678">clear</a></dt>
+<dd>
+<p>ウィンドウの表示を消去します。
+この操作は即座に実行されます。</p>
+</dd>
+<dt><a name="L005676" id="L005676">refresh</a></dt>
+<dd>
+<p>ウィンドウの表示を更新します。</p>
+</dd>
+<dt><a name="L005711" id="L005711">box(ver_char, hor_char)</a></dt>
+<dd>
+<p>縦の線に <var>ver_char</var>、横の線に <var>hor_char</var> を使い
+ウィンドウに沿って箱を書きます。線は普通にウィンドウ内に
+書かれるだけなので上書きしないよう注意してください。</p>
+</dd>
+<dt><a name="L005712" id="L005712">move(y, x)</a></dt>
+<dd>
+<p>ウィンドウを (x,y) に移動します。</p>
+<p>親ウィンドウからはみだす位置を指定すると無視されます。</p>
+</dd>
+<dt><a name="L005694" id="L005694">setpos(y, x)</a></dt>
+<dd>
+<p>ウィンドウ内の (x,y) にカーソルを移動します。</p>
+</dd>
+<dt><a name="L005713" id="L005713">cury</a></dt>
+<dd>
+<p>ウィンドウ内におけるカーソルの行番号を返します。
+一行目が 0 です。</p>
+</dd>
+<dt><a name="L005714" id="L005714">curx</a></dt>
+<dd>
+<p>ウィンドウ内におけるカーソルの桁番号を返します。
+一桁目が 0 です。</p>
+</dd>
+<dt><a name="L005715" id="L005715">maxy</a></dt>
+<dd>
+<p>移動可能な最大の y 座標を返します。
+表示可能な行 + 1 です。</p>
+</dd>
+<dt><a name="L005716" id="L005716">maxx</a></dt>
+<dd>
+<p>移動可能な最大の x 座標を返します。
+表示可能なバイト数 + 1 です。</p>
+</dd>
+<dt><a name="L005717" id="L005717">begy</a></dt>
+<dd>
+<p>親ウィンドウの中でウィンドウの左上がある y 座標を返します。
+始点は 0 です。</p>
+</dd>
+<dt><a name="L005718" id="L005718">begx</a></dt>
+<dd>
+<p>親ウィンドウの中でウィンドウの左上がある x 座標を返します。
+始点は 0 です。</p>
+</dd>
+<dt><a name="L005695" id="L005695">standout</a></dt>
+<dd>
+<p>以後書き込む文字を強調表示します。</p>
+</dd>
+<dt><a name="L005696" id="L005696">standend</a></dt>
+<dd>
+<p>強調書き込みを終了します。</p>
+</dd>
+<dt><a name="L005704" id="L005704">inch</a></dt>
+<dd>
+<p>ウィンドウのカーソル位置から 1 バイト読みとって返します。</p>
+</dd>
+<dt><a name="L005697" id="L005697">addch(ch)</a></dt>
+<dd>
+<p>ウィンドウのカーソル位置に <var>ch</var> (1 バイト) を上書きします。</p>
+</dd>
+<dt><a name="L005698" id="L005698">insch(ch)</a></dt>
+<dd>
+<p>ウィンドウのカーソル位置に <var>ch</var> (1 バイト) を挿入します。</p>
+</dd>
+<dt><a name="L005699" id="L005699">addstr(str)</a></dt>
+<dt><a name="L005719" id="L005719">self &lt;&lt; str</a></dt>
+<dd>
+<p>ウィンドウのカーソル位置に文字列 <var>str</var> を上書きします。</p>
+</dd>
+<dt><a name="L005691" id="L005691">getch</a></dt>
+<dd>
+<p>ウィンドウへの入力から 1 バイト読みこみます。</p>
+</dd>
+<dt><a name="L005692" id="L005692">getstr</a></dt>
+<dd>
+<p>ウィンドウへの入力から一行読みこみます。</p>
+</dd>
+<dt><a name="L005700" id="L005700">delch</a></dt>
+<dd>
+<p>ウィンドウのカーソル位置から 1 バイト消去します。</p>
+</dd>
+<dt><a name="L005701" id="L005701">deleteln</a></dt>
+<dd>
+<p>ウィンドウの、カーソルがある行を消去します。</p>
+</dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm286.html">&lt;-PREV</a>][<a href="refm288.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

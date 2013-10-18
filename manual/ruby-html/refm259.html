@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Kconv</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm260.html" rel="next" />
+<link href="refm258.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm258.html">UP</a>][<a href="refm258.html">&lt;-PREV</a>][<a href="refm260.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L005134" id="L005134">Kconv</a></h1>
+<p><a href="refm448.html">trap::Kconv</a></p>
+<p>文字コードエンコーディングを変換するためのモジュール。
+<a href="refm259.html">Kconv</a>は<a href="refm260.html">nkf</a>のラッパーです。</p>
+<p><a href="refm258.html#L005122">String に追加されるメソッド</a>も参照してください。</p>
+<h2><a name="L005135" id="L005135">使用例</a></h2>
+<pre>newstring = Kconv.kconv(string, Kconv::JIS, Kconv::AUTO)
+newstring = Kconv.tojis(string)
+newstring = Kconv.toeuc(string)
+newstring = Kconv.tosjis(string)
+guessed_code = Kconv.guess(string)</pre>
+<p>または</p>
+<pre>newstring = string.kconv(Kconv::JIS, Kconv::AUTO)
+newstring = string.tojis
+newstring = string.toeuc
+newstring = string.tosjis</pre>
+<h2><a name="L005136" id="L005136">モジュール関数</a></h2>
+<dl>
+<dt><a name="L005137" id="L005137"><code>Kconv.kconv(<var>str</var>, <var>out_code</var>, <var>in_code</var> = <var>Kconv</var>::<var>AUTO</var>)</code></a></dt>
+<dd>
+<p>文字列 <var>str</var> のエンコーディングを <var>out_code</var> に変換したものを
+返します。<var>in_code</var> も指定されていたら <var>str</var> のエンコーディングが
+<var>in_code</var> だとして動作します。</p>
+<p><var>out_code</var> <var>in_code</var> は定数で指定します。</p></dd>
+<dt><a name="L005138" id="L005138"><code>Kconv.tojis(<var>str</var>)</code></a></dt>
+<dd>
+<p>文字列 <var>str</var> のエンコーディングを iso-2022-jp に変換して返します。
+以下と同じです。</p>
+<pre>Kconv.kconv(str, Kconv::JIS)</pre></dd>
+<dt><a name="L005139" id="L005139"><code>Kconv.toeuc(<var>str</var>)</code></a></dt>
+<dd>
+<p>文字列 <var>str</var> のエンコーディングを euc-jp に変換して返します。
+以下と同じです。</p>
+<pre>Kconv.kconv(str, Kconv::EUC)</pre></dd>
+<dt><a name="L005140" id="L005140"><code>Kconv.tosjis(<var>str</var>)</code></a></dt>
+<dd>
+<p>文字列 <var>str</var> のエンコーディングを shift_jis に変換して返します。
+以下と同じです。</p>
+<pre>Kconv.kconv(str, Kconv::SJIS)</pre></dd>
+<dt><a name="L005141" id="L005141"><code>Kconv.guess(<var>str</var>)</code></a></dt>
+<dd>
+<p>文字列 <var>str</var> のエンコーディングを判定します。戻り値は
+<code>Kconv</code> の定数です。</p></dd>
+<dt><a name="L005142" id="L005142"><code>Kconv.toutf8(<var>str</var>)</code></a></dt>
+<dd>
+<p><a href="refm388.html">ruby 1.8.2 feature</a>:
+文字列 <var>str</var> のエンコーディングを utf8 に変換して返します。
+以下と同じです。</p>
+<pre>Kconv.kconv(str, Kconv::UTF8)</pre></dd>
+<dt><a name="L005143" id="L005143"><code>Kconv.toutf16(<var>str</var>)</code></a></dt>
+<dd>
+<p><a href="refm388.html">ruby 1.8.2 feature</a>:
+文字列 <var>str</var> のエンコーディングを utf16 に変換して返します。
+以下と同じです。</p>
+<pre>Kconv.kconv(str, Kconv::UTF16)</pre></dd>
+<dt><a name="L005144" id="L005144"><code>Kconv.iseuc(<var>str</var>)</code></a></dt>
+<dd>
+<p><a href="refm388.html">ruby 1.8.2 feature</a>:
+以下と同じです。</p>
+<pre>Kconv::RegexpEucjp.match( str )</pre></dd>
+<dt><a name="L005145" id="L005145"><code>Kconv.issjis(<var>str</var>)</code></a></dt>
+<dd>
+<p><a href="refm388.html">ruby 1.8.2 feature</a>:
+以下と同じです。</p>
+<pre>Kconv::RegexpShiftjis.match( str )</pre></dd>
+<dt><a name="L005146" id="L005146"><code>Kconv.isutf8(<var>str</var>)</code></a></dt>
+<dd>
+<p><a href="refm388.html">ruby 1.8.2 feature</a>:
+以下と同じです。</p>
+<pre>Kconv::RegexpUtf8.match( str )</pre></dd>
+</dl>
+<h2><a name="L005147" id="L005147">定数</a></h2>
+<dl>
+<dt><a name="L005148" id="L005148"><code>AUTO</code></a></dt>
+<dd>
+<p>エンコーディングを自動検出する。
+入力の指定でのみ有効。</p></dd>
+<dt><a name="L005149" id="L005149"><code>JIS</code></a></dt>
+<dd>
+<p>iso-2022-jp を表す。</p></dd>
+<dt><a name="L005150" id="L005150"><code>EUC</code></a></dt>
+<dd>
+<p>euc-jp を表す。</p></dd>
+<dt><a name="L005151" id="L005151"><code>SJIS</code></a></dt>
+<dd>
+<p>shift_jis (シフト JIS / MS 漢字コードとも言う) を表す。</p></dd>
+<dt><a name="L005152" id="L005152"><code>BINARY</code></a></dt>
+<dd>
+<p>JIS EUC SJIS 以外</p></dd>
+<dt><a name="L005153" id="L005153"><code>UNKNOWN</code></a></dt>
+<dd>
+<p>出力においては「エンコーディングを判定できなかった」
+入力においては AUTO と同様に「自動検出」を表す。</p></dd>
+<dt><a name="L005154" id="L005154"><code>NOCONV</code></a></dt>
+<dd>
+<p>変換されないことを表す。</p></dd>
+<dt><a name="L005155" id="L005155"><code>ASCII</code></a></dt>
+<dd>
+<p><a href="refm388.html">ruby 1.8.2 feature</a>:
+ASCII を表す。</p></dd>
+<dt><a name="L005156" id="L005156"><code>UTF8</code></a></dt>
+<dd>
+<p><a href="refm388.html">ruby 1.8.2 feature</a>:
+UTF8 を表す。</p></dd>
+<dt><a name="L005157" id="L005157"><code>UTF16</code></a></dt>
+<dd>
+<p><a href="refm388.html">ruby 1.8.2 feature</a>:
+UTF16 を表す。</p></dd>
+<dt><a name="L005158" id="L005158"><code>RegexpShiftjis</code></a></dt>
+<dd>
+<p><a href="refm388.html">ruby 1.8.2 feature</a>:
+SJIS にマッチする正規表現です。</p></dd>
+<dt><a name="L005159" id="L005159"><code>RegexpEucjp</code></a></dt>
+<dd>
+<p><a href="refm388.html">ruby 1.8.2 feature</a>:
+EUCJP にマッチする正規表現です。</p></dd>
+<dt><a name="L005160" id="L005160"><code>RegexpUtf8</code></a></dt>
+<dd>
+<p><a href="refm388.html">ruby 1.8.2 feature</a>:
+UTF8 にマッチする正規表現です。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm258.html">UP</a>][<a href="refm258.html">&lt;-PREV</a>][<a href="refm260.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,874 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Module</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm051.html" rel="next" />
+<link href="refm049.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm035.html">UP</a>][<a href="refm049.html">&lt;-PREV</a>][<a href="refm051.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L001174" id="L001174">Module</a></h1>
+<p>モジュールのクラス。</p>
+<h2><a name="L001175" id="L001175">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm035.html">Object</a></li>
+</ul>
+<h2><a name="L001176" id="L001176">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L001177" id="L001177"><code>Module.constants</code></a></dt>
+<dd>
+<p>このメソッドを呼び出した時点で参照可能な定数名の配列を返します。</p>
+<pre>class Foo
+  FOO = 1
+end
+
+p Module.constants
+
+# 出力中に FOO は現われない
+=&gt; [&quot;RUBY_PLATFORM&quot;, &quot;STDIN&quot;, ..., &quot;Foo&quot;, ... ]</pre>
+<p><a href="#L001177">Module#constants</a> や、
+<a href="refm029.html#L000462">local_variables</a>,
+<a href="refm029.html#L000454">global_variables</a>,
+<a href="refm035.html#L000670">Object#instance_variables</a>,
+<a href="#L001193">Module#class_variables</a>
+も参照してください。</p></dd>
+<dt><a name="L001178" id="L001178"><code>Module.nesting</code></a></dt>
+<dd>
+<p>このメソッドを呼び出した時点でのクラス/モジュールのネスト情
+報を配列に入れて返します。</p>
+<pre>module Foo
+  module Bar
+    module Baz
+      p Module.nesting
+    end
+  end
+end
+# =&gt; [Foo::Bar::Baz, Foo::Bar, Foo]</pre></dd>
+<dt><a name="L001179" id="L001179"><code>Module.new</code></a>
+<dt><a name="L001180" id="L001180"><code>Module.new {|<var>mod</var>| ... }      ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>新しく名前の付いていないモジュールを生成して返します。</p>
+<p>名前のないモジュールは、最初に名前を求める際に代入されている定数名
+を検索し、見つかった定数名をモジュール名とします。</p>
+<pre>p foo = Module.new  # =&gt; #&lt;Module 0lx40198a54&gt;
+p foo.name          # =&gt; &quot;&quot;
+Foo = foo           # ここで p foo すれば &quot;Foo&quot; 固定
+Bar = foo
+p foo.name          # =&gt; &quot;Bar&quot;  (&quot;Foo&quot; になるか &quot;Bar&quot; になるかは不定)</pre>
+<p><a href="refm384.html">ruby 1.7 feature</a>:
+ブロックが与えられると生成したモジュールをブロックの引数に渡し、モ
+ジュールのコンテキストでブロックを実行します。この場合も生成したモ
+ジュールを返します。</p>
+<pre>mod = Module.new
+mod.module_eval {|m| ... }
+mod</pre>
+<p>と同じです。ブロックの実行は Module#initialize が行います。</p></dd>
+</dl>
+<h2><a name="L001181" id="L001181">メソッド:</a></h2>
+<dl>
+<dt><a name="L001182" id="L001182"><code><var>self</var> &lt;=&gt; <var>other</var></code></a></dt>
+<dd>
+<p><code>self</code> と <code>other</code> を比較して、
+<code>self</code> が <code>other</code> の子孫であるとき -1、
+同一のクラス／モジュールのとき 0、
+<code>self</code> が <code>other</code> の先祖であるとき 1
+を返します。</p>
+<p>親子関係にないクラス同士の比較ではその動作は不定です。
+<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></p>
+<p><var>other</var> がクラスやモジュールでなければ例外 <a href="refm111.html">TypeError</a> が
+発生します。
+<a name="footmark:2" id="footmark:2" href="#foottext:2"><sup><small>*2</small></sup></a></p>
+<pre>module Foo
+end
+class Bar
+  include Foo
+end
+class Baz &lt; Bar
+end
+class Qux
+end
+p Bar &lt;=&gt; Foo     # =&gt; -1
+p Baz &lt;=&gt; Bar     # =&gt; -1
+p Baz &lt;=&gt; Foo     # =&gt; -1
+p Baz &lt;=&gt; Qux     # =&gt; 1   (version 1.7 では nil, 1.8 では -1)
+p Qux &lt;=&gt; Baz     # =&gt; 1   (version 1.7 では nil, 1.8 では -1)
+
+p Baz &lt;=&gt; Object.new  # =&gt; :in `&lt;=&gt;': &lt;=&gt; requires Class or Module (Object given) (TypeError)
+                      # (version 1.8 では nil)</pre></dd>
+<dt><a name="L001183" id="L001183"><code><var>self</var> &lt; <var>other</var></code></a>
+<dt><a name="L001184" id="L001184"><code><var>self</var> &lt;= <var>other</var></code></a>
+<dt><a name="L001185" id="L001185"><code><var>self</var> &gt; <var>other</var></code></a>
+<dt><a name="L001186" id="L001186"><code><var>self</var> &gt;= <var>other</var></code></a></dt>
+<dd>
+<p>比較演算子。<code>self</code> が <var>other</var> の子孫である時、
+<code>self &lt; other</code> が成立します。</p>
+<p>親子関係にないクラス同士の比較ではいずれの関係も false を返します。
+<a name="footmark:3" id="footmark:3" href="#foottext:3"><sup><small>*3</small></sup></a></p>
+<p><var>other</var> がクラスやモジュールでなければ例外 <a href="refm111.html">TypeError</a> が
+発生します。</p>
+<pre>module Foo
+end
+class Bar
+  include Foo
+end
+class Baz &lt; Bar
+end
+class Qux
+end
+p Bar &lt; Foo     # =&gt; true
+p Baz &lt; Bar     # =&gt; true
+p Baz &lt; Foo     # =&gt; true
+p Baz &lt; Qux     # =&gt; false (version 1.8 では nil)
+p Baz &gt; Qux     # =&gt; false (version 1.8 では nil)
+
+p Foo &lt; Object.new # =&gt; in `&lt;': compared with non class/module (TypeError)</pre></dd>
+<dt><a name="L001187" id="L001187"><code><var>self</var> === <var>obj</var></code></a></dt>
+<dd>
+<p>このメソッドは主に <a href="refm026.html#L000385">case</a> 文での比較に用いられます。
+<var>obj</var> が <code>self</code> と <a href="refm035.html#L000672">Object#kind_of?</a>
+の関係がある時、真になります。つまり、<a href="refm026.html#L000385">case</a> ではクラ
+ス、モジュールの所属関係をチェックすることになります。</p>
+<pre>str = String.new
+case str
+when String     # String === str を評価する
+  p true        # =&gt; true
+end</pre></dd>
+<dt><a name="L001188" id="L001188"><code>ancestors</code></a></dt>
+<dd>
+<p>クラス、モジュールのスーパークラスとインクルードしているモジュール
+を優先順位順に配列に格納して返します。</p>
+<pre>module Foo
+end
+class Bar
+  include Foo
+end
+class Baz &lt; Bar
+  p ancestors
+  p included_modules
+  p superclass
+end
+# =&gt; [Baz, Bar, Foo, Object, Kernel]
+# =&gt; [Foo, Kernel]
+# =&gt; Bar</pre></dd>
+<dt><a name="L001189" id="L001189"><code>autoload(<var>const_name</var>, <var>feature</var>)</code></a>
+<dt><a name="L001190" id="L001190"><code>autoload?(<var>const_name</var>)</code></a></dt>
+<dd>
+<p><a href="refm385.html">ruby 1.8 feature</a></p>
+<p><a href="refm029.html#L000435">autoload</a> を参照。</p></dd>
+<dt><a name="L001191" id="L001191"><code>class_eval(<var>src</var>[,<var>fname</var>[,<var>lineno</var>]])</code></a>
+<dt><a name="L001192" id="L001192"><code>class_eval { ... }</code></a></dt>
+<dd>
+<p><a href="#L001202">Module#module_eval</a> の別名。</p></dd>
+<dt><a name="L001193" id="L001193"><code>class_variables</code></a></dt>
+<dd>
+<p>クラス／モジュールに定義されている<a href="refm023.html#L000311">クラス変数</a>名の配
+列を返します。スーパークラスやインクルードしているモジュールのクラ
+ス変数も含みます。</p>
+<p><a href="refm029.html#L000462">local_variables</a>,
+<a href="refm029.html#L000454">global_variables</a>,
+<a href="refm035.html#L000670">Object#instance_variables</a>,
+<a href="#L001177">Module.constants</a>,
+<a href="#L001177">Module#constants</a>
+も参照してください。</p></dd>
+<dt><a name="L001194" id="L001194"><code>const_defined?(<var>name</var>)</code></a></dt>
+<dd>
+<p>モジュールに <var>name</var> で指定される名前の定数が定義されている時真
+を返します。<var>name</var> は <a href="refm063.html">Symbol</a> か文字列で指定します。</p>
+<p>スーパークラスやインクルードしたモジュールで定義された定数は対象には
+なりません。(ただし、<a href="refm035.html">Object</a> だけは例外
+<a name="footmark:4" id="footmark:4" href="#foottext:4"><sup><small>*4</small></sup></a>)</p>
+<pre>module Kernel
+  FOO = 1
+end
+
+# Object は include したモジュールの定数に対しても
+# true を返す
+p Object.const_defined?(:FOO)   # =&gt; true
+
+module Bar
+  BAR = 1
+end
+class Object
+  include Bar
+end
+# ユーザ定義のモジュールに対しても同様
+p Object.const_defined?(:BAR)   # =&gt; true
+
+class Baz
+  include Bar
+end
+# Object以外では自身の定数だけがチェック対象
+p Baz.const_defined?(:BAR)      # =&gt; false</pre></dd>
+<dt><a name="L001195" id="L001195"><code>const_get(<var>name</var>)</code></a></dt>
+<dd>
+<p>モジュールに定義されている <var>name</var> で指定される名前の定数の値を
+取り出します。定数が定義されていない時には例外 <a href="refm100.html">NameError</a> が
+発生します。
+<var>name</var> は <a href="refm063.html">Symbol</a> か文字列で指定します。</p></dd>
+<dt><a name="L001196" id="L001196"><code>const_missing(<var>name</var>)       ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>定義されていない定数を参照したときに Ruby がこのメソッドを呼び
+ます。参照した定数名の <a href="refm063.html">Symbol</a> が引数に渡されます。</p>
+<p>デフォルトではこのメソッドは例外 <a href="refm100.html">NameError</a> を発生させます。</p>
+<pre>class Foo
+  def Foo.const_missing(id)
+    warn &quot;undefined constant #{id.inspect}&quot;
+  end
+
+  Bar
+end
+Foo::Bar
+
+# =&gt; undefined constant :Bar
+     undefined constant :Bar</pre></dd>
+<dt><a name="L001197" id="L001197"><code>const_set(<var>name</var>, <var>value</var>)</code></a></dt>
+<dd>
+<p>モジュールに <var>name</var> で指定された名前の定数を <var>value</var> とい
+う値として定義し、<var>value</var> を返します。
+そのモジュールにおいてすでにその名前の定数が定義されている場合、警
+告メッセージが出力されます。<var>name</var> は <a href="refm063.html">Symbol</a> か文字列で
+指定します。</p></dd>
+<dt><a name="L001177" id="L001177"><code>constants</code></a></dt>
+<dd>
+<p>そのモジュール(またはクラス)で定義されている定数名の配列を返
+します。
+スーパークラスやインクルードしているモジュールの定数も含みます。</p>
+<p><a href="#L001177">Module.constants</a> や
+<a href="refm029.html#L000462">local_variables</a>,
+<a href="refm029.html#L000454">global_variables</a>,
+<a href="refm035.html#L000670">Object#instance_variables</a>,
+<a href="#L001193">Module#class_variables</a>
+も参照してください。</p>
+<p>例: Module.constants と Module#constants の違い</p>
+<pre># 出力の簡略化のため起動時の定数一覧を取得して後で差し引く
+$clist = Module.constants
+
+class Foo
+  FOO = 1
+end
+class Bar
+  BAR = 1
+
+  # Bar は BAR を含む
+  p constants - $clist                # =&gt; [&quot;BAR&quot;]
+  # 出力に FOO は含まれない
+  p Module.constants - $clist         # =&gt; [&quot;BAR&quot;, &quot;Bar&quot;, &quot;Foo&quot;]
+  class Baz
+    # Baz は定数を含まない
+    p constants - $clist              # =&gt; []
+
+    # ネストしたクラスでは、外側のクラスで定義した定数は
+    # 参照可能なので、BAR は、Module.constants には含まれる
+    # (クラス Baz も Bar の定数なので同様)
+    p Module.constants - $clist       # =&gt; [&quot;BAR&quot;, &quot;Baz&quot;, &quot;Bar&quot;, &quot;Foo&quot;]
+  end
+end</pre></dd>
+<dt><a name="L001198" id="L001198"><code>include?(<var>mod</var>)  ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p><code>self</code> が モジュール <var>mod</var> をインクルードしていれば
+真を返します。</p>
+<pre>Foo = Module.new
+class Bar
+  include Foo
+end
+class Baz &lt; Bar
+end
+
+p Bar.include? Foo #=&gt; true
+p Baz.include? Foo #=&gt; true</pre></dd>
+<dt><a name="L001199" id="L001199"><code>included_modules</code></a></dt>
+<dd>
+<p>インクルードされているモジュールの配列を返します。
+<a href="#L001188">Module#ancestors</a> の例も参照してください</p></dd>
+<dt><a name="L001200" id="L001200"><code>instance_method(<var>name</var>)</code></a></dt>
+<dd>
+<p><code>self</code> のインスタンスメソッドをオブジェクト化した
+<a href="refm049.html">UnboundMethod</a> を返します。<var>name</var> は <a href="refm063.html">Symbol</a> か文字
+列です。</p>
+<p><a href="refm035.html#L000673">Object#method</a> も参照してください。</p></dd>
+<dt><a name="L001201" id="L001201"><code>method_defined?(<var>name</var>)</code></a></dt>
+<dd>
+<p>モジュールにインスタンスメソッド <var>name</var> が定義されているとき真
+を返します。<var>name</var> は <a href="refm063.html">Symbol</a> か文字列です。</p>
+<p><a href="#L001214">Module#public_method_defined?</a>,
+<a href="#L001212">Module#private_method_defined?</a>,
+<a href="#L001213">Module#protected_method_defined?</a>
+も参照してください。</p></dd>
+<dt><a name="L001202" id="L001202"><code>module_eval(<var>expr</var>, [<var>fname</var>, [<var>lineno</var>=<var>1</var>]])</code></a>
+<dt><a name="L001203" id="L001203"><code>module_eval {|<var>mod</var>| .... }</code></a></dt>
+<dd>
+<p>モジュールのコンテキストで文字列 <var>expr</var> を評価してその結果を返
+します。
+<var>fname</var>、<var>lineno</var> が与えられた場合は、ファイル <var>fname</var>、
+行番号 <var>lineno</var> にその文字列があるかのようにコンパイルされ、ス
+タックトレース表示などのファイル名／行番号を差し替えることができま
+す。</p>
+<p>ブロックが与えられた場合にはそのブロックをモジュールのコンテキスト
+で評価してその結果を返します。ブロックの引数 <var>mod</var> には
+<code>self</code> が渡されます。</p>
+<p>モジュールのコンテキストで評価するとは、実行中そのモジュールが
+<code>self</code> になるということです。つまり、そのモジュールの定義文の
+中にあるかのように実行されます。</p>
+<p>ただし、ローカル変数は <code>module_eval</code> の外側のスコープと共有し
+ます。<a href="refm383.html">ruby 1.6 feature</a>: version 1.6.8 以降でブロックが与えられた場合は、定数とクラス変数
+のスコープも外側のスコープになります。</p>
+<p><em>注</em>: module_eval のブロック中でメソッドを定義する場合、
+<a href="refm035.html#L000665">instance_eval</a> と同様の制限があります。詳細はそちらの
+説明を参照してください。</p>
+<p><a href="refm035.html#L000665">Object#instance_eval</a>,
+<a href="#L001191">Module#class_eval</a>
+<a href="#L001179">Module.new</a> も参照してください。</p></dd>
+<dt><a name="L001204" id="L001204"><code>name</code></a>
+<dt><a name="L001205" id="L001205"><code>to_s</code></a></dt>
+<dd>
+<p>クラス、モジュールの名前を返します。名前のないクラス、モジュール
+については空文字列を返します(<a href="#L001179">Module.new</a> の例を参照)。</p>
+<p>クラス、モジュールがネストしている場合は、親クラス、親モジュールも
+合わせて表示されます<a name="footmark:5" id="footmark:5" href="#foottext:5"><sup><small>*5</small></sup></a>。</p>
+<pre>module A
+  module B
+  end
+  p B.name  #=&gt; &quot;A::B&quot;
+
+  class C
+  end
+end
+p A.name    #=&gt; &quot;A&quot;
+p A::B.name #=&gt; &quot;A::B&quot;
+p A::C.name #=&gt; &quot;A::C&quot;</pre></dd>
+<dt><a name="L001206" id="L001206"><code>instance_methods([<var>inherited_too</var>])</code></a>
+<dt><a name="L001207" id="L001207"><code>public_instance_methods([<var>inherited_too</var>])</code></a>
+<dt><a name="L001208" id="L001208"><code>private_instance_methods([<var>inherited_too</var>])</code></a>
+<dt><a name="L001209" id="L001209"><code>protected_instance_methods([<var>inherited_too</var>])</code></a></dt>
+<dd>
+<p>そのモジュールで定義されている public/private/protected メソッド名
+の一覧を配列で返します。</p>
+<p>instance_methods は、public_instance_methods と同じです。
+<a href="refm384.html">ruby 1.7 feature</a>: instance_methods は、public および
+protected メソッド名の一覧を配列で返します。</p>
+<p><var>inherited_too</var> が真であれば、スーパークラスのメソッドも探索し
+ます。デフォルトは偽です。
+(<a href="refm385.html">ruby 1.8 feature</a>: 引数のデフォルトは真に変わる予定です。
+引数を省略すると警告が出るので、変更までは引数を明示することが望ま
+れます)</p>
+<p><a href="refm035.html#L000675">Object#methods</a>,
+<a href="refm035.html#L000676">Object#public_methods</a>,
+<a href="refm035.html#L000677">Object#private_methods</a>,
+<a href="refm035.html#L000678">Object#protected_methods</a>
+も参照してください。</p>
+<p>例:</p>
+<pre>class Foo
+  private;   def private_foo()   end
+  protected; def protected_foo() end
+  public;    def public_foo()    end
+end
+
+# あるクラスのインスタンスメソッドの一覧を得る
+puts &quot;例1:&quot;
+p Foo.instance_methods(false)
+p Foo.public_instance_methods(false)
+p Foo.private_instance_methods(false)
+p Foo.protected_instance_methods(false)
+
+class Bar &lt; Foo
+end
+
+# あるクラスのインスタンスメソッドの一覧を得る。
+# 親のクラスのインスタンスメソッドも含めるため true を指定して
+# いるが、Object のインスタンスメソッドは一覧から排除している。
+
+puts &quot;例2:&quot;
+p Bar.instance_methods(true)           - Object.instance_methods(true)
+p Bar.public_instance_methods(true)    - Object.public_instance_methods(true)
+p Bar.private_instance_methods(true)   - Object.private_instance_methods(true)
+p Bar.protected_instance_methods(true) - Object.protected_instance_methods(true)
+
+=&gt; 例1:
+   [&quot;public_foo&quot;]    # version 1.7 以降、[&quot;protected_foo&quot;, &quot;public_foo&quot;]
+   [&quot;public_foo&quot;]
+   [&quot;private_foo&quot;]
+   [&quot;protected_foo&quot;]
+   例2:
+   [&quot;protected_foo&quot;] # version 1.7 以降、[&quot;protected_foo&quot;, &quot;public_foo&quot;]
+   [&quot;public_foo&quot;]
+   [&quot;private_foo&quot;]
+   [&quot;protected_foo&quot;]</pre></dd>
+<dt><a name="L001210" id="L001210"><code>private_class_method(<var>name</var>,  ... )</code></a>
+<dt><a name="L001211" id="L001211"><code>public_class_method(<var>name</var>,  ... )</code></a></dt>
+<dd>
+<p><var>name</var> で指定したクラスメソッド(クラスの特異メソッド) の可視性
+を変更します。</p>
+<p><code>self</code> を返します。</p></dd>
+<dt><a name="L001212" id="L001212"><code>private_method_defined?(<var>name</var>)</code></a>
+<dt><a name="L001213" id="L001213"><code>protected_method_defined?(<var>name</var>)</code></a>
+<dt><a name="L001214" id="L001214"><code>public_method_defined?(<var>name</var>)</code></a></dt>
+<dd>
+<p><a href="refm384.html">ruby 1.7 feature</a></p>
+<p>それぞれ、<a href="#L001234">private</a>, <a href="#L001235">protected</a>,
+<a href="#L001236">public</a> であるインスタンスメソッド <var>name</var> がモジュー
+ルに定義されているとき真を返します。<var>name</var> は <a href="refm063.html">Symbol</a> か
+文字列です。</p>
+<p><a href="#L001201">Module#method_defined?</a>
+も参照してください。</p></dd>
+</dl>
+<h2><a name="L001215" id="L001215">プライベートメソッド:</a></h2>
+<dl>
+<dt><a name="L001216" id="L001216"><code>alias_method(<var>new</var>, <var>old</var>)</code></a></dt>
+<dd>
+<p>メソッドの別名を定義します。
+<a href="refm028.html#L000422">alias</a> との違いは以下の通りです。</p>
+<ul>
+<li>メソッド名は文字列または <a href="refm063.html">Symbol</a> で指定する</li>
+<li>グローバル変数の別名をつけることはできない</li>
+</ul>
+<p><code>self</code> を返します。</p></dd>
+<dt><a name="L001217" id="L001217"><code>append_features(<var>module_or_class</var>)</code></a></dt>
+<dd>
+<p>モジュール(あるいはクラス)に <code>self</code> の機能を追加します。
+このメソッドは <code>Module#include</code> の実体であり、<code>include</code> を
+Ruby で書くと以下のように定義できます。
+<a name="footmark:6" id="footmark:6" href="#foottext:6"><sup><small>*6</small></sup></a></p>
+<pre>def include(*modules)
+  modules.each {|mod|
+    # append_features はプライベートメソッドなので
+    # 直接 mod.append_features(self) とは書けない
+    mod.__send__ :append_features, self
+    # 1.7 以降は以下の行も実行される
+    # mod.__send__ :included, self
+  }
+end</pre>
+<p><code>self</code> を返します。</p></dd>
+<dt><a name="L001218" id="L001218"><code>attr(<var>name</var>[, <var>assignable</var>])</code></a></dt>
+<dd>
+<p>属性読み込みのためのインスタンスメソッド <var>name</var> を定義します。
+<var>name</var> は <a href="refm063.html">Symbol</a> か文字列で指定します。戻り値は常に
+<code>nil</code> です。</p>
+<p>このメソッドで定義されるアクセスメソッドの定義は次の通りです。</p>
+<pre>def name
+  @name
+end</pre>
+<p>省略可能な第 2 引数 <var>assignable</var> が指定されその値が真である
+場合には、属性の書きこみ用メソッド <code>name=</code> も同時に定義されます。
+その定義は次の通りです。</p>
+<pre>def name=(val)
+  @name = val
+end</pre></dd>
+<dt><a name="L001219" id="L001219"><code>attr_accessor(<var>name</var>,  ... )</code></a></dt>
+<dd>
+<p>属性 <var>name</var> に対する読み込みメソッドと書きこみメソッドの両方を
+定義します。<var>name</var> は <a href="refm063.html">Symbol</a> か文字列で指定します。戻り値
+は常に <code>nil</code> です。</p>
+<p>このメソッドで定義されるメソッドの定義は以下の通りです。</p>
+<pre>def name
+  @name
+end
+def name=(val)
+  @name = val
+end</pre></dd>
+<dt><a name="L001220" id="L001220"><code>attr_reader(<var>name</var>,  ... )</code></a></dt>
+<dd>
+<p>属性 <var>name</var> の読み出しメソッドを定義します。
+<var>name</var> は <a href="refm063.html">Symbol</a> か文字列で指定します。
+戻り値は常に <code>nil</code> です。</p>
+<p>このメソッドで定義されるメソッドの定義は以下の通りです。</p>
+<pre>def name
+  @name
+end</pre></dd>
+<dt><a name="L001221" id="L001221"><code>attr_writer(<var>name</var>,  ... )</code></a></dt>
+<dd>
+<p>属性 <var>name</var> への書き込みメソッド (<code>name=</code>) を定義します。
+<var>name</var> は <a href="refm063.html">Symbol</a> か文字列で指定します。戻り値は常に
+<code>nil</code> です。</p>
+<p>このメソッドで定義されるメソッドの定義は以下の通りです。</p>
+<pre>def name=(val)
+  @name = val
+end</pre></dd>
+<dt><a name="L001222" id="L001222"><code>class_variable_get(<var>name</var>)      ((&lt;<var>ruby</var> <var>1</var>.<var>8</var>.<var>3</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>クラス／モジュールに定義されているクラス変数 <var>name</var> の値を返します。</p>
+<p><var>name</var> は <a href="refm063.html">Symbol</a> か文字列で指定します。</p>
+<p>クラス変数 <var>name</var> が定義されていない場合、例外 <a href="refm100.html">NameError</a> 
+が発生します。</p>
+<pre>class Fred
+  @@foo = 99
+end
+
+def Fred.foo
+  class_variable_get(:@@foo)
+end
+
+p Fred.foo #=&gt; 99</pre></dd>
+<dt><a name="L001223" id="L001223"><code>class_variable_set(<var>name</var>, <var>val</var>) ((&lt;<var>ruby</var> <var>1</var>.<var>8</var>.<var>3</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>クラス／モジュールにクラス変数 <var>name</var> を定義して、その値として
+<var>val</var> をセットします。<var>val</var> を返します。</p>
+<p><var>name</var> は <a href="refm063.html">Symbol</a> か文字列で指定します。</p>
+<pre>class Fred
+  @@foo = 99
+  def foo
+    @@foo
+  end
+end
+
+def Fred.foo(val)
+  class_variable_set(:@@foo, val)
+end
+
+p Fred.foo(101)   # =&gt; 101
+p Fred.new.foo    # =&gt; 101</pre></dd>
+<dt><a name="L001224" id="L001224"><code>define_method(<var>name</var>, <var>method</var>)</code></a>
+<dt><a name="L001225" id="L001225"><code>define_method(<var>name</var>) { ... }</code></a></dt>
+<dd>
+<p>インスタンスメソッド <var>name</var> を定義します。
+<var>method</var> には <a href="refm057.html">Proc</a>、<a href="refm048.html">Method</a> あるいは
+<a href="refm049.html">UnboundMethod</a> のいずれかのインスタンスを指定します。
+引数 <var>method</var> を与えたときはそれを、ブロック付きで
+呼びだしたときはブロックを <a href="refm057.html">Proc</a> 化したオブジェクトを、
+それぞれ返します。</p>
+<p>例:</p>
+<pre>class Foo
+  def foo() p :foo end
+  define_method(:bar, instance_method(:foo))
+end
+Foo.new.bar    # =&gt; :foo</pre>
+<p>ブロックを与えた場合、Ruby 1.7 以降では、定義したメソッド
+の実行時にブロックがレシーバクラスのインスタンスの上で
+instance_eval されます。
+一方 Ruby 1.6 ではブロックとメソッドの関連づけを行うだけで、
+メソッドの実行時にはブロックは生成時のコンテキストのままで
+実行されます。たとえば以下の例を参照してください。</p>
+<pre>class C
+  def print_self
+    p get_self
+  end
+end
+# インスタンスメソッド get_self を定義。
+# ただし define_method はプライベートメソッド
+# なので直接は呼べない。__send__ を介して呼ぶ。
+C.__send__(:define_method, :get_self) { self }
+
+# 1.6 の場合
+C.new.print_self    #=&gt; main
+# 1.7 の場合
+C.new.print_self    #=&gt; #&lt;C:0x4015b490&gt;</pre></dd>
+<dt><a name="L001226" id="L001226"><code>extend_object(<var>object</var>)</code></a></dt>
+<dd>
+<p><a href="refm035.html#L000657">Object#extend</a> の実体です。オブジェクトに
+モジュールの機能を追加します。<code>Object#extend</code> は、Ruby で
+書くと以下のように定義できます。
+<a name="footmark:7" id="footmark:7" href="#foottext:7"><sup><small>*7</small></sup></a></p>
+<pre>def extend(*modules)
+  modules.each {|mod| mod.__send__ :extend_object, self }
+end</pre>
+<p>extend_object のデフォルトの実装では、<code>self</code> に定義されて
+いるメソッドを <var>object</var> の特異メソッドとして追加します。</p>
+<p><var>object</var> を返します。</p></dd>
+<dt><a name="L001227" id="L001227"><code>extended(<var>class_or_module</var>)   ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p><code>self</code> が他のオブジェクト に <a href="refm035.html#L000657">extend</a> されたときに
+呼ばれます。引数には extend を行ったオブジェクトが渡されます。</p>
+<pre>module Foo
+  def self.extended(mod)
+    p &quot;#{mod} extend #{self}&quot;
+  end
+end
+
+Object.new.extend Foo
+
+# =&gt; &quot;#&lt;Object:0x401cbc3c&gt; extend Foo&quot;</pre></dd>
+<dt><a name="L001228" id="L001228"><code>include(<var>module</var> ... )</code></a></dt>
+<dd>
+<p>指定されたモジュールの性質(メソッドや定数、クラス変数)を追加します。
+<code>self</code> を返します。
+<code>include</code> は多重継承の代わりに用いられる Mix-in を実現するため
+に使われます。</p>
+<pre>class C
+  include FileTest
+  include Math
+end
+
+p C.ancestors
+
+# =&gt; [C, Math, FileTest, Object, Kernel]</pre>
+<p>モジュールの機能追加は、クラスの継承関係の間にそのモジュールが挿入
+されることで実現されています。従って、メソッドの探索などはスーパー
+クラスに優先されて追加したモジュールから探索されます(上の例の
+<a href="#L001188">ancestors</a> の結果がメソッド探索の順序です)。</p>
+<p>同じモジュールを二回以上 include すると二回目以降は無視されます。</p>
+<pre>module Foo;                    end
+class  Bar;       include Foo; end
+class  Baz &lt; Bar; include Foo; end  # &lt;- この include は無効
+
+p Baz.ancestors  # =&gt; [Baz, Bar, Foo, Object, Kernel]</pre>
+<p>モジュールの継承関係が循環してしまうような include を行うと、例外
+<a href="refm094.html">ArgumentError</a> が発生します。</p>
+<pre>module Foo; end
+module Bar; include Foo; end
+module Foo; include Bar; end
+
+=&gt; -:3:in `append_features': cyclic include detected (ArgumentError)
+        from -:3:in `include'
+        from -:3</pre>
+<p><a href="refm384.html">ruby 1.7 feature</a>: 引数に複数のモジュールを指定した場合、最後
+の引数から逆順に include を行います。</p></dd>
+<dt><a name="L001229" id="L001229"><code>included(<var>class_or_module</var>)  ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p><code>self</code> が <code>include</code> されたときに対象のクラスまたはモジュー
+ルを引数にインタプリタから呼び出されます。</p>
+<pre>module Foo
+  def self.included(mod)
+    p &quot;#{mod} include #{self}&quot;
+  end
+end
+class Bar
+  include Foo
+end
+# =&gt; &quot;Bar include Foo&quot;</pre></dd>
+<dt><a name="L001230" id="L001230"><code>method_added(<var>name</var>)</code></a></dt>
+<dd>
+<p>メソッド <var>name</var> が追加された時にインタプリタから呼び出されます。
+<var>name</var> には追加されたメソッドの名前が <a href="refm063.html">Symbol</a> で渡されます。</p>
+<pre>class Foo
+  def Foo.method_added(name)
+    puts &quot;method \&quot;#{name}\&quot; was added&quot;
+  end
+
+  def foo
+  end
+  define_method :bar, instance_method(:foo)
+end
+
+=&gt; method &quot;foo&quot; was added
+   method &quot;bar&quot; was added</pre>
+<p>特異メソッドの追加に対するフックには
+<a href="refm035.html#L000703">Object#singleton_method_added</a>
+を使います。</p></dd>
+<dt><a name="L001231" id="L001231"><code>method_removed(<var>name</var>)  ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>メソッドが <a href="#L001239">Module#remove_method</a> により削
+除された時にインタプリタから呼び出されます。
+<var>name</var> には削除されたメソッド名が <a href="refm063.html">Symbol</a> で渡されます。</p>
+<pre>class Foo
+  def Foo.method_removed(name)
+    puts &quot;method \&quot;#{name}\&quot; was removed&quot;
+  end
+
+  def foo
+  end
+  remove_method :foo
+end
+
+=&gt; method &quot;foo&quot; was removed</pre>
+<p>特異メソッドの削除に対するフックには
+<a href="refm035.html#L000704">Object#singleton_method_removed</a>
+を使います。</p></dd>
+<dt><a name="L001232" id="L001232"><code>method_undefined(<var>name</var>)  ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>メソッドが <a href="#L001241">Module#undef_method</a> または
+<a href="refm028.html#L000423">undef</a>により未定義にされた時にインタプリタ
+から呼び出されます。
+<var>name</var> には未定義にされたメソッド名が <a href="refm063.html">Symbol</a> で渡されます。</p>
+<pre>class Foo
+  def Foo.method_undefined(name)
+    puts &quot;method \&quot;#{name}\&quot; was undefined&quot;
+  end
+
+  def foo
+  end
+  def bar
+  end
+  undef_method :foo
+  undef bar
+end
+
+=&gt; method &quot;foo&quot; was undefined
+   method &quot;bar&quot; was undefined</pre>
+<p>特異メソッドの未定義に対するフックには
+<a href="refm035.html#L000705">Object#singleton_method_undefined</a>
+を使います。</p></dd>
+<dt><a name="L001233" id="L001233"><code>module_function([<var>name</var> ... ])</code></a></dt>
+<dd>
+<p>引数なしのときは今後このモジュール定義内で新規に定義されるメソッド
+を<a href="refm477.html#L009758">モジュール関数</a>にします。モジュール関数とはプラ
+イベートメソッドであると同時にモジュールの特異メソッドでもあるよう
+なメソッドです。例えば <a href="refm078.html">Math</a> モジュールで定義されているメソッ
+ドがモジュール関数です。</p>
+<p>引数が与えられた時には引数によって指定されたメソッドをモジュール関
+数にします。</p>
+<p>module_function はメソッドに「モジュール関数」という属性をつけるメ
+ソッドではなく、プライベートメソッドとモジュールの特異メソッドの 2
+つを同時に定義するメソッドです。そのため、モジュール関数を
+<a href="refm028.html#L000422">alias</a> する場合は</p>
+<pre>module Foo
+  def foo
+    p &quot;foo&quot;
+  end
+  module_function :foo
+  alias :bar :foo
+end
+Foo.foo           # =&gt; &quot;foo&quot;
+Foo.bar           # =&gt; undefined method `bar' for Foo:Module (NoMethodError)</pre>
+<p>としても、プライベートメソッド foo の別名ができるだけで、Foo の特
+異メソッド Foo.foo の別名は定義されません。このようなことをしたい場合
+は、先に別名を定義してからそれぞれをモジュール関数として定義するの
+が簡単です。</p>
+<pre>module Foo
+  def foo
+    p &quot;foo&quot;
+  end
+  alias :bar :foo
+  module_function :foo, :bar
+end
+Foo.foo           # =&gt; &quot;foo&quot;
+Foo.bar           # =&gt; &quot;foo&quot;</pre>
+<p><code>self</code> を返します。</p></dd>
+<dt><a name="L001234" id="L001234"><code>private([<var>name</var> ... ])</code></a></dt>
+<dd>
+<p>引数なしのときは今後このクラスまたはモジュール定義内で新規に定義さ
+れるメソッドを関数形式でだけ呼び出せるように(private)設定します。</p>
+<p>引数が与えられた時には引数によって指定されたメソッドを private に
+設定します。</p>
+<p>例:</p>
+<pre>class Foo
+  def foo1() 1 end      # デフォルトでは public
+  private               # 可視性を private に変更
+  def foo2() 2 end      # foo2 は private メソッド
+end
+
+foo = Foo.new
+p foo.foo1          # =&gt; 1
+p foo.foo2          # =&gt; private method `foo2' called for #&lt;Foo:0x401b7628&gt; (NoMethodError)</pre>
+<p><code>self</code> を返します。</p></dd>
+<dt><a name="L001235" id="L001235"><code>protected([<var>name</var> ... ])</code></a></dt>
+<dd>
+<p>引数なしのときは今後このクラスまたはモジュール定義内で新規に定義さ
+れるメソッドを protected に設定します。protected とはそのメソッド
+が定義されているクラスまたはそのサブクラスからしか呼び出すことがで
+きないという意味です。</p>
+<p>引数が与えられた時には引数によって指定されたメソッドを protected
+に設定します。</p>
+<p><code>self</code> を返します。</p></dd>
+<dt><a name="L001236" id="L001236"><code>public([<var>name</var> ... ])</code></a></dt>
+<dd>
+<p>引数なしのときは今後このクラスまたはモジュール定義内で新規に定義さ
+れるメソッドをどんな形式でも呼び出せるように(public)設定します。</p>
+<p>引数が与えられた時には引数によって指定されたメソッドを public に設
+定します。</p>
+<p>例:</p>
+<pre>def foo() 1 end
+p foo             # =&gt; 1
+# the toplevel default is private
+p self.foo        # =&gt; private method `foo' called for #&lt;Object:0x401c83b0&gt; (NoMethodError)
+
+def bar() 2 end
+public :bar       # visibility changed (all access allowed)
+p bar             # =&gt; 2
+p self.bar        # =&gt; 2</pre>
+<p><code>self</code> を返します。</p></dd>
+<dt><a name="L001237" id="L001237"><code>remove_class_variable(<var>name</var>)</code></a></dt>
+<dd>
+<p><var>name</var> で指定したクラス変数を取り除き、そのクラス変数に設定さ
+れていた値を返します。もし指定したクラス変数がそのモジュール(また
+はクラス)で定義されていない場合は例外 <a href="refm100.html">NameError</a> が発生します。</p>
+<pre>class Foo
+  @@foo = 1
+  remove_class_variable(:@@foo)   # =&gt; 1
+  p @@foo   # =&gt; uninitialized class variable @@foo in Foo (NameError)
+end</pre>
+<p><a href="#L001238">Module#remove_const</a>,
+<a href="refm035.html#L000702">Object#remove_instance_variable</a>
+も参照してください。</p></dd>
+<dt><a name="L001238" id="L001238"><code>remove_const(<var>name</var>)</code></a></dt>
+<dd>
+<p><var>name</var> で指定した定数を取り除き、その定数に設定されていた値を
+返します。指定した定数がそのモジュール(またはクラス)で定義されてい
+ない場合は例外 <a href="refm100.html">NameError</a> が発生します。</p>
+<pre>class Foo
+  FOO = 1
+  p remove_const(:FOO)    # =&gt; 1
+  p FOO     # =&gt; uninitialized constant FOO at Foo (NameError)
+end</pre>
+<p>現在のところ組み込みクラス/モジュールを設定している定数や
+<a href="refm029.html#L000435">autoload</a> を指定した(まだロードしてない)定数を削除
+できないという制約があります。</p>
+<pre>class Object
+  remove_const :Array
+end
+=&gt; -:2:in `remove_const': cannot remove Object::Array (NameError)</pre>
+<p><a href="#L001237">Module#remove_class_variable</a>,
+<a href="refm035.html#L000702">Object#remove_instance_variable</a>
+も参照してください。</p></dd>
+<dt><a name="L001239" id="L001239"><code>remove_method(<var>name</var>)</code></a>
+<dt><a name="L001240" id="L001240"><code>remove_method(<var>name</var>[, <var>name2</var>, ...])   ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p><var>name</var> で指定したインスタンスメソッドをモジュールから取り除き
+ます。もし指定したメソッドが定義されていないときには例外
+<a href="refm100.html">NameError</a> が発生します。</p>
+<pre>class Foo
+  def foo() end
+  remove_method(:foo)
+end</pre>
+<p><a href="refm385.html">ruby 1.8 feature</a>: 複数のメソッドを一度に指定することができます。</p>
+<p><code>self</code> を返します。</p>
+<p><a href="#L001241">undef_method</a> の例も参照してください。</p></dd>
+<dt><a name="L001241" id="L001241"><code>undef_method(<var>name</var>)</code></a>
+<dt><a name="L001242" id="L001242"><code>undef_method(<var>name</var>[, <var>name2</var>, ...])   ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>インスタンスに対して <var>name</var> というメソッドを呼び出すことを禁止
+します。もし指定したメソッドが定義されていないときには例外
+<a href="refm100.html">NameError</a> が発生します。</p>
+<p><a href="refm385.html">ruby 1.8 feature</a>: 複数のメソッドを一度に指定することができます。</p>
+<p><a href="refm028.html#L000423">undef</a> との違いは、メソッド名を文字列または
+<a href="refm063.html">Symbol</a> で与える点です。</p>
+<p>また <a href="#L001239">remove_method</a> とはスーパークラスの定義が継承され
+るかどうかで区別されます。以下の挙動を参照してください。</p>
+<pre>class A
+  def ok() puts 'A' end
+end
+class B &lt; A
+  def ok() puts 'B' end
+end
+
+B.new.ok   # =&gt; B
+
+# undef_method の場合はスーパークラスに同名のメソッドがあっても
+# その呼び出しはエラーになる
+class B
+  undef_method :ok
+end
+B.new.ok   # =&gt; NameError
+
+# remove_method の場合はスーパークラスに同名のメソッドがあると
+# それが呼ばれる
+class B
+  remove_method :ok
+end
+B.new.ok   # =&gt; A</pre>
+<p><code>self</code> を返します。</p></dd>
+</dl>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small><a href="refm384.html">ruby 1.7 feature</a>: version 1.7 では <code>nil</code> を返します</small><br />
+<a name="foottext:2" id="foottext:2" href="#footmark:2"><sup><small>*2</small></sup></a><small><a href="refm385.html">ruby 1.8 feature</a>: version 1.8 では<code>nil</code> を返します</small><br />
+<a name="foottext:3" id="foottext:3" href="#footmark:3"><sup><small>*3</small></sup></a><small><a href="refm385.html">ruby 1.8 feature</a>: version 1.8 では <code>nil</code> を返します</small><br />
+<a name="foottext:4" id="foottext:4" href="#footmark:4"><sup><small>*4</small></sup></a><small>あらい 2002-04-10: バグ?制限?</small><br />
+<a name="foottext:5" id="foottext:5" href="#footmark:5"><sup><small>*5</small></sup></a><small> これは昔から? </small><br />
+<a name="foottext:6" id="foottext:6" href="#footmark:6"><sup><small>*6</small></sup></a><small>あらい 2002-03-03: <a href="refm384.html">ruby 1.7 feature</a> では、include を実行する
+順序が変わったので each の代わりに reverse_each を使う</small><br />
+<a name="foottext:7" id="foottext:7" href="#footmark:7"><sup><small>*7</small></sup></a><small>あらい 2002-03-16: <a href="refm384.html">ruby 1.7 feature</a> では、extend を実行する
+順序が変わったので each の代わりに reverse_each を使う</small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm035.html">UP</a>][<a href="refm049.html">&lt;-PREV</a>][<a href="refm051.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Dir</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm042.html" rel="next" />
+<link href="refm040.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm035.html">UP</a>][<a href="refm040.html">&lt;-PREV</a>][<a href="refm042.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L000833" id="L000833">Dir</a></h1>
+<p>ディレクトリ内の要素を順に返すディレクトリストリーム操作のためのクラス。</p>
+<h2><a name="L000834" id="L000834">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm035.html">Object</a></li>
+</ul>
+<h2><a name="L000835" id="L000835">インクルードしているモジュール:</a></h2>
+<ul>
+<li><a href="refm070.html">Enumerable</a></li>
+</ul>
+<h2><a name="L000836" id="L000836">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L000837" id="L000837"><code>Dir[pattern]</code></a>
+<dt><a name="L000838" id="L000838"><code>Dir[pattern[, <var>pattern2</var>, ...]]               ((&lt;<var>ruby</var> <var>1</var>.<var>9</var> <var>feature</var>&gt;))</code></a>
+<dt><a name="L000839" id="L000839"><code>Dir.glob(<var>pattern</var>)</code></a>
+<dt><a name="L000840" id="L000840"><code>Dir.glob(<var>pattern</var>) {|<var>file</var>| ...}</code></a>
+<dt><a name="L000841" id="L000841"><code>Dir.glob(<var>pattern</var>[, <var>flags</var>])                  ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a>
+<dt><a name="L000842" id="L000842"><code>Dir.glob(<var>pattern</var>[, <var>flags</var>]) {|<var>file</var>| ...}     ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>ワイルドカードの展開を行った結果を文字列の配列として返します。
+パターンにマッチするファイルがない場合は空の配列を返します。</p>
+<pre>p Dir.glob(&quot;./b*&quot;)
+=&gt; [&quot;./bar&quot;, &quot;./baz&quot;]</pre>
+<p>ブロックが与えられたときはワイルドカードにマッチしたファイルを
+引数にそのブロックを 1 つずつ評価して <code>nil</code> を返します</p>
+<pre>Dir.glob(&quot;b*&quot;) {|f| p f }
+=&gt; &quot;bar&quot;
+   &quot;baz&quot;</pre>
+<p>パターンを &quot;\0&quot; で区切って 1 度に複数のパターンを指定することもで
+きます。</p>
+<pre>p Dir.glob(&quot;f*\0b*&quot;)
+=&gt; [&quot;foo&quot;, &quot;bar&quot;]</pre>
+<p>ワイルドカードには以下のものがあります。これらはバックスラッシュに
+よりエスケープすることができます。(ダブルクォートの文字列中では 2 
+重にエスケープする必要があることに注意してください)</p>
+<ul>
+<li><code>*</code>
+      空文字列を含む任意の文字列と一致します。</li>
+<li><code>?</code>
+      任意の一文字と一致します。</li>
+<li><code>[ ]</code>
+      鈎括弧内のいずれかの文字と一致します。<code>-</code> でつな
+      がれた文字は範囲を表します。鈎括弧の中の最初の文字が
+      <code>^</code> である時には含まれない文字と一致します。
+      (<code>^</code> の代わりに ksh や POSIX shell のように <code>!</code> も同じ意
+      味で使えます。)</li>
+<li><p><code>{ }</code>
+      コンマで区切られた文字列の組合せに展開します。例えば、
+      <code>foo{a,b,c}</code>は<code>fooa</code>, <code>foob</code>,
+      <code>fooc</code>に展開されそれぞれに対してマッチ判定を行います。</p>
+<p>括弧は入れ子にすることができます。例えば、
+<code>{foo,bar{foo,bar}}</code> は <code>foo</code>, <code>barfoo</code>, <code>barbar</code>
+のそれぞれにマッチします。</p></li>
+<li><code>**/</code>
+      ワイルドカード <code>*/</code> の0回以上の繰り返しを意味し、
+      ディレクトリを再帰的にたどってマッチを行います。
+      例えば,
+      <code>foo/**/bar</code> は <code>foo/bar</code>, <code>foo/*/bar</code>,
+      <code>foo/*/*/bar</code> ... (以下無限に続く)に対してそれぞれ
+      マッチ判定を行います。</li>
+</ul>
+<p><a href="refm383.html">ruby 1.6 feature</a>:
+ruby 1.6 では、&quot;\0&quot; 以外に、空白類(スペース、タブ、改行)でパターン
+を複数指定できましたが、空白を含むファイル名のマッチングのために 
+ruby 1.7 よりパターンの区切りは &quot;\0&quot; のみとなりました。</p>
+<p><a href="refm392.html">ruby 1.9 feature</a>:
+ruby 1.9 では、&quot;\0&quot; 以外に、Dir.glob の第一引数に配列を指定するこ
+とで複数のパターンを指定できます。Dir[] の場合は、複数の引数で複数
+のパターンを指定できます。</p>
+<pre>p Dir.glob([&quot;f*&quot;, &quot;b*&quot;]) # =&gt; [&quot;foo&quot;, &quot;bar&quot;]
+p Dir[&quot;f*&quot;, &quot;b*&quot;]        # =&gt; [&quot;foo&quot;, &quot;bar&quot;]</pre>
+<p><a href="refm384.html">ruby 1.7 feature</a>:
+省略可能な第二引数には <a href="refm046.html#L001074">File.fnmatch</a> に指定できるフラグ
+と同様のフラグを指定できます。このフラグを指定することでマッチの挙
+動を変更することができます。</p></dd>
+<dt><a name="L000843" id="L000843"><code>Dir.chdir([<var>path</var>])</code></a>
+<dt><a name="L000844" id="L000844"><code>Dir.chdir([<var>path</var>]) {|<var>path</var>| ... }  ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>カレントディレクトリを <var>path</var> に変更します。
+<var>path</var> を省略した場合、環境変数 <code>HOME</code> または <code>LOGDIR</code> 
+が設定されていればそのディレクトリに移動します。</p>
+<p>カレントディレクトリの変更に成功すれば 0 を返します。失敗した場合
+は例外 <a href="refm108.html">Errno::EXXX</a> が発生します。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>:
+ブロックが指定された場合、ディレクトリの変更はブロックの実行中に限
+られます。これは以下と等価です。</p>
+<pre>savedir = Dir.pwd
+Dir.chdir(newdir)
+begin
+  ...
+ensure
+  Dir.chdir(savedir)
+end</pre>
+<p>ブロックが指定されたときのこのメソッドの戻り値はブロックの実行結果
+です。</p></dd>
+<dt><a name="L000845" id="L000845"><code>Dir.chroot(<var>path</var>)</code></a></dt>
+<dd>
+<p>ルートディレクトリを <var>path</var> に変更します。
+<a href="refm535.html">chroot(2)</a> を参照のこと。スーパーユーザだけがルー
+トディレクトリを変更できます。</p>
+<p>元のルートディレクトリに戻る方法はありません。</p>
+<p>ルートディレクトリの変更に成功すれば 0 を返します。失敗した場合は
+例外 <a href="refm108.html">Errno::EXXX</a> が発生します。</p></dd>
+<dt><a name="L000846" id="L000846"><code>Dir.delete(<var>path</var>)</code></a>
+<dt><a name="L000847" id="L000847"><code>Dir.rmdir(<var>path</var>)</code></a>
+<dt><a name="L000848" id="L000848"><code>Dir.unlink(<var>path</var>)</code></a></dt>
+<dd>
+<p>ディレクトリを削除します。ディレクトリは空でなければいけませ
+ん。</p>
+<p>ディレクトリの削除に成功すれば 0 を返します。失敗した場合は例外 
+<a href="refm108.html">Errno::EXXX</a> が発生します。</p></dd>
+<dt><a name="L000849" id="L000849"><code>Dir.entries(<var>path</var>)</code></a></dt>
+<dd>
+<p>ディレクトリ <var>path</var> に含まれるファイルエントリ名の
+配列を返します。以下と同じです。</p>
+<pre>def dir_s_entries( path )
+  Dir.open(path) {|d|
+    return d.to_a
+  }
+end</pre></dd>
+<dt><a name="L000850" id="L000850"><code>Dir.foreach(<var>path</var>) {|<var>file</var>| ...}</code></a></dt>
+<dd>
+<p><var>path</var>のディレクトリの要素に対して繰り返すイテレー
+タ。このメソッドは以下と同じ働きをします。</p>
+<pre>dir = Dir.open(path)
+begin
+  dir.each {|file|
+     ...
+  }
+ensure
+  dir.close
+end</pre>
+<p><code>nil</code> を返します。</p></dd>
+<dt><a name="L000851" id="L000851"><code>Dir.getwd</code></a>
+<dt><a name="L000852" id="L000852"><code>Dir.pwd</code></a></dt>
+<dd>
+<p>カレントディレクトリのフルパスを返します。</p>
+<p>カレントディレクトリの取得に失敗した場合は例外 <a href="refm108.html">Errno::EXXX</a> 
+が発生します(が、普通は失敗することはありません)。</p></dd>
+<dt><a name="L000853" id="L000853"><code>Dir.mkdir(<var>path</var>[, <var>mode</var>])</code></a></dt>
+<dd>
+<p><var>path</var> という新しいディレクトリを作ります。パーミッションは 
+<var>mode</var> で指定された値(デフォルトは 0777)に umask をかけた 
+(<code>mode &amp; ~umask</code>) 値になります(<a href="refm535.html">mkdir(2)</a>) を
+参照)。</p>
+<p>ディレクトリの作成に成功すれば 0 を返します。失敗した場合は例外 
+<a href="refm108.html">Errno::EXXX</a> が発生します。</p></dd>
+<dt><a name="L000854" id="L000854"><code>Dir.new(<var>path</var>)</code></a>
+<dt><a name="L000855" id="L000855"><code>Dir.open(<var>path</var>)</code></a>
+<dt><a name="L000856" id="L000856"><code>Dir.open(<var>path</var>) {|<var>dir</var>| ...}</code></a></dt>
+<dd>
+<p><var>path</var>に対するディレクトリストリームをオープンして返します。
+オープンに失敗した場合は例外 <a href="refm108.html">Errno::EXXX</a> が発生します。</p>
+<p><code>open()</code>はブロックを指定することができます。
+ブロックを指定して呼び出した場合は、ディレクトリストリームを
+与えられてブロックが実行されます。ブロックの実行が終了すると、
+ディレクトリは自動的にクローズされます。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>:
+ブロックが指定されたときのこのメソッドの戻り値はブロックの実行結果
+です。version 1.6 では <code>nil</code> 固定です。</p></dd>
+</dl>
+<h2><a name="L000857" id="L000857">メソッド:</a></h2>
+<dl>
+<dt><a name="L000858" id="L000858"><code>close</code></a></dt>
+<dd>
+<p>ディレクトリストリームをクローズします。以降のディレクトリに
+対する操作は例外 <a href="refm097.html">IOError</a> を発生させます。</p>
+<p>クローズに成功すれば <code>nil</code> を返します。失敗した場合は例外 
+<a href="refm097.html">IOError</a> が発生します。</p></dd>
+<dt><a name="L000859" id="L000859"><code>each {|<var>item</var>| ... }</code></a></dt>
+<dd>
+<p>ディレクトリの各要素に対してブロックを評価します。
+<code>self</code> を返します。</p></dd>
+<dt><a name="L000860" id="L000860"><code>path        ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>オープンしているディレクトリのパス名を文字列で返します。</p></dd>
+<dt><a name="L000861" id="L000861"><code>pos</code></a>
+<dt><a name="L000862" id="L000862"><code>tell</code></a></dt>
+<dd>
+<p>ディレクトリストリームの現在の位置を整数で返します。</p>
+<pre>Dir.open(&quot;/tmp&quot;) {|d|
+    d.each {|f|
+      p d.pos
+    }
+}</pre></dd>
+<dt><a name="L000863" id="L000863"><code>pos=(<var>pos</var>)</code></a>
+<dt><a name="L000864" id="L000864"><code>seek(<var>pos</var>)</code></a></dt>
+<dd>
+<p>ディレクトリストリームの読み込み位置を <var>pos</var> に移動させます。
+<var>pos</var>は<a href="#L000862">Dir#tell</a> で与えられた値でなければなりま
+せん。</p>
+<p><code>pos=</code> は右辺を返します。<code>seek</code> は <code>self</code> を返します。</p></dd>
+<dt><a name="L000865" id="L000865"><code>read</code></a></dt>
+<dd>
+<p>ディレクトリストリームから次の要素を読み出して返します。最後の要素
+まで読み出していれば <code>nil</code> を返します。</p>
+<p>ディレクトリの読み出しに失敗した場合は例外 <a href="refm108.html">Errno::EXXX</a> が発
+生します。</p></dd>
+<dt><a name="L000866" id="L000866"><code>rewind</code></a></dt>
+<dd>
+<p>ディレクトリストリームの読み込み位置を先頭に移動させます。
+<code>self</code> を返します。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm035.html">UP</a>][<a href="refm040.html">&lt;-PREV</a>][<a href="refm042.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

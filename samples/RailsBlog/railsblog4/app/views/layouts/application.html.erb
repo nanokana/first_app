@@ -1,0 +1,32 @@
+<html lang="ja-JP">
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+  <title>RailsBlog: <%= controller.controller_name %></title>
+  <%= stylesheet_link_tag 'nobunaga' %>
+</head>
+<body>
+<div class="main">
+
+<h1>RailsBlog</h1>
+
+<div class="header-menus">
+  <%= link_to 'Home', :controller => 'home', :action => '' %>
+  <%= link_to 'Archive', :controller => 'home', :action => 'archive' %>
+  <%= link_to 'About', :controller => 'home', :action => 'about' %>
+  <% if logged_in? %>
+    <%= link_to '日記を書く', :controller => 'entries', :action => 'new' %>
+    <%= link_to '管理', :controller => 'entries', :action => '' %>
+    <%= link_to 'ログアウト', :controller => 'users', :action => 'logout' %>
+  <% else %>
+    <%= link_to 'ログイン', :controller => 'users', :action => 'login' %>
+  <% end %>
+</div>
+
+<p style="color: green"><%= flash[:notice] %></p>
+
+<%= yield  %>
+
+<div class="footer">RailsBlog version 1.0.0</div>
+</div>
+</body>
+</html>

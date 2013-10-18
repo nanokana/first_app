@@ -1,0 +1,738 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Object</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm036.html" rel="next" />
+<link href="refm034.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm034.html">UP</a>][<a href="refm034.html">&lt;-PREV</a>][<a href="refm036.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L000641" id="L000641">Object</a></h1>
+<p>全てのクラスのスーパークラス。
+オブジェクトの一般的な振舞いを定義します。</p>
+<h2><a name="L000642" id="L000642">インクルードしているモジュール:</a></h2>
+<ul>
+<li><a href="refm076.html">Kernel</a></li>
+</ul>
+<h2><a name="L000643" id="L000643">メソッド一覧:</a></h2>
+<h3><a name="L000644" id="L000644">インスタンスメソッド:</a></h3>
+<p><a href="#L000662">__id__</a>
+<a href="#L000687">__send__</a>
+<a href="#L000650">class</a>
+<a href="#L000652">clone</a>
+<a href="#L000654">display</a>
+<a href="#L000653">dup</a>
+<a href="#L000655">eql?</a>
+<a href="#L000656">equal?</a>
+<a href="#L000657">extend</a>
+<a href="#L000658">freeze</a>
+<a href="#L000659">frozen?</a>
+<a href="#L000660">hash</a>
+<a href="#L000661">id</a>
+<a href="#L000664">inspect</a>
+<a href="#L000665">instance_eval</a>
+<a href="#L000667">instance_of?</a>
+<a href="#L000668">instance_variable_get</a>
+<a href="#L000669">instance_variable_set</a>
+<a href="#L000670">instance_variables</a>
+<a href="#L000671">is_a?</a>
+<a href="#L000672">kind_of?</a>
+<a href="#L000673">method</a>
+<a href="#L000674">method_missing</a>
+<a href="#L000675">methods</a>
+<a href="#L000675">methods</a>
+<a href="#L000683">nil?</a>
+<a href="#L000663">object_id</a>
+<a href="#L000677">private_methods</a>
+<a href="#L000677">private_methods</a>
+<a href="#L000678">protected_methods</a>
+<a href="#L000678">protected_methods</a>
+<a href="#L000676">public_methods</a>
+<a href="#L000676">public_methods</a>
+<a href="#L000684">respond_to?</a>
+<em class="XXINVALIDXX">self===</em>
+<em class="XXINVALIDXX">self==</em>
+<em class="XXINVALIDXX">self=~</em>
+<a href="#L000685">send</a>
+<a href="#L000689">singleton_methods</a>
+<a href="#L000691">taint</a>
+<a href="#L000692">tainted?</a>
+<a href="#L000693">to_a</a>
+<a href="#L000694">to_ary</a>
+<a href="#L000695">to_hash</a>
+<a href="#L000696">to_int</a>
+<a href="#L000697">to_s</a>
+<a href="#L000698">to_str</a>
+<a href="#L000651">type</a>
+<a href="#L000699">untaint</a></p>
+<h3><a name="L000645" id="L000645">プライベートメソッド:</a></h3>
+<p><a href="#L000700">initialize</a>
+<a href="#L000701">initialize_copy</a>
+<a href="#L000702">remove_instance_variable</a>
+<a href="#L000703">singleton_method_added</a>
+<a href="#L000704">singleton_method_removed</a>
+<a href="#L000705">singleton_method_undefined</a></p>
+<h2><a name="L000646" id="L000646">メソッド:</a></h2>
+<dl>
+<dt><a name="L000647" id="L000647"><code>self==(<var>other</var>)</code></a></dt>
+<dd>
+<p><code>self</code> と <var>other</var> が等しければ真を返します。
+デフォルトでは <code>equal?</code> と同じ効果です。</p>
+<p>このメソッドは各クラスの性質に合わせて再定義するべきです。</p></dd>
+<dt><a name="L000648" id="L000648"><code>self=~(<var>other</var>)</code></a></dt>
+<dd>
+<p>右辺に正規表現オブジェクトを置いた正規表現マッチ <code>obj =~ /RE/</code> 
+をサポートするためのメソッドです。常に false を返します。</p>
+<p>この定義により例えば</p>
+<pre>nil =~ /re/</pre>
+<p>は正常に false を返します。</p></dd>
+<dt><a name="L000649" id="L000649"><code>self===(<var>other</var>)</code></a></dt>
+<dd>
+<p>このメソッドは <a href="refm026.html#L000385">case</a> 
+文での比較に用いられます。デフォルトは
+<a href="#L000647">Object#==</a> と同じ働きをしますが、
+この挙動はサブクラスで所属性のチェックを実現するため
+適宜再定義されます。</p></dd>
+<dt><a name="L000650" id="L000650"><code>class</code></a>
+<dt><a name="L000651" id="L000651"><code>type        ((&lt;<var>obsolete</var>&gt;))</code></a></dt>
+<dd>
+<p>レシーバのクラスを返します。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>: type は、version 1.7 では、<a href="refm393.html">obsolete</a> 
+となりました。</p></dd>
+<dt><a name="L000652" id="L000652"><code>clone</code></a>
+<dt><a name="L000653" id="L000653"><code>dup</code></a></dt>
+<dd>
+<p>オブジェクトの複製を作成して返します。</p>
+<p><code>clone</code> は <code>freeze</code>、<code>taint</code>、特異メソッドなどの情報も
+含めた完全な複製を、<code>dup</code> はオブジェクトの内容のみの複製を
+作ります。</p>
+<p><code>clone</code> や <code>dup</code> は「浅い(shallow)」コピーであることに注意
+してください。オブジェクト自身を複製するだけで、オブジェクトの指し
+ている先(たとえば配列の要素など)までは複製しません。
+<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></p>
+<p>また複製したオブジェクトに対して</p>
+<pre>obj.equal?(obj.clone)</pre>
+<p>は一般に成立しませんが
+<a name="footmark:2" id="footmark:2" href="#foottext:2"><sup><small>*2</small></sup></a>、</p>
+<pre>obj == obj.clone</pre>
+<p>は多くの場合に成立します。</p>
+<p><code>true</code>, <code>false</code>, <code>nil</code>, <a href="refm063.html">Symbol</a> オブジェクトなど
+を複製しようとすると例外 <a href="refm111.html">TypeError</a> が発生します。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>:
+version 1.7 では、<a href="refm052.html">Numeric</a> オブジェクトなど immutable(内容不
+変)であるオブジェクトを複製しようとすると例外 <a href="refm111.html">TypeError</a> が発
+生します。</p></dd>
+<dt><a name="L000654" id="L000654"><code>display(<var>out</var> = $<var>stdout</var>)</code></a></dt>
+<dd>
+<p>オブジェクトを <var>out</var> に出力します。以下のように定義されています。</p>
+<pre>class Object
+  def display(out=$stdout)
+    out.print to_s
+    nil
+  end
+end</pre>
+<p><code>nil</code> を返します。</p></dd>
+<dt><a name="L000655" id="L000655"><code>eql?(<var>other</var>)</code></a></dt>
+<dd>
+<p>二つのオブジェクトが等しければ真を返します。<a href="refm044.html">Hash</a> で二つのキー
+が等しいかどうかを判定するのに使われます。</p>
+<p>このメソッドを再定義した時には <a href="#L000660">Object#hash</a> メソッ
+ドも再定義しなければなりません。</p>
+<p><code>eql?</code> のデフォルトの定義は <code>equal?</code> と同じくオブジェクト
+の同一性判定になっています。</p></dd>
+<dt><a name="L000656" id="L000656"><code>equal?(<var>other</var>)</code></a></dt>
+<dd>
+<p><code>other</code> が <code>self</code> 自身の時、真を返します。</p>
+<p>このメソッドを再定義してはいけません。</p></dd>
+<dt><a name="L000657" id="L000657"><code>extend(<var>module</var> ... )</code></a></dt>
+<dd>
+<p>引数で指定したモジュールのインスタンスメソッドを <code>self</code> の特異
+メソッドとして追加します。<code>self</code> を返します。</p>
+<p><a href="refm050.html#L001228">include</a> は、クラス(のインスタンス)に機能を追加します
+が、extend は、ある特定のオブジェクトだけにモジュールの機能を追加
+したいときに使用します。</p>
+<pre>module Foo
+  def a
+    'ok'
+  end
+end
+
+obj = Object.new
+obj.extend Foo
+p obj.a         #=&gt; &quot;ok&quot;</pre>
+<p><code>extend</code> の機能は、「特異クラスに対する <a href="refm050.html#L001228">include</a>」
+と言い替えることもできます。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>: 引数に複数のモジュールを指定した場合、最後
+の引数から逆順に extend を行います。</p></dd>
+<dt><a name="L000658" id="L000658"><code>freeze</code></a></dt>
+<dd>
+<p>オブジェクトの内容の変更を禁止します。<code>self</code> を返します。</p>
+<p>フリーズされたオブジェクトの変更は例外 <a href="refm111.html">TypeError</a> を発生させます。</p></dd>
+<dt><a name="L000659" id="L000659"><code>frozen?</code></a></dt>
+<dd>
+<p>オブジェクトの内容の変更が禁止されているときに真を返します。</p></dd>
+<dt><a name="L000660" id="L000660"><code>hash</code></a></dt>
+<dd>
+<p>オブジェクトのハッシュ値を返します。<a href="refm044.html">Hash</a> クラスでオブジェク
+トを格納するのに用いられています。</p>
+<p><code>A.eql?(B)</code> が成立する時は必ず <code>A.hash == B.hash</code> も成立し
+なければいけません。<code>eql?</code>を再定義した時には必ずこちらも合わせ
+て再定義してください。</p>
+<p>デフォルトでは、<a href="#L000662">Object#__id__</a> と同じ値を返します。
+ただし、<a href="refm055.html">Fixnum</a>, <a href="refm063.html">Symbol</a>, <a href="refm061.html">String</a> だけは組込みのハッ
+シュ関数が使用されます(これを変えることはできません)。</p>
+<p>hash を再定義する場合は、一様に分布する任意の整数を返すようにしま
+す。</p></dd>
+<dt><a name="L000661" id="L000661"><code>id                  ((&lt;<var>obsolete</var>&gt;))</code></a>
+<dt><a name="L000662" id="L000662"><code>__id__</code></a>
+<dt><a name="L000663" id="L000663"><code>object_id         ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>各オブジェクトに対して一意な整数を返します。あるオブジェクトに対し
+てどのような整数が割り当てられるかは不定です。</p>
+<p><code>id</code> メソッドの再定義に備えて別名 <code>__id__</code> が用意されて
+おり、ライブラリでは後者の利用が推奨されます。また <code>__id__</code> を
+再定義すべきではありません。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>: id は、version 1.7 では、<a href="refm393.html">obsolete</a> 
+となりました。</p></dd>
+<dt><a name="L000664" id="L000664"><code>inspect</code></a></dt>
+<dd>
+<p>オブジェクトを人間が読める形式に変換した文字列を返します。</p>
+<p>組み込み関数 <a href="refm029.html#L000466">p</a> は、このメソッドの結果を使用して
+オブジェクトを表示します。</p></dd>
+<dt><a name="L000665" id="L000665"><code>instance_eval(<var>expr</var>, [<var>fname</var>, [<var>lineno</var>=<var>1</var>]])</code></a>
+<dt><a name="L000666" id="L000666"><code>instance_eval {|<var>obj</var>| ... }</code></a></dt>
+<dd>
+<p>オブジェクトのコンテキストで文字列 <var>expr</var> を評価してその結果を
+返します。</p>
+<p><var>fname</var>、<var>lineno</var> が与えられた場合は、ファイル <var>fname</var>、
+行番号 <var>lineno</var> にその文字列があるかのようにコンパイルされ、ス
+タックトレース表示などのファイル名／行番号を差し替えることができま
+す。</p>
+<p>ブロックが与えられた場合にはそのブロックをオブジェクトのコンテキス
+トで評価してその結果を返します。ブロックの引数 <var>obj</var> には 
+<code>self</code> が渡されます。</p>
+<p>オブジェクトのコンテキストで評価するとは <code>self</code> をそのオブジェ
+クトにして実行するということです。また、文字列／ブロック中でメソッ
+ドを定義すれば <code>self</code> の特異メソッドが定義されます。</p>
+<p>ただし、ローカル変数だけは <code>instance_eval</code> の外側のスコープと
+共有します。</p>
+<p><em>注</em>: メソッド定義の中で instance_eval のブロックを使用してメ
+ソッド定義を行うと、&quot;nested method definition&quot; とコンパイルエラー
+になります。これは、現在の ruby パーサの制限です。</p>
+<pre>def foo
+   instance_eval {
+     def bar            # &lt;- ネストしたメソッド定義と判断される
+       &quot;bar&quot;
+     end
+   }
+end
+
+# =&gt; -:4: nested method definition</pre>
+<p>文字列で渡す形式を使えば、この制限は回避できます。</p>
+<pre>def foo
+   instance_eval %Q{
+     def bar
+       &quot;bar&quot;
+     end
+   }
+end
+
+# foo を実行すると関数(厳密には foo のレシーバのメソッド) bar 
+# を定義する
+foo
+p bar
+# =&gt; &quot;bar&quot;</pre>
+<p><a href="refm384.html">ruby 1.7 feature</a>: メソッド定義のネストに関して、この制限はな
+くなっています。さらに、version 1.7 以降 instance_eval を使わなく
+ても以下で同じことができます(厳密には異なります。
+<a href="refm028.html#L000416">メソッド定義のネスト</a> を参照してくださ
+い)。</p>
+<pre>def foo
+   def bar
+     &quot;bar&quot;
+   end
+end
+
+foo
+p bar
+# =&gt; &quot;bar&quot;</pre>
+<p><a href="refm050.html#L001202">Module#module_eval</a>,
+<a href="refm050.html#L001191">Module#class_eval</a> も参照してください。</p></dd>
+<dt><a name="L000667" id="L000667"><code>instance_of?(<var>klass</var>)</code></a></dt>
+<dd>
+<p><code>self</code> がクラス <var>klass</var> の直接のインスタンスである時、
+真を返します。</p>
+<p><code>obj.instance_of?(c)</code> が成立する時には、常に
+<code>obj.kind_of?(c)</code> も成立します。</p>
+<p><a href="#L000672">kind_of?</a> も参照してください。</p></dd>
+<dt><a name="L000668" id="L000668"><code>instance_variable_get(<var>var</var>)</code></a></dt>
+<dd>
+<p><a href="refm385.html">ruby 1.8 feature</a></p>
+<p>オブジェクトのインスタンス変数の値を取得して返します。</p>
+<p><var>var</var> にはインスタンス変数名を文字列か <a href="refm063.html">Symbol</a> で指定しま
+す。</p>
+<p>インスタンス変数が定義されていなければ <code>nil</code> を返します。</p>
+<pre>class Foo
+  def initialize
+    @foo = 1
+  end
+end
+
+obj = Foo.new
+p obj.instance_variable_get(&quot;@foo&quot;)     # =&gt; 1
+p obj.instance_variable_get(:@foo)      # =&gt; 1
+p obj.instance_variable_get(:@bar)      # =&gt; nil</pre></dd>
+<dt><a name="L000669" id="L000669"><code>instance_variable_set(<var>var</var>, <var>val</var>)</code></a></dt>
+<dd>
+<p><a href="refm385.html">ruby 1.8 feature</a></p>
+<p>オブジェクトのインスタンス変数に値 <var>val</var> を設定して <var>val</var> 
+を返します。</p>
+<p><var>var</var> にはインスタンス変数名を文字列か <a href="refm063.html">Symbol</a> で指定しま
+す。</p>
+<p>インスタンス変数が定義されていなければ新たに定義されます。</p>
+<pre>obj = Object.new
+p obj.instance_variable_set(&quot;@foo&quot;, 1)  # =&gt; 1
+p obj.instance_variable_set(:@foo, 2)   # =&gt; 2
+p obj.instance_variable_get(:@foo)      # =&gt; 2</pre></dd>
+<dt><a name="L000670" id="L000670"><code>instance_variables</code></a></dt>
+<dd>
+<p>オブジェクトのインスタンス変数名を文字列の配列として返します。</p>
+<pre>obj = Object.new
+obj.instance_eval { @foo, @bar = nil }
+p obj.instance_variables
+
+# =&gt; [&quot;@foo&quot;, &quot;@bar&quot;]</pre>
+<p><a href="refm029.html#L000462">local_variables</a>,
+<a href="refm029.html#L000454">global_variables</a>,
+<a href="refm050.html#L001177">Module.constants</a>,
+<a href="refm050.html#L001177">Module#constants</a>,
+<a href="refm050.html#L001193">Module#class_variables</a>
+も参照してください。</p></dd>
+<dt><a name="L000671" id="L000671"><code>is_a?(<var>mod</var>)</code></a>
+<dt><a name="L000672" id="L000672"><code>kind_of?(<var>mod</var>)</code></a></dt>
+<dd>
+<p><code>self</code> が、クラス <var>mod</var> とそのサブクラス、および
+モジュール <var>mod</var> をインクルードしたクラスとそのサブクラス、
+のいずれかのインスタンスであるとき真を返します。</p>
+<pre>module M
+end
+class C &lt; Object
+  include M
+end
+class S &lt; C
+end
+
+obj = S.new
+p obj.is_a? S       # true
+p obj.is_a? M       # true
+p obj.is_a? C       # true
+p obj.is_a? Object  # true
+p obj.is_a? Hash    # false</pre>
+<p><a href="#L000667">instance_of?</a>, <a href="refm050.html#L001187">Module#===</a> も参照してください。</p></dd>
+<dt><a name="L000673" id="L000673"><code>method(<var>name</var>)</code></a></dt>
+<dd>
+<p><code>self</code> のメソッド <var>name</var> をオブジェクト化した 
+<a href="refm048.html">Method</a> オブジェクトを返します。<var>name</var> は 
+<a href="refm063.html">Symbol</a> または文字列で指定します。</p>
+<p><a href="refm050.html#L001200">Module#instance_method</a> も参照してください。</p></dd>
+<dt><a name="L000674" id="L000674"><code>method_missing(<var>name</var>, <var>args</var>, ... )</code></a></dt>
+<dd>
+<p>呼びだされたメソッドが定義されていなかった時、Ruby がこのメソッド
+を呼び出します。</p>
+<p>呼び出しに失敗したメソッドの名前 (<a href="refm063.html">Symbol</a>) が <var>name</var> に
+その時の引数が <var>arg ...</var> に渡されます。</p>
+<p>デフォルトではこのメソッドは例外 <a href="refm100.html">NameError</a> を発生させます。</p></dd>
+<dt><a name="L000675" id="L000675"><code>methods</code></a>
+<dt><a name="L000676" id="L000676"><code>public_methods</code></a>
+<dt><a name="L000677" id="L000677"><code>private_methods</code></a>
+<dt><a name="L000678" id="L000678"><code>protected_methods</code></a>
+<dt><a name="L000679" id="L000679"><code>methods([<var>inherited_too</var>])            ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a>
+<dt><a name="L000680" id="L000680"><code>public_methods([<var>inherited_too</var>])     ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a>
+<dt><a name="L000681" id="L000681"><code>private_methods([<var>inherited_too</var>])    ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a>
+<dt><a name="L000682" id="L000682"><code>protected_methods([<var>inherited_too</var>])  ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>そのオブジェクトが理解できる public/private/protected メソッド名の
+一覧を文字列の配列で返します。</p>
+<p>methods は、instance_methods と同じです。
+<a href="refm384.html">ruby 1.7 feature</a>: methods は、public および protected メソッ
+ド名の一覧を配列で返します。</p>
+<p><a href="refm385.html">ruby 1.8 feature</a>: 引数が指定できるようになりました。
+<var>inherited_too</var> が真であれば、スーパークラスで定義されたメソッ
+ドも探索します。デフォルトは真です。</p>
+<p>methods(false) は、<a href="#L000689">singleton_methods</a>(false) と同じで
+す。</p>
+<p>例:</p>
+<pre>class Foo
+  private;   def private_foo()   end
+  protected; def protected_foo() end
+  public;    def public_foo()    end
+end
+
+class Bar &lt; Foo
+end
+
+p Bar.new.methods           - Object.new.methods
+p Bar.new.public_methods    - Object.new.public_methods
+p Bar.new.private_methods   - Object.new.private_methods
+p Bar.new.protected_methods - Object.new.protected_methods
+=&gt; [&quot;public_foo&quot;]   # version 1.7 以降、[&quot;protected_foo&quot;, &quot;public_foo&quot;]
+   [&quot;public_foo&quot;]
+   [&quot;private_foo&quot;]
+   [&quot;protected_foo&quot;]</pre>
+<p><a href="refm050.html#L001206">Module#instance_methods</a>,
+<a href="refm050.html#L001207">Module#public_instance_methods</a>,
+<a href="refm050.html#L001208">Module#private_instance_methods</a>,
+<a href="refm050.html#L001209">Module#protected_instance_methods</a>
+も参照してください。</p>
+<p><a href="#L000689">Object#singleton_methods</a>
+も参照してください。</p></dd>
+<dt><a name="L000683" id="L000683"><code>nil?</code></a></dt>
+<dd>
+<p>レシーバが <code>nil</code> であれば真を返します。</p></dd>
+<dt><a name="L000684" id="L000684"><code>respond_to?(<var>name</var>[, <var>priv</var>=<var>false</var>])</code></a></dt>
+<dd>
+<p>オブジェクトが public メソッド <var>name</var> を持つとき真を返します。</p>
+<p><var>name</var> は <a href="refm063.html">Symbol</a> または文字列です。<var>priv</var> が真のとき
+は private メソッドに対しても真を返します。</p></dd>
+<dt><a name="L000685" id="L000685"><code>send(<var>name</var>[, <var>args</var> ... ])</code></a>
+<dt><a name="L000686" id="L000686"><code>send(<var>name</var>[, <var>args</var> ... ]) { .... }</code></a>
+<dt><a name="L000687" id="L000687"><code>__send__(<var>name</var>[, <var>args</var> ... ])</code></a>
+<dt><a name="L000688" id="L000688"><code>__send__(<var>name</var>[, <var>args</var> ... ]) { ... }</code></a></dt>
+<dd>
+<p>オブジェクトのメソッド <var>name</var> を、引数に <var>args</var> を
+渡して呼び出し、メソッドの実行結果を返します。</p>
+<p>ブロック付きで呼ばれたときはブロックもそのまま引き渡します。メソッ
+ド名 <var>name</var> は文字列か<a href="refm063.html">Symbol</a> です。</p>
+<p><code>send</code> が再定義された場合に備えて別名 <code>__send__</code> も
+用意されており、ライブラリではこちらを使うべきです。また
+<code>__send__</code> は再定義すべきではありません。</p>
+<p><code>send</code>, <code>__send__</code> は、<a href="refm028.html#L000420">呼び出し制限</a>
+にかかわらず任意のメソッドを呼び出せます。</p>
+<p><a href="refm392.html">ruby 1.9 feature</a>:
+<a href="refm028.html#L000420">呼び出し制限</a>が<code>send</code>, <code>__send__</code>にも
+影響するようになり、レシーバを指定した呼び出しではprivateメソッドを
+呼び出せなくなりました。
+privateメソッドを呼び出す必要がある場合は<a href="#L000665">instance_eval</a>を
+使用してください。</p></dd>
+<dt><a name="L000689" id="L000689"><code>singleton_methods</code></a>
+<dt><a name="L000690" id="L000690"><code>singleton_methods([<var>inherited_too</var>])  ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>そのオブジェクトに対して定義されている特異メソッド名(publicメソッ
+ドのみ)の一覧を文字列の配列で返します。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>: 引数が指定できるようになりました。
+<var>inherited_too</var> が偽であれば(1.8.0までのデフォルトは偽。1.8.1 
+以降のデフォルト値は真)、スーパークラスで定義されたメソッドは対象
+になりません。</p>
+<p><a href="refm385.html">ruby 1.8 feature</a>: public あるいは protected 属性の特異メソッド
+名の一覧を返すようになりました。特に singleton_methods(false) は、
+<a href="#L000675">methods</a>(false) と同じです。</p>
+<pre>obj = Object.new
+module Foo
+  private;   def private_foo()   end
+  protected; def protected_foo() end
+  public;    def public_foo()    end
+end
+
+class &lt;&lt;obj
+  include Foo
+  private;   def private_bar()   end
+  protected; def protected_bar() end
+  public;    def public_bar()    end
+end
+p obj.singleton_methods
+p obj.singleton_methods(false)
+
+# =&gt; [&quot;public_foo&quot;, &quot;public_bar&quot;, &quot;protected_foo&quot;, &quot;protected_bar&quot;]
+     [&quot;public_bar&quot;, &quot;protected_bar&quot;]</pre>
+<p>あるいは、<a href="#L000657">Object#extend</a> は特異クラスに対するイ
+ンクルードなので以下も同様になります。</p>
+<pre>obj = Object.new
+
+module Foo
+  private;   def private_foo()   end
+  protected; def protected_foo() end
+  public;    def public_foo()    end
+end
+
+obj.extend(Foo)
+p obj.singleton_methods
+p obj.singleton_methods(false)
+
+# =&gt; [&quot;public_foo&quot;, &quot;protected_foo&quot;]
+     []</pre>
+<p>クラスメソッド(クラスオブジェクトの特異メソッド)に関しては引数が真
+のとき、スーパークラスのクラスメソッドも対象になります。</p>
+<pre>class Foo
+  def Foo.foo
+  end
+end
+
+class Bar &lt; Foo
+  def Bar.bar
+  end
+end
+
+p Bar.singleton_methods        #=&gt; [&quot;bar&quot;, &quot;foo&quot;]
+p Bar.singleton_methods(false) #=&gt; [&quot;bar&quot;]</pre></dd>
+<dt><a name="L000691" id="L000691"><code>taint</code></a></dt>
+<dd>
+<p>オブジェクトの「汚染マーク」をセットします。<code>self</code> を返します。</p>
+<p>オブジェクトの汚染に関しては<a href="refm018.html">セキュリティモデル</a>を参照してください。</p></dd>
+<dt><a name="L000692" id="L000692"><code>tainted?</code></a></dt>
+<dd>
+<p>オブジェクトの「汚染マーク」がセットされている時真を返します。</p>
+<p>オブジェクトの汚染に関しては<a href="refm018.html">セキュリティモデル</a>を参照してください。</p></dd>
+<dt><a name="L000693" id="L000693"><code>to_a        ((&lt;<var>obsolete</var>&gt;))</code></a></dt>
+<dd>
+<p>オブジェクトを配列に変換してその配列を返します。</p>
+<p>普通に配列に変換できないオブジェクトは、自身のみを含む長さ 1 の配
+列に変換されます</p>
+<p>(<a href="refm384.html">ruby 1.7 feature</a>: Object のこのメソッドは将来なくなるかもし
+れません。1.7 では警告が出ます)。</p>
+<p>例</p>
+<pre>p( {'a'=&gt;1}.to_a )  # [[&quot;a&quot;, 1]]
+p ['array'].to_a    # [&quot;array&quot;]
+p 1.to_a            # [1]       (warning: default `to_a' will be obsolete)
+p 'str'.to_a        # [&quot;str&quot;]</pre>
+<p><a href="refm385.html">ruby 1.8 feature</a>:
+多重代入の右辺に <code>*</code> を伴ったオブジェクトが現れた場合、
+そのオブジェクトが to_a を定義していればその結果が利用されます。
+to_a が定義されていない場合は、右辺が自身を含む長さ 1 の配列に
+変換された後で代入が行われます。
+<a name="footmark:3" id="footmark:3" href="#foottext:3"><sup><small>*3</small></sup></a></p>
+<pre>class Foo
+  def to_a
+    [1, 2, 3]
+  end
+end
+
+a, b, c = *Foo.new
+p [a, b, c]
+
+# =&gt; [1, 2, 3]</pre></dd>
+<dt><a name="L000694" id="L000694"><code>to_ary</code></a></dt>
+<dd>
+<p>オブジェクトを配列に変換してその配列を返します。</p>
+<p>オブジェクトの配列への暗黙の変換が必要なときに内部で呼ばれます。
+<a name="footmark:4" id="footmark:4" href="#foottext:4"><sup><small>*4</small></sup></a></p>
+<p>このメソッドが定義されたオブジェクトが単独で多重代入の右辺に
+現れた場合にも呼ばれます。</p>
+<pre>class Foo
+  def to_ary
+    [1, 2, 3]
+  end
+end
+
+a, b, c = Foo.new
+p [a, b, c]
+
+=&gt; [1, 2, 3]</pre></dd>
+<dt><a name="L000695" id="L000695"><code>to_hash</code></a></dt>
+<dd>
+<p>オブジェクトのハッシュへの暗黙の変換が必要なときに内部で呼ばれます。</p></dd>
+<dt><a name="L000696" id="L000696"><code>to_int</code></a></dt>
+<dd>
+<p>オブジェクトの整数への暗黙の変換が必要なときに内部で呼ばれます。</p></dd>
+<dt><a name="L000697" id="L000697"><code>to_s</code></a></dt>
+<dd>
+<p>オブジェクトの文字列表現を返します。</p>
+<p><a href="refm029.html#L000467">print</a> や <a href="refm029.html#L000488">sprintf</a> は文字列以外の
+オブジェクトが引数に渡された場合このメソッドを使って文字列に変換し
+ます。</p></dd>
+<dt><a name="L000698" id="L000698"><code>to_str</code></a></dt>
+<dd>
+<p>オブジェクトの文字列への暗黙の変換が必要なときに呼ばれます。</p></dd>
+<dt><a name="L000699" id="L000699"><code>untaint</code></a></dt>
+<dd>
+<p>オブジェクトの「汚染マーク」を取り除きます。<code>self</code> を返します。</p>
+<p>汚染マークを取り除くことによる危険性はプログラマが責任を負う必要が
+あります。</p>
+<p>セキュリティレベルが3以上の場合は例外 <a href="refm106.html">SecurityError</a> が
+発生します。</p>
+<p>オブジェクトの汚染に関しては<a href="refm018.html">セキュリティモデル</a>を参照してください。</p></dd>
+</dl>
+<h2><a name="L000645" id="L000645">プライベートメソッド:</a></h2>
+<dl>
+<dt><a name="L000700" id="L000700"><code>initialize</code></a></dt>
+<dd>
+<p>ユーザ定義クラスのオブジェクト初期化メソッド。</p>
+<p>このメソッドは <a href="refm051.html#L001247">Class#new</a> から新しく生成されたオブ
+ジェクトの初期化のために呼び出されます。デフォルトの動作ではなにも
+しません。サブクラスではこのメソッドを必要に応じて再定義されること
+が期待されています。<code>initialize</code> には 
+<a href="refm051.html#L001247">Class#new</a> に与えられた引数がそのまま渡されます。</p>
+<p><code>initialize</code> という名前のメソッドは自動的に private に設定され
+ます。</p></dd>
+<dt><a name="L000701" id="L000701"><code>initialize_copy(<var>obj</var>)</code></a></dt>
+<dd>
+<p><a href="refm385.html">ruby 1.8 feature</a></p>
+<p>(拡張ライブラリによる)ユーザ定義クラスのオブジェクトコピー(clone,
+dup)の初期化メソッド。</p>
+<p>このメソッドは <code>self</code> を <var>obj</var> の内容で置き換えます。ただ
+し、self のインスタンス変数や特異メソッドは変化しません。</p>
+<p>レシーバが <code>freeze</code> されているか、<var>obj</var> のクラスがレシーバ
+のクラスと異なる場合は例外 <a href="refm111.html">TypeError</a> が発生します。</p>
+<p>デフォルトでは(Object#initialize_copy は)、上記の freeze チェックおよ
+び型のチェックを行い <code>self</code> を返すだけのメソッドです。</p>
+<p>obj.<a href="#L000653">dup</a> は、新たに生成したオブジェクトに対して 
+initialize_copy を呼び</p>
+<pre>obj2 = obj.class.allocate
+obj2.initialize_copy(obj)</pre>
+<p>obj2 に対してさらに obj の汚染状態、インスタンス変数、ファイナライ
+ザをコピーすることで複製を作ります。<a href="#L000652">clone</a> は、さらに
+特異メソッドのコピーも行います。</p>
+<pre>obj = Object.new
+class &lt;&lt;obj
+  attr_accessor :foo
+  def bar
+    :bar
+  end
+end
+
+def check(obj)
+  puts &quot;instance variables: #{obj.inspect}&quot;
+  puts &quot;tainted?: #{obj.tainted?}&quot;
+  print &quot;singleton methods: &quot;
+  begin
+    p obj.bar
+  rescue NameError
+    p $!
+  end
+end
+
+obj.foo = 1
+obj.taint
+
+check Object.new.send(:initialize_copy, obj)
+        # =&gt; instance variables: #&lt;Object:0x4019c9d4&gt;
+        #    tainted?: false
+        #    singleton methods: #&lt;NoMethodError: ...&gt;
+check obj.dup
+        # =&gt; instance variables: #&lt;Object:0x4019c9c0 @foo=1&gt;
+        #    tainted?: true
+        #    singleton methods: #&lt;NoMethodError: ...&gt;
+check obj.clone
+        # =&gt; instance variables: #&lt;Object:0x4019c880 @foo=1&gt;
+        #    tainted?: true
+        #    singleton methods: :bar</pre>
+<p>initialize_copy は、Ruby インタプリンタが知り得ない情報をコピーするた
+めに使用(定義)されます。例えば C 言語でクラスを実装する場合、情報
+をインスタンス変数に保持させない場合がありますが、そういった内部情
+報を initialize_copy でコピーするよう定義しておくことで、dup や clone 
+を再定義する必要がなくなります。</p>
+<p><code>initialize_copy</code> という名前のメソッドは自動的に private に設
+定されます。</p></dd>
+<dt><a name="L000702" id="L000702"><code>remove_instance_variable(<var>name</var>)</code></a></dt>
+<dd>
+<p>オブジェクトからインスタンス変数 <var>name</var> を取り除き、そのインス
+タンス変数に設定されていた値を返します。<var>name</var> は <a href="refm063.html">Symbol</a> 
+か文字列です。</p>
+<p>オブジェクトがインスタンス変数 <var>name</var> を持たない場合は例外 
+<a href="refm100.html">NameError</a> が発生します。</p>
+<pre>class Foo
+  def foo
+    @foo = 1
+    p remove_instance_variable :@foo # =&gt; 1
+    p remove_instance_variable :@foo # =&gt; instance variable @foo not defined (NameError)
+  end
+end
+Foo.new.foo</pre>
+<p><a href="refm050.html#L001237">Module#remove_class_variable</a>,
+<a href="refm050.html#L001238">Module#remove_const</a> 
+も参照してください。</p></dd>
+<dt><a name="L000703" id="L000703"><code>singleton_method_added(<var>name</var>)</code></a></dt>
+<dd>
+<p>特異メソッドが追加された時にインタプリタから呼び出されます。
+<var>name</var> には追加されたメソッド名が <a href="refm063.html">Symbol</a> で渡されます。</p>
+<pre>class Foo
+  def singleton_method_added(name)
+    puts &quot;singleton method \&quot;#{name}\&quot; was added&quot;
+  end
+end
+
+obj = Foo.new
+def obj.foo
+end
+
+=&gt; singleton method &quot;foo&quot; was added</pre>
+<p>通常のメソッドの追加に対するフックには
+<a href="refm050.html#L001230">Module#method_added</a>を使います。</p></dd>
+<dt><a name="L000704" id="L000704"><code>singleton_method_removed(<var>name</var>)</code></a></dt>
+<dd>
+<p><a href="refm384.html">ruby 1.7 feature</a></p>
+<p>特異メソッドが <a href="refm050.html#L001239">Module#remove_method</a> に
+より削除された時にインタプリタから呼び出されます。
+<var>name</var> には削除されたメソッド名が <a href="refm063.html">Symbol</a> で渡されます。</p>
+<pre>class Foo
+  def singleton_method_removed(name)
+    puts &quot;singleton method \&quot;#{name}\&quot; was removed&quot;
+  end
+end
+
+obj = Foo.new
+def obj.foo
+end
+
+class &lt;&lt; obj
+  remove_method :foo
+end
+
+=&gt; singleton method &quot;foo&quot; was removed</pre>
+<p>通常のメソッドの削除に対するフックには
+<a href="refm050.html#L001231">Module#method_removed</a>を使います。</p></dd>
+<dt><a name="L000705" id="L000705"><code>singleton_method_undefined(<var>name</var>)</code></a></dt>
+<dd>
+<p><a href="refm384.html">ruby 1.7 feature</a></p>
+<p>特異メソッドが <a href="refm050.html#L001241">Module#undef_method</a> または 
+<a href="refm028.html#L000423">undef</a> により未定義にされた時にインタプリタ
+から呼び出されます。
+<var>name</var> には未定義にされたメソッド名が <a href="refm063.html">Symbol</a> で渡されます。</p>
+<pre>class Foo
+  def singleton_method_undefined(name)
+    puts &quot;singleton method \&quot;#{name}\&quot; was undefined&quot;
+  end
+end
+
+obj = Foo.new
+def obj.foo
+end
+def obj.bar
+end
+
+class &lt;&lt; obj
+  undef_method :foo
+end
+obj.instance_eval {undef bar}
+
+=&gt; singleton method &quot;foo&quot; was undefined
+   singleton method &quot;bar&quot; was undefined</pre>
+<p>通常のメソッドの未定義に対するフックには 
+<a href="refm050.html#L001232">Module#method_undefined</a> を使います。</p></dd>
+</dl>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>深い(deep)コピーが必要な場合には、
+<code>Marshal.load(Marshal.dump(obj)</code>を
+使ってください。ただしMarshal出来ないオブジェクトが
+含まれている場合には使えません。</small><br />
+<a name="foottext:2" id="foottext:2" href="#footmark:2"><sup><small>*2</small></sup></a><small>version 1.6 では、0.equal?(0.clone) が成立してしまいます</small><br />
+<a name="foottext:3" id="foottext:3" href="#footmark:3"><sup><small>*3</small></sup></a><small>あらい 2003-10-07: 覚書: 簡単に言えば、<code>Array(右辺)</code> と同じ
+規則で右辺が変換される。この辺りの記述は整理しなおすこと</small><br />
+<a name="foottext:4" id="foottext:4" href="#footmark:4"><sup><small>*4</small></sup></a><small>to_ary, to_hash, to_int, to_str は、説明の便宜上このページに書
+いてますが、デフォルトでは <code>Object</code> のメソッドとしては定義され
+ていません</small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm034.html">UP</a>][<a href="refm034.html">&lt;-PREV</a>][<a href="refm036.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

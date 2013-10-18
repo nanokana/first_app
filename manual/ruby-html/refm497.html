@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ruby.h</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm498.html" rel="next" />
+<link href="refm496.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm488.html">UP</a>][<a href="refm496.html">&lt;-PREV</a>][<a href="refm498.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L010520" id="L010520">ruby.h</a></h1>
+<dl>
+<dt><a name="L010521" id="L010521">type* ALLOC(type)</a></dt>
+<dd>
+<p><var>type</var> 型のメモリを割り当てる。</p>
+</dd>
+<dt><a name="L010522" id="L010522">type* ALLOC_N(type, n)</a></dt>
+<dd>
+<p><var>type</var> 型のメモリを <var>n</var> 個割り当てる。</p>
+</dd>
+<dt><a name="L010523" id="L010523">type* ALLOCA_N(type, n)</a></dt>
+<dd>
+<p><var>type</var> 型のメモリを <var>n</var> 個スタックフレームに割り当てる。
+このメモリは関数が終わると自動的に解放される。</p>
+</dd>
+<dt><a name="L010524" id="L010524">int BUILTIN_TYPE(VALUE obj)</a></dt>
+<dd>
+<p><var>obj</var> の構造体型 ID を返します。
+<code>SPECIAL_CONST_P(obj)</code> が真のオブジェクトに対して使うと落ちます。</p>
+</dd>
+<dt><a name="L010525" id="L010525">void Check_SafeStr(VALUE v)</a></dt>
+<dd>
+<p>古い API です。SafeStringValue を使ってください。</p>
+</dd>
+<dt><a name="L010526" id="L010526">void Check_Type(VALUE val, int typeflag)</a></dt>
+<dd>
+<p><var>val</var> の構造体型フラグが <var>typeflag</var> でなければ
+例外 <code>TypeError</code> を発生します。<var>val</var> は即値の VALUE であっても
+構いません。</p>
+</dd>
+<dt><a name="L010527" id="L010527">VALUE CHR2FIX(char x)</a></dt>
+<dd>
+<p>char 型の整数 <var>x</var> を Ruby の Fixnum に変換します。</p>
+</dd>
+<dt><a name="L010528" id="L010528">VALUE CLASS_OF(VALUE obj)</a></dt>
+<dd>
+<p><var>obj</var> のクラスを返します。
+この場合の「クラス」とは C レベルのクラス、
+つまり RBasic 構造体の klass メンバの値です。
+また、構造体を持たない Fixnum などに対しても正常に働きます。</p>
+</dd>
+<dt><a name="L010529" id="L010529">void CLONESETUP(VALUE clone, VALUE obj)</a></dt>
+<dd>
+<p>OBJSETUP() の変種。
+<var>clone</var> を、<var>obj</var> から clone で作った
+オブジェクトとして初期化します。</p>
+</dd>
+<dt><a name="L010530" id="L010530">void Data_Get_Struct(VALUE obj, type, type *svar)</a></dt>
+<dd>
+<p>Ruby のオブジェクト <var>obj</var> から <var>type</var> 型へのポインタを
+とりだし <var>svar</var> に代入します。</p>
+<p>使用例</p>
+<pre>struct mytype {
+    int i;
+    char *s;
+};
+
+VALUE
+my_i(self)
+    VALUE self;
+{
+    struct mytype *m;
+    Data_Get_Struct(self, struct mytype, m);
+    return INT2NUM(m-&gt;i);
+}</pre>
+</dd>
+<dt><a name="L010531" id="L010531">VALUE Data_Make_Struct(VALUE klass, type, RUBY_DATA_FUNC mark, RUBY_DATA_FUNC free, type *svar)</a></dt>
+<dd>
+<p><var>type</var> 型の構造体をヒープに割り当ててそれへのポインタを
+<var>svar</var> に代入し、クラス <var>klass</var> のインスタンスである
+Ruby のオブジェクトを生成し、それを返します。<var>mark</var>
+<var>free</var> はそれぞれマーク用・解放用の関数へのポインタです。
+どちらも、必要ないときはかわりに 0 を渡します。</p>
+<p>また <code>RUBY_DATA_FUNC</code> の定義は以下のようです。</p>
+<pre>typedef void (*RUBY_DATA_FUNC)(void *st)</pre>
+<p>第一引数 <var>st</var> には <var>svar</var> の値が渡されます。</p>
+<p>使用例</p>
+<pre>struct mytype {
+    int i;
+    char *s;
+};
+
+VALUE
+my_s_new(klass)
+    VALUE klass;
+{
+    struct mytype *dummy;
+    return Data_Make_Struct(MyClass, struct mytype,
+                            mark_my, free_my, dummy);
+}</pre>
+</dd>
+<dt><a name="L010532" id="L010532">void *DATA_PTR(VALUE dta)</a></dt>
+<dd>
+<p>実際は struct RData* 型である <var>dta</var> から、
+それがラップしているポインタを取り出します。</p>
+</dd>
+<dt><a name="L010533" id="L010533">VALUE Data_Wrap_Struct(VALUE klass, RUBY_DATA_FUNC mark, RUBY_DATA_FUNC free, void *sval)</a></dt>
+<dd>
+<p>C の構造体 <var>sval</var> をラップして <var>klass</var> クラスの
+インスタンスである Ruby オブジェクトを生成し、それを返します。
+<var>mark</var>、<var>free</var> はそれぞれ <var>sval</var> のマーク用・解放用の
+関数へのポインタです。どちらも、必要ないときはかわりに 0 を渡します。</p>
+<p>また <code>RUBY_DATA_FUNC</code> の定義は以下のようです。</p>
+<pre>typedef void (*RUBY_DATA_FUNC)(void *st)</pre>
+<p>第一引数 <var>st</var> には <var>sval</var> が渡されます。</p>
+<p>使用例</p>
+<pre>struct mytype {
+    int i;
+    char *s;
+};
+
+VALUE
+my_s_new(klass)
+    VALUE klass;
+{
+    struct mytype *m = malloc(sizeof(struct mytype));
+    m-&gt;i = 0;
+    m-&gt;s = 0;
+    return Data_Wrap_Struct(MyClass, 0, free_my, m);
+}</pre>
+</dd>
+<dt><a name="L010534" id="L010534">void DUPSETUP(dup, obj)</a></dt>
+<dd>
+<p>OBJSETUP() の変種。
+<var>dup</var> を、<var>obj</var> から dup で作った
+オブジェクトとして初期化します。</p>
+</dd>
+<dt><a name="L010535" id="L010535">int FIX2INT(VALUE x)</a></dt>
+<dd>
+<p>Fixnum を int に変換します。
+返り値が int の範囲から外れる場合は RangeError が発生します。</p>
+</dd>
+<dt><a name="L010536" id="L010536">long FIX2LONG(VALUE x)</a></dt>
+<dd>
+<p>Fixnum を long に変換します。
+返り値が long の範囲から外れる場合は RangeError が発生します。</p>
+</dd>
+<dt><a name="L010537" id="L010537">unsigned int FIX2UINT(VALUE x)</a></dt>
+<dd>
+<p>Fixnum を unsigned int に変換します。
+返り値が unsigned int の範囲から外れる場合は RangeError が発生します。</p>
+</dd>
+<dt><a name="L010538" id="L010538">unsigned long FIX2ULONG(VALUE x)</a></dt>
+<dd>
+<p>Fixnum を unsigned long に変換します。
+返り値が unsigned long の範囲から外れる場合は RangeError が発生します。</p>
+</dd>
+<dt><a name="L010539" id="L010539">int FIXABLE(long f)</a></dt>
+<dd>
+<p><var>f</var> が Fixnum の範囲に収まっているなら真。</p>
+</dd>
+<dt><a name="L010540" id="L010540">long FIXNUM_MAX</a></dt>
+<dd>
+<p>Fixnum にできる整数の上限値。</p>
+</dd>
+<dt><a name="L010541" id="L010541">long FIXNUM_MIN</a></dt>
+<dd>
+<p>Fixnum にできる整数の下限値。</p>
+</dd>
+<dt><a name="L010542" id="L010542">int FIXNUM_P(VALUE obj)</a></dt>
+<dd>
+<p><var>obj</var> が <code>Fixnum</code> のインスタンスのとき真。</p>
+</dd>
+<dt><a name="L010543" id="L010543">int FL_ABLE(VALUE x)</a></dt>
+<dd>
+<p><var>x</var> が即値の VALUE でなければ真。</p>
+</dd>
+<dt><a name="L010544" id="L010544">void FL_REVERSE(VALUE x, int f)</a></dt>
+<dd>
+<p><var>x</var> のフラグ <var>f</var> を反転する。</p>
+</dd>
+<dt><a name="L010545" id="L010545">void FL_SET(VALUE x, int f)</a></dt>
+<dd>
+<p><var>x</var> に対してフラグ <var>f</var> をセットする。</p>
+</dd>
+<dt><a name="L010546" id="L010546">int FL_TEST(VALUE x, int f)</a></dt>
+<dd>
+<p><var>x</var> のフラグ <var>f</var> が立っていたら真。</p>
+</dd>
+<dt><a name="L010547" id="L010547">void FL_UNSET(VALUE x, int f)</a></dt>
+<dd>
+<p><var>x</var> のフラグ <var>f</var> をクリアする。</p>
+</dd>
+<dt><a name="L010548" id="L010548">VALUE ID2SYM(ID id)</a></dt>
+<dd>
+<p><var>id</var> を Symbol に変換します。</p>
+</dd>
+<dt><a name="L010549" id="L010549">int IMMEDIATE_P(VALUE obj)</a></dt>
+<dd>
+<p><var>obj</var> がポインタでないとき真。すなわち現在の実装では
+<code>Symbol</code> か <code>Fixnum</code> のインスタンスであるとき真。</p>
+</dd>
+<dt><a name="L010550" id="L010550">VALUE INT2FIX(int i)</a></dt>
+<dd>
+<p>31ビット以内におさまる整数を Fixnum に変換します。</p>
+</dd>
+<dt><a name="L010551" id="L010551">VALUE INT2NUM(long i)</a></dt>
+<dd>
+<p>任意の整数を Fixnum か Bignum に変換します。</p>
+</dd>
+<dt><a name="L010552" id="L010552">int ISALNUM(char c)</a></dt>
+<dt><a name="L010553" id="L010553">int ISALPHA(char c)</a></dt>
+<dt><a name="L010554" id="L010554">int ISASCII(char c)</a></dt>
+<dt><a name="L010555" id="L010555">int ISDIGIT(char c)</a></dt>
+<dt><a name="L010556" id="L010556">int ISLOWER(char c)</a></dt>
+<dt><a name="L010557" id="L010557">int ISPRINT(char c)</a></dt>
+<dt><a name="L010558" id="L010558">int ISSPACE(char c)</a></dt>
+<dt><a name="L010559" id="L010559">int ISUPPER(char c)</a></dt>
+<dt><a name="L010560" id="L010560">int ISXDIGIT(char c)</a></dt>
+<dt><a name="L010561" id="L010561">VALUE LL2NUM(long long v)</a></dt>
+<dt><a name="L010562" id="L010562">VALUE LONG2FIX(long i)</a></dt>
+<dt><a name="L010563" id="L010563">VALUE LONG2NUM(long v)</a></dt>
+<dt><a name="L010564" id="L010564">int MEMCMP(p1, p2, type, n)</a></dt>
+<dd>
+<p><var>type</var> 型のメモリ領域 <var>p1</var> と <var>p2</var> の先頭 <var>n</var> 個を比較する。
+<var>p1</var> が <var>p2</var> の最初の <var>n</var> 個より小さい、等しい、大きいとき、そ
+れぞれ正、0、負の値を返す。</p>
+</dd>
+<dt><a name="L010565" id="L010565">void MEMCPY(p1, p2, type, n)</a></dt>
+<dd>
+<p><var>type</var> 型のメモリ領域 <var>p2</var> のうち先頭の <var>n</var> 個を <var>p1</var> にコピーする。</p>
+</dd>
+<dt><a name="L010566" id="L010566">void MEMMOVE(p1, p2, type, n)</a></dt>
+<dd>
+<p><var>type</var> 型のメモリ領域 <var>p2</var> のうち先頭の <var>n</var> 個を <var>p1</var> に移動する。</p>
+</dd>
+<dt><a name="L010567" id="L010567">void MEMZERO(p, type, n)</a></dt>
+<dd>
+<p><var>type</var> 型のメモリ領域 <var>p</var> をゼロクリアする。 <var>n</var> は要素数。</p>
+</dd>
+<dt><a name="L010568" id="L010568">int NEGFIXABLE(long f)</a></dt>
+<dt><a name="L010569" id="L010569">NEWOBJ(obj, int typeflag)</a></dt>
+<dt><a name="L010570" id="L010570">int NIL_P(VALUE obj)</a></dt>
+<dd>
+<p><var>obj</var> が <code>Qnil</code> のとき真。</p>
+</dd>
+<dt><a name="L010571" id="L010571">char NUM2CHR(VALUE x)</a></dt>
+<dt><a name="L010572" id="L010572">double NUM2DBL(VALUE x)</a></dt>
+<dt><a name="L010573" id="L010573">int NUM2INT(VALUE x)</a></dt>
+<dt><a name="L010574" id="L010574">long NUM2LONG(VALUE x)</a></dt>
+<dt><a name="L010575" id="L010575">unsigned int NUM2UINT(VALUE x)</a></dt>
+<dt><a name="L010576" id="L010576">unsigned long NUM2ULONG(VLAUE x)</a></dt>
+<dt><a name="L010577" id="L010577">void OBJ_FREEZE(VALUE x)</a></dt>
+<dt><a name="L010578" id="L010578">int OBJ_FROZEN(VALUE x)</a></dt>
+<dt><a name="L010579" id="L010579">void OBJ_INFECT(VALUE dest, VALUE src)</a></dt>
+<dd>
+<p><var>src</var> に汚染マークが付いていたら <var>dest</var> も汚染する。</p>
+</dd>
+<dt><a name="L010580" id="L010580">void OBJ_TAINT(VALUE x)</a></dt>
+<dd>
+<p><var>x</var> に汚染マークを付ける。</p>
+</dd>
+<dt><a name="L010581" id="L010581">int OBJ_TAINTED(VALUE x)</a></dt>
+<dd>
+<p><var>x</var> に汚染マークが付いていたら真。</p>
+</dd>
+<dt><a name="L010582" id="L010582">void OBJSETUP(obj, VALUE klass, int typeflag)</a></dt>
+<dd>
+<p><var>obj</var> をクラス klass とフラグ typeflag で初期化する。
+$SAFE &gt;= 3 のときは無条件で汚染する。</p>
+</dd>
+<dt><a name="L010583" id="L010583">int POSFIXABLE(long f)</a></dt>
+<dd>
+<p><var>f</var> が Fixnum の上限値以下ならば真。</p>
+</dd>
+<dt><a name="L010584" id="L010584">struct RArray *RARRAY(VALUE obj)</a></dt>
+<dd>
+<p><var>obj</var> を struct RArray* にキャストする。
+本当は <var>obj</var> が struct RArray* でないとしてもキャストしてしまう。</p>
+</dd>
+<dt><a name="L010585" id="L010585">VALUE rb_fix_new(long v)</a></dt>
+<dt><a name="L010586" id="L010586">VALUE rb_int_new(long v)</a></dt>
+<dt><a name="L010587" id="L010587">int rb_safe_level(void)</a></dt>
+<dd>
+<p>現在のセーフレベルを返します。</p>
+</dd>
+<dt><a name="L010588" id="L010588">VALUE rb_uint_new(unsigned int v)</a></dt>
+<dt><a name="L010589" id="L010589">struct RBasic *RBASIC(VALUE obj)</a></dt>
+<dt><a name="L010590" id="L010590">struct RBignum *RBIGNUM(VALUE obj)</a></dt>
+<dt><a name="L010591" id="L010591">struct RClass *RCLASS(VALUE obj)</a></dt>
+<dt><a name="L010592" id="L010592">struct RData *RDATA(VALUE obj)</a></dt>
+<dt><a name="L010593" id="L010593">type* REALLOC_N(var, type, n)</a></dt>
+<dd>
+<p><var>type</var> 型のメモリ領域 <var>var</var> のサイズを <var>n</var> 個に変更する。</p>
+</dd>
+<dt><a name="L010594" id="L010594">struct RFile *RFILE(VALUE obj)</a></dt>
+<dt><a name="L010595" id="L010595">struct RFloat *RFLOAT(VALUE obj)</a></dt>
+<dt><a name="L010596" id="L010596">struct RHash *RHASH(VALUE obj)</a></dt>
+<dt><a name="L010597" id="L010597">struct RClass *RMODULE(VALUE obj)</a></dt>
+<dt><a name="L010598" id="L010598">struct RObject *ROBJECT(VALUE obj)</a></dt>
+<dt><a name="L010599" id="L010599">struct RRegexp *RREGEXP(VALUE obj)</a></dt>
+<dt><a name="L010600" id="L010600">struct RString *RSTRING(VALUE obj)</a></dt>
+<dt><a name="L010601" id="L010601">struct RStruct *RSTRUCT(VALUE obj)</a></dt>
+<dt><a name="L010602" id="L010602">int RTEST(VALUE obj)</a></dt>
+<dd>
+<p><var>obj</var> が <code>Qfalse</code> でも <code>Qnil</code> でもないとき真。</p>
+</dd>
+<dt><a name="L010603" id="L010603">RUBY_DATA_FUNC(func)</a></dt>
+<dd>
+<p>任意の関数へのポインタ func を struct RData の dmark/dfree の
+値として適する型に強制キャストします。</p>
+</dd>
+<dt><a name="L010604" id="L010604">RUBY_METHOD_FUNC(func)</a></dt>
+<dd>
+<p>任意の関数へのポインタ func を Ruby のメソッドの実体として適する
+型に強制キャストします。</p>
+</dd>
+<dt><a name="L010605" id="L010605">SafeStringValue(v)</a></dt>
+<dd>
+<p>StringValue と同じく、<var>val</var> が String でなければ to_str メソッドを
+使って String に変換します。同時に rb_check_safe_str() によるチェックも
+行います。</p>
+</dd>
+<dt><a name="L010606" id="L010606">int SPECIAL_CONST_P(VALUE obj)</a></dt>
+<dd>
+<p><var>obj</var> が実体の構造体を持たないとき真。現時点で真になるのは
+<code>Qnil</code> <code>Qtrue</code> <code>Qfalse</code> と、
+<code>Fixnum</code>／<code>Symbol</code> のインスタンス。</p>
+</dd>
+<dt><a name="L010607" id="L010607">char *STR2CSTR(VALUE str)</a></dt>
+<dd>
+<p>Ruby のオブジェクト <var>str</var> から C の文字列を取り出します。
+<var>str</var> が <code>String</code> でない場合は <code>to_str</code> によって
+変換を試みます。</p>
+<p>返り値を free したり直接書き換えたりしてはいけません。</p>
+<p>STR2CSTR() は、与えられたオブジェクトが文字列でなく to_str メソッ
+ドを持つ場合、内部で to_str を呼び出して暗黙の型変換を行い、
+それが保持する文字列ポインタを返します。
+しかし、このAPIでは暗黙の型変換結果となるオブジェクトがどこからも
+保持されないため、注意して使用しないと結果が GC される可能性があります。</p>
+<p>version 1.7 以降では代わりに StringValuePtr() を使用します。こちら
+は、引数の参照先が暗黙の型変換の結果に置き換わるため変換結果が GC 
+されません。(version 1.7 では、STR2CSTR() は、obsolete です)</p>
+<p>StringValue() は、引数が to_str による暗黙の型変換を期待する
+場合に使用します。</p>
+</dd>
+<dt><a name="L010608" id="L010608">StringValue(VALUE val)</a></dt>
+<dd>
+<p><var>val</var> が String でなければ to_str メソッドを使って String に変換します。</p>
+<p>このマクロに渡した VALUE は ruby の GC から確実に保護されます。</p>
+</dd>
+<dt><a name="L010609" id="L010609">char *StringValuePtr(VALUE val)</a></dt>
+<dd>
+<p><var>val</var> が String でなければ to_str メソッドを使って String に変換し、
+その実体のポインタを返します。</p>
+<p>このマクロに渡した VALUE は ruby の GC から確実に保護されます。</p>
+</dd>
+<dt><a name="L010610" id="L010610">int SYM2ID(VALUE symbol)</a></dt>
+<dd>
+<p>Symbol <var>symbol</var> を数値に変換します。
+1.4では、FIX2INT(symbol)と同じです。</p>
+</dd>
+<dt><a name="L010611" id="L010611">int SYMBOL_P(VALUE obj)</a></dt>
+<dd>
+<p><var>obj</var> が <code>Symbol</code> のインスタンスのとき真。</p>
+</dd>
+<dt><a name="L010612" id="L010612">int TYPE(VALUE obj)</a></dt>
+<dd>
+<p><var>obj</var> の構造体型 ID を返します。</p>
+</dd>
+<dt><a name="L010613" id="L010613">VALUE UINT2NUM(unsigned long i)</a></dt>
+<dd>
+<p>任意の整数を Fixnum か Bignum に変換します。</p>
+</dd>
+<dt><a name="L010614" id="L010614">VALUE ULL2NUM(unsigned long long n)</a></dt>
+<dt><a name="L010615" id="L010615">VALUE ULONG2NUM(unsigned long n)</a></dt>
+<dt><a name="L010616" id="L010616">VALUE UINT2FIX(unsigned int i)</a></dt>
+<dd>
+<p>unsigned int を Fixnum に変換します。</p>
+</dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm488.html">UP</a>][<a href="refm496.html">&lt;-PREV</a>][<a href="refm498.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

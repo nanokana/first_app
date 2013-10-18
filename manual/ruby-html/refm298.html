@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>parsedate</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm299.html" rel="next" />
+<link href="refm297.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm297.html">&lt;-PREV</a>][<a href="refm299.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L005987" id="L005987">parsedate</a></h1>
+<p>日付を解析します。</p>
+<h2><a name="L005988" id="L005988">使い方</a></h2>
+<pre>require 'parsedate'</pre>
+<h2><a name="L005989" id="L005989">モジュール関数</a></h2>
+<dl>
+<dt><a name="L005990" id="L005990"><code>ParseDate.parsedate(<var>str</var>, <var>complete</var> = <var>false</var>)</code></a></dt>
+<dd>
+<p><var>str</var> で与えられた日付表現を解析し、見いだした要素を
+配列 (年、月、日、時、分、秒、タイムゾーン、曜日) で返します。</p>
+<p><var>complete</var> が真で、年が0から99の範囲であれば、
+年の下2桁の表現であるとみなし上2桁を補います。69 以上なら 1900 年代とみなします。
+69 未満なら 2000 年代とみなします。</p>
+<pre>require 'parsedate'
+p ParseDate.parsedate('Sat Aug 28 21:45:09 1999')
+# =&gt; [1999, 8, 28, 21, 45, 9, nil, 6]
+
+p ParseDate.parsedate('Saturday, 28-Aug-99 21:45:09 GMT')
+# =&gt; [99, 8, 28, 21, 45, 9, &quot;GMT&quot;, 6]
+
+p ParseDate.parsedate('99-08-28', true)
+# =&gt; [1999, 8, 28, nil, nil, nil, nil, nil]
+
+p ParseDate.parsedate('01-08-28', true)
+# =&gt; [2001, 8, 28, nil, nil, nil, nil, nil]</pre>
+<p>parsedate はいろいろな書式をあつかえます。
+たとえば、つぎのような表現を受けつけます:</p>
+<pre>Sat
+Saturday
+1999-08-28
+21:45:09
+09:45:09 PM
+1999-08-28T21:45:09+0900
+19990828 214509
+H11.08.28T21:45:09Z
+Sat Aug 28 21:45:09 1999
+Sat Aug 28 21:45:09 JST 1999
+Sat, 28 Aug 1999 21:45:09 -0400
+Saturday, 28-Aug-99 21:45:09 GMT
+08/28/1999
+1999/08/28</pre>
+<p>日付解析し直ちに <a href="refm295.html">Date</a>、あるいは <a href="refm296.html">DateTime</a> オブジェクトを生成するには、
+<a href="refm294.html">date</a> で提供される <a href="refm295.html#L005909">Date.parse</a> や 
+DateTime.parse や <a href="refm295.html#L005910">Date.strptime</a> や 
+DateTime.strptime などをつかうことができます。</p>
+<p>日付解析し直ちに <a href="refm066.html">Time</a> オブジェクトを生成するには、
+<a href="refm297.html">time</a> で提供される <a href="refm297.html#L005973">Time.parse</a> をつかうことができます。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm297.html">&lt;-PREV</a>][<a href="refm299.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

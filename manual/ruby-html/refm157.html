@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>tempfile</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm158.html" rel="next" />
+<link href="refm156.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm156.html">&lt;-PREV</a>][<a href="refm158.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L003005" id="L003005">Tempfile</a></h1>
+<p>テンポラリファイルを操作するためのクラスです。</p>
+<ul>
+<li>テンポラリファイルを作成します。ファイルは &quot;w+&quot; モードで 
+   &quot;basename.pid.n&quot; という名前になります。</li>
+<li>Tempfile オブジェクトは IO オブジェクトと同じように使うことができます。</li>
+<li>Tempfile#close(true) により、作成したテンポラリファイルは削除されます。</li>
+<li>スクリプトが終了するときにも削除されます。</li>
+<li>Tempfile#open により、テンポラリファイルを再オープンすることができます。</li>
+<li>テンポラリファイルのモードは 0600 です。</li>
+</ul>
+<h2><a name="L003006" id="L003006">super class:</a></h2>
+<p><a href="refm329.html"><code>SimpleDelegator</code></a></p>
+<h2><a name="L003007" id="L003007">delegating class:</a></h2>
+<p><a href="refm046.html"><code>File</code></a></p>
+<h2><a name="L003008" id="L003008">class methods:</a></h2>
+<dl>
+<dt><a name="L003009" id="L003009"><code>Tempfile.new(<var>basename</var>[, <var>tempdir</var>])</code></a>
+<dt><a name="L003010" id="L003010"><code>Tempfile.open(<var>basename</var>[, <var>tempdir</var>])</code></a></dt>
+<dd>
+<p>&quot;<var>basename</var><var>pid</var>.<var>n</var>&quot; というファイル名で
+テンポラリファイルを作成します。</p>
+<p>テンポラリファイルは、ディレクトリ <var>tempdir</var> に作成されます。
+このデフォルト値は、</p>
+<pre>ENV['TMPDIR'] || ENV['TMP'] || ENV['TEMP'] || '/tmp'</pre>
+<p>です。</p></dd>
+</dl>
+<h2><a name="L003011" id="L003011">methods:</a></h2>
+<dl>
+<dt><a name="L003012" id="L003012"><code>Tempfile#close([<var>real</var>])</code></a></dt>
+<dd>
+<p>テンポラリファイルをクローズします。
+<var>real</var>が偽でなければ、テンポラリファイルはすぐに削除されます。
+そうでなければ、GC によって削除されます。<var>real</var>のデフォルト値は
+<code>false</code> です。</p></dd>
+<dt><a name="L003013" id="L003013"><code>Tempfile#open</code></a></dt>
+<dd>
+<p>クローズしたテンポラリファイルを再オープンします。
+&quot;r+&quot; でオープンされるので、クローズ前の内容を再度読む
+ことができます。</p></dd>
+<dt><a name="L003014" id="L003014"><code>Tempfile#path</code></a></dt>
+<dd>
+<p>テンポラリファイルのパス名を返します。</p></dd>
+<dt><a name="L003015" id="L003015"><code>Tempfile#size              ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>テンポラリファイルのサイズを返します。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm156.html">&lt;-PREV</a>][<a href="refm158.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

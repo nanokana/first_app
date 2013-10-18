@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Net::HTTP</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm205.html" rel="next" />
+<link href="refm203.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm203.html">UP</a>][<a href="refm203.html">&lt;-PREV</a>][<a href="refm205.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L003883" id="L003883">Net::HTTP</a></h1>
+<p><a href="refm203.html">net/http</a></p>
+<p>HTTP のクライアントのためのクラスです。</p>
+<h2><a name="L003884" id="L003884">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L003885" id="L003885"><code>HTTP.new( <var>address</var>, <var>port</var> = <var>80</var>, <var>proxy_addr</var> = <var>nil</var>, <var>proxy_port</var> = <var>nil</var> )</code></a></dt>
+<dd>
+<p>新しい HTTP オブジェクトを生成します。address は HTTP サーバーの FQDN で、
+port は接続するポート番号です。このメソッドではまだ接続はしません。</p>
+<p>proxy_addr を与えるとプロクシを介して接続するオブジェクトを生成します。</p></dd>
+<dt><a name="L003886" id="L003886"><code>HTTP.start( <var>address</var>, <var>port</var> = <var>80</var>, <var>proxy_addr</var> = <var>nil</var>, <var>proxy_port</var> = <var>nil</var> )</code></a>
+<dt><a name="L003887" id="L003887"><code>HTTP.start( <var>address</var>, <var>port</var> = <var>80</var>, <var>proxy_addr</var> = <var>nil</var>, <var>proxy_port</var> = <var>nil</var> ) {|<var>http</var>| .... }</code></a></dt>
+<dd>
+<p>以下と同じです。</p>
+<pre>Net::HTTP.new(address, port, proxy_addr, proxy_port).start(&amp;block)</pre></dd>
+<dt><a name="L003888" id="L003888"><code>HTTP.get( <var>address</var>, <var>path</var>, <var>port</var> = <var>80</var> )</code></a></dt>
+<dd>
+<p>ホスト address の port 番ポートに接続して path の表現する
+エンティティボディを取得し、文字列で返します。</p></dd>
+<dt><a name="L003889" id="L003889"><code>HTTP.get_print( <var>address</var>, <var>path</var>, <var>port</var> = <var>80</var> )</code></a></dt>
+<dd>
+<p>ホスト address の port 番ポートに接続して path の表現する
+エンティティボディを取得したうえ、$stdout に &lt;&lt; で出力します。</p></dd>
+<dt><a name="L003890" id="L003890"><code>HTTP.Proxy( <var>address</var>, <var>port</var> = <var>80</var> )</code></a></dt>
+<dd>
+<p>Proxy 経由で http サーバに接続するためのクラスを作成し返します。
+このクラスは Net::HTTP を継承しているので Net::HTTP と全く
+同じように使えます。指定されたプロクシを常に経由して http サーバ
+に接続します。</p>
+<p>address が nil のときは Net::HTTP クラスをそのまま返します。</p>
+<pre>require 'net/http'
+proxy_class = Net::HTTP::Proxy( 'proxy.example.com', 8080 )
+http = proxy_class.new( 'www.ruby-lang.org' )
+http.start {|h|
+  h.get('/ja/') # proxy.example.com 経由で接続します。
+}</pre></dd>
+<dt><a name="L003891" id="L003891"><code>HTTP.proxy_class?</code></a></dt>
+<dd>
+<p>自身が (Proxy メソッドによって作成された) プロクシ用のクラスならば真。</p></dd>
+<dt><a name="L003892" id="L003892"><code>HTTP.port</code></a></dt>
+<dd>
+<p>HTTP のデフォルトポート (80)。</p></dd>
+</dl>
+<h2><a name="L003893" id="L003893">メソッド</a></h2>
+<dl>
+<dt><a name="L003886" id="L003886"><code>start</code></a>
+<dt><a name="L003894" id="L003894"><code>start {|<var>http</var>| .... }</code></a></dt>
+<dd>
+<p>TCP コネクションを張り、HTTP セッションを開始します。
+すでにセッションが開始していたら例外 IOError を発生します。</p>
+<p>イテレータとして呼ばれた時はブロックの間だけセッションを接続し、
+ブロック終了とともに自動的にセッションを閉じます。</p></dd>
+<dt><a name="L003895" id="L003895"><code>active?</code></a></dt>
+<dd>
+<p>HTTP セッションが開始されていたら真。</p></dd>
+<dt><a name="L003896" id="L003896"><code>address</code></a></dt>
+<dd>
+<p>接続するアドレス</p></dd>
+<dt><a name="L003892" id="L003892"><code>port</code></a></dt>
+<dd>
+<p>接続するポート番号</p></dd>
+<dt><a name="L003897" id="L003897"><code>open_timeout</code></a>
+<dt><a name="L003898" id="L003898"><code>open_timeout=(<var>n</var>)</code></a></dt>
+<dd>
+<p>接続時に待つ最大秒数。この秒数たってもコネクションが
+開かなければ例外 TimeoutError を発生します。</p></dd>
+<dt><a name="L003899" id="L003899"><code>read_timeout</code></a>
+<dt><a name="L003900" id="L003900"><code>read_timeout=(<var>n</var>)</code></a></dt>
+<dd>
+<p>読みこみ (read(1) 一回) でブロックしてよい最大秒数。
+この秒数たっても読みこめなければ例外 TimeoutError を発生します。</p></dd>
+<dt><a name="L003901" id="L003901"><code>finish</code></a></dt>
+<dd>
+<p>HTTP セッションを終了します。セッション開始前にこのメソッドが
+呼ばれた場合は例外 IOError を発生します。</p></dd>
+<dt><a name="L003902" id="L003902"><code>proxy?</code></a></dt>
+<dd>
+<p>プロクシを介して接続するなら真。</p></dd>
+<dt><a name="L003903" id="L003903"><code>proxy_address</code></a></dt>
+<dd>
+<p>プロクシ経由で接続する HTTP オブジェクトならプロクシのアドレス。
+そうでないなら nil。</p></dd>
+<dt><a name="L003904" id="L003904"><code>proxy_port</code></a></dt>
+<dd>
+<p>プロクシ経由で接続する HTTP オブジェクトならプロクシのポート。
+そうでないなら nil。</p></dd>
+<dt><a name="L003905" id="L003905"><code>get( <var>path</var>, <var>header</var> = <var>nil</var> )</code></a>
+<dt><a name="L003906" id="L003906"><code>get( <var>path</var>, <var>header</var> = <var>nil</var> ) {|<var>str</var>| .... }</code></a></dt>
+<dd>
+<p>サーバ上の path にあるエンティティを取得します。また header が nil
+でなければ、リクエストを送るときにその内容を HTTP ヘッダとして書き
+こみます。header はハッシュで、「ヘッダ名 =&gt; 内容」のような形式で
+なければいけません。</p>
+<p>戻り値は、バージョン 1.1 では HTTPResponse とエンティティボディ文字列の
+二要素の配列です。1.2 では HTTPResponse ただひとつのみです。この場合、
+エンティティボディは response.body で得られます。</p>
+<p>ブロックとともに呼ばれた時はエンティティボディを少しづつブロックに
+与えます。</p>
+<p>1.1 では 3xx (再試行可能なエラー)に対しても例外を発生します。この場合
+HTTPResponse は例外オブジェクトから err.response で得ることができます。
+一方 1.2 では全く例外を発生しません。</p>
+<pre># version 1.1 (bundled with Ruby 1.6)
+response, body = http.get( '/index.html' )
+
+# version 1.2 (bundled with Ruby 1.7 or later)
+response = http.get( '/index.html' )
+
+# compatible in both version
+response , = http.get( '/index.html' )
+response.body
+
+# using block
+File.open( 'save.txt', 'w' ) {|f|
+    http.get( '/~foo/', nil ) do |str|
+      f.write str
+    end
+}</pre></dd>
+<dt><a name="L003907" id="L003907"><code>head( <var>path</var>, <var>header</var> = <var>nil</var> )</code></a></dt>
+<dd>
+<p>サーバ上の path にあるエンティティのヘッダのみを取得します。
+また header が nil でなければリクエストを送るときにその内容を
+HTTP ヘッダとして書きこみます。header はハッシュで、
+「ヘッダ名 =&gt; 内容」のような形式でなければいけません。</p>
+<p>HTTPResponse オブジェクトを返します。</p>
+<p>1.1 では 3xx (再試行可能なエラー)に対しても例外を発生します。この場合
+HTTPResponse は例外オブジェクトから err.response で得ることができます。
+一方 1.2 では全く例外を発生しません。</p>
+<pre>response = nil
+Net::HTTP.start( 'some.www.server', 80 ) {|http|
+    response = http.head( '/index.html' )
+}
+p response['content-type']</pre></dd>
+<dt><a name="L003908" id="L003908"><code>post( <var>path</var>, <var>data</var>, <var>header</var> = <var>nil</var>, <var>dest</var> = <var>nil</var> )</code></a>
+<dt><a name="L003909" id="L003909"><code>post( <var>path</var>, <var>data</var>, <var>header</var> = <var>nil</var> ) {|<var>str</var>| .... }</code></a></dt>
+<dd>
+<p>サーバ上の path にあるエンティティに対し文字列 data を
+送ります。</p>
+<p>戻り値は get と同じように、バージョン 1.1 では HTTPResponse と
+エンティティボディ文字列の 二要素の配列です。1.2 では HTTPResponse 
+ただひとつのみです。この場合、エンティティボディは response.body で得られます。</p>
+<p>header は get メソッドと同じです。</p>
+<p>dest を与えた場合には、レスポンスは &lt;&lt; メソッドを使って dest に書きこまれます。
+dest には &lt;&lt; メソッドが定義されたオブジェクト、通常 <a href="refm061.html">String</a> オブジェクトか
+<a href="refm036.html">Array</a> オブジェクトを与えます。この dest は戻り値の HTTPResponse オブジェクトの
+body にもなります。</p>
+<p>ブロックと一緒に呼びだされたときはエンティティボディを少しづつ文字列として
+ブロックに与えます。このとき戻り値の HTTPResponse オブジェクトは有効な body を
+持ちません。</p>
+<p>dest とブロックを同時に与えてはいけません。同時に与えた場合は例外 ArgumentError
+を投げます。</p>
+<p>1.1 では 3xx (再試行可能なエラー)に対しても例外を発生します。この場合
+HTTPResponse は例外オブジェクトから err.response で得ることができます。
+一方 1.2 では全く例外を発生しません。</p>
+<pre># version 1.1
+response, body = http.post( '/cgi-bin/search.rb', 'query=subject&amp;target=ruby' )
+
+# version 1.2
+response = http.post( '/cgi-bin/search.rb', 'query=subject&amp;target=ruby' )
+
+# compatible in both version
+response , = http.post( '/cgi-bin/search.rb', 'query=subject&amp;target=ruby' )
+
+# using block
+File.open( 'save.html', 'w' ) {|f|
+    http.post( '/cgi-bin/search.rb',
+               'query=subject&amp;target=ruby' ) do |str|
+      f.write str
+    end
+}</pre></dd>
+<dt><a name="L003910" id="L003910"><code>request_get( <var>path</var>, <var>header</var> = <var>nil</var> )</code></a>
+<dt><a name="L003911" id="L003911"><code>request_get( <var>path</var>, <var>header</var> = <var>nil</var> ) {|<var>response</var>| .... }</code></a></dt>
+<dd>
+<p>path にあるエンティティを取得します。HTTPResponse
+オブジェクトを返します。</p>
+<p>ブロックとともに呼び出されたときは、ブロック実行中は接続を
+維持したまま HTTPResponse オブジェクトをブロックに渡します。</p>
+<p>このメソッドは HTTP プロトコルに関連した例外は発生させません。</p>
+<pre># example
+response = http.request_get( '/index.html' )
+p response['content-type']
+puts response.body          # body is already read
+
+# using block
+http.request_get( '/index.html' ) {|response|
+    p response['content-type']
+    response.read_body do |str|   # read body now
+      print str
+    end
+}</pre></dd>
+<dt><a name="L003912" id="L003912"><code>request_post( <var>path</var>, <var>data</var>, <var>header</var> = <var>nil</var> )</code></a>
+<dt><a name="L003913" id="L003913"><code>request_post( <var>path</var>, <var>data</var>, <var>header</var> = <var>nil</var> ) {|<var>response</var>| .... }</code></a></dt>
+<dd>
+<p>path にあるエンティティを取得します。HTTPResponse
+オブジェクトを返します。</p>
+<p>ブロックとともに呼び出されたときは、ボディを読みこむ前に
+HTTPResponse オブジェクトをブロックに渡します。</p>
+<p>このメソッドは HTTP プロトコルに関連した例外は発生させません。</p>
+<pre># example
+response = http.post2( '/cgi-bin/nice.rb', 'datadatadata...' )
+p response.status
+puts response.body          # body is already read
+
+# using block
+http.post2( '/cgi-bin/nice.rb', 'datadatadata...' ) {|response|
+  p response.status
+  p response['content-type']
+  response.read_body do |str|   # read body now
+    print str
+  end
+}</pre></dd>
+<dt><a name="L003914" id="L003914"><code>request( <var>request</var> [, <var>data</var>] )</code></a>
+<dt><a name="L003915" id="L003915"><code>request( <var>request</var> [, <var>data</var>] ) {|<var>response</var>| .... }</code></a></dt>
+<dd>
+<p>HTTPRequest オブジェクト request を送信します。POST/PUT の時は data も
+与えられます (POST/PUT 以外で data を与えると ArgumentError を発生します)。</p>
+<p>ブロックとともに呼びだされたときはボディを読みこまずに HTTPResponse
+オブジェクトをブロックに与えます。</p>
+<p>このメソッドは HTTP プロトコルに関連した例外は発生させません。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm203.html">UP</a>][<a href="refm203.html">&lt;-PREV</a>][<a href="refm205.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

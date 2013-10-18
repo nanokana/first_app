@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>FAQ::ブロック付きメソッド呼び出し</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm400.html" rel="next" />
+<link href="refm398.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm395.html">UP</a>][<a href="refm398.html">&lt;-PREV</a>][<a href="refm400.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L009254" id="L009254">3. ブロック付きメソッド呼び出し</a></h1>
+<ul>
+<li><a href="#L009255">3.1 ブロック付きメソッド呼び出しとは何ですか</a></li>
+<li><em class="XXINVALIDXX">3.2 ブロック付きメソッド呼び出しにブロックを渡すにはどうすればいいですか</em></li>
+<li><a href="#L009257">3.3 ブロックは呼び出したメソッドの中からどのように使われますか</a></li>
+<li><a href="#L009258">3.4 <code>Proc.new</code>では手続きオブジェクトが作られませんが</a></li>
+</ul>
+<h2><a name="L009255" id="L009255">3.1 ブロック付きメソッド呼び出しとは何ですか</a></h2>
+<p>ブロックや手続きオブジェクトを活用するメソッドをブロック付きメソッド呼び出しと呼びます。</p>
+<p>制御構造(特にループ)の抽象化のために用いられたため、イテレータと呼ばれることもありますが、
+単なるブロックの呼び出しなどiterate（繰り返し）を行わないような場合でも活用できます。</p>
+<p>下記はイテレータとして作成されたメソッドを使用したケースです。</p>
+<pre>data = [1, 2, 3]
+data.each do |i|
+  print i, &quot;\n&quot;
+end</pre>
+<p>このコードの出力はこのようになります。</p>
+<pre>$ ruby test.rb
+1
+2
+3</pre>
+<p>つまり<code>do</code>と<code>end</code>で囲まれたブロックがメソッドに渡され、メソッド内で使用されます。
+メソッドeachはブロックをdataの各要素に対して繰り返し適用します。</p>
+<p>これをCで書くと次のようになります。</p>
+<pre>int data[3] = {1, 2, 3};
+int i;
+for (i = 0; i &lt; 3; i++) {
+  printf(&quot;%d\n&quot;, data[i]);
+}</pre>
+<p><code>for</code>を使って書いた場合は繰り返し処理を自分で処理しなくてはなりませんが、
+ブロック付きメソッド呼び出しの場合はメソッド側で処理するため、境界条件の判定ミスで
+バグが生まれる可能性が減少します。</p>
+<p>また、<code>do</code>...<code>end</code>の代わりに<code>{</code>...<code>}</code>を使うこともできます。</p>
+<pre>data = [1, 2, 3]
+data.each { |i|
+  print i, &quot;\n&quot;
+}</pre>
+<p>このコードは先の例と全く同じ動作をします。ただし、<code>do</code>...<code>end</code>と
+<code>{</code>...<code>}</code>で動作が異なる場合があります。</p>
+<pre>foobar a, b do .. end # foobar がブロック付きメソッドとして呼び出されます
+foobar a, b { .. }    # b がブロック付きメソッドとして呼び出されます</pre>
+<p>これは<code>{ }</code>の方が<code>do</code>ブロックよりも結合強度が強いためです。</p>
+<h2><a name="L009256" id="L009256">3.2 ブロック付きメソッドにブロックを渡すにはどうすればいいですか</a></h2>
+<p>ブロック付きメソッドにブロックを渡すには、メソッドの後ろにブロックを置く
+方法の他に、手続きオブジェクト(を指す変数、定数)の前に&amp;を
+つけて引数として渡す方法があります。</p>
+<h2><a name="L009257" id="L009257">3.3 ブロックは呼び出したメソッドの中からどのように使われますか</a></h2>
+<p>メソッドの中からブロックを使用するには、<code>yield</code>制御構造、ブロック引数、
+<code>Proc.new</code>の3種類の方法で行うことができます。( Cで書かれた拡張ライブラリ
+の中では、<code>rb_yield</code>が使われます。)</p>
+<p><code>yield</code>の場合には、<code>yield</code>の後ろに続く引数が、ブロック
+パラメータとしてブロックに渡され、ブロックが実行されます。</p>
+<p>ブロック引数は、メソッド定義の引数の最後に<code>&amp;method</code>という形で
+置かれ、メソッドの中で、<code>method.call(args...)</code>という形で呼ばれます。</p>
+<p><code>Proc.new</code>は、メソッドの中で使われたときには、引数としてそのメソッドに
+渡されたブロックをとり、そのブロックを内容とする手続きオブジェクトを
+生成します。<code>proc</code>または<code>lamda</code>も同様です。</p>
+<pre>def a (&amp;b)
+  yield
+  b.call
+  Proc.new.call
+  proc.call
+  lambda.call
+end
+a{print &quot;test\n&quot;}</pre>
+<h2><a name="L009258" id="L009258">3.4 <code>Proc.new</code>では手続きオブジェクトが作られませんが</a></h2>
+<p><code>Proc.new</code>は、ブロックを与えられないと手続きオブジェクトを生成できず、
+エラーになります。メソッド定義の中で
+使われるブロックなしの<code>Proc.new</code>は、メソッド呼び出しにブロックが与えられて
+いることを仮定しています。</p>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm395.html">UP</a>][<a href="refm398.html">&lt;-PREV</a>][<a href="refm400.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

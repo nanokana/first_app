@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Range</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm060.html" rel="next" />
+<link href="refm058.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm035.html">UP</a>][<a href="refm058.html">&lt;-PREV</a>][<a href="refm060.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L001401" id="L001401">Range</a></h1>
+<p>範囲オブジェクトのクラス。範囲オブジェクトは範囲演算子 <code>..</code> または 
+<code>...</code> によって生成されます。<code>..</code> 演算子によって生成された範囲
+オブジェクトは終端を含み、<code>...</code> 演算子によって生成された範囲オブジェ
+クトは終端を含みません。</p>
+<p>例:</p>
+<pre>for i in 1..5
+   ...
+end</pre>
+<p>これは 1 から 5 までの範囲オブジェクトを生成して、それぞれの値に対して
+繰り返すと言う意味です。</p>
+<p>範囲演算子のオペランドは互いに <code>&lt;=&gt;</code> で比較できる必要があります。
+さらに <a href="#L001411">Range#each</a> を実行するためには <code>succ</code> メソッ
+ドを実行できるものでなければいけません。</p>
+<h2><a name="L001402" id="L001402">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm035.html">Object</a></li>
+</ul>
+<h2><a name="L001403" id="L001403">インクルードしているモジュール:</a></h2>
+<ul>
+<li><a href="refm070.html">Enumerable</a></li>
+</ul>
+<h2><a name="L001404" id="L001404">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L001405" id="L001405"><code>Range.new(<var>first</var>,<var>last</var>[, <var>exclude_end</var>])</code></a></dt>
+<dd>
+<p><var>first</var> から <var>last</var> までの範囲オブジェクトを生成して返しま
+す。<var>exclude_end</var> が真ならば終端を含まない範囲オブジェクトを生
+成します。<var>exclude_end</var> 省略時には終端を含みます。</p>
+<p>生成時に、引数の正当性チェックとして</p>
+<pre>first &lt;=&gt; last</pre>
+<p>を実行します。これが <code>nil</code> を返す場合、例外 
+<a href="refm094.html">ArgumentError</a> が発生します。</p></dd>
+</dl>
+<h2><a name="L001406" id="L001406">メソッド:</a></h2>
+<dl>
+<dt><a name="L001407" id="L001407"><code><var>self</var> === <var>other</var></code></a>
+<dt><a name="L001408" id="L001408"><code>include?(<var>other</var>)     ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p><var>other</var> が範囲内に含まれている時に真を返します。</p>
+<p><code>===</code> は主に <a href="refm026.html#L000385">case</a> 文での比較に用いられます。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>: 
+include? が、<a href="refm070.html#L001758">Enumerable#include?</a>,
+<a href="refm070.html#L001757">Enumerable#member?</a> と異なり <code>&lt;=&gt;</code> メソッド
+による演算により範囲内かどうかを判定することに注意する必要がありま
+す。(1.6 までは、include? と member? ともに Enumerable のメソッドでした)</p>
+<pre>p (0.1 .. 0.2).include?(0.15) # =&gt; true
+p (0.1 .. 0.2).member?(0.15)  # =&gt; cannot iterate from Float (TypeError)
+
+# 文字列の場合、include? は辞書順の比較になる
+p (&quot;a&quot; .. &quot;c&quot;).include?(&quot;ba&quot;) # =&gt; true
+p (&quot;a&quot; .. &quot;c&quot;).member?(&quot;ba&quot;)  # =&gt; false</pre></dd>
+<dt><a name="L001409" id="L001409"><code>begin</code></a>
+<dt><a name="L001410" id="L001410"><code>first</code></a></dt>
+<dd>
+<p>最初の要素を返します。</p></dd>
+<dt><a name="L001411" id="L001411"><code>each {|<var>item</var>|  ... }</code></a></dt>
+<dd>
+<p>範囲内の要素に対して繰り返します。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>: Range#each は各要素の succ メソッドを使用
+してイテレーションするようになりました。1.6 までは、Numeric オブ
+ジェクトは、特別に算術演算で行われていました。この変更により Float 
+の Range の扱いが変わります(Float は、succ を持たない)。</p>
+<pre>(1.0 .. 2.0).each {|v| p v}
+=&gt; ruby 1.6.7 (2002-03-01) [i586-linux]
+   1
+   2
+=&gt; -:1:in `each': cannot iterate from Float (TypeError)
+        from -:1
+   ruby 1.7.3 (2002-09-02) [i586-linux]</pre></dd>
+<dt><a name="L001412" id="L001412"><code>end</code></a>
+<dt><a name="L001413" id="L001413"><code>last</code></a></dt>
+<dd>
+<p>終端を返します。範囲オブジェクトが終端を含むかどうかは関係ありませ
+ん。</p>
+<pre>p (1..5).end   # =&gt; 5
+p (1...5).end  # =&gt; 5</pre></dd>
+<dt><a name="L001414" id="L001414"><code>exclude_end?</code></a></dt>
+<dd>
+<p>範囲オブジェクトが終端を含まないとき真を返します。</p></dd>
+<dt><a name="L001415" id="L001415"><code>length</code></a>
+<dt><a name="L001416" id="L001416"><code>size</code></a></dt>
+<dd>
+<p>範囲の長さを返します。
+始点と終端が Integer のインスタンスなら</p>
+<pre>(last - first + (exclude_end? ? 0 : 1))</pre>
+<p>です。それ以外では、each が実行され範囲の長さを数えます。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>: length, size メソッドはなくなりました。
+必要なら</p>
+<pre>p (&quot;a&quot; .. &quot;z&quot;).to_a.size
+=&gt; 26</pre>
+<p>などとする必要があります。</p></dd>
+<dt><a name="L001417" id="L001417"><code>step([<var>s</var>]) {|<var>item</var>| ... }</code></a></dt>
+<dd>
+<p><a href="refm384.html">ruby 1.7 feature</a></p>
+<p>範囲内の要素を <var>s</var> おきに繰り返します。<var>s</var> には正の整数を
+指定します。デフォルトは 1 です。
+<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></p>
+<pre>(&quot;a&quot; .. &quot;f&quot;).step(2) {|v| p v}
+# =&gt; &quot;a&quot;
+     &quot;c&quot;
+     &quot;e&quot;</pre></dd>
+</dl>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>あらい 2002-01-13: もちろん <a href="refm052.html">Numeric</a> のサブクラスであれば
+<var>item</var> + <var>s</var> が動作しなければならない。それ以外では <var>succ</var>
+を <var>s</var> 回実行する。</small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm035.html">UP</a>][<a href="refm058.html">&lt;-PREV</a>][<a href="refm060.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>kconv</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm259.html" rel="next" />
+<link href="refm257.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm257.html">&lt;-PREV</a>][<a href="refm259.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L005121" id="L005121">kconv</a></h1>
+<p>他のメソッドや定数については <a href="refm259.html">Kconv</a> を参照してください。
+kconv を require すると <a href="refm061.html">String</a> クラスに以下のメソッドが定義されます。</p>
+<h2><a name="L005122" id="L005122">String に追加されるメソッド</a></h2>
+<dl>
+<dt><a name="L005123" id="L005123"><code>String#kconv(<var>out_code</var>, <var>in_code</var> = <var>Kconv</var>::<var>AUTO</var>)</code></a></dt>
+<dd>
+<p><code>self</code> のエンコーディングを <code>out_code</code> に変換したのを
+返します。<var>out_code</var> <var>in_code</var> は <code>Kconv</code> の定数で
+指定します。</p></dd>
+<dt><a name="L005124" id="L005124"><code>String#tojis</code></a></dt>
+<dd>
+<p><code>self</code> のエンコーディングを iso-2022-jp に変換した文字列を
+返します。</p></dd>
+<dt><a name="L005125" id="L005125"><code>String#toeuc</code></a></dt>
+<dd>
+<p><code>self</code> のエンコーディングを euc-jp に変換した文字列を
+返します。</p></dd>
+<dt><a name="L005126" id="L005126"><code>String#tosjis</code></a></dt>
+<dd>
+<p><code>self</code> のエンコーディングを shift_jis に変換した文字列を
+返します。</p></dd>
+<dt><a name="L005127" id="L005127"><code>String#toutf8    ((&lt;<var>ruby</var> <var>1</var>.<var>8</var>.<var>2</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p><code>self</code> のエンコーディングを utf8 に変換した文字列を
+返します。</p></dd>
+<dt><a name="L005128" id="L005128"><code>String#toutf16    ((&lt;<var>ruby</var> <var>1</var>.<var>8</var>.<var>2</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p><code>self</code> のエンコーディングを utf16 に変換した文字列を
+返します。</p></dd>
+<dt><a name="L005129" id="L005129"><code>String#iseuc    ((&lt;<var>ruby</var> <var>1</var>.<var>8</var>.<var>2</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>以下と同じです。</p>
+<pre>Kconv.iseuc(self)</pre></dd>
+<dt><a name="L005130" id="L005130"><code>String#issjis    ((&lt;<var>ruby</var> <var>1</var>.<var>8</var>.<var>2</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>以下と同じです。</p>
+<pre>Kconv.issjis(self)</pre></dd>
+<dt><a name="L005131" id="L005131"><code>String#isutf8    ((&lt;<var>ruby</var> <var>1</var>.<var>8</var>.<var>2</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>以下と同じです。</p>
+<pre>Kconv.isutf8(self)</pre></dd>
+</dl>
+<h2><a name="L005132" id="L005132">参考</a></h2>
+<ul>
+<li><a href="http://jp.rubyist.net/magazine/">Rubyist Magazine</a><sup class="outside"><small>[外部]</small></sup>
+<ul>
+<li><a href="http://jp.rubyist.net/magazine/?0009-BundledLibraries">標準添付ライブラリ紹介【第 3 回】 Kconv/NKF/Iconv</a><sup class="outside"><small>[外部]</small></sup></li>
+</ul></li>
+</ul>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm257.html">&lt;-PREV</a>][<a href="refm259.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

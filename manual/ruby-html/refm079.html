@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ObjectSpace</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm080.html" rel="next" />
+<link href="refm078.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm034.html">UP</a>][<a href="refm078.html">&lt;-PREV</a>][<a href="refm080.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L002015" id="L002015">ObjectSpace</a></h1>
+<p>全てのオブジェクトを操作するためのモジュール。</p>
+<h2><a name="L002016" id="L002016">モジュール関数:</a></h2>
+<dl>
+<dt><a name="L002017" id="L002017"><code>ObjectSpace._id2ref(<var>id</var>)</code></a></dt>
+<dd>
+<p>オブジェクト ID(<a href="refm035.html#L000662">Object#__id__</a>)からオブジェクトを得ます。
+対応するオブジェクトが存在しなければ例外 <a href="refm102.html">RangeError</a> が発生し
+ます。</p></dd>
+<dt><a name="L002018" id="L002018"><code>ObjectSpace.define_finalizer(<var>obj</var>, <var>proc</var>)</code></a>
+<dt><a name="L002019" id="L002019"><code>ObjectSpace.define_finalizer(<var>obj</var>) {|<var>id</var>| ...}</code></a></dt>
+<dd>
+<p><var>obj</var> が解放されるときに実行されるファイナライザ <var>proc</var> を
+登録します。同じオブジェクトについて複数回呼ばれたときは置き換えで
+はなく追加登録されます。</p>
+<p><var>proc</var> には、ファイナライザとして <a href="refm057.html">Proc</a> オブジェクトを渡
+します。ブロックを指定した場合は、そのブロックが <var>proc</var> になり
+ます(しかし、後述の問題があるのでブロックでファイナライザを登録す
+るのは難しいです)。</p>
+<p>ファイナライザ <var>proc</var> には引数として <var>obj</var> の 
+ID(<a href="refm035.html#L000662">Object#__id__</a>) が渡されます。</p>
+<p>以下は、<code>define_finalizer</code> の使い方の悪い例です。</p>
+<pre>class Foo
+  def initialize
+    ObjectSpace.define_finalizer(self) {
+      puts &quot;foo&quot;
+    }
+  end
+end
+Foo.new
+GC.start</pre>
+<p>これは、渡された <var>proc</var> の <code>self</code> が <var>obj</var> を参照しつ
+づけるため。そのオブジェクトが GC の対象になりません。</p>
+<p><a href="refm526.html">ruby-src:lib/tempfile.rb</a> は、ファイナライザの使い方の
+良い例になっています。これは、クラスのコンテキストで <a href="refm057.html">Proc</a> を
+生成することで上記の問題を回避しています。</p>
+<pre>class Bar
+  def Bar.callback
+    proc {
+      puts &quot;bar&quot;
+    }
+  end
+  def initialize
+    ObjectSpace.define_finalizer(self, Bar.callback)
+  end
+end
+Bar.new
+GC.start</pre>
+<p><var>proc</var> の呼び出しで発生した大域脱出(exitや例外)は無視されます。
+これは、スクリプトのメイン処理が GC の発生によって非同期に中断され
+るのを防ぐためです。不安なうちは <a href="refm011.html#L000130">-d</a> オプションで
+事前に例外の発生の有無を確認しておいた方が良いでしょう。</p>
+<pre>class Baz
+  def initialize
+    ObjectSpace.define_finalizer self, eval %q{
+      proc {
+        raise &quot;baz&quot; rescue puts $!
+        raise &quot;baz2&quot;
+        puts &quot;baz3&quot;
+      }
+    }, TOPLEVEL_BINDING
+  end
+end
+Baz.new
+GC.start
+
+# =&gt; baz</pre></dd>
+<dt><a name="L002020" id="L002020"><code>ObjectSpace.each_object([<var>class_or_module</var>]) {|<var>object</var>| ...}</code></a></dt>
+<dd>
+<p><var>class_or_module</var> と <a href="refm035.html#L000672">kind_of?</a> の関係にある全ての
+オブジェクトに対して繰り返します。引数が省略された時には全てのオブ
+ジェクトに対して繰り返します。</p>
+<p>ただし、次のクラスのオブジェクトについては繰り返しません:
+<a href="refm055.html">Fixnum</a>,
+<a href="refm063.html">Symbol</a>,
+<a href="refm067.html">TrueClass</a>,
+<a href="refm042.html">FalseClass</a>,
+<a href="refm068.html">NilClass</a></p>
+<p>とくに、<var>class_or_module</var> に <a href="refm055.html">Fixnum</a> や <a href="refm063.html">Symbol</a> などのクラスを指定した場合は、
+何も繰り返さないことになります。</p>
+<p>なお、<a href="refm063.html">Symbol</a> については、かわりに <a href="refm063.html#L001595">Symbol.all_symbols</a> が使用できます。</p>
+<p>繰り返した数を返します。</p></dd>
+<dt><a name="L002021" id="L002021"><code>ObjectSpace.garbage_collect</code></a></dt>
+<dd>
+<p>どこからもアクセスされなくなったオブジェクトを回収します。
+<a href="refm075.html#L001965">GC#start</a> と同じです。</p>
+<p><code>nil</code> を返します。</p></dd>
+<dt><a name="L002022" id="L002022"><code>ObjectSpace.undefine_finalizer(<var>obj</var>)</code></a></dt>
+<dd>
+<p><var>obj</var> に対するファイナライザをすべて解除します。</p>
+<p><var>obj</var> を返します。</p></dd>
+</dl>
+<p>以下は、ファイナライザの古いインタフェースです。使用すると警告メッセー
+ジが出力されます。</p>
+<dl>
+<dt><a name="L002023" id="L002023"><code>ObjectSpace.add_finalizer(<var>proc</var>)     ((&lt;<var>obsolete</var>&gt;))</code></a></dt>
+<dd>
+<p><var>proc</var> をファイナライザとして設定します。</p>
+<p><a href="#L002024">call_finalizer</a> で指定したオブジェクトが解放され
+る時、そのオブジェクトの ID(c.f <a href="refm035.html#L000662">Object#__id__</a>)を引数に
+ファイナライザが評価されます。</p>
+<p><var>proc</var> を返します。</p>
+<p>このメソッドは、obsolete です。代わりに 
+<a href="#L002018">ObjectSpace.define_finalizer</a> を使用してください</p></dd>
+<dt><a name="L002024" id="L002024"><code>ObjectSpace.call_finalizer(<var>obj</var>)     ((&lt;<var>obsolete</var>&gt;))</code></a></dt>
+<dd>
+<p><var>obj</var> をファイナライザの対象オブジェクトとして設定します。</p>
+<p><var>obj</var> を返します。</p>
+<p>このメソッドは、obsolete です。</p></dd>
+<dt><a name="L002025" id="L002025"><code>ObjectSpace.finalizers      ((&lt;<var>obsolete</var>&gt;))</code></a></dt>
+<dd>
+<p>現在登録されているファイナライザの配列を返します。</p>
+<p>このメソッドは、obsolete です。</p></dd>
+<dt><a name="L002026" id="L002026"><code>ObjectSpace.remove_finalizer(<var>proc</var>)  ((&lt;<var>obsolete</var>&gt;))</code></a></dt>
+<dd>
+<p>指定した <var>proc</var> をファイナライザから取り除きます。</p>
+<p><var>proc</var> を返します。</p>
+<p>このメソッドは、obsolete です。代わりに 
+<a href="#L002022">ObjectSpace.undefine_finalizer</a> を使用してくださ
+い。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm034.html">UP</a>][<a href="refm078.html">&lt;-PREV</a>][<a href="refm080.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

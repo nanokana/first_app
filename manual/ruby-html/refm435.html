@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>trap::Hash</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm436.html" rel="next" />
+<link href="refm434.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm421.html">UP</a>][<a href="refm434.html">&lt;-PREV</a>][<a href="refm436.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L009473" id="L009473">Hash</a></h1>
+<ul>
+<li><p>Hash.new([])は同じ[]を参照するので…。</p>
+<p>Hash.new(val) は、ハッシュのデフォルトオブジェクトに val を設定しま
+す。値が設定されていないハッシュの参照はこのデフォルトオブジェクトを
+返しているだけです。</p>
+<pre>h = Hash.new([])
+h[0] &lt;&lt; 0
+h[1] &lt;&lt; 1
+p h         #=&gt; {}
+p h.default #=&gt; [0, 1]</pre>
+<p>上記で、&lt;&lt; はデフォルトオブジェクトを破壊的に変更するだけで、h[0] など
+に影響を与えません。+= などの破壊的でないメソッドで再代入する必要が有り
+ます。</p>
+<pre>h = Hash.new([])
+h[0] += [0]
+h[1] += [1]
+p h         #=&gt; {0=&gt;[0], 1=&gt;[1]}
+p h.default #=&gt; []</pre>
+<p>また、このようなミスを防ぐためにも初期値は freeze しておくのが無難です。</p>
+<pre>h = Hash.new([].freeze)
+h[0] += [0]
+h[1] &lt;&lt; 1
+=&gt; -:3:in `&lt;&lt;': can't modify frozen array (TypeError)</pre></li>
+<li><p><a href="refm035.html#L000664">inspect</a>ではデフォルトオブジェクトが表示されません。</p>
+<pre>h = Hash.new(0)
+p h         #=&gt; {}
+p h.default #=&gt; 0</pre></li>
+<li><p><a href="refm035.html#L000660">hash</a>メソッドと<a href="refm035.html#L000655">eql?</a>を再定義していないクラスの
+  オブジェクトをキーとして使うと予想外の結果になることがあります。</p>
+<pre>h = Hash.new
+h[//] = 1
+h[//] #=&gt; nil</pre></li>
+<li><p>キーとなるオブジェクトが変化した場合は<a href="refm044.html#L000970">rehash</a>を呼ぶ必要が
+  あります。</p>
+<pre>a = [1]
+h = {a=&gt;:a}
+p h[[1]] #=&gt; :a
+a.push 2
+p h[[1,2]] #=&gt; nil
+h.rehash
+p h[[1,2]] #=&gt; :a</pre>
+<p>文字列をキーにする場合は、文字列のコピーを <a href="refm035.html#L000658">freeze</a> した
+ものがキーとして使われるのでキーを書き換えることができず、
+<a href="refm044.html#L000970">rehash</a> を呼ぶ必要性は生じません。</p>
+<pre>a = &quot;aaa&quot;
+h = {a=&gt;:a}
+p h[&quot;aaa&quot;] #=&gt; :a
+
+p [a, a.object_id, a.frozen?]                      # =&gt; [&quot;aaa&quot;, 537759798, false]
+h.keys.each {|k| p [k, k.object_id, k.frozen?]}    # =&gt; [&quot;aaa&quot;, 537756858, true]
+
+a &lt;&lt; &quot;bbb&quot;
+p h[&quot;aaa&quot;]    #=&gt; :a
+p h[&quot;aaabbb&quot;] #=&gt; nil
+h.rehash
+p h[&quot;aaa&quot;]    #=&gt; :a
+p h[&quot;aaabbb&quot;] #=&gt; nil</pre></li>
+</ul>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm421.html">UP</a>][<a href="refm434.html">&lt;-PREV</a>][<a href="refm436.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

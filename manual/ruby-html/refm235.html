@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>OpenSSL::PKey::DH</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm236.html" rel="next" />
+<link href="refm234.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm213.html">UP</a>][<a href="refm234.html">&lt;-PREV</a>][<a href="refm236.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L004678" id="L004678">OpenSSL::PKey::DH</a></h1>
+<p>Diffie-Hellman 暗号クラス</p>
+<h2><a name="L004679" id="L004679">スーパークラス:</a></h2>
+<p><a href="refm232.html">OpenSSL::PKey::PKey</a></p>
+<h2><a name="L004680" id="L004680">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L004681" id="L004681"><code>DH.generate(<var>size</var>, <var>generator</var>=<var>2</var>)</code></a></dt>
+<dd>
+<p>Diffie-Hellman 鍵交換の最初のステップである秘密鍵と公開鍵の生成を行ないDH オブジェクトを返す。size は安全な素数のサイズ。単位はビット。generator は1より大きい小さな数で、大抵は2か5。</p></dd>
+<dt><a name="L004682" id="L004682"><code>DH.new(<var>size</var>, <var>generator</var>=<var>2</var>)</code></a></dt>
+<dd>
+<p>DH.generate(size, generator) と同じ。</p></dd>
+<dt><a name="L004683" id="L004683"><code>DH.new(<var>str</var>)</code></a>
+<dt><a name="L004684" id="L004684"><code>DH.new(<var>io</var>)</code></a>
+<dt><a name="L004685" id="L004685"><code>DH.new()</code></a></dt>
+<dd>
+<p>DH オブジェクトを生成する。</p></dd>
+</dl>
+<h2><a name="L004686" id="L004686">メソッド</a></h2>
+<dl>
+<dt><a name="L004687" id="L004687"><code>compute_key(<var>num</var>)</code></a>
+<dt><a name="L004688" id="L004688"><code>compute_key(<var>str</var>)</code></a>
+<dt><a name="L004689" id="L004689"><code>compute_key(<var>bn</var>)</code></a></dt>
+<dd>
+<p>Diffie-Hellman 鍵交換の第2ステップ。共有暗号鍵を自分の秘密鍵と相手の公開鍵(num, str, bn)から計算して文字列として返す。これで鍵交換は完了する。</p></dd>
+<dt><a name="L004690" id="L004690"><code>public?</code></a></dt>
+<dd>
+<p>公開鍵を持っているかどうか判定する。</p></dd>
+<dt><a name="L004691" id="L004691"><code>private?</code></a></dt>
+<dd>
+<p>秘密鍵を持っているかどうか判定する。</p></dd>
+<dt><a name="L004692" id="L004692"><code>to_text</code></a></dt>
+<dd>
+<p>人間が読める形式に変換する。</p></dd>
+<dt><a name="L004693" id="L004693"><code>export()</code></a>
+<dt><a name="L004694" id="L004694"><code>to_pem()</code></a>
+<dt><a name="L004695" id="L004695"><code>to_s()</code></a></dt>
+<dd>
+<p>鍵ペアを PEM 形式で出力する。</p></dd>
+<dt><a name="L004696" id="L004696"><code>to_der</code></a></dt>
+<dd>
+<p>DER 形式に変換する。</p></dd>
+<dt><a name="L004697" id="L004697"><code>public_key</code></a></dt>
+<dd>
+<p>公開鍵を複製して DH オブジェクトとして返す。</p></dd>
+<dt><a name="L004698" id="L004698"><code>params_ok?</code></a></dt>
+<dd>
+<p>パラメータ p と g が安全かどうかを判定する。</p></dd>
+<dt><a name="L004699" id="L004699"><code>generate_key!</code></a></dt>
+<dd>
+<p>新たに公開鍵と秘密鍵を生成しなおす。</p></dd>
+<dt><a name="L004700" id="L004700"><code>params</code></a></dt>
+<dd>
+<p>パラメータの入った <a href="refm044.html">Hash</a> オブジェクトを返す。</p></dd>
+<dt><a name="L004701" id="L004701"><code>sign(<var>digest</var>, <var>data</var>)</code></a>
+<dt><a name="L004702" id="L004702"><code>verify(<var>digest</var>, <var>sign</var>, <var>data</var>)</code></a></dt>
+<dd>
+<p><a href="refm232.html">OpenSSL::PKey::PKey</a> で定義された sign と verify を呼び出すことができるが、
+Diffie-Hellman 暗号の性質から、呼び出しても全て PKeyError になる。</p></dd>
+<dt><a name="L004703" id="L004703"><code>p</code></a>
+<dt><a name="L004704" id="L004704"><code>g</code></a>
+<dt><a name="L004705" id="L004705"><code>pub_key</code></a>
+<dt><a name="L004706" id="L004706"><code>pub_key=</code></a>
+<dt><a name="L004707" id="L004707"><code>priv_key</code></a>
+<dt><a name="L004708" id="L004708"><code>priv_key=</code></a>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm213.html">UP</a>][<a href="refm234.html">&lt;-PREV</a>][<a href="refm236.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ToDo</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm005.html" rel="next" />
+<link href="refm003.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm002.html">UP</a>][<a href="refm003.html">&lt;-PREV</a>][<a href="refm005.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L000014" id="L000014">やること(やるかもしれないこと)</a></h1>
+<p>これらの課題や方針については rubyist ML で議論されています(議論されて
+ない場合もあります:-p)。</p>
+<ul>
+<li>2002-04-19: Method の良い実例を → <a href="http://www.freeml.com/ml_view.php?ml=rubyist&pg=1343">rubyist:1343</a><sup class="outside"><small>[外部]</small></sup> ？</li>
+<li>2002-04-16: <a href="refm005.html">shim</a> <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/16790">ruby-dev:16790</a><sup class="outside"><small>[外部]</small></sup>, <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/16926">ruby-dev:16926</a><sup class="outside"><small>[外部]</small></sup> の紹介。</li>
+<li>2002-03-04: getoptsの変更(<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/16193">ruby-dev:16193</a><sup class="outside"><small>[外部]</small></sup>)への追随(commit待ち)。
+  -&gt; なんだっけ？確か書いたと思う。<a href="refm376.html">getopts</a> の「おそらく1.6.8」
+  とかいう記述は直さなきゃね。</li>
+<li>追加された添付ライブラリについてのページを(まだなければ)用意する。</li>
+<li><p>「new は initialize を呼ぶ。そうでないコンストラクタ(openとか)は
+  initializeを呼ばない」ことを明記する</p>
+<p>チェック完 -&gt; Proc</p>
+<p>Thread は難しいので保留</p></li>
+<li><p>メソッドの戻り値の明記</p>
+<p>ENV と ARGF がまだ。疲れたわい。</p>
+<p>チェック完 -&gt; Thread, Proc, 組み込み関数
+Object, Array, Binding, Continuation, Data, Exception, Dir,
+FalseClass, File::Stat, Hash, IO, File, MatchData, Method,
+UnboundMethod, Module, Class, Numeric, Integer, Bignum, Fixnum,
+Float, Proc, Process::Status, Range, Regexp,
+String, Struct, Symbol, Thread, ThreadGroup, Time, TrueClass, NilClass,
+Comparable, Enumerable, Errno, File::Constants, FileTest, GC,
+Kernel, Marshal, Math, ObjectSpace, Precision, Process, Signal,
+全例外クラス</p></li>
+<li>2001-05-09: Marshal の制限について書く(<a href="http://www.freeml.com/ml_view.php?ml=rubyist&pg=537">rubyist:0537</a><sup class="outside"><small>[外部]</small></sup>)</li>
+<li>footnote の整理(まだちょっと残ってる→その後、また書いちゃった
+  footnote はpending項目としても使っている)</li>
+<li>暗黙の型変換について書く(本当に書く？元気がなくなった)</li>
+<li>文書スタイルの確立</li>
+<li>RAAの紹介ページなんかも欲しいなとか言ってみる</li>
+<li>演算子の説明(一般的な用法 rubyの演算子は再定義可能なので→うーん)</li>
+<li>self の説明(コンテキストの説明)</li>
+<li>クラスもオブジェクトであることに言及する。
+<ul>
+<li>object.c の図を載せる？</li>
+<li>クラス階層について詳細を(include はクラス階層への挿入)</li>
+<li><a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/14141">ruby-list:14141</a><sup class="outside"><small>[外部]</small></sup>の図を載せる</li>
+</ul></li>
+<li>できるだけすべてのメソッドに簡潔な実例をつけるようにする。</li>
+</ul>
+<h1><a name="L000015" id="L000015">(どなたかが)やったこと</a></h1>
+<ul>
+<li>allocation framework (1.7 feature) のことも書く
+  -&gt; 2002-04-10: 簡単に書いた</li>
+<li>定義も実行文であることにふれる。(class や module 文で)
+<ul>
+<li>直接ではないけど、一応前に「<a href="refm028.html#L000411">クラス定義</a>」で書いた</li>
+</ul></li>
+<li>索引ページの更新(演算子形式等も索引に載るように)
+<ul>
+<li><a href="refm537.html">method</a>ページで解決？-&gt;解決</li>
+</ul></li>
+<li>MethodList 化
+<ul>
+<li>2002-01-14: クラス、モジュール等主なものはは完了。あとはぼちぼちやる。</li>
+</ul></li>
+<li>このマニュアルの配布条件を決める(？)
+<ul>
+<li>2001-12-25: <a href="refm538.html">配布条件</a></li>
+</ul></li>
+<li>2001-04-28: Rubyの終了処理について書く(<a href="http://www.freeml.com/ml_view.php?ml=rubyist&pg=526">rubyist:0526</a><sup class="outside"><small>[外部]</small></sup>)
+<ul>
+<li>2001-05-11: <a href="refm016.html">終了処理</a></li>
+</ul></li>
+<li>「Rubyの文法」再構成に伴い、全体の記述の見直しと((&lt;Rubyの文法&gt;))
+  と参照している箇所を修正する
+<ul>
+<li>2001-05-11: やった。</li>
+</ul></li>
+<li><a href="refm535.html">manual page</a> の参照の仕方のページ
+<ul>
+<li>ページだけ作った</li>
+<li><a href="refm081.html">Process</a>でちょっと使ってみた</li>
+<li>完了したつもり</li>
+</ul></li>
+<li>Ruby FAQをここに取り込む
+<ul>
+<li>完了したみたい</li>
+</ul></li>
+<li>「Rubyの文法」の再編成(検討中)
+<ul>
+<li>2001-02-26 やった。どう？ - あらい</li>
+</ul></li>
+<li>拡張ライブラリリファレンスマニュアル(書く人いる？)</li>
+</ul>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm002.html">UP</a>][<a href="refm003.html">&lt;-PREV</a>][<a href="refm005.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

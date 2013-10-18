@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ruby-src:ext/pty/README</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm518.html" rel="next" />
+<link href="refm516.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm516.html">&lt;-PREV</a>][<a href="refm518.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1>ruby-src:ext/pty/README</h1>
+pty&nbsp;extension&nbsp;version&nbsp;0.3&nbsp;by&nbsp;A.ito<br />
+<br />
+1.&nbsp;Introduction<br />
+<br />
+This&nbsp;extension&nbsp;module&nbsp;adds&nbsp;ruby&nbsp;a&nbsp;functionality&nbsp;to&nbsp;execute&nbsp;an&nbsp;<br />
+arbitrary&nbsp;command&nbsp;through&nbsp;pseudo&nbsp;tty&nbsp;(pty).<br />
+<br />
+2.&nbsp;Install<br />
+<br />
+Follow&nbsp;the&nbsp;instruction&nbsp;below.<br />
+<br />
+(1)&nbsp;Execute<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ruby&nbsp;extconf.rb<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;then&nbsp;Makefile&nbsp;is&nbsp;generated.<br />
+<br />
+(3)&nbsp;Do&nbsp;make;&nbsp;make&nbsp;install.<br />
+<br />
+3.&nbsp;What&nbsp;you&nbsp;can&nbsp;do<br />
+<br />
+This&nbsp;extension&nbsp;module&nbsp;defines&nbsp;a&nbsp;module&nbsp;named&nbsp;PTY,&nbsp;which&nbsp;contains<br />
+following&nbsp;module&nbsp;fungtions:<br />
+<br />
+&nbsp;&nbsp;&nbsp;getpty(command)<br />
+&nbsp;&nbsp;&nbsp;spawn(command)<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This&nbsp;function&nbsp;reserves&nbsp;a&nbsp;pty,&nbsp;executes&nbsp;command&nbsp;over&nbsp;the&nbsp;pty&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;returns&nbsp;an&nbsp;array.&nbsp;The&nbsp;return&nbsp;value&nbsp;is&nbsp;an&nbsp;array&nbsp;with&nbsp;three<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;elements.&nbsp;The&nbsp;first&nbsp;element&nbsp;in&nbsp;the&nbsp;array&nbsp;is&nbsp;for&nbsp;reading&nbsp;and&nbsp;the&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;second&nbsp;for&nbsp;writing.&nbsp;The&nbsp;third&nbsp;element&nbsp;is&nbsp;the&nbsp;process&nbsp;ID&nbsp;of&nbsp;the<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;child&nbsp;process.&nbsp;If&nbsp;this&nbsp;function&nbsp;is&nbsp;called&nbsp;with&nbsp;an&nbsp;iterator&nbsp;block,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;array&nbsp;is&nbsp;passed&nbsp;to&nbsp;the&nbsp;block&nbsp;as&nbsp;block&nbsp;parameters,&nbsp;and&nbsp;the<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;function&nbsp;itself&nbsp;returns&nbsp;nil.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;When&nbsp;the&nbsp;child&nbsp;process&nbsp;is&nbsp;suspended&nbsp;or&nbsp;finished,&nbsp;an&nbsp;exception&nbsp;is<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;raised.&nbsp;&nbsp;If&nbsp;this&nbsp;function&nbsp;is&nbsp;called&nbsp;with&nbsp;an&nbsp;iterator&nbsp;block,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exception&nbsp;is&nbsp;raised&nbsp;only&nbsp;within&nbsp;the&nbsp;block.&nbsp;&nbsp;Child&nbsp;process<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;monitor&nbsp;is&nbsp;terminated&nbsp;on&nbsp;block&nbsp;exit.<br />
+<br />
+&nbsp;&nbsp;&nbsp;protect_signal<br />
+&nbsp;&nbsp;&nbsp;reset_signal<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;These&nbsp;functions&nbsp;are&nbsp;obsolete&nbsp;in&nbsp;this&nbsp;version&nbsp;of&nbsp;pty.<br />
+<br />
+4.&nbsp;License<br />
+<br />
+(C)&nbsp;Copyright&nbsp;1998&nbsp;by&nbsp;Akinori&nbsp;Ito.<br />
+<br />
+This&nbsp;software&nbsp;may&nbsp;be&nbsp;redistributed&nbsp;freely&nbsp;for&nbsp;this&nbsp;purpose,&nbsp;in&nbsp;full&nbsp;<br />
+or&nbsp;in&nbsp;part,&nbsp;provided&nbsp;that&nbsp;this&nbsp;entire&nbsp;copyright&nbsp;notice&nbsp;is&nbsp;included&nbsp;<br />
+on&nbsp;any&nbsp;copies&nbsp;of&nbsp;this&nbsp;software&nbsp;and&nbsp;applications&nbsp;and&nbsp;derivations&nbsp;thereof.<br />
+<br />
+This&nbsp;software&nbsp;is&nbsp;provided&nbsp;on&nbsp;an&nbsp;&quot;as&nbsp;is&quot;&nbsp;basis,&nbsp;without&nbsp;warranty&nbsp;of&nbsp;any<br />
+kind,&nbsp;either&nbsp;expressed&nbsp;or&nbsp;implied,&nbsp;as&nbsp;to&nbsp;any&nbsp;matter&nbsp;including,&nbsp;but&nbsp;not<br />
+limited&nbsp;to&nbsp;warranty&nbsp;of&nbsp;fitness&nbsp;of&nbsp;purpose,&nbsp;or&nbsp;merchantability,&nbsp;or<br />
+results&nbsp;obtained&nbsp;from&nbsp;use&nbsp;of&nbsp;this&nbsp;software.<br />
+<br />
+5.&nbsp;Bug&nbsp;report<br />
+<br />
+Please&nbsp;feel&nbsp;free&nbsp;to&nbsp;send&nbsp;E-mail&nbsp;to<br />
+<br />
+&nbsp;&nbsp;&nbsp;aito@ei5sun.yz.yamagata-u.ac.jp<br />
+<br />
+for&nbsp;any&nbsp;bug&nbsp;report,&nbsp;opinion,&nbsp;contribution,&nbsp;etc.<br />
+
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm516.html">&lt;-PREV</a>][<a href="refm518.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

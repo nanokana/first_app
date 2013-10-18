@@ -1,0 +1,645 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>IO</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm046.html" rel="next" />
+<link href="refm044.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm035.html">UP</a>][<a href="refm044.html">&lt;-PREV</a>][<a href="refm046.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L000980" id="L000980">IO</a></h1>
+<p><code>IO</code> クラスは基本的な入出力機能を実装します。</p>
+<ul>
+<li><a href="refm436.html">Traps: IO ポートのオープンに関わる問題</a></li>
+</ul>
+<h2><a name="L000981" id="L000981">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm035.html">Object</a></li>
+</ul>
+<h2><a name="L000982" id="L000982">インクルードされているモジュール:</a></h2>
+<ul>
+<li><a href="refm070.html">Enumerable</a></li>
+<li><a href="refm073.html">File::Constants</a></li>
+</ul>
+<p><a href="refm385.html">ruby 1.8 feature</a>: File::Constants は、<a href="refm046.html">File</a> から移動しました。</p>
+<h2><a name="L000983" id="L000983">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L000984" id="L000984"><code>IO.new(<var>fd</var>[, <var>mode</var>])</code></a>
+<dt><a name="L000985" id="L000985"><code>IO.for_fd(<var>fd</var>[, <var>mode</var>]) ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a>
+<dt><a name="L000986" id="L000986"><code>IO.open(<var>fd</var>[, <var>mode</var>])                 ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a>
+<dt><a name="L000987" id="L000987"><code>IO.open(<var>fd</var>[, <var>mode</var>]) {|<var>io</var>| ... }     ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>オープン済みのファイルディスクリプタ <var>fd</var> に対する新しい 
+<code>IO</code> オブジェクトを生成して返します。<code>IO</code> オブジェクトの生
+成に失敗した場合は例外 <a href="refm108.html">Errno::EXXX</a> が発生します。</p>
+<p><var>mode</var> には、<a href="refm046.html#L001080">File.open</a> と同じ形式で IO のモードを指
+定します(ただし、文字列形式のみ)。詳細は組み込み関数<a href="refm029.html#L000464">open</a>
+を参照してください。
+<var>mode</var> のデフォルト値は &quot;r&quot; です。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>:
+IO.for_fd は、IO.new と同じです。IO.open はブロックを持てる
+点だけが異なります(ブロックの終了とともに fd はクローズされます)。</p>
+<p>ブロックつき IO.open は、ブロックの結果を返します。それ以外は生成
+した IO オブジェクトを返します。</p>
+<p><a href="refm385.html">ruby 1.8 feature</a>:
+<var>mode</var> の指定は完全に <a href="refm029.html#L000464">open</a>,
+<a href="refm046.html#L001080">File.open</a> と同じです。(つまり、1.8 からは File::RDONLY 
+などの定数(数値)でモードを指定できます)</p></dd>
+<dt><a name="L000988" id="L000988"><code>IO.foreach(<var>path</var>[, <var>rs</var>]) {|<var>line</var>| ... }</code></a></dt>
+<dd>
+<p><var>path</var> で指定されたファイルの各行に対して繰り返します
+(<a href="refm029.html#L000464">open</a> と同様 <var>path</var> の先頭が &quot;|&quot; ならば、コマ
+ンドの出力を読み取ります)。ちょうど以下のような働きをします。</p>
+<pre>port = open(path)
+begin
+  port.each_line {|line|
+     ...
+  }
+ensure
+  port.close
+end</pre>
+<p><var>path</var> のオープンに成功すれば <code>nil</code> を返します。
+失敗した場合は例外 <a href="refm108.html">Errno::EXXX</a> が発生します。</p>
+<p>行の区切りは引数 <var>rs</var> で指定した文字列になります。<var>rs</var> の
+デフォルト値は組み込み変数 <a href="refm030.html#L000528">$/</a> の値です。</p>
+<p><var>rs</var> に nil を指定すると行区切りなしとみなします。
+空文字列 <code>&quot;&quot;</code> を指定すると連続する改行を行の区切りとみなします
+(パラグラフモード)。</p></dd>
+<dt><a name="L000989" id="L000989"><code>IO.pipe</code></a></dt>
+<dd>
+<p><a href="refm535.html">pipe(2)</a> を実行して、相互につながった2つの
+<a href="refm045.html">IO</a> オブジェクトを要素とする配列を返します。<code>IO</code> オブジェ
+クトの作成に失敗した場合は例外 <a href="refm108.html">Errno::EXXX</a> が発生します。</p>
+<p>戻り値の配列は最初の要素が読み込み側で、次の要素が書き込み側です。</p>
+<pre>p pipe = IO.pipe    # =&gt; [#&lt;IO:0x401b90f8&gt;, #&lt;IO:0x401b7718&gt;]
+pipe[1].puts &quot;foo&quot;
+p pipe[0].gets      # =&gt; &quot;foo\n&quot;</pre></dd>
+<dt><a name="L000990" id="L000990"><code>IO.popen(<var>command</var> [, <var>mode</var>])</code></a>
+<dt><a name="L000991" id="L000991"><code>IO.popen(<var>command</var> [, <var>mode</var>]) {|<var>io</var>| ... }</code></a></dt>
+<dd>
+<p><var>command</var> をサブプロセスとして実行し、そのプロセスの標準入出力
+との間にパイプラインを確立します。<var>mode</var> はオープンする IO ポー
+トのモードを指定します(<var>mode</var> の詳細は <a href="refm029.html#L000464">open</a> 
+参照)。省略されたときのデフォルトは &quot;r&quot; です。</p>
+<p>生成したパイプ(<a href="refm045.html">IO</a> オブジェクト)を返します。</p>
+<pre>p io = IO.popen(&quot;cat&quot;, &quot;r+&quot;)  # =&gt; #&lt;IO:0x401b75c8&gt;
+io.puts &quot;foo&quot;
+p io.gets  # =&gt; &quot;foo\n&quot;</pre>
+<p>ブロックが与えられた場合は生成した <code>IO</code> オブジェクトを引数にブ
+ロックを実行し、その結果を返します。ブロックの実行後、生成したパイ
+プは自動的にクローズされます。</p>
+<pre>p IO.popen(&quot;cat&quot;, &quot;r+&quot;) {|io|
+  io.puts &quot;foo&quot;
+  io.gets
+}
+# =&gt; &quot;foo\n&quot;</pre>
+<p>コマンド名が <code>&quot;-&quot;</code> の時、Ruby は <a href="refm535.html">fork(2)</a> を
+行い子プロセスの標準入出力との間にパイプラインを確立します。このと
+きの戻りは、親プロセスは <code>IO</code> オブジェクトを返し、子プロセスは
+<code>nil</code> を返します。ブロックがあれば、親プロセスは生成した
+<code>IO</code> オブジェクトを引数にブロックを実行しその結果を返します。
+(パイプはクローズされます)
+子プロセスは <code>nil</code> を引数にブロックを実行し終了します。</p>
+<pre># ブロックなしの例
+
+io = IO.popen(&quot;-&quot;, &quot;r+&quot;)
+if io.nil?
+  # child
+  s = gets
+  print &quot;child output: &quot; + s
+  exit
+end
+
+# parent
+io.puts &quot;foo&quot;
+p io.gets                   # =&gt; &quot;child output: foo\n&quot;
+io.close
+
+# ブロックありの例
+
+p IO.popen(&quot;-&quot;, &quot;r+&quot;) {|io|
+  if io
+    # parent
+    io.puts &quot;foo&quot;
+    io.gets
+  else
+    # child
+    s = gets
+    puts &quot;child output: &quot; + s
+  end
+}
+# =&gt; &quot;child output: foo\n&quot;</pre>
+<p>パイプ、あるいは子プロセスの生成に失敗した場合は例外 
+<a href="refm108.html">Errno::EXXX</a> が発生します。</p>
+<p><a href="refm392.html">ruby 1.9 feature</a>:
+<var>command</var> が配列の場合は、シェルを経由せずに子プロセスを実行し
+ます。</p></dd>
+<dt><a name="L000992" id="L000992"><code>IO.read(<var>path</var>,[<var>length</var>,[<var>offset</var>]])  ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p><var>path</var> で指定されたファイルを <var>offset</var> 位置から 
+<var>length</var> バイト分読み込んで返します。ちょうど以下のような働き
+をします。</p>
+<pre>port = open(path)
+port.pos = offset if offset
+begin
+  port.read length
+ensure
+  port.close
+end</pre>
+<p><var>length</var> が <code>nil</code> であるか省略した場合には、EOF まで読み込
+みますが、IO が既に <code>EOF</code> に達していれば <code>&quot;&quot;</code> を返します。
+したがって、<code>IO.read(空ファイル)</code> は <code>&quot;&quot;</code> となります。</p>
+<p><var>length</var> に具体的な長さを指定した場合には、その長さを読み込みますが、
+IO が既に <code>EOF</code> に達していれば <code>nil</code> を返します。</p>
+<p><var>path</var> のオープン、<var>offset</var> 位置への設定、ファイルの読み込
+みに失敗した場合は例外 <a href="refm108.html">Errno::EXXX</a> が発生します。
+<var>length</var> が負の場合、例外 <a href="refm094.html">ArgumentError</a> が発生します。</p></dd>
+<dt><a name="L000993" id="L000993"><code>IO.readlines(<var>path</var>[, <var>rs</var>])</code></a></dt>
+<dd>
+<p><var>path</var> で指定されたファイルを全て読み込んで、その各行を要素と
+してもつ配列を返します。
+IO が既に EOF に達していれば空配列 <code>[]</code> を返します。</p>
+<p>ちょうど以下のような働きをします。</p>
+<pre>port = open(path)
+begin
+  port.readlines
+ensure
+  port.close
+end</pre>
+<p>行の区切りは引数 <var>rs</var> で指定した文字列になります。<var>rs</var> の
+デフォルト値は組み込み変数 <a href="refm030.html#L000528">$/</a> の値です。</p>
+<p><var>rs</var> に nil を指定すると行区切りなしとみなします。
+空文字列 <code>&quot;&quot;</code> を指定すると連続する改行を行の区切りとみなします
+(パラグラフモード)。</p>
+<p><var>path</var> のオープン、ファイルの読み込みに失敗した場合は例外 
+<a href="refm108.html">Errno::EXXX</a> が発生します。</p></dd>
+<dt><a name="L000994" id="L000994"><code>IO.select(<var>reads</var>[, <var>writes</var>[, <var>excepts</var>[, <var>timeout</var>]]])</code></a></dt>
+<dd>
+<p><a href="refm535.html">select(2)</a> を実行します。
+<var>reads</var>/<var>writes</var>/<var>excepts</var>には、入力待ちする
+<a href="refm045.html">IO</a> (またはそのサブクラス)のインスタンスの配列を渡します。</p>
+<p><var>timeout</var> は整数、<a href="refm056.html">Float</a> または <code>nil</code>(省略
+時のデフォルト値)を指定します。<code>nil</code> を指定した時に
+は IO がレディ状態になるまで待ち続けます。
+整数、<a href="refm056.html">Float</a>で指定したときは単位は秒です。</p>
+<p>戻り値は、<var>timeout</var> した時には <code>nil</code> を、そうで
+ないときは 3 要素の配列を返し、その各要素が入力/出力/例外
+待ちのオブジェクトの配列です(指定した配列のサブセット)。</p>
+<p><a href="refm029.html#L000483">select</a> と同じです。</p></dd>
+<dt><a name="L000995" id="L000995"><code>IO.sysopen(<var>path</var>[, <var>mode</var> [, <var>perm</var>]])   ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p><var>path</var>で指定されるファイルをオープンし、ファイル記述子を返しま
+す。ファイルのオープンに失敗した場合は例外 <a href="refm108.html">Errno::EXXX</a> が発
+生します。</p>
+<p>引数 <var>mode</var>, <var>perm</var> については 組み込み関数 
+<a href="refm029.html#L000464">open</a> と同じです。</p>
+<p><a href="#L000985">IO.for_fd</a> などで IO オブジェクトにしない限り、このメソッ
+ドでオープンしたファイルをクローズする手段はありません。<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></p></dd>
+</dl>
+<h2><a name="L000996" id="L000996">メソッド:</a></h2>
+<dl>
+<dt><a name="L000997" id="L000997"><code><var>self</var> &lt;&lt; <var>object</var></code></a></dt>
+<dd>
+<p><var>object</var> を出力します。<var>object</var> が文字列でない時にはメソッ
+ド <code>to_s</code> を用いて文字列に変換します。<code>self</code> を戻り値とす
+るので、以下のような <code>&lt;&lt;</code> の連鎖を使うことができます。</p>
+<pre>STDOUT &lt;&lt; 1 &lt;&lt; &quot; is a &quot; &lt;&lt; Fixnum &lt;&lt; &quot;\n&quot;</pre>
+<p>出力に失敗した場合は例外 <a href="refm108.html">Errno::EXXX</a> が発生します。</p></dd>
+<dt><a name="L000998" id="L000998"><code>binmode</code></a></dt>
+<dd>
+<p>ストリームをバイナリモードにします。MSDOS などバイナリモードの存在
+する OS でのみ有効です(そうでない場合このメソッドは何もしません)。
+バイナリモードから通常のモードに戻す方法は再オープンしかありません。</p>
+<p><code>self</code> を返します。</p></dd>
+<dt><a name="L000999" id="L000999"><code>clone</code></a>
+<dt><a name="L001000" id="L001000"><code>dup</code></a></dt>
+<dd>
+<p>レシーバと同じ IO を参照する新しい IO オブジェクトを返します。
+(参照しているファイル記述子は <a href="refm535.html">dup(2)</a> されます)
+clone の際に <code>self</code> は一旦 <a href="#L001014">flush</a> されます。</p>
+<p>フリーズした IO の clone は同様にフリーズされた IO を返しますが、
+dup は内容の等しいフリーズされていない IO を返します。</p></dd>
+<dt><a name="L001001" id="L001001"><code>close</code></a></dt>
+<dd>
+<p>入出力ポートをクローズします。</p>
+<p>以後このポートに対して入出力を行うと例外 <a href="refm097.html">IOError</a> が発生しま
+す。ガーベージコレクトの際にはクローズされていない IO ポートはクロー
+ズされます。<a href="refm436.html">Traps:closeをGCにまかせる</a></p>
+<p>close に失敗した場合は例外 <a href="refm108.html">Errno::EXXX</a> が発生します。</p>
+<p><code>self</code> がパイプでプロセスにつながっていれば、そのプロセスの終
+了を待ち合わせます。</p>
+<p><code>nil</code> を返します。</p></dd>
+<dt><a name="L001002" id="L001002"><code>close_read</code></a></dt>
+<dd>
+<p>読み込み用の IO を close します。主にパイプや読み書き両用に作成し
+た IO オブジェクトで使用します。</p>
+<p><code>self</code> が読み込み用にオープンされていなければ、例外 
+<a href="refm097.html">IOError</a> が発生します。</p>
+<p>close に失敗した場合は例外 <a href="refm108.html">Errno::EXXX</a> が発生します。</p>
+<p><code>nil</code> を返します。</p></dd>
+<dt><a name="L001003" id="L001003"><code>close_write</code></a></dt>
+<dd>
+<p>書き込み用の IO を close します。</p>
+<p><code>self</code> が書き込み用にオープンされていなければ、例外 
+<a href="refm097.html">IOError</a> が発生します。</p>
+<p>close に失敗した場合は例外 <a href="refm108.html">Errno::EXXX</a> が発生します。</p>
+<p><code>nil</code> を返します。</p></dd>
+<dt><a name="L001004" id="L001004"><code>closed?</code></a></dt>
+<dd>
+<p>ポートがクローズされている時に真を返します。</p></dd>
+<dt><a name="L001005" id="L001005"><code>each([<var>rs</var>]) {|<var>line</var>| ... }</code></a>
+<dt><a name="L001006" id="L001006"><code>each_line([<var>rs</var>]) {|<var>line</var>| ... }</code></a></dt>
+<dd>
+<p>IO ポートから 1 行ずつ読み込んで繰り返すイテレータ。IO ポートはリー
+ドモードでオープンされている必要があります(<a href="refm029.html#L000464">open</a>参
+照)。</p>
+<p>行の区切りは引数 <var>rs</var> で指定した文字列になります。<var>rs</var> の
+デフォルト値は組み込み変数 <a href="refm030.html#L000528">$/</a> の値です。</p>
+<p><var>rs</var> に nil を指定すると行区切りなしとみなします。
+空文字列 <code>&quot;&quot;</code> を指定すると連続する改行を行の区切りとみなします
+(パラグラフモード)。</p>
+<p><code>self</code> を返します。</p></dd>
+<dt><a name="L001007" id="L001007"><code>each_byte {|<var>ch</var>| ... }</code></a></dt>
+<dd>
+<p>IO ポートから 1 バイトずつ読み込みます。IO ポートはリードモードで
+オープンされている必要があります(<a href="refm029.html#L000464">open</a>参照)。</p>
+<p><code>self</code> を返します。</p></dd>
+<dt><a name="L001008" id="L001008"><code>eof</code></a>
+<dt><a name="L001009" id="L001009"><code>eof?</code></a></dt>
+<dd>
+<p>ストリームがファイルの終端に達した場合真を返します。</p></dd>
+<dt><a name="L001010" id="L001010"><code>fcntl(<var>cmd</var>[, <var>arg</var>])</code></a></dt>
+<dd>
+<p>IOに対してシステムコール <code>fcntl</code> を実行します。
+機能の詳細は<a href="refm535.html">fcntl(2)</a>を参照してください。</p>
+<p><var>arg</var> が整数の時にはその値を、true または false の場合はそれぞ
+れ 1 または 0 を、文字列の場合には pack した構造体だとみなしてその
+まま <a href="refm535.html">fcntl(2)</a> に渡します。<var>arg</var> の省略時の値
+は 0 です。</p>
+<p><var>cmd</var> に対して指定できる値は、添付ライブラリ <a href="refm250.html">fcntl</a> が提供しています。</p>
+<p><code>fcntl(2)</code> が返した数値を返します。<code>fcntl(2)</code> の実行に失敗
+した場合は例外 <a href="refm108.html">Errno::EXXX</a> が発生します。</p></dd>
+<dt><a name="L001011" id="L001011"><code>fsync       ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>書き込み用の IO に対して、システムコール<a href="refm535.html">fsync(2)</a> 
+を実行します。<a href="#L001014">flush</a>を行ったあと(OSレベルで)まだディスクに
+書き込まれていないメモリ上にあるデータをディスクに書き出します。</p>
+<p>成功すれば 0 を返します。失敗した場合は例外 <a href="refm108.html">Errno::EXXX</a> が発
+生します。<code>self</code> が書き込み用でなければ例外 <a href="refm097.html">IOError</a> が発
+生します。</p></dd>
+<dt><a name="L001012" id="L001012"><code>fileno</code></a>
+<dt><a name="L001013" id="L001013"><code>to_i</code></a></dt>
+<dd>
+<p>ファイル記述子の番号を返します。</p></dd>
+<dt><a name="L001014" id="L001014"><code>flush</code></a></dt>
+<dd>
+<p>IO ポートの内部バッファをフラッシュします。
+<code>self</code> が書き込み用でなければ例外 <a href="refm097.html">IOError</a> が発
+生します。</p>
+<p><code>self</code> を返します。</p></dd>
+<dt><a name="L001015" id="L001015"><code>getc</code></a></dt>
+<dd>
+<p>IO ポートから 1 文字読み込んで、その文字に対応する <a href="refm055.html">Fixnum</a> を
+返します。EOF に到達した時には <code>nil</code> を返します。</p></dd>
+<dt><a name="L001016" id="L001016"><code>gets([<var>rs</var>])</code></a></dt>
+<dd>
+<p>一行読み込んで、読み込みに成功した時にはその文字列を返します。
+ファイルの終りに到達した時には <code>nil</code> を返します。
+<a href="#L001005">IO#each</a> と同じように動作します
+が、こちらは 1 行返すだけで繰り返しません。</p>
+<p>行の区切りは引数 <var>rs</var> で指定した文字列になります。<var>rs</var> の
+デフォルト値は組み込み変数 <a href="refm030.html#L000528">$/</a> の値です。</p>
+<p><var>rs</var> に nil を指定すると行区切りなしとみなします。
+空文字列 <code>&quot;&quot;</code> を指定すると連続する改行を行の区切りとみなします
+(パラグラフモード)。</p>
+<p><code>IO#gets</code> は<a href="refm029.html#L000452">gets</a> 同様、読み込んだ文字列を変数 
+<code>$_</code> にセットします。</p></dd>
+<dt><a name="L001017" id="L001017"><code>ioctl(<var>cmd</var>[, <var>arg</var>])</code></a></dt>
+<dd>
+<p>IO に対してシステムコール <code>ioctl</code> を実行し、その結果を返します。
+機能の詳細は <a href="refm535.html">ioctl(2)</a> を参照してください。</p>
+<p><var>arg</var> が整数の時にはその値を、文字列の場合には 
+<a href="refm036.html#L000776">pack</a> した構造体だとみなして<code>ioctl</code> に渡します。
+<var>arg</var> が省略されたときや、<code>nil</code>, <code>false</code> のときは 0、
+<code>true</code> に対しては 1 を <code>ioctl</code> に渡します。</p></dd>
+<dt><a name="L001018" id="L001018"><code>isatty</code></a>
+<dt><a name="L001019" id="L001019"><code>tty?</code></a></dt>
+<dd>
+<p>入出力ポートがttyに結合している時、真を返します。</p></dd>
+<dt><a name="L001020" id="L001020"><code>lineno</code></a></dt>
+<dd>
+<p>現在の行番号を返します。</p></dd>
+<dt><a name="L001021" id="L001021"><code>lineno=number</code></a></dt>
+<dd>
+<p>行番号をセットします。</p></dd>
+<dt><a name="L001022" id="L001022"><code>pid</code></a></dt>
+<dd>
+<p><a href="#L000990">IO.popen</a> で作られたIOポートなら、子プロセスのプロセス ID を
+返します。それ以外は <code>nil</code> を返します。</p></dd>
+<dt><a name="L001023" id="L001023"><code>pos</code></a>
+<dt><a name="L001024" id="L001024"><code>tell</code></a></dt>
+<dd>
+<p>ファイルポインタの現在の位置を返します。</p></dd>
+<dt><a name="L001025" id="L001025"><code>pos = <var>n</var></code></a></dt>
+<dd>
+<p>ファイルポインタを指定位置に移動します。
+<code>io.seek(pos, IO::SEEK_SET)</code>と同じです。</p></dd>
+<dt><a name="L001026" id="L001026"><code>print([<var>arg</var>[, ...]])</code></a></dt>
+<dd>
+<p>引数を IO ポートに順に出力します。引数を省略した場合は、
+<a href="refm030.html#L000512">$_</a> を出力します。
+引数の扱いは <a href="refm029.html#L000467">print</a> と同じです(詳細はこちらを参照
+してください)。</p>
+<p><code>nil</code> を返します。</p></dd>
+<dt><a name="L001027" id="L001027"><code>printf(<var>format</var>[, <var>arg</var>[, ...]])</code></a></dt>
+<dd>
+<p><code>C</code> 言語の <code>printf</code> と同じように、<var>format</var> に従い引数
+を文字列に変換して、<code>self</code> に出力します。</p>
+<p>第一引数に <code>IO</code> を指定できないこと、引数を省略できないことを除
+けば <a href="refm029.html#L000468">printf</a> と同じです。
+引数の扱いの詳細については <a href="refm452.html">sprintfフォーマット</a> を参照してください。</p>
+<p><code>nil</code> を返します。</p></dd>
+<dt><a name="L001028" id="L001028"><code>putc(<var>ch</var>)</code></a></dt>
+<dd>
+<p>文字 <var>ch</var> を <code>self</code> に出力します。
+引数の扱いは <a href="refm029.html#L000471">putc</a> と同じです(詳細はこちらを参照し
+てください)。</p>
+<p><var>ch</var> を返します。</p></dd>
+<dt><a name="L001029" id="L001029"><code>puts([<var>obj</var>[, ...]])</code></a></dt>
+<dd>
+<p>各 <var>obj</var> を <code>self</code> に出力した後、改行します。
+引数の扱いは <a href="refm029.html#L000472">puts</a> と同じです(詳細はこちらを参照し
+てください)。</p>
+<p><code>nil</code> を返します。</p></dd>
+<dt><a name="L001030" id="L001030"><code>read([<var>length</var>])</code></a>
+<dt><a name="L001031" id="L001031"><code>read([<var>length</var>[, <var>outbuf</var>]])       ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p><var>length</var> が指定された場合、
+<var>length</var> バイト読み込んで、その文字列を返します。
+IO が既に <code>EOF</code> に達していれば <code>nil</code> を返します。</p>
+<p><var>length</var> が省略された時には、<code>EOF</code> までの全てのデータを読み込みます。
+IO が既に <code>EOF</code> に達している場合 <code>&quot;&quot;</code> を返します。
+したがって、<code>open(空ファイル) {|f| f.read }</code> は <code>&quot;&quot;</code> となります。</p>
+<p>データの読み込みに失敗した場合は例外 <a href="refm108.html">Errno::EXXX</a> が発生しま
+す。<var>length</var> が負の場合、例外 <a href="refm094.html">ArgumentError</a> が発生します。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>: 第二引数として文字列を指定すると、読み込ん
+だデータをその文字列オブジェクトに上書きして返します。指定した文字
+列オブジェクトがあらかじめ <var>length</var> 長の領域であれば、余計なメ
+モリの割当てが行われません。指定した文字列の長さが <var>length</var> と
+異なる場合、その文字列は一旦 <var>length</var> 長に拡張(あるいは縮小)さ
+れます(そして、実際に読み込んだデータのサイズになります)。</p>
+<p>第二引数を指定した <code>read</code> の呼び出しでデータが空であった場合
+(<code>read</code> が<code>nil</code> を返す場合)、<var>outbuf</var> は空文字列になりま
+す。</p>
+<pre>outbuf = &quot;x&quot; * 20;
+io = File.open(&quot;/dev/null&quot;)
+p io.read(10,outbuf)
+p outbuf
+=&gt; nil
+   &quot;&quot;</pre>
+<p><a href="refm392.html">ruby 1.9 feature</a>: <code>read(0)</code> は常に <code>&quot;&quot;</code> を返します。</p></dd>
+<dt><a name="L001032" id="L001032"><code>readchar</code></a></dt>
+<dd>
+<p><a href="#L001015">IO#getc</a> と同様に 1 文字読み込んで、その文字に対応す
+る <a href="refm055.html">Fixnum</a> を返しますが、EOF に到達した時に例外 
+<a href="refm098.html">EOFError</a> を発生させます。</p></dd>
+<dt><a name="L001033" id="L001033"><code>readline([<var>rs</var>])</code></a></dt>
+<dd>
+<p><a href="#L001016">IO#gets</a> と同様に 1 行読み込みその文字列を返しますが、
+EOF に到達した時に例外 <a href="refm098.html">EOFError</a> を発生させます。</p>
+<p>行の区切りは引数 <var>rs</var> で指定した文字列になります。<var>rs</var> の
+デフォルト値は組み込み変数 <a href="refm030.html#L000528">$/</a> の値です。</p>
+<p><var>rs</var> に nil を指定すると行区切りなしとみなします。
+空文字列 <code>&quot;&quot;</code> を指定すると連続する改行を行の区切りとみなします
+(パラグラフモード)。</p>
+<p><code>readline</code> は <code>gets</code> 同様読み込んだ文字列を変数 <code>$_</code> 
+にセットします。</p></dd>
+<dt><a name="L001034" id="L001034"><code>readlines([<var>rs</var>])</code></a></dt>
+<dd>
+<p>データを全て読み込んで、その各行を要素としてもつ配列を返します。
+IO が既に EOF に達していれば空配列 <code>[]</code> を返します。</p>
+<p>行の区切りは引数 <var>rs</var> で指定した文字列になります。<var>rs</var> の
+デフォルト値は組み込み変数 <a href="refm030.html#L000528">$/</a> の値です。</p>
+<p><var>rs</var> に nil を指定すると行区切りなしとみなします。
+空文字列 <code>&quot;&quot;</code> を指定すると連続する改行を行の区切りとみなします
+(パラグラフモード)。</p></dd>
+<dt><a name="L001035" id="L001035"><code>read_nonblock(<var>maxlen</var>[, <var>outbuf</var>])</code></a></dt>
+<dd>
+<p><a href="refm391.html">ruby 1.8.5 feature</a></p>
+<p>IO をノンブロッキングモードに設定し、
+その後で read(2) システムコールにより
+長さ <var>maxlen</var> を上限として読み込み、文字列として返します。 </p>
+<p>文字列 <var>outbuf</var> が指定された場合、
+読み込んだデータを <var>outbuf</var> に破壊的に格納し、
+返り値は <var>outbuf</var> となります。</p>
+<p>read_nonblock は read(2) システムコールを呼びます。
+その結果として起きたエラーは EAGAIN, EINTR などをふくめ、
+すべてが <a href="refm108.html">Errno::EXXX</a> 例外として呼出元に報告されます。</p>
+<p>read(2) システムコールが 0 を返した場合は
+EOFError となります。</p>
+<p>なお、バッファが空でない場合は、
+read_nonblock はバッファから読み込みます。
+この場合、read(2) システムコールは呼ばれません。</p></dd>
+<dt><a name="L001036" id="L001036"><code>readpartial(<var>maxlen</var>[, <var>outbuf</var>])</code></a></dt>
+<dd>
+<p><a href="refm389.html">ruby 1.8.3 feature</a></p>
+<p>IO から長さ <var>maxlen</var> を上限として読み込み、文字列として返します。
+ここで、即座に得られるデータが存在しないときにはブロックしてデータの到着を待ちますが、
+即座に得られるデータが 1byte でも存在すればブロックしません。
+第二引数 <var>outbuf</var> として文字列を指定すると、
+読み込んだデータを <var>outbuf</var> に上書きして返します。
+IO が既に <code>EOF</code> に達していれば例外 <a href="refm098.html">EOFError</a> を発生させます。</p>
+<p>readpartial はブロックを最小限に抑えることによって、
+パイプ、ソケット、端末などのストリームに対して適切に動作するよう設計されています。
+readpartial がブロックするのは次の全ての条件が満たされたときだけです。</p>
+<ul>
+<li>IO オブジェクト内のバッファが空</li>
+<li>ストリームにデータが到着していない</li>
+<li>ストリームが <code>EOF</code> になっていない</li>
+</ul>
+<p>これらの条件が満たされる場合、何らかのデータが到着するか <code>EOF</code> になるまで readpartial はブロックします。</p>
+<p>readpartial の結果は以下のようになります。</p>
+<ol>
+<li>バッファが空でなければ、そのバッファのデータを読み込んで返します。</li>
+<li>ストリームにデータがあれば、ストリームからデータを読み込んで返します。</li>
+<li>ストリームが <code>EOF</code> になっていれば、例外 <a href="refm098.html">EOFError</a> を発生させます。 </li>
+</ol>
+<p>例えば、パイプに対しては次のように動作します。</p>
+<pre>r, w = IO.pipe           #               buffer          pipe content
+w &lt;&lt; &quot;abc&quot;               #               &quot;&quot;              &quot;abc&quot;.
+r.readpartial(4096)      #=&gt; &quot;abc&quot;       &quot;&quot;              &quot;&quot;
+r.readpartial(4096)      # バッファにもパイプにもデータがないのでブロックする
+
+r, w = IO.pipe           #               buffer          pipe content
+w &lt;&lt; &quot;abc&quot;               #               &quot;&quot;              &quot;abc&quot;
+w.close                  #               &quot;&quot;              &quot;abc&quot; EOF
+r.readpartial(4096)      #=&gt; &quot;abc&quot;       &quot;&quot;              EOF
+r.readpartial(4096)      # 例外 EOFError 発生
+
+r, w = IO.pipe           #               buffer          pipe content
+w &lt;&lt; &quot;abc\ndef\n&quot;        #               &quot;&quot;              &quot;abc\ndef\n&quot;
+r.gets                   #=&gt; &quot;abc\n&quot;     &quot;def\n&quot;         &quot;&quot;
+w &lt;&lt; &quot;ghi\n&quot;             #               &quot;def\n&quot;         &quot;ghi\n&quot;
+r.readpartial(4096)      #=&gt; &quot;def\n&quot;     &quot;&quot;              &quot;ghi\n&quot;
+r.readpartial(4096)      #=&gt; &quot;ghi\n&quot;     &quot;&quot;              &quot;&quot;</pre>
+<p>なお、readpartial は nonblock フラグに影響されません。
+つまり、nonblock フラグが設定されていて sysread であれば Errno::EAGAIN になる場合でもブロックします。</p>
+<p>また、readpartial の挙動は sysread によく似ています。
+とくに、バッファが空の場合には同じ挙動を示します。
+ただし、EAGAIN および EINTR エラーは内部で発生したとしても通知されず、データが到着するまでブロックし続けます。</p></dd>
+<dt><a name="L001037" id="L001037"><code>reopen(<var>io</var>)</code></a>
+<dt><a name="L001038" id="L001038"><code>reopen(<var>name</var>[, <var>mode</var>])</code></a></dt>
+<dd>
+<p>自身を <var>io</var> に繋ぎ換えます。クラスも <var>io</var> に等しくなります
+(注意)。</p>
+<p>第一引数が文字列の時、<var>name</var> で指定されたファイルにストリーム
+を繋ぎ換えます。</p>
+<p>第二引数のデフォルト値は &quot;r&quot; です。
+<a href="refm385.html">ruby 1.8 feature</a>: 第二引数を省略したとき <code>self</code> のモード
+をそのまま引き継ぎます。</p>
+<p><code>self</code> を返します。</p></dd>
+<dt><a name="L001039" id="L001039"><code>rewind</code></a></dt>
+<dd>
+<p>ファイルポインタを先頭に移動します。<code>IO#lineno</code> は 0 になります。</p></dd>
+<dt><a name="L001040" id="L001040"><code>seek(<var>offset</var>[, <var>whence</var>])</code></a></dt>
+<dd>
+<p>ファイルポインタを <var>whence</var> の位置から <var>offset</var> だけ移動させます。
+<var>whence</var> の値は以下のいずれかです。</p>
+<ul>
+<li><code>IO::SEEK_SET</code>: ファイルの先頭から (デフォルト)</li>
+<li><code>IO::SEEK_CUR</code>: 現在のファイルポインタから</li>
+<li><code>IO::SEEK_END</code>: ファイルの末尾から</li>
+</ul>
+<p><var>whence</var> の省略値は <code>IO::SEEK_SET</code> です。</p>
+<p><var>offset</var> 位置への移動が成功すれば 0 を返します。
+失敗した場合は例外 <a href="refm108.html">Errno::EXXX</a> が発生します。</p></dd>
+<dt><a name="L001041" id="L001041"><code>stat</code></a></dt>
+<dd>
+<p>ファイルのステータスを含む <a href="refm043.html">File::Stat</a> オブジェクトを生成して
+返します。</p>
+<p>ステータスの読み込みに失敗した場合は例外 <a href="refm108.html">Errno::EXXX</a> が発生
+します。</p>
+<p><a href="refm046.html#L001086">File#lstat</a>,
+<a href="refm046.html#L001085">File.stat</a>,
+<a href="refm046.html#L001086">File.lstat</a> も参照してください。</p></dd>
+<dt><a name="L001042" id="L001042"><code>sync</code></a></dt>
+<dd>
+<p>現在の出力同期モードを真偽値で返します。同期モードが真の時は
+出力関数の呼出毎にバッファがフラッシュされます。</p></dd>
+<dt><a name="L001043" id="L001043"><code>sync=newstate</code></a></dt>
+<dd>
+<p>出力同期モードを設定します。
+<var>newstate</var> が真なら同期モード、偽なら非同期モードになります。
+<var>newstate</var> を返します。</p></dd>
+<dt><a name="L001044" id="L001044"><code>sysread(<var>maxlen</var>)</code></a>
+<dt><a name="L001045" id="L001045"><code>sysread(<var>maxlen</var>[, <var>outbuf</var>])      ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p><a href="refm535.html">read(2)</a> を用いて入力を行ない、入力されたデータを
+含む文字列を返します。ファイルの終りに到達した時には例外 
+<a href="refm098.html">EOFError</a> を発生させます。<code>stdio</code> を経由しないので 
+<code>gets</code> や <code>getc</code> や <code>eof?</code> などと混用すると思わぬ動作
+をすることがあります。</p>
+<p>データの読み込みに失敗した場合は例外 <a href="refm108.html">Errno::EXXX</a> が発生しま
+す。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>: 第二引数として文字列を指定すると、読み込ん
+だデータをその文字列オブジェクトに上書きして返します。指定した文字
+列オブジェクトがあらかじめ <var>maxlen</var> 長の領域であれば、余計なメ
+モリの割当てが行われません。指定した文字列の長さが <var>maxlen</var> と
+異なる場合、その文字列は一旦 <var>maxlen</var> 長に拡張(あるいは縮小)さ
+れます(そして、実際に読み込んだデータのサイズになります)。</p>
+<p>第二引数を指定した <code>sysread</code> の呼び出しでデータが空であった場
+合(<code>sysread</code> が例外 <a href="refm098.html">EOFError</a> を発生させる場合)、
+<var>outbuf</var> は空文字列になります。</p>
+<pre>outbuf = &quot;x&quot; * 20;
+io = File.open(&quot;/dev/null&quot;)
+p((io.sysread(10,outbuf) rescue nil))
+p outbuf
+=&gt; nil
+   &quot;&quot;</pre></dd>
+<dt><a name="L001046" id="L001046"><code>sysseek(<var>offset</var>[, <var>whence</var>])     ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p><a href="refm535.html">lseek(2)</a> と同じです。<a href="#L001040">seek</a> では、
+<a href="#L001044">sysread</a>, <a href="#L001047">syswrite</a> と併用すると正しく動作しないの
+で代わりにこのメソッドを使います。</p>
+<p>読み込み用にバッファリングされた IO に対して実行すると例外 
+<a href="refm097.html">IOError</a> が発生します。
+書き込み用にバッファリングされた IO に対して実行すると警告が出ます。</p>
+<pre>File.open(&quot;/dev/zero&quot;) {|f|
+  buf = f.read(3)
+  f.sysseek(0)
+}
+# =&gt; -:3:in `sysseek': sysseek for buffered IO (IOError)
+
+File.open(&quot;/dev/null&quot;, &quot;w&quot;) {|f|
+  f.print &quot;foo&quot;
+  f.sysseek(0)
+}
+# =&gt; -:3: warning: sysseek for buffered IO</pre>
+<p>引数は <a href="#L001040">IO#seek</a> と同じです。</p>
+<p><var>offset</var> 位置への移動が成功すれば移動した位置(ファイル先頭から
+の位置)を返します。移動に失敗した場合は例外 <a href="refm108.html">Errno::EXXX</a> が発
+生します。</p></dd>
+<dt><a name="L001047" id="L001047"><code>syswrite(<var>string</var>)</code></a></dt>
+<dd>
+<p><a href="refm535.html">write(2)</a> を用いて <var>string</var> を出力します。
+<var>string</var> が文字列でなければ <code>to_s</code> による文字列化を試みます。
+<code>stdio</code> を経由しないので他の出力メソッドと混用すると思わぬ動作
+をすることがあります。</p>
+<p>実際に出力できたバイト数を返します。出力に失敗した場合は例外 
+<a href="refm108.html">Errno::EXXX</a> が発生します。</p></dd>
+<dt><a name="L001048" id="L001048"><code>to_io</code></a></dt>
+<dd>
+<p><code>self</code> を返します。</p></dd>
+<dt><a name="L001049" id="L001049"><code>ungetc(<var>char</var>)</code></a></dt>
+<dd>
+<p><var>char</var> を読み戻します。2バイト以上の読み戻しは保証されません。</p>
+<p><code>nil</code> を返します。</p></dd>
+<dt><a name="L001050" id="L001050"><code>write(<var>str</var>)</code></a></dt>
+<dd>
+<p>IOポートに対して <var>str</var> を出力します。<var>str</var> が文字列でなけ
+れば <code>to_s</code> による文字列化を試みます。</p>
+<p><a href="#L001047">IO#syswrite</a> を除く全ての出力メソッドは、最終的に 
+&quot;write&quot; という名のメソッドを呼び出すので、このメソッドを置き換える
+ことで出力関数の挙動を変更することができます。
+<a name="footmark:2" id="footmark:2" href="#foottext:2"><sup><small>*2</small></sup></a></p>
+<p>実際に出力できたバイト数を返します。出力に失敗した場合は例外 
+<a href="refm108.html">Errno::EXXX</a> が発生します。</p></dd>
+<dt><a name="L001051" id="L001051"><code>write_nonblock(<var>string</var>)</code></a></dt>
+<dd>
+<p><a href="refm391.html">ruby 1.8.5 feature</a></p>
+<p>IO をノンブロッキングモードに設定し、
+その後で <var>string</var> を write(2) システムコールで書き出します。</p>
+<p>write(2) が成功した場合、返り値は書き込んだ長さとなります。</p>
+<p>write(2) が失敗した場合、例外 <a href="refm108.html">Errno::EXXX</a> が発生します。
+ここで、EAGAIN, EINTR なども単に例外として呼出元に報告されます。</p></dd>
+</dl>
+<h2><a name="L001052" id="L001052">定数</a></h2>
+<dl>
+<dt><a name="L001053" id="L001053"><code>SEEK_CUR</code></a>
+<dt><a name="L001054" id="L001054"><code>SEEK_END</code></a>
+<dt><a name="L001055" id="L001055"><code>SEEK_SET</code></a></dt>
+<dd>
+<p><a href="#L001040">IO#seek</a> を参照してください。</p></dd>
+</dl>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>あらい 
+2002-08-03 たぶん</small><br />
+<a name="foottext:2" id="foottext:2" href="#footmark:2"><sup><small>*2</small></sup></a><small><a href="refm384.html">ruby 1.7 feature</a>: 以前は<a href="refm029.html#L000471">putc</a>,
+<a href="#L001028">IO#putc</a> に対してだけこのことは適用されませんでした
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/16305">ruby-dev:16305</a><sup class="outside"><small>[外部]</small></sup>が、修正されました<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/18038">ruby-dev:18038</a><sup class="outside"><small>[外部]</small></sup></small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm035.html">UP</a>][<a href="refm044.html">&lt;-PREV</a>][<a href="refm046.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

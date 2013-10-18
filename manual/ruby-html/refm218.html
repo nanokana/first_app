@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>OpenSSL::X509::Certificate</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm219.html" rel="next" />
+<link href="refm217.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm217.html">UP</a>][<a href="refm217.html">&lt;-PREV</a>][<a href="refm219.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L004308" id="L004308">OpenSSL::X509::Certificate</a></h1>
+<p>X509 証明書クラス</p>
+<h2><a name="L004309" id="L004309">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L004310" id="L004310"><code>Certificate.new()</code></a>
+<dt><a name="L004311" id="L004311"><code>Certificate.new(<var>str</var>)</code></a>
+<dt><a name="L004312" id="L004312"><code>Certificate.new(<var>io</var>)</code></a></dt>
+<dd>
+<p>証明書オブジェクトを生成する。</p></dd>
+</dl>
+<h2><a name="L004313" id="L004313">メソッド</a></h2>
+<dl>
+<dt><a name="L004314" id="L004314"><code>to_der</code></a></dt>
+<dd>
+<p>DER 形式に変換する。</p></dd>
+<dt><a name="L004315" id="L004315"><code>to_pem</code></a>
+<dt><a name="L004316" id="L004316"><code>to_s</code></a></dt>
+<dd>
+<p>PEM 形式に変換する。</p></dd>
+<dt><a name="L004317" id="L004317"><code>to_text</code></a></dt>
+<dd>
+<p>人間が読める形式に変換する。</p></dd>
+<dt><a name="L004318" id="L004318"><code>version</code></a>
+<dt><a name="L004319" id="L004319"><code>version=</code></a></dt>
+<dd>
+<p>X509 証明書の version。 v1の場合は 0 、v3 の場合は 2 となる。</p></dd>
+<dt><a name="L004320" id="L004320"><code>signature_algorithm</code></a></dt>
+<dd>
+<p>発行者(CA)が証明書に署名するのに使ったアルゴリズム。</p></dd>
+<dt><a name="L004321" id="L004321"><code>serial</code></a>
+<dt><a name="L004322" id="L004322"><code>serial=</code></a></dt>
+<dd>
+<p>発行者(CA)が証明書に付ける識別番号。</p></dd>
+<dt><a name="L004323" id="L004323"><code>subject</code></a>
+<dt><a name="L004324" id="L004324"><code>subject=</code></a></dt>
+<dd>
+<p>証明書の所有者の名前 <a href="refm222.html">OpenSSL::X509::Name</a> オブジェクト。
+http://www.ipa.go.jp/security/pki/033.html#_Toc3020767</p></dd>
+<dt><a name="L004325" id="L004325"><code>issuer</code></a>
+<dt><a name="L004326" id="L004326"><code>issuer=</code></a></dt>
+<dd>
+<p>証明書の発行者(CA)の名前 <a href="refm222.html">OpenSSL::X509::Name</a> オブジェクト。</p></dd>
+<dt><a name="L004327" id="L004327"><code>not_before</code></a>
+<dt><a name="L004328" id="L004328"><code>not_before=</code></a></dt>
+<dd>
+<p>証明書が有効になる時刻 <a href="refm066.html">Time</a> オブジェクト。</p></dd>
+<dt><a name="L004329" id="L004329"><code>not_after</code></a>
+<dt><a name="L004330" id="L004330"><code>not_after=</code></a></dt>
+<dd>
+<p>証明書が無効になる時刻 <a href="refm066.html">Time</a> オブジェクト。</p></dd>
+<dt><a name="L004331" id="L004331"><code>extensions</code></a>
+<dt><a name="L004332" id="L004332"><code>extensions=</code></a></dt>
+<dd>
+<p>証明書の拡張領域 <a href="refm220.html">OpenSSL::X509::Extension</a> オブジェクトの <a href="refm036.html">Array</a>。</p></dd>
+<dt><a name="L004333" id="L004333"><code>add_extension(<var>ext</var>)</code></a></dt>
+<dd>
+<p>拡張領域に値を加える。ext は <a href="refm220.html">OpenSSL::X509::Extension</a> オブジェクト。</p></dd>
+<dt><a name="L004334" id="L004334"><code>public_key</code></a>
+<dt><a name="L004335" id="L004335"><code>public_key=</code></a></dt>
+<dd>
+<p>証明書に記載された公開鍵 <a href="refm233.html">OpenSSL::PKey::RSA</a> オブジェクト。</p></dd>
+<dt><a name="L004336" id="L004336"><code>sign(<var>pkey</var>, <var>digest</var>)</code></a></dt>
+<dd>
+<p>証明書に署名する。pkey は発行者の秘密鍵。digest は        
+<a href="refm216.html">OpenSSL::Digest::Digest</a> オブジェクト。秘密鍵オブジェクトが   
+<a href="refm234.html">OpenSSL::PKey::DSA</a> のインスタンスである場合、 digest は OpenSSL::Digest::DSS1 
+オブジェクトでなければいけない。逆も同じ。OpenSSL::Digest::DSS1 は 
+OpenSSL::PKey::DSA 以外のダイジェストとして使えない。</p></dd>
+<dt><a name="L004337" id="L004337"><code>verify(<var>key</var>)</code></a></dt>
+<dd>
+<p>key は証明書の発行者の公開鍵。 key で証明書の署名を検証する。</p></dd>
+<dt><a name="L004338" id="L004338"><code>check_private_key(<var>pkey</var>)</code></a></dt>
+<dd>
+<p>与えられた秘密鍵が証明書に記載されている subject の公開鍵と対応するものかを確かめる。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm217.html">UP</a>][<a href="refm217.html">&lt;-PREV</a>][<a href="refm219.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

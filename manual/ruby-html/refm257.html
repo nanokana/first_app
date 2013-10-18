@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>jcode</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm258.html" rel="next" />
+<link href="refm256.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm256.html">&lt;-PREV</a>][<a href="refm258.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L005096" id="L005096">jcode</a></h1>
+<h2><a name="L005097" id="L005097">概要</a></h2>
+<p><a href="refm061.html">String</a>クラスのメソッドを追加、再定義し、
+日本語を意識した文字列処理を提供します。</p>
+<h2><a name="XXINVALIDXX" id="XXINVALIDXX">使用例 </a></h2>
+<pre>require 'jcode'
+$KCODE='e' # 漢字コードをEUC-JPに。Windowsで Shift_JIS なら 's' にする
+print 'abcdef'.tr( 'a-z', 'Ａ-Ｚ' ), &quot;\n&quot;</pre>
+<p>$KCODE はこのスクリプト自体の文字コードあわせて設定します。</p>
+<h2><a name="L005099" id="L005099">追加メソッド</a></h2>
+<dl>
+<dt><a name="L005100" id="L005100">each_char</a></dt>
+<dt><a name="L005101" id="L005101">each_char {|char| ... }</a></dt>
+<dd>
+<p>文字列中の各文字に対して繰り返します。
+ブロックを指定せずに呼び出された時には、各文字の配列を返します。</p>
+<p>例：</p>
+<pre>#!/usr/bin/env ruby
+$KCODE='e'
+require 'jcode'
+zstr='ＡＢＣＤＥＦ'
+p zstr.each_char
+zstr.each_char do |x|
+  print &quot;+#{x}+&quot;
+end                     # =&gt; +Ａ++Ｂ++Ｃ++Ｄ++Ｅ++Ｆ+</pre>
+</dd>
+<dt><a name="L005102" id="L005102">end_regexp</a></dt>
+<dd>
+<p>最後の文字が多バイト文字である文字列にマッチする正規表現を返します。
+再定義された<a href="refm061.html">String#succ</a>で内部的に使われます。</p>
+</dd>
+<dt><a name="L005103" id="L005103">jcount(str)</a></dt>
+<dd>
+<p><a href="refm061.html">String#count</a>の日本語対応版です。</p>
+<p>例：</p>
+<pre>#!/usr/bin/env ruby
+$KCODE='e'
+zstr='ＡＢＣＤＥＦ'
+hogehoge='hogehoge'
+
+p zstr.count 'Ａ' # =&gt; 7 ←これは正しくない
+p hogehoge.count &quot;g&quot; # =&gt; 2
+
+require 'jcode'
+
+p zstr.jcount 'Ａ' # =&gt; 1
+
+p hogehoge.jcount &quot;g&quot; # =&gt; 2</pre>
+</dd>
+<dt><a name="L005104" id="L005104">jlength</a></dt>
+<dt><a name="L005105" id="L005105">jsize</a></dt>
+<dd>
+<p><a href="refm061.html">String#length</a>の日本語対応版です。</p>
+<p>例：</p>
+<pre>#!/usr/bin/env ruby
+$KCODE='e'
+zstr='ＡＢＣＤＥＦ'
+hogehoge='hogehoge'
+
+p zstr.size # =&gt; 12
+p hogehoge.size # =&gt; 8
+
+require 'jcode'
+
+p zstr.jsize # =&gt; 6
+
+p hogehoge.jsize # =&gt; 8</pre>
+</dd>
+<dt><a name="L005106" id="L005106">mbchar?</a></dt>
+<dd>
+<p><code>self</code>に多バイト文字が最初に現れる位置を返します。
+多バイト文字が含まれていなければ<code>nil</code>を返します。</p>
+<p>例：</p>
+<pre>#!/usr/bin/env ruby
+$KCODE='e'
+zstr='ＡＢＣＤＥＦ'
+hoge='hogehoge'
+
+require 'jcode'
+
+p zstr.mbchar? # =&gt; 0
+p hoge.mbchar? # =&gt; nil</pre>
+</dd>
+</dl>
+<h2><a name="L005107" id="L005107">再定義メソッド</a></h2>
+<p>それぞれのメソッドに<code>!</code>がついているものは破壊的メソッドです。</p>
+<dl>
+<dt><a name="L005108" id="L005108">chop</a></dt>
+<dt><a name="L005109" id="L005109">chop!</a></dt>
+<dd>
+<p><a href="refm061.html">String#chop</a>の日本語対応版です。</p>
+<p>例：</p>
+<pre>#!/usr/bin/env ruby
+$KCODE='e'
+zstr='ＡＢＣＤＥＦ'
+hogehoge='hogehoge'
+
+p zstr.chop                     # =&gt; ＡＢＣＤＥ\243
+p hogehoge.chop                 # =&gt; hogehog
+
+require 'jcode'
+
+p zstr.chop                     # =&gt; ＡＢＣＤＥ
+p hogehoge.chop                 # =&gt; hogehog</pre>
+</dd>
+<dt><a name="L005110" id="L005110">delete(str)</a></dt>
+<dt><a name="L005111" id="L005111">delete!(str)</a></dt>
+<dd>
+<p><a href="refm061.html">String#delete</a>の日本語対応版です。</p>
+<p>例：</p>
+<pre>#!/usr/bin/env ruby
+$KCODE='e'
+zstr='ＡＢＣＤＥＦ'
+hogehoge='hogehoge'
+
+p zstr.delete &quot;Ａ&quot;                    # =&gt; 唾津\306
+p hogehoge.delete &quot;e&quot;                # =&gt; hoghog
+
+require 'jcode'
+
+p zstr.delete &quot;Ａ&quot;                    # =&gt; ＢＣＤＥＦ
+p hogehoge.delete &quot;e&quot;                # =&gt; hoghog</pre>
+</dd>
+<dt><a name="L005112" id="L005112">squeeze([str])</a></dt>
+<dt><a name="L005113" id="L005113">squeeze!([str])</a></dt>
+<dd>
+<p><a href="refm061.html">String#squeeze</a>の日本語対応版です。</p>
+<p>例：</p>
+<pre>#!/usr/bin/env ruby
+$KCODE='e'
+zstr='ＡＡＢＢＣＣ'
+hogehoge='hhoge'
+
+p zstr.squeeze                   # =&gt; ＡＡＢＢＣＣ
+p hogehoge.squeeze                # =&gt; hoge
+
+require 'jcode'
+
+p zstr.squeeze                    # =&gt; ＡＢＣ
+p hogehoge.squeeze                # =&gt; hoge</pre>
+</dd>
+<dt><a name="L005114" id="L005114">succ</a></dt>
+<dt><a name="L005115" id="L005115">succ!</a></dt>
+<dd>
+<p><a href="refm061.html">String#succ</a>の日本語対応版です。</p>
+<p>以下のような<em>次</em>の文字列を返します。</p>
+<pre>&quot;あaあ&quot;.succ =&gt; &quot;あaぃ&quot;
+&quot;rｂ&quot;.succ =&gt; &quot;rｃ&quot;
+&quot;_紅玉&quot;.succ =&gt; &quot;_紅桐&quot;</pre>
+<p>従来の<a href="refm061.html">String#succ</a>は、
+多バイト文字と半角文字が混在している文字列を
+意図通りに処理することができません。
+例えば上記のコードは、それぞれ
+<code>&quot;あbあ&quot;</code>、<code>&quot;sｂ&quot;</code>、<code>&quot;_紘玉&quot;</code>を返します。</p>
+<p>なお、<code>&quot;99&quot;</code>の次は<code>&quot;100&quot;</code>になるのに対し、
+<code>&quot;９９&quot;</code>の次は<code>&quot;１００&quot;</code>にはならないことに注意。
+<code>&quot;Ａｚ&quot;</code>や<code>&quot;ｚｚ&quot;</code>も同様です。 <a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></p>
+</dd>
+<dt><a name="L005116" id="L005116">tr(search, replace)</a></dt>
+<dt><a name="L005117" id="L005117">tr!(search, replace)</a></dt>
+<dd>
+<p><a href="refm061.html">String#tr</a>の日本語対応版です。</p>
+<p>例：</p>
+<pre>#!/usr/bin/env ruby
+$KCODE='e'
+zstr='ＡＡＢＢＣＣ'
+hogehoge='hhoge'
+
+p zstr.tr('Ａ-Ｚ','A-Z')        # =&gt; A疏疏汰汰蛋\303
+p hogehoge.tr('a-z','Ａ-Ｚ')    # =&gt; 旙旙\332
+
+require 'jcode'
+
+p zstr.tr('Ａ-Ｚ','A-Z')        # =&gt; AABBCC
+p hogehoge.tr('a-z','Ａ-Ｚ')    # =&gt; ＨＨＯＧＥ</pre>
+</dd>
+<dt><a name="L005118" id="L005118">tr_s(search, replace)</a></dt>
+<dt><a name="L005119" id="L005119">tr_s!(search, replace)</a></dt>
+<dd>
+<p><a href="refm061.html">String#tr_s</a>の日本語対応版です。</p>
+<pre>irb(main):009:0&gt; &quot;foo&quot;.tr_s(&quot;o&quot;, &quot;f&quot;)
+&quot;ff&quot;
+irb(main):010:0&gt; require 'jcode'; $KCODE='e'
+&quot;e&quot;
+irb(main):011:0&gt; &quot;ｆｏｏ&quot;.tr_s(&quot;ｏ&quot;,&quot;ｆ&quot;)
+&quot;ｆｆ&quot;
+irb(main):012:0&gt; &quot;foo&quot;.tr_s(&quot;o&quot;, &quot;f&quot;)
+&quot;ff&quot;</pre>
+</dd>
+</dl>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>CozoH: このあたり、もっと正確で分かりやすい説明が欲しいです。私自身、よく分かっていないので。</small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm256.html">&lt;-PREV</a>][<a href="refm258.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

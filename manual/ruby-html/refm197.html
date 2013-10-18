@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Rinda::TupleSpace</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm198.html" rel="next" />
+<link href="refm196.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm196.html">&lt;-PREV</a>][<a href="refm198.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L003777" id="L003777">Rinda::TupleSpace</a></h1>
+<p><a href="refm002.html">執筆者募集</a></p>
+<p><a href="refm195.html">Rinda</a></p>
+<p>Tuple Space のためのクラスです。普通は <a href="refm196.html">Rinda::TupleSpaceProxy</a> を介して使います。</p>
+<h2><a name="L003778" id="L003778">インクルードしているモジュール</a></h2>
+<p><a href="refm308.html">MonitorMixin</a>, DRbUndumped</p>
+<h2><a name="L003779" id="L003779">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L003780" id="L003780"><code>TupleSpace.new(<var>period</var>=<var>60</var>)</code></a></dt>
+<dd>
+<p>TupleSpace オブジェクトを生成します。</p></dd>
+</dl>
+<h2><a name="L003781" id="L003781">メソッド</a></h2>
+<dl>
+<dt><a name="L003782" id="L003782"><code>move(<var>port</var>, <var>tuple</var>, <var>sec</var>=<var>nil</var>)</code></a>
+<dt><a name="L003783" id="L003783"><code>notify(<var>event</var>, <var>tuple</var>, <var>sec</var>=<var>nil</var>)</code></a>
+<dt><a name="L003784" id="L003784"><code>read(<var>tuple</var>, <var>sec</var>=<var>nil</var>)</code></a>
+<dt><a name="L003785" id="L003785"><code>read_all(<var>tuple</var>)</code></a>
+<dt><a name="L003786" id="L003786"><code>take(<var>tuple</var>, <var>sec</var>=<var>nil</var>)</code></a>
+<dt><a name="L003787" id="L003787"><code>take(<var>tuple</var>, <var>sec</var>=<var>nil</var>){|<var>template</var>| ... }</code></a></dt>
+<dd>
+<p><var>tuple</var> にマッチするタプルをタプルスペースから取り出して返します。
+マッチするタプルが存在しない場合は、マッチするタプルがタプルスペースに
+投入されるまで待ちます。</p>
+<p>待ち時間が <var>sec</var> 秒を過ぎた時には take をあきらめ   
+例外 RequestExpiredError を投げます。</p></dd>
+<dt><a name="L003788" id="L003788"><code>write(<var>tuple</var>, <var>sec</var>=<var>nil</var>)</code></a></dt>
+<dd>
+<p>与えられた <a href="refm199.html">Rinda::Tuple</a> オブジェクト <var>tuple</var> をタプルスペースに加えます。
+<var>tuple</var> を管理するための <a href="refm198.html">Rinda::TupleEntry</a> オブジェクトを返します。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm196.html">&lt;-PREV</a>][<a href="refm198.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

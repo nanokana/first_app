@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>NoMethodError</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm102.html" rel="next" />
+<link href="refm100.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm100.html">UP</a>][<a href="refm100.html">&lt;-PREV</a>][<a href="refm102.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L002199" id="L002199">NoMethodError</a></h1>
+<p><a href="refm384.html">ruby 1.7 feature</a>:
+定義されていないメソッドの呼び出しが行われたときに発生します。</p>
+<pre>self.bar
+=&gt; -:1: undefined method `bar' for #&lt;Object:0x401a6c40&gt; (NoMethodError)</pre>
+<p>メソッド呼び出しの形式でなければ <a href="refm100.html">NameError</a> 例外が発生します。</p>
+<pre>bar
+=&gt; -:1: undefined local variable or method `bar' for #&lt;Object:0x401a6c40&gt; (NameError)</pre>
+<h2><a name="L002200" id="L002200">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm100.html">NameError</a></li>
+</ul>
+<h2><a name="L002201" id="L002201">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L002202" id="L002202"><code>NoMethodError.new(<var>error_message</var>[, <var>name</var>[, <var>args</var>]])  ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>例外オブジェクトを生成して返します。
+<var>args</var>は、メソッド呼び出しに使われた引数です。</p>
+<pre>nom = NoMethodError.new(&quot;message&quot;, &quot;foo&quot;, [1,2,3])
+p nom.name
+p nom.args
+
+# =&gt; &quot;foo&quot;
+     [1, 2, 3]</pre></dd>
+</dl>
+<h2><a name="L002203" id="L002203">メソッド:</a></h2>
+<dl>
+<dt><a name="L002204" id="L002204"><code>args  ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>メソッド呼び出しに使われた引数を配列で返します。</p>
+<pre>begin
+  foobar(1,2,3)
+rescue NoMethodError
+  p $!
+  p $!.name
+  p $!.args
+end
+
+# =&gt; #&lt;NoMethodError: undefined method `foobar' for main:Object&gt;
+     :foobar
+     [1, 2, 3]</pre></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm100.html">UP</a>][<a href="refm100.html">&lt;-PREV</a>][<a href="refm102.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

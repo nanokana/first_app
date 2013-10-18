@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>dl/import</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm357.html" rel="next" />
+<link href="refm355.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm351.html">UP</a>][<a href="refm355.html">&lt;-PREV</a>][<a href="refm357.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006801" id="L006801">DL::Importable</a></h1>
+<ul>
+<li><a href="refm351.html">dl</a></li>
+<li><a href="refm352.html">DL</a></li>
+<li><a href="refm358.html">DL::Types</a></li>
+<li><a href="refm357.html">dl/struct</a></li>
+</ul>
+<h2><a name="L006802" id="L006802">スーパークラス</a></h2>
+<ul>
+<li><a href="refm050.html">Module</a></li>
+</ul>
+<h2><a name="L006803" id="L006803">メソッド</a></h2>
+<dl>
+<dt><a name="L006804" id="L006804"><code>dlload(<var>lib</var>,...)</code></a></dt>
+<dd>
+<p><a href="refm352.html#L006746">DL.dlopen</a> を用いてライブラリをロードし、extend した
+モジュール内でそのライブラリで定義されている参照可能なシンボルを取得できるよ
+うにする。</p></dd>
+<dt><a name="L006805" id="L006805"><code>extern(<var>prototype</var>)</code></a></dt>
+<dd>
+<p>Cの関数プロトタイプを与えることによって、その関数を呼び出すメソッドを動的に
+定義することができる。頭文字が大文字の場合は小文字に自動的に変換される。</p></dd>
+<dt><a name="L006806" id="L006806"><code>callback(<var>proto</var>)</code></a></dt>
+<dd>
+<p>Cの関数プロトタイプを与えることによって、既に定義されたRubyのメソッドをCの
+コールバック関数として扱うことができるようにする。
+<a href="refm354.html">DL::Symbol</a>オブジェクトを返す。</p></dd>
+<dt><a name="L006807" id="L006807"><code>typealias(<var>newtype</var>, <var>oldtype</var>)</code></a></dt>
+<dd>
+<p><var>newtype</var>型を<var>oldtype</var>型のエイリアスとして定義する。
+<var>newtype</var>で与えた型は<code>extern</code>や<code>callback</code>メソッド
+のプロトタイプを与えるときに利用する。</p></dd>
+<dt><a name="L006808" id="L006808"><code>symbol(<var>sym</var>[, <var>typespec</var>])</code></a></dt>
+<dd>
+<p>シンボル名が<var>sym</var>のシンボルを取り出す。
+<var>typespec</var>には型情報を与え、<a href="refm354.html">DL::Symbol</a>オブジェクトを返す。
+<var>typespec</var>が省略された場合、シンボルへの参照を<a href="refm355.html">DL::PtrData</a>オブジェクト
+として返す。</p></dd>
+</dl>
+<h2><a name="L006809" id="L006809">補足</a></h2>
+<p>実際には、上記のメソッドは、<code>DL::Importable::Internal</code>において定義されている。
+<code>Importable</code>モジュールは、<code>Internal</code>モジュールをインクルードしているために、
+<code>Internal</code>で定義されたメソッドは<code>Importable</code>モジュールによって提供される。</p>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm351.html">UP</a>][<a href="refm355.html">&lt;-PREV</a>][<a href="refm357.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

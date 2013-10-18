@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>OpenSSL::ASN1</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm237.html" rel="next" />
+<link href="refm235.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm213.html">UP</a>][<a href="refm235.html">&lt;-PREV</a>][<a href="refm237.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L004710" id="L004710">OpenSSL::ASN1</a></h1>
+<h2><a name="L004711" id="L004711">モジュール関数</a></h2>
+<dl>
+<dt><a name="L004712" id="L004712"><code>ASN1.decode(<var>der</var>)</code></a></dt>
+<dd>
+<p>DER表現の文字列を解析し、<a href="refm237.html">OpenSSL::ASN1::ASN1Data</a> のサブクラスのインスタンスを返す。ASN.1 オブジェクトが Constructive である場合は、それを構成する要素も再帰的に解析する。<var>der</var> に複数の ASN.1 オブジェクトが含まれる場合は最初の ASN.1 オブジェクトだけを返す。</p></dd>
+</dl>
+<pre>ruby -e '
+require &quot;openssl&quot;
+require &quot;pp&quot;
+pem = File.read(ARGV[0])
+cert = OpenSSL::X509::Certificate.new(pem)
+pp OpenSSL::ASN1.decode(cert.to_der)
+' mycert.pem
+#&lt;OpenSSL::ASN1::Sequence:0x814e9fc
+ @tag=16,
+ @tag_class=:UNIVERSAL,
+ @tagging=nil,
+ @value=
+  [#&lt;OpenSSL::ASN1::Sequence:0x814ead8
+    @tag=16,
+    @tag_class=:UNIVERSAL,
+    @tagging=nil,
+    @value=
+     [#&lt;OpenSSL::ASN1::ASN1Data:0x814f690
+       @tag=0,
+       @tag_class=:CONTEXT_SPECIFIC,
+       @value=
+        [#&lt;OpenSSL::ASN1::Integer:0x814f6a4
+          @tag=2,
+          @tag_class=:UNIVERSAL,
+          @tagging=nil,
+          @value=2&gt;]&gt;,
+          ...</pre>
+<dl>
+<dt><a name="L004713" id="L004713"><code>ASN1.decode_all(<var>der</var>)</code></a></dt>
+<dd>
+<p>ASN1.decode と違い、<var>der</var> に含まれる全てのオブジェクトを再帰的に解析し
+配列として返す。</p></dd>
+<dt><a name="L004714" id="L004714"><code>ASN1.traverse(<var>der</var>) {|<var>depth</var>, <var>off</var>, <var>hlen</var>, <var>len</var>, <var>constructed</var>, <var>tag_class</var>, <var>tag</var>| ...}</code></a></dt>
+<dd>
+<p><var>der</var> に含まれる全てのオブジェクトを再帰的に解析して、
+そのプロパティを引数として与えられたブロックを評価する。</p>
+<ul>
+<li><var>depth</var> は再帰の深さ</li>
+<li><var>off</var> は対象の ASN.1 オブジェクトの開始の
+      <var>der</var> の始めからのオフセット。</li>
+<li><var>hlen</var> は ASN.1 オブジェクトのヘッダの長さ。</li>
+<li><var>len</var> は ASN.1 オブジェクトの値フィールドの長さ。</li>
+<li><var>constructed</var> は対象の ASN.1 オブジェクトが Constructive なら真である。  </li>
+<li><var>tag_class</var> はタグクラスを表す <a href="refm063.html">Symbol</a> オブジェクト 
+      (:UNIVERSAL, :CONTEXT_SPECIFIC, :APPLICATION)。</li>
+<li><var>tag</var> はタグ番号。</li>
+</ul>
+<p>ASN1.decode_all と同じように <var>der</var> に含まれる全ての ASN.1 オブジェクトを
+再帰的に解析する。</p></dd>
+</dl>
+<p>以下のようなモジュール関数も定義されている。メソッドと同じ名前のクラスの
+コンストラクター new と同じ。</p>
+<dl>
+<dt><a name="L004715" id="L004715"><code>ASN1.Boolean(<var>value</var> [, <var>tag</var> [, <var>tagging</var> [, <var>tag_class</var>]]])</code></a>
+<dt><a name="L004716" id="L004716"><code>ASN1.Integer(<var>value</var> ... )</code></a>
+<dt><a name="L004717" id="L004717"><code>ASN1.Enumerated(<var>value</var> ... )</code></a>
+<dt><a name="L004718" id="L004718"><code>ASN1.BitString(<var>value</var> ... )</code></a>
+<dt><a name="L004719" id="L004719"><code>ASN1.OctetString(<var>value</var> ... )</code></a>
+<dt><a name="L004720" id="L004720"><code>ASN1.UTF8String(<var>value</var> ... )</code></a>
+<dt><a name="L004721" id="L004721"><code>ASN1.NumericString(<var>value</var> ... )</code></a>
+<dt><a name="L004722" id="L004722"><code>ASN1.PrintableString(<var>value</var> ... )</code></a>
+<dt><a name="L004723" id="L004723"><code>ASN1.T61String(<var>value</var> ... )</code></a>
+<dt><a name="L004724" id="L004724"><code>ASN1.VideotexString(<var>value</var> ... )</code></a>
+<dt><a name="L004725" id="L004725"><code>ASN1.IA5String(<var>value</var> ... )</code></a>
+<dt><a name="L004726" id="L004726"><code>ASN1.GraphicString(<var>value</var> ... )</code></a>
+<dt><a name="L004727" id="L004727"><code>ASN1.ISO64String(<var>value</var> ... )</code></a>
+<dt><a name="L004728" id="L004728"><code>ASN1.GeneralString(<var>value</var> ... )</code></a>
+<dt><a name="L004729" id="L004729"><code>ASN1.UniversalString(<var>value</var> ... )</code></a>
+<dt><a name="L004730" id="L004730"><code>ASN1.BMPString(<var>value</var> ... )</code></a>
+<dt><a name="L004731" id="L004731"><code>ASN1.Null(<var>value</var> ... )</code></a>
+<dt><a name="L004732" id="L004732"><code>ASN1.ObjectId(<var>value</var> ... )</code></a>
+<dt><a name="L004733" id="L004733"><code>ASN1.UTCTime(<var>value</var> ... )</code></a>
+<dt><a name="L004734" id="L004734"><code>ASN1.GeneralizedTime(<var>value</var> ... )</code></a>
+<dt><a name="L004735" id="L004735"><code>ASN1.Sequence(<var>value</var> ... )</code></a>
+<dt><a name="L004736" id="L004736"><code>ASN1.Set(<var>value</var> ... )</code></a>
+</dl>
+<h2><a name="L004737" id="L004737">定数</a></h2>
+<dl>
+<dt><a name="L004738" id="L004738"><code>UNIVERSAL_TAG_NAME</code></a></dt>
+<dd>
+<p>タグ番号が表すASN.1 オブジェクト名を収録した配列。</p>
+<pre>require 'openssl'
+p OpenSSL::ASN1::UNIVERSAL_TAG_NAME[0]  # =&gt; &quot;EOC&quot;
+p OpenSSL::ASN1::UNIVERSAL_TAG_NAME[12] # =&gt; &quot;UTF8STRING&quot;</pre></dd>
+</dl>
+<p>ASN.1 オブジェクトのタグ番号を表す定数が以下のように定義されている。</p>
+<pre>require 'openssl'
+p OpenSSL::ASN1::UTF8STRING # =&gt; 12</pre>
+<dl>
+<dt><a name="L004739" id="L004739"><code>EOC</code></a></dt>
+<dd>
+<p>EOC のタグ番号 0 を表す定数。</p></dd>
+<dt><a name="L004740" id="L004740"><code>BOOLEAN</code></a></dt>
+<dd>
+<p>BOOLEAN のタグ番号 1 を表す定数。</p></dd>
+<dt><a name="L004741" id="L004741"><code>INTEGER</code></a></dt>
+<dd>
+<p>INTEGER のタグ番号 2 を表す定数。</p></dd>
+<dt><a name="L004742" id="L004742"><code>BIT_STRING</code></a></dt>
+<dd>
+<p>BIT_STRING のタグ番号 3 を表す定数。</p></dd>
+<dt><a name="L004743" id="L004743"><code>OCTET_STRING</code></a></dt>
+<dd>
+<p>OCTET_STRING のタグ番号 4 を表す定数。</p></dd>
+<dt><a name="L004744" id="L004744"><code>NULL</code></a></dt>
+<dd>
+<p>NULL のタグ番号 5 を表す定数。</p></dd>
+<dt><a name="L004745" id="L004745"><code>OBJECT</code></a></dt>
+<dd>
+<p>OBJECT のタグ番号 6 を表す定数。</p></dd>
+<dt><a name="L004746" id="L004746"><code>OBJECT_DESCRIPTOR</code></a></dt>
+<dd>
+<p>OBJECT_DESCRIPTOR のタグ番号 7 を表す定数。</p></dd>
+<dt><a name="L004747" id="L004747"><code>EXTERNAL</code></a></dt>
+<dd>
+<p>EXTERNAL のタグ番号 8 を表す定数。</p></dd>
+<dt><a name="L004748" id="L004748"><code>REAL</code></a></dt>
+<dd>
+<p>REAL のタグ番号 9 を表す定数。</p></dd>
+<dt><a name="L004749" id="L004749"><code>ENUMERATED</code></a></dt>
+<dd>
+<p>ENUMERATED のタグ番号 10 を表す定数。</p></dd>
+<dt><a name="L004750" id="L004750"><code>EMBEDDED_PDV</code></a></dt>
+<dd>
+<p>EMBEDDED_PDV のタグ番号 11 を表す定数。</p></dd>
+<dt><a name="L004751" id="L004751"><code>UTF8STRING</code></a></dt>
+<dd>
+<p>UTF8STRING のタグ番号 12 を表す定数。</p></dd>
+<dt><a name="L004752" id="L004752"><code>RELATIVE_OID</code></a></dt>
+<dd>
+<p>RELATIVE_OID のタグ番号 13 を表す定数。</p></dd>
+<dt><a name="L004753" id="L004753"><code>SEQUENCE</code></a></dt>
+<dd>
+<p>SEQUENCE のタグ番号 16 を表す定数。</p></dd>
+<dt><a name="L004754" id="L004754"><code>SET</code></a></dt>
+<dd>
+<p>SET のタグ番号 17 を表す定数。</p></dd>
+<dt><a name="L004755" id="L004755"><code>NUMERICSTRING</code></a></dt>
+<dd>
+<p>NUMERICSTRING のタグ番号 18 を表す定数。</p></dd>
+<dt><a name="L004756" id="L004756"><code>PRINTABLESTRING</code></a></dt>
+<dd>
+<p>PRINTABLESTRING のタグ番号 19 を表す定数。 </p></dd>
+<dt><a name="L004757" id="L004757"><code>T61STRING</code></a></dt>
+<dd>
+<p>T61STRING のタグ番号 20 を表す定数。</p></dd>
+<dt><a name="L004758" id="L004758"><code>VIDEOTEXSTRING</code></a></dt>
+<dd>
+<p>VIDEOTEXSTRING のタグ番号 21 を表す定数。 </p></dd>
+<dt><a name="L004759" id="L004759"><code>IA5STRING</code></a></dt>
+<dd>
+<p>IA5STRING のタグ番号 22 を表す定数。 </p></dd>
+<dt><a name="L004760" id="L004760"><code>UTCTIME</code></a></dt>
+<dd>
+<p>UTCTIME のタグ番号 23 を表す定数。 </p></dd>
+<dt><a name="L004761" id="L004761"><code>GENERALIZEDTIME</code></a></dt>
+<dd>
+<p>GENERALIZEDTIME のタグ番号 24 を表す定数。 </p></dd>
+<dt><a name="L004762" id="L004762"><code>GRAPHICSTRING</code></a></dt>
+<dd>
+<p>GRAPHICSTRING のタグ番号 25 を表す定数。 </p></dd>
+<dt><a name="L004763" id="L004763"><code>ISO64STRING</code></a></dt>
+<dd>
+<p>ISO64STRING のタグ番号 26 を表す定数。</p></dd>
+<dt><a name="L004764" id="L004764"><code>GENERALSTRING</code></a></dt>
+<dd>
+<p>GENERALSTRING のタグ番号 27 を表す定数。</p></dd>
+<dt><a name="L004765" id="L004765"><code>UNIVERSALSTRING</code></a></dt>
+<dd>
+<p>UNIVERSALSTRING のタグ番号 28 を表す定数。</p></dd>
+<dt><a name="L004766" id="L004766"><code>CHARACTER_STRING</code></a></dt>
+<dd>
+<p>CHARACTER_STRING のタグ番号 29 を表す定数。</p></dd>
+<dt><a name="L004767" id="L004767"><code>BMPSTRING</code></a></dt>
+<dd>
+<p>BMPSTRING のタグ番号 30 を表す定数。</p></dd>
+</dl>
+<h2><a name="L004768" id="L004768">例外</a></h2>
+<dl>
+<dt><a name="L004769" id="L004769"><code>ASN1Error</code></a></dt>
+<dd>
+<p>OpenSSL::OpenSSLError を継承している。</p></dd>
+</dl>
+<h2><a name="L004770" id="L004770">参照</a></h2>
+<ul>
+<li>[RFC 3279] <a href="http://www.ipa.go.jp/security/rfc/RFC3279EN.html">Algorithms and Identifiers for the Internet X.509 Public Key InfrastructureCertificate and Certificate Revocation List (CRL) Profile</a><sup class="outside"><small>[外部]</small></sup></li>
+<li>[RFC 3280] <a href="http://www.ipa.go.jp/security/rfc/RFC3280-00EN.html">Internet X.509 Public Key Infrastructure Certificate and CRL Profile</a><sup class="outside"><small>[外部]</small></sup></li>
+<li>[ASN.1:2002] <a href="http://asn1.elibel.tm.fr/en/standards/index.htm#asn1">Abstract Syntax Notation One (ASN.1) Specification of Basic Notation ITU-T Rec. X.680 (2002) | ISO/IEC 8824-1:2002</a><sup class="outside"><small>[外部]</small></sup></li>
+</ul>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm213.html">UP</a>][<a href="refm235.html">&lt;-PREV</a>][<a href="refm237.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

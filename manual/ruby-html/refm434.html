@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>trap::File</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm435.html" rel="next" />
+<link href="refm433.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm421.html">UP</a>][<a href="refm433.html">&lt;-PREV</a>][<a href="refm435.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L009471" id="L009471">trap::File</a></h1>
+<p>FileのスーパークラスのIOについての<a href="refm436.html">trap::IO</a>も参照してください。</p>
+<ul>
+<li><p>パス名を扱うメソッド(FileTestなど)はパス名の中に&quot;\0&quot;が含まれると
+  その部分までをパスと見なしてしまいます。</p>
+<pre>path = &quot;/etc\0garbage&quot;
+p File.exists? path     #=&gt; true</pre>
+<p>これはおそらくそのようなチェックをRubyのソースに
+埋め込むのが面倒だから(？)だと思います(邪推。
+普通、こんなことしないしね。UNIXのパス名で&quot;\0&quot; はパス名の中に
+含めることのできない数少ない文字の1つです 文責-あらい)</p></li>
+</ul>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm421.html">UP</a>][<a href="refm433.html">&lt;-PREV</a>][<a href="refm435.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>open-uri</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm159.html" rel="next" />
+<link href="refm157.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm157.html">&lt;-PREV</a>][<a href="refm159.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L003017" id="L003017">open-uri</a></h1>
+<p>http/ftp に簡単にアクセスするためのクラスです。
+Kernel のモジュール関数(組み込み関数) open を再定義します。</p>
+<h2><a name="L003018" id="L003018">使用例</a></h2>
+<p>http/ftp の URL を、普通のファイルのように開けます。</p>
+<pre>require 'open-uri'
+open(&quot;http://www.ruby-lang.org/&quot;) {|f|
+  f.each_line {|line| p line}
+}</pre>
+<p>開いたファイルオブジェクトは StringIO もしくは Tempfile ですが <a href="#L003034">OpenURI::Meta</a> で拡張されていて、
+メタ情報を獲得するメソッドが使えます。</p>
+<pre>open(&quot;http://www.ruby-lang.org/en&quot;) {|f|
+  f.each_line {|line| p line}
+  p f.base_uri         # &lt;URI::HTTP:0x40e6ef2 URL:http://www.ruby-lang.org/en/&gt;
+  p f.content_type     # &quot;text/html&quot;
+  p f.charset          # &quot;iso-8859-1&quot;
+  p f.content_encoding # []
+  p f.last_modified    # Thu Dec 05 02:45:02 UTC 2002
+}</pre>
+<p>ハッシュ引数で、追加のヘッダフィールドを指定できます。</p>
+<pre>open(&quot;http://www.ruby-lang.org/en/&quot;,
+  &quot;User-Agent&quot; =&gt; &quot;Ruby/#{RUBY_VERSION}&quot;,
+  &quot;From&quot; =&gt; &quot;foo@bar.invalid&quot;,
+  &quot;Referer&quot; =&gt; &quot;http://www.ruby-lang.org/&quot;) {|f|
+  ...
+}</pre>
+<p>http_proxy や ftp_proxy などの環境変数は、デフォルトで有効になっています。
+プロキシを無効にするには :proxy =&gt; nil とします。</p>
+<pre>open(&quot;http://www.ruby-lang.org/en/raa.html&quot;,
+  :proxy =&gt; nil) {|f|
+  ...
+}</pre>
+<p>URI オブジェクトも似たような方法で開けます。</p>
+<pre>uri = URI.parse(&quot;http://www.ruby-lang.org/en/&quot;)
+uri.open {|f|
+  ...
+}</pre>
+<p>URI オブジェクトは直接読み込むことができます。
+戻り値の文字列は、OpenURI::Meta で拡張されています。</p>
+<pre>str = uri.read
+p str.base_uri</pre>
+<h2><a name="L003019" id="L003019">Kernel モジュール</a></h2>
+<h3><a name="L003020" id="L003020">モジュール関数</a></h3>
+<dl>
+<dt><a name="L003021" id="L003021"><code>Kernel.open(<var>name</var>, *<var>rest</var>)</code></a>
+<dt><a name="L003022" id="L003022"><code>Kernel.open(<var>name</var>, *<var>rest</var>){|<var>ouri</var>| ...}</code></a></dt>
+<dd>
+<p>'open-uri' を require すると、Kernel.open が再定義されます。</p>
+<p><var>name</var> が http:// や ftp:// で始まっている文字列なら URI のリソースを
+取得した上で <a href="refm116.html">StringIO</a> オブジェクトとして返します。この <a href="refm116.html">StringIO</a> 
+オブジェクトは <em class="XXINVALIDXX">OpenURI::Meta</em> で拡張されています。
+<code>*rest</code> で受け付けるオプションに関しては、
+<a href="#L003026">OpenURI.open_uri</a> を参照して下さい。</p>
+<p><var>name</var> に open メソッドが定義されている場合は、<var>*rest</var> を引数として渡し
+name.open(*rest, &amp;block) のように <var>name</var> の open メソッドが呼ばれます。
+これ以外の場合は、<var>name</var> はファイル名として扱われ、従来の
+<a href="refm029.html#L000464">Kernel#open</a> が呼ばれます。</p>
+<pre>require 'open-uri'
+sio = open('http://www.example.com')
+p sio.is_a?(OpenURI::Meta) # =&gt; true
+p sio.content_type 
+puts sio.read</pre>
+<p>ブロックを与えた場合は上の場合と同様、<var>name</var> が http:// や ftp:// で
+始まっている文字列なら URI のリソースを取得した上で <a href="refm116.html">StringIO</a> オブジェクトを
+引数としてブロックを評価します。後は同様です。</p></dd>
+</dl>
+<h2><a name="XXINVALIDXX" id="XXINVALIDXX">URI::HTTP </a></h2>
+<p><a href="#L003030">OpenURI::OpenRead</a> をインクルードします。</p>
+<h2><a name="L003024" id="L003024">URI::FTP</a></h2>
+<p><a href="#L003030">OpenURI::OpenRead</a> をインクルードします。</p>
+<h2><a name="L003025" id="L003025">OpenURI モジュール</a></h2>
+<h3><a name="L003020" id="L003020">モジュール関数</a></h3>
+<dl>
+<dt><a name="L003026" id="L003026"><code>OpenURI.open_uri(<var>name</var> [, <var>mode</var> [, <var>perm</var>]] [, <var>options</var>])</code></a>
+<dt><a name="L003027" id="L003027"><code>OpenURI.open_uri(<var>name</var> [, <var>mode</var> [, <var>perm</var>]] [, <var>options</var>]){|<var>sio</var>| ... }</code></a></dt>
+<dd>
+<p>URI である文字列 <var>name</var> のリソースを取得して <a href="refm116.html">StringIO</a> オブジェクト
+として返します。 与えられた <var>mode</var> が書き込みモードであった場合は、例外 
+ArgumentError を投げます。 <var>perm</var> は与えても無視されます。 </p>
+<pre>require 'open-uri'
+sio = OpenURI.open_uri('http://www.example.com')
+puts sio.read
+
+OpenURI.open_uri('http://www.example.com'){|sio| sio.read }</pre>
+<p>ブロックを与えた場合は <a href="refm116.html">StringIO</a> オブジェクトを引数としてブロックを
+評価します。</p>
+<p><var>options</var> には <a href="refm044.html">Hash</a> を与えます。解釈するハッシュの
+キーは :proxy, :progress_proc, :content_length_proc です。HTTP でのみ意味があります。</p>
+<p>キー :proxy の値には以下のいずれかを与える。</p>
+<ul>
+<li>文字列  =&gt; &quot;http://proxy.foo.com:8000/&quot; のようなプロクシの URI。</li>
+<li>URI オブジェクト =&gt; URI.parse(&quot;http://proxy.foo.com:8000/&quot;) のような
+        プロクシの URI オブジェクト。</li>
+<li>true =&gt; Proxy を環境変数などから見つけようとする。</li>
+<li>false =&gt; Proxy を用いない。</li>
+<li><p>nil =&gt; Proxy を用いない。</p>
+<pre>require 'open-uri'
+sio = OpenURI.open_uri('http://www.example.com',
+                       { :proxy =&gt; 'http://proxy.example.com:8000/' })</pre></li>
+</ul>
+<p>キー :content_length_proc の値にはブロックを与えます。ブロックは対象となる URI の
+Content-Length を引数として実際の転送が始まる前に評価されます。返り値は特に
+利用されません。</p>
+<p>キー :progress_proc の値にはブロックを与えます。ブロックは対象となる URI からデータの
+断片が転送されるたびに、その断片のサイズを引数として評価されます。返り値は特に
+利用されません。</p>
+<p>上の2つ :content_length_proc と :progress_proc はプログレスバーのために
+利用されることを想定しています。</p></dd>
+</dl>
+<h3><a name="L003028" id="L003028">定数</a></h3>
+<dl>
+<dt><a name="L003029" id="L003029"><code>Options</code></a></dt>
+<dd>
+<p><a href="refm044.html">Hash</a> オブジェクト。open_uri が解釈するオプションのデフォルトです。</p></dd>
+</dl>
+<h2><a name="L003030" id="L003030">OpenURI::OpenRead モジュール</a></h2>
+<h3><a name="L003031" id="L003031">メソッド</a></h3>
+<dl>
+<dt><a name="L003032" id="L003032"><code>open(*<var>rest</var>, &amp;<var>block</var>)</code></a></dt>
+<dd>
+<p>OpenURI.open_uri(self, *rest, &amp;block) と同じです。</p></dd>
+<dt><a name="L003033" id="L003033"><code>read(<var>options</var>={})</code></a></dt>
+<dd>
+<p>self.open(options={}).read と同じです。
+このメソッドによって返される文字列は <em class="XXINVALIDXX">OpenURI::Meta</em>
+によって拡張されています。</p>
+<pre>require 'open-uri'
+uri = URI.parse('http://www.example.com/')
+str = uri.read
+p str.is_a?(OpenURI::Meta) # =&gt; true
+p str.content_type </pre></dd>
+</dl>
+<h2><a name="XXINVALIDXX" id="XXINVALIDXX">OpenURI::Meta モジュール       </a></h2>
+<h3><a name="L003031" id="L003031">メソッド</a></h3>
+<dl>
+<dt><a name="L003035" id="L003035"><code>last_modified</code></a></dt>
+<dd>
+<p>対象となる URI の最終更新時刻を <a href="refm066.html">Time</a> オブジェクトで返します。</p></dd>
+<dt><a name="L003036" id="L003036"><code>content_type</code></a></dt>
+<dd>
+<p>対象となる URI の Content-Type を文字列で返します。</p></dd>
+<dt><a name="L003037" id="L003037"><code>charset</code></a></dt>
+<dd>
+<p>対象となる URI の文字コードを Content-Type の文字コード情報を文字列で返します。</p>
+<pre>open(&quot;http://www.ruby-lang.org/en&quot;){|f|
+  p f.content_type  # =&gt; &quot;text/html&quot;
+  p f.charset       # =&gt; &quot;iso-8859-1&quot;
+}</pre></dd>
+<dt><a name="L003038" id="L003038"><code>content_encoding</code></a></dt>
+<dd>
+<p>対象となる URI の Content-Encoding を文字列の配列として返します。</p></dd>
+<dt><a name="L003039" id="L003039"><code>status</code></a></dt>
+<dd>
+<p>対象となる URI のステータスコードと reason phrase を文字列の配列として返します。</p></dd>
+<dt><a name="L003040" id="L003040"><code>base_uri</code></a></dt>
+<dd>
+<p>リダイレクトされた後のデータが存在する URI を URI オブジェクトとして返します。</p></dd>
+<dt><a name="L003041" id="L003041"><code>meta</code></a></dt>
+<dd>
+<p>ヘッダを収録したハッシュを返します。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm157.html">&lt;-PREV</a>][<a href="refm159.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

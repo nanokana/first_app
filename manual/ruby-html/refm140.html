@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Zlib::GzipFile</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm141.html" rel="next" />
+<link href="refm139.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm135.html">UP</a>][<a href="refm139.html">&lt;-PREV</a>][<a href="refm141.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L002696" id="L002696">Zlib::GzipFile</a></h1>
+<p><a href="refm134.html">zlib</a></p>
+<p>gzip 形式の圧縮ファイルを扱う抽象クラス。
+具体的な読み込み/書き込み操作は、それぞれサブクラスの
+<a href="refm143.html">Zlib::GzipReader</a>, <a href="refm142.html">Zlib::GzipWriter</a> で定義されています。</p>
+<p>IO クラスのインスタンス (又は IO クラスのインスタンスと同じメソッドを
+持つオブジェクト) と関連付けて使用します。</p>
+<h2><a name="L002697" id="L002697">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm035.html">Object</a></li>
+</ul>
+<h2><a name="L002698" id="L002698">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L002699" id="L002699"><code>GzipFile.new(<var>args</var>...)</code></a></dt>
+<dd>
+<p><a href="refm143.html#L002749">Zlib::GzipReader.new</a> 及び <a href="refm142.html#L002725">Zlib::GzipWriter.new</a> を参照。</p></dd>
+<dt><a name="L002700" id="L002700"><code>GzipFile.wrap(<var>args</var>...) {|<var>gz</var>| ... }</code></a></dt>
+<dd>
+<p><a href="refm143.html#L002750">Zlib::GzipReader.wrap</a> 及び <a href="refm142.html#L002726">Zlib::GzipWriter.wrap</a> を参照。</p></dd>
+<dt><a name="L002701" id="L002701"><code>Zlib::GzipFile.open(<var>args</var>...) {|<var>gz</var>| ... }</code></a></dt>
+<dd>
+<p><a href="refm143.html#L002751">Zlib::GzipReader.open</a> 及び <a href="refm142.html#L002727">Zlib::GzipWriter.open</a> を参照。</p></dd>
+</dl>
+<h2><a name="L002702" id="L002702">メソッド:</a></h2>
+<dl>
+<dt><a name="L002703" id="L002703"><code>closed?</code></a>
+<dt><a name="L002704" id="L002704"><code>to_io</code></a></dt>
+<dd>
+<p>IO クラスの同名メソッドと同じ。</p></dd>
+<dt><a name="L002705" id="L002705"><code>close</code></a></dt>
+<dd>
+<p>GzipFile オブジェクトをクローズします。このメソッドは
+関連付けられている IO オブジェクトの close メソッドを呼び出します。
+関連付けられている IO オブジェクトを返します。</p></dd>
+<dt><a name="L002706" id="L002706"><code>finish</code></a></dt>
+<dd>
+<p>GzipFile オブジェクトをクローズします。<a href="#L002705">close</a>と違い、
+このメソッドは関連付けられている IO オブジェクトの close メソッドを
+呼び出しません。関連付けられている IO オブジェクトを返します。</p></dd>
+<dt><a name="L002707" id="L002707"><code>crc</code></a></dt>
+<dd>
+<p>圧縮されていないデータの CRC 値を返します。</p></dd>
+<dt><a name="L002708" id="L002708"><code>Zlib::GzipFile#level</code></a></dt>
+<dd>
+<p>圧縮レベルを返します。</p></dd>
+<dt><a name="L002709" id="L002709"><code>mtime</code></a></dt>
+<dd>
+<p>gzip ファイルのヘッダーに記録されている最終更新時間を返します。</p></dd>
+<dt><a name="L002710" id="L002710"><code>os_code</code></a></dt>
+<dd>
+<p>gzip ファイルのヘッダーに記録されている OS コード番号を返します。</p></dd>
+<dt><a name="L002711" id="L002711"><code>orig_name</code></a></dt>
+<dd>
+<p>gzip ファイルのヘッダーに記録されている元ファイル名を返します。
+ファイル名が記録されていない場合は nil を返します。</p></dd>
+<dt><a name="L002712" id="L002712"><code>comment</code></a></dt>
+<dd>
+<p>gzip ファイルのヘッダーに記録されているコメントを返します。
+コメントが存在しない場合は nil を返します。</p></dd>
+<dt><a name="L002713" id="L002713"><code>sync</code></a>
+<dt><a name="L002714" id="L002714"><code>sync= <var>flag</var></code></a></dt>
+<dd>
+<p>IO クラスと同じ。<var>flag</var> が真の時、関連付けられている
+IO オブジェクトが flush メソッドを持っていなければなりません。
+また、true にすると圧縮率が著しく低下します。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm135.html">UP</a>][<a href="refm139.html">&lt;-PREV</a>][<a href="refm141.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

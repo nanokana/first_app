@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>OpenSSL::PKey::RSA</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm234.html" rel="next" />
+<link href="refm232.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm213.html">UP</a>][<a href="refm232.html">&lt;-PREV</a>][<a href="refm234.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L004620" id="L004620">OpenSSL::PKey::RSA</a></h1>
+<p>RSA 暗号鍵クラス</p>
+<h2><a name="L004621" id="L004621">スーパークラス:</a></h2>
+<p><a href="refm232.html">OpenSSL::PKey::PKey</a></p>
+<h2><a name="L004622" id="L004622">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L004623" id="L004623"><code>RSA.generate(<var>size</var>, <var>exponent</var>=<var>65537</var>)</code></a></dt>
+<dd>
+<p>RSA 公開鍵と秘密鍵のペアを生成して、RSA オブジェクトを返す。size (単位はビット)で鍵の modulus つまりは 鍵のサイズを指定する。size &lt; 1024 では小さ過ぎると考えられている。exponent で public exponent を指定する。exponent には奇数を指定し、大抵の場合、3、17あるいは65537を指定する。</p></dd>
+<dt><a name="L004624" id="L004624"><code>RSA.new(<var>size</var>, <var>exponent</var>=<var>65537</var>)</code></a></dt>
+<dd>
+<p>RSA 暗号鍵オブジェクトを生成する。RSA.generate(size, exponent) と同じ。</p></dd>
+<dt><a name="L004625" id="L004625"><code>RSA.new(<var>str</var>, <var>pass</var>=<var>nil</var>)</code></a>
+<dt><a name="L004626" id="L004626"><code>RSA.new(<var>io</var>, <var>pass</var>=<var>nil</var>)</code></a>
+<dt><a name="L004627" id="L004627"><code>RSA.new()</code></a></dt>
+<dd>
+<p>RSA 暗号鍵オブジェクトを生成する。pass が指定された場合は、秘密鍵を pass を使って復号化する。</p></dd>
+</dl>
+<h2><a name="L004628" id="L004628">メソッド</a></h2>
+<dl>
+<dt><a name="L004629" id="L004629"><code>public?</code></a></dt>
+<dd>
+<p>公開鍵を持っているかどうか判定する。</p></dd>
+<dt><a name="L004630" id="L004630"><code>private?</code></a></dt>
+<dd>
+<p>秘密鍵を持っているかどうか判定する。</p></dd>
+<dt><a name="L004631" id="L004631"><code>to_text</code></a></dt>
+<dd>
+<p>人間が読める形式に変換する。</p></dd>
+<dt><a name="L004632" id="L004632"><code>export(<var>cipher</var>=<var>nil</var>, <var>pass</var>=<var>nil</var>)</code></a>
+<dt><a name="L004633" id="L004633"><code>export()</code></a>
+<dt><a name="L004634" id="L004634"><code>to_pem()</code></a>
+<dt><a name="L004635" id="L004635"><code>to_s()</code></a></dt>
+<dd>
+<p>鍵ペアを PEM 形式で出力する。cipher と pass が指定された場合、秘密鍵を暗号 cipher <a href="refm215.html">OpenSSL::Cipher::Cipher</a> とパスワード pass を使って暗号化する。</p></dd>
+<dt><a name="L004636" id="L004636"><code>to_der</code></a></dt>
+<dd>
+<p>DER 形式に変換する。</p></dd>
+<dt><a name="L004637" id="L004637"><code>public_key</code></a></dt>
+<dd>
+<p>公開鍵を複製して RSA オブジェクトとして返す。</p></dd>
+<dt><a name="L004638" id="L004638"><code>public_encrypt(<var>str</var>, <var>mode</var>=<var>OpenSSL</var>::<var>PKey</var>::<var>RSA</var>::<var>PKCS1_PADDING</var>)</code></a></dt>
+<dd>
+<p>文字列 str を公開鍵で暗号化する。</p></dd>
+<dt><a name="L004639" id="L004639"><code>public_decrypt(<var>str</var>, <var>mode</var>=<var>OpenSSL</var>::<var>PKey</var>::<var>RSA</var>::<var>PKCS1_PADDING</var>)</code></a></dt>
+<dd>
+<p>文字列 str を公開鍵で復号化する。</p></dd>
+<dt><a name="L004640" id="L004640"><code>private_encrypt(<var>str</var>, <var>mode</var>=<var>OpenSSL</var>::<var>PKey</var>::<var>RSA</var>::<var>PKCS1_PADDING</var>)</code></a></dt>
+<dd>
+<p>文字列 str を秘密鍵で暗号化する。</p></dd>
+<dt><a name="L004641" id="L004641"><code>private_decrypt(<var>str</var>, <var>mode</var>=<var>OpenSSL</var>::<var>PKey</var>::<var>RSA</var>::<var>PKCS1_PADDING</var>)</code></a></dt>
+<dd>
+<p>文字列 str を秘密鍵で復号化する。</p></dd>
+</dl>
+<h2><a name="L004642" id="L004642">定数</a></h2>
+<p><a href="#L004638">OpenSSL::PKey::RSA#public_encrypt</a>、
+<a href="#L004639">OpenSSL::PKey::RSA#public_decrypt</a>、
+<a href="#L004640">OpenSSL::PKey::RSA#private_encrypt</a>、
+<a href="#L004641">OpenSSL::PKey::RSA#private_decrypt</a>の
+第二引数に指定できるパディングモード。</p>
+<dl>
+<dt><a name="L004643" id="L004643"><code>PKCS1_PADDING</code></a>
+<dt><a name="L004644" id="L004644"><code>SSLV23_PADDING</code></a>
+<dt><a name="L004645" id="L004645"><code>NO_PADDING</code></a>
+<dt><a name="L004646" id="L004646"><code>PKCS1_OAEP_PADDING</code></a>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm213.html">UP</a>][<a href="refm232.html">&lt;-PREV</a>][<a href="refm234.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

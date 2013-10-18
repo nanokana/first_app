@@ -1,0 +1,856 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>eval.c</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm493.html" rel="next" />
+<link href="refm491.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm488.html">UP</a>][<a href="refm491.html">&lt;-PREV</a>][<a href="refm493.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L009965" id="L009965">eval.c</a></h1>
+<dl>
+<dt><a name="L009966" id="L009966">static char *arg_defined(VALUE self, NODE *node, char *buf, char *type)</a></dt>
+<dt><a name="L009967" id="L009967">static void assign(VALUE self, NODE *lhs, VALUE val, int pcall)</a></dt>
+<dd>
+<p>左辺を表す構文木 <var>lhs</var> に対し、右辺の値 <var>val</var> を代入します。
+Proc オブジェクトを起動する場合は <var>pcall</var> を非ゼロとします。</p>
+</dd>
+<dt><a name="L009968" id="L009968">static VALUE avalue_to_svalue(VALUE v)</a></dt>
+<dt><a name="L009969" id="L009969">static VALUE avalue_to_yvalue(VALUE v)</a></dt>
+<dt><a name="L009970" id="L009970">static VALUE backtrace(int lev)</a></dt>
+<dt><a name="L009971" id="L009971">static VALUE bind_clone(VALUE self)</a></dt>
+<dt><a name="L009972" id="L009972">static void blk_copy_prev(struct BLOCK *block)</a></dt>
+<dt><a name="L009973" id="L009973">static void blk_free(struct BLOCK *data)</a></dt>
+<dt><a name="L009974" id="L009974">static void blk_mark(struct BLOCK *data)</a></dt>
+<dt><a name="L009975" id="L009975">static int blk_orphan(struct BLOCK *data)</a></dt>
+<dd>
+<p><var>data</var> が作成された <code>SCOPE</code> かまたはその子ではない
+<code>SCOPE</code> を評価しているとき真。</p>
+</dd>
+<dt><a name="L009976" id="L009976">static VALUE block_pass(VALUE self, NODE *node)</a></dt>
+<dd>
+<p><var>node</var> を評価して Proc オブジェクトを得、それを積みます。</p>
+</dd>
+<dt><a name="L009977" id="L009977">static void bm_mark(struct METHOD *data)</a></dt>
+<dt><a name="L009978" id="L009978">static VALUE bmcall(VALUE args, VALUE method)</a></dt>
+<dt><a name="L009979" id="L009979">static VALUE call_cfunc(VALUE (*func)(), VALUE recv, int len, int argc, VALUE *argv)</a></dt>
+<dd>
+<p>C で定義されたメソッドの起動に際し、実体の関数 <var>func</var> を呼び出します。</p>
+</dd>
+<dt><a name="L009980" id="L009980">static void call_end_proc(VALUE data)</a></dt>
+<dd>
+<p>評価器プロセスが終了するとき、
+END 文で登録された Proc オブジェクト <var>data</var> を起動します。</p>
+</dd>
+<dt><a name="L009981" id="L009981">static void call_trace_func(char *event, NODE *pos, VALUE self, ID id, VALUE klass)</a></dt>
+<dd>
+<p>評価器の動作をフックする手続き trace_func を評価します。</p>
+</dd>
+<dt><a name="L009982" id="L009982">static VALUE catch_i(ID tag)</a></dt>
+<dt><a name="L009983" id="L009983">static void catch_timer(int sig)</a></dt>
+<dt><a name="L009984" id="L009984">static NODE *compile(VALUE src, char *file, int line)</a></dt>
+<dd>
+<p>Ruby の文字列または IO オブジェクト <var>src</var> を
+構文木にコンパイルし、返します。そのとき、<var>src</var> が
+ファイル <var>file</var> の <var>line</var> 行目から始まっていると仮定します。</p>
+</dd>
+<dt><a name="L009985" id="L009985">static void compile_error(const char *at)</a></dt>
+<dt><a name="L009986" id="L009986">static void copy_fds(fd_set *dst, fd_set *src, int max)</a></dt>
+<dd>
+<p><code>fd_set</code> <var>src</var> を <var>dst</var> にコピーします。
+<var>max</var> は select(2) の第一引数と同じ意味です。</p>
+</dd>
+<dt><a name="L009987" id="L009987">static NODE *copy_node_scope(NODE *node, VALUE rval)</a></dt>
+<dd>
+<p><var>node</var> の先頭についているはずの、
+ローカル変数スコープを積むための情報を格納したノード <code>NODE_SCOPE</code> を
+コピーして返します。そのとき <code>nd_rval</code> に <var>rval</var> を格納します。 </p>
+</dd>
+<dt><a name="L009988" id="L009988">static VALUE cvar_cbase(void)</a></dt>
+<dd>
+<p>現在のコンテキストで、クラス変数の探索の起点となるモジュールを返します。</p>
+</dd>
+<dt><a name="L009989" id="L009989">static inline void dvar_asgn(ID id, VALUE value)</a></dt>
+<dd>
+<p>現在のローカル変数スコープ中に存在するはずの
+ブロックローカル変数 <var>id</var> に <var>value</var> を代入します。</p>
+</dd>
+<dt><a name="L009990" id="L009990">static inline void dvar_asgn_curr(ID id, VALUE value)</a></dt>
+<dd>
+<p>現在のブロックローカル変数スコープに存在するはずの
+ブロックローカル変数 <var>id</var> に <var>value</var> を代入します。</p>
+</dd>
+<dt><a name="L009991" id="L009991">static void dvar_asgn_internal(ID id, VALUE value, int curr)</a></dt>
+<dd>
+<p><code>dvar_asgn</code> と <code>dvar_asgn_curr</code> の補助関数です。</p>
+</dd>
+<dt><a name="L009992" id="L009992">static VALUE errat_getter(ID id)</a></dt>
+<dt><a name="L009993" id="L009993">static void errat_setter(VALUE val, ID id, VALUE *var)</a></dt>
+<dt><a name="L009994" id="L009994">static void errinfo_setter(VALUE val, ID id, VALUE *var)</a></dt>
+<dt><a name="L009995" id="L009995">static int error_handle(int ex)</a></dt>
+<dt><a name="L009996" id="L009996">static void error_pos(void)</a></dt>
+<dt><a name="L009997" id="L009997">static void error_print(void)</a></dt>
+<dt><a name="L009998" id="L009998">static VALUE ev_const_defined(NODE *cref, ID id, VALUE self)</a></dt>
+<dd>
+<p>外のクラスが <var>cref</var> で self が <var>self</var> のとき、
+定数 <var>id</var> が定義されていたら真。</p>
+</dd>
+<dt><a name="L009999" id="L009999">static VALUE ev_const_get(NODE *cref, ID id, VALUE self)</a></dt>
+<dd>
+<p>外のクラスが <var>cref</var> で self が <var>self</var> として
+定数 <var>id</var> を参照します。</p>
+</dd>
+<dt><a name="L010000" id="L010000">static VALUE eval(VALUE self, VALUE src, VALUE scope, char *file, int line)</a></dt>
+<dd>
+<p>eval の実体。文字列 <var>src</var> を評価します。
+そのとき第三引数 <var>scope</var> が <code>nil</code> でなければ
+そのコンテキストの元で評価します。</p>
+<p>また <var>src</var> をコンパイルするとき、
+ファイル <var>file</var> の <var>line</var> 行目に配置されていると仮定します。</p>
+</dd>
+<dt><a name="L010001" id="L010001">static VALUE eval_node(VALUE self, NODE *node)</a></dt>
+<dt><a name="L010002" id="L010002">static VALUE eval_under(VALUE under, VALUE self, VALUE src, const char *file, int line)</a></dt>
+<dt><a name="L010003" id="L010003">static VALUE eval_under_i(VALUE *args)</a></dt>
+<dt><a name="L010004" id="L010004">static VALUE exec_under(VALUE (*func)(), VALUE under, VALUE cbase, void *args)</a></dt>
+<dt><a name="L010005" id="L010005">static int find_bad_fds(fd_set *dst, fd_set *src, int max)</a></dt>
+<dt><a name="L010006" id="L010006">static void frame_dup(struct FRAME *frame)</a></dt>
+<dd>
+<p><var>frame</var> とその親 FRAME 全てをスタックからヒープに割り当てなおします。</p>
+</dd>
+<dt><a name="L010007" id="L010007">static VALUE get_backtrace(VALUE info)</a></dt>
+<dt><a name="L010008" id="L010008">static int handle_rescue(VALUE self, NODE *node)</a></dt>
+<dt><a name="L010009" id="L010009">void Init_eval(void)</a></dt>
+<dt><a name="L010010" id="L010010">void Init_load(void)</a></dt>
+<dt><a name="L010011" id="L010011">void Init_Proc(void)</a></dt>
+<dt><a name="L010012" id="L010012">void Init_Thread(void)</a></dt>
+<dt><a name="L010013" id="L010013">static int intersect_fds(fd_set *src, fd_set *dst, int max)</a></dt>
+<dt><a name="L010014" id="L010014">static char *is_defined(VALUE self, NODE *node, char *buf)</a></dt>
+<dd>
+<p><var>node</var> を self = <var>self</var> で評価したとき値が得られそうな
+式であれば、<var>node</var> の種別を表す文字列を返します。</p>
+</dd>
+<dt><a name="L010015" id="L010015">static void jump_tag_but_local_jump(int state)</a></dt>
+<dt><a name="L010016" id="L010016">static void localjump_error(const char *mesg, VALUE status)</a></dt>
+<dt><a name="L010017" id="L010017">static VALUE localjump_exitstatus(VALUE exc)</a></dt>
+<dt><a name="L010018" id="L010018">static VALUE make_backtrace(void)</a></dt>
+<dt><a name="L010019" id="L010019">static VALUE massign(VALUE self, NODE *node, VALUE val, int pcall)</a></dt>
+<dt><a name="L010020" id="L010020">static int match_fds(fd_set *dst, fd_set *src, int max)</a></dt>
+<dt><a name="L010021" id="L010021">static VALUE method_arity(VALUE method)</a></dt>
+<dt><a name="L010022" id="L010022">static VALUE method_call(int argc, VALUE *argv, VALUE method)</a></dt>
+<dt><a name="L010023" id="L010023">static VALUE method_clone(VALUE self)</a></dt>
+<dt><a name="L010024" id="L010024">static VALUE method_eq(VALUE method, VALUE other)</a></dt>
+<dt><a name="L010025" id="L010025">static VALUE method_inspect(VALUE method)</a></dt>
+<dt><a name="L010026" id="L010026">static VALUE method_proc(VALUE method)</a></dt>
+<dt><a name="L010027" id="L010027">static VALUE method_unbind(VALUE obj)</a></dt>
+<dt><a name="L010028" id="L010028">static VALUE mnew(VALUE klass, VALUE obj, ID id, VALUE mklass)</a></dt>
+<dt><a name="L010029" id="L010029">static VALUE module_setup(VALUE module, NODE *n)</a></dt>
+<dd>
+<p><var>module</var> を定義するモジュール文の本体 <var>n</var> を評価します。</p>
+</dd>
+<dt><a name="L010030" id="L010030">static VALUE mproc(void)</a></dt>
+<dt><a name="L010031" id="L010031">static VALUE mvalue_to_svalue(VALUE v)</a></dt>
+<dt><a name="L010032" id="L010032">static struct BLOCKTAG *new_blktag(void)</a></dt>
+<dt><a name="L010033" id="L010033">static struct RVarmap *new_dvar(ID id, VALUE value, struct RVarmap *prev)</a></dt>
+<dt><a name="L010034" id="L010034">static void print_undef(VALUE klass, ID id)</a></dt>
+<dd>
+<p>クラス klass にメソッド id が見付からない (undefined) ことに
+対するエラーメッセージを stderr に出力します。</p>
+</dd>
+<dt><a name="L010035" id="L010035">static VALUE proc_arity(VALUE proc)</a></dt>
+<dt><a name="L010036" id="L010036">static VALUE proc_binding(VALUE proc)</a></dt>
+<dt><a name="L010037" id="L010037">static VALUE proc_call(VALUE proc, VALUE args)</a></dt>
+<dt><a name="L010038" id="L010038">static VALUE proc_eq(VALUE self, VALUE other)</a></dt>
+<dt><a name="L010039" id="L010039">static int proc_get_safe_level(VALUE data)</a></dt>
+<dt><a name="L010040" id="L010040">static VALUE proc_invoke(VALUE proc, VALUE args, int pcall, VALUE self)</a></dt>
+<dd>
+<p>Proc オブジェクト <var>proc</var> を起動します。そのとき
+引数を <var>args</var> とし、self を <var>self</var> にします。</p>
+</dd>
+<dt><a name="L010041" id="L010041">static VALUE proc_new(VALUE klass)</a></dt>
+<dd>
+<p>評価器のその時点でのスナップショットを保存する
+Proc オブジェクトを生成します。クラスを <var>klass</var> にします。</p>
+</dd>
+<dt><a name="L010042" id="L010042">static VALUE proc_s_new(int argc, VALUE *argv, VALUE klass)</a></dt>
+<dd>
+<p><code>Proc.new</code> の実体。</p>
+</dd>
+<dt><a name="L010043" id="L010043">static void proc_save_safe_level(VALUE data)</a></dt>
+<dt><a name="L010044" id="L010044">static void proc_set_safe_level(VALUE data)</a></dt>
+<dt><a name="L010045" id="L010045">static VALUE proc_to_proc(VALUE proc)</a></dt>
+<dt><a name="L010046" id="L010046">static VALUE proc_to_s(VALUE self, VALUE other)</a></dt>
+<dt><a name="L010047" id="L010047">static VALUE proc_yield(VALUE proc, VALUE args)</a></dt>
+<dd>
+<p><code>Proc.yield</code> の実体。</p>
+</dd>
+<dt><a name="L010048" id="L010048">void rb_add_method(VALUE klass, ID mid, NODE *node, int noex)</a></dt>
+<dd>
+<p>クラス klass に mid という名前のメソッドを定義する。
+その本体は node であり、noex で示される可視性を持つ。</p>
+</dd>
+<dt><a name="L010049" id="L010049">void rb_alias(VALUE klass, ID name, ID def)</a></dt>
+<dd>
+<p>クラス <var>klass</var> に定義されたメソッド <var>name</var> の
+本体を実体とする新しいメソッド <var>def</var> を定義します。</p>
+</dd>
+<dt><a name="L010050" id="L010050">VALUE rb_apply(VALUE recv, ID mid, VALUE args)</a></dt>
+<dd>
+<p>オブジェクト <var>recv</var> のメソッド <var>mid</var> を
+引数 <var>args</var> とともに呼び出します。</p>
+</dd>
+<dt><a name="L010051" id="L010051">void rb_attr(VALUE klass, ID id, int read, int write, int ex)</a></dt>
+<dt><a name="L010052" id="L010052">void rb_backtrace(void)</a></dt>
+<dt><a name="L010053" id="L010053">int rb_block_given_p(void)</a></dt>
+<dd>
+<p>メソッドがブロック付きで呼ばれていれば <code>Qtrue</code> を返します。</p>
+</dd>
+<dt><a name="L010054" id="L010054">static VALUE rb_call(VALUE klass, VALUE recv, ID mid, int argc, const VALUE *argv, int scope)</a></dt>
+<dd>
+<p>クラス <var>klass</var> に定義されたメソッド <var>mid</var> を呼び出します。
+レシーバは <var>recv</var> で、引数は長さ <var>argc</var> の配列 <var>argv</var> で渡します。</p>
+<p><var>scope</var> は以下のように呼び出しの形式を示します。</p>
+<ul>
+<li>0: obj.method()   (private/protected メソッドを呼べない)</li>
+<li>1: method()       (private/protected メソッドも呼べる)</li>
+<li>2: method_or_lvar (1とはエラーメッセージが変わる)</li>
+<li>3: super</li>
+</ul>
+</dd>
+<dt><a name="L010055" id="L010055">static VALUE rb_call0(VALUE klass, VALUE recv, ID id, int argc, VALUE *argv, NODE *body, int nosuper)</a></dt>
+<dd>
+<p>クラス <var>klass</var> に定義されたメソッドのコード <var>body</var> を起動します。
+レシーバは <var>recv</var> で、引数は長さ <var>argc</var> の配列 <var>argv</var> で渡します。
+<var>nosuper</var> が非ゼロのときは、この呼び出し中の <code>super</code> がエラーになります。</p>
+</dd>
+<dt><a name="L010056" id="L010056">VALUE rb_call_super(int argc, const VALUE *argv)</a></dt>
+<dd>
+<p>Rubyレベルでの <code>super</code> です。
+現在評価中のメソッドのスーパークラスのメソッドを呼び出します。</p>
+</dd>
+<dt><a name="L010057" id="L010057">static VALUE rb_callcc(VALUE self)</a></dt>
+<dd>
+<p><code>Continuation</code> オブジェクトを生成します。</p>
+</dd>
+<dt><a name="L010058" id="L010058">VALUE rb_catch(const char *tag, VALUE (*proc)(), VALUE data)</a></dt>
+<dd>
+<p><code>catch</code> と同等の動作を実行します。</p>
+<p>まず <var>proc</var> に、yield された値と <var>data</var> を渡して実行します。
+その途中で <var>tag</var> が throw されたら rb_catch 全体を終了します。</p>
+<p>throw が発生した場合はその値を返します。
+throw が発生しなかったときは <var>proc</var> の返り値を返します。</p>
+<pre>static VALUE
+foo_yield(VALUE a, VALUE b)
+{</pre>
+</dd>
+</dl>
+<pre>return rb_yield(b);</pre>
+<pre>}
+
+static VALUE
+foo_catch(VALUE obj)
+{</pre>
+<pre>return rb_catch(&quot;footag&quot;, foo_yield, INT2FIX(2));</pre>
+<pre>}
+
+static VALUE
+foo_abort(VALUE obj)
+{</pre>
+<pre>return rb_throw(&quot;footag&quot;, Qnil);</pre>
+<pre>}
+
+void
+Init_foo(void)
+{</pre>
+<pre>VALUE Foo = rb_define_class(&quot;Foo&quot;, rb_cObject);
+rb_define_method(Foo, &quot;catch&quot;, foo_catch, 0);
+rb_define_method(Foo, &quot;abort&quot;, foo_abort, 0);</pre>
+<pre>}</pre>
+<dl>
+<dt><a name="L010059" id="L010059">void rb_check_safe_str(VALUE x)</a></dt>
+<dd>
+<p>マクロ Check_SafeStr の本体です。</p>
+<p>この API は obsolete です。
+SafeStringValue() を使ってください。</p>
+</dd>
+<dt><a name="L010060" id="L010060">void rb_clear_cache(void)</a></dt>
+<dd>
+<p>メソッドキャッシュをすべて消去します。</p>
+</dd>
+<dt><a name="L010061" id="L010061">static void rb_clear_cache_by_class(VALUE klass)</a></dt>
+<dd>
+<p>メソッドキャシュから <var>klass</var> クラスのメソッドの
+キャッシュエントリを消去します。</p>
+</dd>
+<dt><a name="L010062" id="L010062">static void rb_clear_cache_by_id(ID id)</a></dt>
+<dd>
+<p>メソッドキャシュから <var>id</var> という名前のメソッドの
+キャッシュエントリを全て消去します。</p>
+</dd>
+<dt><a name="L010063" id="L010063">static VALUE rb_cont_call(int argc, VALUE *argv, VALUE cont)</a></dt>
+<dd>
+<p><code>Continuation#call</code> の実体。</p>
+</dd>
+<dt><a name="L010064" id="L010064">void rb_disable_super(VALUE klass, const char *name)</a></dt>
+<dd>
+<p>クラス <var>klass</var> のメソッド <var>name</var> からの <code>super</code> を禁止します。
+<var>klass</var> とそのスーパークラスで <var>name</var> というメソッドが定義
+されていないときは例外 <code>NameError</code> を発生します。</p>
+</dd>
+<dt><a name="L010065" id="L010065">VALUE rb_dvar_curr(ID id)</a></dt>
+<dd>
+<p>現在のブロックローカル変数スコープで <var>id</var> を参照します。</p>
+</dd>
+<dt><a name="L010066" id="L010066">VALUE rb_dvar_defined(ID id)</a></dt>
+<dt><a name="L010067" id="L010067">void rb_dvar_push(ID id, VALUE value)</a></dt>
+<dt><a name="L010068" id="L010068">VALUE rb_dvar_ref(ID id)</a></dt>
+<dd>
+<p>現在のローカル変数スコープで <var>id</var> を参照します。</p>
+</dd>
+<dt><a name="L010069" id="L010069">void rb_enable_super(VALUE klass, const char *name)</a></dt>
+<dd>
+<p>クラス <var>klass</var> のメソッド <var>name</var> からの <code>super</code> を許可します。
+<var>klass</var> とそのスーパークラスで <var>name</var> というメソッドが定義
+されていないときは例外 <code>NameError</code> を発生します。</p>
+</dd>
+<dt><a name="L010070" id="L010070">VALUE rb_ensure(VALUE (*body)(), VALUE data1, VALUE (*ensure)(), VALUE data2)</a></dt>
+<dd>
+<p>ensure の C 版です。まず <code>body(data1)</code> を実行し、その途中で
+例外や <code>exit</code> が起きたとしても <code>ensure(data2)</code> が確実に
+実行されます ( <code>body()</code> が正常終了しても実行されます)。</p>
+</dd>
+<dt><a name="L010071" id="L010071">static VALUE rb_eval(VALUE self, NODE *n)</a></dt>
+<dd>
+<p>構文木 <var>n</var> を self = <var>self</var> のもとで評価します。</p>
+</dd>
+<dt><a name="L010072" id="L010072">VALUE rb_eval_cmd(VALUE cmd, VALUE arg, int tcheck)</a></dt>
+<dt><a name="L010073" id="L010073">VALUE rb_eval_string(const char *str)</a></dt>
+<dd>
+<p><var>str</var> を Ruby プログラムとしてコンパイル・評価し、
+その値を返します。</p>
+</dd>
+<dt><a name="L010074" id="L010074">VALUE rb_eval_string_protect(const char *str, int *state)</a></dt>
+<dd>
+<p><var>str</var> を Ruby プログラムとしてコンパイル・評価し、
+その値を返します。</p>
+<p>コンパイル中または評価中に例外を含む大域脱出が発生した場合は、
+state が NULL でなければそれに値が代入され Qnil を返します。</p>
+</dd>
+<dt><a name="L010075" id="L010075">VALUE rb_eval_string_wrap(const char *str, int *state)</a></dt>
+<dd>
+<p><em class="XXINVALIDXX">rb_eval_string_protect</em> と同じですが，スクリプトの評価を
+無名のモジュールのもとで行います。</p>
+</dd>
+<dt><a name="L010076" id="L010076">void rb_exc_fatal(VALUE err)</a></dt>
+<dd>
+<p>例外オブジェクト err を fatal として投げます。</p>
+</dd>
+<dt><a name="L010077" id="L010077">void rb_exc_raise(VALUE err)</a></dt>
+<dd>
+<p>例外オブジェクト err を投げます。</p>
+</dd>
+<dt><a name="L010078" id="L010078">void rb_exec_end_proc(void)</a></dt>
+<dd>
+<p>END ブロックおよび Kernel#at_exit で登録した Proc オブジェクトを
+実行します。</p>
+</dd>
+<dt><a name="L010079" id="L010079">void rb_exit(int status)</a></dt>
+<dt><a name="L010080" id="L010080">static void rb_export_method(VALUE klass, ID name, ID noex)</a></dt>
+<dt><a name="L010081" id="L010081">void rb_extend_object(VALUE obj, VALUE module)</a></dt>
+<dt><a name="L010082" id="L010082">static VALUE rb_f_abort(int argc, VALUE *argv)</a></dt>
+<dt><a name="L010083" id="L010083">static VALUE rb_f_at_exit(void)</a></dt>
+<dt><a name="L010084" id="L010084">static VALUE rb_f_binding(VALUE self)</a></dt>
+<dt><a name="L010085" id="L010085">static VALUE rb_f_block_given_p(void)</a></dt>
+<dd>
+<p>block_given? の実体。
+現在評価中の (Ruby で実装された) メソッドに対して
+ブロックが与えられていたら真。</p>
+</dd>
+<dt><a name="L010086" id="L010086">static VALUE rb_f_caller(int argc, VALUE *argv)</a></dt>
+<dt><a name="L010087" id="L010087">static VALUE rb_f_catch(VALUE dmy, VALUE tag)</a></dt>
+<dt><a name="L010088" id="L010088">static void rb_f_END(void)</a></dt>
+<dt><a name="L010089" id="L010089">static VALUE rb_f_eval(int argc, VALUE *argv, VALUE self)</a></dt>
+<dt><a name="L010090" id="L010090">static VALUE rb_f_exit(int argc, VALUE *argv, VALUE obj)</a></dt>
+<dt><a name="L010091" id="L010091">VALUE rb_f_lambda(void)</a></dt>
+<dd>
+<p>ruby_block 先端の BLOCK から Proc オブジェクトを作成し、返します。</p>
+</dd>
+<dt><a name="L010092" id="L010092">static VALUE rb_f_load(int argc, VALUE *argv)</a></dt>
+<dd>
+<p><code>load</code> の実体。</p>
+</dd>
+<dt><a name="L010093" id="L010093">static VALUE rb_f_local_variables(void)</a></dt>
+<dt><a name="L010094" id="L010094">static VALUE rb_f_loop(void)</a></dt>
+<dd>
+<p>loop の実体。永遠に yield を繰り返します。</p>
+</dd>
+<dt><a name="L010095" id="L010095">static VALUE rb_f_missing(int argc, VALUE *argv, VALUE obj)</a></dt>
+<dt><a name="L010096" id="L010096">static VALUE rb_f_raise(int argc, VALUE *argv)</a></dt>
+<dt><a name="L010097" id="L010097">VALUE rb_f_require(VALUE obj, VALUE fname)</a></dt>
+<dd>
+<p><code>require</code> の実体。
+self == <var>obj</var> として <var>fname</var> を require します。</p>
+</dd>
+<dt><a name="L010098" id="L010098">static VALUE rb_f_send(int argc, VALUE *argv, VALUE recv)</a></dt>
+<dt><a name="L010099" id="L010099">static VALUE rb_f_throw(int argc, VALUE *argv)</a></dt>
+<dt><a name="L010100" id="L010100">static int rb_feature_p(const char *feature, int wait)</a></dt>
+<dt><a name="L010101" id="L010101">ID rb_frame_last_func(void)</a></dt>
+<dd>
+<p>現在呼び出し中の (Rubyで実装された) メソッドの呼び出し名を返します。</p>
+</dd>
+<dt><a name="L010102" id="L010102">void rb_frozen_class_p(VALUE klass)</a></dt>
+<dt><a name="L010103" id="L010103">VALUE rb_funcall(VALUE recv, ID name, int nargs, ...)</a></dt>
+<dd>
+<p><var>recv</var> に対してメソッド <var>name</var> を呼びだし、
+メソッドの返り値を返します。プライベートメソッドも
+呼びだせます。</p>
+<p>メソッドへの引数は第四引数以降にあたえ、その数を <var>nargs</var>
+に指定します。それら引数はすべて <code>VALUE</code> でなければ
+いけません。</p>
+</dd>
+<dt><a name="L010104" id="L010104">VALUE rb_funcall2(VALUE recv, ID name, int nargs, VALUE *args)</a></dt>
+<dd>
+<p><var>recv</var> に対してメソッド <var>name</var> を呼びだし、
+メソッドの返り値を返します。プライベートメソッドも
+呼びだせます。</p>
+<p>メソッドへの引数は <code>VALUE</code> の配列として第四引数にあたえ、
+その長さを <var>nargs</var> に指定します。</p>
+</dd>
+<dt><a name="L010105" id="L010105">VALUE rb_funcall3(VALUE recv, ID mid, int argc, const VALUE *argv)</a></dt>
+<dd>
+<p><var>recv</var> に対してメソッド <var>name</var> を呼びだし、
+メソッドの返り値を返します。</p>
+<p>メソッドへの引数は <code>VALUE</code> の配列として第四引数にあたえ、
+その長さを <var>nargs</var> に指定します。</p>
+<p><code>rb_funcall2</code> との違いは、プライベートメソッドを呼び出せないことです。</p>
+</dd>
+<dt><a name="L010106" id="L010106">void rb_gc_mark_threads(void)</a></dt>
+<dd>
+<p>存在するスレッド全てをマークします。</p>
+</dd>
+<dt><a name="L010107" id="L010107">static NODE *rb_get_method_body(VALUE *klassp, ID *idp, int *noexp)</a></dt>
+<dd>
+<p>クラス klass から id という名前のメソッドエントリを検索する。
+見付かったらその本体である構文木を返す。見付からなければ
+NULL を返す。</p>
+<p>検索結果をキャッシュする。</p>
+</dd>
+<dt><a name="L010108" id="L010108">void rb_interrupt(void)</a></dt>
+<dt><a name="L010109" id="L010109">void rb_iter_break(void)</a></dt>
+<dd>
+<p><code>break</code> の C 用インターフェイスです。
+現在評価中のブロックから抜けます。</p>
+<p>代表的には、rb_iterate の block_proc 中で使います。</p>
+</dd>
+<dt><a name="L010110" id="L010110">VALUE rb_iterate(VALUE (*call_proc)(), VALUE date1, VALUE (*block_proc)(), date2)</a></dt>
+<dd>
+<p>ブロック付きメソッド(イテレータ)呼び出しを行う関数です．</p>
+<p>まず <code>call_proc(data1)</code> を実行します。そしてその関数か
+その直下のメソッドで <code>yield</code> が発生すると以下が実行されます。</p>
+<pre>block_proc(VALUE block_arg, VALUE data2, VALUE self)</pre>
+<p><code>block_arg</code> はブロック引数(複数なら配列に入っている)、
+<code>data2</code> は <code>rb_iterate()</code> に渡したもの、
+<code>self</code> は <code>block_proc</code> 呼び出し時点での <code>self</code> です。</p>
+</dd>
+<dt><a name="L010111" id="L010111">int rb_iterator_p()</a></dt>
+<dd>
+<p>この関数はobsoleteです。<em class="XXINVALIDXX">rb_block_given_p</em>を使用してください。</p>
+</dd>
+<dt><a name="L010112" id="L010112">void rb_jump_tag(int tag)</a></dt>
+<dd>
+<p>初出: [ruby-dev:4064]</p>
+<p><em class="XXINVALIDXX">rb_load_protect</em>,<em class="XXINVALIDXX">rb_eval_string_protect</em>,<em class="XXINVALIDXX">rb_protect</em>
+などで捕捉した大域脱出を再生成します。</p>
+<p><var>tag</var>には上記関数の引数で受け取った<var>state</var>を指定します。</p>
+</dd>
+<dt><a name="L010113" id="L010113">void rb_load(VALUE fname, int wrap)</a></dt>
+<dd>
+<p>参考: [ruby-list:21651]</p>
+<p><em class="XXINVALIDXX">load</em>の低レベルインタフェースです。Rubyスクリプ
+トが格納されたファイル<var>fname</var> をロードします。</p>
+<p>引数<var>wrap</var>が、non-zeroなら無名のモジュールを生成して、ロー
+ドした内容をそのモジュールに閉じ込めます。閉じ込めるのは</p>
+<ul>
+<li>定数</li>
+<li>クラス、モジュール</li>
+<li>トップレベルメソッド</li>
+</ul>
+<p>です。グローバル変数の変更などは閉じ込められません。</p>
+</dd>
+<dt><a name="L010114" id="L010114">void rb_load_protect(VALUE fname, int wrap, int *state)</a></dt>
+<dt><a name="L010115" id="L010115">static void rb_longjmp(int tag, VALUE mesg)</a></dt>
+<dt><a name="L010116" id="L010116">void rb_mark_end_proc(void)</a></dt>
+<dt><a name="L010117" id="L010117">int rb_method_boundp(VALUE klass, ID id, int ex)</a></dt>
+<dt><a name="L010118" id="L010118">static VALUE rb_mod_alias_method(VALUE mod, VALUE newname, VALUE oldname)</a></dt>
+<dt><a name="L010119" id="L010119">static VALUE rb_mod_append_features(VALUE module, VALUE include)</a></dt>
+<dt><a name="L010120" id="L010120">static VALUE rb_mod_define_method(int argc, VALUE *argv, VALUE mod)</a></dt>
+<dt><a name="L010121" id="L010121">static VALUE rb_mod_extend_object(VALUE mod, VALUE obj)</a></dt>
+<dt><a name="L010122" id="L010122">static VALUE rb_mod_include(int argc, VALUE *argv, VALUE module)</a></dt>
+<dt><a name="L010123" id="L010123">static VALUE rb_mod_method(VALUE mod, VALUE vid)</a></dt>
+<dt><a name="L010124" id="L010124">static VALUE rb_mod_method_defined(VALUE mod, VALUE mid)</a></dt>
+<dt><a name="L010125" id="L010125">static VALUE rb_mod_modfunc(int argc, VALUE *argv, VALUE module)</a></dt>
+<dt><a name="L010126" id="L010126">VALUE rb_mod_module_eval(int argc, VALUE *argv, VALUE mod)</a></dt>
+<dd>
+<p><code>Module#module_eval</code> の実体です。</p>
+</dd>
+<dt><a name="L010127" id="L010127">static VALUE rb_mod_nesting(void)</a></dt>
+<dt><a name="L010128" id="L010128">static VALUE rb_mod_private(int argc, VALUE *argv, VALUE module)</a></dt>
+<dt><a name="L010129" id="L010129">static VALUE rb_mod_private_method(int argc, VALUE *argv, VALUE obj)</a></dt>
+<dt><a name="L010130" id="L010130">static VALUE rb_mod_protected(int argc, VALUE *argv, VALUE module)</a></dt>
+<dt><a name="L010131" id="L010131">static VALUE rb_mod_public(int argc, VALUE *argv, VALUE module)</a></dt>
+<dt><a name="L010132" id="L010132">static VALUE rb_mod_public_method(int argc, VALUE *argv, VALUE obj)</a></dt>
+<dt><a name="L010133" id="L010133">static VALUE rb_mod_remove_method(VALUE mod, VALUE name)</a></dt>
+<dd>
+<p><code>Module#remove_method</code> の実体。</p>
+<p>モジュール <var>mod</var> から <var>name</var> という名前のメソッドを
+検索し、エントリを削除します。見付からなかったときは
+例外 <a href="refm100.html">NameError</a> が発生します。</p>
+</dd>
+<dt><a name="L010134" id="L010134">static VALUE rb_mod_s_constants(void)</a></dt>
+<dt><a name="L010135" id="L010135">static VALUE rb_mod_undef_method(VALUE mod, VALUE name)</a></dt>
+<dt><a name="L010136" id="L010136">void rb_obj_call_init(VALUE obj, int argc, VALUE *argv)</a></dt>
+<dd>
+<p>オブジェクト <var>obj</var> に対して initialize を呼び出します。
+引数は長さ <var>argc</var> の配列 <var>argv</var> で表され、
+ブロックが積んである場合はそれも自動的に渡されます。</p>
+</dd>
+<dt><a name="L010137" id="L010137">static VALUE rb_obj_extend(int argc, VALUE *argv, VALUE obj)</a></dt>
+<dt><a name="L010138" id="L010138">VALUE rb_obj_instance_eval(int argc, VALUE *argv, VALUE self)</a></dt>
+<dt><a name="L010139" id="L010139">static VALUE rb_obj_is_block(VALUE block)</a></dt>
+<dd>
+<p>proc が Proc または Binding のインスタンスであれば真。</p>
+</dd>
+<dt><a name="L010140" id="L010140">static VALUE rb_obj_is_proc(VALUE proc)</a></dt>
+<dd>
+<p>proc が Proc のインスタンスであれば真。</p>
+</dd>
+<dt><a name="L010141" id="L010141">static VALUE rb_obj_method(VALUE obj, VALUE vid)</a></dt>
+<dt><a name="L010142" id="L010142">static VALUE rb_obj_respond_to(int argc, VALUE *argv, VALUE obj)</a></dt>
+<dt><a name="L010143" id="L010143">VALUE rb_proc_new(func, val)</a></dt>
+<dd>
+<p>VALUE (*func)(ANYARGS);	
+VALUE val;</p>
+</dd>
+<dt><a name="L010144" id="L010144">VALUE rb_protect(VALUE (*proc)(), VALUE data, int *state)</a></dt>
+<dd>
+<p>初出: [ruby-dev:4064]</p>
+<p><code>proc(data)</code> を評価中のあらゆる大域脱出(例外を含む)を捕捉します。</p>
+<pre>val = rb_protect(func, arg, &amp;status);
+if (status != 0) {
+    puts(&quot;大域脱出が起きた&quot;);
+    rb_jump_tag(status);
+}</pre>
+</dd>
+<dt><a name="L010145" id="L010145">void rb_provide(const char *feature)</a></dt>
+<dd>
+<p>ライブラリ <var>feature</var> をロードしたものとしてロックをかけます。</p>
+</dd>
+<dt><a name="L010146" id="L010146">static void rb_provide_feature(VALUE feature)</a></dt>
+<dt><a name="L010147" id="L010147">int rb_provided(const char *feature)</a></dt>
+<dt><a name="L010148" id="L010148">void rb_remove_method(VALUE klass, const char *name)</a></dt>
+<dd>
+<p>クラス klass 自体に登録されている name という名前のメソッドを
+検索し、エントリを削除します。
+見付からなかったときは例外 <code>NameError</code> を発生します。</p>
+</dd>
+<dt><a name="L010149" id="L010149">VALUE rb_require(const char *fname)</a></dt>
+<dd>
+<p><code>require</code> の C 版です。feature「<var>fname</var>」をロードします。</p>
+</dd>
+<dt><a name="L010150" id="L010150">VALUE rb_rescue(VALUE (*b_proc)(), VALUE data1, VALUE (*r_proc)(), VALUE data2)</a></dt>
+<dd>
+<p>まず b_proc(data1) を実行し、その途中で例外が発生したら r_proc(data2) を実行します。
+捕捉する例外は <a href="refm093.html">StandardError</a> のサブクラスだけです。</p>
+</dd>
+<dt><a name="L010151" id="L010151">VALUE rb_rescue2(VALUE (*b_proc)(), VALUE data1, VALUE (*r_proc)(), VALUE data2, ...)</a></dt>
+<dd>
+<p>まず b_proc(data1) を実行し、その途中で例外が発生したら r_proc(data2) を実行します。
+第五引数以降の可変長引数に捕捉したい例外クラスのリストを指定します。
+引数の最後は NULL で終らなければなりません。</p>
+</dd>
+<dt><a name="L010152" id="L010152">int rb_respond_to(VALUE obj, ID id)</a></dt>
+<dd>
+<p><var>obj</var> にメソッド <var>id</var> が定義されているとき真。
+プライベートメソッドに対しても真を返します。</p>
+</dd>
+<dt><a name="L010153" id="L010153">void rb_secure(int level)</a></dt>
+<dd>
+<p>現在のセーフレベルが <var>level</var> 以上のとき、
+例外 <code>SecurityError</code> を発生します。</p>
+</dd>
+<dt><a name="L010154" id="L010154">void rb_set_end_proc(void (*func)(VALUE), VALUE data)</a></dt>
+<dt><a name="L010155" id="L010155">void rb_set_safe_level(int level)</a></dt>
+<dd>
+<p>セーフレベルを <var>level</var> に上げます。
+<var>level</var> が現在のセーフレベルより低い場合は
+例外 <code>SecurityError</code> が発生します。</p>
+</dd>
+<dt><a name="L010156" id="L010156">VALUE *rb_svar(int cnt)</a></dt>
+<dd>
+<p>現在の <code>SCOPE</code> でローカル変数IDが <var>cnt</var> である変数の
+領域へのポインタを返します。主に $_ (cnt=0) と $~ (cnt=1) に
+アクセスするために使われます。</p>
+</dd>
+<dt><a name="L010157" id="L010157">static VALUE rb_thread_abort_exc(VALUE thread)</a></dt>
+<dt><a name="L010158" id="L010158">static VALUE rb_thread_abort_exc_set(VALUE thread, VALUE val)</a></dt>
+<dt><a name="L010159" id="L010159">static VALUE rb_thread_alive_p(VALUE thread)</a></dt>
+<dt><a name="L010160" id="L010160">static rb_thread_t rb_thread_alloc(VALUE klass)</a></dt>
+<dt><a name="L010161" id="L010161">int rb_thread_alone(void)</a></dt>
+<dd>
+<p>評価器にスレッドが一つしか存在しないとき真。</p>
+</dd>
+<dt><a name="L010162" id="L010162">static VALUE rb_thread_aref(VALUE thread, VALUE id)</a></dt>
+<dt><a name="L010163" id="L010163">static VALUE rb_thread_aset(VALUE thread, VALUE id, VALUE val)</a></dt>
+<dt><a name="L010164" id="L010164">void rb_thread_atfork(void)</a></dt>
+<dt><a name="L010165" id="L010165">static rb_thread_t rb_thread_check(VALUE data)</a></dt>
+<dt><a name="L010166" id="L010166">static void rb_thread_cleanup(void)</a></dt>
+<dt><a name="L010167" id="L010167">VALUE rb_thread_create(fn, arg)</a></dt>
+<dd>
+<p>VALUE (*fn)();
+void *arg;</p>
+</dd>
+<dt><a name="L010168" id="L010168">static VALUE rb_thread_critical_get(void)</a></dt>
+<dt><a name="L010169" id="L010169">static VALUE rb_thread_critical_set(VALUE obj, VALUE val)</a></dt>
+<dt><a name="L010170" id="L010170">VALUE rb_thread_current(void)</a></dt>
+<dd>
+<p>現在実行中のスレッドを返します。</p>
+</dd>
+<dt><a name="L010171" id="L010171">static int rb_thread_dead(rb_thread_t th)</a></dt>
+<dt><a name="L010172" id="L010172">static void rb_thread_deadlock(void)</a></dt>
+<dt><a name="L010173" id="L010173">static VALUE rb_thread_exit(void)</a></dt>
+<dt><a name="L010174" id="L010174">void rb_thread_fd_close(int fd)</a></dt>
+<dt><a name="L010175" id="L010175">int rb_thread_fd_writable(int fd)</a></dt>
+<dt><a name="L010176" id="L010176">static VALUE rb_thread_initialize(VALUE thread, VALUE args)</a></dt>
+<dt><a name="L010177" id="L010177">static VALUE rb_thread_inspect(VALUE thread)</a></dt>
+<dt><a name="L010178" id="L010178">void rb_thread_interrupt(void)</a></dt>
+<dt><a name="L010179" id="L010179">static int rb_thread_join(rb_thread_t th, double limit)</a></dt>
+<dt><a name="L010180" id="L010180">static VALUE rb_thread_join_m(int argc, VALUE *argv, VALUE thread)</a></dt>
+<dt><a name="L010181" id="L010181">static VALUE rb_thread_key_p(VALUE thread, VALUE id)</a></dt>
+<dt><a name="L010182" id="L010182">static VALUE rb_thread_keys(VALUE thread)</a></dt>
+<dt><a name="L010183" id="L010183">static VALUE rb_thread_kill(VALUE thread)</a></dt>
+<dt><a name="L010184" id="L010184">VALUE rb_thread_list(void)</a></dt>
+<dt><a name="L010185" id="L010185">VALUE rb_thread_local_aref(VALUE thread, ID id)</a></dt>
+<dt><a name="L010186" id="L010186">VALUE rb_thread_local_aset(VALUE thread, ID id, VALUE val)</a></dt>
+<dt><a name="L010187" id="L010187">VALUE rb_thread_main(void)</a></dt>
+<dd>
+<p>メインスレッド (プロセスの一番最初に存在するスレッド) を返します。</p>
+</dd>
+<dt><a name="L010188" id="L010188">static VALUE rb_thread_pass(void)</a></dt>
+<dd>
+<p><code>Thread#pass</code> の実体。</p>
+</dd>
+<dt><a name="L010189" id="L010189">void rb_thread_polling(void)</a></dt>
+<dt><a name="L010190" id="L010190">static VALUE rb_thread_priority(VALUE thread)</a></dt>
+<dt><a name="L010191" id="L010191">static VALUE rb_thread_priority_set(VALUE thread, VALUE prio)</a></dt>
+<dt><a name="L010192" id="L010192">static VALUE rb_thread_raise(int argc, VALUE *argv, rb_thread_t th)</a></dt>
+<dt><a name="L010193" id="L010193">static VALUE rb_thread_raise_m(int argc, VALUE *argv, VALUE thread)</a></dt>
+<dt><a name="L010194" id="L010194">static void rb_thread_ready(rb_thread_t th)</a></dt>
+<dt><a name="L010195" id="L010195">static void rb_thread_remove(rb_thread_t th)</a></dt>
+<dt><a name="L010196" id="L010196">static void rb_thread_restore_context(rb_thread_t th, int exit)</a></dt>
+<dd>
+<p>スレッドを切り替えるにあたって、切り替え先のスレッド <var>th</var> の
+コンテキストを評価器に復帰します。</p>
+</dd>
+<dt><a name="L010197" id="L010197">VALUE rb_thread_run(VALUE thread)</a></dt>
+<dd>
+<p>スレッド <var>thread</var> に実行権を渡します。</p>
+</dd>
+<dt><a name="L010198" id="L010198">static VALUE rb_thread_s_abort_exc(void)</a></dt>
+<dt><a name="L010199" id="L010199">static VALUE rb_thread_s_abort_exc_set(VALUE self, VALUE val)</a></dt>
+<dt><a name="L010200" id="L010200">static VALUE rb_thread_s_kill(VALUE obj, VALUE th)</a></dt>
+<dt><a name="L010201" id="L010201">static VALUE rb_thread_s_new(int argc, VALUE *argv, VALUE klass)</a></dt>
+<dt><a name="L010202" id="L010202">static VALUE rb_thread_safe_level(VALUE thread)</a></dt>
+<dt><a name="L010203" id="L010203">static void rb_thread_save_context(rb_thread_t th)</a></dt>
+<dd>
+<p>スレッドを切り替えるにあたって、現在実行中のスレッド <var>th</var> の
+コンテキストを評価器から <var>th</var> に退避します。</p>
+</dd>
+<dt><a name="L010204" id="L010204">void rb_thread_schedule(void)</a></dt>
+<dd>
+<p>他のスレッドに実行権を渡します。
+対象の特定はできません。</p>
+<p>see also: rb_thread_wait_fd, rb_thread_wait_for</p>
+</dd>
+<dt><a name="L010205" id="L010205">int rb_thread_select(int max, fd_set *read, fd_set *write, fd_set *except, struct timeval *timeout)</a></dt>
+<dd>
+<p>Ruby のスレッドは実装のために内部で select(2) を使っているため、
+拡張ライブラリ内で独自に select(2) を使った場合の動作は保証されません。
+代わりにこの関数 rb_thread_select を使ってください。
+引数の意味は select(2) と同じです。</p>
+</dd>
+<dt><a name="L010206" id="L010206">void rb_thread_signal_raise(char *sig)</a></dt>
+<dt><a name="L010207" id="L010207">void rb_thread_sleep(int sec)</a></dt>
+<dt><a name="L010208" id="L010208">void rb_thread_sleep_forever(void)</a></dt>
+<dt><a name="L010209" id="L010209">static VALUE rb_thread_start(VALUE klass, VALUE args)</a></dt>
+<dt><a name="L010210" id="L010210">static VALUE rb_thread_start_0(VALUE (*fn)(), void *arg, rb_thread_t th_arg)</a></dt>
+<dt><a name="L010211" id="L010211">void rb_thread_start_timer(void)</a></dt>
+<dd>
+<p>setitimer(2) が存在する場合のみ定義されます。</p>
+<p>Ruby のスレッドスケジューリングに使用している
+インターバルタイマーを開始します。</p>
+</dd>
+<dt><a name="L010212" id="L010212">static VALUE rb_thread_status(VALUE thread)</a></dt>
+<dt><a name="L010213" id="L010213">VALUE rb_thread_stop(void)</a></dt>
+<dd>
+<p>現在実行中のスレッドを停止します。
+他のスレッドから rb_thread_wakeup を呼ばれると再開します。</p>
+</dd>
+<dt><a name="L010214" id="L010214">static VALUE rb_thread_stop_p(VALUE thread)</a></dt>
+<dt><a name="L010215" id="L010215">void rb_thread_stop_timer(void)</a></dt>
+<dd>
+<p>setitimer(2) が存在する場合のみ定義されます。</p>
+<p>Ruby のスレッドスケジューリングに使用しているインターバルタイマーを
+停止します。このタイマーが止まると Ruby のスレッド機構は基本的に停止
+しますので注意してください。</p>
+</dd>
+<dt><a name="L010216" id="L010216">void rb_thread_trap_eval(VALUE cmd, int sig)</a></dt>
+<dt><a name="L010217" id="L010217">static VALUE rb_thread_value(VALUE thread)</a></dt>
+<dt><a name="L010218" id="L010218">void rb_thread_wait_fd(int fd)</a></dt>
+<dd>
+<p>ファイルディスクリプタ <var>fd</var> を読み込めるようになるまで
+カレントスレッドを停止します。</p>
+</dd>
+<dt><a name="L010219" id="L010219">void rb_thread_wait_for(struct timeval time)</a></dt>
+<dd>
+<p><var>time</var> の長さの時間が経過するまでカレントスレッドを停止します。</p>
+</dd>
+<dt><a name="L010220" id="L010220">static void rb_thread_wait_other_threads(void)</a></dt>
+<dt><a name="L010221" id="L010221">VALUE rb_thread_wakeup(VALUE thread)</a></dt>
+<dd>
+<p>停止中のスレッド <var>thread</var> を再開させます。</p>
+</dd>
+<dt><a name="L010222" id="L010222">static VALUE rb_thread_yield(VALUE arg, rb_thread_t th)</a></dt>
+<dt><a name="L010223" id="L010223">void rb_throw(const char *tag, VALUE val)</a></dt>
+<dd>
+<p><code>throw</code> の実体。返り値を <var>val</var> として、
+<var>tag</var> を <code>catch</code> したところまでジャンプします。</p>
+<p>rb_catch も参照してください。</p>
+</dd>
+<dt><a name="L010224" id="L010224">static VALUE rb_trap_eval(VALUE cmd, int sig)</a></dt>
+<dt><a name="L010225" id="L010225">void rb_undef(VALUE klass, ID id)</a></dt>
+<dd>
+<p>クラス <var>klass</var> のメソッド <var>id</var> を undef します。</p>
+</dd>
+<dt><a name="L010226" id="L010226">static VALUE rb_undefined(VALUE obj, ID id, int argc, VALUE *argv, int call_status)</a></dt>
+<dt><a name="L010227" id="L010227">VALUE rb_with_disable_interrupt(VALUE (*proc)(), data)</a></dt>
+<dt><a name="L010228" id="L010228">VALUE rb_yield(VALUE val)</a></dt>
+<dd>
+<p><code>yield</code> の C 版です．<var>val</var> を引数にブロックを実行します．
+複数の引数を与えたいときは配列に格納して渡します。</p>
+<p>この関数を呼び出したメソッドがブロックを伴わない場合は，例外
+<a href="refm099.html">LocalJumpError</a> が発生します．</p>
+</dd>
+<dt><a name="L010229" id="L010229">static VALUE rb_yield_0(VALUE val, VALUE self, VALUE klass, int pcall)</a></dt>
+<dd>
+<p>カレントブロックに val を渡して処理を移す。
+そのさい self とクラスを self と klass に切り替える。
+Proc の呼び出しのときは pcall=非ゼロ にしなければならない。</p>
+</dd>
+<dt><a name="L010230" id="L010230">static void remove_method(VALUE klass, ID mid)</a></dt>
+<dd>
+<p>クラス <var>klass</var> 自体に登録されている <var>mid</var> という名前のメソッドを
+検索し、エントリを削除します。見付からなかったときは例外 <a href="refm100.html">NameError</a>
+を発生します。</p>
+</dd>
+<dt><a name="L010231" id="L010231">void ruby_finalize(void)</a></dt>
+<dd>
+<p>評価器プロセスの終了処理を行います。</p>
+</dd>
+<dt><a name="L010232" id="L010232">void ruby_init(void)</a></dt>
+<dd>
+<p>評価器を初期化します。Ruby C API を呼ぶプロセスでは
+前もって必ずこの関数を呼ばなければなりません。</p>
+</dd>
+<dt><a name="L010233" id="L010233">void ruby_options(int argc, char **argv)</a></dt>
+<dd>
+<p><var>argc</var> と <var>argv</var> を ruby への
+コマンドラインオプションとして処理します。</p>
+</dd>
+<dt><a name="L010234" id="L010234">void ruby_run(void)</a></dt>
+<dd>
+<p><code>ruby_eval_tree</code> の評価を開始します。</p>
+</dd>
+<dt><a name="L010235" id="L010235">void ruby_stop(int ex)</a></dt>
+<dd>
+<p>評価器プロセスを停止します。</p>
+</dd>
+<dt><a name="L010236" id="L010236">static VALUE safe_getter(void)</a></dt>
+<dt><a name="L010237" id="L010237">static void safe_setter(VALUE val)</a></dt>
+<dt><a name="L010238" id="L010238">static void scope_dup(struct SCOPE *scope)</a></dt>
+<dd>
+<p><var>scope</var> とその親の <code>SCOPE</code> 全ての <code>local_vars</code> を
+スタックからヒープに割り当て直します。</p>
+</dd>
+<dt><a name="L010239" id="L010239">static NODE *search_method(VALUE klass, ID id, VALUE *origin)</a></dt>
+<dd>
+<p>クラス <var>klass</var> から <var>id</var> という名前のメソッドエントリを検索し、
+返します。見付からなければ NULL を返します。</p>
+<p>このメソッドは <code>undef</code> を考慮しません。つまり <code>m_tbl</code> に
+エントリがあるならその内容に関らず探索は成功します。</p>
+</dd>
+<dt><a name="L010240" id="L010240">static void secure_visibility(VALUE self)</a></dt>
+<dt><a name="L010241" id="L010241">static void set_backtrace(VALUE info, VALUE bt)</a></dt>
+<dt><a name="L010242" id="L010242">static void set_method_visibility(VALUE self, int argc, VALUE *argv, ID ex)</a></dt>
+<dt><a name="L010243" id="L010243">static VALUE set_trace_func(VALUE obj, VALUE trace)</a></dt>
+<dd>
+<p>Kernel#set_trace_func の実体。
+評価器に対するフック手続きを登録します。</p>
+</dd>
+<dt><a name="L010244" id="L010244">static VALUE specific_eval(int argc, VALUE *argv, VALUE klass, VALUE self)</a></dt>
+<dd>
+<p>rb_obj_instance_eval と rb_mod_module_eval を共通化するための補助関数です。</p>
+</dd>
+<dt><a name="L010245" id="L010245">static void stack_check(void)</a></dt>
+<dt><a name="L010246" id="L010246">static void stack_extend(rb_thread_t th, int exit)</a></dt>
+<dt><a name="L010247" id="L010247">static VALUE superclass(VALUE self, NODE *node)</a></dt>
+<dd>
+<p>クラス文のスーパークラスを表すノード <var>node</var> を
+評価してクラスを得ます。</p>
+</dd>
+<dt><a name="L010248" id="L010248">static VALUE svalue_to_avalue(VALUE v)</a></dt>
+<dt><a name="L010249" id="L010249">static VALUE svalue_to_mvalue(VALUE v)</a></dt>
+<dt><a name="L010250" id="L010250">static void terminate_process(int status, const char *mesg, int mlen)</a></dt>
+<dt><a name="L010251" id="L010251">static VALUE thgroup_add(VALUE group, VALUE thread)</a></dt>
+<dt><a name="L010252" id="L010252">static VALUE thgroup_list(VALUE group)</a></dt>
+<dt><a name="L010253" id="L010253">static VALUE thgroup_s_alloc(VALUE klass)</a></dt>
+<dt><a name="L010254" id="L010254">static void thread_free(rb_thread_t th)</a></dt>
+<dt><a name="L010255" id="L010255">static int thread_keys_i(ID key, VALUE value, VALUE ary)</a></dt>
+<dt><a name="L010256" id="L010256">static void thread_mark(rb_thread_t th)</a></dt>
+<dt><a name="L010257" id="L010257">static const char *thread_status_name(enum thread_status status)</a></dt>
+<dt><a name="L010258" id="L010258">static int thread_switch(int n)</a></dt>
+<dt><a name="L010259" id="L010259">static double timeofday(void)</a></dt>
+<dt><a name="L010260" id="L010260">static VALUE top_include(int argc, VALUE *argv)</a></dt>
+<dt><a name="L010261" id="L010261">static VALUE top_private(int argc, VALUE *argv)</a></dt>
+<dt><a name="L010262" id="L010262">static VALUE top_public(int argc, VALUE *argv)</a></dt>
+<dt><a name="L010263" id="L010263">static VALUE umcall(VALUE args, VALUE method)</a></dt>
+<dt><a name="L010264" id="L010264">static VALUE umethod_bind(VALUE method, VALUE recv)</a></dt>
+<dd>
+<p><code>UnboundMethod</code> <var>method</var> を <var>recv</var> に束縛します。</p>
+</dd>
+<dt><a name="L010265" id="L010265">static VALUE umethod_call(int argc, VALUE *argv, VALUE method)</a></dt>
+<dt><a name="L010266" id="L010266">static VALUE umethod_proc(VALUE method)</a></dt>
+<dt><a name="L010267" id="L010267">static VALUE umethod_unbind(VALUE obj)</a></dt>
+<dt><a name="L010268" id="L010268">static VALUE yield_under(VALUE under, VALUE self)</a></dt>
+<dd>
+<p>モジュール <var>under</var> の元のコンテキストで
+<code>ruby_block</code> を評価します。</p>
+</dd>
+<dt><a name="L010269" id="L010269">static VALUE yield_under_i(VALUE self)</a></dt>
+<dd>
+<p><code>yield_under</code> の補助関数です。</p>
+</dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm488.html">UP</a>][<a href="refm491.html">&lt;-PREV</a>][<a href="refm493.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

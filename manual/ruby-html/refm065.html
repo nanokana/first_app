@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ThreadGroup</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm066.html" rel="next" />
+<link href="refm064.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm035.html">UP</a>][<a href="refm064.html">&lt;-PREV</a>][<a href="refm066.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L001645" id="L001645">ThreadGroup</a></h1>
+<p><a href="refm064.html">Thread</a> はグループを持ち、必ずいずれかのグループに属します。
+<code>ThreadGroup</code> クラスによりグループに属する <code>Thread</code> をまとめて
+操作することができます。</p>
+<p>デフォルトの <code>ThreadGroup</code> は、
+<a href="#L001656">ThreadGroup::Default</a> です。生成されたばかり
+の <a href="refm064.html">Thread</a> は生成した <a href="refm064.html">Thread</a> のグループを引き継ぎます。</p>
+<dl>
+<dt><a name="L001646" id="L001646">例:</a></dt>
+<dd>
+<p>生成したすべてのThreadが終了するのを待つ</p>
+<pre>5.times {
+   Thread.new { sleep 1; puts &quot;#{Thread.current} finished&quot; }
+}
+
+(ThreadGroup::Default.list - [Thread.current]).each {|th| th.join}
+
+puts &quot;all threads finished&quot;</pre>
+<p>対象の <code>Thread</code> が <code>Thread</code> を起こす可能性がある場合
+(<a href="refm299.html#L005995">Thread.exclusive</a>参照)</p>
+<pre>Thread.exclusive do
+  (ThreadGroup::Default.list - [Thread.current]).each {|th| th.join}
+end</pre>
+</dd>
+</dl>
+<h2><a name="L001647" id="L001647">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm035.html">Object</a></li>
+</ul>
+<h2><a name="L001648" id="L001648">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L001649" id="L001649"><code>ThreadGroup.new</code></a></dt>
+<dd>
+<p>新たな <code>ThreadGroup</code> を生成して返します。</p></dd>
+</dl>
+<h2><a name="L001650" id="L001650">メソッド:</a></h2>
+<dl>
+<dt><a name="L001651" id="L001651"><code>add(<var>thread</var>)</code></a></dt>
+<dd>
+<p>スレッド <var>thread</var> のグループを <code>self</code> にします。</p>
+<p><code>self</code> を返します。</p></dd>
+<dt><a name="L001652" id="L001652"><code>enclose             ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>ThreadGroup への Thread の追加/削除を(freeze せずに)禁止します。
+(追加/削除を行うと例外 <a href="refm110.html">ThreadError</a> が発生します)</p>
+<p>self を返します。</p>
+<p>追加の例:</p>
+<pre>thg = ThreadGroup.new.enclose
+thg.add Thread.new {}
+
+=&gt; -:2:in `add': can't move to the enclosed thread group (ThreadError)</pre>
+<p>削除の例:</p>
+<pre>thg1 = ThreadGroup.new
+thg2 = ThreadGroup.new
+
+th = Thread.new {sleep 1}
+
+thg1.add th
+thg1.enclose
+thg2.add th
+
+=&gt; -:8:in `add': can't move from the enclosed thread group (ThreadError)</pre></dd>
+<dt><a name="L001653" id="L001653"><code>enclosed?           ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p><a href="#L001652">enclose</a> の状態を真偽値で返します。
+freeze された ThreadGroup に Thread の追加/削除はできなくなりますが、
+enclosed? は false を返します。</p>
+<pre>thg = ThreadGroup.new
+p thg.enclosed?         # =&gt; false
+thg.enclose
+p thg.enclosed?         # =&gt; true
+
+thg = ThreadGroup.new
+p thg.enclosed?         # =&gt; false
+thg.freeze
+p thg.enclosed?         # =&gt; false</pre></dd>
+<dt><a name="L001654" id="L001654"><code>list</code></a></dt>
+<dd>
+<p><code>self</code> に属するスレッドの配列を返します。</p>
+<p>終了処理中(aborting)、や終了状態(dead)であるスレッドは要素に含まれ
+ません(<a href="refm064.html#L001618">Thread.list</a>と同じです)。
+<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></p></dd>
+</dl>
+<h2><a name="L001655" id="L001655">定数:</a></h2>
+<dl>
+<dt><a name="L001656" id="L001656"><code>Default</code></a></dt>
+<dd>
+<p>デフォルトで定義されている <code>ThreadGroup</code> です。メインスレッド
+は最初このグループに属します。</p></dd>
+</dl>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small><a href="refm384.html">ruby 1.7 feature</a>: version 1.7 では、aborting 状態であるスレッド
+も要素に含まれます。つまり「生きている」スレッドの配列を返します</small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm035.html">UP</a>][<a href="refm064.html">&lt;-PREV</a>][<a href="refm066.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

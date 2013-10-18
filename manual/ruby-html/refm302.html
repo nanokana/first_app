@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Queue</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm303.html" rel="next" />
+<link href="refm301.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm299.html">UP</a>][<a href="refm301.html">&lt;-PREV</a>][<a href="refm303.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006019" id="L006019">Queue</a></h1>
+<p>Queueはスレッド間のFIFO(first in first out)の通信路です。ス
+レッドが空のqueueを読み出そうとすると停止します。queueになんら
+かの情報が書き込まれると実行は再開されます。</p>
+<dl>
+<dt><a name="L006020" id="L006020"><a href="refm303.html">SizedQueue</a></a></dt>
+<dd>
+<p>最大サイズが指定できる Queue のサブクラスです。</p>
+</dd>
+</dl>
+<h2><a name="L006021" id="L006021">例</a></h2>
+<pre>require 'thread'
+
+q = Queue.new
+
+th1 = Thread.start do
+  while resource = q.pop
+    puts resource
+  end
+end
+
+[:resource1, :resource2, :resource3, nil].each{|r|
+  q.push(r)
+}
+
+th1.join</pre>
+<p>実行すると以下のように出力します。</p>
+<pre>$ ruby que.rb
+resource1
+resource2
+resource3</pre>
+<h2><a name="L006022" id="L006022">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm035.html">Object</a></li>
+</ul>
+<h2><a name="L006023" id="L006023">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L006024" id="L006024"><code>Queue.new</code></a></dt>
+<dd>
+<p>新しいqueueオブジェクトを生成します。</p></dd>
+</dl>
+<h2><a name="L006025" id="L006025">メソッド:</a></h2>
+<dl>
+<dt><a name="L006026" id="L006026"><code>clear</code></a></dt>
+<dd>
+<p>queue を空にします。返り値は不定です。</p></dd>
+<dt><a name="L006027" id="L006027"><code>empty?</code></a></dt>
+<dd>
+<p>queueが空の時、真を返します。</p></dd>
+<dt><a name="L006028" id="L006028"><code>length</code></a>
+<dt><a name="L006029" id="L006029"><code>size</code></a></dt>
+<dd>
+<p>queueの長さを返します。</p></dd>
+<dt><a name="L006030" id="L006030"><code>num_waiting</code></a></dt>
+<dd>
+<p>queue を待っているスレッドの数を返します。</p></dd>
+<dt><a name="L006031" id="L006031"><code>pop(<var>non_block</var> = <var>false</var>)</code></a>
+<dt><a name="L006032" id="L006032"><code>shift(<var>non_block</var> = <var>false</var>)</code></a>
+<dt><a name="L006033" id="L006033"><code>deq(<var>non_block</var> = <var>false</var>)</code></a></dt>
+<dd>
+<p>queueからひとつ値を取り出します。queueが空の時、呼出元のスレッ
+ドは停止します。<var>non_block</var> に true を与えると、
+queueが空の時に例外 <a href="refm110.html">ThreadError</a> が発生します。</p></dd>
+<dt><a name="L006034" id="L006034"><code>push(<var>value</var>)</code></a>
+<dt><a name="L006035" id="L006035"><code><var>self</var> &lt;&lt; <var>value</var></code></a>
+<dt><a name="L006036" id="L006036"><code>enq(<var>value</var>)</code></a></dt>
+<dd>
+<p>queue の値を追加します。待っているスレッドがいれば実行を再開
+させます。返り値は不定です。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm299.html">UP</a>][<a href="refm301.html">&lt;-PREV</a>][<a href="refm303.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

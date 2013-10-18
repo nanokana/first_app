@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>trap::matrix</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm448.html" rel="next" />
+<link href="refm446.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm421.html">UP</a>][<a href="refm446.html">&lt;-PREV</a>][<a href="refm448.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<ul>
+<li>Matrix#det</li>
+<li><p>Matrix#determinant</p>
+<p>内部で割り算してるため，要素が Integer の場合は結果がおかしくなります．</p>
+<pre>$ ruby -r matrix -e 'p Matrix[[3, 2], [4, 1]].det'
+-3</pre>
+<p>きちんと計算させるためには，要素を Float にして</p>
+<pre>$ ruby -r matrix -e 'p Matrix[[3.0, 2.0], [4.0, 1.0]].det'
+-5.0</pre>
+<p>とするか，mathn を require して</p>
+<pre>$ ruby -r mathn -r matrix -e 'p Matrix[[3, 2], [4, 1]].det'
+-5</pre>
+<p>こうしましょう．</p></li>
+</ul>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm421.html">UP</a>][<a href="refm446.html">&lt;-PREV</a>][<a href="refm448.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

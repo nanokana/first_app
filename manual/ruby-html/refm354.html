@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>DL::Symbol</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm355.html" rel="next" />
+<link href="refm353.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm352.html">UP</a>][<a href="refm353.html">&lt;-PREV</a>][<a href="refm355.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006764" id="L006764">DL::Symbol</a></h1>
+<p><a href="refm352.html">DL</a></p>
+<h2><a name="L006765" id="L006765">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L006766" id="L006766"><code>Symbol.new(<var>addr</var>, <var>name</var> = <var>nil</var>, <var>type</var> = <var>nil</var>)</code></a></dt>
+<dd>
+<p>type が nil でないなら 型 type の Symbol オブジェクト sym を作成する。
+関数が割り当てられているなら addr はそのアドレス。type が nil なら
+<a href="refm355.html">DL::PtrData</a> オブジェクトを返す。</p>
+<p>型の指定には C 言語の型を表す文字で構成した文字列を使う。
+文字列の 1 文字目には関数の戻り値を、
+2 文字目以降には関数の引数を表す文字を順に書いていく。
+型を表す文字と対応する C 言語の型は次のようになっている。</p>
+<ul>
+<li><code>&quot;C&quot;</code> char</li>
+<li><code>&quot;c&quot;</code>, <code>&quot;s&quot;</code> char *</li>
+<li><code>&quot;H&quot;</code> short</li>
+<li><code>&quot;h&quot;</code> short *</li>
+<li><code>&quot;I&quot;</code> int</li>
+<li><code>&quot;i&quot;</code> int *</li>
+<li><code>&quot;L&quot;</code> long</li>
+<li><code>&quot;l&quot;</code> long *</li>
+<li><code>&quot;F&quot;</code> float</li>
+<li><code>&quot;f&quot;</code> float *</li>
+<li><code>&quot;D&quot;</code> double</li>
+<li><code>&quot;d&quot;</code> double *</li>
+<li><code>&quot;0&quot;</code> void</li>
+<li><code>&quot;P&quot;</code>, <code>&quot;p&quot;</code> void *</li>
+<li><code>&quot;S&quot;</code> const char *</li>
+<li><code>&quot;a&quot;</code>, <code>&quot;A&quot;</code> [] （配列）</li>
+</ul>
+<p>たとえば戻り値が int、引数が const char * と long である関数の型は
+<code>&quot;ISL&quot;</code> という文字列で指定する。</p></dd>
+<dt><a name="L006767" id="L006767"><code>Symbol.char2type(<var>char</var>)</code></a></dt>
+<dd>
+<p>型に相当する文字 char を取り、C 言語の型修飾を返す。</p></dd>
+</dl>
+<h2><a name="L006768" id="L006768">メソッド</a></h2>
+<dl>
+<dt><a name="L006769" id="L006769"><code>proto()</code></a></dt>
+<dd>
+<p>関数のプロトタイプを返す。</p></dd>
+<dt><a name="L006770" id="L006770"><code>Symbol#name()</code></a></dt>
+<dd>
+<p>関数名を返す。</p></dd>
+<dt><a name="L006771" id="L006771"><code>cproto(),</code></a>
+<dt><a name="L006772" id="L006772"><code>to_s()</code></a></dt>
+<dd>
+<p>C 言語形式のプロトタイプを返す。</p></dd>
+<dt><a name="L006773" id="L006773"><code>Symbol#inspect()</code></a></dt>
+<dd>
+<p>人間が読みやすい形式の文字列を返す(訳注:意訳)。</p></dd>
+<dt><a name="L006774" id="L006774"><code>call(<var>arg1</var>,<var>arg2</var>,...,<var>argN</var>),</code></a>
+<dt><a name="L006775" id="L006775"><code>self[](<var>arg1</var>,<var>arg2</var>,...,<var>argN</var>)</code></a></dt>
+<dd>
+<p>パラメータ arg1, arg2, ... argN で関数を呼び出す。結果は、戻り値 r 
+やパラメータrs からなる。rs は配列。</p></dd>
+<dt><a name="L006776" id="L006776"><code>to_ptr</code></a></dt>
+<dd>
+<p>対応する <a href="refm355.html">DL::PtrData</a> オブジェクト ptr を返す。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm352.html">UP</a>][<a href="refm353.html">&lt;-PREV</a>][<a href="refm355.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

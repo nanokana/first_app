@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>trap::()で解決するもの</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm423.html" rel="next" />
+<link href="refm421.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm421.html">UP</a>][<a href="refm421.html">&lt;-PREV</a>][<a href="refm423.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L009446" id="L009446">()で解決するもの</a></h1>
+<ul>
+<li><p>結合強度の話</p>
+<p>Range オブジェクトのリテラル(あるいは範囲式)を表す <code>..</code>,
+<code>...</code> は結合強度(<a href="refm025.html">演算子式</a>参照)が低いので、以下はエラーにな
+ります</p>
+<pre>1..3.to_a
+
+=&gt; -:1: bad value for range (ArgumentError)</pre>
+<p>上記は、以下のように解釈されています。</p>
+<pre>1..(3.to_a)</pre>
+<p>範囲式は括弧で囲むのが無難です。</p>
+<pre>(1..3).to_a  # =&gt; [1, 2, 3]</pre></li>
+<li><p>メソッド呼出のかっこ省略による誤解釈</p>
+<p>上の例の続きで、以下は意図通りにはなりません</p>
+<pre>p (1..3).to_a
+=&gt; 1..3</pre>
+<p>これは以下のように解釈されます。</p>
+<pre>(p (1..3)).to_a</pre>
+<p>これは範囲式に限らず、メソッドの後に括弧があれば括弧の中身だけが引数
+であると解釈されるためです。以下も同様です。</p>
+<pre>Time.gm (19+1)*100,2,11,12,34,56
+=&gt; -:1: parse error
+       Time.gm (19+1)*100,2,11,12,34,56
+                          ^</pre>
+<p>このような場合は、引数全体を括弧で囲む必要があります。
+<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></p>
+<pre>p ((1..3).to_a)
+=&gt; [1, 2, 3]
+
+Time.gm((19+1)*100,2,11,12,34,56)
+=&gt; Fri Feb 11 12:34:56 UTC 2000</pre></li>
+<li><p>メソッド呼出のかっこ省略による誤解釈(2)</p>
+<p>以下のようなメソッド呼び出しと代入を含む式は parse error になります。</p>
+<pre>p obj = String.new &quot;foo&quot;
+=&gt; -:1: parse error</pre>
+<p>以下のようにする必要があります。</p>
+<pre>p obj = String.new(&quot;foo&quot;)
+p ((obj = String.new &quot;foo&quot;))</pre></li>
+<li><p>and/or の優先順位</p>
+<pre>p :a if true || false &amp;&amp;  false
+p :b if true or false and false
+  #=&gt; :a</pre>
+<p>&amp;&amp; が || よりも優先順位が高いのに対し、
+and と or の優先順位が同じであることに注意。上記は以下のように解釈さ
+れています。</p>
+<pre>p :a if true || (false &amp;&amp;  false)
+p :b if (true or false) and false</pre></li>
+<li><p>式と文</p>
+<pre>p (true &amp;&amp; true)    #=&gt; true
+p (true and true)   #=&gt; parse error
+p ((true and true)) #=&gt; true</pre>
+<p>true and falseは文と解釈されるので式として解釈されるための括弧とpの
+引数をくくる括弧が必要になります。</p>
+<p><a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/24664">ruby-list:24664</a><sup class="outside"><small>[外部]</small></sup>式を要求するコンテキストでは、以下のものが直接
+は書けません。</p>
+<ul>
+<li>and/or/not を含む文</li>
+<li>do .. endのブロックのついたメソッド呼び出し<a name="footmark:2" id="footmark:2" href="#foottext:2"><sup><small>*2</small></sup></a></li>
+<li>かっこを省略したメソッド呼び出し(実はラストの1個だけは置ける)<a name="footmark:3" id="footmark:3" href="#foottext:3"><sup><small>*3</small></sup></a></li>
+<li>alias</li>
+<li>undef</li>
+<li>if/unless/while/until/rescue修飾子</li>
+<li>多重代入</li>
+</ul></li>
+<li><p>do..end の parse error</p>
+<pre>(1..5).sort   do |a,b| b &lt;=&gt; a end.reverse # parse error
+(1..5).sort() do |a,b| b &lt;=&gt; a end.reverse # [1,2,3,4,5]</pre>
+<p><a name="footmark:4" id="footmark:4" href="#foottext:4"><sup><small>*4</small></sup></a></p></li>
+<li><p>ハッシュ引数</p>
+<pre>p {1=&gt;2}    #=&gt; parse error (ブレースがブロックと解釈される)
+p ({1=&gt;2})  #=&gt; {1=&gt;2}
+p (1=&gt;2)    #=&gt; {1=&gt;2} (引数がハッシュと解釈される)
+p (1=&gt;2, 3) #=&gt; parse error    (ブレースを省略したハッシュが引数にかけるのは最後だけ)
+p (0,1=&gt;2)  #=&gt; 0
+                1=&gt;2</pre></li>
+<li><p>大文字で始まるメソッドの呼び出し</p>
+<p>大文字で始まるメソッドを :: 記法により呼び出す場合やレシーバを省略し
+て呼び出す場合、そのままでは定数と判断されるので注意が必要。()により
+メソッドコールであることを明示することで回避できる。</p>
+<pre>obj = Object
+def obj.Foo
+  p &quot;ok&quot;
+end
+def Bar
+  p &quot;ok&quot;
+end
+
+obj.Foo     # =&gt; &quot;ok&quot;
+obj::Foo    # =&gt; uninitialized constant Foo::Bar (NameError)
+obj::Foo()  # =&gt; &quot;ok&quot;
+Bar         # =&gt; uninitialized constant Foo::Bar (NameError)
+Bar()       # =&gt; &quot;ok&quot;</pre></li>
+<li><p>defined?</p>
+<p>defined? はメソッドではなく構文要素。なので：</p>
+<pre>defined? obj.doit &amp;&amp; obj.doit</pre>
+<p>は：</p>
+<pre>defined? (obj.doit &amp;&amp; obj.doit)</pre>
+<p>と等しくなる。</p></li>
+</ul>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small><a href="refm384.html">ruby 1.7 feature</a>: version 1.7 では、メソッド名と
+括弧の間に空白があると(おそらく)期待通りの動作をするよう
+に変更されています</small><br />
+<a name="foottext:2" id="foottext:2" href="#footmark:2"><sup><small>*2</small></sup></a><small>version 1.6以降では改善されました</small><br />
+<a name="foottext:3" id="foottext:3" href="#footmark:3"><sup><small>*3</small></sup></a><small>version 1.7以降では最後の引数にも括弧を省略したメソッド呼び出しは書けなくなってます</small><br />
+<a name="foottext:4" id="foottext:4" href="#footmark:4"><sup><small>*4</small></sup></a><small>version 1.6 以降、前者でもparse errorにならないよう改善されました</small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm421.html">UP</a>][<a href="refm421.html">&lt;-PREV</a>][<a href="refm423.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

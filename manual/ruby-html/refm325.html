@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>weakref</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm326.html" rel="next" />
+<link href="refm324.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm324.html">&lt;-PREV</a>][<a href="refm326.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006344" id="L006344">weakref</a></h1>
+<h2><a name="L006345" id="L006345">目的・概要</a></h2>
+<p>WeakRefクラスによりweak referenceを実現する。</p>
+<p>WeakRefオブジェクトは与えられたオブジェクトをポイントするが、
+ポイント先のオブジェクトはGCされる可能性がある。
+アクセスしようとしたときにオブジェクトがGCされていれば
+WeakRef::RefErrorが発生する。</p>
+<h2><a name="L006346" id="L006346">サンプルコード</a></h2>
+<pre>require 'weakref'
+foo = Object.new
+ref = WeakRef.new(foo)
+ref.some_method_of_foo</pre>
+<h2><a name="L006347" id="L006347">class WeakRef</a></h2>
+<p>weak referenceを提供するクラス。</p>
+<dl>
+<dt><a name="L006348" id="L006348">上位クラス</a></dt>
+<dd>
+<p><a href="refm328.html">Delegator</a></p>
+</dd>
+</dl>
+<h3><a name="L006349" id="L006349">クラスメソッド</a></h3>
+<dl>
+<dt><a name="L006350" id="L006350"><code>WeakRef.new(<var>obj</var>)</code></a></dt>
+<dd>
+<p><var>obj</var>へのweak referenceを生成する</p></dd>
+</dl>
+<h3><a name="L006351" id="L006351">インスタンスメソッド</a></h3>
+<dl>
+<dt><a name="L006352" id="L006352"><code>WeakRef#weakref_alive?</code></a></dt>
+<dd>
+<p>参照先のオブジェクトがまだ生きていればtrueを返す</p></dd>
+</dl>
+<h2><a name="L006353" id="L006353">class WeakRef::RefError</a></h2>
+<p>GCされたオブジェクトを参照しようとしたときに発生する例外。</p>
+<dl>
+<dt><a name="L006348" id="L006348">上位クラス</a></dt>
+<dd>
+<p><a href="refm093.html">StandardError</a></p>
+</dd>
+</dl>
+<h2><a name="L006354" id="L006354">see also</a></h2>
+<ul>
+<li><a href="refm327.html">delegate</a></li>
+</ul>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm324.html">&lt;-PREV</a>][<a href="refm326.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

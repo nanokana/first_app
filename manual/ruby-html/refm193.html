@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>webrick/cgi</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm194.html" rel="next" />
+<link href="refm192.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm173.html">UP</a>][<a href="refm192.html">&lt;-PREV</a>][<a href="refm194.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L003764" id="L003764">webrick/cgi</a></h1>
+<p><a href="refm173.html">webrick</a></p>
+<p>一般の CGI 環境で WEBrick のサーブレットと同じように CGI スクリプトを書くための
+クラス。サーバが WEBrick でなくても使うことが出来る。</p>
+<p><a href="refm187.html">WEBrick::HTTPServlet::AbstractServlet</a> と同じようにメソッド do_GET や
+do_POST を再定義することによって CGI スクリプトを書く。</p>
+<p>普通は WEBrick::CGI のサブクラスを定義して、そのクラスに対してメソッド do_XXX を
+定義する。</p>
+<pre>#!/usr/local/bin/ruby
+require 'webrick/cgi'
+
+class MyCGI &lt; WEBrick::CGI
+  def do_GET(req, res)
+    res[&quot;content-type&quot;] = &quot;text/plain&quot;
+    ret = &quot;hoge\n&quot;
+    res.body = ret
+  end
+end
+
+MyCGI.new.start()</pre>
+<h2><a name="L003765" id="L003765">class WEBrick::CGI</a></h2>
+<h2><a name="L003766" id="L003766">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L003767" id="L003767"><code>CGI.new(<var>config</var>={}, *<var>options</var>)</code></a></dt>
+<dd>
+<p>CGI オブジェクトを生成する。</p></dd>
+</dl>
+<h2><a name="L003768" id="L003768">メソッド</a></h2>
+<dl>
+<dt><a name="L003769" id="L003769"><code>start(<var>env</var>=<var>ENV</var>, <var>stdin</var>=$<var>stdin</var>, <var>stdout</var>=$<var>stdout</var>)</code></a></dt>
+<dd>
+<p>スクリプトを実行する。env にはスクリプトが受け取るべき環境変数、stdin には
+スクリプトの入力元、stdout には出力先を指定する。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm173.html">UP</a>][<a href="refm192.html">&lt;-PREV</a>][<a href="refm194.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

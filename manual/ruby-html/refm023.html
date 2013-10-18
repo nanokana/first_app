@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>変数と定数</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm024.html" rel="next" />
+<link href="refm022.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm020.html">UP</a>][<a href="refm022.html">&lt;-PREV</a>][<a href="refm024.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L000308" id="L000308">変数と定数</a></h1>
+<ul>
+<li><a href="#L000309">ローカル変数</a></li>
+<li><a href="#L000310">インスタンス変数</a></li>
+<li><a href="#L000311">クラス変数</a></li>
+<li><a href="#L000312">グローバル変数</a></li>
+<li><a href="#L000313">疑似変数</a></li>
+<li><a href="#L000320">定数</a>
+<ul>
+<li><a href="#L000321">定数参照の優先順位</a></li>
+</ul></li>
+</ul>
+<p>Ruby の変数と定数の種別は変数名の最初の一文字によって、
+ローカル変数、
+インスタンス変数、
+クラス変数、
+グローバル変数、
+定数
+のいずれかに区別されます。
+通常の変数の二文字目以降は英数字または
+<code>_</code>ですが、組み込み変数の一部には
+「`<code>$</code>'+1文字の記号」という変数があります(<a href="refm030.html">組み込み変数</a>を参照)。変数名
+の長さにはメモリのサイズ以外の制限はありません。</p>
+<h2><a name="L000309" id="L000309">ローカル変数</a></h2>
+<p>例:</p>
+<pre>foobar</pre>
+<p>小文字または`<code>_</code>'で始まる識別子はローカル変数また
+はメソッド呼び出しです。ローカル変数スコープ(クラス、モジュー
+ル、メソッド定義の本体)における小文字で始まる識別子への最初
+の代入はそのスコープに属するローカル変数の宣言になります。宣
+言されていない識別子の参照は引数の無いメソッド呼び出しとみな
+されます。</p>
+<p>ローカル変数のスコープは、<em>宣言した位置から</em>その変数が宣
+言されたブロック、メソッド定義、またはクラス/モジュール定義
+の終りまでです。寿命もそのブロックの終りまで(トップレベルの
+ローカル変数はプログラムの終了まで)ですが、例外としてブロッ
+クが手続きオブジェクト化された場合は、そのオブジェクトが消滅
+するまで存在します。同じスコープを参照する手続きオブジェクト
+間ではローカル変数は共有されます。</p>
+<pre># (A) の部分はスコープに入らない
+2.times {
+  p defined?(v)    # (A)
+  v = 1            # ここ(宣言開始)から
+  p v              # ここ(ブロックの終り)までが v のスコープ
+}
+
+# =&gt; nil
+     1
+     nil           &lt;- これが nil であることに注意
+     1</pre>
+<p>宣言は、例え実行されなくても宣言とみなされます。</p>
+<pre>v = 1 if false # 代入は行われないが宣言は有効
+p defined?(v)  # =&gt; &quot;local-variable&quot;
+p v            # =&gt; nil</pre>
+<p>またあまり推奨はされませんが <a href="refm011.html#L000129">-K</a> オプションを指定
+すれば日本語文字の識別子も使用でき、それはローカル変数とみなされます。</p>
+<h2><a name="L000310" id="L000310">インスタンス変数</a></h2>
+<p>例:</p>
+<pre>@foobar</pre>
+<p>`<code>@</code>'で始まる変数はインスタンス変数であり、特定の
+オブジェクトに所属しています。インスタンス変数はそのクラスま
+たはサブクラスのメソッドから参照できます。初期化されていない
+インスタンス変数を参照した時の値は<code>nil</code>です。</p>
+<h2><a name="L000311" id="L000311">クラス変数</a></h2>
+<p>例:</p>
+<pre>class Foo
+  @@foo = 1
+  def bar
+    puts @@foo
+  end
+end</pre>
+<p><code>@@</code>で始まる変数はクラス変数です。クラス変数はクラス定義
+の中で定義され、クラスの特異メソッド、インスタンスメソッドなどから参照／
+代入ができます。</p>
+<p>クラス変数と<a href="#L000320">定数</a>の違いは以下の通りです。</p>
+<ul>
+<li>再代入可能(定数は警告を出す)</li>
+<li>クラスの外から直接参照できない(継承されたクラスからは参照／代入可能)</li>
+</ul>
+<p>クラス変数はクラス自身のインスタンス変数とは以下の点で異なります。</p>
+<ul>
+<li>サブクラスから参照／代入が可能</li>
+<li>インスタンスメソッドから参照／代入が可能</li>
+</ul>
+<p>クラス変数は、そのクラスやサブクラス、それらのインスタンスで共有される
+グローバル変数であるとみなすことができます。</p>
+<pre>class Foo
+  @@foo = 1
+end
+class Bar &lt; Foo
+  p @@foo += 1          # =&gt; 2
+end
+class Baz &lt; Bar
+  p @@foo += 1          # =&gt; 3
+end</pre>
+<p>モジュールで定義されたクラス変数(モジュール変数)は、そのモジュールをイ
+ンクルードしたクラス間でも共有されます。</p>
+<pre>module Foo
+  @@foo = 1
+end
+class Bar
+  include Foo
+  p @@foo += 1          # =&gt; 2
+end
+class Baz
+  include Foo
+  p @@foo += 1          # =&gt; 3
+end</pre>
+<h2><a name="L000312" id="L000312">グローバル変数</a></h2>
+<p>例:</p>
+<pre>$foobar
+$/</pre>
+<p>`<code>$</code>'で始まる変数はグローバル変数で、プログラムの
+どこからでも参照できます(その分、利用には注意が必要です)。
+グローバル変数には宣言は必要ありません。
+初期化されていないグローバル変数を参照した時の値は
+<code>nil</code>です。</p>
+<h2><a name="L000313" id="L000313">疑似変数</a></h2>
+<p>通常の変数以外に疑似変数と呼ばれる特殊な変数があります。</p>
+<dl>
+<dt><a name="L000314" id="L000314"><code>self</code></a></dt>
+<dd>
+<p>現在のメソッドの実行主体</p>
+</dd>
+<dt><a name="L000315" id="L000315"><code>nil</code></a></dt>
+<dd>
+<p><a href="refm068.html">NilClass</a>クラスの唯一のインスタンス</p>
+</dd>
+<dt><a name="L000316" id="L000316"><code>true</code></a></dt>
+<dd>
+<p><a href="refm067.html">TrueClass</a>クラスの唯一のインスタンス。真の代表値</p>
+</dd>
+<dt><a name="L000317" id="L000317"><code>false</code></a></dt>
+<dd>
+<p><a href="refm042.html">FalseClass</a>クラスの唯一のインスタンス。nilとfalseは偽を表します。</p>
+</dd>
+<dt><a name="L000318" id="L000318"><code>__FILE__</code></a></dt>
+<dd>
+<p>現在のソースファイル名
+<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></p>
+</dd>
+<dt><a name="L000319" id="L000319"><code>__LINE__</code></a></dt>
+<dd>
+<p>現在のソースファイル中の行番号</p>
+</dd>
+</dl>
+<p>疑似変数の値を変更することはできません。
+擬似変数へ代入すると文法エラーになります。</p>
+<h2><a name="L000320" id="L000320">定数</a></h2>
+<p>例:</p>
+<pre>FOOBAR</pre>
+<p>アルファベット大文字 (<code>[A-Z]</code>) で始まる識別子は定数です。
+定数の定義 (と初期化) は代入によって行われますが、メソッドの
+中では定義できません。一度定義された定数に再び代入を行おうと
+すると警告メッセージが出ます。定義されていない定数にアクセス
+すると例外 <a href="refm100.html">NameError</a> が発生します。</p>
+<p>定数はその定数が定義されたクラス/モジュール定義の中(メソッド
+本体やネストしたクラス/モジュール定義中を含みます)、クラスを
+継承しているクラス、モジュールをインクルードしているクラスま
+たはモジュールから参照することができます。クラス定義の外(トッ
+プレベル)で定義された定数は <a href="refm035.html">Object</a> に所属することになり
+ます。</p>
+<p>例:</p>
+<pre>class Foo
+  FOO = 'FOO'       # クラス Foo の定数 FOO を定義(Foo::FOO)
+end
+
+class Bar &lt; Foo
+  BAR = 'BAR'       # クラス Bar の定数 BAR を定義(Bar::BAR)
+
+  # 親クラスの定数は直接参照できる
+  p FOO             # =&gt; &quot;FOO&quot;
+  class Baz
+
+    # ネストしたクラスはクラスの継承関係上は無関係であるがネス
+    # トの外側の定数も直接参照できる
+    p BAR           # =&gt; &quot;BAR&quot;
+  end
+end</pre>
+<p>また<a href="refm028.html#L000411">クラス定義</a>式はクラスオブジェクトの生
+成を行うと同時に、名前がクラス名である定数にクラスオブジェクトを代入す
+る動作をします。クラス名を参照することは文法上は定数を参照していること
+になります。</p>
+<pre>class C
+end
+p C    # =&gt; C</pre>
+<p>あるクラスまたはモジュールで定義された定数を外部から参照する
+ためには`<code>::</code>'演算子を用います。また<code>Object</code>クラスで
+定義されている定数(トップレベルの定数と言う)を確実に参照する
+ためには左辺無しの`<code>::</code>'演算子が使えます。
+ただしこれらの `<code>::</code>' 演算子を用いて定数に代入すること
+はできません。</p>
+<p><a href="refm385.html">ruby 1.8 feature</a>: `<code>::</code>' 演算子を用いた定数への代入が可能に
+なりました。</p>
+<p>例:</p>
+<pre>module M
+  I = 35
+  class C
+  end
+end
+p M::I   #=&gt; 35
+p M::C   #=&gt; M::C
+p ::M    #=&gt; M
+
+M::NewConst = 777   # error--&gt; parse error</pre>
+<h3><a name="L000321" id="L000321">定数参照の優先順位</a></h3>
+<p>親クラスとネストの外側のクラスで同名の定数が定義されているとネストの外
+側の定数の方を先に参照します。つまり、定数参照時の定数の探索順序は、最
+初にネスト関係を外側に向かって探索し、次に継承関係を上位に向かって探索
+します。</p>
+<p>例:</p>
+<pre>class Foo
+  CONST = 'Foo'
+end
+
+class Bar
+  CONST = 'Bar'
+  class Baz &lt; Foo
+    p CONST             # =&gt; &quot;Bar&quot;      外側の定数
+    # この場合、親クラスの定数は明示的に指定しなければ見えない
+    p Foo::CONST        # =&gt; &quot;Foo&quot;
+  end
+end</pre>
+<p>トップレベルの定数定義はネストの外側とはみなされません。したがってトッ
+プレベルの定数は、継承関係を探索した結果で参照されるので優先順位は低い
+と言えます。</p>
+<p>例:</p>
+<pre>class Foo
+  CONST = 'Foo'
+end
+
+CONST = 'Object'
+
+class Bar &lt; Foo
+  p CONST               # =&gt; &quot;Foo&quot;
+end
+
+# 以下のように明示的にネストしていれば規則通り Object の定数
+# (ネストの外側)が先に探索される
+class Object
+  class Bar &lt; Foo
+    p CONST             # =&gt; &quot;Object&quot;
+  end
+end</pre>
+<p>上位のクラス(クラスの継承関係上、およびネストの関係上の上位クラス)の定
+数と同名の定数(下の例で CONST) に代入を行うと、上位の定数への代入では
+なく、そのクラスの定数の定義になります。</p>
+<p>例:</p>
+<pre>class Foo
+  CONST = 'Foo'
+end
+class Bar &lt; Foo
+  p CONST               # =&gt; &quot;Foo&quot;
+  CONST = 'Bar'         # Bar の定数 CONST を*定義*
+  p CONST               # =&gt; &quot;Bar&quot;  (Foo::CONST は隠蔽される)
+  p Foo::CONST          # =&gt; &quot;Foo&quot;  (:: 演算子で明示すれば見える)
+end</pre>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>  フルパスとは限らないため、フルパスが必要な場合は
+<code>File.expand_path(__FILE__)</code> とする必要があります。</small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm020.html">UP</a>][<a href="refm022.html">&lt;-PREV</a>][<a href="refm024.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

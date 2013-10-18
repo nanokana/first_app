@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ConditionVariable</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm301.html" rel="next" />
+<link href="refm299.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm299.html">UP</a>][<a href="refm299.html">&lt;-PREV</a>][<a href="refm301.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L005997" id="L005997">ConditionVariable</a></h1>
+<p>スレッドの同期機構の一つである状態変数を実現するクラスです。</p>
+<p>以下も ConditionVariable を理解するのに参考になります。</p>
+<p><a href="http://www.ruby-doc.org/docs/ProgrammingRuby/html/tut_threads.html#UF">&lt;URL:http://www.ruby-doc.org/docs/ProgrammingRuby/html/tut_threads.html#UF&gt;</a><sup class="outside"><small>[外部]</small></sup></p>
+<h2><a name="L005998" id="L005998">Condition Variable とは</a></h2>
+<p>あるスレッド A が排他領域で動いていたとします。スレッド A は現在空いていない
+リソースが必要になったので空くまで待つことにしたとします。これはうまくいきません。
+なぜなら、スレッド A は排他領域で動いているわけですから、他のスレッドは動くことが
+できません。リソースを空けることもできません。スレッド A がリソースの空きを
+待っていても、いつまでも空くことはありません。</p>
+<p>以上のような状況を解決するのが Condition Variable です。</p>
+<p>スレッド a で条件(リソースが空いているかなど)が満たされるまで wait メソッドで
+スレッドを止めます。他のスレッド b において条件が満たされたなら signal
+メソッドでスレッド a に対して条件が成立したことを通知します。これが典型^な
+使用例です。</p>
+<pre>mutex = Mutex.new
+cv = ConditionVariable.new
+
+a = Thread.start {
+    mutex.synchronize {
+      ...
+      while (条件が満たされない)
+        cv.wait(mutex)
+      end
+      ...
+    }
+}
+
+b = Thread.start {
+    mutex.synchronize {
+      # 上の条件を満たすための操作
+      cv.signal
+    }
+}</pre>
+<p>以下は <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/14445">ruby-list:14445</a><sup class="outside"><small>[外部]</small></sup> で紹介されている例です。<code>@q</code> が空になった場合、
+あるいは満たんになった場合に Condition Variable を使って wait しています。</p>
+<pre>require 'thread'
+
+class TinyQueue
+  def initialize(max=2)
+    @max = max
+    @full = ConditionVariable.new
+    @empty = ConditionVariable.new
+    @mutex = Mutex.new
+    @q = []
+  end
+
+  def count
+    @q.size
+  end
+
+  def enq(v)
+    @mutex.synchronize{
+      @full.wait(@mutex) if count == @max 
+      @q.push v
+      @empty.signal if count == 1 
+    }
+  end
+
+  def deq    
+    @mutex.synchronize{
+      @empty.wait(@mutex) if count == 0 
+      v = @q.shift
+      @full.signal if count == (@max - 1)
+      v
+    }
+  end
+
+  alias send enq
+  alias recv deq
+end
+
+if __FILE__ == $0
+  q = TinyQueue.new(1)
+  foods = 'Apple Banana Strawberry Udon Rice Milk'.split
+  l = []
+
+  th = Thread.new {
+    for obj in foods
+      q.send(obj) 
+      print &quot;sent &quot;, obj, &quot;\n&quot;
+    end
+    q.send nil
+  }
+
+  l.push th
+
+  th = Thread.new {
+    while obj = q.recv
+      print &quot;recv &quot;, obj, &quot;\n&quot;
+    end
+  }
+  l.push th
+
+  l.each do |t|
+    t.join
+  end
+end</pre>
+<p>実行すると以下のように出力します。</p>
+<pre>$ ruby condvar.rb
+sent Apple
+recv Apple
+sent Banana
+recv Banana
+sent Strawberry
+recv Strawberry
+sent Udon
+recv Udon
+sent Rice
+recv Rice
+sent Milk
+recv Milk</pre>
+<h2><a name="L005999" id="L005999">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm035.html">Object</a></li>
+</ul>
+<h2><a name="L006000" id="L006000">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L006001" id="L006001"><code>ConditionVariable.new</code></a></dt>
+<dd>
+<p>状態変数を生成して返します。</p></dd>
+</dl>
+<h2><a name="L006002" id="L006002">メソッド:</a></h2>
+<dl>
+<dt><a name="L006003" id="L006003"><code>broadcast</code></a></dt>
+<dd>
+<p>状態変数を待っているスレッドをすべて再開します。再開された
+スレッドは <a href="refm300.html">ConditionVariable#wait</a>
+で指定した mutex のロックを試みます。</p>
+<p>実行待ちしていたスレッドの配列を返します。</p></dd>
+<dt><a name="L006004" id="L006004"><code>signal</code></a></dt>
+<dd>
+<p>状態変数を待っているスレッドを1つ再開します。再開された
+スレッドは <a href="refm300.html">ConditionVariable#wait</a>
+で指定した mutex のロックを試みます。</p>
+<p>状態を待っているスレッドがあった場合は、そのスレッドを返します。
+そうでなければ <code>nil</code> を返します。</p></dd>
+<dt><a name="L006005" id="L006005"><code>wait(<var>mutex</var>)</code></a></dt>
+<dd>
+<p>mutex のロックを解放し、カレントスレッドを停止します。
+<a href="refm300.html">ConditionVariable#signal</a>または、
+<a href="refm300.html">ConditionVariable#broadcast</a>で送られたシグナルを
+受け取ると、mutexのロックを取得し、実行状態となります。</p>
+<p><code>self</code> を返します。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm299.html">UP</a>][<a href="refm299.html">&lt;-PREV</a>][<a href="refm301.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>profiler</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm342.html" rel="next" />
+<link href="refm340.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm340.html">&lt;-PREV</a>][<a href="refm342.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006555" id="L006555">profiler</a></h1>
+<p>Profiler__.start_profile 実行から、Profiler__.stop_profile までの
+区間の実行コードのプロファイルを取得する。</p>
+<p>現在、<a href="refm342.html">profile</a> は、profiler を利用して実装されている。</p>
+<pre>require 'profiler'
+
+Profiler__.start_profile
+
+require 'tk'
+
+Profiler__.print_profile(STDOUT)
+
+# =&gt;
+ %   cumulative   self              self     total
+time   seconds   seconds    calls  ms/call  ms/call  name
+51.64     1.10      1.10        3   366.67   776.67  Kernel.require
+17.37     1.47      0.37        1   370.00   370.00  TclTkIp#initialize
+ 8.92     1.66      0.19      514     0.37     0.37  Module#method_added
+ 6.57     1.80      0.14        1   140.00   140.00  Profiler__.start_profile
+ 4.23     1.89      0.09       15     6.00    10.67  Kernel.extend
+ 3.29     1.96      0.07       15     4.67     4.67  Module#extend_object
+ 3.29     2.03      0.07      133     0.53     0.53  Kernel.singleton_method_added
+ 2.82     2.09      0.06       28     2.14     2.86  Module#attr
+ 1.88     2.13      0.04       19     2.11     2.11  Module#private
+ 1.41     2.16      0.03       29     1.03     1.38  Module#include
+ 0.94     2.18      0.02       10     2.00     4.00  Module#module_function
+ 0.94     2.20      0.02        2    10.00    10.00  Array#collect
+   :
+   :
+&lt;snip&gt;</pre>
+<h2><a name="L006556" id="L006556">モジュール関数:</a></h2>
+<dl>
+<dt><a name="L006557" id="L006557"><code>Profiler__.start_profile</code></a></dt>
+<dd>
+<p>プロファイルの取得を開始する。</p></dd>
+<dt><a name="L006558" id="L006558"><code>Profiler__.stop_profile</code></a></dt>
+<dd>
+<p>プロファイルの取得を停止する。</p></dd>
+<dt><a name="L006559" id="L006559"><code>Profiler__.print_profile(<var>file</var>)</code></a></dt>
+<dd>
+<p>stop_profile を実行し、プロファイルの結果を <var>file</var> に出力する。
+<var>file</var>.<code>printf</code> が定義されている必要がある。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm340.html">&lt;-PREV</a>][<a href="refm342.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

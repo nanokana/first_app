@@ -1,0 +1,21 @@
+<div class="archive">
+  <h2>Archive</h2>
+  <% @all_entries.sort.reverse.each do |year_month, entries| %>
+    <h3>
+      <a href="<%= year_month %>.html">
+        <%= entries[0].date.year %>年<%= entries[0].date.month %>月
+      </a>
+    </h3>
+    <ul>
+      <% entries.each do |entry| %>
+        <li>
+          <a href="<%= year_month %>.html#<%= entry.date.day %>">
+            <%= entry.date %>
+          </a>
+          ……
+          <%= entry.head %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+</div>

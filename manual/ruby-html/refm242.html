@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>resolv</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm243.html" rel="next" />
+<link href="refm241.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm241.html">&lt;-PREV</a>][<a href="refm243.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L004814" id="L004814">Resolv</a></h1>
+<p>Rubyで書かれたリゾルバ(名前解決)ライブラリ。
+Rubyで書かれているためthread-awareであり、
+並列に多くのホスト名を解決することができます。</p>
+<p>DNSモジュールを使うことで、さまざまなリソースを直接ルックアップできます。</p>
+<p>なお、単にホスト名から IP アドレスを得たいだけであれば、
+<a href="refm159.html">socket</a> ライブラリの <a href="refm159.html#L003050">IPSocket.getaddress など</a> が使用できます。</p>
+<p><a href="refm002.html">執筆者募集</a></p>
+<h2><a name="L004815" id="L004815">例:</a></h2>
+<pre>Resolv.getaddress(&quot;www.ruby-lang.org&quot;)
+Resolv.getname(&quot;210.251.121.214&quot;).to_s
+Resolv::DNS.new.getresources(&quot;www.ruby-lang.org&quot;, Resolv::DNS::Resource::IN::A).collect {|r| r.address}
+Resolv::DNS.new.getresources(&quot;ruby-lang.org&quot;, Resolv::DNS::Resource::IN::MX).collect {|r| [r.exchange.to_s, r.preference]}</pre>
+<h2><a name="L004816" id="L004816">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L004817" id="L004817"><code>Resolv.getaddress(<var>name</var>)</code></a>
+<dt><a name="L004818" id="L004818"><code>Resolv.getaddresses(<var>name</var>)</code></a>
+<dt><a name="L004819" id="L004819"><code>Resolv.each_address(<var>name</var>) {|<var>address</var>| ...}</code></a></dt>
+<dd>
+<p>Stringのホスト名 <var>name</var> のIPアドレスをルックアップします</p>
+<p>getaddress はルックアップ結果の最初のアドレスを返します。
+getaddresses はルックアップ結果のアドレスリストを返します。
+each_address はルックアップ結果のアドレスに対するイテレータ</p>
+<p>例:</p>
+<pre>Resolv.getaddress(&quot;www.ruby-lang.org&quot;).to_s #=&gt; &quot;210.251.121.214&quot;</pre></dd>
+<dt><a name="L004820" id="L004820"><code>Resolv.getname(<var>address</var>)</code></a>
+<dt><a name="L004821" id="L004821"><code>Resolv.getnames(<var>address</var>)</code></a>
+<dt><a name="L004822" id="L004822"><code>Resolv.each_name(<var>address</var>) {|<var>name</var>| ...}</code></a></dt>
+<dd>
+<p>StringのIPアドレス <var>address</var> のホスト名をルックアップします。</p>
+<p>getname はルックアップ結果の最初のホスト名を返します。
+getnames はルックアップ結果のホスト名リストを返します。
+each_names はルックアップ結果のアドレスに対するイテレータ</p>
+<p>例:</p>
+<pre>Resolv.getname(&quot;210.251.121.214&quot;).to_s #=&gt; &quot;helium.ruby-lang.org&quot;</pre></dd>
+</dl>
+<h2><a name="L004823" id="L004823">Resolv::Hosts</a></h2>
+<p>/etc/hosts を使用するホスト名リゾルバです。</p>
+<h3><a name="L004816" id="L004816">クラスメソッド:</a></h3>
+<dl>
+<dt><a name="L004824" id="L004824"><code>Resolv::Hosts.new(<var>hosts</var>='/<var>etc</var>/<var>hosts</var>')</code></a>
+</dl>
+<h3><a name="L004825" id="L004825">メソッド:</a></h3>
+<dl>
+<dt><a name="L004826" id="L004826"><code>Resolv::Hosts#getaddress(<var>name</var>)</code></a>
+<dt><a name="L004827" id="L004827"><code>Resolv::Hosts#getaddresses(<var>name</var>)</code></a>
+<dt><a name="L004828" id="L004828"><code>Resolv::Hosts#each_address(<var>name</var>) {|<var>address</var>| ...}</code></a></dt>
+<dd>
+<p>address lookup methods.</p></dd>
+<dt><a name="L004829" id="L004829"><code>Resolv::Hosts#getname(<var>address</var>)</code></a>
+<dt><a name="L004830" id="L004830"><code>Resolv::Hosts#getnames(<var>address</var>)</code></a>
+<dt><a name="L004831" id="L004831"><code>Resolv::Hosts#each_name(<var>address</var>) {|<var>name</var>| ...}</code></a></dt>
+<dd>
+<p>hostnames lookup methods.</p></dd>
+</dl>
+<h2><a name="L004832" id="L004832">Resolv::DNS</a></h2>
+<p>DNS stub resolver.</p>
+<h3><a name="L004816" id="L004816">クラスメソッド:</a></h3>
+<dl>
+<dt><a name="L004833" id="L004833"><code>Resolv::DNS.new(<var>resolv_conf</var>='/<var>etc</var>/<var>resolv</var>.<var>conf</var>')</code></a>
+</dl>
+<h3><a name="L004825" id="L004825">メソッド:</a></h3>
+<dl>
+<dt><a name="L004834" id="L004834"><code>Resolv::DNS#getaddress(<var>name</var>)</code></a>
+<dt><a name="L004835" id="L004835"><code>Resolv::DNS#getaddresses(<var>name</var>)</code></a>
+<dt><a name="L004836" id="L004836"><code>Resolv::DNS#each_address(<var>name</var>) {|<var>address</var>| ...}</code></a></dt>
+<dd>
+<p>address lookup methods.</p>
+<p><var>name</var> は Resolv::Name または String でなければなりません。
+ルックアップ結果は Resolv::IPv4 または Resolv::IPv6 のインスタンスとなります。</p></dd>
+<dt><a name="L004837" id="L004837"><code>Resolv::DNS#getname(<var>address</var>)</code></a>
+<dt><a name="L004838" id="L004838"><code>Resolv::DNS#getnames(<var>address</var>)</code></a>
+<dt><a name="L004839" id="L004839"><code>Resolv::DNS#each_name(<var>address</var>) {|<var>name</var>| ...}</code></a></dt>
+<dd>
+<p>hostnames lookup methods.</p>
+<p><var>address</var> は Resolv::IPv4, Resolv::IPv6, String のいずれかでなければなりません。
+ルックアップ結果は Resolv::Name のインスタンスとなります。</p></dd>
+<dt><a name="L004840" id="L004840"><code>Resolv::DNS#getresource(<var>name</var>, <var>typeclass</var>)</code></a>
+<dt><a name="L004841" id="L004841"><code>Resolv::DNS#getresources(<var>name</var>, <var>typeclass</var>)</code></a>
+<dt><a name="L004842" id="L004842"><code>Resolv::DNS#each_resource(<var>name</var>, <var>typeclass</var>) {|<var>resource</var>| ...}</code></a></dt>
+<dd>
+<p>They lookup DNS resources of <var>name</var>.
+<var>name</var> は Resolv::Name または String でなければなりません。</p>
+<p><var>typeclass</var> は以下のいずれかです。</p>
+<ul>
+<li>Resolv::DNS::Resource::IN::ANY</li>
+<li>Resolv::DNS::Resource::IN::NS</li>
+<li>Resolv::DNS::Resource::IN::CNAME</li>
+<li>Resolv::DNS::Resource::IN::SOA</li>
+<li>Resolv::DNS::Resource::IN::HINFO</li>
+<li>Resolv::DNS::Resource::IN::MINFO</li>
+<li>Resolv::DNS::Resource::IN::MX</li>
+<li>Resolv::DNS::Resource::IN::TXT</li>
+<li>Resolv::DNS::Resource::IN::ANY</li>
+<li>Resolv::DNS::Resource::IN::A</li>
+<li>Resolv::DNS::Resource::IN::WKS</li>
+<li>Resolv::DNS::Resource::IN::PTR</li>
+<li>Resolv::DNS::Resource::IN::AAAA</li>
+</ul>
+<p>ルックアップ結果は Resolv::DNS::Resource （のサブクラス）のインスタンスとなります。</p></dd>
+</dl>
+<h2><a name="L004843" id="L004843">Resolv::DNS::Resource::IN::NS</a></h2>
+<dl>
+<dt><a name="L004844" id="L004844"><code>name</code></a>
+</dl>
+<h2><a name="L004845" id="L004845">Resolv::DNS::Resource::IN::CNAME</a></h2>
+<dl>
+<dt><a name="L004844" id="L004844"><code>name</code></a>
+</dl>
+<h2><a name="L004846" id="L004846">Resolv::DNS::Resource::IN::SOA</a></h2>
+<dl>
+<dt><a name="L004847" id="L004847"><code>mname</code></a>
+<dt><a name="L004848" id="L004848"><code>rname</code></a>
+<dt><a name="L004849" id="L004849"><code>serial</code></a>
+<dt><a name="L004850" id="L004850"><code>refresh</code></a>
+<dt><a name="L004851" id="L004851"><code>retry</code></a>
+<dt><a name="L004852" id="L004852"><code>expire</code></a>
+<dt><a name="L004853" id="L004853"><code>minimum</code></a>
+</dl>
+<h2><a name="L004854" id="L004854">Resolv::DNS::Resource::IN::HINFO</a></h2>
+<dl>
+<dt><a name="L004855" id="L004855"><code>cpu</code></a>
+<dt><a name="L004856" id="L004856"><code>os</code></a>
+</dl>
+<h2><a name="L004857" id="L004857">Resolv::DNS::Resource::IN::MINFO</a></h2>
+<dl>
+<dt><a name="L004858" id="L004858"><code>rmailbx</code></a>
+<dt><a name="L004859" id="L004859"><code>emailbx</code></a>
+</dl>
+<h2><a name="L004860" id="L004860">Resolv::DNS::Resource::IN::MX</a></h2>
+<dl>
+<dt><a name="L004861" id="L004861"><code>preference</code></a>
+<dt><a name="L004862" id="L004862"><code>exchange</code></a>
+</dl>
+<h2><a name="L004863" id="L004863">Resolv::DNS::Resource::IN::TXT</a></h2>
+<dl>
+<dt><a name="L004864" id="L004864"><code>data</code></a>
+</dl>
+<h2><a name="L004865" id="L004865">Resolv::DNS::Resource::IN::A</a></h2>
+<dl>
+<dt><a name="L004866" id="L004866"><code>address</code></a>
+</dl>
+<h2><a name="L004867" id="L004867">Resolv::DNS::Resource::IN::WKS</a></h2>
+<dl>
+<dt><a name="L004866" id="L004866"><code>address</code></a>
+<dt><a name="L004868" id="L004868"><code>protocol</code></a>
+<dt><a name="L004869" id="L004869"><code>bitmap</code></a>
+</dl>
+<h2><a name="L004870" id="L004870">Resolv::DNS::Resource::IN::PTR</a></h2>
+<dl>
+<dt><a name="L004844" id="L004844"><code>name</code></a>
+</dl>
+<h2><a name="L004871" id="L004871">Resolv::DNS::Resource::IN::AAAA</a></h2>
+<dl>
+<dt><a name="L004866" id="L004866"><code>address</code></a>
+</dl>
+<h2><a name="L004872" id="L004872">Resolv::DNS::Name</a></h2>
+<h3><a name="L004816" id="L004816">クラスメソッド:</a></h3>
+<dl>
+<dt><a name="L004873" id="L004873"><code>Resolv::DNS::Name.create(<var>name</var>)</code></a>
+</dl>
+<h3><a name="L004825" id="L004825">メソッド:</a></h3>
+<dl>
+<dt><a name="L004874" id="L004874"><code>Resolv::DNS::Name#to_s</code></a>
+</dl>
+<h2><a name="L004875" id="L004875">Resolv::DNS::Resource</a></h2>
+<h2><a name="L004876" id="L004876">Resolv::IPv4</a></h2>
+<h3><a name="L004816" id="L004816">クラスメソッド:</a></h3>
+<dl>
+<dt><a name="L004877" id="L004877"><code>Resolv::IPv4.create(<var>address</var>)</code></a>
+</dl>
+<h3><a name="L004825" id="L004825">メソッド:</a></h3>
+<dl>
+<dt><a name="L004878" id="L004878"><code>Resolv::IPv4#to_s</code></a>
+<dt><a name="L004879" id="L004879"><code>Resolv::IPv4#to_name</code></a>
+</dl>
+<h3><a name="L004880" id="L004880">定数:</a></h3>
+<dl>
+<dt><a name="L004881" id="L004881"><code>Resolv::IPv4::Regex</code></a></dt>
+<dd>
+<p>IPv4のアドレスの正規表現。</p></dd>
+</dl>
+<h2><a name="L004882" id="L004882">Resolv::IPv6</a></h2>
+<h3><a name="L004816" id="L004816">クラスメソッド:</a></h3>
+<dl>
+<dt><a name="L004883" id="L004883"><code>Resolv::IPv6.create(<var>address</var>)</code></a>
+</dl>
+<h3><a name="L004825" id="L004825">メソッド:</a></h3>
+<dl>
+<dt><a name="L004884" id="L004884"><code>Resolv::IPv6#to_s</code></a>
+<dt><a name="L004885" id="L004885"><code>Resolv::IPv6#to_name</code></a>
+</dl>
+<h3><a name="L004880" id="L004880">定数:</a></h3>
+<dl>
+<dt><a name="L004886" id="L004886"><code>Resolv::IPv6::Regex</code></a></dt>
+<dd>
+<p>IPv6のアドレスの正規表現。</p></dd>
+</dl>
+<h2><a name="L004887" id="L004887">Bugs</a></h2>
+<p>NISはサポートされていません。</p>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm241.html">&lt;-PREV</a>][<a href="refm243.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

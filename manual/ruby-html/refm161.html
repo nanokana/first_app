@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>IPSocket</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm162.html" rel="next" />
+<link href="refm160.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm160.html">UP</a>][<a href="refm160.html">&lt;-PREV</a>][<a href="refm162.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L003069" id="L003069">IPSocket</a></h1>
+<p>インターネットドメインソケットの抽象クラス。
+通常の<a href="refm045.html">IO</a>クラスのサブクラスと同様の入出力ができます。</p>
+<h2><a name="L003070" id="L003070">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm160.html">BasicSocket</a></li>
+</ul>
+<h2><a name="L003071" id="L003071">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L003072" id="L003072"><code>IPSocket.getaddress(<var>host</var>)</code></a></dt>
+<dd>
+<p>ホスト名からホストのアドレスを返します。ホストのアドレスは文
+字列はdotted quadの文字列(例:127.0.0.1)です。</p>
+<pre>p IPSocket.getaddress(&quot;www.ruby-lang.org&quot;)        #=&gt; &quot;210.163.138.100&quot;</pre></dd>
+</dl>
+<h2><a name="L003073" id="L003073">メソッド:</a></h2>
+<dl>
+<dt><a name="L003074" id="L003074"><code>addr</code></a></dt>
+<dd>
+<p>ソケットの接続情報を表す配列を返します。配列の各要素は第1要
+素が文字列 &quot;AF_INET&quot;, &quot;AF_INET6&quot; など、第2要素がport番号、第3要素がホストを表
+す文字列、第4要素がホストのIPアドレスを表す文字列 (dotted quad) です。
+<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></p>
+<pre>serv = TCPServer.new(&quot;localhost&quot;, 0)
+p serv.addr         #=&gt; [&quot;AF_INET&quot;, 46102, &quot;localhost.localdomain&quot;, &quot;127.0.0.1&quot;]
+c = TCPSocket.new(*serv.addr.values_at(3,1))
+s = serv.accept</pre></dd>
+<dt><a name="L003075" id="L003075"><code>peeraddr</code></a></dt>
+<dd>
+<p>接続相手先ソケットの情報を表す配列を返します。配列の各要素は
+<a href="#L003074">IPSocket#addr</a>メソッドが返す配列
+と同じです。</p>
+<pre>TCPSocket.open(&quot;localhost&quot;, &quot;http&quot;) {|s|
+  p s.peeraddr    #=&gt; [&quot;AF_INET&quot;, 80, &quot;localhost.localdomain&quot;, &quot;127.0.0.1&quot;]
+  p s.addr        #=&gt; [&quot;AF_INET&quot;, 52615, &quot;localhost.localdomain&quot;, &quot;127.0.0.1&quot;]
+}</pre></dd>
+<dt><a name="L003076" id="L003076"><code>recvfrom(<var>maxlen</var>[, <var>flags</var>])</code></a></dt>
+<dd>
+<p><code>recv</code>と同様にソケットからデータを受け取りますが、
+戻り値は文字列と相手ソケットのアドレス(形式は
+<a href="#L003074">IPSocket#addr</a>参照)のペアです。引数につ
+いては<a href="refm160.html#L003063">BasicSocket#recv</a>と同様です。</p>
+<pre>s1 = UDPSocket.new
+s1.bind(&quot;0.0.0.0&quot;, 0) # 適当に空いている port を割り当てる
+s2 = UDPSocket.new
+s2.send(&quot;foo&quot;, 0, s1.getsockname)
+mesg, inet_addr = s1.recvfrom(100)
+p mesg            #=&gt; &quot;foo&quot;
+p inet_addr       #=&gt; [&quot;AF_INET&quot;, 32876, &quot;localhost.localdomain&quot;, &quot;127.0.0.1&quot;]</pre></dd>
+</dl>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>接続先の情報はaddrではなくpeeraddrです。注意。<a href="refm446.html">trap::Socket</a></small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm160.html">UP</a>][<a href="refm160.html">&lt;-PREV</a>][<a href="refm162.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

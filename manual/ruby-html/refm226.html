@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>OpenSSL::SSL</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm227.html" rel="next" />
+<link href="refm225.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm213.html">UP</a>][<a href="refm225.html">&lt;-PREV</a>][<a href="refm227.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L004449" id="L004449">OpenSSL::SSL</a></h1>
+<ul>
+<li><a href="refm229.html">OpenSSL::SSL::SSLContext</a></li>
+<li><a href="refm228.html">OpenSSL::SSL::SSLServer</a></li>
+<li><a href="refm227.html">OpenSSL::SSL::SSLSocket</a></li>
+</ul>
+<h2><a name="L004450" id="L004450">定数</a></h2>
+<p><a href="refm229.html#L004552">OpenSSL::SSL::SSLContext#options=</a> に指定できるもの。</p>
+<dl>
+<dt><a name="L004451" id="L004451"><code>OP_ALL</code></a>
+<dt><a name="L004452" id="L004452"><code>OP_EPHEMERAL_RSA</code></a>
+<dt><a name="L004453" id="L004453"><code>OP_NETSCAPE_CA_DN_BUG</code></a>
+<dt><a name="L004454" id="L004454"><code>OP_NETSCAPE_DEMO_CIPHER_CHANGE_BUG</code></a>
+<dt><a name="L004455" id="L004455"><code>OP_NO_SSLv2</code></a>
+<dt><a name="L004456" id="L004456"><code>OP_NO_SSLv3</code></a>
+<dt><a name="L004457" id="L004457"><code>OP_NO_TLSv1</code></a>
+<dt><a name="L004458" id="L004458"><code>OP_PKCS1_CHECK_1</code></a>
+<dt><a name="L004459" id="L004459"><code>OP_PKCS1_CHECK_2</code></a>
+<dt><a name="L004460" id="L004460"><code>OP_SINGLE_DH_USE</code></a>
+<dt><a name="L004461" id="L004461"><code>OP_TLS_ROLLBACK_BUG</code></a>
+</dl>
+<p><a href="refm229.html#L004560">OpenSSL::SSL::SSLContext#verify_mode=</a> に指定できるもの。サーバーモードであるかクライアントモードであるかによって意味がことなる。</p>
+<dl>
+<dt><a name="L004462" id="L004462"><code>VERIFY_CLIENT_ONCE</code></a></dt>
+<dd>
+<p>サーバーモード: 最初の TLS/SSL ハンドシェイクの時だけクライアントに証明書を要求する。このフラグは VERIFY_PEER フラグとともに使われなければいけない。</p>
+<p>クライアントモード: 無視される。</p></dd>
+<dt><a name="L004463" id="L004463"><code>VERIFY_FAIL_IF_NO_PEER_CERT</code></a></dt>
+<dd>
+<p>サーバーモード: クライアントが証明書を返さない場合に TLS/SSL ハンドシェイクを即座に終了させる。このフラグは VERIFY_PEER フラグとともに使われなければいけない。</p>
+<p>クライアントモード: 無視される。</p></dd>
+<dt><a name="L004464" id="L004464"><code>VERIFY_NONE</code></a></dt>
+<dd>
+<p>サーバーモード: クライアントに証明書を要求しない。</p>
+<p>クライアントモード: anonymous cipher を用いない場合にサーバーは証明書を送ってくる。TLS/SSL ハンドシェイクの結果は SSL_get_verify_result を使ってチェックできる。証明書の検証の結果によらずハンドシェイクは継続する。</p></dd>
+<dt><a name="L004465" id="L004465"><code>VERIFY_PEER</code></a></dt>
+<dd>
+<p>サーバーモード: サーバーはクライアントに証明書を要求する。送られてきた証明書は検証される。検証が失敗した場合、TLS/SSL ハンドシェイクを即座に終了させる。</p>
+<p>クライアントモード: サーバーの証明書を検証する。検証が失敗した場合、TLS/SSL ハンドシェイクを即座に終了させる。サーバーが証明書を返さずに、anonymous cipher を用いる場合、VERIFY_PEER は無視される。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm213.html">UP</a>][<a href="refm225.html">&lt;-PREV</a>][<a href="refm227.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>trap::timeout</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm446.html" rel="next" />
+<link href="refm444.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm421.html">UP</a>][<a href="refm444.html">&lt;-PREV</a>][<a href="refm446.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L009502" id="L009502">timeout</a></h1>
+<ul>
+<li><p>gethostbyname で timeout できない</p>
+<p>timeout は Thread で実現されているため、C レベルで停止してしまう
+(Threadの切替えが発生しない)処理に対しては効果がありません。</p>
+<p>以下の例では、gethostbyname(およそ0.6秒処理に時間がかかっている) が終了し
+た直後((A)の箇所)で TimeoutError 例外があがっています。</p>
+<pre>require 'timeout'
+require 'socket'
+
+start = Time.now
+begin
+  timeout(0.1) {
+    p TCPSocket.gethostbyname(&quot;www.ruby-lang.org&quot;)
+    # (A)
+  }
+ensure
+  p Time.now - start
+end
+
+=&gt; [&quot;helium.ruby-lang.org&quot;, [], 2, &quot;210.251.121.214&quot;]
+   0.689331
+   /usr/local/lib/ruby/1.6/timeout.rb:37: execution expired (TimeoutError)
+          from -:6:in `timeout'
+          from -:6</pre>
+<p>Rubyで書かれたリゾルバを利用するという回避策があります。
+<code>require &quot;resolv-replace&quot;</code> すると、<code>resolv</code> で定義された、
+リゾルバが利用されるようになります。</p></li>
+<li><p>Windows版 Ruby で timeout できない</p>
+<p>Win32版 ruby (<a href="refm463.html">Cygwin</a>、<a href="refm459.html">MinGW</a>、<a href="refm458.html">mswin32</a>,
+<a href="refm461.html">bccwin32</a>)では、以下の場合も Thread の切替えが起こらないために 
+timeout できません。</p>
+<pre># Win32ネイティブ版(mingw, mswin32, bccwin32)
+
+require 'timeout'
+
+begin
+  timeout(5) do
+    $stdin.gets
+  end
+rescue TimeoutError
+  print &quot;timeout\n&quot;
+end
+
+# Cygwin版
+
+i = 0
+begin
+  timeout(5) do
+    while true
+        puts (i+=1)
+    end
+  end
+rescue TimeoutError
+  print &quot;timeout\n&quot;
+end</pre>
+<p><a href="refm456.html">Win32ネイティブ版</a>では、$stdin.gets が、<a href="refm463.html">Cygwin</a>版 では、
+puts が Thread の切替えを発生させないようです。<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></p></li>
+</ul>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>正確には cygwinで
+は <a href="refm535.html">setitimer(2)</a> にバグがある(らしい)ため 
+Thread が切り替わらないようです。Cygwin版 ruby version 1.6.8 と 
+1.7.3 の最新では setitimer(2) を使わないようにすることでこの不具合が
+修正されました<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/36058">ruby-list:36058</a><sup class="outside"><small>[外部]</small></sup>, <a href="refm383.html">ruby 1.6 feature</a></small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm421.html">UP</a>][<a href="refm444.html">&lt;-PREV</a>][<a href="refm446.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

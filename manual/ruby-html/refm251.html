@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>open3</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm252.html" rel="next" />
+<link href="refm250.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm250.html">&lt;-PREV</a>][<a href="refm252.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L005021" id="L005021">Open3</a></h1>
+<p>プログラムを実行し、そのプロセスの標準入力・標準出力・
+標準エラー出力にパイプをつなぎます。</p>
+<p>※プロセス作成に fork を利用している為、Windows環境では使用出来ません。代替として
+'<a href="http://rubyforge.org/frs/?group_id=85">win32-open3</a><sup class="outside"><small>[外部]</small></sup>' が利用出来ます。</p>
+<h2><a name="L005022" id="L005022">使用例</a></h2>
+<p>nroff を実行してその標準入力に man ページを送り込み処理させる。
+nroff プロセスの標準出力から処理結果を受け取る。</p>
+<pre>require &quot;open3&quot; 
+
+stdin, stdout, stderr = *Open3.popen3('nroff -man')
+# こちらから書く
+Thread.fork {
+  File.foreach('/usr/man/man1/ruby.1') do |line|
+    stdin.print line
+  end
+  stdin.close    # または close_write
+}
+# こちらから読む
+stdout.each do |line|
+  print line
+end</pre>
+<h2><a name="L005023" id="L005023">モジュール関数</a></h2>
+<dl>
+<dt><a name="L005024" id="L005024"><code>Open3.popen3(<var>cmd</var>)</code></a></dt>
+<dd>
+<p>外部プログラム <var>cmd</var> を実行し、そのプロセスの標準入力、
+標準出力、標準エラー出力に接続されたパイプを 3 要素の配列で返す。
+<var>cmd</var> は <a href="refm029.html">exec</a>と同じ規則で解釈される。</p>
+<pre>stdin, stdout, stderr = *Open3.popen3(&quot;/usr/bin/nroff -man&quot;)</pre>
+<p>ブロックを指定するとパイプの配列を引数にブロックを実行し、最後に
+パイプを close する。この場合はブロックの最後の式の結果を返す。</p>
+<pre>require 'open3'
+
+Open3.popen3(&quot;read stdin; echo stdout; echo stderr &gt;&amp;2&quot;) {|stdin, stdout, stderr|
+  stdin.puts &quot;stdin&quot;
+  stdin.close     # または close_write
+  p stdout.read
+  p stderr.read
+}
+#=&gt; &quot;stdout\n&quot;
+    &quot;stderr\n&quot;</pre>
+<p>stdin への入力が終わったらできる限り早く close か close_write
+で閉じるべきです。</p>
+<p>[UNIX系OS固有の注意] Open3 で作成した子プロセスは
+wait(2) しなくてもゾンビになりません。</p>
+<p>コマンドは実際には孫プロセスとして動作するため、<a href="refm030.html#L000522">$?</a> でコマンドの終了ステータスを得ることはできません。<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></p></dd>
+</dl>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small> 終了ステータスがほしいひとは、<a href="http://popen4.rubyforge.org/">POpen4</a><sup class="outside"><small>[外部]</small></sup> を試してみるといいかもしれません。</small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm250.html">&lt;-PREV</a>][<a href="refm252.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

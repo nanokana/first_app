@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ruby-src:ext/etc/etc.txt.ja</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm517.html" rel="next" />
+<link href="refm515.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm515.html">&lt;-PREV</a>][<a href="refm517.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1>ruby-src:ext/etc/etc.txt.ja</h1>
+.\&quot;&nbsp;etc.txt.ja&nbsp;-&nbsp;&nbsp;-*-&nbsp;Indented-Text&nbsp;-*-&nbsp;created&nbsp;at:&nbsp;Fri&nbsp;Jul&nbsp;14&nbsp;00:47:15&nbsp;JST&nbsp;1995<br />
+<br />
+**&nbsp;Etc(モジュール)<br />
+<br />
+/etcディレクトリ以下の情報を得るためのモジュール．クラスにインクルード<br />
+して使うこともできる．<br />
+<br />
+Module&nbsp;Function:<br />
+<br />
+&nbsp;&nbsp;&nbsp;getlogin<br />
+<br />
+&nbsp;&nbsp;自分のlogin名を返す．これが失敗した場合はgetpwuid()を用いると<br />
+&nbsp;&nbsp;良い．<br />
+<br />
+&nbsp;&nbsp;&nbsp;getpwnam(name)<br />
+<br />
+&nbsp;&nbsp;/etc/passwdファイル(あるいはDBMファイルやNISデータベース)を検<br />
+&nbsp;&nbsp;索し，nameの名前を持つpasswdエントリを返す．戻り値はpasswd構造<br />
+&nbsp;&nbsp;体で以下のメンバを持つ．<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;struct&nbsp;passwd<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name&nbsp;&nbsp;#&nbsp;ユーザ名(文字列)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;passwd&nbsp;#&nbsp;パスワード(文字列)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;uid&nbsp;&nbsp;#&nbsp;ユーザID(整数)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gid&nbsp;&nbsp;#&nbsp;グループID(整数)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gecos&nbsp;#&nbsp;gecosフィールド(文字列)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dir&nbsp;&nbsp;#&nbsp;ホームディレクトリ(文字列)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;shell&nbsp;#&nbsp;ログインシェル(文字列)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;以降のメンバはシステムによっては提供されない．<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;change&nbsp;#&nbsp;パスワード変更時間(整数)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;quota&nbsp;#&nbsp;クォータ(整数)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;age&nbsp;&nbsp;#&nbsp;エージ(整数)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;class&nbsp;#&nbsp;ユーザアクセスクラス(文字列)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;comment&nbsp;#&nbsp;コメント(文字列)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;expire&nbsp;#&nbsp;アカウント有効期限(整数)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;end<br />
+<br />
+&nbsp;&nbsp;詳細はgetpwnam(3)を参照のこと．<br />
+<br />
+&nbsp;&nbsp;&nbsp;getpwuid([uid])<br />
+<br />
+&nbsp;&nbsp;uidをユーザIDとするpasswdエントリを返す．戻り値はgetpwnam()と<br />
+&nbsp;&nbsp;同様である．引数を省略した場合にはgetuid()の値を用いる．詳細は<br />
+&nbsp;&nbsp;getpwuid(3)を参照のこと．<br />
+<br />
+&nbsp;&nbsp;&nbsp;getgrgid(gid)<br />
+<br />
+&nbsp;&nbsp;/etc/groupファイル(あるいは…getpwnam参照)を検索し，gidをグルー<br />
+&nbsp;&nbsp;プIDとするグループエントリを返す．戻り値はgroup構造体で以下の<br />
+&nbsp;&nbsp;メンバを持つ．<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;struct&nbsp;group<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name&nbsp;&nbsp;#&nbsp;グループ名(文字列)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;passwd&nbsp;#&nbsp;グループのパスワード(文字列)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gid&nbsp;&nbsp;#&nbsp;グループID(整数)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mem&nbsp;&nbsp;#&nbsp;グループメンバ名の配列<br />
+&nbsp;&nbsp;&nbsp;&nbsp;end<br />
+<br />
+&nbsp;&nbsp;詳細はgetgrgid(3)を参照のこと．<br />
+<br />
+&nbsp;&nbsp;&nbsp;getgrnam(name)<br />
+<br />
+&nbsp;&nbsp;nameという名前のグループエントリを返す．戻り値はgetgrgid()と同<br />
+&nbsp;&nbsp;様である．詳細はgetgrnam(3)を参照．<br />
+<br />
+&nbsp;&nbsp;&nbsp;group<br />
+<br />
+&nbsp;&nbsp;全てのグループエントリを順にアクセスするためのイテレータ．<br />
+<br />
+&nbsp;&nbsp;&nbsp;passwd<br />
+<br />
+&nbsp;&nbsp;全てのpasswdエントリを順にアクセスするためのイテレータ．<br />
+
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm515.html">&lt;-PREV</a>][<a href="refm517.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

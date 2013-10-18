@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>readbytes</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm253.html" rel="next" />
+<link href="refm251.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm251.html">&lt;-PREV</a>][<a href="refm253.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L005026" id="L005026">readbytes</a></h1>
+<h2><a name="L005027" id="L005027">メソッド:</a></h2>
+<dl>
+<dt><a name="L005028" id="L005028"><code>IO#readbytes(<var>size</var>)</code></a></dt>
+<dd>
+<p><a href="refm045.html#L000992">IO#read</a>と同様に<var>size</var>バイト読み込みますが、
+EOFに到達した時に例外 <a href="refm098.html">EOFError</a> を発生させます。
+<var>size</var>バイト未満しか読み込めなかった時には
+例外 <a href="#L005029">TruncatedDataError</a> を発生させます。</p></dd>
+</dl>
+<h2><a name="L005029" id="L005029">TruncatedDataError</a></h2>
+<p>IO#readbytes が発生させる例外</p>
+<h3><a name="L005030" id="L005030">スーパークラス:</a></h3>
+<ul>
+<li><a href="refm097.html">IOError</a></li>
+</ul>
+<h3><a name="L005027" id="L005027">メソッド:</a></h3>
+<dl>
+<dt><a name="L005031" id="L005031"><code>TruncatedDataError#data</code></a></dt>
+<dd>
+<p>例外が発生するまでに読み込んだデータを文字列で返します。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm251.html">&lt;-PREV</a>][<a href="refm253.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ruby-src:doc/forwardable.rd.ja</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm512.html" rel="next" />
+<link href="refm510.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm510.html">&lt;-PREV</a>][<a href="refm512.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L011381" id="L011381">Forwardable</a></h1>
+<p>クラスに対しメソッドの委譲機能を定義します.</p>
+<h2><a name="L011382" id="L011382">使い方</a></h2>
+<p>クラスに対してextendして使います. </p>
+<pre>class Foo
+  extend Forwardable
+
+  def_delegators(&quot;@out&quot;, &quot;printf&quot;, &quot;print&quot;)
+  def_delegators(:@in, :gets)
+  def_delegator(:@contents, :[], &quot;content_at&quot;)
+end
+f = Foo.new
+f.printf ...
+f.gets
+f.content_at(1)</pre>
+<h2><a name="L011383" id="L011383">メソッド</a></h2>
+<dl>
+<dt><a name="L011384" id="L011384"><code>Forwardable#def_instance_delegators(<var>accessor</var>, *<var>methods</var>)</code></a></dt>
+<dd>
+<p><var>methods</var>で渡されたメソッドのリストを<var>accessorに</var>委譲する
+ようにします.</p></dd>
+<dt><a name="L011385" id="L011385"><code>Forwardable#def_instance_delegator(<var>accessor</var>, <var>method</var>, <var>ali</var> = <var>method</var>)</code></a></dt>
+<dd>
+<p><var>|method</var>で渡されたメソッドを<var>accessor</var>に委譲するようにし
+ます. <var>ali</var>が引数として渡されたときは, メソッド<var>ali</var>が呼ば
+れたときには, <var>accessor</var>に対し<var>method</var>を呼び出します.</p></dd>
+<dt><a name="L011386" id="L011386"><code>Forwardable#def_delegators(<var>accessor</var>, *<var>methods</var>)</code></a></dt>
+<dd>
+<p><var>Forwardable#def_instance_delegators</var>の別名です.</p></dd>
+<dt><a name="L011387" id="L011387"><code>Forwardable#def_delegator(<var>accessor</var>, <var>method</var>, <var>ali</var> = <var>method</var>)</code></a></dt>
+<dd>
+<p><var>Forwardable#def_instance_delegator</var>の別名です.</p></dd>
+</dl>
+<h1><a name="L011388" id="L011388">SingleForwardable</a></h1>
+<p>オブジェクトに対し, メソッドの委譲機能を定義します.</p>
+<h2><a name="L011382" id="L011382">使い方</a></h2>
+<p>オブジェクトに対して<var>extend</var>して使います. </p>
+<pre>g = Goo.new
+g.extend SingleForwardable
+g.def_delegator(&quot;@out&quot;, :puts)
+g.puts ...</pre>
+<h2><a name="L011383" id="L011383">メソッド</a></h2>
+<dl>
+<dt><a name="L011389" id="L011389"><code>SingleForwardable#def_singleton_delegators(<var>accessor</var>, *<var>methods</var>)</code></a></dt>
+<dd>
+<p><var>methods</var>で渡されたメソッドのリストを<var>accessor</var>に委譲する
+ようにします.</p></dd>
+<dt><a name="L011390" id="L011390"><code>SingleForwardable#def_singleton_delegator(<var>accessor</var>, <var>method</var>, <var>ali</var> = <var>method</var>)</code></a></dt>
+<dd>
+<p><var>method</var>で渡されたメソッドを<var>accessor</var>に委譲するようにしま
+す. <var>ali</var>が引数として渡されたときは, メソッド<var>ali</var>が呼ばれ
+たときには, <var>accessor</var>に対し<var>method</var>を呼び出します.</p></dd>
+<dt><a name="L011391" id="L011391"><code>SingleForwardable#def_delegators(<var>accessor</var>, *<var>methods</var>)</code></a></dt>
+<dd>
+<p><var>SingleForwardable#def_singleton_delegators</var>の別名です.</p></dd>
+<dt><a name="L011392" id="L011392"><code>SingleForwardable#def_delegator(<var>accessor</var>, <var>method</var>, <var>ali</var> = <var>method</var>)</code></a></dt>
+<dd>
+<p><var>SingleForwardable#def_singleton_delegator</var>の別名です.</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm510.html">&lt;-PREV</a>][<a href="refm512.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

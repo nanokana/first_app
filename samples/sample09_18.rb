@@ -1,0 +1,1 @@
+p "ABCDEFG".downcase    #=> "abcdefg"

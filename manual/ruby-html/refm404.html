@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>FAQ::拡張ライブラリ</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm405.html" rel="next" />
+<link href="refm403.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm395.html">UP</a>][<a href="refm403.html">&lt;-PREV</a>][<a href="refm405.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L009339" id="L009339">8. 拡張ライブラリ</a></h1>
+<ul>
+<li><a href="#L009340">8.1 Rubyを対話型で使いたいのですが</a></li>
+<li><a href="#L009341">8.2 デバッガはありますか</a></li>
+<li><a href="#L009342">8.3 C言語で書かれたライブラリをRubyで使いたいのですが</a></li>
+<li><a href="#L009343">8.4 <code>Tcl/Tk</code>のインターフェースはありますか</a></li>
+<li><a href="#L009344">8.5 Tkが動かないのですが</a></li>
+<li><a href="#L009345">8.6 gtk+、xformsのインターフェースはありますか</a></li>
+<li><a href="#L009346">8.7 日付の計算をしたいのですが</a></li>
+</ul>
+<h2><a name="L009340" id="L009340">8.1 Rubyを対話型で使いたいのですが</a></h2>
+<p>irb というスクリプトがあります。</p>
+<pre>$ irb
+irb(main):001:0&gt; 1 + 2 * 3
+7
+irb(main):002:0&gt; if true
+irb(main):003:1&gt;   :true
+irb(main):004:1&gt; else
+irb(main):005:1*   :false
+irb(main):006:1&gt; end
+:true
+irb(main):007:0&gt; </pre>
+<p>のように使えます。</p>
+<p>使い方の詳細は <a href="refm008.html">irb</a> を参照してください。</p>
+<p>バイナリパッケージのrubyを利用している場合 irb は別パッケージになって
+いる可能性があります。各ディストリビューションの状況を調べてみてくださ
+い。</p>
+<h2><a name="L009341" id="L009341">8.2 デバッガはありますか</a></h2>
+<p>あります。Rubyを次のように起動してください。詳細は <a href="refm339.html">debug</a> を参
+照してください。</p>
+<pre>ruby -r debug your_script</pre>
+<h2><a name="L009342" id="L009342">8.3 C言語で書かれたライブラリをRubyで使いたいのですが</a></h2>
+<p>RubyはCで書かれています。さらに、Cで書かれたライブラリを
+Rubyで利用できるようにするための部品もととのっていますので、
+Cで書かれたライブラリとRubyとの間のインターフェースを書くことに
+より、Rubyから使えるライブラリができます。</p>
+<p>まず、Rubyのソースを展開したディレクトリにある、
+<a href="refm533.html">ruby-src:README.EXT.ja</a> を読んでみましょう。この文書はRuby
+そのものについて知るためにもよいドキュメントになっています。</p>
+<p>次にext/ディレクトリの下にあるサブディレクトリを覗いてみると
+実例が出てきます。ftpサイトのcontribにあるものも参考になる
+ことでしょう。</p>
+<h2><a name="L009343" id="L009343">8.4 Tcl/Tkのインターフェースはありますか</a></h2>
+<p>標準で添付されている拡張ライブラリに、Tcl/Tkのインターフェースが
+あります。一つは、ext/tcltklib/lib以下のrequire &quot;tcltk&quot;で ロードされるインタ
+ーフェースで、TclスクリプトをRubyスクリプト中に埋め込むよ
+うな記述になります。</p>
+<p>もう一つはext/tk/以下のrequire &quot;tk&quot;でロードされるインターフェースで、
+こちらはよりRubyらしい記述でTkのGUIを実現することができます。</p>
+<h2><a name="L009344" id="L009344">8.5 Tkが動かないのですが</a></h2>
+<p>お使いのTkのバージョンが古い可能性があります。新しいものと交換してみて
+ください。</p>
+<h2><a name="L009345" id="L009345">8.6 gtk+、xformsのインターフェースはありますか</a></h2>
+<p><a href="http://raa.ruby-lang.org/list.rhtml?name=Ruby/GTK">RAA:Ruby/GTK</a><sup class="outside"><small>[外部]</small></sup>, <a href="http://raa.ruby-lang.org/list.rhtml?name=Ruby/Forms">RAA:Ruby/Forms</a><sup class="outside"><small>[外部]</small></sup> を参照してください。</p>
+<h2><a name="L009346" id="L009346">8.7 日付の計算をしたいのですが</a></h2>
+<p><a href="refm066.html">Time</a>オブジェクトは、1970年1月1日から2038年1月19日までしか表せま
+せん。標準添付ライブラリ <a href="refm294.html">date</a> を使ってください。
+<a href="refm529.html">ruby-src:sample/cal.rb</a> も参照してください。</p>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm395.html">UP</a>][<a href="refm403.html">&lt;-PREV</a>][<a href="refm405.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

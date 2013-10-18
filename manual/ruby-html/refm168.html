@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Socket</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm169.html" rel="next" />
+<link href="refm167.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm167.html">UP</a>][<a href="refm167.html">&lt;-PREV</a>][<a href="refm169.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L003142" id="L003142">Socket</a></h1>
+<p>ソケットそのものに対するシステムコールレベルのアクセスを提供
+するクラス。Perlのソケットに対するアクセスと同レベルの機能を
+提供してます。このクラスではソケットアドレスは <a href="refm036.html#L000776">pack</a> 
+された文字列で指定します
+(<a href="refm159.html#L003049">ソケットアドレス構造体を pack した文字列</a>を参照)。</p>
+<p>一般的なソケットプログラミングはより高レベルの
+<a href="refm162.html">TCPSocket</a>クラスや
+<a href="refm163.html">TCPServer</a>クラスを用い
+て行われることが多く、このクラスはあまり用いられません。</p>
+<h2><a name="L003143" id="L003143">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm160.html">BasicSocket</a></li>
+</ul>
+<h2><a name="L003144" id="L003144">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L003145" id="L003145"><code>Socket.open(<var>domain</var>, <var>type</var>, <var>protocol</var>)</code></a>
+<dt><a name="L003146" id="L003146"><code>Socket.new(<var>domain</var>, <var>type</var>, <var>protocol</var>)</code></a></dt>
+<dd>
+<p>新しいソケットを生成します。<var>domain</var>、<var>type</var>、
+<var>protocol</var> はインクルードファイルにある定数で指定しま
+す。ほとんどの定数は <code>Socket::AF_INET</code> のように 
+Socket クラスの定数として定義されています。<var>domain</var> 
+と<var>type</var> に関しては、<code>&quot;AF_INET&quot;</code>,
+<code>&quot;SOCK_STREAM&quot;</code> のように文字列でも指定できますが、文
+字列ですべての機能を指定できる保証はありません。</p>
+<p>例えば、IPv4 の TCP ソケットは以下のように生成されます。</p>
+<pre>s = Socket.new(Socket::AF_INET, Socket::SOCK_STREAM, 0)</pre>
+<p>なお、socket(2) の domain 引数において AF_ と PF_ のどちらの定数を使用するかについては混乱がありますが、
+Stevens の「UNIX ネットワークプログラミング第2版 Vol.1」4.2節に述べられているように、
+現実的にはどちらでも問題なく、また、既存のコーディング習慣として AF_ が用いられることが多いため、
+ここでは AF_ を使用しています。</p></dd>
+<dt><a name="L003147" id="L003147"><code>Socket.for_fd(<var>fd</var>)</code></a></dt>
+<dd>
+<p>ファイルディスクリプタ <var>fd</var> に対する新しいソケットを生成します。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>:
+このメソッドは <a href="refm160.html">BasicSocket</a> に移動しました。</p></dd>
+<dt><a name="L003148" id="L003148"><code>Socket.getaddrinfo(<var>nodename</var>, <var>servname</var>[, <var>family</var>[, <var>socktype</var>[, <var>protocol</var>[, <var>flags</var>]]]])</code></a></dt>
+<dd>
+<p><em class="XXINVALIDXX">RFC:2553</em>で定義された
+<code>getaddrinfo()</code>の機能を提供するクラスメソッド。この関数は
+<code>gethostbyname()</code>や<code>getservbyname()</code>の代わりとして用意されており、
+IPのバージョンに依存しないプログラムを書くための標準的なAPIです。</p>
+<p>アドレス情報の配列を返します。アドレス情報とは7つの要素からなる次の
+形の配列です。</p>
+<ul>
+<li>第0要素 - アドレスファミリー(String)。</li>
+<li>第1要素 - ポート番号(Integer)。</li>
+<li>第2要素 - ホスト名(String)。</li>
+<li>第3要素 - アドレス(String)。</li>
+<li>第4要素 - アドレスファミリーに対応するInteger。</li>
+<li>第5要素 - ソケットタイプに対応するInteger。</li>
+<li>第6要素 - プロトコルに対応するInteger。</li>
+</ul>
+<p>必須引数の意味は以下の通りです。</p>
+<ul>
+<li><var>nodename</var> - ホスト名。
+        (<a href="refm159.html#L003047">ホスト指定形式</a>を参照)</li>
+<li><var>servname</var> - サービス名。
+        (<a href="refm159.html#L003048">サービス指定形式</a>を参照)</li>
+</ul>
+<p>残りの引数は省略可能です。</p>
+<ul>
+<li><var>family</var> - アドレスファミリー。
+        <code>Socket::AF_INET</code> など、
+        <a href="refm169.html#L003174">アドレスファミリー</a>にある定数を指定します。</li>
+<li><var>socktype</var> - ソケットタイプ。
+        <code>Socket::SOCK_STREAM</code> など、
+        <a href="refm169.html#L003182">ソケットタイプ</a>にある定数を指定します。</li>
+<li><var>protocol</var> - プロトコル。
+        <code>Socket::IPPROTO_IP</code> など、
+        <em class="XXINVALIDXX">プロトコル</em>にある定数を指定します。</li>
+<li><var>flags</var> - getaddrinfo(3)の第3引数に指定するaddrinfo構造体の
+        ai_flags メンバに相当するFixnum。
+        <code>Socket::AI_PASSIVE</code>、
+        <code>Socket::AI_CANONNAME</code>、
+        <code>Socket::AI_NUMERICHOST</code>
+        が用意されている場合があります。</li>
+</ul>
+<p>引数に指定できる定数の意味については
+<a href="refm535.html">getaddrinfo(3)</a> を参照して下さい。</p>
+<p>例:
+<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></p>
+<pre>p Socket.getaddrinfo(Socket.gethostname, &quot;ftp&quot;)
+#=&gt; [[&quot;AF_INET&quot;, 21, &quot;helium.ruby-lang.org&quot;, &quot;210.251.121.214&quot;, 2, 1, 6]]
+
+pp Socket.getaddrinfo(Socket.gethostname, nil)
+#=&gt; [[&quot;AF_INET&quot;, 0, &quot;helium.ruby-lang.org&quot;, &quot;210.251.121.214&quot;, 2, 1, 6],
+#    [&quot;AF_INET&quot;, 0, &quot;helium.ruby-lang.org&quot;, &quot;210.251.121.214&quot;, 2, 2, 17],
+#    [&quot;AF_INET&quot;, 0, &quot;helium.ruby-lang.org&quot;, &quot;210.251.121.214&quot;, 2, 3, 0]]</pre></dd>
+<dt><a name="L003149" id="L003149"><code>Socket.getnameinfo(<var>sa</var>[, <var>flags</var>])</code></a></dt>
+<dd>
+<p><em class="XXINVALIDXX">RFC:2553</em> で定義された<code>getnameinfo()</code> の機能を提供するク
+ラスメソッド。 <code>gethostbyaddr()</code> や <code>getservbyport()</code> の代
+わりとして用意されています。IPのバージョンに依存しないプログラムを
+書くための標準的なAPIです。</p>
+<p>配列を返し、その要素はアドレスとポートを表す文字列です。</p>
+<p>引数 <var>sa</var> には文字列か配列を与えます。文字列の場合は sockaddr 構造体
+のパック文字列を与えます。具体的には <a href="refm160.html#L003061">getsockname</a> 
+の値が利用できます。配列を与える場合には、要素が3つの場合と4つの場合
+があります。</p>
+<ul>
+<li><p>要素が3つの場合:</p>
+<pre>[アドレスファミリー, サービス, ホスト]</pre></li>
+<li><p>要素が4つの場合:</p>
+<pre>[アドレスファミリー, サービス, 任意, アドレスを表す文字列]</pre></li>
+</ul>
+<p>アドレスファミリーには <code>Socket::AF_INET</code> 等の定数の他に文字列
+で <code>&quot;AF_INET&quot;</code> もしくは <code>&quot;AF_INET6&quot;</code> もしくは <code>nil</code> が
+指定できます。ただしIPv6が使えないようにコンパイルされている場合は 
+<code>&quot;AF_INET6&quot;</code> は無効な指定となります。アドレスファミリーに 
+<code>nil</code> を指定することは <code>Socket::AF_UNSPEC</code> を指定すること
+と等価です。</p>
+<p>サービス、ホストの指定に関しては <a href="refm159.html#L003048">サービス指定形式</a>、
+<a href="refm159.html#L003047">ホスト指定形式</a>を参照してください。</p>
+<p>要素が3つの場合でも、ホストにはアドレスを指定できますが、要素が4つ
+の場合には、最後の要素を名前解決しないことが保証されます。<a name="footmark:2" id="footmark:2" href="#foottext:2"><sup><small>*2</small></sup></a></p>
+<p>省略可能な第2引数 <var>flags</var> には <a href="refm535.html">getnameinfo(3)</a> 
+の第7番目の引数に指定する flags に相当する <a href="refm055.html">Fixnum</a> を与えます。</p>
+<p>引数<var>flags</var>を構成するための定数として
+<code>Socket::NI_MAXHOST</code>、
+<code>Socket::NI_MAXSERV</code>、
+<code>Socket::NI_NOFQDN</code>、
+<code>Socket::NI_NUMERICHOST</code>、
+<code>Socket::NI_NAMEREQD</code>、
+<code>Socket::NI_NUMERICSERV</code>、
+<code>Socket::NI_DGRAM</code>
+が用意されている場合があります。</p>
+<p>これらの定数の意味については <a href="refm535.html">getnameinfo(3)</a>を参照
+して下さい。</p>
+<p>例:</p>
+<pre>Socket.getnameinfo(Socket.sockaddr_in('21','127.0.0.1'))
+#=&gt; [&quot;localhost&quot;, &quot;ftp&quot;]
+
+Socket.getnameinfo([nil, 21,'127.0.0.1'])
+#=&gt; [&quot;localhost&quot;, &quot;ftp&quot;]</pre></dd>
+<dt><a name="L003150" id="L003150"><code>Socket.gethostbyaddr(<var>host</var>[, <var>type</var>])</code></a></dt>
+<dd>
+<p>sockaddr 構造体をパックした文字列からホスト情報を返します。
+ホスト情報の構造は <a href="#L003151">Socket.gethostbyname</a>と同じです。
+<var>type</var> には、アドレスタイプ(デフォルトは 
+<code>Socket::AF_INET</code>)を指定します。</p></dd>
+<dt><a name="L003151" id="L003151"><code>Socket.gethostbyname(<var>host</var>)</code></a></dt>
+<dd>
+<p>ホスト名またはIPアドレス(指定方法に関しては
+<a href="refm159.html#L003047">ホスト指定形式</a>を参照)
+からホストの情報を返します。
+ホスト情報は以下の 4 要素の配列で表現されています。</p>
+<ul>
+<li>ホスト名</li>
+<li>ホストの別名の配列</li>
+<li>ホストのアドレスタイプ (整数定数)</li>
+<li>ホストのアドレス</li>
+</ul>
+<p>ホストのアドレスはpackされた
+文字列で、unpack(&quot;CCCC&quot;)で分解できます。</p>
+<pre>例:
+irb(main):009:0&gt; Socket.gethostbyname(&quot;210.251.121.214&quot;)
+[&quot;helium.ruby-lang.org&quot;, [&quot;helium&quot;], 2, &quot;\322\373y\326&quot;]</pre>
+<p><a href="refm387.html">ruby 1.8.1 feature</a></p>
+<p>第四要素のホストのアドレスは、各アドレスタイプに対応する
+C のアドレス構造体を pack した文字列として表現されています。
+例えばアドレスタイプが AF_INET (定数 2) ならば
+Socket.unpack_sockaddr_in で unpack できます。</p>
+<pre>例:
+irb(main):009:0&gt; Socket.gethostbyname(&quot;210.251.121.214&quot;)
+[&quot;210.251.121.214&quot;, [], 2, &quot;\002\000\000\000\322\373y\326\000\000\000\000\000\000\000\000&quot;]
+
+irb(main):009:0&gt; Socket.unpack_sockaddr_in(Socket.gethostbyname(&quot;210.251.121.214&quot;)[3])[1]
+&quot;210.251.121.214&quot;</pre>
+<p><a href="refm388.html">ruby 1.8.2 feature</a></p>
+<p>ホストのアドレスはpackされた
+文字列で、unpack(&quot;CCCC&quot;)で分解できます。</p>
+<pre>例:
+irb(main):009:0&gt; Socket.gethostbyname(&quot;210.251.121.214&quot;)
+[&quot;210.251.121.214&quot;, [], 2, &quot;\322\373y\326&quot;]</pre></dd>
+<dt><a name="L003152" id="L003152"><code>Socket.gethostname</code></a></dt>
+<dd>
+<p>システムの標準のホスト名を取得します。</p>
+<p>ホストの別名やアドレスなど他の情報を得るには
+<a href="#L003148">Socket.getaddrinfo</a> を使ってください。
+ただし、これは不可能な場合もあります。</p>
+<pre>p Socket.gethostname   #=&gt; &quot;helium.ruby-lang.org&quot;</pre></dd>
+<dt><a name="L003153" id="L003153"><code>Socket.getservbyname(<var>service</var>[, <var>proto</var>])</code></a></dt>
+<dd>
+<p><var>service</var>, <var>proto</var>に対応するポート番号を返
+します。<var>proto</var>の省略値は<code>&quot;tcp&quot;</code>です。</p>
+<pre>p Socket.getservbyname(&quot;echo&quot;)
+=&gt; 7
+p Socket.getservbyname(&quot;shell&quot;, &quot;tcp&quot;)
+=&gt; 514
+p Socket.getservbyname(&quot;syslog&quot;, &quot;udp&quot;)
+=&gt; 514</pre></dd>
+<dt><a name="L003154" id="L003154"><code>Socket.sockaddr_in(<var>port</var>, <var>host</var>)       ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a>
+<dt><a name="L003155" id="L003155"><code>Socket.pack_sockaddr_in(<var>port</var>, <var>host</var>)  ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>指定したアドレスを<a href="refm159.html#L003049">ソケットアドレス構造体を pack した文字列</a>
+で返します。<var>port</var> は、ポート番号を表す <a href="refm055.html">Fixnum</a> あるいは、ポート
+番号、サービス名を表す文字列です。</p>
+<pre>require 'socket'
+p Socket.sockaddr_in(&quot;echo&quot;, &quot;localhost&quot;)
+=&gt; &quot;\002\000\000\a\177\000\000\001\000\000\000\000\000\000\000\000&quot;
+p Socket.sockaddr_in(&quot;echo&quot;, &quot;::1&quot;)
+=&gt; &quot;\n\000\000\a\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\001\000\000\000\000&quot;</pre></dd>
+<dt><a name="L003156" id="L003156"><code>Socket.sockaddr_un(<var>path</var>)             ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a>
+<dt><a name="L003157" id="L003157"><code>Socket.pack_sockaddr_un(<var>path</var>)        ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>指定したアドレスを<a href="refm159.html#L003049">ソケットアドレス構造体を pack した文字列</a>
+で返します。</p>
+<pre>require 'socket'
+p Socket.sockaddr_un(&quot;/tmp/.X11-unix/X0&quot;)
+=&gt; &quot;\001\000/tmp/.X11-unix/X0\000....&quot;</pre></dd>
+<dt><a name="L003158" id="L003158"><code>Socket.pair(<var>domain</var>, <var>type</var>, <var>protocol</var>)</code></a>
+<dt><a name="L003159" id="L003159"><code>Socket.socketpair(<var>domain</var>, <var>type</var>, <var>protocol</var>)</code></a></dt>
+<dd>
+<p>相互に結合されたソケットのペアを含む2要素の配列を返します。
+引数の指定は<code>Socket.open</code>と同じです。</p></dd>
+<dt><a name="L003160" id="L003160"><code>Socket.unpack_sockaddr_in(<var>sockaddr</var>)      ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p><a href="refm159.html#L003049">ソケットアドレス構造体を pack した文字列</a>を 
+unpack したアドレスを返します。返される値は <code>[port, ipaddr]</code> 
+の配列です。</p>
+<pre>require 'socket'
+p Socket.unpack_sockaddr_in(Socket.sockaddr_in(&quot;echo&quot;, &quot;localhost&quot;))
+=&gt; [7, &quot;127.0.0.1&quot;]
+p Socket.unpack_sockaddr_in(Socket.sockaddr_in(&quot;echo&quot;, &quot;::1&quot;))
+=&gt; [7, &quot;::1&quot;]</pre></dd>
+<dt><a name="L003161" id="L003161"><code>Socket.unpack_sockaddr_un(<var>sockaddr</var>)      ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p><a href="refm159.html#L003049">ソケットアドレス構造体を pack した文字列</a>を 
+unpack したソケットパス名をを返します。</p>
+<pre>require 'socket'
+p Socket.unpack_sockaddr_un(Socket.sockaddr_un(&quot;/tmp/.X11-unix/X0&quot;))
+=&gt; &quot;/tmp/.X11-unix/X0&quot;</pre></dd>
+</dl>
+<h2><a name="L003162" id="L003162">メソッド:</a></h2>
+<dl>
+<dt><a name="L003163" id="L003163"><code>accept</code></a></dt>
+<dd>
+<p>新しい接続を受け付けて、新しい接続に対するソケットと接続元のアドレスの
+2つからなる配列を返します。<code>accept(2)</code>を参照。</p>
+<p>たとえば IPv4 の TCP サーバソケットを生成し、accept でクライアントからの接続を受け付けるには以下のようにします。</p>
+<pre>serv = Socket.new(Socket::AF_INET, Socket::SOCK_STREAM, 0)
+sockaddr = Socket.sockaddr_in(8080, &quot;0.0.0.0&quot;)
+serv.bind(sockaddr)
+serv.listen(5)
+sock, sockaddr = serv.accept</pre></dd>
+<dt><a name="L003164" id="L003164"><code>accept_nonblock</code></a></dt>
+<dd>
+<p><a href="refm391.html">ruby 1.8.5 feature</a></p>
+<p>ソケットをノンブロッキングモードに設定した後、
+<code>accept(2)</code>を呼び出します。</p>
+<p>引数、返り値は <a href="#L003163">accept</a> と同じです。</p>
+<p><code>accept(2)</code>がエラーになった場合、
+EAGAIN, EINTR を含め例外 <a href="refm108.html">Errno::EXXX</a> が発生します。</p></dd>
+<dt><a name="L003165" id="L003165"><code>bind(<var>my_sockaddr</var>)</code></a></dt>
+<dd>
+<p>ソケットを<var>my_sockaddr</var>に結合します。<code>bind(2)</code>
+と同じ働きをします。<var>my_sockaddr</var>は 
+<a href="refm159.html#L003049">ソケットアドレス構造体を pack した文字列</a>
+です。</p>
+<p>0 を返します。</p></dd>
+<dt><a name="L003166" id="L003166"><code>connect(<var>server_sockaddr</var>)</code></a></dt>
+<dd>
+<p><code>connect(2)</code>と同じ働きをします。<var>server_sockaddr</var> は、
+<a href="refm159.html#L003049">ソケットアドレス構造体を pack した文字列</a>
+です。</p>
+<p>0 を返します。</p>
+<p>たとえば IPv4 の TCP ソケットを生成し、connect で www.ruby-lang.org:80 に接続するには以下のようにします。</p>
+<pre>s = Socket.new(Socket::AF_INET, Socket::SOCK_STREAM, 0)
+sockaddr = Socket.sockaddr_in(80, &quot;www.ruby-lang.org&quot;)
+s.connect(sockaddr)
+s.write &quot;GET / HTTP/1.0\r\n\r\n&quot;
+print s.read</pre></dd>
+<dt><a name="L003167" id="L003167"><code>connect_nonblock(<var>server_sockaddr</var>)</code></a></dt>
+<dd>
+<p><a href="refm391.html">ruby 1.8.5 feature</a></p>
+<p>ソケットをノンブロッキングモードに設定した後、
+<code>connect(2)</code>を呼び出します。</p>
+<p>引数、返り値は <a href="#L003166">connect</a> と同じです。</p>
+<p><code>connect(2)</code>がエラーになった場合、
+EINPROGRESS を含め例外 <a href="refm108.html">Errno::EXXX</a> が発生します。</p></dd>
+<dt><a name="L003168" id="L003168"><code>listen(<var>backlog</var>)</code></a></dt>
+<dd>
+<p><code>listen(2)</code>と同じ働きをします。</p>
+<p>0 を返します。</p></dd>
+<dt><a name="L003169" id="L003169"><code>recvfrom(<var>maxlen</var>[, <var>flags</var>])</code></a></dt>
+<dd>
+<p><code>recv</code>と同様にソケットからデータを受け取りますが、
+戻り値は文字列と相手ソケットのアドレスのペアです。引数につい
+てはrecvと同様です。</p>
+<pre>s1 = Socket.new(Socket::AF_INET, Socket::SOCK_DGRAM, 0)
+s2 = Socket.new(Socket::AF_INET, Socket::SOCK_DGRAM, 0)
+s1.bind(Socket.sockaddr_in(0, &quot;0.0.0.0&quot;))
+s2.send(&quot;foo&quot;, 0, s1.getsockname)
+mesg, sockaddr = s1.recvfrom(10)
+p mesg                                    #=&gt; &quot;foo&quot;
+p sockaddr                                #=&gt; &quot;\002\000\200r\177\000\000\001\000\000\000\000\000\000\000\000&quot;
+p Socket.unpack_sockaddr_in(sockaddr)     #=&gt; [32882, &quot;127.0.0.1&quot;]</pre></dd>
+<dt><a name="L003170" id="L003170"><code>recvfrom_nonblock(<var>maxlen</var>[, <var>flags</var>])</code></a></dt>
+<dd>
+<p><a href="refm391.html">ruby 1.8.5 feature</a></p>
+<p>ソケットをノンブロッキングモードに設定した後、
+<code>recvfrom(2)</code>を呼び出します。</p>
+<p>引数、返り値は <a href="#L003169">recvfrom</a> と同じです。</p>
+<p><code>recvfrom(2)</code>がエラーになった場合、
+EAGAIN, EINTR を含め例外 <a href="refm108.html">Errno::EXXX</a> が発生します。</p></dd>
+<dt><a name="L003171" id="L003171"><code>sysaccept           ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>接続したクライアントのファイル記述子とアドレスのペアを返すことを除
+けば <a href="#L003163">accept</a> と同じです。</p></dd>
+</dl>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small> Linuxではservnameにポート番号(0や21や&quot;0&quot;や&quot;21&quot;など)は
+getaddrinfo: Servname not supported for ai_socktype (SocketError)に
+なって使えないようです。 </small><br />
+<a name="foottext:2" id="foottext:2" href="#footmark:2"><sup><small>*2</small></sup></a><small>4つの
+場合の3番目の引数ってなんだか変なインタフェースですね。4番目の引数
+が nil の場合は要素3つと同じ扱いになるんですね。どういうわけでこう
+なってるのかがよくわかりません。ホスト指定は常に3番目の要素にして
+[アドレスファミリー, サービス, ホスト, フラグ] として4番目の要素で
+名前解決うんぬんを指定するんじゃダメだったんでしょうかね？-あらい 
+2002-01-01</small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm167.html">UP</a>][<a href="refm167.html">&lt;-PREV</a>][<a href="refm169.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

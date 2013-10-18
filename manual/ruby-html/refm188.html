@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>WEBrick::HTTPServlet::FileHandler</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm189.html" rel="next" />
+<link href="refm187.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm187.html">UP</a>][<a href="refm187.html">&lt;-PREV</a>][<a href="refm189.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L003713" id="L003713">WEBrick::HTTPServlet::FileHandler</a></h1>
+<p>通常のファイルサーバとしての機能を提供するためのサーブレット。</p>
+<h2><a name="L003714" id="L003714">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L003715" id="L003715"><code>FileHandler.new(<var>server</var>, <var>root</var>, <var>options</var>={}, <var>default</var>=<var>Config</var>::<var>FileHandler</var>)</code></a></dt>
+<dd>
+<p>FileHandler サーブレットを生成する。root はサーブレットにルートディレクトリ
+として認識させる、ローカルのファイルシステムのディレクトリを文字列で与える。</p>
+<p><var>config</var>は設定を保存したハッシュ、
+<var>default</var>にはデフォルトの設定を保存したハッシュを与える。
+デフォルト値はそれぞれ{}と<a href="#L003717">WEBrick::Config::FileHandler</a>。</p></dd>
+</dl>
+<h2><a name="L003716" id="L003716">スーパークラス</a></h2>
+<p><a href="refm187.html">WEBrick::HTTPServlet::AbstractServlet</a></p>
+<h2><a name="L003717" id="L003717">WEBrick::Config::FileHandler</a></h2>
+<p>WEBrick::HTTPServlet::FileHandler.newに与えるオプションの初期値。</p>
+<pre>FileHandler = {
+  :NondisclosureName =&gt; [&quot;.ht*&quot;, &quot;*~&quot;],
+  :FancyIndexing     =&gt; false,
+  :HandlerTable      =&gt; {},
+  :HandlerCallback   =&gt; nil,
+  :DirectoryCallback =&gt; nil,
+  :FileCallback      =&gt; nil,
+  :UserDir           =&gt; &quot;public_html&quot;,
+  :AcceptableLanguages =&gt; []  # [&quot;en&quot;, &quot;ja&quot;, ... ]
+}</pre>
+<dl>
+<dt><a name="L003718" id="L003718">:AcceptableLanguages</a></dt>
+<dd>
+<p>コンテンツの言語を選択するオプション。設定値は文字列の配列。</p>
+<p>クライアントからのリクエストに含まれるAccept-Languageの内容がfrで、
+かつ:AcceptableLanguagesには['ja', 'en']が設定されている場合、
+WEBrick::HTTPServlet::FileHandlerは以下の順番でファイルを探す。</p>
+<ol>
+<li>index.html</li>
+<li>index.html.fr</li>
+<li>index.html.ja</li>
+<li>index.html.en</li>
+</ol>
+</dd>
+<dt><a name="L003719" id="L003719">:FancyIndexing</a></dt>
+<dd>
+<p>クライアントがディレクトリをリクエストしたが表示するファイルが無い場合の挙動を決める。
+値は真偽値。</p>
+<p>trueならば、代わりにファイル一覧を表示する。
+falseならばエラー(403 Forbidden)となる。</p>
+</dd>
+<dt><a name="L003720" id="L003720">:DirectoryCallback</a></dt>
+<dt><a name="L003721" id="L003721">:FileCallback</a></dt>
+<dt><a name="L003722" id="L003722">:HandlerCallback</a></dt>
+<dt><a name="L003723" id="L003723">:HandlerTable</a></dt>
+<dt><a name="L003724" id="L003724">:NonDisclosureName</a></dt>
+<dd>
+<p>インデックスに表示したくないファイルの指定。値は文字列の配列。</p>
+<p>表示したくないファイルをワイルドカードで指定する。</p>
+</dd>
+<dt><a name="L003725" id="L003725">:UserDir</a></dt>
+<dd>
+<p>ユーザ毎のドキュメントルートのディレクトリ名。値は文字列。</p>
+<p>ユーザfooのホームディレクトリが/home/fooで、:UserDirにpublic_htmlを設定した場合、
+クライアントから/~foo/index.htmlがリクエストされると/home/foo/public_html/index.htmlの内容を表示される。</p>
+<p>この設定を有効にするには以下の条件が必要。</p>
+<ul>
+<li><a href="refm318.html">etc</a>ライブラリが使える状態である。</li>
+<li>環境変数SCRIPT_NAMEが空(空文字列)である。</li>
+</ul>
+</dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm187.html">UP</a>][<a href="refm187.html">&lt;-PREV</a>][<a href="refm189.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

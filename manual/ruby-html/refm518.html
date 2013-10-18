@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ruby-src:ext/pty/README.ja</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm519.html" rel="next" />
+<link href="refm517.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm517.html">&lt;-PREV</a>][<a href="refm519.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1>ruby-src:ext/pty/README.ja</h1>
+pty&nbsp;拡張モジュール&nbsp;version&nbsp;0.3&nbsp;by&nbsp;A.ito<br />
+<br />
+1.&nbsp;はじめに<br />
+<br />
+この拡張モジュールは，仮想tty&nbsp;(pty)&nbsp;を通して適当なコマンドを<br />
+実行する機能を&nbsp;ruby&nbsp;に提供します．<br />
+<br />
+2.&nbsp;インストール<br />
+<br />
+次のようにしてインストールしてください．<br />
+<br />
+(1)&nbsp;&nbsp;ruby&nbsp;extconf.rb<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;を実行すると&nbsp;Makefile&nbsp;が生成されます．<br />
+<br />
+(2)&nbsp;make;&nbsp;make&nbsp;install&nbsp;を実行してください．<br />
+<br />
+3.&nbsp;何ができるか<br />
+<br />
+この拡張モジュールは，PTY&nbsp;というモジュールを定義します．その中<br />
+には，次のようなモジュール関数が含まれています．<br />
+<br />
+&nbsp;&nbsp;&nbsp;getpty(command)<br />
+&nbsp;&nbsp;&nbsp;spawn(command)<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;この関数は，仮想ttyを確保し，指定されたコマンドをその仮想tty<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;の向こうで実行し，配列を返します．戻り値は3つの要素からなる<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;配列です．最初の要素は仮想ttyから読み出すためのIOオブジェクト，<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2番目は書きこむためのIOオブジェクト，3番目は子プロセスのプロ<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;セスIDです．この関数がイテレータとして呼ばれた場合，これらの<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;要素はブロックパラメータとして渡され，関数自体はnilを返します．<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;この関数によって作られたサブプロセスが動いている間，子プロセス<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;の状態を監視するために&nbsp;SIGCHLD&nbsp;シグナルを捕捉します．子プロセス<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;が終了したり停止した場合には，例外が発生します．この間，すべての<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SIGCHLD&nbsp;が&nbsp;PTY&nbsp;モジュールのシグナルハンドラに捕捉されるので，<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;サブプロセスを生成する他の関数(system()&nbsp;とか&nbsp;IO.popen()など)を<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;使うと，予期しない例外が発生することがあります．これを防ぐため<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;には，下記のprotect_signal()を参照してください．<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;この関数がブロックパラメータ付きで呼ばれた場合には，そのブロック<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;の中でのみ&nbsp;SIGCHLD&nbsp;が捕捉されます．したがって，ブロックパラメータ<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;として渡されたIOオブジェクトを，ブロックの外に持ち出して使うの<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;は勧められません．<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;protect_signal<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;この関数はイテレータです．ここで指定されたブロックの中では，<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;子プロセスが終了しても例外を発生しません．この関数を使うことで，<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PTYの子プロセスが動いている間でも，system()や&nbsp;IO.popen()などの<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;関数を安全に使うことができます．例えば，<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PTY.spawn(&quot;command_foo&quot;)&nbsp;do&nbsp;|r,w|<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PTY.protect_signal&nbsp;do<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;system&nbsp;&quot;some&nbsp;other&nbsp;commands&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;end<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;end<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;このような記述により，&quot;some&nbsp;other&nbsp;commands&quot;&nbsp;が終了したときに<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;例外が発生するのを防げます．<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;reset_signal<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PTY&nbsp;の子プロセスが動いていても，そのプロセスの終了時に例外が発生<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;しないようにします．<br />
+<br />
+4.&nbsp;利用について<br />
+<br />
+伊藤彰則が著作権を保有します．<br />
+<br />
+ソースプログラムまたはドキュメントに元の著作権表示が改変されずに<br />
+表示されている場合に限り，誰でも，このソフトウェアを無償かつ著作<br />
+権者に無断で利用・配布・改変できます．利用目的は限定されていませ<br />
+ん．<br />
+<br />
+このプログラムの利用・配布その他このプログラムに関係する行為によ<br />
+って生じたいかなる損害に対しても，作者は一切責任を負いません．<br />
+<br />
+5.&nbsp;バグ報告等<br />
+<br />
+バグレポートは歓迎します．<br />
+<br />
+&nbsp;&nbsp;aito@ei5sun.yz.yamagata-u.ac.jp<br />
+<br />
+まで電子メールでバグレポートをお送りください．<br />
+
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm517.html">&lt;-PREV</a>][<a href="refm519.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

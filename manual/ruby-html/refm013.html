@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>オブジェクト</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm014.html" rel="next" />
+<link href="refm012.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm012.html">&lt;-PREV</a>][<a href="refm014.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L000164" id="L000164">オブジェクト</a></h1>
+<h2><a name="L000165" id="L000165">オブジェクトとは</a></h2>
+<p>Ruby で扱える全ての値はオブジェクトです。
+Ruby のオブジェクトに対して可能な操作はメソッド呼び出しのみです。
+あるオブジェクトが反応できるメソッドは、
+そのオブジェクトが所属するクラスによって一意に決定します。
+所属するクラスはオブジェクト生成時に決まり、その後は特異クラスの導入以外、所属クラスが変わることはありません。
+またオブジェクトは、特定のクラスに対比して、その「インスタンス」とも呼ばれます。</p>
+<p>オブジェクトの生成は、一般には、別のオブジェクトのメソッドを呼び出すことによって行われます。</p>
+<h2><a name="L000166" id="L000166">クラス</a></h2>
+<p>クラスは自身に所属するオブジェクトが反応できるメソッドを決定します。
+所属するオブジェクトに対してあるメソッドを呼び出すことができるなら、
+そのメソッドが「クラスに定義されている」と言います。
+またメソッドはクラスとメソッド名によって一意に決定します。</p>
+<p>クラスは必ずただひとつの「スーパークラス」を持ち、
+スーパークラスであるメソッドが定義されていれば自クラスでもそのメソッドが同じ内容で定義されていることになります。
+これを「継承」と呼びます。
+継承は推移するので、スーパークラスのスーパークラスが持つメソッドもまた自クラスにおいて定義されていることになります。</p>
+<h3><a name="L000167" id="L000167">モジュール</a></h3>
+<p>include</p>
+<p>ちょっと特殊でクラスではない。しかし機能は同じ</p>
+<h2><a name="L000168" id="L000168">メソッド</a></h2>
+<p>メソッドは実行することができます。その実行を開始することを通常「呼び出す」と言います。
+また呼び出すときにはオブジェクトを渡すことができ、
+そのオブジェクトを「引数」と呼びます。いくつの引数を受け取ることができるかはメソッドの定義時に決定し、
+変更することはできません。</p>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm012.html">&lt;-PREV</a>][<a href="refm014.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

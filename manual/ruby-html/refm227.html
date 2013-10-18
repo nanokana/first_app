@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>OpenSSL::SSL::SSLSocket</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm228.html" rel="next" />
+<link href="refm226.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm226.html">UP</a>][<a href="refm226.html">&lt;-PREV</a>][<a href="refm228.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L004467" id="L004467">OpenSSL::SSL::SSLSocket</a></h1>
+<p>SSLSocket クラス</p>
+<h2><a name="L004468" id="L004468">例</a></h2>
+<p>SSL/TLS サーバに接続して write する。</p>
+<pre>require 'socket'
+require 'openssl'
+include OpenSSL
+
+soc = TCPSocket.new('www.example.com', 443)
+ssl = SSL::SSLSocket.new(soc)
+ssl.connect
+ssl.write('hoge')
+print ssl.peer_cert.to_text
+ssl.close
+soc.close</pre>
+<h2><a name="L004469" id="L004469">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L004470" id="L004470"><code>SSLSocket.new(<var>socket</var>)</code></a>
+<dt><a name="L004471" id="L004471"><code>SSLSocket.new(<var>socket</var>, <var>context</var>)</code></a></dt>
+<dd>
+<p>SSLSocket オブジェクトを生成する。socket には <a href="refm162.html">TCPSocket</a> オブジェクトを与える。context には <a href="refm229.html">OpenSSL::SSL::SSLContext</a> オブジェクトを与える。</p></dd>
+</dl>
+<h2><a name="L004472" id="L004472">メソッド</a></h2>
+<dl>
+<dt><a name="L004473" id="L004473"><code>io</code></a>
+<dt><a name="L004474" id="L004474"><code>to_io</code></a></dt>
+<dd>
+<p>SSLSocket オブジェクトを生成する時に渡されたソケットを返す。</p></dd>
+<dt><a name="L004475" id="L004475"><code>context</code></a></dt>
+<dd>
+<p>SSLSocket オブジェクトを生成する時に渡されたコンテクストを返す。  
+<a href="refm229.html">OpenSSL::SSL::SSLContext</a> オブジェクト。 </p></dd>
+<dt><a name="L004476" id="L004476"><code>sync_close</code></a>
+<dt><a name="L004477" id="L004477"><code>sync_close=(<var>true</var> <var>or</var> <var>false</var>)</code></a></dt>
+<dd>
+<p>SSLSocket を close するときに TCPSocket も close するかどうかを設定する。</p></dd>
+<dt><a name="L004478" id="L004478"><code>peer_cert</code></a></dt>
+<dd>
+<p>接続相手の X509 証明書 <a href="refm218.html">OpenSSL::X509::Certificate</a> オブジェクトを返す。
+検証結果は別途知る必要がある。</p></dd>
+<dt><a name="L004479" id="L004479"><code>peer_cert_chain</code></a></dt>
+<dd>
+<p>接続相手の証明書チェーンすなわち <a href="refm218.html">OpenSSL::X509::Certificate</a> オブジェクトの配列を返す。接続相手の証明書からルート CA の証明書までのリスト。順序は以下のとおり。</p></dd>
+</dl>
+<pre>[接続相手の証明書, 下位CAの証明書,... 中間CAの証明書]</pre>
+<dl>
+<dt><a name="L004480" id="L004480"><code>state</code></a></dt>
+<dd>
+<p>現在の状態を6文字の文字列で返す。</p></dd>
+<dt><a name="L004481" id="L004481"><code>cipher</code></a></dt>
+<dd>
+<p>現在実際に使われている暗号の情報を配列で返す。 TLS/SSL ハンドシェイクが行われる前の接続されていない状態では nil を返す。
+返される配列の形式は以下の例のように [暗号名, TLS/SSLのバージョン, 鍵長, アルゴリズムで使われる bit 数] となる。</p></dd>
+</dl>
+<pre>[&quot;DES-CBC3-SHA&quot;, &quot;TLSv1/SSLv3&quot;, 168, 168]</pre>
+<dl>
+<dt><a name="L004482" id="L004482"><code>pending</code></a></dt>
+<dd>
+<p>読み取り可能なバイト数を返す。</p></dd>
+<dt><a name="L004483" id="L004483"><code>&lt;&lt;</code></a></dt>
+<dd>
+<p><a href="refm045.html">IO</a>#&lt;&lt; と同様。</p></dd>
+<dt><a name="L004484" id="L004484"><code>accept</code></a></dt>
+<dd>
+<p>TLS/SSL クライアントから接続を受け付け、 TLS/SSL ハンドシェイクを実行し、自分自身を返す。</p></dd>
+<dt><a name="L004485" id="L004485"><code>addr</code></a></dt>
+<dd>
+<p><a href="refm161.html#L003074">IPSocket#addr</a> と同様。</p></dd>
+<dt><a name="L004486" id="L004486"><code>close</code></a></dt>
+<dd>
+<p>接続を閉じる。flush を呼んでから閉じる。</p></dd>
+<dt><a name="L004487" id="L004487"><code>closed?</code></a></dt>
+<dd>
+<p>close していたら true を返す。</p></dd>
+<dt><a name="L004488" id="L004488"><code>connect</code></a></dt>
+<dd>
+<p>接続相手との TLS/SSL ハンドシェイクを実行する。</p></dd>
+<dt><a name="L004489" id="L004489"><code>do_not_reverse_lookup=(<var>flag</var>)</code></a></dt>
+<dd>
+<p><a href="refm160.html#L003055">BasicSocket#do_not_reverse_lookup</a> と同様。</p></dd>
+<dt><a name="L004490" id="L004490"><code>each</code></a></dt>
+<dd>
+<p><a href="refm045.html#L001005">IO#each</a> と同様。</p></dd>
+<dt><a name="L004491" id="L004491"><code>each_byte</code></a></dt>
+<dd>
+<p><a href="refm045.html#L001007">IO#each_byte</a> と同様。</p></dd>
+<dt><a name="L004492" id="L004492"><code>eof?</code></a></dt>
+<dd>
+<p><a href="refm045.html#L001009">IO#eof?</a> と同様。</p></dd>
+<dt><a name="L004493" id="L004493"><code>fcntl(<var>cmd</var>[, <var>arg</var>])</code></a></dt>
+<dd>
+<p><a href="refm045.html#L001010">IO#fcntl</a> と同様。</p></dd>
+<dt><a name="L004494" id="L004494"><code>flush</code></a></dt>
+<dd>
+<p><a href="refm045.html#L001014">IO#flush</a> と同様。</p></dd>
+<dt><a name="L004495" id="L004495"><code>getc</code></a></dt>
+<dd>
+<p><a href="refm045.html#L001015">IO#getc</a> と同様。</p></dd>
+<dt><a name="L004496" id="L004496"><code>gets([<var>rs</var>])</code></a></dt>
+<dd>
+<p><a href="refm045.html#L001016">IO#gets</a> と同様。</p></dd>
+<dt><a name="L004497" id="L004497"><code>getsockopt(<var>level</var>, <var>optname</var>)</code></a></dt>
+<dd>
+<p><a href="refm160.html#L003062">BasicSocket#getsockopt</a> と同様。</p></dd>
+<dt><a name="L004498" id="L004498"><code>peeraddr</code></a></dt>
+<dd>
+<p><a href="refm161.html#L003075">IPSocket#peeraddr</a> と同様。</p></dd>
+<dt><a name="L004499" id="L004499"><code>print([<var>arg</var>[, ...]])</code></a></dt>
+<dd>
+<p><a href="refm045.html#L001026">IO#print</a> と同様。</p></dd>
+<dt><a name="L004500" id="L004500"><code>printf(<var>format</var>[, <var>arg</var>[, ...]])</code></a></dt>
+<dd>
+<p><a href="refm045.html#L001027">IO#printf</a> と同様。</p></dd>
+<dt><a name="L004501" id="L004501"><code>puts([<var>obj</var>[, ...]])</code></a></dt>
+<dd>
+<p><a href="refm045.html#L001029">IO#puts</a> と同様。</p></dd>
+<dt><a name="L004502" id="L004502"><code>read([<var>length</var>[, <var>buf</var>]])</code></a></dt>
+<dd>
+<p><a href="refm045.html#L000992">IO#read</a> と同様。</p></dd>
+<dt><a name="L004503" id="L004503"><code>readchar</code></a></dt>
+<dd>
+<p><a href="refm045.html#L001032">IO#readchar</a> と同様。</p></dd>
+<dt><a name="L004504" id="L004504"><code>readlines([<var>rs</var>])</code></a></dt>
+<dd>
+<p><a href="refm045.html#L000993">IO#readlines</a> と同様。</p></dd>
+<dt><a name="L004505" id="L004505"><code>setsockopt(<var>level</var>, <var>optname</var>, <var>optval</var>)</code></a></dt>
+<dd>
+<p><a href="refm160.html#L003066">BasicSocket#setsockopt</a> と同様。</p></dd>
+<dt><a name="L004506" id="L004506"><code>sysclose</code></a></dt>
+<dd>
+<p>接続を閉じる。相手に'close notify'を送る。 </p></dd>
+<dt><a name="L004507" id="L004507"><code>sysread(<var>length</var>[, <var>buf</var>])</code></a></dt>
+<dd>
+<p><a href="refm045.html#L001044">IO#sysread</a> と同様。</p></dd>
+<dt><a name="L004508" id="L004508"><code>syswrite(<var>string</var>)</code></a></dt>
+<dd>
+<p><a href="refm045.html#L001047">IO#syswrite</a> と同様。</p></dd>
+<dt><a name="L004509" id="L004509"><code>ungetc(<var>char</var>)</code></a></dt>
+<dd>
+<p><a href="refm045.html#L001049">IO#ungetc</a> と同様。</p></dd>
+<dt><a name="L004510" id="L004510"><code>write(<var>str</var>)</code></a></dt>
+<dd>
+<p><a href="refm045.html#L001050">IO#write</a> と同様。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm226.html">UP</a>][<a href="refm226.html">&lt;-PREV</a>][<a href="refm228.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

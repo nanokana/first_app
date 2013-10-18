@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>debug</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm340.html" rel="next" />
+<link href="refm338.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm338.html">&lt;-PREV</a>][<a href="refm340.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006502" id="L006502">debug</a></h1>
+<p>Ruby デバッガです。ruby スクリプトのソースデバッグに使用します。</p>
+<p>Emacs を使用したインタフェース<code>ruby/misc/rubydb[23]x.el</code>も ruby の
+アーカイブの中にあります。</p>
+<p><code>rubydb2x.el</code> は、Emacs 19.2x 以前用、
+<code>rubydb3x.el</code> は、Emacs 19.3x 以降用です。</p>
+<h2><a name="L006503" id="L006503">使い方:</a></h2>
+<pre>$ ruby -rdebug foo.rb</pre>
+<p>または、Emacs から</p>
+<pre>M-x load-library rubydb3x.el
+M-x rubydb</pre>
+<h2><a name="L006504" id="L006504">デバッグコマンド:</a></h2>
+<p>以下は、デバッガで使用できるコマンド名とその用法の一覧です。各コマンド
+名には省略形があります。</p>
+<p>ここに挙げたもの以外を入力した場合、その入力を ruby の式として評価します。</p>
+<dl>
+<dt><a name="L006505" id="L006505">break</a></dt>
+<dt><a name="L006506" id="L006506">break [&lt;file&gt;:]&lt;position&gt;|&lt;class&gt;:&lt;method&gt;</a></dt>
+<dd>
+<p>ブレークポイントを設定します。引数を省略した場合設定したブレークポ
+イントを表示します。</p>
+<p>設定するブレークポイントの書式は <var>プログラムファイル名:位置</var> か
+<var>クラス名:メソッド名</var> です。
+<var>位置</var> はファイル中の行番号もしくはメソッド名で指定します。
+<var>ファイル名:</var> を省略した場合は現在実行中のファイルを指定した
+ものと見倣されます。</p>
+<p>このコマンドの省略形は <code>b</code> です。</p>
+</dd>
+<dt><a name="L006507" id="L006507">catch &lt;an Exception&gt;</a></dt>
+<dd>
+<p>例外が発生した時にデバッガを停止させるキャッチポイントを設定します。
+引数を省略した場合設定したキャッチポイントを表示します。</p>
+<p>発生した例外が <var>&lt;an Exception&gt;</var> のサブクラスであれば
+デバッガが停止します。デフォルトのキャッチポイントは
+StandardErrorに設定されています。</p>
+<p><var>&lt;an Exception&gt;</var>として off を指定すると
+例外発生時に停止しなくなります。</p>
+<p>このコマンドの省略形は <code>cat</code> です。</p>
+</dd>
+<dt><a name="L006508" id="L006508">watch &lt;expression&gt;</a></dt>
+<dd>
+<p>式 <var>&lt;expression&gt;</var> の値が変化したときに停止するウォッ
+チポイントを設定します。</p>
+<p>このコマンドの省略形は <code>wat</code> です。</p>
+</dd>
+<dt><a name="L006509" id="L006509">delete [nnn]</a></dt>
+<dd>
+<p>指定したブレークポイントを取り除きます。引数を省略した場合すべての
+ブレークポイントを取り除きます。</p>
+<p>このコマンドの省略形は <code>del</code> です。</p>
+</dd>
+<dt><a name="L006510" id="L006510">display &lt;expression&gt;</a></dt>
+<dd>
+<p>処理が停止するごとに <var>&lt;expression&gt;</var> を評価するディス
+プレイ式を設定します。
+引数を省略した場合すべてのディスプレイ式を表示します。</p>
+<p>このコマンドの省略形は <code>disp</code> です。</p>
+</dd>
+<dt><a name="L006511" id="L006511">undisplay &lt;nnn&gt;</a></dt>
+<dd>
+<p>指定したディスプレイ式を取り除きます。引数を省略した場合すべての
+ディスプレイ式を取り除きます。</p>
+<p>このコマンドの省略形は <code>undisp</code> です。</p>
+</dd>
+<dt><a name="L006512" id="L006512">cont</a></dt>
+<dd>
+<p>スクリプトが終了するまで、もしくは次のブレークポイントに到達するま
+で処理を続行します。</p>
+<p>このコマンドの省略形は <code>c</code> です。</p>
+</dd>
+<dt><a name="L006513" id="L006513">step [nnn]</a></dt>
+<dd>
+<p>一行ずつ処理を実行します。引数を指定した場合、指定した行数分、処理を
+続行します。メソッドの中に入ります。</p>
+<p>このコマンドの省略形は <code>s</code> です。</p>
+</dd>
+<dt><a name="L006514" id="L006514">next [nnn]</a></dt>
+<dd>
+<p>一行ずつ処理を実行します。引数を指定した場合、指定した行数分、処理を
+続行します。<a href="#L006513">step [nnn]</a>との違いは、メソッド呼び出しのところでそのメ
+ソッドの中に入らないことです。</p>
+<p>このコマンドの省略形は <code>n</code> です。</p>
+</dd>
+<dt><a name="L006515" id="L006515">where</a></dt>
+<dt><a name="L006516" id="L006516">frame</a></dt>
+<dd>
+<p>フレームのスタックと、現在のフレーム位置を表示します。</p>
+<p>このコマンドの省略形は <code>w</code> または <code>f</code> です。</p>
+</dd>
+<dt><a name="L006517" id="L006517">list [(-|nn-mm)]</a></dt>
+<dd>
+<p>スクリプトを表示します。引数が `<var>-</var>' ならば前の行を表示します。
+<var>nn-mm</var> の形式では指定した範囲の行のスクリプトを表示します。</p>
+<p>このコマンドの省略形は <code>l</code> です。</p>
+</dd>
+<dt><a name="L006518" id="L006518">up [nn]</a></dt>
+<dd>
+<p>上位のフレームに上がります。</p>
+</dd>
+<dt><a name="L006519" id="L006519">down [nn]</a></dt>
+<dd>
+<p>下位のフレームに下がります。</p>
+</dd>
+<dt><a name="L006520" id="L006520">finish</a></dt>
+<dd>
+<p>外側のフレームに上がるまで処理を続行します。</p>
+<p>このコマンドの省略形は <code>fin</code> です。</p>
+</dd>
+<dt><a name="L006521" id="L006521">trace [(on|off)]</a></dt>
+<dd>
+<p>トレースモードの設定を変更します。トレースモードをonにすると、以後
+の実行においてメソッドの呼び出し関係が表示されます。引数を省略した
+場合現在のモードを表示します。</p>
+<p>このコマンドの省略形は <code>tr</code> です。</p>
+</dd>
+<dt><a name="L006522" id="L006522">quit</a></dt>
+<dd>
+<p>スクリプトを中断し、デバッガを終了します。</p>
+<p>このコマンドの省略形は <code>q</code> です。</p>
+</dd>
+<dt><a name="L006523" id="L006523">var g[lobal]</a></dt>
+<dt><a name="L006524" id="L006524">var l[ocal]</a></dt>
+<dt><a name="L006525" id="L006525">var i[nstance] &lt;object&gt;</a></dt>
+<dt><a name="L006526" id="L006526">var c[onst] &lt;object&gt;</a></dt>
+<dd>
+<p>それぞれ、グローバル変数、ローカル変数、オブジェクト<var>&lt;object&gt;</var>の
+インスタンス変数、<var>&lt;object&gt;</var>の定数を表示します。</p>
+<p>このコマンドの省略形は <code>v</code> です。</p>
+</dd>
+<dt><a name="L006527" id="L006527">method i[nstance] &lt;object&gt;</a></dt>
+<dt><a name="L006528" id="L006528">method &lt;class|module&gt;</a></dt>
+<dd>
+<p>それぞれ、オブジェクト<var>&lt;object&gt;</var>のインスタンスメソッド
+クラスメソッド または モジュールメソッドを表示します。</p>
+<p>このコマンドの省略形は <code>m</code> です。</p>
+</dd>
+<dt><a name="L006529" id="L006529">thread l[ist]</a></dt>
+<dd>
+<p>スレッドの一覧を表示します。</p>
+<p>このコマンドの省略形は <code>th</code> です。</p>
+</dd>
+<dt><a name="L006530" id="L006530">thread c[ur[rent]]</a></dt>
+<dd>
+<p>現在のスレッドを表示します。</p>
+</dd>
+<dt><a name="L006531" id="L006531">thread &lt;nnn&gt;</a></dt>
+<dt><a name="L006532" id="L006532">thread sw[itch] &lt;nnn&gt;</a></dt>
+<dd>
+<p>実行するスレッドを <var>&lt;nnn&gt;</var> に切替えます。</p>
+</dd>
+<dt><a name="L006533" id="L006533">thread stop &lt;nnn&gt;</a></dt>
+<dt><a name="L006534" id="L006534">thread c[ur[rent]] &lt;nnn&gt;</a></dt>
+<dd>
+<p>スレッド <var>&lt;nnn&gt;</var> を停止します。</p>
+</dd>
+<dt><a name="L006535" id="L006535">thread resume &lt;nnn&gt;</a></dt>
+<dd>
+<p>スレッド <var>&lt;nnn&gt;</var> を再開します。</p>
+</dd>
+<dt><a name="L006536" id="L006536">p &lt;expression&gt;</a></dt>
+<dd>
+<p>ruby の式 <var>&lt;expression&gt;</var> の結果を表示します。</p>
+</dd>
+<dt><a name="L006537" id="L006537">help</a></dt>
+<dd>
+<p>デバッグコマンドの一覧を表示します。</p>
+<p>このコマンドの省略形は <code>h</code> です。</p>
+</dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm338.html">&lt;-PREV</a>][<a href="refm340.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

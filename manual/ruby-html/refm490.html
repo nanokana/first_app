@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>class.c</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm491.html" rel="next" />
+<link href="refm489.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm488.html">UP</a>][<a href="refm489.html">&lt;-PREV</a>][<a href="refm491.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L009916" id="L009916">class.c</a></h1>
+<dl>
+<dt><a name="L009917" id="L009917">static int clone_method(ID mid, NODE *body, st_table *tbl)</a></dt>
+<dd>
+<p><code>m_tbl</code> 格納形式のメソッド (構文木) をコピーして返します。
+<code>ST_CONTINUE</code> を返します。</p>
+</dd>
+<dt><a name="L009918" id="L009918">static VALUE include_class_new(VALUE module, VALUE super)</a></dt>
+<dd>
+<p><var>super</var> をスーパークラスとして
+モジュールの「化身」クラスを作成し返します。</p>
+</dd>
+<dt><a name="L009919" id="L009919">static int ins_methods_i(ID key, NODE *body, VALUE ary)</a></dt>
+<dd>
+<p><code>rb_class_instance_methods()</code> のイテレータブロック (通常版)。</p>
+</dd>
+<dt><a name="L009920" id="L009920">static int ins_methods_priv_i(ID key, NODE *body, VALUE ary)</a></dt>
+<dd>
+<p><code>rb_class_instance_methods()</code> のイテレータブロック
+(private メソッド版)。</p>
+</dd>
+<dt><a name="L009921" id="L009921">static int ins_methods_prot_i(ID key, NODE *body, VALUE ary)</a></dt>
+<dd>
+<p><code>rb_class_instance_methods()</code> のイテレータブロック
+(protected メソッド版)。</p>
+</dd>
+<dt><a name="L009922" id="L009922">static VALUE method_list(VALUE mod, int option, int (*func)())</a></dt>
+<dd>
+<p>モジュール <var>mod</var> に定義されているメソッドに対して
+順番に <code>func</code> を繰り返し呼び出します。</p>
+</dd>
+<dt><a name="L009923" id="L009923">VALUE rb_class_boot(VALUE super)</a></dt>
+<dd>
+<p>スーパークラスを <var>super</var> とするクラスオブジェクトを作成し、返します。</p>
+</dd>
+<dt><a name="L009924" id="L009924">VALUE rb_class_inherited(VALUE super, VALUE klass)</a></dt>
+<dd>
+<p>クラス <var>super</var> の下位クラス <var>klass</var> が作成されたことを
+受けて、<var>super</var> に対し <code>inherited</code> メソッドを呼び出します。</p>
+</dd>
+<dt><a name="L009925" id="L009925">VALUE rb_class_instance_methods(int argc, VALUE *argv, VALUE mod)</a></dt>
+<dd>
+<p><code>Module#instance_methods</code> の実体。
+モジュール <var>mod</var> に定義されている public メソッド名の
+リストを文字列の配列で返します。</p>
+</dd>
+<dt><a name="L009926" id="L009926">VALUE rb_class_new(VALUE super)</a></dt>
+<dd>
+<p><var>super</var> をスーパークラスとして
+新しいクラスオブジェクトを生成し、返します。</p>
+</dd>
+<dt><a name="L009927" id="L009927">VALUE rb_class_private_instance_methods(int argc, VALUE *argv, VALUE mod)</a></dt>
+<dd>
+<p><code>Module#private_instance_methods</code> の実体。
+モジュール <var>mod</var> に定義されている private メソッド名の
+リストを文字列の配列で返します。</p>
+</dd>
+<dt><a name="L009928" id="L009928">VALUE rb_class_protected_instance_methods(int argc, VALUE *argv, VALUE mod)</a></dt>
+<dd>
+<p><code>Module#protected_instance_methods</code> の実体。
+モジュール <var>mod</var> に定義されている protected メソッド名の
+リストを文字列の配列で返します。</p>
+</dd>
+<dt><a name="L009929" id="L009929">void rb_define_alias(VALUE klass, const char *new, const char *old)</a></dt>
+<dd>
+<p>クラス <var>klass</var> のインスタンスメソッド <var>old</var> の
+別名 <var>new</var> を定義します。</p>
+</dd>
+<dt><a name="L009930" id="L009930">void rb_define_attr(VALUE klass, const char *name, int read, int write)</a></dt>
+<dd>
+<p>クラス <var>klass</var> にメソッド name と name= を定義します。
+<var>read</var> が真のときは name を定義し、
+<var>write</var> が真のときは name= を定義します。</p>
+</dd>
+<dt><a name="L009931" id="L009931">VALUE rb_define_class(const char *name, VALUE super)</a></dt>
+<dd>
+<p>クラス <var>super</var> の下位クラス <var>name</var> を作成し返します。</p>
+</dd>
+<dt><a name="L009932" id="L009932">VALUE rb_define_class_id(ID id, VALUE super)</a></dt>
+<dd>
+<p>クラス名 id でクラス super を継承したクラスを
+新しく作成する。クラス→クラス名 (定数名) の関連付けは
+なされるが、定数→クラスの関連付けはなされない。</p>
+</dd>
+<dt><a name="L009933" id="L009933">VALUE rb_define_class_under(VALUE outer, const char *name, VALUE super)</a></dt>
+<dd>
+<p>クラス <var>super</var> の下位クラス <code><var>outer</var>::<var>name</var></code>
+を作成し返します。</p>
+</dd>
+<dt><a name="L009934" id="L009934">void rb_define_global_function(const char *name, VALUE (*func)(), int argc)</a></dt>
+<dd>
+<p>関数 <var>name</var> を定義します。
+<var>func</var> と <var>argc</var> は <code>rb_define_method</code> と同じです。</p>
+</dd>
+<dt><a name="L009935" id="L009935">void rb_define_method(VALUE klass, const char *name, VALUE(*func)(), int argc)</a></dt>
+<dd>
+<p>クラス<var>klass</var>のインスタンスメソッド<var>name</var>を定義します。</p>
+<p><var>argc</var>はCの関数へ渡される引数の数(と形式)を決めます．</p>
+<ul>
+<li><p><var>argc</var>が0以上の時</p>
+<p><var>argc</var>で指定した値がそのメソッドの引数の数になります。
+16個以上の引数は使えません，</p>
+<pre>VALUE func(VALUE self, VALUE arg1, ... VALUE argN)</pre></li>
+<li><p><var>argc</var>が-1のとき</p>
+<p>引数はCの配列として第二引数に入れて渡されます。
+第一引数は配列の要素数です。</p>
+<pre>VALUE func(int argc, VALUE *argv, VALUE self)</pre></li>
+<li><p><var>argc</var>が-2のとき</p>
+<p>引数はRubyの配列に入れて渡されます。</p>
+<pre>VALUE func(VALUE self, VALUE args)</pre></li>
+</ul>
+<p><em class="XXINVALIDXX">rb_scan_args</em>も参照</p>
+</dd>
+<dt><a name="L009936" id="L009936">void rb_define_method_id(VALUE klass, ID name, VALUE (*func)(), int argc)</a></dt>
+<dd>
+<p><var>klass</var> に public メソッド <var>name</var> を定義します。
+その実体は関数 <var>func</var> です。また <var>argc</var> の意味は
+rb_define_method と同じです。</p>
+</dd>
+<dt><a name="L009937" id="L009937">VALUE rb_define_module(const char *name)</a></dt>
+<dd>
+<p>モジュール <var>name</var> を作成し返します。</p>
+</dd>
+<dt><a name="L009938" id="L009938">void rb_define_module_function(VALUE module, const char *name, VALUE (*func)(), int argc)</a></dt>
+<dd>
+<p>モジュール <var>module</var> にモジュール関数 <var>name</var> を定義します。
+<var>func</var> と <var>argc</var> は <code>rb_define_method</code> と同じです。</p>
+</dd>
+<dt><a name="L009939" id="L009939">VALUE rb_define_module_id(ID id)</a></dt>
+<dd>
+<p>名前が <var>id</var> である新しいモジュールを定義し、それを返します。
+モジュール→名前 (定数) のリンクは確立しますが
+名前→モジュールのリンクはまだ確立していません。</p>
+</dd>
+<dt><a name="L009940" id="L009940">VALUE rb_define_module_under(VALUE outer, const char *name)</a></dt>
+<dd>
+<p>モジュール <code><var>outer</var>::<var>name</var></code> を作成し返します。</p>
+</dd>
+<dt><a name="L009941" id="L009941">void rb_define_private_method(VALUE klass, const char *name, VALUE(*func)(), int argc)</a></dt>
+<dd>
+<p>クラス <var>klass</var> にプライベートインスタンスメソッド <var>name</var> を
+定義します。その実体は関数 <var>func</var> であり、その関数がとる
+引数のタイプを <var>argc</var> で指定します。<var>argc</var> のフォーマットに
+ついては <code>rb_define_method</code> の項を参照してください。</p>
+</dd>
+<dt><a name="L009942" id="L009942">void rb_define_protected_method(VALUE klass, const char *name, VALUE (*func)(), int argc)</a></dt>
+<dd>
+<p>クラス <var>klass</var> に protected インスタンスメソッド <var>name</var> を
+定義します。その実体は関数 <var>func</var> であり、その関数がとる
+引数のタイプを <var>argc</var> で指定します。<var>argc</var> のフォーマットに
+ついては <code>rb_define_method</code> の項を参照してください。</p>
+</dd>
+<dt><a name="L009943" id="L009943">void rb_define_singleton_method(VALUE obj, const char *name, VALUE (*func)(), int argc)</a></dt>
+<dd>
+<p><var>obj</var> に特異メソッド <var>name</var> を定義します。
+メソッドの実体を <var>func</var> に関数ポインタで与え、その関数がとる
+引数のタイプを <var>argc</var> に渡します。<var>argc</var> のフォーマットに
+ついては <code>rb_define_method</code> の記述を参照してください。</p>
+</dd>
+<dt><a name="L009944" id="L009944">void rb_include_module(VALUE klass, VALUE module)</a></dt>
+<dd>
+<p><code>Module#append_features</code> の実体。
+クラスまたはモジュール <var>klass</var> にモジュール <var>module</var> を
+インクルードします。</p>
+</dd>
+<dt><a name="L009945" id="L009945">VALUE rb_make_metaclass(VALUE obj, VALUE klass)</a></dt>
+<dd>
+<p>クラス <var>klass</var> のインスタンス <var>obj</var> に特異クラスを導入し
+特異クラスと <var>obj</var> を結びつけます。</p>
+</dd>
+<dt><a name="L009946" id="L009946">VALUE rb_mod_ancestors(VALUE mod)</a></dt>
+<dd>
+<p>モジュール <var>mod</var> にインクルードされているモジュール、
+さらに <var>mod</var> がクラスならばスーパークラスとそれに
+インクルードされているモジュールを再帰的に集めて
+メソッド探索優先順位順に並べて返します (早く探索されるほうが前)。</p>
+</dd>
+<dt><a name="L009947" id="L009947">VALUE rb_mod_clone(VALUE mod)</a></dt>
+<dd>
+<p>モジュール <var>mod</var> を clone して返します。</p>
+</dd>
+<dt><a name="L009948" id="L009948">VALUE rb_mod_dup(VALUE mod)</a></dt>
+<dd>
+<p>モジュール <var>mod</var> を dup して返します。</p>
+</dd>
+<dt><a name="L009949" id="L009949">VALUE rb_mod_include_p(VALUE mod, VALUE mod2)</a></dt>
+<dd>
+<p>モジュール <var>mod</var> が <var>mod2</var> をインクルードしていれば真。</p>
+</dd>
+<dt><a name="L009950" id="L009950">VALUE rb_mod_included_modules(VALUE mod)</a></dt>
+<dd>
+<p>モジュール <var>mod</var> にインクルードされているモジュールの配列を返します。</p>
+</dd>
+<dt><a name="L009951" id="L009951">VALUE rb_module_new(void)</a></dt>
+<dd>
+<p>新しいモジュールオブジェクトを作成し、返します。</p>
+</dd>
+<dt><a name="L009952" id="L009952">VALUE rb_obj_singleton_methods(int argc, VALUE *argv, VALUE obj)</a></dt>
+<dd>
+<p><code>Object#singleton_methods</code> の実体。
+オブジェクト <var>obj</var> に定義されている特異メソッド名のリストを
+文字列の配列で返す。</p>
+</dd>
+<dt><a name="L009953" id="L009953">int rb_scan_args(int argc, const VALUE *argv, const char *fmt, ...)</a></dt>
+<dd>
+<p>長さ <var>argc</var> の配列 <var>argv</var> を <var>fmt</var> に従って
+解析し、第四引数以降で渡されたアドレスに書き込みます。</p>
+<p><var>fmt</var> のフォーマットは以下の通りです。</p>
+<ul>
+<li>必須引数の数 (省略可能な引数があるなら省略不可)</li>
+<li>省略可能な引数の数 (ゼロ個ならば省略可)</li>
+<li>残りの引数を Ruby の配列として受け取ることを示す '*' (省略可)</li>
+<li>ブロックを Proc オブジェクト化して受け取ることを示す '&amp;' (省略可)</li>
+</ul>
+<p>これらの指定文字はそれぞれ省略可能ですが、
+必ずこの順番で現れなければいけません。</p>
+<p>使用例</p>
+</dd>
+</dl>
+<pre>VALUE a, b, optv;
+rb_scan_args(argc, argv, &quot;21&quot;, &amp;a, &amp;b, &amp;optv);</pre>
+<pre>対応する Ruby プログラムでの宣言</pre>
+<pre>def some_method( a, b, opt = nil )</pre>
+<pre>使用例 (2)</pre>
+<pre>VALUE a, rest, block;
+rb_scan_args(argc, argv, &quot;1*&amp;&quot;, &amp;a, &amp;rest, &amp;block);</pre>
+<pre>対応する Ruby プログラムでの宣言</pre>
+<pre>def some_method( a, *rest, &amp;block )</pre>
+<dl>
+<dt><a name="L009954" id="L009954">VALUE rb_singleton_class(VALUE obj)</a></dt>
+<dd>
+<p><var>obj</var> に特異クラスを導入し、その特異クラスを返します。
+すでに特異クラスが導入されているときはそれをそのまま返します。</p>
+<p><var>obj</var> が特異メソッドを定義できない型のオブジェクトである
+ときは例外 <code>TypeError</code> を発生します。</p>
+</dd>
+<dt><a name="L009955" id="L009955">void rb_singleton_class_attached(VALUE klass, VALUE obj)</a></dt>
+<dd>
+<p>特異クラス <var>klass</var> にその唯一のインスタンス <var>obj</var> を結びつけます。</p>
+</dd>
+<dt><a name="L009956" id="L009956">VALUE rb_singleton_class_clone(VALUE klass)</a></dt>
+<dd>
+<p>特異クラス <var>klass</var> を clone して返します。
+<var>klass</var> が特異クラスでないときはただ <var>klass</var> を返します。</p>
+</dd>
+<dt><a name="L009957" id="L009957">VALUE rb_singleton_class_new(VALUE super)</a></dt>
+<dd>
+<p><var>super</var> をスーパークラスとする特異クラスを生成し、返します。</p>
+</dd>
+<dt><a name="L009958" id="L009958">void rb_undef_method(VALUE klass, const char *name)</a></dt>
+<dd>
+<p>クラス <var>klass</var> のインスタンスメソッド <var>name</var> を
+undef します。</p>
+</dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm488.html">UP</a>][<a href="refm489.html">&lt;-PREV</a>][<a href="refm491.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

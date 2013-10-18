@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>prettyprint</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm365.html" rel="next" />
+<link href="refm363.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm363.html">&lt;-PREV</a>][<a href="refm365.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006884" id="L006884">PrettyPrint</a></h1>
+<p>このクラスは pretty printing アルゴリズムの実装です。
+改行の位置を探し、構造のまとまりのためにきれいなインデントを施します。</p>
+<p>デフォルトでは、このクラスは最も基本的な要素は文字列であり、
+その1バイトが出力幅の中で1カラムを占めると仮定しています。
+しかし、いくつかのメソッドに対して適切な引数を与えることで、
+そうでない状況にも利用できます:
+<code>PrettyPrint.new</code> には改行オブジェクトと空白の生成を表すブロックを、
+<code>PrettyPrint#text</code> や <code>PrettyPrint#breakable</code> には幅といった具合に。
+これらを使ういくつかの候補は例えば次のようなものでしょう。
+proportional font を使ったテキストの整形、
+出力幅とバイト数が異なるような多バイト文字、
+文字以外の出力などです。</p>
+<h2><a name="L006885" id="L006885">class methods</a></h2>
+<dl>
+<dt><a name="L006886" id="L006886"><code>PrettyPrint.new([<var>output</var>[, <var>maxwidth</var>[, <var>newline</var>]]]) [{|<var>width</var>| ...}]</code></a></dt>
+<dd>
+<p>pretty printing のためのバッファを生成します。</p>
+<p><var>output</var> は出力先で、
+もし指定されなければ <code>''</code> が仮定されます。
+このオブジェクトは次のものを受け付ける <code>&lt;&lt;</code> 
+メソッドを持っていなければなりません。それは、
+<code>PrettyPrint#text</code> の第1引数 <var>obj</var>、
+<code>PrettyPrint#breakable</code> の第1引数 <var>sep</var>、
+<code>PrettyPrint.new</code> の第1引数 <var>newline</var>
+および
+<code>PrettyPrint.new</code> に与えられたブロックを評価した結果です。</p>
+<p><var>maxwidth</var> は行の最大幅を指定します。
+与えられない場合は 79 が仮定されます。
+ただし、改行できないものが渡された場合は
+実際の出力幅は <var>maxwidth</var> を越えることがあります。</p>
+<p><var>newline</var> は改行に使われます。
+指定されない場合は <code>&quot;\n&quot;</code> が仮定されます。</p>
+<p>ブロックは空白を生成します。
+指定されない場合は <code>{|width| ' ' * width}</code> が使われます。</p></dd>
+<dt><a name="L006887" id="L006887"><code>PrettyPrint.format([<var>output</var>[, <var>maxwidth</var>[, <var>newline</var>[, <var>genspace</var>]]]]) {|<var>pp</var>| ...}</code></a></dt>
+<dd>
+<p>以下と同じ働きをするもので簡便のために用意されています。</p>
+<pre>begin
+  pp = PrettyPrint.new(output, maxwidth, newline, &amp;genspace)
+  ...
+  pp.flush
+  output
+end</pre></dd>
+<dt><a name="L006888" id="L006888"><code>PrettyPrint.singleline_format([<var>output</var>[, <var>maxwidth</var>[, <var>newline</var>[, <var>genspace</var>]]]]) {|<var>pp</var>| ...}</code></a></dt>
+<dd>
+<p><code>PrettyPrint.format</code> に似ていますが、改行しません。引数 
+<var>maxwidth</var>, <var>newline</var> と <var>genspace</var> は無視されます。ブロッ
+ク中の <code>breakable</code> の実行は、改行せずに <code>text</code> の実行であるか
+のように扱います。</p></dd>
+</dl>
+<h2><a name="L006889" id="L006889">methods</a></h2>
+<dl>
+<dt><a name="L006890" id="L006890"><code>text(<var>obj</var>[, <var>width</var>])</code></a></dt>
+<dd>
+<p><var>obj</var> を <var>width</var> カラムのテキストとして追加します。</p>
+<p><var>width</var> が指定されなかった場合、<code><var>obj</var>.length</code> が利用されます。</p></dd>
+<dt><a name="L006891" id="L006891"><code>breakable([<var>sep</var>[, <var>width</var>]])</code></a></dt>
+<dd>
+<p>「必要ならここで改行出来る」ということを通知します。
+もしその位置で改行されなければ、
+<var>width</var>カラムのテキスト <var>sep</var> がそこに挿入されます。</p>
+<p><var>sep</var> が指定されなければ <code>&quot; &quot;</code> が利用されます。</p>
+<p><var>width</var> が指定されなければ、<code><var>sep</var>.length</code> が利用されます。
+例えば <var>sep</var> が多バイト文字の際に指定する必要があるかも知れません。</p></dd>
+<dt><a name="L006892" id="L006892"><code>nest(<var>indent</var>) {...}</code></a></dt>
+<dd>
+<p>ブロックの中で追加された改行の後の左マージンを <var>indent</var> ぶんだけ
+増加させます。</p></dd>
+<dt><a name="L006893" id="L006893"><code>group([<var>indent</var>[, <var>open_obj</var>[, <var>close_obj</var>[, <var>open_width</var>[, <var>close_width</var>]]]]]) {...}</code></a></dt>
+<dd>
+<p>ブロック内で追加された改行のヒントをグループ化します。</p>
+<p><var>indent</var> が指定された場合、このメソッド呼び出しは
+<code>nest(<var>indent</var>) { ... }</code> でネストしているものとして扱われます。</p>
+<p><var>open_obj</var> が指定された場合、<code>text open_obj, open_width</code> が
+最初に呼ばれます。
+<var>close_obj</var> が指定された場合、<code>text close_obj, close_width</code> が
+最後に呼ばれます。</p></dd>
+<dt><a name="L006894" id="L006894"><code>flush</code></a></dt>
+<dd>
+<p>バッファされたデータを出力します。</p></dd>
+<dt><a name="L006895" id="L006895"><code>first?</code></a></dt>
+<dd>
+<p>現在のグループで <code>first?</code> に対する最初の呼び出しかどうかを判定する
+述語です。
+これはカンマで区切られた値を整形するのに有用です。</p>
+<pre>pp.group(1, '[', ']') {
+  xxx.each {|yyy|
+    unless pp.first?
+      pp.text ','
+      pp.breakable
+    end
+    ... pretty printing yyy ...
+  }
+}</pre></dd>
+</dl>
+<h2><a name="L006896" id="L006896">Bugs</a></h2>
+<ul>
+<li>箱指向の整形? 他のアルゴリズム?</li>
+</ul>
+<h2><a name="L006897" id="L006897">References</a></h2>
+<p>Christian Lindig, Strictly Pretty, March 2000,
+<a href="http://www.st.cs.uni-sb.de/~lindig/papers/pretty/strictly-pretty.html">&lt;URL:http://www.st.cs.uni-sb.de/~lindig/papers/pretty/strictly-pretty.html&gt;</a><sup class="outside"><small>[外部]</small></sup></p>
+<p>Philip Wadler, A prettier printer, March 1998,
+<a href="http://homepages.inf.ed.ac.uk/wadler/topics/language-design.html#prettier">&lt;URL:http://homepages.inf.ed.ac.uk/wadler/topics/language-design.html#prettier&gt;</a><sup class="outside"><small>[外部]</small></sup></p>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm363.html">&lt;-PREV</a>][<a href="refm365.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

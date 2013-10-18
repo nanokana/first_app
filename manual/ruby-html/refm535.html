@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>manual page</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm536.html" rel="next" />
+<link href="refm534.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm534.html">&lt;-PREV</a>][<a href="refm536.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L011810" id="L011810">manual page</a></h1>
+<p><code>foo(1)</code>という記述はマニュアルページの参照を示します(Unixでの話)。</p>
+<pre>$ man 1 foo</pre>
+<p>などとして参照します。</p>
+<p>数字はセクション番号を示します。例えば</p>
+<ul>
+<li>1 コマンド</li>
+<li>2 システムコール</li>
+<li>3 ライブラリ関数</li>
+</ul>
+<p>などと分類わけされています。各セクションの意味は <code>intro(1)</code> などに
+説明がありますのでそちらも参照してください。</p>
+<p>環境によってはシステムコールがライブラリ関数として実装されている
+場合もあるので <code>socket(2)</code> が</p>
+<pre>$ man 2 socket</pre>
+<p>でなく</p>
+<pre>$ man 3 socket</pre>
+<p>の場合もあります。大抵セクションは省略して</p>
+<pre>$ man socket</pre>
+<p>として参照すれば良いでしょう。</p>
+<p>詳細は <code>man(1)</code> を参照してください。</p>
+<p>UNIX 環境を触れない人は </p>
+<ul>
+<li><a href="http://www.unix-systems.org/single_unix_specification_v2/">The Single UNIX(R) Specification V2</a><sup class="outside"><small>[外部]</small></sup></li>
+<li><a href="http://www.linux.or.jp/JM/">JM Project</a><sup class="outside"><small>[外部]</small></sup></li>
+<li><a href="http://www.jp.freebsd.org/man-jp/">jpman プロジェクト</a><sup class="outside"><small>[外部]</small></sup></li>
+<li><a href="http://xjman.dsl.gr.jp/">X Japanese Documentation Project</a><sup class="outside"><small>[外部]</small></sup></li>
+<li><a href="http://www.freebsd.org/cgi/man.cgi">FreeBSD Hypertext Man Pages</a><sup class="outside"><small>[外部]</small></sup></li>
+<li><a href="http://www.opengroup.org/onlinepubs/007904975/idx/index.html">The Open Group Base Specifications Issue 6 IEEE Std 1003.1-2001</a><sup class="outside"><small>[外部]</small></sup></li>
+</ul>
+<p>などを参照してください(この他にも情報があれば教えてください)。</p>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm534.html">&lt;-PREV</a>][<a href="refm536.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

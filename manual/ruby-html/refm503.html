@@ -1,0 +1,492 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>逆引きApollo</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm504.html" rel="next" />
+<link href="refm502.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm486.html">UP</a>][<a href="refm502.html">&lt;-PREV</a>][<a href="refm504.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L010770" id="L010770">逆引き Apollo</a></h1>
+<h2><a name="L010771" id="L010771">Widget 全般</a></h2>
+<h3><a name="L010772" id="L010772">幅や高さを設定する</a></h3>
+<h4><a name="L010773" id="L010773">A.フォームのなかでラベルの大きさを指定する。</a></h4>
+<pre>require &quot;phi&quot; ; include Phi
+form  = Phi::Form.new        :form, &quot;大きさを指定する(1)&quot;
+label = Phi::Label.new form, :label, &quot;Hello!&quot;
+label.height = 50
+label.width  = 70
+label.color  = Phi::CL_RED
+form.show
+Phi.mainloop
+
+# by take_tk</pre>
+<h4><a name="L010774" id="L010774">B.ラベルをフォームのクライアント領域全体と指定して、フォームの大きさを指定する。</a></h4>
+<pre>require &quot;phi&quot; ; include Phi
+form  = Phi::Form.new        :form,  &quot;大きさを指定する(2)&quot;
+label = Phi::Label.new form, :label, &quot;Hello!&quot;
+label.align = Phi::AL_CLIENT
+label.color = Phi::CL_RED
+form.height = 200
+form.width  = 300
+form.show
+Phi.mainloop
+
+# by take_tk</pre>
+<h3><a name="L010775" id="L010775">幅や高さを取得する</a></h3>
+<pre>require &quot;phi&quot; ; include Phi
+form  = Phi::Form.new        :form, &quot;大きさを取得する。フォームの大きさを変えてください。&quot;
+label = Phi::Label.new form, :label, &quot;Hello!&quot;
+label.align = Phi::AL_CLIENT
+form.on_resize = proc{
+  label.caption = &quot;height = %d, width = %d&quot; % [form.height, form.width]
+}
+form.show
+Phi.mainloop
+
+# by take_tk</pre>
+<h3><a name="L010776" id="L010776">Widget の見ためを変える</a></h3>
+<h3><a name="L010777" id="L010777">Widget 間の間隔(余白)を設定する</a></h3>
+<ul>
+<li>image: <a href="http://member.nifty.ne.jp/take_tk/apollo/gyaku01.jpg">&lt;URL:http://member.nifty.ne.jp/take_tk/apollo/gyaku01.jpg&gt;</a><sup class="outside"><small>[外部]</small></sup></li>
+</ul>
+<pre>require &quot;phi&quot; ; include Phi
+require&quot;rgui&quot;
+
+form = RGUI::Form.new :form, &quot;Widget 間の間隔(余白)を設定する&quot;
+
+form.add (
+  hbox1 = RGUI::Hbox.new(true,10).add(*[
+    vbox1 = RGUI::Vbox.new(true,10).add(*[
+      button1  = Button.new( form , :button1, &quot;横に広げる&quot;),
+      button2  = Button.new( form , :button2, &quot;横に狭める&quot;)
+    ]),
+    vbox2 = RGUI::Vbox.new(true,10).add(*[ 
+      button3  = Button.new( form , :button3, &quot;縦に広げる&quot;),
+      button4  = Button.new( form , :button4, &quot;縦に狭める&quot;)
+    ]),
+  ])
+)
+
+button1.on_click = proc{ hbox1.space += 1 ; form.layout }
+button2.on_click = proc{ hbox1.space -= 1 ; form.layout }
+button3.on_click = proc{ vbox2.space = vbox1.space += 1 ; form.layout }
+button4.on_click = proc{ vbox2.space = vbox1.space -= 1 ; form.layout }
+form.on_resize = proc{ form.layout }
+
+form.show
+mainloop</pre>
+<ul>
+<li>by take_tk</li>
+</ul>
+<h3><a name="L010778" id="L010778">前景、背景色を変える</a></h3>
+<h3><a name="L010779" id="L010779">アクティブ時(マウスが上に来たとき)の前景、背景色を変える</a></h3>
+<h3><a name="L010780" id="L010780">フォントを変える</a></h3>
+<pre>require 'phi'
+include  Phi 
+
+form = Form.new
+form.font.name = 'ＭＳ ゴシック'
+i = Button.new form, :btn, 'hello'
+i.align = Phi::AL_CLIENT
+def i.on_click
+  self.caption = Time.now.to_s
+  print &quot;clicked\n&quot;
+end
+
+form.show
+Phi.mainloop</pre>
+<h3><a name="L010781" id="L010781">フォント(文字)の色を変える</a></h3>
+<pre>font.color = CL_RED</pre>
+<h3><a name="L010782" id="L010782">フォントの大きさを変える</a></h3>
+<pre>font.size = 20</pre>
+<h3><a name="L010783" id="L010783">フォントの一覧を取得する</a></h3>
+<pre>require &quot;phi&quot;
+puts Phi::SCREEN.fonts.sort
+#=&gt; @Batang
+#=&gt; @BatangChe
+#=&gt; ……
+#=&gt; @Terminal
+#=&gt; @ＭＳ Ｐゴシック
+#=&gt; @ＭＳ Ｐ明朝
+#=&gt; @ＭＳ ゴシック
+#=&gt; @ＭＳ 明朝
+#=&gt; Arial
+#=&gt; ……
+#=&gt; Wingdings
+#=&gt; ＭＳ Ｐゴシック
+#=&gt; ＭＳ Ｐ明朝
+#=&gt; ＭＳ ゴシック
+#=&gt; ＭＳ 明朝</pre>
+<p>by take_tk</p>
+<h3><a name="L010784" id="L010784">フォーカスを移動する</a></h3>
+<h3><a name="L010785" id="L010785">イメージつきにする</a></h3>
+<h3><a name="L010786" id="L010786">マウスカーソルの形状を変更する</a></h3>
+<h3><a name="L010787" id="L010787">独自カーソルを使用する</a></h3>
+<h3><a name="L010788" id="L010788">Widget の種類を取得する</a></h3>
+<h2><a name="L010789" id="L010789">配置</a></h2>
+<h3><a name="L010777" id="L010777">Widget 間の間隔(余白)を設定する</a></h3>
+<h3><a name="L010790" id="L010790">親 Widget を指定する</a></h3>
+<h3><a name="L010791" id="L010791">Widget を非表示にする</a></h3>
+<h3><a name="L010792" id="L010792">上から下に順にpackする</a></h3>
+<h3><a name="L010793" id="L010793">下から上に順にpackする</a></h3>
+<h3><a name="L010794" id="L010794">左から右に順にpackする</a></h3>
+<h3><a name="L010795" id="L010795">絶対座標で配置する</a></h3>
+<h3><a name="L010796" id="L010796">格子状の配置をする</a></h3>
+<h2><a name="L010797" id="L010797">イベント</a></h2>
+<h3><a name="L010798" id="L010798">マウスの第一ボタンをクリックしたときの動作を設定する</a></h3>
+<h3><a name="L010799" id="L010799">マウスをダブルクリックしたときの動作を設定する</a></h3>
+<h3><a name="L010800" id="L010800">マウスの第二ボタンをクリックしたときの動作を設定する</a></h3>
+<h3><a name="L010801" id="L010801">マウスを移動したときの動作を設定する</a></h3>
+<h3><a name="L010802" id="L010802">マウスの座標を取得する</a></h3>
+<h3><a name="L010803" id="L010803">Enter キーを押したときの動作を設定する</a></h3>
+<h3><a name="L010804" id="L010804">どのキーが押されたかを取得する</a></h3>
+<h3><a name="L010805" id="L010805">特殊キー(Shift, Crtl, ALT)などが押されたかどうか知る</a></h3>
+<h3><a name="L010806" id="L010806">Widget にフォーカスが移って来たときの動作を設定する</a></h3>
+<h3><a name="L010807" id="L010807">C-x C-c で終了する</a></h3>
+<h2><a name="L010808" id="L010808">Label Widget</a></h2>
+<h3><a name="L010809" id="L010809">表示後にテキストを変更する</a></h3>
+<h3><a name="L010810" id="L010810">表示したテキストを取得する</a></h3>
+<h3><a name="L010811" id="L010811">文字の位置揃えをする</a></h3>
+<h3><a name="L010812" id="L010812">複数行表示する</a></h3>
+<h3><a name="L010813" id="L010813">折り返し幅を指定する</a></h3>
+<h3><a name="L010814" id="L010814">下線を引く</a></h3>
+<h2><a name="L010815" id="L010815">Message Widget</a></h2>
+<h3><a name="L010813" id="L010813">折り返し幅を指定する</a></h3>
+<h2><a name="L010816" id="L010816">Button Widget</a></h2>
+<h3><a name="L010817" id="L010817">Enter で選択できるようにする</a></h3>
+<h3><a name="L010818" id="L010818">ショートカットできるようにする</a></h3>
+<h3><a name="L010819" id="L010819">ボタンを使用不可にする</a></h3>
+<h3><a name="L010820" id="L010820">イメージつきボタンを使用する</a></h3>
+<h2><a name="L010821" id="L010821">CheckButton Widget</a></h2>
+<h3><a name="L010822" id="L010822">ボタンの選択、非選択を切り換える</a></h3>
+<h3><a name="L010823" id="L010823">チェックされているかどうか調べる</a></h3>
+<h3><a name="L010824" id="L010824">チェック領域を表示しないようにする</a></h3>
+<h3><a name="L010825" id="L010825">ビットマップを使用する</a></h3>
+<h3><a name="L010826" id="L010826">ボタンを選択(非選択)したときの動作を設定する</a></h3>
+<h2><a name="L010827" id="L010827">RadioButton Widget</a></h2>
+<h3><a name="L010828" id="L010828">どのボタンが選択されているかどうかを調べる</a></h3>
+<h3><a name="L010822" id="L010822">ボタンの選択、非選択を切り換える</a></h3>
+<h3><a name="L010824" id="L010824">チェック領域を表示しないようにする</a></h3>
+<h3><a name="L010825" id="L010825">ビットマップを使用する</a></h3>
+<h3><a name="L010826" id="L010826">ボタンを選択(非選択)したときの動作を設定する</a></h3>
+<h2><a name="L010829" id="L010829">Entry Widget</a></h2>
+<h3><a name="L010830" id="L010830">入力内容を取得する</a></h3>
+<h3><a name="L010831" id="L010831">あらかじめ文字列を入力しておく</a></h3>
+<h3><a name="L010832" id="L010832">入力内容をクリアする</a></h3>
+<h3><a name="L010833" id="L010833">複数行の入力を行う</a></h3>
+<h3><a name="L010834" id="L010834">パスワードの入力を行う</a></h3>
+<h3><a name="L010835" id="L010835">数値のみ入力できるようにする</a></h3>
+<h3><a name="L010836" id="L010836">入力最大文字数を設定する</a></h3>
+<h3><a name="L010837" id="L010837">Read Only にする</a></h3>
+<h3><a name="L010838" id="L010838">選択部分を取得する</a></h3>
+<h3><a name="L010839" id="L010839">特定の領域を選択状態にする</a></h3>
+<h3><a name="L010840" id="L010840">フォーカスされたら全体を選択状態にする</a></h3>
+<h3><a name="L010841" id="L010841">日本語入力を開始する</a></h3>
+<h3><a name="L010842" id="L010842">フォーカスが移ってきたときに日本語入力を自動的にONする</a></h3>
+<h3><a name="L010843" id="L010843">カーソル位置を取得する</a></h3>
+<h3><a name="L010844" id="L010844">Enter で入力を完了できるようにする</a></h3>
+<h3><a name="L010845" id="L010845">Enter で次の入力欄に移動できるようにする</a></h3>
+<h2><a name="L010846" id="L010846">Text Widget</a></h2>
+<h3><a name="L010847" id="L010847">スクロールバーを付ける</a></h3>
+<h3><a name="L010848" id="L010848">テキストの全内容を取得する</a></h3>
+<h3><a name="L010837" id="L010837">Read Only にする</a></h3>
+<h3><a name="L010838" id="L010838">選択部分を取得する</a></h3>
+<h3><a name="L010849" id="L010849">クリップボードを使う</a></h3>
+<h3><a name="L010843" id="L010843">カーソル位置を取得する</a></h3>
+<h3><a name="L010850" id="L010850">画像を表示する</a></h3>
+<h3><a name="L010851" id="L010851">文字の属性を変更する</a></h3>
+<h3><a name="L010852" id="L010852">文字に下線を引く</a></h3>
+<h3><a name="L010853" id="L010853">文字の上に横線を引く</a></h3>
+<h2><a name="L010854" id="L010854">ListBox Widget</a></h2>
+<h3><a name="L010855" id="L010855">項目を追加する</a></h3>
+<h3><a name="L010856" id="L010856">項目を削除する</a></h3>
+<h3><a name="L010857" id="L010857">全項目を削除する</a></h3>
+<h3><a name="L010858" id="L010858">項目数を取得する</a></h3>
+<h3><a name="L010859" id="L010859">選択された項目を取得する</a></h3>
+<h3><a name="L010860" id="L010860">選択された項目数を取得する</a></h3>
+<h3><a name="L010861" id="L010861">複数選択できるリストボックスを作る</a></h3>
+<h3><a name="L010862" id="L010862">リストボックスを使用不可にする</a></h3>
+<h3><a name="L010847" id="L010847">スクロールバーを付ける</a></h3>
+<h3><a name="L010863" id="L010863">先頭に表示される項目を設定する</a></h3>
+<h2><a name="L010864" id="L010864">Scale Widget</a></h2>
+<h3><a name="L010865" id="L010865">スケールの範囲を設定する</a></h3>
+<h3><a name="L010866" id="L010866">水平のスケールを使用する</a></h3>
+<h3><a name="L010867" id="L010867">現在の値を取得する</a></h3>
+<h3><a name="L010868" id="L010868">値を変更する</a></h3>
+<h3><a name="L010869" id="L010869">現在の値を表示するかどうかを変える</a></h3>
+<h3><a name="L010870" id="L010870">スケールの移動単位を設定する</a></h3>
+<h2><a name="L010871" id="L010871">Canvas Widget</a></h2>
+<h3><a name="L010872" id="L010872">線を描画する</a></h3>
+<h3><a name="L010873" id="L010873">多角形を描画する</a></h3>
+<h3><a name="L010874" id="L010874">四角を描画する</a></h3>
+<h3><a name="L010875" id="L010875">円を描画する</a></h3>
+<h3><a name="L010876" id="L010876">扇形を描画する</a></h3>
+<h3><a name="L010877" id="L010877">テキストを描画する</a></h3>
+<h3><a name="L010878" id="L010878">図形の中身を塗りつぶす</a></h3>
+<h3><a name="L010847" id="L010847">スクロールバーを付ける</a></h3>
+<h3><a name="L010879" id="L010879">表示範囲を設定する</a></h3>
+<h3><a name="L010880" id="L010880">PostScript を出力する</a></h3>
+<h3><a name="L010881" id="L010881">GIF を出力する</a></h3>
+<h3><a name="L010882" id="L010882">図形の色を変更する</a></h3>
+<h3><a name="L010883" id="L010883">図形を移動する</a></h3>
+<h3><a name="L010884" id="L010884">図形を消去する</a></h3>
+<h3><a name="L010885" id="L010885">図形の上下関係を設定する</a></h3>
+<h3><a name="L010886" id="L010886">図形をドラッグして移動する</a></h3>
+<h3><a name="L010887" id="L010887">図形を一定時間ごとに移動する</a></h3>
+<h2><a name="L010888" id="L010888">メニュー</a></h2>
+<h3><a name="L010889" id="L010889">チェックボタンメニューを作る</a></h3>
+<h3><a name="L010890" id="L010890">ラジオボタンメニューを作る</a></h3>
+<h3><a name="L010891" id="L010891">カスケードメニューを作る</a></h3>
+<h3><a name="L010892" id="L010892">セパレータを使う</a></h3>
+<h3><a name="L010893" id="L010893">イメージを使用する</a></h3>
+<h3><a name="L010894" id="L010894">切り離されないメニューを作る</a></h3>
+<h3><a name="L010895" id="L010895">ポップアップメニューを作る</a></h3>
+<h3><a name="L010896" id="L010896">オプションメニューを作る</a></h3>
+<h3><a name="L010897" id="L010897">ショートカットキーを設定する</a></h3>
+<h3><a name="L010898" id="L010898">メニューの項目を使用不可にする</a></h3>
+<h3><a name="L010899" id="L010899">ヘルプメニューのみ右端に付けるようにする</a></h3>
+<h2><a name="L010900" id="L010900">ダイアログ</a></h2>
+<h3><a name="L010901" id="L010901">ダイアログボックスを表示する</a></h3>
+<pre>require 'dialog'
+:</pre>
+<h3><a name="L010902" id="L010902">メッセージボックスを表示する</a></h3>
+<pre>Phi.message_dlg( Usage , Phi::MT_CONFIRMATION, [Phi::MB_OK])</pre>
+<h3><a name="L010903" id="L010903">独自のダイアログを作成する</a></h3>
+<p>Phi::Form から継承して作りましょう。
+そして form.show_modal します。</p>
+<h3><a name="L010904" id="L010904">ファイル選択のダイアログを表示する</a></h3>
+<pre>dlg = Phi::OpenDialog.new
+if dlg.execute
+  :
+end</pre>
+<h3><a name="L010905" id="L010905">ディレクトリ選択のダイアログを表示する</a></h3>
+<pre>require 'phi'
+include Phi
+
+prompt = 'Select a directory'
+root = 'C:/apollo/src'
+result_path=''
+
+if Phi.select_dir prompt, root, result_path
+  print &quot;You selected [%s]\n&quot; % result_path
+else
+  print &quot;You canceled to select directory.\n&quot;
+end</pre>
+<h3><a name="L010906" id="L010906">カラー選択のダイアログを表示する</a></h3>
+<pre>dlg = Phi::ColorDialog.new
+if dlg.execute
+  :
+end</pre>
+<h2><a name="L010907" id="L010907">イメージ</a></h2>
+<h3><a name="L010908" id="L010908">イメージを表示する</a></h3>
+<pre>form = Form.new
+Image.new form, :image
+form.image.picture.load file_name</pre>
+<h3><a name="L010909" id="L010909">PNG, JPEG, TIFF などを使用する</a></h3>
+<p>JPEG は require 'jpeg' で扱えます。</p>
+<h3><a name="L010910" id="L010910">XBM, PPM, PGM をスクリプトに埋め込む</a></h3>
+<p>?</p>
+<h3><a name="L010911" id="L010911">GIF をスクリプトに埋め込む</a></h3>
+<p>?</p>
+<h2><a name="L010912" id="L010912">その他</a></h2>
+<h3><a name="L010913" id="L010913">プログラムを終了する</a></h3>
+<p>ウィンドウを閉じるっていう意味?</p>
+<pre>exit</pre>
+<p>とか?</p>
+<h3><a name="L010914" id="L010914">ウィンドウマネージャーのクローズボタンを押したときにすぐに終了しないようにする</a></h3>
+<p>すぐには終了しません。
+全てのウィンドウを閉じると Phi.mainloop を抜けます。</p>
+<h3><a name="L010915" id="L010915">タイトルを設定する</a></h3>
+<pre>form.caption = 'タイトル'</pre>
+<p>あるいは Form 生成時に</p>
+<pre>form = Form.new :form1, 'タイトル'</pre>
+<h3><a name="L010916" id="L010916">アイコンを設定する</a></h3>
+<pre>Phi::APPLICATION.icon = Phi::Icon.new.load('foo.ico')</pre>
+<h4><a name="L010917" id="L010917">A.フォームのアイコンを設定する</a></h4>
+<pre>#!ruby -Ks
+require &quot;phi&quot; ; include Phi
+form = Form.new :form, &quot;フォームのアイコンを設定する&quot;
+button = Button.new form, :button, &quot;フォームのアイコンを設定します&quot;
+button.on_click = proc{
+  form.icon = Icon.new.load 'c:/apollo/sample/arima.ico'
+  button.caption = &quot;フォームのアイコンを変更しました&quot;
+}
+button.align = AL_CLIENT
+form.show
+mainloop</pre>
+<ul>
+<li>by take_tk</li>
+</ul>
+<h4><a name="L010918" id="L010918">B.アプリケーションのアイコンを設定する</a></h4>
+<pre>#!ruby -Ks
+require &quot;phi&quot; ; include Phi
+form = Form.new :form, &quot;アプリケーションのアイコンを設定する&quot;
+button = Button.new form, :button, &quot;アプリケーションのアイコンを設定します&quot;
+button.on_click = proc{
+  APPLICATION.icon = Icon.new.load 'c:/apollo/sample/arima.ico'
+  button.caption = &quot;アプリケーションのアイコンを変更しました&quot;
+}
+button.align = AL_CLIENT
+form.show
+mainloop</pre>
+<ul>
+<li>by take_tk</li>
+</ul>
+<h3><a name="L010919" id="L010919">アイコン化されたときに表示される文字列を設定する</a></h3>
+<pre>form.caption = 'hello'
+
+# by moriq</pre>
+<h3><a name="L010920" id="L010920">新しいウィンドウを生成する</a></h3>
+<pre>form = Phi::Form.new
+form.show
+
+# by moriq</pre>
+<h3><a name="L010921" id="L010921">ウィンドウを消去する</a></h3>
+<pre>form.close
+
+# by moriq</pre>
+<h3><a name="L010922" id="L010922">ウィンドウを非表示にする</a></h3>
+<pre>form.hide
+
+# by moriq</pre>
+<h3><a name="L010923" id="L010923">画面中央にウィンドウを表示する</a></h3>
+<pre>form.position = Phi::PO_SCREEN_CENTER
+
+# by moriq</pre>
+<h3><a name="L010924" id="L010924">ウィンドウを移動する</a></h3>
+<pre>form.top = top
+form.left = left
+
+form.rect = Rect.new(left, top, right, bottom)
+
+form.set_bounds(left, top, width, height)
+
+# by moriq</pre>
+<h3><a name="L010925" id="L010925">画面の大きさを取得する</a></h3>
+<pre>p Phi::SCREEN.width
+p Phi::SCREEN.height
+
+# by moriq</pre>
+<h3><a name="L010926" id="L010926">ウィンドウの大きさを固定する</a></h3>
+<pre>form.border_style = Phi::BS_DIALOG # or BS_SINGLE, BS_NONE
+
+# by moriq</pre>
+<h3><a name="L010927" id="L010927">モーダルウィンドウを作成する</a></h3>
+<pre>form.show_modal
+
+# by moriq</pre>
+<h3><a name="L010928" id="L010928">ベルを鳴らす</a></h3>
+<pre>Sys.beep
+
+# by moriq
+# SysUtils Unit 関係は Sys module を使うつもりだったんだけど、ややこしいから Phi にまとめようか?</pre>
+<h3><a name="L010929" id="L010929">Windows で動くようにする</a></h3>
+<p>動く</p>
+<pre># by moriq</pre>
+<h3><a name="L010930" id="L010930">漢字コードを設定する</a></h3>
+<p>基本的に Delphi は SJIS のみ</p>
+<pre># by moriq</pre>
+<h3><a name="L010931" id="L010931">ウィンドウがアクティブのとき特定の Widget にフォーカスを移動する</a></h3>
+<pre>edit.set_focus
+form.focus_control = edit
+
+# by moriq</pre>
+<h3><a name="L010932" id="L010932">使っている Phi のバージョンを調べる</a></h3>
+<pre>p Phi::VERSION
+
+# by moriq</pre>
+<h3><a name="L010933" id="L010933">使っている Phi に日本語パッチが当たっているかどうか調べる</a></h3>
+<p>?</p>
+<pre># by moriq</pre>
+<h3><a name="L010934" id="L010934">使っている Phi のライブラリディレクトリを調べる</a></h3>
+<pre>p $:
+
+# by moriq</pre>
+<h3><a name="L010935" id="L010935">環境を調べる</a></h3>
+<p>?</p>
+<pre># by moriq</pre>
+<h3><a name="L010936" id="L010936">ドラッグアンドドロップする</a></h3>
+<pre>#! ruby
+
+# cf:
+# Delphi4 プログラミングバイブル p.215
+# 5.1.5. コンポーネント間のドラッグ
+
+require 'phi'
+include Phi
+
+form = Form.new
+form.caption = $0
+
+i = Edit.new form, :edit
+i.align = Phi::AL_TOP
+i.text = 'hello'
+
+def i.on_mouse_down(btn, shift, x, y)
+  begin_drag false, 10
+end
+
+i = ListBox.new form, :lbox
+i.align = Phi::AL_CLIENT
+
+def i.on_drag_over(accept, src, x, y, state)
+  src != parent.edit || items.index_of(parent.edit.text) &lt; 0
+end
+
+def i.on_drag_drop(src, x, y)
+  case src
+  when parent.edit
+    items.add src.text
+  end
+end
+
+form.show
+
+Phi.mainloop
+
+# sample/drag_drop.rb
+# by moriq</pre>
+<h3><a name="L010937" id="L010937">バックグラウンドでの処理</a></h3>
+<h2><a name="L010938" id="L010938">（Ａ）Application#on_idle</a></h2>
+<pre>#-- $(apollo)/sample/Application_on_idle.rb
+require &quot;phi&quot; ; include Phi
+form = Form.new
+form.show
+APPLICATION.on_idle = proc{
+  @idle_cnt ||= 0
+  @idle_cnt += 1
+  form.caption = @idle_cnt.to_s
+}
+mainloop</pre>
+<p>take_tk</p>
+<h2><a name="L010939" id="L010939">（Ｂ）Timer</a></h2>
+<pre>#-- $(apollo)/sapmle/Timer_interval.rb
+#-- (B) Timer
+require &quot;phi&quot; ; include Phi
+form = Form.new
+form.show
+timer = Timer.new
+timer.interval = 100 ## 100/1000 sec
+timer.on_timer = proc{
+  @idle_cnt ||= 0
+  @idle_cnt += 1
+  form.caption = @idle_cnt.to_s
+}  
+mainloop</pre>
+<p>take_tk</p>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm486.html">UP</a>][<a href="refm502.html">&lt;-PREV</a>][<a href="refm504.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

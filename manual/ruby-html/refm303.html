@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SizedQueue</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm304.html" rel="next" />
+<link href="refm302.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm302.html">UP</a>][<a href="refm302.html">&lt;-PREV</a>][<a href="refm304.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006038" id="L006038">SizedQueue</a></h1>
+<p>サイズの最大値を指定できる <a href="refm302.html">Queue</a> です。</p>
+<h2><a name="L006039" id="L006039">例</a></h2>
+<p><a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/283">ruby-list:283</a><sup class="outside"><small>[外部]</small></sup>より。<code>q</code> をサイズ 1 の SizedQueue オブジェクトに
+することによって、入力される行と出力される行が同じ順序になります。
+q = [] にすると入力と違った順序で行が出力されます。</p>
+<pre>require 'thread'
+
+q = SizedQueue.new(1)
+
+th = Thread.start {
+  while line = q.pop
+    print line
+  end
+}
+
+while l = gets
+  q.push(l)
+end
+q.push(l)
+
+th.join</pre>
+<h2><a name="L006040" id="L006040">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm302.html">Queue</a></li>
+</ul>
+<h2><a name="L006041" id="L006041">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L006042" id="L006042"><code>SizedQueue.new(<var>max</var>)</code></a></dt>
+<dd>
+<p>SizedQueue オブジェクトを生成します。
+max は queue のサイズの最大値です。</p></dd>
+</dl>
+<h2><a name="L006043" id="L006043">メソッド:</a></h2>
+<dl>
+<dt><a name="L006044" id="L006044"><code>max</code></a>
+<dt><a name="L006045" id="L006045"><code>max= <var>n</var></code></a></dt>
+<dd>
+<p>queue の最大サイズを設定します。</p></dd>
+<dt><a name="L006046" id="L006046"><code>push(<var>obj</var>)</code></a></dt>
+<dd>
+<p>queue に <var>obj</var> を追加します。</p>
+<p>queue のサイズが max に達している場合は、
+queue のサイズが max より小さくなるまで他のスレッドに実行を譲ります。その後、
+queue に <var>obj</var> を追加します。</p>
+<p>あとは <a href="refm302.html#L006034">Queue#push</a> と同じです。</p></dd>
+<dt><a name="L006047" id="L006047"><code>pop</code></a></dt>
+<dd>
+<p>queue からひとつ値を取り出します。
+queue に push しようと待っているスレッドがあれば、実行を再開させます。</p>
+<p>あとは <a href="refm302.html#L006031">Queue#pop</a> と同じです。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm302.html">UP</a>][<a href="refm302.html">&lt;-PREV</a>][<a href="refm304.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ruby-src:sample/trojan.rb</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm532.html" rel="next" />
+<link href="refm530.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm530.html">&lt;-PREV</a>][<a href="refm532.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1>ruby-src:sample/trojan.rb</h1>
+#!&nbsp;/usr/local/bin/ruby<br />
+<br />
+path&nbsp;=&nbsp;ENV['PATH'].split(File::PATH_SEPARATOR)<br />
+<br />
+for&nbsp;dir&nbsp;in&nbsp;path<br />
+&nbsp;&nbsp;if&nbsp;File.directory?(dir)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;f&nbsp;in&nbsp;d&nbsp;=&nbsp;Dir.open(dir)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fpath&nbsp;=&nbsp;File.join(dir,&nbsp;f)&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;File.file?(fpath)&nbsp;&amp;&amp;&nbsp;(File.stat(fpath).mode&nbsp;&amp;&nbsp;022)&nbsp;!=&nbsp;0<br />
+&nbsp;&nbsp;printf(&quot;file&nbsp;%s&nbsp;is&nbsp;writable&nbsp;from&nbsp;other&nbsp;users\n&quot;,&nbsp;fpath)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;end<br />
+&nbsp;&nbsp;&nbsp;&nbsp;end<br />
+&nbsp;&nbsp;&nbsp;&nbsp;d.close<br />
+&nbsp;&nbsp;end<br />
+end<br />
+
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm530.html">&lt;-PREV</a>][<a href="refm532.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>socket</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm160.html" rel="next" />
+<link href="refm158.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm158.html">&lt;-PREV</a>][<a href="refm160.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L003043" id="L003043">socket</a></h1>
+<p>socket はプロセス外部との通信 (プロセス間通信、ホスト間通信) を実現します。</p>
+<h2><a name="L003044" id="L003044">クラス</a></h2>
+<ul>
+<li><a href="refm045.html">IO</a>
+<ul>
+<li><a href="refm160.html">BasicSocket</a>: ソケットを表す抽象クラス
+<ul>
+<li><a href="refm161.html">IPSocket</a>: インターネットドメインソケットの抽象クラス
+<ul>
+<li><a href="refm162.html">TCPSocket</a>: インターネットドメインのストリーム型ソケットのクラス
+<ul>
+<li><a href="refm163.html">TCPServer</a>: TCP/IPストリーム型接続のサーバ側のソケットのクラス</li>
+<li><a href="refm164.html">SOCKSSocket</a>: TCPSocket を SOCKS 対応したクラス</li>
+</ul></li>
+<li><a href="refm165.html">UDPSocket</a>: インターネットドメインのデータグラム型ソケットのクラス</li>
+</ul></li>
+<li><a href="refm166.html">UNIXSocket</a>: Unixドメインのストリーム型ソケットのクラス
+<ul>
+<li><a href="refm167.html">UNIXServer</a>: Unixストリーム型接続のサーバ側のソケットのクラス</li>
+</ul></li>
+<li><a href="refm168.html">Socket</a>: 低レベルソケットインターフェース</li>
+</ul></li>
+</ul></li>
+</ul>
+<h2><a name="L003045" id="L003045">モジュール</a></h2>
+<ul>
+<li><a href="refm169.html">Socket::Constants</a></li>
+</ul>
+<h2><a name="L003046" id="L003046">ソケットアドレス</a></h2>
+<p>ソケットというのは通信路の末端です。
+たとえば 1対1 の通信では、まず通信路の両端にひとつずつソケットをつくり、
+それらのソケットを接続することによって通信路が確立し、相互に通信できるようになります。
+この接続時に、一方のソケットにもう一方のソケットの場所を教えてやる必要がありますが、
+この場所を指定するものがソケットアドレスです。</p>
+<p>ソケットアドレスはソケットの種類によって中身が異なります。
+たとえば TCP では IPアドレスとポート番号ですし、
+Unixドメインソケットではソケットファイルを指すパス名です。</p>
+<p><a href="refm161.html">IPSocket</a> および <a href="refm166.html">UNIXSocket</a> 以下のクラス階層では、
+わざわざソケットアドレスという形式にまとめなくてもよいよう、
+ソケットアドレスの中身を直接扱えるメソッドが用意されています。</p>
+<p>また、<a href="refm161.html">IPSocket</a> 以下でのIPアドレスとポート番号の指定は、
+数値で表現するだけでなく、ホスト名やサービス名が使えます。
+これについては<a href="#L003047">ホスト指定形式</a>と<a href="#L003048">サービス指定形式</a>を参照してください。</p>
+<p>また、C のレベルの<a href="#L003049">ソケットアドレス構造体を pack した文字列</a>も使用できます。
+これは主に低レベルソケットインターフェース (<a href="refm168.html">Socket</a>) で用いられます。</p>
+<h3><a name="L003047" id="L003047">ホスト指定形式</a></h3>
+<p>AF_INETなソケットにおいてホストを指定するには以下のいずれか
+の形式を指定します。</p>
+<ul>
+<li>ホスト名 (例: &quot;localhost&quot;)</li>
+<li>dotted quadによるIPアドレス(文字列) (例: &quot;127.0.0.1&quot;)</li>
+<li>空文字列 (&quot;&quot;), 文字列 <code>&quot;&lt;any&gt;&quot;</code> - <code>INADDR_ANY</code>に相当</li>
+<li>文字列 <code>&quot;&lt;broadcast&gt;&quot;</code> - <code>INADDR_BROADCAST</code>に相当</li>
+<li>IPアドレスを表す 32bit の整数 (例: 0x7f000001)</li>
+</ul>
+<h3><a name="L003048" id="L003048">サービス指定形式</a></h3>
+<p>サービスを指定するには以下のいずれかの形式を指定します。</p>
+<ul>
+<li>ポート番号(整数または文字列) (例: 21, &quot;21&quot;)</li>
+<li>サービス名 (例: &quot;ftp&quot;)</li>
+</ul>
+<h3><a name="L003049" id="L003049">ソケットアドレス構造体を pack した文字列</a></h3>
+<p>ソケットアドレス構造体とは、C 言語の構造体 struct sockaddr_in (IPv4) 
+や struct sockaddr_un (Unix ドメイン)を指します。
+<a href="refm168.html">Socket</a> クラスなどソケットの低レベルインタフェースで利用されます。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>:
+<a href="refm168.html#L003155">Socket.pack_sockaddr_in</a>,
+<a href="refm168.html#L003160">Socket.unpack_sockaddr_in</a> といったメソッドにより、
+例えば、以下のようにしてこの文字列を得ることが出来ます</p>
+<pre>require 'socket'
+p Socket.pack_sockaddr_in(&quot;echo&quot;, &quot;127.0.0.1&quot;)
+=&gt; &quot;\002\000\000\a\177\000\000\001\000\000\000\000\000\000\000\000&quot;</pre>
+<p>また、ruby 1.6 以前では、以下のように <a href="refm036.html#L000776">pack</a> を使用できます。</p>
+<pre>require 'socket'
+p [Socket::AF_INET,
+   Socket.getservbyname('echo'),
+   127, 0, 0, 1].pack(&quot;s n C4 x8&quot;)
+=&gt; &quot;\002\000\000\a\177\000\000\001\000\000\000\000\000\000\000\000&quot;</pre>
+<h2><a name="L003050" id="L003050">ホスト名と IP アドレスの変換</a></h2>
+<p>ホスト名から IP アドレスへの変換 (正引き) を行うメソッドは以下のものが用意されています。</p>
+<ul>
+<li><a href="refm161.html#L003072">IPSocket.getaddress</a>(&quot;www.ruby-lang.org&quot;) =&gt; &quot;210.163.138.100&quot;</li>
+<li><a href="refm162.html#L003083">TCPSocket.gethostbyname</a>(&quot;www.ruby-lang.org&quot;) =&gt; [&quot;beryllium.ruby-lang.org&quot;, [], 2, &quot;210.163.138.100&quot;]</li>
+<li><a href="refm168.html#L003150">Socket.gethostbyname</a>(&quot;www.ruby-lang.org&quot;) =&gt; [&quot;beryllium.ruby-lang.org&quot;, [], 2, &quot;\322\243\212d&quot;]</li>
+<li><a href="refm168.html#L003148">Socket.getaddrinfo</a>(&quot;www.ruby-lang.org&quot;, &quot;http&quot;) =&gt; [[&quot;AF_INET&quot;, 80, &quot;beryllium.ruby-lang.org&quot;, &quot;210.163.138.100&quot;, 2, 1, 6]]</li>
+</ul>
+<p>逆に IP アドレスからホスト名への変換 (逆引き) を行うメソッドは以下のものが用意されています。</p>
+<ul>
+<li><a href="refm168.html#L003149">Socket.getnameinfo</a>([nil, nil, nil, &quot;210.163.138.100&quot;]) =&gt; [&quot;beryllium.ruby-lang.org&quot;, &quot;0&quot;]</li>
+</ul>
+<p>また、<a href="refm242.html">resolv</a> ライブラリも使用できます。</p>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm158.html">&lt;-PREV</a>][<a href="refm160.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

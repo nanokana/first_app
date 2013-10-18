@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>YAML::Store</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm131.html" rel="next" />
+<link href="refm129.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm129.html">UP</a>][<a href="refm129.html">&lt;-PREV</a>][<a href="refm131.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L002585" id="L002585">YAML::Store</a></h1>
+<p><a href="refm385.html">ruby 1.8 feature</a>:
+<a href="refm285.html">PStore</a> の <a href="refm129.html">YAML</a> 版です。<a href="refm077.html#L001975">Marshal.dump</a> したバイナリ形式の
+代わりに YAML 形式でファイルに保存します。</p>
+<p>使い方は <a href="refm285.html">PStore</a> とほとんど同じです。<a href="refm002.html">執筆者募集</a></p>
+<h2><a name="L002586" id="L002586">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm285.html">PStore</a></li>
+</ul>
+<h2><a name="L002587" id="L002587">例</a></h2>
+<pre>require &quot;yaml/store&quot;
+
+db = YAML::Store.new(&quot;sample.yml&quot;)
+db.transaction do
+  db[&quot;hoge&quot;] = {1 =&gt; 100, &quot;bar&quot; =&gt; 101}
+end
+
+# sample.yml
+hoge:
+  1: 100
+  bar: 101</pre>
+<p><a href="refm285.html">PStore</a> 同様、ユーザが定義したクラスのオブジェクトを保存することもできます。</p>
+<pre>require &quot;yaml/store&quot;
+
+class Foo
+  attr_accessor :foo
+end
+
+db = YAML::Store.new(&quot;sample.yml&quot;)
+db.transaction do
+  f = Foo.new
+  f.foo = 777
+  db[&quot;bar&quot;] = f
+end
+
+# sample.yml
+bar: !ruby/object:Foo
+  foo: 777</pre>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm129.html">UP</a>][<a href="refm129.html">&lt;-PREV</a>][<a href="refm131.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>expect</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm289.html" rel="next" />
+<link href="refm287.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm287.html">&lt;-PREV</a>][<a href="refm289.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L005721" id="L005721">expect</a></h1>
+<p>Author: A. Ito</p>
+<p>Expectライブラリは，tcl の expect パッケージと似たような機能をIOクラスに追加します．</p>
+<p>追加されるメソッドの使い方は次の通りです．</p>
+<h2><a name="L005722" id="L005722">IO</a></h2>
+<h3><a name="L005723" id="L005723">メソッド</a></h3>
+<dl>
+<dt><a name="L005724" id="L005724"><code>expect(<var>pat</var>, [<var>timeout</var>])</code></a></dt>
+<dd>
+<p>pattern は String か Regexp のインスタンス，timeout は Fixnum
+のインスタンスです．timeout は省略できます．
+このメソッドがブロックなしで呼ばれた場合，まずレシーバである
+IOオブジェクトから pattern にマッチするパターンが読みこまれる
+まで待ちます．パターンが得られたら，そのパターンに関する配列を
+返します．配列の最初の要素は，pattern にマッチするまでに読みこ
+まれた内容の文字列です．2番目以降の要素は，pattern の正規表現
+の中にアンカーがあった場合に，そのアンカーにマッチする部分です．
+もしタイムアウトが起きた場合は，このメソッドはnilを返します．
+このメソッドがブロック付きで呼ばれた場合には，マッチした要素の
+配列がブロック引数として渡され，ブロックが評価されます．</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm287.html">&lt;-PREV</a>][<a href="refm289.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>TimeoutError</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm307.html" rel="next" />
+<link href="refm305.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm304.html">UP</a>][<a href="refm305.html">&lt;-PREV</a>][<a href="refm307.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006063" id="L006063">TimeoutError &lt; Interrupt</a></h1>
+<p><a href="refm304.html">timeout</a> で定義される例外クラスです。関数 <code>timeout</code> がタイ
+ムアウトすると発生します。</p>
+<p><a href="refm304.html">timeout</a> を使うライブラリを作成する場合は、ユーザが指定した 
+timeout を捕捉しないようにライブラリ内で TimeoutError のサブクラスを
+定義して使用した方が無難です。
+<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></p>
+<pre>==&gt; foo.rb &lt;==
+require 'timeout.rb'
+class Foo
+  FooTimeoutError = Class.new(TimeoutError)
+  def longlongtime_method
+    timeout(100, FooTimeoutError) {
+       ...
+    }
+  end
+end
+
+==&gt; main.rb &lt;==
+require 'foo'
+timeout(5) {
+  Foo.new.longlongtime_method
+}</pre>
+<h2><a name="L006064" id="L006064">スーパークラス:</a></h2>
+<p><a href="refm092.html">Interrupt</a></p>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>注: version 1.6 では、<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/33352">ruby-list:33352</a><sup class="outside"><small>[外部]</small></sup> のパッチが必要です。
+このパッチは 1.7 に取り込まれました<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/33391">ruby-list:33391</a><sup class="outside"><small>[外部]</small></sup></small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm304.html">UP</a>][<a href="refm305.html">&lt;-PREV</a>][<a href="refm307.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

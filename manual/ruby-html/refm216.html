@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>OpenSSL::Digest::Digest</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm217.html" rel="next" />
+<link href="refm215.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm213.html">UP</a>][<a href="refm215.html">&lt;-PREV</a>][<a href="refm217.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L004246" id="L004246">OpenSSL::Digest::Digest</a></h1>
+<p>ハッシュ関数のための抽象的なインターフェースを提供するクラス。
+<a href="refm117.html">digest</a> も参照のこと。</p>
+<p>実装されているクラスは以下の通り。</p>
+<ul>
+<li>OpenSSL::Digest::DSS1</li>
+<li>OpenSSL::Digest::MD2</li>
+<li>OpenSSL::Digest::MD4</li>
+<li>OpenSSL::Digest::MD5</li>
+<li>OpenSSL::Digest::MDC2</li>
+<li>OpenSSL::Digest::RIPEMD160</li>
+<li>OpenSSL::Digest::SHA</li>
+</ul>
+<p><a href="refm389.html">ruby 1.8.3 feature</a>:
+システムにインストールされている openssl が 0.9.8 以降ならば以下のアルゴリズムも利用できます。</p>
+<ul>
+<li>OpenSSL::Digest::SHA224</li>
+<li>OpenSSL::Digest::SHA256</li>
+<li>OpenSSL::Digest::SHA384</li>
+<li>OpenSSL::Digest::SHA512</li>
+</ul>
+<h2><a name="L004247" id="L004247">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L004248" id="L004248"><code>Digest.digest(<var>name</var>, <var>str</var>)</code></a></dt>
+<dd>
+<p>name で与えられたハッシュアルゴリズムで与えられた文字列 str に対するハッシュ値を文字列で返す。 </p></dd>
+<dt><a name="L004249" id="L004249"><code>Digest.hexdigest(<var>name</var>, <var>str</var>)</code></a></dt>
+<dd>
+<p>name で与えられたハッシュアルゴリズムで与えられた文字列 str に対するハッシュ値を、ASCIIコードを使って 16進数の列を示す文字列にエンコードして返す。</p></dd>
+<dt><a name="L004250" id="L004250"><code>Digest.new(<var>name</var>)</code></a></dt>
+<dd>
+<p>オブジェクトを生成する。name でハッシュアルゴリズムを指定する。</p></dd>
+</dl>
+<h2><a name="L004251" id="L004251">メソッド</a></h2>
+<dl>
+<dt><a name="L004252" id="L004252"><code>reset</code></a></dt>
+<dd>
+<p>いままで入力された文字列をリセットする。</p></dd>
+<dt><a name="L004248" id="L004248"><code>digest</code></a></dt>
+<dd>
+<p>ハッシュ値を計算して文字列を返す。</p></dd>
+<dt><a name="L004249" id="L004249"><code>hexdigest</code></a>
+<dt><a name="L004253" id="L004253"><code>inspect</code></a>
+<dt><a name="L004254" id="L004254"><code>to_s</code></a></dt>
+<dd>
+<p>文字列に対するハッシュ値を、ASCIIコードを使って 16進数の列を示す文字列にエンコードして返す。</p></dd>
+<dt><a name="L004255" id="L004255"><code>update(<var>str</var>)</code></a>
+<dt><a name="L004256" id="L004256"><code>&lt;&lt;(<var>str</var>)</code></a></dt>
+<dd>
+<p>文字列を追加する。複数回updateを呼ぶことは文字列を連結して updateを呼ぶことと等しい。</p></dd>
+<dt><a name="L004257" id="L004257"><code>==(<var>digest</var>)</code></a></dt>
+<dd>
+<p>与えられた Digest オブジェクトと等しいかどうか。</p></dd>
+<dt><a name="L004258" id="L004258"><code>name</code></a></dt>
+<dd>
+<p>ハッシュアルゴリズムを返す。</p></dd>
+<dt><a name="L004259" id="L004259"><code>size</code></a></dt>
+<dd>
+<p>digest で返す文字列のバイト長。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm213.html">UP</a>][<a href="refm215.html">&lt;-PREV</a>][<a href="refm217.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

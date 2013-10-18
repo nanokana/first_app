@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>File::Stat</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm044.html" rel="next" />
+<link href="refm042.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm035.html">UP</a>][<a href="refm042.html">&lt;-PREV</a>][<a href="refm044.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L000875" id="L000875">File::Stat</a></h1>
+<p>ファイルの情報を格納したオブジェクトのクラス。</p>
+<h2><a name="L000876" id="L000876">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm035.html">Object</a></li>
+</ul>
+<h2><a name="L000877" id="L000877">インクルードしているモジュール:</a></h2>
+<ul>
+<li><a href="refm069.html">Comparable</a></li>
+</ul>
+<h2><a name="L000878" id="L000878">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L000879" id="L000879"><code>File::Stat.new(<var>path</var>)</code></a></dt>
+<dd>
+<p><var>path</var> に関する <code>File::Stat</code> オブジェクトを生成して返します。
+<a href="refm046.html#L001085">File.stat</a> と同じです。</p></dd>
+</dl>
+<h2><a name="L000880" id="L000880">メソッド:</a></h2>
+<dl>
+<dt><a name="L000881" id="L000881"><code><var>self</var> &lt;=&gt; <var>other</var></code></a></dt>
+<dd>
+<p>ファイルの最終更新時刻を比較します。<code>self</code> が <var>other</var> よりも
+新しければ正の数を、等しければ 0 を古ければ負の数を返します。</p></dd>
+<dt><a name="L000882" id="L000882"><code>ftype</code></a></dt>
+<dd>
+<p>ファイルのタイプを表す文字列を返します。文字列は以下のうちの
+いずれかです。</p>
+<pre>&quot;file&quot;
+&quot;directory&quot;
+&quot;characterSpecial&quot;
+&quot;blockSpecial&quot;
+&quot;fifo&quot;
+&quot;link&quot;
+&quot;socket&quot;
+
+&quot;unknown&quot;</pre>
+<p><a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></p></dd>
+</dl>
+<p>以下の属性メソッドは、システムによってサポートされていない場合 0 が返ります。
+<a href="refm384.html">ruby 1.7 feature</a>: 1.7 では nil が返ります。</p>
+<dl>
+<dt><a name="L000883" id="L000883"><code>dev</code></a></dt>
+<dd>
+<p>デバイス番号(ファイルシステム)</p></dd>
+<dt><a name="L000884" id="L000884"><code>dev_major  ((&lt;<var>ruby</var> <var>1</var>.<var>9</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>dev の major 番号部</p></dd>
+<dt><a name="L000885" id="L000885"><code>dev_minor  ((&lt;<var>ruby</var> <var>1</var>.<var>9</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>dev の minor 番号部</p></dd>
+<dt><a name="L000886" id="L000886"><code>ino</code></a></dt>
+<dd>
+<p>i-node 番号</p></dd>
+<dt><a name="L000887" id="L000887"><code>mode</code></a></dt>
+<dd>
+<p>ファイルモード</p></dd>
+<dt><a name="L000888" id="L000888"><code>nlink</code></a></dt>
+<dd>
+<p>ハードリンクの数</p></dd>
+<dt><a name="L000889" id="L000889"><code>uid</code></a></dt>
+<dd>
+<p>オーナーのユーザID</p></dd>
+<dt><a name="L000890" id="L000890"><code>gid</code></a></dt>
+<dd>
+<p>オーナーのグループID</p></dd>
+<dt><a name="L000891" id="L000891"><code>rdev</code></a></dt>
+<dd>
+<p>デバイスタイプ(スペシャルファイルのみ)</p></dd>
+<dt><a name="L000892" id="L000892"><code>rdev_major  ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>rdev の major 番号部</p></dd>
+<dt><a name="L000893" id="L000893"><code>rdev_minor  ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>rdev の minor 番号部</p></dd>
+<dt><a name="L000894" id="L000894"><code>size</code></a></dt>
+<dd>
+<p>ファイルサイズ(バイト単位)</p></dd>
+<dt><a name="L000895" id="L000895"><code>blksize</code></a></dt>
+<dd>
+<p>望ましいI/Oのブロックサイズ</p></dd>
+<dt><a name="L000896" id="L000896"><code>blocks</code></a></dt>
+<dd>
+<p>割り当てられているブロック数</p></dd>
+<dt><a name="L000897" id="L000897"><code>atime</code></a></dt>
+<dd>
+<p>最終アクセス時刻</p></dd>
+<dt><a name="L000898" id="L000898"><code>mtime</code></a></dt>
+<dd>
+<p>最終更新時刻</p></dd>
+<dt><a name="L000899" id="L000899"><code>ctime</code></a></dt>
+<dd>
+<p>最終状態変更時刻
+(状態の変更とは chmod などによるもので、Unix では i-node の変更を意味します)</p></dd>
+</dl>
+<p>以下の判定メソッドは、<a href="refm074.html">FileTest</a> の同名のモジュール関数と同じですが、
+ファイル名を引数に取るかわりに <code>Stat</code> 自身について判定します。</p>
+<dl>
+<dt><a name="L000900" id="L000900"><code>directory?</code></a></dt>
+<dd>
+<p>ディレクトリの時に真</p></dd>
+<dt><a name="L000901" id="L000901"><code>readable?</code></a></dt>
+<dd>
+<p>読み込み可能な時に真</p></dd>
+<dt><a name="L000902" id="L000902"><code>readable_real?</code></a></dt>
+<dd>
+<p>実ユーザ/実グループによって読み込み可能な時に真</p></dd>
+<dt><a name="L000903" id="L000903"><code>writable?</code></a></dt>
+<dd>
+<p>書き込み可能な時に真</p></dd>
+<dt><a name="L000904" id="L000904"><code>writable_real?</code></a></dt>
+<dd>
+<p>実ユーザ/実グループによって書き込み可能な時に真</p></dd>
+<dt><a name="L000905" id="L000905"><code>executable?</code></a></dt>
+<dd>
+<p>実効ユーザ/グループIDで実行できる時に真</p></dd>
+<dt><a name="L000906" id="L000906"><code>executable_real?</code></a></dt>
+<dd>
+<p>実ユーザ/グループIDで実行できる時に真</p></dd>
+<dt><a name="L000907" id="L000907"><code>file?</code></a></dt>
+<dd>
+<p>通常ファイルの時に真</p></dd>
+<dt><a name="L000908" id="L000908"><code>zero?</code></a></dt>
+<dd>
+<p>サイズが0である時に真</p></dd>
+<dt><a name="L000909" id="L000909"><code>size?</code></a></dt>
+<dd>
+<p>サイズ(0の時には偽)</p></dd>
+<dt><a name="L000910" id="L000910"><code>owned?</code></a></dt>
+<dd>
+<p>自分のものである時に真</p></dd>
+<dt><a name="L000911" id="L000911"><code>grpowned?</code></a></dt>
+<dd>
+<p>グループIDが実効グループIDと等しい時に真</p>
+<p>補助グループIDは考慮されません。</p></dd>
+<dt><a name="L000912" id="L000912"><code>pipe?</code></a></dt>
+<dd>
+<p>無名パイプおよび名前つきパイプ(FIFO)の時に真</p></dd>
+<dt><a name="L000913" id="L000913"><code>symlink?</code></a></dt>
+<dd>
+<p>シンボリックリンクである時に真</p></dd>
+<dt><a name="L000914" id="L000914"><code>socket?</code></a></dt>
+<dd>
+<p>ソケットの時に真</p></dd>
+<dt><a name="L000915" id="L000915"><code>blockdev?</code></a></dt>
+<dd>
+<p>ブロックスペシャルファイルの時に真</p></dd>
+<dt><a name="L000916" id="L000916"><code>chardev?</code></a></dt>
+<dd>
+<p>キャラクタスペシャルファイルの時に真</p></dd>
+<dt><a name="L000917" id="L000917"><code>setuid?</code></a></dt>
+<dd>
+<p>setuidされている時に真</p></dd>
+<dt><a name="L000918" id="L000918"><code>setgid?</code></a></dt>
+<dd>
+<p>setgidされている時に真</p></dd>
+<dt><a name="L000919" id="L000919"><code>sticky?</code></a></dt>
+<dd>
+<p>stickyビットが立っている時に真</p></dd>
+</dl>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>あらい 2002-01-06: 今のところ &quot;unknown&quot; を返すことはないはず。
+もしそのようなことがあれば、バグ報告をした方が良いと思われる。
+Solaris の Door とかは unknown になる？</small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm035.html">UP</a>][<a href="refm042.html">&lt;-PREV</a>][<a href="refm044.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>TCPServer</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm164.html" rel="next" />
+<link href="refm162.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm162.html">UP</a>][<a href="refm162.html">&lt;-PREV</a>][<a href="refm164.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L003085" id="L003085">TCPServer</a></h1>
+<p>TCP/IPストリーム型接続のサーバ側のソケットのクラス。このクラ
+スによって簡単にソケットを利用したサーバのプログラミングがで
+きます。例えばechoサーバは以下のようになります。</p>
+<pre>require &quot;socket&quot;
+
+gs = TCPServer.open(0)
+socks = [gs]
+addr = gs.addr
+addr.shift
+printf(&quot;server is on %s\n&quot;, addr.join(&quot;:&quot;))
+
+while true
+  nsock = select(socks)
+  next if nsock == nil
+  for s in nsock[0]
+    if s == gs
+      socks.push(s.accept)
+      print(s, &quot; is accepted\n&quot;)
+    else
+      if s.eof?
+        print(s, &quot; is gone\n&quot;)
+        s.close
+        socks.delete(s)
+      else
+        str = s.gets
+        s.write(str)
+      end
+    end
+  end
+end</pre>
+<p><code>Thread</code>を使えばもっと短くなります。</p>
+<pre>require &quot;socket&quot;
+
+gs = TCPServer.open(0)
+addr = gs.addr
+addr.shift
+printf(&quot;server is on %s\n&quot;, addr.join(&quot;:&quot;))
+
+while true
+  Thread.start(gs.accept) do |s|       # save to dynamic variable
+    print(s, &quot; is accepted\n&quot;)
+    while s.gets
+      s.write($_)
+    end
+    print(s, &quot; is gone\n&quot;)
+    s.close
+  end
+end</pre>
+<h2><a name="L003086" id="L003086">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm162.html">TCPSocket</a></li>
+</ul>
+<h2><a name="L003087" id="L003087">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L003088" id="L003088"><code>TCPServer.new([<var>host</var>, ]<var>service</var>)</code></a>
+<dt><a name="L003089" id="L003089"><code>TCPServer.open([<var>host</var>, ]<var>service</var>)</code></a></dt>
+<dd>
+<p>新しいサーバー接続をオープンします。<var>service</var>は
+<code>/etc/services</code>(またはNIS)に登録されているサービ
+ス名かポート番号で指定します。<var>host</var>を指定した時は
+指定したホストに対しての接続だけを受け付けます。省略時は全てのホ
+スト(インタフェース)への接続要求を受け付けることになります。</p>
+<p><var>host</var>に指定できる形式は<a href="refm159.html#L003047">ホスト指定形式</a>を見てください。</p></dd>
+</dl>
+<h2><a name="L003090" id="L003090">メソッド:</a></h2>
+<dl>
+<dt><a name="L003091" id="L003091"><code>accept</code></a></dt>
+<dd>
+<p>クライアントからの接続要求を受け付け、接続した
+<a href="refm162.html">TCPSocket</a>のインスタンスを返します。</p>
+<pre>TCPServer.open(&quot;&quot;, 0) {|serv|
+  c = TCPSocket.new(*serv.addr.values_at(3,1))
+  s = serv.accept
+  c.write &quot;foo&quot;  
+  p s.recv(10)  #=&gt; &quot;foo&quot;
+}</pre></dd>
+<dt><a name="L003092" id="L003092"><code>accept_nonblock</code></a></dt>
+<dd>
+<p><a href="refm391.html">ruby 1.8.5 feature</a></p>
+<p>ソケットをノンブロッキングモードに設定した後、
+<code>accept(2)</code>を呼び出します。</p>
+<p>引数、返り値は <a href="#L003091">accept</a> と同じです。</p>
+<p><code>accept(2)</code>がエラーになった場合、
+EAGAIN, EINTR を含め例外 <a href="refm108.html">Errno::EXXX</a> が発生します。</p></dd>
+<dt><a name="L003093" id="L003093"><code>listen(<var>backlog</var>)       ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p><a href="refm535.html">listen(2)</a> を実行します。
+(<a href="refm168.html#L003168">listen</a>と同じ)</p>
+<p><var>backlog</var> は、クライアントからの接続要求を保留できる数です。
+TCPServer のインスタンスは最初は backlog の値は 5 で生成されます。</p>
+<p><a href="refm535.html">listen(2)</a> が成功すれば 0 を返します。
+失敗すれば 例外 <a href="refm108.html">Errno::EXXX</a> が発生します。</p></dd>
+<dt><a name="L003094" id="L003094"><code>sysaccept           ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>接続したクライアントのソケットをファイル記述子で返すことを除けば 
+<a href="#L003091">accept</a> と同じです。</p>
+<pre>TCPServer.open(&quot;&quot;, 0) {|serv|
+  c = TCPSocket.new(*serv.addr.values_at(3,1))
+  p serv.sysaccept        #=&gt; 6
+}</pre></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm162.html">UP</a>][<a href="refm162.html">&lt;-PREV</a>][<a href="refm164.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

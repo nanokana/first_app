@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>WEBrick::HTTPServlet::AbstractServlet</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm188.html" rel="next" />
+<link href="refm186.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm173.html">UP</a>][<a href="refm186.html">&lt;-PREV</a>][<a href="refm188.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L003702" id="L003702">WEBrick::HTTPServlet::AbstractServlet</a></h1>
+<p>サーブレットの抽象クラス。実装はサブクラスで行なう。</p>
+<h2><a name="L003703" id="L003703">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L003704" id="L003704"><code>AbstractServlet.new(<var>server</var>, *<var>options</var>)</code></a>
+<dt><a name="L003705" id="L003705"><code>AbstractServlet.get_instance(<var>config</var>, *<var>options</var>)</code></a>
+</dl>
+<h2><a name="L003706" id="L003706">メソッド</a></h2>
+<dl>
+<dt><a name="L003707" id="L003707"><code>service(<var>req</var>, <var>res</var>)</code></a></dt>
+<dd>
+<p>最初にサーバーから呼び出されるメソッド。この service メソッドが
+クライアントの HTTP リクエストメソッドに応じて、
+do_GET, do_HEAD, do_POST, do_OPTIONS... などを呼ぶ。</p></dd>
+</dl>
+<p>以下はサーブレットが実装すべきメソッド。返り値は特に規定されていない。何でも良い。
+クライアントからのリクエストに使われないと分かっているメソッドは実装しなくても良い。
+クライアントが使う可能性のある RFC で定義された HTTP のメソッドはすべて実装する必要がある。</p>
+<dl>
+<dt><a name="L003708" id="L003708"><code>do_GET(<var>req</var>, <var>res</var>)</code></a>
+<dt><a name="L003709" id="L003709"><code>do_HEAD(<var>req</var>, <var>res</var>)</code></a>
+<dt><a name="L003710" id="L003710"><code>do_POST(<var>req</var>, <var>res</var>)</code></a>
+<dt><a name="L003711" id="L003711"><code>do_OPTIONS(<var>req</var>, <var>res</var>)</code></a>
+</dl>
+<p>など。</p>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm173.html">UP</a>][<a href="refm186.html">&lt;-PREV</a>][<a href="refm188.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

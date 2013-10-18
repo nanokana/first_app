@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>trap::ブロック付きメソッド呼び出し</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm429.html" rel="next" />
+<link href="refm427.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm421.html">UP</a>][<a href="refm427.html">&lt;-PREV</a>][<a href="refm429.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L009458" id="L009458">ブロック付きメソッド呼び出し</a></h1>
+<ul>
+<li><p>配列内の値の変換</p>
+<pre>a = [1,2,3]
+a.each{|item| item = item + 10} # 誤り
+a.collect!{|item| item + 10}</pre>
+<p>代入した時点で元の item (配列に格納されているもの)とは別の
+オブジェクトをさすためです。従って、</p>
+<pre>a = ['a','b','c']
+a.each{|item| item.replace('x')}</pre>
+<p>など、破壊的メソッドは有効となります。</p></li>
+<li>逆に自作のオブジェクトのeachを作るときにyieldに渡したオブジェクトを
+  yield後にeachの中で変更するとsortやcollectが変になることがある。</li>
+</ul>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm421.html">UP</a>][<a href="refm427.html">&lt;-PREV</a>][<a href="refm429.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

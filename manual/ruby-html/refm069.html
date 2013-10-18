@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Comparable</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm070.html" rel="next" />
+<link href="refm068.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm034.html">UP</a>][<a href="refm068.html">&lt;-PREV</a>][<a href="refm070.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L001732" id="L001732">Comparable</a></h1>
+<p>比較演算を許すクラスのための <code>Mix-in</code>。このモジュールをインクルー
+ドするクラスは、基本的な比較演算子である <code>&lt;=&gt;</code> 演算子を定義してい
+る必要があります。他の比較演算子はその定義を利用して派生できます。</p>
+<h2><a name="L001733" id="L001733">メソッド:</a></h2>
+<dl>
+<dt><a name="L001734" id="L001734"><code><var>self</var> == <var>other</var></code></a></dt>
+<dd>
+<p><code>self</code> と <var>other</var> が等しい時真を返します。</p>
+<p><a href="refm385.html">ruby 1.8 feature</a>:
+&lt;=&gt; が nil を返したとき nil を返します。</p></dd>
+<dt><a name="L001735" id="L001735"><code><var>self</var> &gt; <var>other</var></code></a></dt>
+<dd>
+<p><code>self</code> が <var>other</var> より大きい時真を返します。</p>
+<p><a href="refm385.html">ruby 1.8 feature</a>:
+&lt;=&gt; が nil を返したとき例外<a href="refm094.html">ArgumentError</a> が発生します。</p></dd>
+<dt><a name="L001736" id="L001736"><code><var>self</var> &gt;= <var>other</var></code></a></dt>
+<dd>
+<p><code>self</code> が <var>other</var> より大きいか等しい時真を返します。</p>
+<p><a href="refm385.html">ruby 1.8 feature</a>:
+&lt;=&gt; が nil を返したとき例外<a href="refm094.html">ArgumentError</a> が発生します。</p></dd>
+<dt><a name="L001737" id="L001737"><code><var>self</var> &lt; <var>other</var></code></a></dt>
+<dd>
+<p><code>self</code> が <var>other</var> より小さい時真を返します。</p>
+<p><a href="refm385.html">ruby 1.8 feature</a>:
+&lt;=&gt; が nil を返したとき例外<a href="refm094.html">ArgumentError</a> が発生します。</p></dd>
+<dt><a name="L001738" id="L001738"><code><var>self</var> &lt;= <var>other</var></code></a></dt>
+<dd>
+<p><code>self</code> が <var>other</var> より小さいか等しい時真を返します。</p>
+<p><a href="refm385.html">ruby 1.8 feature</a>:
+&lt;=&gt; が nil を返したとき例外<a href="refm094.html">ArgumentError</a> が発生します。</p></dd>
+<dt><a name="L001739" id="L001739"><code>between?(<var>min</var>, <var>max</var>)</code></a></dt>
+<dd>
+<p><code>self</code> が <var>min</var> と <var>max</var> の範囲内(<var>min</var>, <var>max</var> 
+を含みます)にある時真を返します。</p>
+<p><a href="refm385.html">ruby 1.8 feature</a>:
+<code>self</code> &lt;=&gt; <var>min</var> か、<code>self</code> &lt;=&gt; <code>max</code> が nil を返
+したとき例外 <a href="refm094.html">ArgumentError</a> が発生します。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm034.html">UP</a>][<a href="refm068.html">&lt;-PREV</a>][<a href="refm070.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

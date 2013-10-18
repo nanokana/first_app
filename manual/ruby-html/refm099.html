@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>LocalJumpError</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm100.html" rel="next" />
+<link href="refm098.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm093.html">UP</a>][<a href="refm098.html">&lt;-PREV</a>][<a href="refm100.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L002186" id="L002186">LocalJumpError</a></h1>
+<p>スコープを出てしまった <a href="refm057.html">Proc</a> からの 
+<a href="refm026.html#L000401">return</a>,
+<a href="refm026.html#L000392">break</a>,
+<a href="refm026.html#L000395">retry</a> で発生します。</p>
+<p><a href="refm057.html">Proc</a> の例を参照してください。</p>
+<h2><a name="L002187" id="L002187">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm093.html">StandardError</a></li>
+</ul>
+<h2><a name="L002188" id="L002188">メソッド</a></h2>
+<dl>
+<dt><a name="L002189" id="L002189"><code>exit_value  ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>例外 <code>LocalJumpError</code> を発生させた break や return に指定した
+戻り値を返します。</p>
+<pre>def foo
+  proc { return 10 }
+end
+
+begin
+  foo.call
+rescue LocalJumpError
+  p $!
+  p $!.reason
+  p $!.exit_value
+end
+
+=&gt; ruby 1.8.0 (2003-06-09) [i586-linux]
+   #&lt;LocalJumpError: return from block-closure&gt;
+   :return
+   10
+
+begin
+  Block.new { break 5 }.call
+rescue LocalJumpError
+  p $!
+  p $!.reason
+  p $!.exit_value
+end
+
+=&gt; ruby 1.8.0 (2003-06-09) [i586-linux]
+   #&lt;LocalJumpError: break from block-closure&gt;
+   :break
+   5</pre></dd>
+<dt><a name="L002190" id="L002190"><code>reason ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>例外を発生させた原因をシンボルで返します。返す値は、</p>
+<ul>
+<li>:break</li>
+<li>:redo</li>
+<li>:retry</li>
+<li>:next</li>
+<li>:return</li>
+</ul>
+<p>のいずれかです。<a href="#L002189">exit_value</a> の例を参照してください。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm093.html">UP</a>][<a href="refm098.html">&lt;-PREV</a>][<a href="refm100.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Rubyの起動</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm012.html" rel="next" />
+<link href="refm010.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm007.html">UP</a>][<a href="refm010.html">&lt;-PREV</a>][<a href="refm012.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L000122" id="L000122">Rubyの起動</a></h1>
+<ul>
+<li><a href="#L000123">コマンドラインオプション</a></li>
+<li><a href="#L000154">インタプリタ行の解釈</a></li>
+</ul>
+<p>Rubyインタプリタの起動は以下の書式のコマンドラインにより行います。
+<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></p>
+<pre>ruby [ option ...] [ -- ] [ programfile ] [ argument ...]</pre>
+<p>ここで、<code>option</code> は後述の<a href="#L000123">コマンドラインオプション</a> 
+のいずれかを指定します。<code>--</code> は、オプション列の終りを明示するため
+に使用できます。<code>programfile</code> は、Ruby スクリプトを記述したファイ
+ルです。これを省略したり`<code>-</code>' を指定した場合には標準入力を Ruby ス
+クリプトとみなします。</p>
+<p><code>programfile</code> が `<code>#!</code>' で始まるファイルである場合、特殊な解釈
+が行われます。詳細は後述の<a href="#L000154">インタプリタ行の解釈</a> を参照
+してください</p>
+<p><code>argument</code> に指定した文字列は組み込み定数 <a href="refm031.html#L000574">ARGV</a> の初
+期値として設定されます。標準のシェルがワイルドカードを展開しない環境
+(<a href="refm455.html">Win32</a>)では、Ruby インタプリタが自前でワイルドカードを展開して 
+<a href="refm031.html#L000574">ARGV</a> に設定します。この場合ワイルドカードとして
+`<code>*</code>', `<code>?</code>', `<code>[]</code>', `<code>**/</code>' が使用できます
+(<a href="refm041.html#L000839">Dir.glob</a> と異なり `<code>{..}</code>' は使えません)。Win32 環境で、
+ワイルドカード展開を抑止したい場合は引数をシングルクォート(') で括りま
+す。</p>
+<h2><a name="L000123" id="L000123">コマンドラインオプション</a></h2>
+<p>Rubyインタプリタは以下のコマンドラインオプションを受け付けま
+す。基本的にPerlのものと良く似ています。</p>
+<dl>
+<dt><a name="L000124" id="L000124"><code>-0<var>数字</var></code></a></dt>
+<dd>
+<p>入力レコードセパレータ(`<a href="refm030.html#L000528">$/</a>')を8進数で指定します。</p>
+<p>数字を指定しない場合はヌルキャラクタがセパレータになります
+($/ = &quot;\0&quot; と同じ)。
+数の後に他のスイッチがあっても構いません。</p>
+<p><code>-00</code>で, パラグラフモード($/=&quot;&quot;と同じ), <code>-0777</code>で
+(そのコードを持つ文字は存在しないので)ファイルの内容を全部一度に読み
+込むモード($/=nilと同じ)に設定できます。</p>
+</dd>
+<dt><a name="L000125" id="L000125"><code>-a</code></a></dt>
+<dd>
+<p>`-n'や`-p'とともに用いて, オートスプリットモードをONにします。
+オートスプリットモードでは各ループの先頭で,</p>
+<pre>$F = $_.split</pre>
+<p>が実行されます。`-n'か`-p'オプションが同時に指定されない限り,
+このオプションは意味を持ちません。</p>
+</dd>
+<dt><a name="L000126" id="L000126"><code>-C <var>directory</var></code></a></dt>
+<dd>
+<p>スクリプト実行前に指定されたディレクトリに移動します。</p>
+</dd>
+<dt><a name="L000127" id="L000127"><code>-c</code></a></dt>
+<dd>
+<p>スクリプトの内部形式へのコンパイルのみを行い, 実行しません。コンパイル終
+了後, 文法エラーが無ければ, &quot;Syntax OK&quot;と出力します。</p>
+</dd>
+<dt><a name="L000128" id="L000128"><code>--copyright</code></a></dt>
+<dd>
+<p>著作権表示をします。</p>
+</dd>
+<dt><a name="L000129" id="L000129"><code>-K<var>c</var></code></a></dt>
+<dd>
+<p>Rubyの処理する漢字コードを指定します。 Rubyは指定された文字
+が `E'または`e'の場合は文字列やアクセスするファイルの内容の
+コードがEUCであると仮定します。同様に`S'または`s'の場合は
+SJIS、'U'または'u'の場合はUTF-8として処理します。
+`N'は漢字を処理しません。デフォルトはN(NONE)です。</p>
+<p>このオプションは将来文字コードの取扱いが変更された場合等には
+変更される可能性があります。</p>
+</dd>
+<dt><a name="L000130" id="L000130"><code>-d</code></a></dt>
+<dt><a name="L000131" id="L000131"><code>--debug</code></a></dt>
+<dd>
+<p>デバッグモードでスクリプトを実行します。<a href="refm030.html#L000545">$DEBUG</a> を 
+true にします。</p>
+</dd>
+<dt><a name="L000132" id="L000132"><code>-e <var>script</var></code></a></dt>
+<dd>
+<p>コマンドラインからスクリプトを指定します。<code>-e</code>オ
+プションを付けた時には引数からスクリプトファイル名を取りませ
+ん。</p>
+<p><code>-e</code> オプションを複数指定した場合、各スクリプトの間に改行を
+挟んで解釈します。</p>
+<pre>以下は等価です。
+ruby -e &quot;5.times do |i|&quot; -e &quot;puts i&quot; -e &quot;end&quot;
+
+ruby -e &quot;5.times do |i|
+  puts i
+end&quot;
+
+ruby -e &quot;5.times do |i|; puts i; end&quot;</pre>
+</dd>
+<dt><a name="L000133" id="L000133"><code>-F<var>regexp</var></code></a></dt>
+<dd>
+<p>入力フィールドセパレータ(<a href="refm030.html#L000531">$;</a>)に <var>regexp</var> をセットします。</p>
+</dd>
+<dt><a name="L000134" id="L000134"><code>-h</code></a></dt>
+<dt><a name="L000135" id="L000135"><code>--help</code></a></dt>
+<dd>
+<p>コマンドラインオプションの概要を表示します。</p>
+</dd>
+<dt><a name="L000136" id="L000136"><code>-i[<var>extension</var>]</code></a></dt>
+<dd>
+<p>引数で指定されたファイルの内容を置き換える(in-place edit)こ
+とを指定します。元のファイルは拡張子をつけた形で保存されます。
+拡張子がなければ、バックアップは行われず、変更されたファイル
+だけが残ります。
+<a name="footmark:2" id="footmark:2" href="#foottext:2"><sup><small>*2</small></sup></a></p>
+<p>例:</p>
+<pre>% echo matz &gt; /tmp/junk
+% cat /tmp/junk
+matz
+% ruby -p -i.bak -e '$_.upcase!' /tmp/junk
+% cat /tmp/junk
+MATZ
+% cat /tmp/junk.bak
+matz</pre>
+</dd>
+<dt><a name="L000137" id="L000137"><code>-I <var>directory</var></code></a></dt>
+<dd>
+<p>ファイルをロードするパスを指定(追加)します。指定されたディレ
+クトリはRubyの配列変数(<a href="refm030.html#L000541">$:</a>)に追加されます。</p>
+</dd>
+<dt><a name="L000138" id="L000138"><code>-l</code></a></dt>
+<dd>
+<p>行末の自動処理を行います。まず、<a href="refm030.html#L000529">$\</a> を 
+<a href="refm030.html#L000528">$/</a> と同じ値に設定し, <code>print</code>での出力
+時に改行を付加するようにします。それから, <code>-n</code>
+フラグまたは<code>-p</code>フラグが指定されていると
+<code>gets</code>
+で読み込まれた各行の最後に対して
+<code>String#chop!</code>を行います。</p>
+</dd>
+<dt><a name="L000139" id="L000139"><code>-n</code></a></dt>
+<dd>
+<p>このフラグがセットされるとプログラム全体が
+<code>sed -n</code>や<code>awk</code>
+のように</p>
+<pre>while gets
+ ...
+end</pre>
+<p>で囲まれているように動作します.</p>
+</dd>
+<dt><a name="L000140" id="L000140"><code>-p</code></a></dt>
+<dd>
+<p><code>-n</code>フラグとほぼ同じですが, 各ループの最後に変数 <a href="refm030.html#L000512">$_</a> 
+の値を出力するようになります。</p>
+<p>例:</p>
+<pre>% echo matz | ruby -p -e '$_.tr! &quot;a-z&quot;, &quot;A-Z&quot;'
+MATZ</pre>
+</dd>
+<dt><a name="L000141" id="L000141"><code>-r <var>feature</var></code></a></dt>
+<dd>
+<p>スクリプト実行前に <var>feature</var> で指定されるライブラリを 
+<a href="refm029.html#L000480">require</a> します。
+`-n'オプション、`-p'オプションとともに使う時に特に有効です。</p>
+</dd>
+<dt><a name="L000142" id="L000142"><code>-s</code></a></dt>
+<dd>
+<p>スクリプト名に続く, `-'で始まる引数を解釈して, 同名のグローバル変数に値
+を設定します。`--'なる引数以降は解釈を行ないません。該当する引数は 
+<a href="refm031.html#L000574">ARGV</a> から取り除かれます。</p>
+<p>例:</p>
+<pre>#! /usr/local/bin/ruby -s
+# prints &quot;true&quot; if invoked with `-xyz' switch.
+print &quot;true\n&quot; if $xyz</pre>
+</dd>
+<dt><a name="L000143" id="L000143"><code>-S</code></a></dt>
+<dd>
+<p>スクリプト名が`/'で始まっていない場合, 環境変数
+<code>PATH</code>の値を使ってスクリプトを探すことを指定しま
+す。 これは、<code>#!</code>をサポートしていないマシンで、
+<code>#!</code> による実行をエミュレートするために、以下の
+ようにして使うことができます:</p>
+<pre>#!/bin/sh
+exec ruby -S -x $0 &quot;$@&quot;
+#! ruby</pre>
+<p>システムは最初の行により、スクリプトを<code>/bin/sh</code>
+に渡します。<code>/bin/sh</code>は2行目を実行しRubyインタプリタを起動します。
+Rubyインタプリタは<code>-x</code>
+オプションにより`#!'で始まり, &quot;ruby&quot;という文字列を含む行までを
+読み飛ばします。</p>
+<p>システムによっては <a href="refm030.html#L000537">$0</a>は必ずしもフルパスを含まな
+いので、`-S'を用いてRubyに必要に応じてスクリプトを探すように
+指示する必要があります。</p>
+</dd>
+<dt><a name="L000144" id="L000144"><code>-T[<var>level</var>]</code></a></dt>
+<dd>
+<p>不純度チェックを行います。<var>level</var> を指定すると安全度レベルをその
+レベルに設定します。<var>level</var> 省略時は 1 を指定したのと同じです。
+CGIプログラムなどでは<code>-T1</code> 程度を指定しておく方が良いでしょう。
+<a href="refm030.html#L000525">$SAFE</a> に指定したレベルがセットされます。</p>
+</dd>
+<dt><a name="L000145" id="L000145"><code>-v</code></a></dt>
+<dt><a name="L000146" id="L000146"><code>--verbose</code></a></dt>
+<dd>
+<p>冗長モード。起動時にバージョンの表示を行い, 組み込み変数
+<a href="refm030.html#L000550">$VERBOSE</a>をtrueにセットします。この変数がtrueで
+ある時, いくつかのメソッドは実行時に冗長なメッセージを出力し
+ます。`-v'オプションが指定されて, それ以外の引数がない時には
+バージョンを表示した後, 実行を終了します(標準入力からのスク
+リプトを待たない).</p>
+</dd>
+<dt><a name="L000147" id="L000147"><code>--version</code></a></dt>
+<dd>
+<p>Rubyのバージョンを表示します。</p>
+</dd>
+<dt><a name="L000148" id="L000148"><code>-w</code></a></dt>
+<dd>
+<p>バージョンの表示を行う事無く冗長モードになります。</p>
+</dd>
+<dt><a name="L000149" id="L000149"><code>-W[<var>level</var>]</code></a></dt>
+<dd>
+<p><a href="refm385.html">ruby 1.8 feature</a></p>
+<p>冗長モードを三段階のレベルで指定します。それぞれ以下の通りです。</p>
+<ul>
+<li>-W0: 警告を出力しない</li>
+<li>-W1: 重要な警告のみ出力(デフォルト)</li>
+<li>-W2 or -W: すべての警告を出力する</li>
+</ul>
+<p>組み込み変数 <a href="refm030.html#L000550">$VERBOSE</a> はそれぞれ nil, false, true
+に設定されます。</p>
+</dd>
+<dt><a name="L000150" id="L000150"><code>-x[<var>directory</var>]</code></a></dt>
+<dd>
+<p>メッセージ中のスクリプトを取り出して実行します。スクリプトを
+読み込む時に、`#!'で始まり, &quot;ruby&quot;という文字列を含む行までを
+読み飛ばします。スクリプトの終りは<code>EOF</code>(ファイル
+の終り), <code>^D</code>(コントロールD), <code>^Z</code>(コ
+ントロールZ)または予約語<code>__END__</code>で指定されます。</p>
+<p>ディレクトリ名を指定すると、スクリプト実行前に指定されたディ
+レクトリに移動します。</p>
+</dd>
+<dt><a name="L000151" id="L000151"><code>-X <var>directory</var></code></a></dt>
+<dd>
+<p>スクリプト実行前に指定されたディレクトリに移動します。
+-C と同様。</p>
+</dd>
+<dt><a name="L000152" id="L000152"><code>-y</code></a></dt>
+<dt><a name="L000153" id="L000153"><code>--yydebug</code></a></dt>
+<dd>
+<p>コンパイラデバッグモード。スクリプトを内部表現にコンパイルす
+る時の構文解析の過程を表示します。この表示は非常に冗長なので,
+コンパイラそのものをデバッグする人以外には必要ないと思います。</p>
+</dd>
+</dl>
+<h2><a name="L000154" id="L000154">インタプリタ行の解釈</a></h2>
+<p>コマンドラインに指定したスクリプトが `<code>#!</code>' で始まるファイルで、そ
+の行に `<code>ruby</code>' という文字列を<em>含まない場合</em>、OSに代わって 
+`<code>#!</code>' に続く文字列をコマンドラインとみなしてそのインタプリタを起
+動します。このときコマンドラインで指定した引数はそのインタプリタに渡さ
+れます。</p>
+<p>例えば、以下のシェルスクリプトを ruby で実行すると sh を起動します。</p>
+<pre>#!/bin/sh -vx
+echo &quot;$@&quot;</pre>
+<p>この行に `<code>ruby</code>' という文字列が<em>含まれる場合</em>は、その文字列よ
+り左側は無視され、右側に `<code>-</code>'で始まる語があればオプションとして解
+釈します。</p>
+<p>ここで指定したオプションは、コマンドラインでの指定に追加されます。これ
+はそのスクリプトで指定すべきオプションを埋め込むために使います。例えば
+以下の行で始まるスクリプトはコマンドラインに <code>-Ke</code> オプションを指
+定したのと同じ効果になります。</p>
+<pre>#! ruby -Ke</pre>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small><a href="refm456.html">Win32ネイティブ版</a> には、コマンドプロンプトを使用しない 
+<code>rubyw.exe</code> コマンドがあります</small><br />
+<a name="foottext:2" id="foottext:2" href="#footmark:2"><sup><small>*2</small></sup></a><small>2003-08-11: <a href="refm455.html">Win32</a> では、拡張子の省略はエラーになるようです
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/38066">ruby-list:38066</a><sup class="outside"><small>[外部]</small></sup></small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm007.html">UP</a>][<a href="refm010.html">&lt;-PREV</a>][<a href="refm012.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

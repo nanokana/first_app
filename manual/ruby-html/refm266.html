@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Matrix</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm267.html" rel="next" />
+<link href="refm265.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm265.html">UP</a>][<a href="refm265.html">&lt;-PREV</a>][<a href="refm267.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L005262" id="L005262">Matrix</a></h1>
+<p>[2002-04-03]  by <a href="mailto:sugawah@attglobal.net">すす</a><sup class="outside"><small>[外部]</small></sup></p>
+<p>(数<a href="refm052.html">Numeric</a>を要素とする)行列を扱うクラス</p>
+<h2><a name="L005263" id="L005263">行列</a></h2>
+<p>m×n個の数a(i,j)を</p>
+<pre>[ a(0,0) a(0,1) a(0,2)  a(0,3) ... a(0,n-1)   ]
+[ a(1,0) a(1,1) a(1,2)  a(1,3) ... a(1,n-1)   ]
+[ a(2,0) a(2,1) a(2,2)  a(2,3) ... a(2,n-1)   ]
+[                                             ]
+[ a(m-1,0)                         a(m-1,n-1) ]</pre>
+<p>のように、縦横の表にあらわしたものを(m,n)型の行列という。
+m=nの行列をm次の正方行列(square matrix)という。</p>
+<p>上からi番目の横の数の並びを第i行(the i-th row)、
+左からj番目の縦の数の並びを第j列(the j-th column)という。</p>
+<p>(m,n)型行列は、
+大きさnの行(横)ベクトルをm個縦に並べたものとみなすこともできるし、
+大きさmの列(縦)ベクトルをn個横に並べたものとみなすこともできる。</p>
+<p>第i行、第j列にある数a(i,j)を(i,j)要素<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a>(the (i,j)-th element)という。</p>
+<p>i=jの要素a(i,j)を対角要素(diagonal element)、
+それ以外の要素を非対角要素(nondiagonal element)という。</p>
+<h2><a name="L005264" id="L005264">使い方　Usage</a></h2>
+<p>Matrixクラスを使うためには、require 'matrix'する必要がある。</p>
+<pre>require 'matrix'</pre>
+<h2><a name="L005265" id="L005265">インスタンス生成  Instance Creation</a></h2>
+<dl>
+<dt><a name="L005266" id="L005266"><code>Matrix.[<var>rows</var>]</code></a></dt>
+<dd>
+<p>rowsを要素とする行列を生成する。
+ただし、引数rowsはネストした配列(=配列の配列)である。
+例 Matrix[[11, 12], [21, 22]]</p></dd>
+<dt><a name="L005267" id="L005267"><code>Matrix.rows(<var>rows</var>, <var>copy</var> = <var>true</var>)</code></a></dt>
+<dd>
+<p>rowsを要素とする行列を生成する。
+ただし、引数rowsはネストした配列(=配列の配列)である。
+また、オプション引数 copy が偽(false)ならば、複製を行わない。</p></dd>
+<dt><a name="L005268" id="L005268"><code>Matrix.columns(<var>columns</var>)</code></a></dt>
+<dd>
+<p>columnsを列ベクトルの集合とする行列を生成する。</p></dd>
+<dt><a name="L005269" id="L005269"><code>Matrix.diagonal(<var>values</var>)</code></a></dt>
+<dd>
+<p>対角要素がvalues(オブジェクトの並び)で、非対角要素が全て0であるような正方行列を生成する。</p>
+<p>(注:) valuesに一次元Arrayを1個指定すると、そのArrayを唯一の要素とした1×1の行列ができる。</p></dd>
+<dt><a name="L005270" id="L005270"><code>Matrix.scalar(<var>n</var>, <var>value</var>)</code></a></dt>
+<dd>
+<p>対角要素が全てvalue(数)で、非対角要素が全て0であるようなn次の正方行列を生成する。</p></dd>
+<dt><a name="L005271" id="L005271"><code>Matrix.identity(<var>n</var>)</code></a>
+<dt><a name="L005272" id="L005272"><code>Matrix.unit(<var>n</var>)</code></a>
+<dt><a name="L005273" id="L005273"><code>Matrix.I(<var>n</var>)</code></a></dt>
+<dd>
+<p>n次の単位行列を生成する。</p>
+<p>単位行列とは、対角要素が全て1で、非対角要素が全て0であるような行列である。</p></dd>
+<dt><a name="L005274" id="L005274"><code>Matrix.zero(<var>n</var>)</code></a></dt>
+<dd>
+<p>n次の零行列を生成する。
+零行列とは、要素が全て0の行列である。</p></dd>
+<dt><a name="L005275" id="L005275"><code>Matrix.row_vector(<var>row</var>)</code></a></dt>
+<dd>
+<p>要素がrowの(1,n)型の行列(行ベクトル)を生成する。
+ここで、引数rowは、<a href="refm267.html">Vector</a>または<a href="refm036.html">Array</a>で与えられる。</p></dd>
+<dt><a name="L005276" id="L005276"><code>Matrix.column_vector(<var>column</var>)</code></a></dt>
+<dd>
+<p>要素がcolumnの(n,1)型の行列(列ベクトル)を生成する。
+ここで、引数columnは、<a href="refm267.html">Vector</a>または<a href="refm036.html">Array</a>で与えられる。</p></dd>
+</dl>
+<h2><a name="L005277" id="L005277">読み出し書き込み Accessing</a></h2>
+<dl>
+<dt><a name="L005278" id="L005278"><code>Matrix#[<var>i</var>, <var>j</var>]</code></a></dt>
+<dd>
+<p>(i,j)要素を返す。</p></dd>
+<dt><a name="L005279" id="L005279"><code>Matrix#row_size</code></a></dt>
+<dd>
+<p>行の大きさを返す。</p></dd>
+<dt><a name="L005280" id="L005280"><code>Matrix#column_size</code></a></dt>
+<dd>
+<p>列の大きさを返す。</p></dd>
+<dt><a name="L005281" id="L005281"><code>Matrix#minor(<var>from_row</var>,<var>row_size</var>,<var>from_col</var>,<var>col_size</var>)</code></a>
+<dt><a name="L005282" id="L005282"><code>Matrix#minor(<var>from_row</var>..<var>to_row</var>,<var>from_col</var>..<var>to_col</var>)</code></a></dt>
+<dd>
+<p>部分行列を返す。たたし、パラメータは、次の方法で指定する。</p>
+<ol>
+<li>開始行番号, 行の大きさ, 開始列番号, 列の大きさ</li>
+<li>開始行番号..終了行番号, 開始列番号..終了列番号</li>
+</ol></dd>
+<dt><a name="L005283" id="L005283"><code>Matrix#[<var>i</var>, <var>j</var>] = <var>x</var></code></a></dt>
+<dd>
+<p>(i,j)要素をxに変更する。</p></dd>
+</dl>
+<p>このメソッドは、matrix.rbに定義されていない。
+以下に、その定義と使用例を示す。</p>
+<pre>require 'matrix'
+
+class Matrix
+  def []=(i,j,x)
+    @rows[i][j]=x
+  end
+end
+
+m=Matrix[[11,12],[21,22]]
+m[1,1]=-1
+p m #=&gt; Matrix[[11,12],[21,-1]]</pre>
+<h2><a name="L005284" id="L005284">演算 Arithmatics</a></h2>
+<dl>
+<dt><a name="L005285" id="L005285"><code>Matrix#* <var>m</var></code></a></dt>
+<dd>
+<p>行列mを右から乗じた行列を返す。</p></dd>
+<dt><a name="L005286" id="L005286"><code>Matrix#+ <var>m</var></code></a></dt>
+<dd>
+<p>行列mを加えた行列を返す。</p></dd>
+<dt><a name="L005287" id="L005287"><code>Matrix#- <var>m</var></code></a></dt>
+<dd>
+<p>行列mを減じた行列を返す。</p></dd>
+<dt><a name="L005288" id="L005288"><code>Matrix#/ <var>m</var></code></a></dt>
+<dd>
+<p>行列mの逆行列を右から乗じた行列を返す。</p></dd>
+<dt><a name="L005289" id="L005289"><code>Matrix#inverse</code></a>
+<dt><a name="L005290" id="L005290"><code>Matrix#inv</code></a></dt>
+<dd>
+<p>逆行列を返す。</p></dd>
+<dt><a name="L005291" id="L005291"><code>Matrix#** <var>n</var></code></a>
+<dt><a name="L005292" id="L005292"><code>Matrix#power(<var>n</var>)</code></a></dt>
+<dd>
+<p>スカラーnに対するべき乗を返す。</p></dd>
+<dt><a name="L005293" id="L005293"><code>Matrix#** <var>m</var></code></a>
+<dt><a name="L005294" id="L005294"><code>Matrix#power(<var>m</var>)</code></a></dt>
+<dd>
+<p>行列mに対するべき乗を返す。</p></dd>
+</dl>
+<h2><a name="L005295" id="L005295">行列に対する関数 Matrix functions</a></h2>
+<dl>
+<dt><a name="L005296" id="L005296"><code>Matrix#determinant</code></a>
+<dt><a name="L005297" id="L005297"><code>Matrix#det</code></a></dt>
+<dd>
+<p>行列式(determinant) <a name="footmark:2" id="footmark:2" href="#foottext:2"><sup><small>*2</small></sup></a>を返す。</p></dd>
+<dt><a name="L005298" id="L005298"><code>Matrix#rank</code></a></dt>
+<dd>
+<p>階数(rank) <a name="footmark:3" id="footmark:3" href="#foottext:3"><sup><small>*3</small></sup></a>を返す。</p></dd>
+<dt><a name="L005299" id="L005299"><code>Matrix#trace</code></a>
+<dt><a name="L005300" id="L005300"><code>Matrix#tr</code></a></dt>
+<dd>
+<p>トレース(trace)を返す。
+行列のトレース(trace)とは、対角要素の和である。</p></dd>
+<dt><a name="L005301" id="L005301"><code>Matrix#transpose</code></a>
+<dt><a name="L005302" id="L005302"><code>Matrix#t</code></a></dt>
+<dd>
+<p>転置行列(transpose matrix)を返す。
+冒頭に掲げた行列に対して、a(j,i)を(i,j)要素とする(n,m)型行列を転置行列という。</p></dd>
+</dl>
+<h2><a name="L005303" id="L005303">イテレータ Iterators</a></h2>
+<dl>
+<dt><a name="L005304" id="L005304"><code>Matrix#row(<var>i</var>)</code></a></dt>
+<dd>
+<p>第i番目の行ベクトルを返す。
+ブロックが与えられたときは、各行ベクトルについて、ブロックを繰り返す。</p></dd>
+<dt><a name="L005305" id="L005305"><code>Matrix#column(<var>j</var>)</code></a></dt>
+<dd>
+<p>第j番目の列ベクトルを返す。
+ブロックが与えられたときは、各列ベクトルについて、ブロックを繰り返す。</p></dd>
+<dt><a name="L005306" id="L005306"><code>Matrix#collect {|<var>x</var>| ... }</code></a>
+<dt><a name="L005307" id="L005307"><code>Matrix#map {|<var>x</var>| ... }</code></a></dt>
+<dd>
+<p>行列の各要素に対してブロックの適用を繰り返した結果を、要素として持つ行列を生成する。</p></dd>
+</dl>
+<h2><a name="L005308" id="L005308">判定 Testing</a></h2>
+<dl>
+<dt><a name="L005309" id="L005309"><code>Matrix#regular?</code></a></dt>
+<dd>
+<p>正則(regular)なら真を返す。</p>
+<p>行列が正則であるとは、正方行列であり、かつ、その逆行列が存在することである。</p></dd>
+<dt><a name="L005310" id="L005310"><code>Matrix#singular?</code></a></dt>
+<dd>
+<p>特異(singular)である、すなわち、正則でないなら真を返す。</p></dd>
+<dt><a name="L005311" id="L005311"><code>Matrix#square?</code></a></dt>
+<dd>
+<p>正方行列であるなら、真を返す。</p></dd>
+</dl>
+<h2><a name="L005312" id="L005312">型変換 Converting</a></h2>
+<dl>
+<dt><a name="L005313" id="L005313"><code>Matrix#row_vectors</code></a></dt>
+<dd>
+<p>列ベクトルの配列を返す。</p></dd>
+<dt><a name="L005314" id="L005314"><code>Matrix#column_vectors</code></a></dt>
+<dd>
+<p>行ベクトルの配列を返す。</p></dd>
+<dt><a name="L005315" id="L005315"><code>Matrix#to_a</code></a></dt>
+<dd>
+<p><a href="refm036.html">Array</a>に変換する。
+結果は、ネストした配列(配列の配列)となる。</p></dd>
+<dt><a name="L005316" id="L005316"><code>Matrix#to_f</code></a></dt>
+<dd>
+<p>各要素を浮動小数点数<a href="refm056.html">Float</a>に変換する。</p></dd>
+<dt><a name="L005317" id="L005317"><code>Matrix#to_i</code></a></dt>
+<dd>
+<p>各要素を整数<a href="refm053.html">Integer</a>に変換する。</p></dd>
+<dt><a name="L005318" id="L005318"><code>Matrix#to_r</code></a></dt>
+<dd>
+<p>各要素を有理数<a href="refm264.html">Rational</a>に変換する。</p></dd>
+</dl>
+<h2><a name="L005319" id="L005319">Complexクラスとの併用 Working with Complex class</a></h2>
+<p>require 'complex'することによって、
+Matrixオブジェクトの要素は<a href="refm262.html">Complex</a>クラスに拡張される。
+多くのメソッドは、この拡張されたMatrixクラスでも、期待通りに動作する。</p>
+<p>次の例は、各要素を共役複素数に置換するメソッド(Matrix#conjugate)である。</p>
+<pre>require 'matrix'
+require 'complex'
+
+class Matrix
+  def conjugate
+    collect{|e| e.conjugate }
+  end
+end</pre>
+<h2><a name="L005320" id="L005320">ChangeLog</a></h2>
+<ul>
+<li>[2004-04-23] by <a href="mailto:mas@star.le.ac.uk">坂野</a><sup class="outside"><small>[外部]</small></sup>
+<ul>
+<li>Matrix.diagonalに注意書を加える。</li>
+</ul></li>
+<li>[2002-04-03] by <a href="mailto:sugawah@attglobal.net">すす</a><sup class="outside"><small>[外部]</small></sup>
+<ul>
+<li>使い方の節を追加</li>
+<li>Working with Complex classの節を追加</li>
+<li>[]=メソッドを追加</li>
+<li>イテレータ関係を同じ節にまとめた</li>
+<li>誤りを訂正し、説明を直した。</li>
+<li>他クラスへのリンクを追加 Numeric, Vector</li>
+</ul></li>
+<li>[2002-04-02] 初版 by <a href="mailto:sugawah@attglobal.net">すす</a><sup class="outside"><small>[外部]</small></sup></li>
+</ul>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>elementという語には、数学では「成分」、物理では「要素」という訳をあてる。数学の「要素」はcomponentという語に当たる</small><br />
+<a name="foottext:2" id="foottext:2" href="#footmark:2"><sup><small>*2</small></sup></a><small>線形代数の教科書を見よ</small><br />
+<a name="foottext:3" id="foottext:3" href="#footmark:3"><sup><small>*3</small></sup></a><small>線形代数の教科書を見よ</small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm265.html">UP</a>][<a href="refm265.html">&lt;-PREV</a>][<a href="refm267.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

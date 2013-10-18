@@ -1,0 +1,8 @@
+<% @entries.each do |entry| %>
+  <div class="entry" id="<%= entry.date.day %>">
+    <div class="date"><%= entry.date %></div>
+    <%= entry.to_html %>
+    <% year_month = entry.date.strftime('%Y-%m') %>
+    <div class="permalink"><a href="<%= year_month %>.html#<%= entry.date.day %>">permalink</a></div>
+  </div>
+<% end %>

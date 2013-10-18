@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>net/pop</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm210.html" rel="next" />
+<link href="refm208.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm208.html">&lt;-PREV</a>][<a href="refm210.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L004115" id="L004115">net/pop</a></h1>
+<h2><a name="L004116" id="L004116">このライブラリについて</a></h2>
+<p>メールを受信するためのプロトコル POP3 (Post Office Protocol version 3) を
+扱うライブラリです。POP3 の実装は [RFC1939]
+<a href="http://www.ietf.org/rfc/rfc1939.txt">&lt;URL:http://www.ietf.org/rfc/rfc1939.txt&gt;</a><sup class="outside"><small>[外部]</small></sup> に基いています。</p>
+<h2><a name="L004117" id="L004117">使用例</a></h2>
+<h3><a name="L004118" id="L004118">メールの受信</a></h3>
+<p>以下のコードは、メールを受信してファイル 'inbox/1' 'inbox/2'... に
+書きこみ、サーバ上からメールを消します。pop3.server.address は適宜
+読みかえてください。</p>
+<pre>require 'net/pop'
+
+pop = Net::POP3.new( 'pop3.server.address', 110 )
+pop.start( 'YourAccount', 'YourPassword' )          ###
+if pop.mails.empty? then
+  puts 'no mail.'
+else
+  i = 0
+  pop.each_mail do |m|   # or &quot;pop.mails.each ...&quot;
+    File.open( 'inbox/' + i.to_s, 'w' ) {|f|
+      f.write m.pop
+    }
+    m.delete
+    i += 1
+  end
+  puts &quot;#{pop.mails.size} mails popped.&quot;
+end
+pop.finish                                           ###</pre>
+<p>POP サーバはネットワークのむこうに存在するので、なにか仕事をさせる
+にはその前に開始手続きを、終わったら終了手続きを、行わなければいけ
+ません。それを行うのが Net::POP3#start と #finish で、POP3 オブジェクト
+はその二つのメソッドの間でだけ有効になります。</p>
+<p>サーバ上のメールは POPMail オブジェクトとして表現されており、この
+オブジェクトのメソッドを呼ぶことでメールを取ってきたり消したりする
+ことができます。POP3#mails はこの POPMail オブジェクトの配列であり、
+POP3#each_mail はさらに mails.each のショートカットです。</p>
+<h3><a name="L004119" id="L004119">短くする</a></h3>
+<p>上の例はあえて省略や短縮用メソッドを避けたためにかなり冗長です。
+まず、ブロック付きの Net::POP3.start を使うことで POP3.new #start #finish を併合できます。</p>
+<pre>require 'net/pop'
+
+Net::POP3.start( 'pop3.server.address', 110,
+                 'YourAccount', 'YourPassword' ){|pop|
+  if pop.mails.empty? then
+    puts 'no mail.'
+  else
+    i = 0
+    pop.each_mail do |m|   # or &quot;pop.mails.each ...&quot;
+      File.open( 'inbox/' + i.to_s, 'w' ) {|f|
+        f.write m.pop
+      }
+      m.delete
+      i += 1
+    end
+    puts &quot;#{pop.mails.size} mails popped.&quot;
+  end
+}</pre>
+<p>POP3#delete_all を使うとさらに #each_mail と m.delete を
+併合できます。</p>
+<pre>require 'net/pop'
+
+Net::POP3.start( 'pop3.server.address', 110,
+              'YourAccount', 'YourPassword' ) {|pop|
+  if pop.mails.empty? then
+    puts 'no mail.'
+  else
+    i = 0
+    pop.delete_all do |m|
+      File.open( 'inbox/' + i.to_s, 'w' ) {|f|
+        f.write m.pop
+      }
+      i += 1
+    end
+  end
+}</pre>
+<p>クラスメソッドの POP3.delete_all を使うとさらに短くなります。</p>
+<pre>require 'net/pop'
+
+i = 0
+Net::POP3.delete_all( 'pop3.server.address', 110,
+                      'YourAccount', 'YourPassword' ) do |m|
+  File.open( 'inbox/' + i.to_s, 'w' ) {|f|
+      f.write m.pop
+  }
+  i += 1
+end</pre>
+<h3><a name="L004120" id="L004120">ファイルに直接書く</a></h3>
+<p>これまでの例では m.pop の部分でメールをひとつの文字列として
+うけとっていましたが、たとえば 3MB くらいある巨大なメールの場合は
+これではまずい場合があります。そのような場合は以下のように m.pop
+に File オブジェクトを与える手が使えます。</p>
+<pre>require 'net/pop'
+Net::POP3.delete_all( 'pop3.server.address', 110,
+                      'YourAccount', 'YourPassword' ) do |m|
+  File.open( 'inbox', 'w' ) {|f|
+      m.pop f   ####
+  }
+end</pre>
+<h3><a name="L004121" id="L004121">APOP</a></h3>
+<p>Net::POP3 クラスのかわりに Net::APOP クラスを使うと、認証時に APOP を
+使うようになります。また動的にノーマル POP と APOP を選択するには、
+以下のように Net::POP3.APOP() メソッドを使うのが便利です。</p>
+<pre>require 'net/pop'
+
+# use APOP authentication if $isapop == true
+pop = Net::POP3.APOP($isapop).new( 'apop.server.address', 110 )
+pop.start( YourAccount', 'YourPassword' ) {|pop|
+    # Rest code is same.
+}</pre>
+<p>この方法はクラス自体を変えるので、クラスメソッドの start や foreach、
+delete_all、auth_only なども APOP とともに使えます。</p>
+<h2><a name="L004122" id="L004122">Net::POP3 class</a></h2>
+<h3><a name="L004123" id="L004123">クラスメソッド</a></h3>
+<dl>
+<dt><a name="L004124" id="L004124">new( address, port = 110, apop = false )</a></dt>
+<dd>
+<p>Net::POP3 オブジェクトを生成します。まだ接続はしません。
+apop が真のときは APOP 認証を行うオブジェクトを生成します。</p>
+</dd>
+<dt><a name="L004125" id="L004125">start( address, port = 110, account, password )</a></dt>
+<dt><a name="L004126" id="L004126">start( address, port = 110, account, password ) {|pop| .... }</a></dt>
+<dd>
+<p>address の port 番ポートに接続し、アカウント account パスワード
+password で POP ログインします。第二引数 port に nil を渡すと
+POP3 のデフォルトポート(110)を使います。</p>
+<pre>Net::POP3.start( addr, port, account, password ) {|pop|
+  pop.each_mail do |m|
+    file.write m.pop
+    m.delete
+  end
+}</pre>
+</dd>
+<dt><a name="L004127" id="L004127">APOP( is_apop )</a></dt>
+<dd>
+<p>bool が真なら Net::APOP クラス、偽なら Net::POP3 クラスを返します。
+以下の例のように使ってください。</p>
+<pre># example 1
+pop = Net::POP3::APOP($isapop).new( addr, port )
+
+# example 2
+Net::POP3::APOP($isapop).start( addr, port ) {|pop|
+    ....
+}</pre>
+</dd>
+<dt><a name="L004128" id="L004128">foreach( address, port = 110, account, password ) {|mail| .... }</a></dt>
+<dd>
+<p>POP セッションを開き、サーバ上のすべてのメールに対して繰り返します。
+以下と同じです。</p>
+<pre>Net::POP3.start( address, port, account, password ) {|pop|
+  pop.each_mail do |m|
+    yield m
+  end
+}
+
+# example
+Net::POP3.foreach( 'your.pop.server', 110,
+                   'YourAccount', 'YourPassword' ) do |m|
+  file.write m.pop
+  m.delete if $DELETE
+end</pre>
+</dd>
+<dt><a name="L004129" id="L004129">delete_all( address, port = 110, account, password )</a></dt>
+<dt><a name="L004130" id="L004130">delete_all( address, port = 110, account, password ) {|mail| .... }</a></dt>
+<dd>
+<p>POP セッションを開き、サーバ上のメールをすべて削除します。
+ブロックが与えられた時は削除する前にブロックにそのメールを
+渡します。以下と同じです。</p>
+<pre># example
+Net::POP3.delete_all( addr, nil, 'YourAccount', 'YourPassword' ) do |m|
+  m.pop file
+end</pre>
+</dd>
+<dt><a name="L004131" id="L004131">auth_only( address, port = 110, account, password )</a></dt>
+<dd>
+<p>POP セッションを開き認証だけを行って接続を切ります。
+POP before SMTP 専用です。</p>
+<pre># example
+Net::POP3.auth_only( 'your.pop3.server',
+                     nil,     # using default (110)
+                     'YourAccount',
+                     'YourPassword' )</pre>
+</dd>
+</dl>
+<h3><a name="L004132" id="L004132">メソッド</a></h3>
+<dl>
+<dt><a name="L004133" id="L004133">start( account, password )</a></dt>
+<dt><a name="L004134" id="L004134">start( account, password ) {|pop| .... }</a></dt>
+<dd>
+<p>リモートホストとの接続を開始し、アカウントに account、
+パスワードに password を使って POP ログインします。</p>
+</dd>
+<dt><a name="L004135" id="L004135">active?</a></dt>
+<dd>
+<p>POP3 セッションが開始されていたら真。</p>
+</dd>
+<dt><a name="L004136" id="L004136">address</a></dt>
+<dd>
+<p>接続するアドレス</p>
+</dd>
+<dt><a name="L004137" id="L004137">port</a></dt>
+<dd>
+<p>接続するポート番号</p>
+</dd>
+<dt><a name="L004138" id="L004138">open_timeout</a></dt>
+<dt><a name="L004139" id="L004139">open_timeout=(n)</a></dt>
+<dd>
+<p>接続時に待つ最大秒数。この秒数たってもコネクションが
+開かなければ例外 TimeoutError を発生します。</p>
+</dd>
+<dt><a name="L004140" id="L004140">read_timeout</a></dt>
+<dt><a name="L004141" id="L004141">read_timeout=(n)</a></dt>
+<dd>
+<p>読みこみ (read(1) 一回) でブロックしてよい最大秒数。
+この秒数たっても読みこめなければ例外 TimeoutError を発生します。</p>
+</dd>
+<dt><a name="L004142" id="L004142">finish</a></dt>
+<dd>
+<p>POP3 セッションを終了します。セッション開始前にこのメソッドが
+呼ばれた場合は例外 IOError を発生します。</p>
+</dd>
+<dt><a name="L004143" id="L004143">mails</a></dt>
+<dd>
+<p>Net::POPMail オブジェクトの配列をかえします。
+この配列はセッションを開始したときに自動的に更新されます。</p>
+</dd>
+<dt><a name="L004144" id="L004144">each_mail {|popmail| .... }</a></dt>
+<dt><a name="L004145" id="L004145">each {|popmail| .... }</a></dt>
+<dd>
+<p>pop3.mails.each と同じです。</p>
+</dd>
+<dt><a name="L004129" id="L004129">delete_all</a></dt>
+<dt><a name="L004146" id="L004146">delete_all {|popmail| .... }</a></dt>
+<dd>
+<p>サーバ上のメールを全て消去します。
+ブロックを与えられたときは消去する前にその POPMail オブジェクトを
+ブロックに渡します。</p>
+<pre># example
+n = 1
+pop.delete_all do |m|
+  File.open(&quot;inbox/#{n}&quot;) {|f| f.write m.pop }
+  n += 1
+end</pre>
+</dd>
+<dt><a name="L004147" id="L004147">auth_only( account, password )</a></dt>
+<dd>
+<p>POP セッションを開き認証だけを行って接続を切ります。
+POP before SMTP 専用です。</p>
+<pre># example
+pop = Net::POP3.new( 'your.pop3.server' )
+pop.auth_only 'YourAccount', 'YourPassword'</pre>
+</dd>
+<dt><a name="L004148" id="L004148">reset</a></dt>
+<dd>
+<p>セッションをリセットします。
+具体的には POPMail#delete で消したメールが全て復活します。
+(POP3 ではメール一個だけを復活する方法はありません)</p>
+</dd>
+</dl>
+<h2><a name="L004149" id="L004149">Net::APOP</a></h2>
+<p>このクラスでは新しいメソッドは導入していません。
+認証方式が APOP に変わるだけです。</p>
+<h3><a name="L004150" id="L004150">スーパークラス</a></h3>
+<p>Net::POP3</p>
+<h2><a name="L004151" id="L004151">Net::POPMail</a></h2>
+<p>POP サーバー上のメール一通を抽象的に表現するクラス。
+メールの取得や消去といった操作をカプセル化します。</p>
+<h3><a name="L004132" id="L004132">メソッド</a></h3>
+<dl>
+<dt><a name="L004152" id="L004152">pop( dest = '' )</a></dt>
+<dd>
+<p>メールを受信して dest に &lt;&lt; メソッドを使って書きこみます。
+dest を返します。</p>
+<pre># example
+allmails = nil
+POP3.start( 'your.pop3.server', 110,
+            'YourAccount, 'YourPassword' ) {|pop|
+    allmails = pop.mails.collect {|popmail| popmail.pop }
+}</pre>
+</dd>
+<dt><a name="L004153" id="L004153">pop {|str| .... }</a></dt>
+<dd>
+<p>メールの文字列を少しづつ読みこみ、順次ブロックに与えます。</p>
+<pre># example
+POP3.start( 'localhost', 110 ) {|pop3|
+  pop3.each_mail do |m|
+    m.pop do |str|
+      # do anything
+    end
+  end
+}</pre>
+</dd>
+<dt><a name="L004154" id="L004154">header</a></dt>
+<dd>
+<p>ヘッダだけを受信して文字列で返します。</p>
+</dd>
+<dt><a name="L004155" id="L004155">top( lines )</a></dt>
+<dd>
+<p>メールヘッダと lines 行ぶんの本文を取得し文字列で返します。</p>
+</dd>
+<dt><a name="L004156" id="L004156">delete</a></dt>
+<dd>
+<p>サーバ上からメールを削除します。</p>
+</dd>
+<dt><a name="L004157" id="L004157">size</a></dt>
+<dd>
+<p>メールのサイズ (単位はバイト) をかえします。</p>
+</dd>
+<dt><a name="L004158" id="L004158">deleted?</a></dt>
+<dd>
+<p>メールがサーバ上で消去されているとき真。消去してしまったら
+POP3#reset を使う以外に復活する方法はありません。</p>
+</dd>
+<dt><a name="L004159" id="L004159">unique_id</a></dt>
+<dd>
+<p>メールに対して振られた、サーバ上で一意な識別子（UIDL）をかえします。
+number と違い、接続しなおしても変化しません。</p>
+</dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm208.html">&lt;-PREV</a>][<a href="refm210.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

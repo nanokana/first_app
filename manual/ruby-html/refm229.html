@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>OpenSSL::SSL::SSLContext</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm230.html" rel="next" />
+<link href="refm228.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm226.html">UP</a>][<a href="refm228.html">&lt;-PREV</a>][<a href="refm230.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L004530" id="L004530">OpenSSL::SSL::SSLContext</a></h1>
+<p>SSL コンテクストクラス</p>
+<h2><a name="L004531" id="L004531">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L004532" id="L004532"><code>SSLContext.new(<var>ssl_method</var>)</code></a>
+<dt><a name="L004533" id="L004533"><code>SSLContext.new()</code></a></dt>
+<dd>
+<p>SSLContext オブジェクトを生成する。ssl_method で TLS/SSL method を指定する。ssl_method は文字列かシンボル。指定できるのは以下のいずれか。SSL_CTX_new 参照。</p></dd>
+</dl>
+<pre>'TLSv1', 'TLSv1_server', 'TLSv1_client', 'SSLv2', 'SSLv2_server', 'SSLv2_client',
+'SSLv3', 'SSLv3_server', 'SSLv3_client', 'SSLv23', 'SSLv23_server', 'SSLv23_client'</pre>
+<h2><a name="L004534" id="L004534">メソッド:</a></h2>
+<dl>
+<dt><a name="L004535" id="L004535"><code>ciphers</code></a>
+<dt><a name="L004536" id="L004536"><code>ciphers=</code></a></dt>
+<dd>
+<p>使用可能な暗号の配列。以下のような形式。</p></dd>
+</dl>
+<pre>[[&quot;EDH-RSA-DES-CBC3-SHA&quot;, &quot;TLSv1/SSLv3&quot;, 168, 168], ...]</pre>
+<dl>
+<dt><a name="L004537" id="L004537"><code>ca_file</code></a>
+<dt><a name="L004538" id="L004538"><code>ca_file=(<var>path</var>)</code></a></dt>
+<dd>
+<p>接続相手の検証のために使う、信頼している CA 証明書ファイルのパス。以下のように複数の証明書を含んでいてもかまわない。</p></dd>
+</dl>
+<pre>(ここに証明書の説明)
+
+-----BEGIN CERTIFICATE-----
+... (CA certificate in base64 encoding) ...
+-----END CERTIFICATE-----
+
+(ここに証明書の説明)
+
+-----BEGIN CERTIFICATE-----
+... (CA certificate in base64 encoding) ...
+-----END CERTIFICATE-----</pre>
+<dl>
+<dt><a name="L004539" id="L004539"><code>ca_path</code></a>
+<dt><a name="L004540" id="L004540"><code>ca_path=(<var>path</var>)</code></a></dt>
+<dd>
+<p>接続相手の証明書の検証のために使う、信頼している CA 証明書ファイルを含むディレクトリ。</p></dd>
+<dt><a name="L004541" id="L004541"><code>cert</code></a>
+<dt><a name="L004542" id="L004542"><code>cert=</code></a></dt>
+<dd>
+<p>所有している証明書。 <a href="refm218.html">OpenSSL::X509::Certificate</a> オブジェクト。</p></dd>
+<dt><a name="L004543" id="L004543"><code>cert_store</code></a>
+<dt><a name="L004544" id="L004544"><code>cert_store=</code></a></dt>
+<dd>
+<p>接続相手の証明書の検証のために使う、信頼している CA 証明書のストレージ。 <a href="refm223.html">OpenSSL::X509::Store</a> オブジェクト。通常は ca_path=(path) や ca_file=(path) を使う。</p></dd>
+<dt><a name="L004545" id="L004545"><code>client_ca</code></a>
+<dt><a name="L004546" id="L004546"><code>client_ca=</code></a></dt>
+<dd>
+<p>クライアント証明書を要求する時にクライアントに送る CA のリスト。CA の Certificate オブジェクトの配列。このリストに含まれる CA ―あるはその下位の CA―に署名された証明書をクライアントは送り返すことになっている。</p></dd>
+<dt><a name="L004547" id="L004547"><code>extra_chain_cert</code></a>
+<dt><a name="L004548" id="L004548"><code>extra_chain_cert=</code></a></dt>
+<dd>
+<p>証明書チェーン。所有している証明書からルート CA までの証明書のリスト。これを指定しない場合、ca_file や ca_path で指定した信頼されている証明書のストレージから証明書チェーンを構成しようとする。 順序は以下のとおり。</p></dd>
+</dl>
+<pre>[所有している証明書, 下位 CA 証明書, ... 中間 CA 証明書]</pre>
+<dl>
+<dt><a name="L004549" id="L004549"><code>key</code></a>
+<dt><a name="L004550" id="L004550"><code>key=</code></a></dt>
+<dd>
+<p>所有している証明書に記載されている公開鍵に対応する秘密鍵。</p></dd>
+<dt><a name="L004551" id="L004551"><code>options</code></a>
+<dt><a name="L004552" id="L004552"><code>options=</code></a></dt>
+<dd>
+<p>オプション。定数 OP_* のビットマスクで指定する。</p></dd>
+<dt><a name="L004553" id="L004553"><code>timeout</code></a>
+<dt><a name="L004554" id="L004554"><code>timeout=</code></a></dt>
+<dd>
+<p>タイムアウトするまでの時間。単位は秒。</p></dd>
+<dt><a name="L004555" id="L004555"><code>verify_callback</code></a>
+<dt><a name="L004556" id="L004556"><code>verify_callback=</code></a></dt>
+<dd>
+<p>通常の証明書の検証に加えてさらに適用される <a href="refm057.html">Proc</a> オブジェクト。この Proc オブジェクトは preverify_ok と ctx 二つの引数をとる。preverify_ok は true か false の値をとり、verify_mode で設定した通常の証明書の検証が成功したかどうかで決まる。ctx は SSLContext オブジェクト。この Proc オブジェクトは true か false を返す必要がある。</p></dd>
+</dl>
+<pre>lambda{|preverify_ok, ctx|
+  return true # or false
+}</pre>
+<dl>
+<dt><a name="L004557" id="L004557"><code>verify_depth</code></a>
+<dt><a name="L004558" id="L004558"><code>verify_depth=</code></a></dt>
+<dd>
+<p>証明書を検証する深さ。</p></dd>
+<dt><a name="L004559" id="L004559"><code>verify_mode</code></a>
+<dt><a name="L004560" id="L004560"><code>verify_mode=</code></a></dt>
+<dd>
+<p>検証モード。デフォルトは nil。つまり検証しない。下の定数の項を参照。定数 VERIFY_* のビットマスクで指定する。</p></dd>
+</dl>
+<h2><a name="L004561" id="L004561">定数</a></h2>
+<p>verify_mode= と options= で指定できる定数に関しては <a href="refm226.html">OpenSSL::SSL</a> を参照。</p>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm226.html">UP</a>][<a href="refm228.html">&lt;-PREV</a>][<a href="refm230.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

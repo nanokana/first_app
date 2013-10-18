@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>WEBrick::HTTPRequest</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm179.html" rel="next" />
+<link href="refm177.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm173.html">UP</a>][<a href="refm177.html">&lt;-PREV</a>][<a href="refm179.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L003550" id="L003550">WEBrick::HTTPRequest</a></h1>
+<p><a href="http://shogo.homelinux.org/~ysantoso/webrickguide/html/HTTPRequest.html">&lt;URL:http://shogo.homelinux.org/~ysantoso/webrickguide/html/HTTPRequest.html&gt;</a><sup class="outside"><small>[外部]</small></sup></p>
+<h2><a name="L003551" id="L003551">インスタンスメソッド</a></h2>
+<dl>
+<dt><a name="L003552" id="L003552"><code>[<var>header_name</var>]</code></a>
+<dt><a name="L003553" id="L003553"><code>accept</code></a></dt>
+<dd>
+<p>Accept ヘッダの内容を配列で返す。配列は品質係数(qvalue)でソートされたメディアタイプの文字列の配列。</p></dd>
+<dt><a name="L003554" id="L003554"><code>accept_charset</code></a></dt>
+<dd>
+<p>Accept-Charset  ヘッダの内容を配列で返す。配列は品質係数(qvalue)でソートされた文字セットの文字列の配列。</p></dd>
+<dt><a name="L003555" id="L003555"><code>accept_encoding</code></a></dt>
+<dd>
+<p>Accept-Encoding  ヘッダの内容を配列で返す。配列は品質係数(qvalue)でソートされたコーディングの文字列の配列。</p></dd>
+<dt><a name="L003556" id="L003556"><code>accept_language</code></a></dt>
+<dd>
+<p>Accept-Language  ヘッダの内容を配列で返す。配列は品質係数(qvalue)でソートされた自然言語の文字列の配列。</p></dd>
+<dt><a name="L003557" id="L003557"><code>addr</code></a></dt>
+<dd>
+<p><a href="refm161.html#L003074">IPSocket#addr</a>と同様。</p></dd>
+<dt><a name="L003558" id="L003558"><code>attributes</code></a>
+<dt><a name="L003559" id="L003559"><code>content_length</code></a></dt>
+<dd>
+<p>content-length を整数で返す。</p></dd>
+<dt><a name="L003560" id="L003560"><code>content_type</code></a></dt>
+<dd>
+<p>content-type ヘッダを文字列で返す。</p></dd>
+<dt><a name="L003561" id="L003561"><code>cookies</code></a></dt>
+<dd>
+<p><a href="refm185.html">WEBrick::Cookie</a> の配列を返す。</p></dd>
+<dt><a name="L003562" id="L003562"><code>each{|<var>key</var>, <var>val</var>| ... }</code></a></dt>
+<dd>
+<p>ヘッダ名を key、内容を val としてブロックを評価します。</p></dd>
+<dt><a name="L003563" id="L003563"><code>header</code></a></dt>
+<dd>
+<p>ヘッダ名を key、内容を val とするハッシュを返す。key も val も文字列。</p></dd>
+<dt><a name="L003564" id="L003564"><code>host</code></a></dt>
+<dd>
+<p>host を文字列で返す。</p></dd>
+<dt><a name="L003565" id="L003565"><code>http_version</code></a></dt>
+<dd>
+<p><a href="refm184.html">WEBrick::HTTPVersion</a> オブジェクトを返す。</p></dd>
+<dt><a name="L003566" id="L003566"><code>keep_alive</code></a>
+<dt><a name="L003567" id="L003567"><code>keep_alive?</code></a></dt>
+<dd>
+<p>Keep-Alive かどうかを返す。</p></dd>
+<dt><a name="L003568" id="L003568"><code>meta_vars</code></a>
+<dt><a name="L003569" id="L003569"><code>path</code></a></dt>
+<dd>
+<p>path を文字列で返す。</p></dd>
+<dt><a name="L003570" id="L003570"><code>path_info</code></a>
+<dt><a name="L003571" id="L003571"><code>path_info=</code></a></dt>
+<dd>
+<p>path と同値。</p></dd>
+<dt><a name="L003572" id="L003572"><code>peeraddr</code></a></dt>
+<dd>
+<p><a href="refm161.html#L003075">IPSocket#peeraddr</a>と同様。</p></dd>
+<dt><a name="L003573" id="L003573"><code>port</code></a></dt>
+<dd>
+<p>サーバのポートを文字列で返す。</p></dd>
+<dt><a name="L003574" id="L003574"><code>query</code></a></dt>
+<dd>
+<p>ハッシュを返す。key も val も unescape されている。</p></dd>
+<dt><a name="L003575" id="L003575"><code>query_string</code></a></dt>
+<dd>
+<p>request_uri.query と同値。</p></dd>
+<dt><a name="L003576" id="L003576"><code>raw_header</code></a>
+<dt><a name="L003577" id="L003577"><code>request_line</code></a></dt>
+<dd>
+<p>クライアントのリクエストの最初の行(GET / HTTP/1.1)を文字列で返す。</p></dd>
+<dt><a name="L003578" id="L003578"><code>request_method</code></a></dt>
+<dd>
+<p>クライアントのリクエストの HTTP メソッド(GET, POST,...)を文字列で返す。</p></dd>
+<dt><a name="L003579" id="L003579"><code>request_time</code></a></dt>
+<dd>
+<p>リクエストされた時刻を Time オブジェクトで返す。</p></dd>
+<dt><a name="L003580" id="L003580"><code>request_uri</code></a></dt>
+<dd>
+<p><a href="refm170.html">URI</a> オブジェクトを返す。</p></dd>
+<dt><a name="L003581" id="L003581"><code>script_name</code></a>
+<dt><a name="L003582" id="L003582"><code>script_name=</code></a>
+<dt><a name="L003583" id="L003583"><code>unparsed_uri</code></a>
+<dt><a name="L003584" id="L003584"><code>user</code></a>
+<dt><a name="L003585" id="L003585"><code>user=</code></a>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm173.html">UP</a>][<a href="refm177.html">&lt;-PREV</a>][<a href="refm179.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

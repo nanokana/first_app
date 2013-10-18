@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>find</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm154.html" rel="next" />
+<link href="refm152.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm152.html">&lt;-PREV</a>][<a href="refm154.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L002897" id="L002897">Find</a></h1>
+<p>ディレクトリ配下のファイルを探索するためのモジュールです。</p>
+<h2><a name="L002898" id="L002898">使い方:</a></h2>
+<pre>require &quot;find&quot;
+
+Find.find('/foo','/bar') {|f| ...}</pre>
+<p>または</p>
+<pre>require &quot;find&quot;
+
+include Find
+find('/foo','/bar') {|f| ...}</pre>
+<p>以下は、ruby のアーカイブに含まれるサンプルスクリプト 
+<a href="refm531.html">ruby-src:sample/trojan.rb</a> をこのモジュールで書き換えたものです。</p>
+<pre>#! /usr/bin/env ruby
+require &quot;find&quot;
+# 他人が書き込み可能な危険なコマンドを探す
+
+for dir in ENV['PATH'].split(File::PATH_SEPARATOR)
+  Find.find(dir) do |fpath|
+    if File.file?(fpath) and (File.stat(fpath).mode &amp; 022) != 0
+      printf(&quot;file %s is writable from other users\n&quot;, fpath)
+    end
+  end
+end</pre>
+<h2><a name="L002899" id="L002899">モジュール関数:</a></h2>
+<dl>
+<dt><a name="L002900" id="L002900"><code>Find.find(<var>dir</var>[, ...]) {|<var>file</var>| }</code></a></dt>
+<dd>
+<p><a href="refm535.html">find(1)</a>のように<var>dir</var>配下のすべてのファイルや
+ディレクトリを一つずつ引数<var>file</var>に渡してブロックを実行します。
+<var>file</var> に渡される順序は不定です。</p>
+<p>あるディレクトリ配下の探索を省略したい場合</p>
+<pre>require 'find'
+
+Find.find('/tmp') {|f|
+  Find.prune if f == &quot;/tmp/bar&quot;
+  ...
+}</pre>
+<p>のように、<a href="#L002901">Find.prune</a>を使用します。この例では &quot;/tmp/bar&quot; 
+配下のファイルやディレクトリを探索しません。<code>prune</code> の代わりに 
+<a href="refm026.html#L000393">next</a> を使用した場合、&quot;/tmp/bar&quot; 自体をスキップする
+だけで、その配下の探索は続行されます．</p></dd>
+<dt><a name="L002901" id="L002901"><code>Find.prune</code></a></dt>
+<dd>
+<p><a href="#L002900">Find.find</a>メソッドのブロックにディレクトリが渡されたときにこ
+のメソッドを実行すると、そのディレクトリ配下の探索を無視します。</p></dd>
+</dl>
+<h2><a name="L002902" id="L002902">履歴:</a></h2>
+<dl>
+<dt><a name="L002903" id="L002903">version 1.4 (ruby version 1.6.1)</a></dt>
+<dd>
+<p>ディレクトリのシンボリックリンクを辿らなくなりました。</p>
+</dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm152.html">&lt;-PREV</a>][<a href="refm154.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

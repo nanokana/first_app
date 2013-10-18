@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>FAQ::Rubyの処理系について</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm408.html" rel="next" />
+<link href="refm406.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm395.html">UP</a>][<a href="refm406.html">&lt;-PREV</a>][<a href="refm408.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L009364" id="L009364">11 Ruby の処理系について</a></h1>
+<ul>
+<li><a href="#L009365">11.1 Ruby スクリプトをコンパイルすることはできますか？</a></li>
+<li><a href="#L009366">11.2 Java VM 上で動く Ruby ってありますか？</a></li>
+<li><a href="#L009367">11.3 オリジナル以外の Ruby の実装はありますか？</a></li>
+<li><a href="#L009368">11.4 Ruby 用の indent みたいなものはありますか？</a></li>
+<li><a href="#L009369">11.5 ネイティブスレッドを使った Ruby はない？</a></li>
+<li><a href="#L009370">11.6 GC が遅い！ どうにかならないの？</a></li>
+<li><a href="#L009371">11.7 Mac では Ruby は動かないの？</a></li>
+</ul>
+<h2><a name="L009365" id="L009365">11.1 Ruby スクリプトをコンパイルすることはできますか？</a></h2>
+<p>RAA に、試験的に作成された x86 向けの Just In Time コンパイラが
+あります。ただしバージョン 1.5 用ですし、実用にもならないでしょう。</p>
+<p>コンパイルしたい理由がソースコードの隠蔽なら、近いうちに進展があるかも
+しれません(<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/35194">ruby-list:35194</a><sup class="outside"><small>[外部]</small></sup>)。速度についてはかなり意欲的に改良が
+進んでいます。</p>
+<h2><a name="L009366" id="L009366">11.2 Java VM 上で動く Ruby ってありますか？</a></h2>
+<p>JRuby( <a href="http://jruby.sf.net/">&lt;URL:http://jruby.sf.net/&gt;</a><sup class="outside"><small>[外部]</small></sup> ) という処理系が現在開発されています。</p>
+<h2><a name="L009367" id="L009367">11.3 オリジナル以外の Ruby の実装はありますか？</a></h2>
+<p>現在のところありません。最初の一人を狙うのもいいですね。<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></p>
+<h2><a name="L009368" id="L009368">11.4 Ruby 用の indent みたいなものはありますか？</a></h2>
+<p>これもありません。基本的に Ruby スクリプトの解析は非常に面倒です。
+しかしユーザが増えればかなり実現可能性は高いでしょう。</p>
+<h2><a name="L009369" id="L009369">11.5 ネイティブスレッドを使った Ruby はない？</a></h2>
+<p>ネイティブスレッドは、現在の GC (ガベージコレクション……自動メモリ回収)
+の実装と非常に相性が悪いため実現していません。またインタプリタおよび
+基本ライブラリには C レベルでスレッドセーフでない部分がありますので
+その部分を洗いだして修正する必要もあります。</p>
+<h2><a name="L009370" id="L009370">11.6 GC が遅い！ どうにかならないの？</a></h2>
+<p>GC は現在の Ruby インタプリタの最大のボトルネックになりつつあるようで、
+特に大規模なプログラムにおいては顕著です。これを解決するのが次の安定版
+に向けての核となるでしょう。たとえば世代別 GC のような新アルゴリズムが
+試験実装されたりしています。それまでの対処としては 1. 黙って耐える
+2. 生成されるオブジェクトを減らす 3. 大量にオブジェクトを生成するのが
+わかっているならそのあいだだけ GC を止めておく……などが考えられます。</p>
+<p>ただし通常のプログラムではそうそう GC の影響を受けることはありません。
+安易に GC のせいにせず、どこが遅いのかちゃんと計測してみましょう。</p>
+<h2><a name="L009371" id="L009371">11.7 Mac では Ruby は動かないの？</a></h2>
+<p>MacOS X ならば .pkg フォーマットのRubyがRAAで公開されています。
+MacOS 9 以前でも動いていたことは
+あるそうですが現在のバージョンは動いていません。消えゆく OS に積極的に
+対応しようとする人もあまりいないのでは……。</p>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small> NETRuby には触れるべきですか？ </small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm395.html">UP</a>][<a href="refm406.html">&lt;-PREV</a>][<a href="refm408.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>gserver</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm246.html" rel="next" />
+<link href="refm244.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm244.html">&lt;-PREV</a>][<a href="refm246.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L004924" id="L004924">GServer</a></h1>
+<p>サーバを実装するためのクラスです。GServer を継承した新しいクラスを定義して使います。
+fork ではなくスレッドを使っています。</p>
+<h2><a name="L004925" id="L004925">例</a></h2>
+<pre>#
+# 1970年からの経過時間を秒で返すサーバの例です。
+# 
+class TimeServer &lt; GServer
+  def initialize(port=10001, *args)
+    super(port, *args)
+  end
+  def serve(io)
+    io.puts(Time.now.to_i)
+  end
+end
+
+# ログを取る設定でサーバをスタートします。
+server = TimeServer.new
+server.audit = true                  # Turn logging on.
+server.start 
+
+# まだサーバが動いているかを確認してみましょう。
+GServer.in_service?(10001)           # -&gt; true
+server.stopped?                      # -&gt; false
+
+# サーバを止めます。
+server.shutdown
+
+# すぐさまサーバを止めることもできます。
+GServer.stop(10001)
+# もちろん server.stop でも可能です。</pre>
+<h2><a name="L004926" id="L004926">定数</a></h2>
+<dl>
+<dt><a name="L004927" id="L004927"><code>DEFAULT_HOST</code></a></dt>
+<dd>
+<p>&quot;127.0.0.1&quot; です。</p></dd>
+</dl>
+<h2><a name="L004928" id="L004928">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L004929" id="L004929"><code>GServer.new(<var>port</var>, <var>host</var> = <var>DEFAULT_HOST</var>, <var>maxConnections</var> = <var>4</var>, <var>stdlog</var> = $<var>stderr</var>, <var>audit</var> = <var>false</var>, <var>debug</var> = <var>false</var>)</code></a></dt>
+<dd>
+<p>GServer オブジェクトを生成します。</p></dd>
+<dt><a name="L004930" id="L004930"><code>GServer.in_service?(<var>port</var>, <var>host</var> = <var>DEFAULT_HOST</var>)</code></a></dt>
+<dd>
+<p>与えられた <var>host</var> と <var>port</var> で GServer オブジェクトが同じプロセス内で
+サービス中なら真を返します。</p></dd>
+<dt><a name="L004931" id="L004931"><code>GServer.stop(<var>port</var>, <var>host</var> = <var>DEFAULT_HOST</var>)</code></a></dt>
+<dd>
+<p>与えられた <var>host</var> と <var>port</var> に対応する GServer オブジェクトを停止します。</p></dd>
+</dl>
+<h2><a name="L004932" id="L004932">メソッド</a></h2>
+<dl>
+<dt><a name="L004933" id="L004933"><code>audit</code></a>
+<dt><a name="L004934" id="L004934"><code>audit=</code></a></dt>
+<dd>
+<p>true なら GServer はログを取るためのメソッド 
+starting, connecting, disconnecting, stoppingを
+それぞれ定められた時に呼びます。</p></dd>
+<dt><a name="L004935" id="L004935"><code>connecting(<var>client</var>)</code></a></dt>
+<dd>
+<p>audit が true に設定されているなら、クライアント接続時に呼ばれます。
+<var>client</var> はクライアントと接続している <a href="refm162.html">TCPSocket</a> です。
+サブクラスでオーバーライドします。</p></dd>
+<dt><a name="L004936" id="L004936"><code>connections()</code></a></dt>
+<dd>
+<p>現在接続しているクライアントの数を返します。</p></dd>
+<dt><a name="L004937" id="L004937"><code>disconnecting(<var>clientPort</var>)</code></a></dt>
+<dd>
+<p>audit が true に設定されているなら、クライアントとの接続終了時に呼ばれます。
+<var>clientPort</var> は接続していたクライアントのポートです。
+サブクラスでオーバーライドします。</p></dd>
+<dt><a name="L004938" id="L004938"><code>debug</code></a>
+<dt><a name="L004939" id="L004939"><code>debug=</code></a></dt>
+<dd>
+<p>デバッグモードにするかどうかを設定します。</p></dd>
+<dt><a name="L004940" id="L004940"><code>error(<var>detail</var>)</code></a></dt>
+<dd>
+<p>debug が true に設定されている時、例外が発生すると呼ばれます。
+<var>detail</var> は例外オブジェクトです。protected メソッドです。</p></dd>
+<dt><a name="L004941" id="L004941"><code>host</code></a></dt>
+<dd>
+<p>ホストを文字列で返します。</p></dd>
+<dt><a name="L004942" id="L004942"><code>join()</code></a></dt>
+<dd>
+<p>サーバのサービスを実行しているスレッドを join します。</p></dd>
+<dt><a name="L004943" id="L004943"><code>log(<var>msg</var>)</code></a></dt>
+<dd>
+<p>文字列 <var>msg</var> をログに記録します。protected メソッドです。</p></dd>
+<dt><a name="L004944" id="L004944"><code>maxConnections</code></a></dt>
+<dd>
+<p>受け付ける最大接続数を返します。</p></dd>
+<dt><a name="L004945" id="L004945"><code>port</code></a></dt>
+<dd>
+<p>ポートを数で返します。</p></dd>
+<dt><a name="L004946" id="L004946"><code>serve(<var>io</var>)</code></a></dt>
+<dd>
+<p>何もしません。サブクラスでオーバーライドします。</p></dd>
+<dt><a name="L004947" id="L004947"><code>shutdown()</code></a></dt>
+<dd>
+<p>GServer を停止します。</p></dd>
+<dt><a name="L004948" id="L004948"><code>start(<var>maxConnections</var> = -<var>1</var>)</code></a></dt>
+<dd>
+<p>GServer を起動します。 0 より大きい <var>maxConnections</var> を与えたなら、
+最大接続数として設定されます。</p></dd>
+<dt><a name="L004949" id="L004949"><code>starting()</code></a></dt>
+<dd>
+<p>audit が true に設定されているなら、サーバ起動時に呼ばれます。
+サブクラスでオーバーライドします。</p></dd>
+<dt><a name="L004950" id="L004950"><code>stdlog</code></a>
+<dt><a name="L004951" id="L004951"><code>stdlog=</code></a></dt>
+<dd>
+<p>ログを出力する先の <a href="refm045.html">IO</a> オブジェクトを設定します。デフォルトは $stderr です。</p></dd>
+<dt><a name="L004952" id="L004952"><code>stop()</code></a></dt>
+<dd>
+<p>GServer をすぐに停止します。</p></dd>
+<dt><a name="L004953" id="L004953"><code>stopping()</code></a></dt>
+<dd>
+<p>audit が true に設定されているなら、サーバ停止時に呼ばれます。
+サブクラスでオーバーライドします。</p></dd>
+<dt><a name="L004954" id="L004954"><code>stopped?()</code></a></dt>
+<dd>
+<p>GServer が停止しているなら真を返します。</p></dd>
+</dl>
+<h2><a name="L004955" id="L004955">参照</a></h2>
+<p><a href="http://www.ruby-doc.org/stdlib/libdoc/gserver/rdoc/">&lt;URL:http://www.ruby-doc.org/stdlib/libdoc/gserver/rdoc/&gt;</a><sup class="outside"><small>[外部]</small></sup></p>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm244.html">&lt;-PREV</a>][<a href="refm246.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

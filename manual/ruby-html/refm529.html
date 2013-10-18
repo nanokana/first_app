@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ruby-src:sample/cal.rb</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm530.html" rel="next" />
+<link href="refm528.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm528.html">&lt;-PREV</a>][<a href="refm530.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1>ruby-src:sample/cal.rb</h1>
+#!&nbsp;/usr/bin/env&nbsp;ruby<br />
+<br />
+#&nbsp;cal.rb:&nbsp;Written&nbsp;by&nbsp;Tadayoshi&nbsp;Funaba&nbsp;1998-2004<br />
+#&nbsp;$Id:&nbsp;cal.rb,v&nbsp;2.8&nbsp;2004-09-25&nbsp;12:50:10+09&nbsp;tadf&nbsp;Exp&nbsp;$<br />
+<br />
+require&nbsp;'date'<br />
+<br />
+class&nbsp;Cal<br />
+<br />
+&nbsp;&nbsp;START&nbsp;=<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'cn'&nbsp;=&gt;&nbsp;true,&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;China<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'de'&nbsp;=&gt;&nbsp;2342032,&nbsp;#&nbsp;Germany&nbsp;(protestant&nbsp;states)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'dk'&nbsp;=&gt;&nbsp;2342032,&nbsp;#&nbsp;Denmark<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'es'&nbsp;=&gt;&nbsp;2299161,&nbsp;#&nbsp;Spain<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'fi'&nbsp;=&gt;&nbsp;2361390,&nbsp;#&nbsp;Finland<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'fr'&nbsp;=&gt;&nbsp;2299227,&nbsp;#&nbsp;France<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'gb'&nbsp;=&gt;&nbsp;2361222,&nbsp;#&nbsp;United&nbsp;Kingdom<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'gr'&nbsp;=&gt;&nbsp;2423868,&nbsp;#&nbsp;Greece<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'hu'&nbsp;=&gt;&nbsp;2301004,&nbsp;#&nbsp;Hungary<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'it'&nbsp;=&gt;&nbsp;2299161,&nbsp;#&nbsp;Italy<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'jp'&nbsp;=&gt;&nbsp;true,&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;Japan<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'no'&nbsp;=&gt;&nbsp;2342032,&nbsp;#&nbsp;Norway<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'pl'&nbsp;=&gt;&nbsp;2299161,&nbsp;#&nbsp;Poland<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'pt'&nbsp;=&gt;&nbsp;2299161,&nbsp;#&nbsp;Portugal<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'ru'&nbsp;=&gt;&nbsp;2421639,&nbsp;#&nbsp;Russia<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'se'&nbsp;=&gt;&nbsp;2361390,&nbsp;#&nbsp;Sweden<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'us'&nbsp;=&gt;&nbsp;2361222,&nbsp;#&nbsp;United&nbsp;States<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'os'&nbsp;=&gt;&nbsp;false,&nbsp;&nbsp;&nbsp;#&nbsp;(old&nbsp;style)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'ns'&nbsp;=&gt;&nbsp;true&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;(new&nbsp;style)<br />
+&nbsp;&nbsp;}<br />
+<br />
+&nbsp;&nbsp;DEFAULT_START&nbsp;=&nbsp;'gb'<br />
+<br />
+&nbsp;&nbsp;def&nbsp;initialize<br />
+&nbsp;&nbsp;&nbsp;&nbsp;opt_j;&nbsp;opt_m;&nbsp;opt_t;&nbsp;opt_y;&nbsp;opt_c<br />
+&nbsp;&nbsp;end<br />
+<br />
+&nbsp;&nbsp;def&nbsp;opt_j(flag=false)&nbsp;@opt_j&nbsp;=&nbsp;flag&nbsp;end<br />
+&nbsp;&nbsp;def&nbsp;opt_m(flag=false)&nbsp;@opt_m&nbsp;=&nbsp;flag&nbsp;end<br />
+&nbsp;&nbsp;def&nbsp;opt_t(flag=false)&nbsp;@opt_t&nbsp;=&nbsp;flag&nbsp;end<br />
+&nbsp;&nbsp;def&nbsp;opt_y(flag=false)&nbsp;@opt_y&nbsp;=&nbsp;flag&nbsp;end<br />
+<br />
+&nbsp;&nbsp;def&nbsp;opt_c(arg=DEFAULT_START)&nbsp;@start&nbsp;=&nbsp;START[arg]&nbsp;end<br />
+<br />
+&nbsp;&nbsp;def&nbsp;set_params<br />
+&nbsp;&nbsp;&nbsp;&nbsp;@dw&nbsp;=&nbsp;if&nbsp;@opt_j&nbsp;then&nbsp;3&nbsp;else&nbsp;2&nbsp;end<br />
+&nbsp;&nbsp;&nbsp;&nbsp;@mw&nbsp;=&nbsp;(@dw&nbsp;+&nbsp;1)&nbsp;*&nbsp;7&nbsp;-&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;@mn&nbsp;=&nbsp;if&nbsp;@opt_j&nbsp;then&nbsp;2&nbsp;else&nbsp;3&nbsp;end<br />
+&nbsp;&nbsp;&nbsp;&nbsp;@tw&nbsp;=&nbsp;(@mw&nbsp;+&nbsp;2)&nbsp;*&nbsp;@mn&nbsp;-&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;@k&nbsp;&nbsp;=&nbsp;if&nbsp;@opt_m&nbsp;then&nbsp;1&nbsp;else&nbsp;0&nbsp;end<br />
+&nbsp;&nbsp;&nbsp;&nbsp;@da&nbsp;=&nbsp;if&nbsp;@opt_j&nbsp;then&nbsp;:yday&nbsp;else&nbsp;:mday&nbsp;end<br />
+&nbsp;&nbsp;end<br />
+<br />
+&nbsp;&nbsp;def&nbsp;pict(y,&nbsp;m)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;d&nbsp;=&nbsp;(1..31).detect{|d|&nbsp;Date.valid_date?(y,&nbsp;m,&nbsp;d,&nbsp;@start)}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;fi&nbsp;=&nbsp;Date.new(y,&nbsp;m,&nbsp;d,&nbsp;@start)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;fi&nbsp;-=&nbsp;(fi.jd&nbsp;-&nbsp;@k&nbsp;+&nbsp;1)&nbsp;%&nbsp;7<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ve&nbsp;&nbsp;=&nbsp;(fi..fi&nbsp;+&nbsp;&nbsp;6).collect{|cu|<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%w(S&nbsp;M&nbsp;Tu&nbsp;W&nbsp;Th&nbsp;F&nbsp;S)[cu.wday]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ve&nbsp;+=&nbsp;(fi..fi&nbsp;+&nbsp;41).collect{|cu|<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;cu.mon&nbsp;==&nbsp;m&nbsp;then&nbsp;cu.send(@da)&nbsp;end.to_s<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ve&nbsp;=&nbsp;ve.collect{|e|&nbsp;e.rjust(@dw)}<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gr&nbsp;=&nbsp;group(ve,&nbsp;7)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gr&nbsp;=&nbsp;trans(gr)&nbsp;if&nbsp;@opt_t<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ta&nbsp;=&nbsp;gr.collect{|xs|&nbsp;xs.join('&nbsp;')}<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ca&nbsp;=&nbsp;%w(January&nbsp;February&nbsp;March&nbsp;April&nbsp;May&nbsp;June&nbsp;July<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;August&nbsp;September&nbsp;October&nbsp;November&nbsp;December)[m&nbsp;-&nbsp;1]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ca&nbsp;=&nbsp;ca&nbsp;+&nbsp;'&nbsp;'&nbsp;+&nbsp;y.to_s&nbsp;if&nbsp;not&nbsp;@opt_y<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ca&nbsp;=&nbsp;ca.center(@mw)<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ta.unshift(ca)<br />
+&nbsp;&nbsp;end<br />
+<br />
+&nbsp;&nbsp;def&nbsp;group(xs,&nbsp;n)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;(0..xs.size&nbsp;/&nbsp;n&nbsp;-&nbsp;1).collect{|i|&nbsp;xs[i&nbsp;*&nbsp;n,&nbsp;n]}<br />
+&nbsp;&nbsp;end<br />
+<br />
+&nbsp;&nbsp;def&nbsp;trans(xs)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;(0..xs[0].size&nbsp;-&nbsp;1).collect{|i|&nbsp;xs.collect{|x|&nbsp;x[i]}}<br />
+&nbsp;&nbsp;end<br />
+<br />
+&nbsp;&nbsp;def&nbsp;stack(xs)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;xs.empty?&nbsp;then&nbsp;[]&nbsp;else&nbsp;xs[0]&nbsp;+&nbsp;stack(xs[1..-1])&nbsp;end<br />
+&nbsp;&nbsp;end<br />
+<br />
+&nbsp;&nbsp;def&nbsp;block(xs,&nbsp;n)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;stack(group(xs,&nbsp;n).collect{|ys|&nbsp;trans(ys).collect{|zs|&nbsp;zs.join('&nbsp;&nbsp;')}})<br />
+&nbsp;&nbsp;end<br />
+<br />
+&nbsp;&nbsp;def&nbsp;unlines(xs)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;xs.collect{|x|&nbsp;x&nbsp;+&nbsp;&quot;\n&quot;}.join<br />
+&nbsp;&nbsp;end<br />
+<br />
+&nbsp;&nbsp;def&nbsp;monthly(y,&nbsp;m)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;unlines(pict(y,&nbsp;m))<br />
+&nbsp;&nbsp;end<br />
+<br />
+&nbsp;&nbsp;def&nbsp;addmon(y,&nbsp;m,&nbsp;n)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;y,&nbsp;m&nbsp;=&nbsp;(y&nbsp;*&nbsp;12&nbsp;+&nbsp;(m&nbsp;-&nbsp;1)&nbsp;+&nbsp;n).divmod(12)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;y,&nbsp;m&nbsp;+&nbsp;1<br />
+&nbsp;&nbsp;end<br />
+<br />
+&nbsp;&nbsp;def&nbsp;yearly(y)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;y.to_s.center(@tw)&nbsp;+&nbsp;&quot;\n\n&quot;&nbsp;+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unlines(block((0..11).collect{|n|&nbsp;pict(*addmon(y,&nbsp;1,&nbsp;n))},&nbsp;@mn))&nbsp;+&nbsp;&quot;\n&quot;<br />
+&nbsp;&nbsp;end<br />
+<br />
+&nbsp;&nbsp;def&nbsp;print(y,&nbsp;m)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;set_params<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;@opt_y&nbsp;then&nbsp;yearly(y)&nbsp;else&nbsp;monthly(y,&nbsp;m)&nbsp;end<br />
+&nbsp;&nbsp;end<br />
+<br />
+end<br />
+<br />
+if&nbsp;__FILE__&nbsp;==&nbsp;$0<br />
+<br />
+&nbsp;&nbsp;require&nbsp;'getoptlong'<br />
+<br />
+&nbsp;&nbsp;def&nbsp;usage<br />
+&nbsp;&nbsp;&nbsp;&nbsp;warn&nbsp;'usage:&nbsp;cal&nbsp;[-c&nbsp;iso3166]&nbsp;[-jmty]&nbsp;[[month]&nbsp;year]'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;exit&nbsp;1<br />
+&nbsp;&nbsp;end<br />
+<br />
+&nbsp;&nbsp;cal&nbsp;=&nbsp;Cal.new<br />
+<br />
+&nbsp;&nbsp;begin<br />
+&nbsp;&nbsp;&nbsp;&nbsp;GetoptLong.new(['-c',&nbsp;GetoptLong::REQUIRED_ARGUMENT],<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;['-j',&nbsp;GetoptLong::NO_ARGUMENT],<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;['-m',&nbsp;GetoptLong::NO_ARGUMENT],<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;['-t',&nbsp;GetoptLong::NO_ARGUMENT],<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;['-y',&nbsp;GetoptLong::NO_ARGUMENT]).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;each&nbsp;do&nbsp;|opt,&nbsp;arg|<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;opt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;'-c';&nbsp;cal.opt_c(arg)&nbsp;||&nbsp;raise<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;'-j';&nbsp;cal.opt_j(true)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;'-m';&nbsp;cal.opt_m(true)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;'-t';&nbsp;cal.opt_t(true)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;'-y';&nbsp;cal.opt_y(true)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;end<br />
+&nbsp;&nbsp;&nbsp;&nbsp;end<br />
+&nbsp;&nbsp;rescue<br />
+&nbsp;&nbsp;&nbsp;&nbsp;usage<br />
+&nbsp;&nbsp;end<br />
+<br />
+&nbsp;&nbsp;y,&nbsp;m&nbsp;=&nbsp;ARGV.values_at(1,&nbsp;0).compact.collect{|x|&nbsp;x.to_i}<br />
+&nbsp;&nbsp;cal.opt_y(true)&nbsp;if&nbsp;y&nbsp;and&nbsp;not&nbsp;m<br />
+<br />
+&nbsp;&nbsp;to&nbsp;=&nbsp;Date.today<br />
+&nbsp;&nbsp;y&nbsp;||=&nbsp;to.year<br />
+&nbsp;&nbsp;m&nbsp;||=&nbsp;to.mon<br />
+<br />
+&nbsp;&nbsp;usage&nbsp;unless&nbsp;m&nbsp;&gt;=&nbsp;1&nbsp;and&nbsp;m&nbsp;&lt;=&nbsp;12<br />
+&nbsp;&nbsp;usage&nbsp;unless&nbsp;y&nbsp;&gt;=&nbsp;-4712<br />
+<br />
+&nbsp;&nbsp;print&nbsp;cal.print(y,&nbsp;m)<br />
+<br />
+end<br />
+
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm528.html">&lt;-PREV</a>][<a href="refm530.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

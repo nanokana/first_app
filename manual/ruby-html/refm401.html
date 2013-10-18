@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>FAQ::メソッド</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm402.html" rel="next" />
+<link href="refm400.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm395.html">UP</a>][<a href="refm400.html">&lt;-PREV</a>][<a href="refm402.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L009272" id="L009272">5. メソッド</a></h1>
+<ul>
+<li><a href="#L009273">5.1 オブジェクトにメッセージを送った時に実行されるメソッドはどのように捜されますか</a></li>
+<li><a href="#L009274">5.2 <code>+</code>や<code>-</code>は演算子ですか</a></li>
+<li><a href="#L009275">5.3 関数はありますか</a></li>
+<li><a href="#L009276">5.4 オブジェクトのインスタンス変数を外から参照できますか</a></li>
+<li><a href="#L009277">5.5 <code>private</code>と<code>protected</code>の違いが分かりません</a></li>
+<li><a href="#L009278">5.6 インスタンス変数をpublicにしたいのですが</a></li>
+<li><a href="#L009279">5.7 メソッドの可視性を指定したいのですが</a></li>
+<li><a href="#L009280">5.8 メソッド名に大文字で始まる識別子は使えますか</a></li>
+<li><a href="#L009281">5.9 <code>super</code>が<code>ArgumentError</code>になりますが</a></li>
+<li><a href="#L009282">5.10 2段階上の同名のメソッドを呼びたいのですが</a></li>
+<li><a href="#L009283">5.11 組み込み関数を再定義した時に、元の関数を呼びたい時はどうしますか</a></li>
+<li><a href="#L009284">5.12 破壊的メソッドとは何ですか</a></li>
+<li><a href="#L009285">5.13 副作用が起こるのはどんな時ですか</a></li>
+<li><a href="#L009286">5.14 メソッドから複数の戻り値を返すことはできますか</a></li>
+<li><a href="#L009287">5.15 今実行中のメソッドの名前を知りたいのですが</a></li>
+</ul>
+<h2><a name="L009273" id="L009273">5.1 オブジェクトにメッセージを送った時に実行されるメソッドはどのように捜されますか</a></h2>
+<p>特異メソッド、自クラスで定義されたメソッド、スーパークラス(Mix-inされた
+モジュールを含む。クラス名.ancestorsで表示される。)で定義されたメソッドの順に
+最初に見つかったメソッドが実行されます。メソッドが見つからなかった
+場合には、<code>method_missing</code>が同じ順で捜されます。</p>
+<pre>module Indexed
+  def [](n)
+    to_a[n]
+  end
+end
+class String
+  include Indexed
+end
+p String.ancestors # [String, Indexed, Enumerable, Comparable, Object, Kernel]
+p &quot;abcde&quot;.gsub!(/./, &quot;\\&amp;\n&quot;)[1]</pre>
+<p>は、残念ながら期待するように&quot;b\n&quot;を返してくれず、10を返してきます。
+[]がStringクラスで捜され、Indexedで定義されたものを捜し出す前に
+マッチしてしまうからです。Class Stringで直接[]を再定義すれば、
+期待どおりになります。</p>
+<h2><a name="L009274" id="L009274">5.2 <code>+</code>や<code>-</code>は演算子ですか</a></h2>
+<p><code>+</code>や<code>-</code>などは演算子ではなくメソッド呼び出しです。したがって
+オーバーライド(再定義)することもできます。</p>
+<pre>class MyString &lt; String
+  def +(other)
+    print super(other)
+  end
+end</pre>
+<p>ただし、以下のもの及びこれらを組み合わせたもの(!=、!~)は制御構造であり、
+オーバーライドできません。</p>
+<pre>=, .., ..., !, not, &amp;&amp;, and, |, or, ~, ::</pre>
+<p>単項演算子をオーバーライド(もしくは定義)するには、メソッド名として
+<code>+@</code>や<code>-@</code>を使います。</p>
+<p><code>=</code>は、インスタンス変数へのアクセスメソッドとして,
+クラス定義の中で次のようにメソッドを定義することができます。
+また、<code>+</code>や<code>-</code>なども定義することにより、<code>+=</code>
+などの自己代入演算も可能になります。</p>
+<pre>def attribute=(val)
+  @attribute = val
+end</pre>
+<h2><a name="L009275" id="L009275">5.3 関数はありますか</a></h2>
+<p>Rubyにおいて関数のように見えるものはすべてレシーバ(self)を省略した形の
+メソッドです。例えば</p>
+<pre>def writeln(str)
+  print(str, &quot;\n&quot;)
+end
+
+writeln(&quot;Hello, World!&quot;)</pre>
+<p>のように一見関数のように見えるものも、<a href="refm035.html">Object</a>クラスに定義された
+メソッドであり、隠されたレシーバー<code>self</code>に送られているというわけです。
+したがってRubyを純粋なオブジェクト指向言語と呼ぶことができます。</p>
+<p>組み込み関数のように、<code>self</code>が何であっても同じ結果を返すメソッドは、
+レシーバーを意識する必要がありませんので、関数と考えてもいいという
+ことになります。</p>
+<h2><a name="L009276" id="L009276">5.4 オブジェクトのインスタンス変数を外から参照できますか</a></h2>
+<p>直接はできません。あらかじめそのオブジェクトにインスタンス変数を
+参照するためのメソッド (アクセサと言います) を定義しておく必要が
+あります。たとえば以下のようにします。</p>
+<pre>class C
+  def name
+    @name
+  end
+  def name=(str)    # name の後に空白を入れてはいけない！
+    @name = str
+  end
+end
+
+c = C.new
+c.name = 'やまだたろう'
+p c.name                 #=&gt; &quot;やまだたろう&quot;</pre>
+<p>またこのような単純なメソッド定義は <code>Module#attr</code>、<code>attr_reader</code>、
+<code>attr_writer</code>、<code>attr_accessor</code> などを使って簡潔に行うことができます。
+たとえば上にあったクラス定義は以下のように書き直せます。</p>
+<pre>class C
+  attr_accessor :name
+end</pre>
+<p>なんらかの理由でアクセスメソッドは作りたくないけれど参照はしたい場合は
+<code>Object#instance_eval</code> を使って参照することもできます。</p>
+<h2><a name="L009277" id="L009277">5.5 <code>private</code>と<code>protected</code>の違いが分かりません</a></h2>
+<p><code>private</code>の意味は、メソッドを関数形式でだけ呼び出せるようにし、
+レシーバー形式では呼び出せないようにするという意味です。したがって、
+可視性が<code>private</code>なメソッドは、自クラス及びサブクラスからしか参照
+できません。</p>
+<p><code>protected</code>も同様に、自クラス及びサブクラスからしか参照できませんが、
+関数形式でもレシーバー形式でも呼び出せます。</p>
+<p>メソッドのカプセル化に必要な機能です。</p>
+<h2><a name="L009278" id="L009278">5.6 インスタンス変数をpublicにしたいのですが</a></h2>
+<p>変数を直接外から見えるようにすることはできません。Rubyではインスタンス
+変数へのアクセスはアクセスメソッドを使って行います。例えば次のように
+します。</p>
+<pre>class Foo
+  def initialize(str)
+    @name = str
+  end
+
+  def name
+    return @name
+  end
+end</pre>
+<p>しかし毎回これを書くのは面倒です。そこで<code>attr_reader</code>、<code>attr_writer</code>、
+<code>attr_accessor</code>と言ったメソッドを使うとこのような単純なメソッド定義を
+簡単に書くことができます。</p>
+<pre>class Foo
+  def initialize(str)
+    @name = str
+  end
+
+  attr_reader :name
+  # 次のように書いたのと同じです。
+  # def name
+  #   return @name
+  # end
+end
+
+foo = Foo.new(&quot;Tom&quot;)
+print foo.name, &quot;\n&quot;         # Tom</pre>
+<p><code>attr_accessor</code>を使うと書き込み用のメソッドも同時に定義できます。</p>
+<pre>class Foo
+  def initialize(str)
+    @name = str
+  end
+
+  attr_accessor :name
+  # 次のように書いたのと同じです。
+  # def name
+  #   return @name
+  # end
+  # def name=(str)
+  #   @name = str
+  # end
+end
+
+foo = Foo.new(&quot;Tom&quot;)
+foo.name = &quot;Jim&quot;
+print foo.name, &quot;\n&quot;    # Jim</pre>
+<p>同様に書き込み用のメソッドだけ定義したければ<code>attr_writer</code>が使えます。</p>
+<h2><a name="L009279" id="L009279">5.7 メソッドの可視性を指定したいのですが</a></h2>
+<p>まず、Rubyでは関数形式(レシーバを省略した形)でしか呼び出すことのできない
+メソッドのことをprivateなメソッドと呼んでいます。C++やJavaのprivateとは
+意味が違うので注意してください。</p>
+<p>メソッドをprivateにすると、そのメソッドは別のオブジェクトからは
+呼び出すことができなくなります。クラス内か、そのサブクラスからしか
+使わないメソッドはprivateにしておきましょう。</p>
+<p>次のようにすればメソッドをprivateにすることができます。</p>
+<pre>class Foo
+  def test
+    print &quot;hello\n&quot;
+  end
+  private :test
+end
+
+foo = Foo.new
+foo.test
+#=&gt; test.rb:9: private method `test' called for #&lt;Foo:0x400f3eec&gt;(Foo)</pre>
+<p>クラスメソッドをprivateにするには<code>private_class_method</code>を使います。</p>
+<pre>class Foo
+  def Foo.test
+    print &quot;hello\n&quot;
+  end
+  private_class_method :test
+end
+
+Foo.test
+#=&gt; test.rb:8: private method `test' called for Foo(Class)</pre>
+<p>同様に<code>public</code>、<code>public_class_method</code>を用いることでメソッドを
+publicにすることができます。</p>
+<p>デフォルトでは、クラス内でのメソッド定義はinitializeを除いてpublic、
+トップレベルではprivateになっています。</p>
+<h2><a name="L009280" id="L009280">5.8 メソッド名に大文字で始まる識別子は使えますか</a></h2>
+<p>使えます。ただし、引数の無いメソッド呼び出しに対して引数を括る括弧を
+省略できなくなります。</p>
+<h2><a name="L009281" id="L009281">5.9 <code>super</code>が<a href="refm094.html">ArgumentError</a>になりますが</a></h2>
+<p>メソッド定義中で<code>super</code>と呼び出すと、引数がすべて渡されますので、
+引数の数が合わないと<a href="refm094.html">ArgumentError</a>になります。異なる数の引数を
+指定するには、<code>super</code>に引数を指定してやります。</p>
+<h2><a name="L009282" id="L009282">5.10 2段階上の同名のメソッドを呼びたいのですが</a></h2>
+<p><code>super</code>は、1段上の同名のメソッドしか呼べません。それより上の同名の
+メソッドを呼び出すには、あらかじめそのメソッドをaliasしておきます。</p>
+<h2><a name="L009283" id="L009283">5.11 組み込み関数を再定義した時に、元の関数を呼びたい時はどうしますか</a></h2>
+<p>メソッド定義の中では<code>super</code>が使えます。再定義する前に<code>alias</code>
+しておくと、元の定義が保たれます。
+<a href="refm076.html">Kernel</a>の特異メソッドとしても呼べます。</p>
+<h2><a name="L009284" id="L009284">5.12 破壊的メソッドとは何ですか</a></h2>
+<p>オブジェクトの内容を変更してしまうメソッドで、文字列や配列、ハッシュ
+などにあります。同名のメソッドがあって、一方はオブジェクトのコピーを
+作って返し、もう一方は変更されたオブジェクトを返すようになっている場合、
+!のついた方が破壊的メソッドです。ただし、!がつかないメソッドの中にも
+String#concatのように破壊的なものはあります。</p>
+<h2><a name="L009285" id="L009285">5.13 副作用が起こるのはどんな時ですか</a></h2>
+<p>実引数であるオブジェクトに対して、メソッドの中から破壊的メソッドを
+適用した場合です.</p>
+<pre>def foo(str)
+  str.sub!(/foo/, &quot;baz&quot;)
+end
+
+obj = &quot;foo&quot;
+foo(obj)
+print obj
+#=&gt; &quot;baz&quot;</pre>
+<p>この場合、引数となったオブジェクトが変更されています。でも、これは、プログラム
+の中で<em>必要があって</em>副作用のあるメッセージをオブジェクトに対し
+て送っているので当たり前です。</p>
+<h2><a name="L009286" id="L009286">5.14 メソッドから複数の戻り値を返すことはできますか</a></h2>
+<p>Rubyでは、メソッドの戻り値は一つしか指定できませんが、
+配列を使うことによって、複数の戻り値を返すことができます。</p>
+<pre>return 1, 2, 3</pre>
+<p>とするとreturnに与えたリストが配列として返されます。つまり上記のコードは
+次のように書くのと全く同じ意味です。</p>
+<pre>return [1, 2, 3]</pre>
+<p>さらに多重代入を利用すると、複数の戻り値を戻すのとほとんど同じことがで
+きます。たとえば、</p>
+<pre>def foo
+  return 20, 4, 17
+end
+
+a, b, c = foo
+print &quot;a:&quot;, a, &quot;\n&quot; #=&gt; a:20
+print &quot;b:&quot;, b, &quot;\n&quot; #=&gt; b:4
+print &quot;c:&quot;, c, &quot;\n&quot; #=&gt; c:17</pre>
+<p>こんなことができるわけです。</p>
+<h2><a name="L009287" id="L009287">5.15 今実行中のメソッドの名前を知りたいのですが</a></h2>
+<p>callerを使って調べることが出来ます。
+<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></p>
+<pre>def current_method
+  caller.first[/:in \`(.*?)\'\z/, 1]
+end
+
+def some_method
+  p current_method #=&gt; &quot;some_method&quot;
+end</pre>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small><a href="http://www.rubyist.net/~nobu/t/20051013.html#p02">今実行中のメソッドの名前は…</a><sup class="outside"><small>[外部]</small></sup>より。</small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm395.html">UP</a>][<a href="refm400.html">&lt;-PREV</a>][<a href="refm402.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

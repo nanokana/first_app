@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>st.c</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm499.html" rel="next" />
+<link href="refm497.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm488.html">UP</a>][<a href="refm497.html">&lt;-PREV</a>][<a href="refm499.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L010618" id="L010618">st.c</a></h1>
+<dl>
+<dt><a name="L010619" id="L010619">static int delete_never(char *key, char *value, char *never)</a></dt>
+<dd>
+<p>st_cleanup_safe() のイテレータブロック。</p>
+</dd>
+<dt><a name="L010620" id="L010620">static int new_size(int size)</a></dt>
+<dd>
+<p>必要なサイズ size から、最適なハッシュエントリの
+サイズを返す。</p>
+</dd>
+<dt><a name="L010621" id="L010621">static int numcmp(long x, long y)</a></dt>
+<dd>
+<p>int用の比較関数。</p>
+</dd>
+<dt><a name="L010622" id="L010622">static int numhash(long n)</a></dt>
+<dd>
+<p>int用のハッシュ関数。
+n に対するハッシュ値を計算する。</p>
+</dd>
+<dt><a name="L010623" id="L010623">static void rehash(register st_table *table)</a></dt>
+<dd>
+<p>テーブルの全要素に対しハッシュ値を計算しなおして
+テーブルを再構成する。エントリに対して要素の数が
+増えすぎ、テーブルが狭くなってきたときに発生する。</p>
+</dd>
+<dt><a name="L010624" id="L010624">void st_add_direct(st_table *table, char *key, char *value)</a></dt>
+<dd>
+<p>st_insert() と似ているが、同じハッシュ値を持つエントリーに対する
+「同値検査」を省略する。key がまだ登録されていないことがはっきり
+している場合には、少し高速に登録できる。</p>
+</dd>
+<dt><a name="L010625" id="L010625">void st_cleanup_safe(st_table *table, char *never)</a></dt>
+<dd>
+<p>never と同じ値を持つエントリーを削除する。</p>
+</dd>
+<dt><a name="L010626" id="L010626">st_table *st_copy(st_table *old_table)</a></dt>
+<dd>
+<p>Hash#dup の実体。
+old_table と同じ内容の st_table を新たに作成して返す。</p>
+</dd>
+<dt><a name="L010627" id="L010627">int st_delete(register st_table *table, register char **key, char **value)</a></dt>
+<dd>
+<ul>
+<li>key に対応する値をテーブルから削除し、*key、*value に登録時のキーと</li>
+</ul>
+<p>値を書きこむ。返り値は削除したかどうか。</p>
+</dd>
+<dt><a name="L010628" id="L010628">int st_delete_safe(register st_table *table, register char **key, char **value, char *never)</a></dt>
+<dd>
+<p>st_delete() と似ているが、その場ですぐに削除するのではなく never を
+書きこんでおく。st_cleanup_safe() で本当に削除できる。
+Ruby では never には Qundef を使う。</p>
+</dd>
+<dt><a name="L010629" id="L010629">void st_foreach(st_table *table, enum st_retval (*func)(), char *arg)</a></dt>
+<dd>
+<p>Hash#each,delete_if などの実体。ハッシュ内の全てのキーと値、arg を
+引数にして、func を実行する。func の返り値 enum st_retval は ST_CONTINUE
+ST_STOP ST_DELETE のどれか。どれも見ためどおりの働きをする。</p>
+</dd>
+<dt><a name="L010630" id="L010630">void st_free_table(st_table *table)</a></dt>
+<dd>
+<p>table を解放する。キー、値は解放されない。</p>
+</dd>
+<dt><a name="L010631" id="L010631">st_table *st_init_numtable(void)</a></dt>
+<dd>
+<p>キーが int 型であるハッシュテーブルを作成する。</p>
+</dd>
+<dt><a name="L010632" id="L010632">st_table *st_init_numtable_with_size(int size)</a></dt>
+<dd>
+<p>キーが int 型であるハッシュテーブルを作成する。
+st_init_table() に int 用の操作関数を渡しているだけ。</p>
+</dd>
+<dt><a name="L010633" id="L010633">st_table *st_init_strtable(void)</a></dt>
+<dd>
+<p>キーが char* 型であるハッシュテーブルを作成する。</p>
+</dd>
+<dt><a name="L010634" id="L010634">st_table *st_init_strtable_with_size(int size)</a></dt>
+<dd>
+<p>キーが char* 型であるハッシュテーブルを作成する。
+st_init_table() に文字列用の操作関数を渡しているだけ。</p>
+</dd>
+<dt><a name="L010635" id="L010635">st_table *st_init_table(struct st_hash_type *type)</a></dt>
+<dt><a name="L010636" id="L010636">st_table *st_init_table_with_size(struct st_hash_type *type, int size)</a></dt>
+<dd>
+<p>st_table を作成する。_with_size はサイズを指定して生成する。
+struct st_hash_type はハッシュ値を得る関数と、同値判定を行う
+関数を持つ。</p>
+</dd>
+<dt><a name="L010637" id="L010637">int st_insert(register st_table *table, register char *key, char *value)</a></dt>
+<dd>
+<p>ハッシュに key と value の組を追加する。
+古いライブラリなので void* のかわりに char* を使っている。</p>
+</dd>
+<dt><a name="L010638" id="L010638">int st_lookup(st_table *table, register char *key, char **value)</a></dt>
+<dd>
+<p>key に対応する値をみつけて value にポインタを書きこむ。
+返り値は見つかったかどうかの真偽値。</p>
+<p>任意の型ポインタにvoid*でなくchar*を使っているのは
+古いライブラリだからだ。ANSI C以前はvoid*の意味に
+char*を使っていた。</p>
+</dd>
+<dt><a name="L010639" id="L010639">static void stat_col(void)</a></dt>
+<dd>
+<p>ハッシュの衝突に関する統計を /tmp/col に出力する。
+#ifdef HASH_LOG のときだけ定義される、開発者用関数。</p>
+</dd>
+<dt><a name="L010640" id="L010640">static int strhash(register char *string)</a></dt>
+<dd>
+<p>文字列用のハッシュ関数。
+string に対するハッシュ値を計算する。</p>
+</dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm488.html">UP</a>][<a href="refm497.html">&lt;-PREV</a>][<a href="refm499.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

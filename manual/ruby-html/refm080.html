@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Precision</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm081.html" rel="next" />
+<link href="refm079.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm034.html">UP</a>][<a href="refm079.html">&lt;-PREV</a>][<a href="refm081.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L002028" id="L002028">Precision</a></h1>
+<p>精度をもつ具象数値クラスのための Mix-in。 ここでいう精度とは実数の近似
+の良さを意味します。抽象数値クラスや複素数、行列などそれら自身が実数に
+含まれないような クラスにインクルードすべきではありません。</p>
+<h2><a name="L002029" id="L002029">モジュールメソッド:</a></h2>
+<dl>
+<dt><a name="L002030" id="L002030"><code>Precision.included(<var>module_or_class</var>)</code></a></dt>
+<dd>
+<p><a href="refm384.html">ruby 1.7 feature</a></p>
+<p><code>Precision</code> がインクルードされた時に呼ばれます。詳細は 
+<a href="refm050.html#L001229">Module#included</a> を参照してください。</p>
+<p>このメソッドは、<code>Precision</code> をインクルードするクラスやモジュー
+ルに対してメソッド <code>induced_from</code> を自動的に定義するためにあり
+ます。<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></p></dd>
+<dt><a name="L002031" id="L002031"><code>Precision.induced_from(<var>number</var>)</code></a></dt>
+<dd>
+<p><var>number</var> を自分のクラスに変換した結果を返します。 デフォルトの
+定義は、例外 <a href="refm111.html">TypeError</a> を発生させるので、Mix-in したクラスで
+このメソッドを再定義する必要があります。再定義に、
+<a href="#L002033">Precision#prec</a> を使うと、 無限ループになる可
+能性があります。</p></dd>
+</dl>
+<h2><a name="L002032" id="L002032">メソッド:</a></h2>
+<dl>
+<dt><a name="L002033" id="L002033"><code>prec(<var>klass</var>)</code></a></dt>
+<dd>
+<p><code>self</code> を精度 <var>klass</var> に変換した結果を返します。デフォルト
+の定義では <code><var>klass</var>.induced_from(self)</code> を呼び出し、その結
+果を返します。</p>
+<p>新しく精度クラスを作るときは組み込みクラスの
+<a href="#L002031">Precision.induced_from</a> を変更するのではなく、この 
+prec の再定義で対応するべきです。</p></dd>
+<dt><a name="L002034" id="L002034"><code>prec_i</code></a></dt>
+<dd>
+<p><code>self</code> を <a href="refm053.html">Integer</a> に変換します。<code>prec(Integer)</code> と等
+価です。</p></dd>
+<dt><a name="L002035" id="L002035"><code>prec_f</code></a></dt>
+<dd>
+<p><code>self</code> を <a href="refm056.html">Float</a> に変換します。<code>prec(Float)</code> と等価で
+す。</p></dd>
+</dl>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>ruby 1.6 以前は、これを 
+<em class="XXINVALIDXX">Module#append_feature</em> を再定義すること
+で実現していました</small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm034.html">UP</a>][<a href="refm079.html">&lt;-PREV</a>][<a href="refm081.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

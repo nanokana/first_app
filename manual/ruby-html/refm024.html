@@ -1,0 +1,486 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>リテラル</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm025.html" rel="next" />
+<link href="refm023.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm020.html">UP</a>][<a href="refm023.html">&lt;-PREV</a>][<a href="refm025.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L000323" id="L000323">リテラル</a></h1>
+<ul>
+<li><a href="#L000324">数値リテラル</a></li>
+<li><a href="#L000338">文字列リテラル</a>
+<ul>
+<li><a href="#L000339">バックスラッシュ記法</a></li>
+<li><a href="#L000355">式展開</a></li>
+</ul></li>
+<li><a href="#L000356">コマンド出力</a></li>
+<li><a href="#L000357">ヒアドキュメント (行指向文字列リテラル)</a></li>
+<li><a href="#L000358">正規表現リテラル</a></li>
+<li><a href="#L000363">配列式</a></li>
+<li><a href="#L000364">ハッシュ式</a></li>
+<li><a href="#L000365">範囲オブジェクト</a></li>
+<li><a href="#L000366">シンボル</a></li>
+<li><a href="#L000367">%記法</a></li>
+</ul>
+<p>数字の1や文字列&quot;hello world&quot;のようにRubyのプログラムの中に直接
+記述できる値の事をリテラルといいます。</p>
+<h2><a name="L000324" id="L000324">数値リテラル</a></h2>
+<dl>
+<dt><a name="L000325" id="L000325"><code>123</code></a></dt>
+<dt><a name="L000326" id="L000326"><code>0d123</code>           <a href="refm384.html">ruby 1.7 feature</a></a></dt>
+<dd>
+<p>整数</p>
+</dd>
+<dt><a name="L000327" id="L000327"><code>-123</code></a></dt>
+<dd>
+<p>符号つき整数 <a href="refm437.html">trap::Numeric</a></p>
+</dd>
+<dt><a name="L000328" id="L000328"><code>123.45</code></a></dt>
+<dd>
+<p>浮動小数点数
+<a href="refm385.html">ruby 1.8 feature</a>:
+.1 など &quot;.&quot; で始まる浮動小数点数は許されなくなりました。0.1 と書く必
+要があります。</p>
+</dd>
+<dt><a name="L000329" id="L000329"><code>1.2e-3</code></a></dt>
+<dd>
+<p>浮動小数点数</p>
+</dd>
+<dt><a name="L000330" id="L000330"><code>0xffff</code></a></dt>
+<dd>
+<p>16進整数</p>
+</dd>
+<dt><a name="L000331" id="L000331"><code>0b1011</code></a></dt>
+<dd>
+<p>2進整数</p>
+</dd>
+<dt><a name="L000332" id="L000332"><code>0377</code></a></dt>
+<dt><a name="L000333" id="L000333"><code>0o377</code>           <a href="refm384.html">ruby 1.7 feature</a></a></dt>
+<dd>
+<p>8進整数</p>
+</dd>
+<dt><a name="L000334" id="L000334"><code>?a</code></a></dt>
+<dd>
+<p>文字<code>a</code>のコード(97)</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>: 空白類を指定する場合は、?\s, ?\t などとする
+必要があります。</p>
+</dd>
+<dt><a name="L000335" id="L000335"><code>?\C-a</code></a></dt>
+<dd>
+<p>コントロール a のコード(1)</p>
+</dd>
+<dt><a name="L000336" id="L000336"><code>?\M-a</code></a></dt>
+<dd>
+<p>メタ a のコード(225)</p>
+</dd>
+<dt><a name="L000337" id="L000337"><code>?\M-\C-a</code></a></dt>
+<dd>
+<p>メタ-コントロール a のコード(129)</p>
+</dd>
+</dl>
+<p><code>?</code> 表現では全ての<a href="#L000339">バックスラッシュ記法</a>が有効です。</p>
+<p>文字コード以外の数値リテラルには、`<code>_</code>' を含めることができます。
+ruby インタプリタは `<code>_</code>' を単に無視し、特別な解釈は何もしません。
+これは、大きな数値の桁数がひと目でわかるように記述するのに便利です。
+リテラルの最初と、最後には <code>_</code> を書くことはできません。(リテラルの
+前(符号(+,-)の直後を含む)に <code>_</code>を置くとローカル変数やメソッド呼び
+出しと解釈されます)
+<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></p>
+<pre>1_000_000_000  =&gt; 1000000000
+0xffff_ffff  =&gt; 0xffffffff</pre>
+<h2><a name="L000338" id="L000338">文字列リテラル</a></h2>
+<p>例:</p>
+<pre>&quot;this is a string expression\n&quot;
+'this is a string expression\n'
+%q!I said, &quot;You said, 'She said it.'&quot;!
+%!I said, &quot;You said, 'She said it.'&quot;!
+%Q('This is it.'\n)
+&quot;this is multi line
+string&quot;</pre>
+<p>文字列はダブルクォートまたはシングルクォートで囲まれています。
+ダブルクォートで囲まれた文字列では<a href="#L000339">バックスラッシュ記法</a>
+と<a href="#L000355">式展開</a>(後述)が有効になります。シングルクォートで囲ま
+れた文字列では、<code>\\</code>(バックスラッシュそのもの)と
+<code>\'</code>(シングルクォート)、行末の<code>\</code>(改行を無視します)
+を除いて文字列の中身の解釈は行われません。
+<a name="footmark:2" id="footmark:2" href="#foottext:2"><sup><small>*2</small></sup></a></p>
+<p>複数行にわたって書くこともできます。
+この場合含まれる改行文字は常に<code>\n</code>になります。
+実際のソースファイルの改行コードとは無関係です。</p>
+<p>空白を間に挟んだ文字列リテラルは、コンパイル時に1つの文字列
+リテラルと見倣されます。</p>
+<pre>p &quot;foo&quot; &quot;bar&quot;
+=&gt; &quot;foobar&quot;</pre>
+<p><a href="#L000367">%記法</a> による別形式の文字列表現もあります。</p>
+<p>文字列式は評価されるたびに毎回新しい文字列オブジェクトを生成します。</p>
+<h3><a name="L000339" id="L000339">バックスラッシュ記法</a></h3>
+<p><a name="footmark:3" id="footmark:3" href="#foottext:3"><sup><small>*3</small></sup></a></p>
+<dl>
+<dt><a name="L000340" id="L000340"><code>\t</code></a></dt>
+<dd>
+<p>タブ(0x09)</p>
+</dd>
+<dt><a name="L000341" id="L000341"><code>\n</code></a></dt>
+<dd>
+<p>改行(0x0a)</p>
+</dd>
+<dt><a name="L000342" id="L000342"><code>\r</code></a></dt>
+<dd>
+<p>キャリッジリターン(0x0d)</p>
+</dd>
+<dt><a name="L000343" id="L000343"><code>\f</code></a></dt>
+<dd>
+<p>改ページ(0x0c)</p>
+</dd>
+<dt><a name="L000344" id="L000344"><code>\b</code></a></dt>
+<dd>
+<p>バックスペース (0x08)</p>
+</dd>
+<dt><a name="L000345" id="L000345"><code>\a</code></a></dt>
+<dd>
+<p>ベル (0x07)</p>
+</dd>
+<dt><a name="L000346" id="L000346"><code>\e</code></a></dt>
+<dd>
+<p>エスケープ (0x1b)</p>
+</dd>
+<dt><a name="L000347" id="L000347"><code>\s</code></a></dt>
+<dd>
+<p>空白 (0x20)</p>
+</dd>
+<dt><a name="L000348" id="L000348"><code>\nnn</code></a></dt>
+<dd>
+<p>8 進数表記 (n は 0-7)</p>
+</dd>
+<dt><a name="L000349" id="L000349"><code>\xnn</code></a></dt>
+<dd>
+<p>16 進数表記 (n は 0-9,a-f)</p>
+</dd>
+<dt><a name="L000350" id="L000350"><code>\cx</code></a></dt>
+<dt><a name="L000351" id="L000351"><code>\C-x</code></a></dt>
+<dd>
+<p>コントロール文字 (x は ASCII 文字)</p>
+</dd>
+<dt><a name="L000352" id="L000352"><code>\M-x</code></a></dt>
+<dd>
+<p>メタ x (c | 0x80)</p>
+</dd>
+<dt><a name="L000353" id="L000353"><code>\M-\C-x</code></a></dt>
+<dd>
+<p>メタ コントロール x</p>
+</dd>
+<dt><a name="L000354" id="L000354"><code>\x</code></a></dt>
+<dd>
+<p>文字 x そのもの</p>
+</dd>
+</dl>
+<h3><a name="L000355" id="L000355">式展開</a></h3>
+<p>例:</p>
+<pre>($ruby = &quot;RUBY&quot;の場合)
+
+   &quot;my name is #{$ruby}&quot; #=&gt; &quot;my name is RUBY&quot;
+   'my name is #{$ruby}' #=&gt; &quot;my name is #{$ruby}&quot;</pre>
+<p>ダブルクォート(<code>&quot;</code>)で囲まれた文字列式、コマンド文
+字列および正規表現の中では<code>#{式}</code>という形式で式
+の内容(を文字列化したもの)を埋め込むことができます。式が変数
+記号(<code>$</code>,<code>@</code>)で始まる変数の場合には
+<code>{}</code>を省略して、<code>#変数名</code>という形式で
+も展開できます。文字<code>#</code>に続く文字が
+<code>{</code>,<code>$</code>,<code>@</code>でなければ、その
+まま文字<code>#</code>として解釈されます。明示的に式展開を止
+めるには<code>#</code>の前にバックスラッシュを置きます。</p>
+<p>式展開中の式は、ダブルクォートなども含めて Ruby の式をそのまま書くこと
+ができます。コメントも許されます。</p>
+<pre>p &quot;#{ &quot;string&quot; # comment }&quot;   # =&gt; &quot;string&quot;</pre>
+<p><a href="refm384.html">ruby 1.7 feature</a>: version 1.7 では、式展開中のコメントは、
+<code>#</code> から <code>}</code> まででなく改行までです。上記の例は</p>
+<pre>p &quot;#{ &quot;string&quot; # comment
+  }&quot;                          # =&gt; &quot;string&quot;</pre>
+<p>と書く必要があります。</p>
+<h2><a name="L000356" id="L000356">コマンド出力</a></h2>
+<p>例:</p>
+<pre>`date`
+%x{ date }</pre>
+<p>バッククォート(<code>`</code>)で囲まれた文字列は、ダブルクォー
+トで囲まれた文字列と同様に<a href="#L000339">バックスラッシュ記法</a>
+の解釈と<a href="#L000355">式展開</a>
+が行なわれた後、コマンドとして実行され、その標準出力が文字列
+として与えられます。コマンドは評価されるたびに実行されます。
+コマンドの終了ステータスを得るには、<a href="refm030.html#L000522">$?</a> を
+参照します。</p>
+<p><a href="#L000367">%記法</a> による別形式のコマンド出力もあります。</p>
+<h2><a name="L000357" id="L000357">ヒアドキュメント (行指向文字列リテラル)</a></h2>
+<p>文法:</p>
+<pre>&lt;&lt;[-][&quot;'`]識別子[&quot;'`]
+   ...
+識別子</pre>
+<p>普通の<a href="#L000338">文字列リテラル</a>はデリミタ(&quot;, ', ` など)で囲まれた
+文字列ですが、ヒアドキュメントは `&lt;&lt;識別子' を含む行の次の行から `識別
+子' だけの行の直前までを文字列とする行指向のリテラルです。例えば、</p>
+<pre>print &lt;&lt;EOS      # 識別子 EOS までがリテラルになる
+  the string
+  next line
+EOS</pre>
+<p>これは以下と同じです。</p>
+<pre>print &quot;  the string\n  next line\n&quot;</pre>
+<p>ヒアドキュメントでは、開始ラベル `<code>&lt;&lt;識別子</code>' が文法要素としての式
+にあたります。これは、開始ラベルを使ってヒアドキュメント全体を引数に渡
+したりレシーバにしたりすることができるということを意味します。</p>
+<pre># 式の中に開始ラベルを書く
+# method の第二引数には &quot;    ヒアドキュメント\n&quot; が渡される
+method(arg1, &lt;&lt;LABEL, arg2)
+    ヒアドキュメント
+LABEL
+
+# ヒアドキュメントをレシーバにメソッドを呼ぶ
+p  &lt;&lt;LABEL.upcase
+the lower case string
+LABEL
+
+# =&gt; &quot;THE LOWER CASE STRING&quot;</pre>
+<p>開始ラベルの次の行は常にヒアドキュメントとなります。例えば、以下のよう
+な記述は文法エラーになります</p>
+<pre>printf('%s%d',
+       &lt;&lt;EOS,
+       3055 * 2 / 5)   # &lt;- この行はヒアドキュメントに含まれてしまう
+This line is a here document.
+EOS</pre>
+<p>開始ラベルを `<code>&lt;&lt;-識別子</code>' のように `<code>-</code>' を付けて書くことで終端
+行をインデントすることができます。これ以外では、終端行に、余
+分な空白やコメントさえも書くことはできません。</p>
+<pre>if need_define_foo
+  eval &lt;&lt;-EOS   # '&lt;&lt;-' を使うと……
+    def foo
+      print &quot;foo\n&quot;
+    end
+  EOS
+  #↑終端行をインデントできます。
+end</pre>
+<p>一行に複数のヒアドキュメントを書くこともできます。</p>
+<pre>print &lt;&lt;FIRST, &lt;&lt;SECOND
+   これは一つめのヒアドキュメントです。
+   まだ一つめです。
+FIRST
+   この行からは二つめのヒアドキュメントです。
+   この行で終わります。
+SECOND</pre>
+<p>開始ラベル `<code>&lt;&lt;識別子</code>' の `識別子' を(&quot;&quot;、''、``)のいずれかで囲む
+ことで、ヒアドキュメントとなる文字列リテラルの性質は対応する文字列リテ
+ラルと同じ扱いになります<a name="footmark:4" id="footmark:4" href="#foottext:4"><sup><small>*4</small></sup></a>。以下の例
+を参照してください。`識別子' がクォートで囲まれていないときはダブルクォー
+トでくくられているのと同じです。</p>
+<pre># バックスラッシュ記法、式展開が有効
+print &lt;&lt;&quot;EOS&quot;
+The price is #{$price}.
+EOS
+
+# 上のものと同じ結果
+print &lt;&lt;EOS
+The price is #{$price}.
+EOS
+
+# 式展開はできない
+print &lt;&lt;'EOS'
+The price is #{$price}.
+EOS
+
+# コマンドを実行
+print &lt;&lt;`EOC`
+date
+diff test.c.org test.c
+EOC</pre>
+<p>文字列リテラルのそれぞれの性質に関しては
+<a href="#L000338">文字列リテラル</a>、
+<a href="#L000355">式展開</a>、
+<a href="#L000339">バックスラッシュ記法</a>、
+<a href="#L000356">コマンド出力</a>
+を参照してください。</p>
+<h2><a name="L000358" id="L000358">正規表現リテラル</a></h2>
+<p>例:</p>
+<pre>/^Ruby the OOPL/
+/Ruby/i
+/my name is #{myname}/o
+%r|Ruby|</pre>
+<p><code>/</code>で囲まれた文字列は正規表現です。正規表現として解釈される
+メタ文字については<a href="refm019.html">正規表現</a>を参照してください。</p>
+<p>終りの<code>/</code>の直後の文字は正規表現に対するオプションになります。
+オプションの機能は以下の通りです。</p>
+<dl>
+<dt><a name="L000359" id="L000359"><code>i</code></a></dt>
+<dd>
+<p>正規表現はマッチ時に大文字小文字の区別を行わない</p>
+</dd>
+<dt><a name="L000360" id="L000360"><code>o</code></a></dt>
+<dd>
+<p>一番最初に正規表現の評価が行われた時に
+一度だけ<a href="#L000355">式展開</a>を行う</p>
+</dd>
+<dt><a name="L000361" id="L000361"><code>x</code></a></dt>
+<dd>
+<p>正規表現中の空白(改行も含む)を無視する。また、バックスラッシュでエス
+ケープしない`<code>#</code>' から改行までをコメントとみなして無視する(ただ
+し、コメント中に <code>/</code> を含めると構文解析に失敗するので注意)</p>
+<pre>/foo        # コメント
+ bar/x</pre>
+<p>これは <code>/foobar/</code> と同じ。</p>
+<p>空白を含めるには <code>\ </code> のようにエスケープします。</p>
+</dd>
+<dt><a name="L000362" id="L000362"><code>m</code></a></dt>
+<dd>
+<p>複数行モード。正規表現 &quot;.&quot; が改行にもマッチするようになる</p>
+</dd>
+</dl>
+<p>Ruby は日本語化されているので、<a href="refm030.html#L000551">$KCODE</a> の値に従って正
+規表現中の日本語文字を正しく扱います。<code>$KCODE = &quot;n&quot;</code> の場合、日本
+語文字を一切認識せずにバイト列として扱います。これはデフォルトの動作で
+す。</p>
+<p>オプションとして <code>n</code>, <code>e</code>, <code>s</code>, <code>u</code> のいずれかを指定す
+ることで正規表現の文字コードを <a href="refm030.html#L000551">$KCODE</a> の値に関係なく
+個々の正規表現リテラルに指定することもできます。</p>
+<p><a href="#L000367">%記法</a> による別形式の正規表現も指定できます。</p>
+<p>正規表現の中では文字列と同じ<a href="#L000339">バックスラッシュ記法</a>や
+<a href="#L000355">式展開</a>も有効です。</p>
+<p>正規表現リテラルはその中に<a href="#L000355">式展開</a>を含まなければ、何度評
+価されても同一の正規表現オブジェクトを返します。
+<a href="#L000355">式展開</a>を含む場合は評価のたびに(式展開の結果を元に)正規
+表現がコンパイルされ正規表現オブジェクトが生成されます(ただし上記の 
+o オプションを指定すれば、同一の正規表現オブジェクトを返します)</p>
+<h2><a name="L000363" id="L000363">配列式</a></h2>
+<p>例:</p>
+<pre>[1, 2, 3]
+%w[a b c]
+%W[a b c]             ((&lt;ruby 1.7 feature&gt;))</pre>
+<p>文法:</p>
+<pre>`[' 式`,' ... `]'</pre>
+<p>それぞれの式を評価した結果を含む配列を返します。
+配列は<a href="refm036.html">Array</a>クラスのインスタンスです。</p>
+<p>要素が文字列リテラルの場合に限り、<a href="#L000367">%記法</a> による別形式の
+配列表現も指定できます。</p>
+<p>配列式は評価されるたびに毎回新しい配列オブジェクトを生成します。</p>
+<h2><a name="L000364" id="L000364">ハッシュ式</a></h2>
+<p>例:</p>
+<pre>{1=&gt;2, 2=&gt;4, 3=&gt;6}</pre>
+<p>文法:</p>
+<pre>`{' 式 `=&gt;' 式 `,' ... `}'
+`{' 式 `,' 式 `,' ... `}'</pre>
+<p>それぞれの式を評価した結果をキーと値とするハッシュオブジェク
+トを返します。ハッシュとは任意のオブジェクトをキー(添字)として持
+つ配列で、<a href="refm044.html">Hash</a>クラスのインスタンスです。</p>
+<p>メソッドの引数の末尾に要素が1つ以上のハッシュを渡す場合は、<code>{</code>,
+<code>}</code>を省略することができます。ただし、<code>obj[...]</code>  形式のメソッ
+ド呼び出しと<a href="#L000363">配列式</a>では、要素全体がハッシュの場合に限り、
+<code>{</code>, <code>}</code>を省略することができます。</p>
+<p>例:</p>
+<pre>method(1,2,3=&gt;4)      # method(1,2,{3=&gt;4})
+obj[1=&gt;2,3=&gt;4]        # obj[{1=&gt;2,3=&gt;4}]
+[1=&gt;2,3=&gt;4]           # [{1=&gt;2, 3=&gt;4}]</pre>
+<p>ハッシュ式は評価されるたびに毎回新しいハッシュオブジェクトを生成します。</p>
+<h2><a name="L000365" id="L000365">範囲オブジェクト</a></h2>
+<p><a href="refm025.html#L000373">範囲式</a>を参照</p>
+<p>範囲式はその両端が数値リテラルであれば、何度評価されても同じオブジェク
+トを返します。そうでなければ評価されるたびに新しい範囲オブジェクトを生
+成します。</p>
+<h2><a name="L000366" id="L000366">シンボル</a></h2>
+<p>例:</p>
+<pre>(シンボルの例)
+
+      :class
+      :lvar
+      :method!
+      :andthisis?
+      :$gvar
+      :@ivar
+      :@@cvar
+      :+</pre>
+<p>文法:</p>
+<pre>`:' 識別子
+`:' 変数名
+`:' 演算子</pre>
+<p><a href="refm063.html">Symbol</a>クラスのインスタンス。
+ある文字列と<code>Symbol</code>オブジェクトは一対一に対応します。</p>
+<p>Symbol リテラルに指定できる演算子はメソッドとして再定義できる演算子だ
+けです。<a href="refm025.html">演算子式</a> を参照して下さい。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>:
+1.7では以下の記法も使えます。</p>
+<pre>p :'foo-bar' #=&gt; :&quot;foo-bar&quot;
+p :&quot;foo-bar&quot; #=&gt; :&quot;foo-bar&quot;
+p %s{foo-bar} #=&gt; :&quot;foo-bar&quot;</pre>
+<p>この記法では、任意のシンボルを定義することができます(ただし、&quot;\0&quot; を含
+めることはできません)。</p>
+<p><code>:&quot;...&quot;</code> の形式は、<a href="#L000339">バックスラッシュ記法</a>や
+<a href="#L000355">式展開</a>が有効です。</p>
+<p>シンボルは常に一意のオブジェクトで、(式展開を含んでいてもその結果が同
+じ文字列であれば)何度評価されても同じオブジェクトを返します。</p>
+<h2><a name="L000367" id="L000367">%記法</a></h2>
+<p><a href="#L000338">文字列リテラル</a>、
+<a href="#L000356">コマンド出力</a>、
+<a href="#L000358">正規表現リテラル</a>、
+<a href="#L000363">配列式</a>、
+<a href="#L000366">シンボル</a>
+では、<code>%</code>で始まる形式の記法を用いることができます。
+文字列や正規表現では、`&quot;', `/' など(通常のリテラルの区切り文字)を要素
+に含めたい場合にバックスラッシュの数をコードから減らす効果があります。
+また配列式では文字列の配列を簡単に表現できます。それぞれ以下のように対
+応します。</p>
+<ul>
+<li><code>%!STRING!</code>  : ダブルクォート文字列</li>
+<li><code>%Q!STRING!</code> : 同上</li>
+<li><code>%q!STRING!</code> : シングルクォート文字列</li>
+<li><code>%x!STRING!</code> : コマンド出力</li>
+<li><code>%r!STRING!</code> : 正規表現</li>
+<li><code>%w!STRING!</code> : 要素が文字列の配列(空白区切り)</li>
+<li><code>%W!STRING!</code> : 要素が文字列の配列(空白区切り)。式展開、バックスラッシュ記法が有効(<a href="refm384.html">ruby 1.7 feature</a>)</li>
+<li><code>%s!STRING!</code> : シンボル。式展開、バックスラッシュ記法は無効(<a href="refm384.html">ruby 1.7 feature</a>)</li>
+</ul>
+<p><code>!</code>の部分には改行を含めた任意の非英数字を使うことができます。始ま
+りの区切り文字が括弧(`(',`[',`{',`&lt;')である時には、終りの区切り文字は
+対応する括弧になります。括弧を区切り文字にした場合、対応が取れていれば
+区切り文字と同じ括弧を要素に含めることができます。</p>
+<pre>%(()) =&gt; &quot;()&quot;</pre>
+<p>配列式の%記法はシングルクォートで囲んだ文字列を空白文字で分割したのと
+同じです。たとえば、</p>
+<pre>%w[foo bar baz]</pre>
+<p>は<code>['foo', 'bar', 'baz']</code>と等価です。</p>
+<p>バックスラッシュを使って空白を要素に含むこともできます。</p>
+<pre>%w[foo\ bar baz]
+
+=&gt; [&quot;foo bar&quot;, &quot;baz&quot;]</pre>
+<p><a href="refm384.html">ruby 1.7 feature</a>:
+%W は、%w と同様ですが、ダブルクォートで囲んだ文字列のように、式展開、
+バックスラッシュ記法が使用できます。空白による分割は式展開を評価する前
+に行われます。</p>
+<pre>v = &quot;c d&quot;
+%W[a\ b #{v}e\sf #{}]
+
+=&gt; [&quot;a b&quot;, &quot;c de f&quot;, &quot;&quot;]</pre>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small><a href="refm383.html">ruby 1.6 feature</a>: 1.6.7 から <code>_</code> は、0x などの prefix の
+直後にも書けなくなりました。また、<code>_</code> を連続して書いてもエラーにな
+ります。他、細かい部分でこのあたりの規則は見直され統一されました</small><br />
+<a name="foottext:2" id="foottext:2" href="#footmark:2"><sup><small>*2</small></sup></a><small><a href="refm385.html">ruby 1.8 feature</a>: 1.8.1(?) 以降ではシングルクォートで囲まれた文
+字列では行末の\は \ そのものとして解釈されます。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/21339">ruby-dev:21339</a><sup class="outside"><small>[外部]</small></sup></small><br />
+<a name="foottext:3" id="foottext:3" href="#footmark:3"><sup><small>*3</small></sup></a><small>例えあなたが &quot;\&quot; がバックスラッシュに見えなかったとしてもこれはバックスラッ
+シュ記法です;-)</small><br />
+<a name="foottext:4" id="foottext:4" href="#footmark:4"><sup><small>*4</small></sup></a><small>ただし、文字列中に &quot; や ' はバックスラッシュ
+エスケープせずにそのまま書ける(エスケープする必要がない)。シングルクォー
+トで囲ったヒアドキュメントの場合、' をエスケープする必要がないというこ
+とは、\の特別扱いも必要ないということになる。つまり、シングルクォート
+で囲ったヒアドキュメントは完全に書いたままの文字列になる</small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm020.html">UP</a>][<a href="refm023.html">&lt;-PREV</a>][<a href="refm025.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

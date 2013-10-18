@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Process</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm082.html" rel="next" />
+<link href="refm080.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm034.html">UP</a>][<a href="refm080.html">&lt;-PREV</a>][<a href="refm082.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L002037" id="L002037">Process</a></h1>
+<p>UNIX のプロセスを管理するモジュール。</p>
+<p><code>Process</code> がプロセスを表現するクラスではなく、プロセスに対する操作
+をまとめたモジュールであることに注意してください。</p>
+<h2><a name="L002038" id="L002038">モジュールメソッド:</a></h2>
+<dl>
+<dt><a name="L002039" id="L002039"><code>Process.abort([<var>message</var>])</code></a></dt>
+<dd>
+<p><a href="refm384.html">ruby 1.7 feature</a></p>
+<p>関数 <a href="refm029.html#L000432">abort</a> と同じです。</p></dd>
+<dt><a name="L002040" id="L002040"><code>Process.daemon(<var>nochdir</var>=<var>nil</var>,<var>noclose</var>=<var>nil</var>)</code></a></dt>
+<dd>
+<p><a href="refm392.html">ruby 1.9 feature</a></p>
+<p>プロセスから制御端末を切り離し、
+バックグラウンドにまわってデーモンとして動作させます。</p>
+<p>カレントディレクトリを / に移動します。
+ただし <var>nochdir</var> に真を指定したときにはこの動作は抑制され、
+カレントディレクトリは移動しません。</p>
+<p>標準入力・標準出力・標準エラー出力を /dev/null にリダイレクトします。
+ただし <var>noclose</var> に真を指定したときにはこの動作は抑制され、
+リダイレクトは行なわれません。</p>
+<p>0を返します。</p></dd>
+<dt><a name="L002041" id="L002041"><code>Process.detach(<var>pid</var>)</code></a></dt>
+<dd>
+<p><a href="refm385.html">ruby 1.8 feature</a></p>
+<p>子プロセス <var>pid</var> の終了を監視するスレッドを生成して返します。
+生成したスレッドは子プロセスが終了した後に <code>nil</code> で終了します。
+(指定した子プロセスが存在しなければ即座に nil で終了します)。</p>
+<pre>pid = fork {
+  # child
+  sleep 3
+}
+
+th = Process.detach(pid)
+p th.value
+
+# =&gt; nil</pre></dd>
+<dt><a name="L002042" id="L002042"><code>Process.exit([<var>status</var>])</code></a></dt>
+<dd>
+<p><a href="refm384.html">ruby 1.7 feature</a></p>
+<p>関数 <a href="refm029.html#L000448">exit</a> と同じです。</p></dd>
+<dt><a name="L002043" id="L002043"><code>Process.exit!([<var>status</var>])</code></a></dt>
+<dd>
+<p>関数 <a href="refm029.html#L000449">exit!</a> と同じです。</p></dd>
+<dt><a name="L002044" id="L002044"><code>Process.fork</code></a>
+<dt><a name="L002045" id="L002045"><code>Process.fork { ... }</code></a></dt>
+<dd>
+<p>関数 <a href="refm029.html#L000450">fork</a> と同じです。</p></dd>
+<dt><a name="L002046" id="L002046"><code>Process.getrlimit(<var>resource</var>)                         ((&lt;<var>ruby</var> <var>1</var>.<var>8</var>.<var>5</var> <var>feature</var>&gt;))</code></a>
+<dt><a name="L002047" id="L002047"><code>Process.setrlimit(<var>resource</var>, <var>cur_limit</var>, <var>max_limit</var>)   ((&lt;<var>ruby</var> <var>1</var>.<var>8</var>.<var>5</var> <var>feature</var>&gt;))</code></a>
+<dt><a name="L002048" id="L002048"><code>Process.setrlimit(<var>resource</var>, <var>limit</var>)                  ((&lt;<var>ruby</var> <var>1</var>.<var>8</var>.<var>5</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p><var>resource</var> で示すプロセスリソースの制限値の取得、設定を行います。</p>
+<p>Process.setrlimit において単一の <var>limit</var> が指定された場合には、
+<var>cur_limit</var>, <var>max_limit</var> の両方がその値として指定されたものとして扱います。
+これらの引数には、<var>resource</var> によって決まる意味を持つ何らかの整数もしくは
+<a href="#L002096">Process::RLIM_INFINITY</a>,
+<a href="#L002097">Process::RLIM_SAVED_CUR</a>,
+<a href="#L002098">Process::RLIM_SAVED_MAX</a> のいずれかを指定します。</p>
+<p><var>resource</var> に指定する値は環境によりますが、以下のいずれかです。
+システムによってはこれらのいくつかは存在しない場合があります。
+詳細は、<a href="refm535.html">setrlimit(2)</a> を参照してください。</p>
+<ul>
+<li><a href="#L002086">Process::RLIMIT_CORE</a> core ファイルのサイズ (バイト) (SUSv3)</li>
+<li><a href="#L002087">Process::RLIMIT_CPU</a> プロセスの CPU 時間 (秒) (SUSv3)</li>
+<li><a href="#L002088">Process::RLIMIT_DATA</a> プロセスのデータ領域のサイズ (バイト) (SUSv3)</li>
+<li><a href="#L002089">Process::RLIMIT_FSIZE</a> プロセスが生成するファイルのサイズ (バイト) (SUSv3)</li>
+<li><a href="#L002091">Process::RLIMIT_NOFILE</a> プロセスがオープンできるファイルの数 (SUSv3)</li>
+<li><a href="#L002095">Process::RLIMIT_STACK</a> プロセスのスタック領域のサイズ (バイト) (SUSv3)</li>
+<li><a href="#L002085">Process::RLIMIT_AS</a> プロセスの仮想メモリサイズ (バイト) (SUSv3, NetBSD, FreeBSD, OpenBSD but 4.4BSD-Lite))</li>
+<li><a href="#L002086">Process::RLIMIT_MEMLOCK</a> mlock(2) でロックできるトータルのサイズ (バイト) (4.4BSD, GNU/Linux)</li>
+<li><a href="#L002092">Process::RLIMIT_NPROC</a> そのユーザのプロセスの最大数 (4.4BSD, GNU/Linux)</li>
+<li><a href="#L002093">Process::RLIMIT_RSS</a> 使用できる実メモリの最大サイズ (バイト) (4.2BSD, GNU/Linux)</li>
+<li><a href="#L002094">Process::RLIMIT_SBSIZE</a> ソケットバッファのサイズ (バイト) (NetBSD, FreeBSD)</li>
+</ul>
+<p><code>getrlimit</code> は、2値の配列 [<var>cur_limit</var>, <var>max_limit</var>] 
+を返します。
+<code>setrlimit</code> は、引数に指定した値を設定し、<code>nil</code> を返します。</p>
+<p>リソースの制限値の取得、設定に失敗した場合、例外 <a href="refm108.html">Errno::EXXX</a> 
+が発生します。</p>
+<p>以下の例は RLIMIT_CORE の制限を hard limit (max limit) まで引き上げ、可能なら core を残すようにします。</p>
+<pre>Process.setrlimit(Process::RLIMIT_CORE, Process.getrlimit(Process::RLIMIT_CORE)[1])</pre></dd>
+<dt><a name="L002049" id="L002049"><code>Process.spawn(<var>cmd</var>, [, <var>arg</var>, ...])    ((&lt;<var>ruby</var> <var>1</var>.<var>9</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>関数 <a href="refm029.html#L000486">spawn</a> と同じです。</p></dd>
+</dl>
+<h2><a name="L002050" id="L002050">モジュール属性:</a></h2>
+<p>これらは、<a href="refm477.html#L009758">モジュール関数</a>です。</p>
+<dl>
+<dt><a name="L002051" id="L002051"><code>Process.egid</code></a></dt>
+<dd>
+<p>カレントプロセスの実効グループ ID を返します。</p></dd>
+<dt><a name="L002052" id="L002052"><code>Process.egid=gid</code></a></dt>
+<dd>
+<p>カレントプロセスの実効グループ ID を設定します。<var>gid</var> を返します。</p></dd>
+<dt><a name="L002053" id="L002053"><code>Process.euid</code></a></dt>
+<dd>
+<p>カレントプロセスの実効ユーザ ID を返します。</p></dd>
+<dt><a name="L002054" id="L002054"><code>Process.euid=uid</code></a></dt>
+<dd>
+<p>カレントプロセスの実効ユーザ ID を設定します。<var>uid</var> を返します。</p></dd>
+<dt><a name="L002055" id="L002055"><code>Process.gid</code></a></dt>
+<dd>
+<p>カレントプロセスの実グループ ID を返します。</p></dd>
+<dt><a name="L002056" id="L002056"><code>Process.gid=gid</code></a></dt>
+<dd>
+<p>カレントプロセスの実グループ ID を設定します。<var>gid</var> を返します。</p></dd>
+<dt><a name="L002057" id="L002057"><code>Process.groups</code></a></dt>
+<dd>
+<p>補助グループ ID の配列を返します(実効グループ ID を含むかも知れません)。</p>
+<p>返される配列の最大要素数は 32 固定です(たぶんbug)。</p></dd>
+<dt><a name="L002058" id="L002058"><code>Process.groups=gid_ary</code></a></dt>
+<dd>
+<p>補助グループを設定します。右辺の配列の要素はグループ ID かグループ
+名を指定します。Process.groups の結果を返します。</p>
+<p>設定する補助グループ ID の数が <a href="#L002059">Process.maxgroups</a> の
+数を越えている場合、例外 <a href="refm094.html">ArgumentError</a> が発生します。</p></dd>
+<dt><a name="L002059" id="L002059"><code>Process.maxgroups</code></a>
+<dt><a name="L002060" id="L002060"><code>Process.maxgroups=num</code></a></dt>
+<dd>
+<p>設定できる補助グループ ID の数を指定します。実際に返される補助グルー
+プ ID の数よりも少ない値を設定していると、
+<a href="#L002057">Process.groups</a> で例外が発生します。</p></dd>
+<dt><a name="L002061" id="L002061"><code>Process.pid</code></a></dt>
+<dd>
+<p>カレントプロセスのプロセス ID を返します。変数 <a href="refm030.html#L000540">$$</a> 
+の値と同じです。</p></dd>
+<dt><a name="L002062" id="L002062"><code>Process.ppid</code></a></dt>
+<dd>
+<p>親プロセスのプロセス ID を返します。UN*X では実際の親プロセスが終
+了した後は <code>ppid</code> は 1 (<code>init</code>の pid)になります。</p></dd>
+<dt><a name="L002063" id="L002063"><code>Process.uid</code></a></dt>
+<dd>
+<p>プロセスの実ユーザ ID を返します。</p></dd>
+<dt><a name="L002064" id="L002064"><code>Process.uid=uid</code></a></dt>
+<dd>
+<p>プロセスの実ユーザ ID を設定します。<var>uid</var> を返します。</p></dd>
+</dl>
+<h2><a name="L002065" id="L002065">モジュール関数:</a></h2>
+<dl>
+<dt><a name="L002066" id="L002066"><code>Process.getpgid(<var>pid</var>)</code></a>
+<dt><a name="L002067" id="L002067"><code>Process.getpgrp([<var>pid</var>])</code></a></dt>
+<dd>
+<p><var>pid</var> のプロセスのプロセスグループを返します。<var>pid</var> が 0 
+の時や省略された時はカレントプロセスを意味します。</p>
+<p>プロセスグループの取得に失敗した場合は、例外 <a href="refm108.html">Errno::EXXX</a> が
+発生します。
+<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a>。</p></dd>
+<dt><a name="L002068" id="L002068"><code>Process.getpriority(<var>which</var>, <var>who</var>)</code></a></dt>
+<dd>
+<p>プロセス、プロセスグループ、ユーザの現在のプライオリティを返
+します(<a href="refm535.html">getpriority(2)</a> 参照)。</p>
+<p><code>Process</code> モジュールは <var>which</var> として指定できる定数 
+<a href="#L002082">Process::PRIO_PROCESS</a>, <a href="#L002083">Process::PRIO_PGRP</a>,
+<a href="#L002084">Process::PRIO_USER</a> を定義しています。</p>
+<p><var>who</var> には、<var>which</var> の値にしたがってプロセス ID、プロセス
+グループ ID、ユーザ ID のいずれかを指定します。</p>
+<p>プライオリティの取得に失敗した場合は、例外 <a href="refm108.html">Errno::EXXX</a> が発
+生します。</p></dd>
+<dt><a name="L002069" id="L002069"><code>Process.initgroups(<var>user</var>, <var>group</var>)</code></a></dt>
+<dd>
+<p><a href="refm385.html">ruby 1.8 feature</a></p>
+<p><a href="refm002.html">執筆者募集</a></p>
+<p>(<a href="refm535.html">initgroups(3)</a> 参照)</p></dd>
+<dt><a name="L002070" id="L002070"><code>Process.kill(<var>signal</var>, <var>pid</var> ... )</code></a></dt>
+<dd>
+<p><var>pid</var> で指定されたプロセスにシグナルを送ります。<var>signal</var> 
+はシグナル番号か名前(文字列または<a href="refm063.html">Symbol</a>)で指定します。</p>
+<p>負の値を持つシグナル(あるいはシグナル名の前に<code>-</code>)もしくは
+負の値を持つプロセス番号を与えるとプロセスではなくプロセスグループにシグナルを送ります。
+負の値のプロセス番号はプロセスグループ番号を符号反転したものと見なされます。</p>
+<p>全てのシグナル送信に成功した場合、指定した pid の数を返します。
+失敗した場合は例外 <a href="refm108.html">Errno::EXXX</a> が発生します。</p>
+<p>存在しないシグナルを指定した場合は、例外 <a href="refm094.html">ArgumentError</a> が発
+生します<a name="footmark:2" id="footmark:2" href="#foottext:2"><sup><small>*2</small></sup></a></p>
+<p><a href="refm029.html#L000502">trap</a>も参照してください。</p></dd>
+<dt><a name="L002071" id="L002071"><code>Process.setpgrp(<var>pid</var>, <var>pgrp</var>)</code></a>
+<dt><a name="L002071" id="L002071"><code>Process.setpgrp               ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a>
+<dt><a name="L002072" id="L002072"><code>Process.setpgid(<var>pid</var>, <var>pgrp</var>)</code></a></dt>
+<dd>
+<p><var>pid</var> のプロセスグループを設定します。<var>pid</var> が 0 の時はカ
+レントプロセスを意味します。</p>
+<p>プロセスグループの設定に成功した場合は 0 を返します。失敗した場合
+は、例外 <a href="refm108.html">Errno::EXXX</a> が発生します。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>:
+version 1.7 では、Process.setpgrp は、引数を取りません。</p></dd>
+<dt><a name="L002073" id="L002073"><code>Process.setpriority(<var>which</var>, <var>who</var>, <var>prio</var>)</code></a></dt>
+<dd>
+<p>プロセス、プロセスグループ、ユーザの現在のプライオリティを設
+定します(<a href="refm535.html">setpriority(2)</a> 参照)。</p>
+<p><code>Process</code> モジュールは <var>which</var> として指定できる定数 
+<a href="#L002082">Process::PRIO_PROCESS</a>, <a href="#L002083">Process::PRIO_PGRP</a>,
+<a href="#L002084">Process::PRIO_USER</a> を定義しています。</p>
+<p><var>who</var> には、<var>which</var> の値にしたがってプロセス ID、プロセス
+グループ ID、ユーザ ID のいずれかを指定します。</p>
+<p><var>prio</var> には、-20 から 20 の値を設定します。
+小さな値はプライオリティが高いことを意味し、
+大きな値はプライオリティが低いことを意味します。</p>
+<p>プライオリティの設定に成功した場合は 0 を返します。失敗した場合は、
+例外 <a href="refm108.html">Errno::EXXX</a> が発生します。</p>
+<p>以下の例は呼び出したプロセス自身のプライオリティを 10 に下げます。
+(すでに 10 よりもプライオリティが低く、Errno::EACCES となった場合には無視して実行を続けます)</p>
+<pre>begin
+  Process.setpriority(Process::PRIO_PROCESS, 0, 10)
+rescue Errno::EACCES
+end</pre></dd>
+<dt><a name="L002074" id="L002074"><code>Process.setsid()</code></a></dt>
+<dd>
+<p>新しいセッションを作成して、tty を切り離します。デーモンを簡単に作
+ることができます。セッション ID を返します。</p>
+<p>セッションの作成に失敗した場合は、例外 <a href="refm108.html">Errno::EXXX</a> が発生します。</p></dd>
+<dt><a name="L002075" id="L002075"><code>Process.times     ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>自身のプロセスとその子プロセスが消費したユーザ/システム CPU 時間の
+積算を <a href="refm062.html">Struct</a>::Tms のオブジェクトとして返します。
+<code>Struct::Tms</code> は以下のメンバを持つ構造体クラスです。</p>
+<pre>utime           # user time
+stime           # system time
+cutime          # user time of children
+cstime          # system time of children</pre>
+<p>時間の単位は秒で、浮動小数点数で与えられます。詳細は 
+<a href="refm535.html">times(3)</a> を参照してください。</p></dd>
+<dt><a name="L002076" id="L002076"><code>Process.wait</code></a>
+<dt><a name="L002077" id="L002077"><code>Process.wait2</code></a></dt>
+<dd>
+<p>子プロセスが終了するのを待ち、終了した子プロセスの pid を返します。
+子プロセスが一つもなければ例外 <a href="refm108.html">Errno::ECHILD</a> が
+発生します。</p>
+<p><code>wait2</code> は、その戻り値が pid と <a href="refm030.html#L000522">$?</a> の配列であ
+る点だけが異なります。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>:
+version 1.7 からは <code>$?</code> は<a href="refm058.html">Process::Status</a> オブジェクトで
+す。
+Process.wait と Process.waitpid の実体は同じものになりました。
+Process.wait2 と Process.waitpid2 の実体は同じものになりました。</p></dd>
+<dt><a name="L002078" id="L002078"><code>Process.waitall ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>全ての子プロセスが終了するのを待ちます。</p>
+<p>終了した子プロセスの pid と終了ステータス(<a href="refm058.html">Process::Status</a>)の
+配列を要素に持つ配列を返します。子プロセスがいない状態でこのメソッ
+ドを呼び出すと空の配列を返します。</p>
+<p><a href="refm030.html#L000522">$?</a> には最後に終了した子プロセスの終了ステータスが
+設定されます。</p>
+<p>例:</p>
+<pre>3.times {|n|
+  Process.fork() { exit n }
+}
+p ret = Process.waitall
+p ret[-1][1]  , ret[-1][1].class 
+p $?          , $?.class
+=&gt; [[5245, 256], [5244, 0], [5243, 512]]
+   512
+   Process::Status
+   512
+   Process::Status</pre></dd>
+<dt><a name="L002079" id="L002079"><code>Process.waitpid(<var>pid</var>[, <var>flags</var>])</code></a>
+<dt><a name="L002080" id="L002080"><code>Process.waitpid2(<var>pid</var>[, <var>flags</var>])</code></a></dt>
+<dd>
+<p><var>pid</var> で指定される特定の子プロセスの終了を待ち、そのプロセスが
+終了した時に <code>pid</code> を返します。子プロセスが存在しなければ例外 
+<a href="refm108.html">Errno::ECHILD</a> が発生します。</p>
+<p><var>flags</var> には、<code>Process</code> モジュールの定数 
+<a href="#L002099">Process::WNOHANG</a>(ノンブロッキングモード)と
+<a href="#L002100">Process::WUNTRACED</a> の論理和を指定します。省略したときの値は 0 
+です。</p>
+<p>ノンブロッキングモードで子プロセスがまだ終了していない時には 
+<code>nil</code> を返します。<a href="refm535.html">waitpid(2)</a> か 
+<a href="refm535.html">wait4(2)</a> の実装されていないマシンでは 
+<var>flags</var> はいつも <code>nil</code> または 0 を指定する必要があります。</p>
+<p><code>waitpid2</code> は、その戻り値が pid と <a href="refm030.html#L000522">$?</a> の配列
+である点だけが異なります。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>:
+version 1.7 からは <code>$?</code> は <a href="refm058.html">Process::Status</a> オブジェクト
+です。
+Process.wait と Process.waitpid の実体は同じものになりました。
+Process.wait2 と Process.waitpid2 の実体は同じものになりました。</p></dd>
+</dl>
+<h2><a name="L002081" id="L002081">定数:</a></h2>
+<dl>
+<dt><a name="L002082" id="L002082"><code>Process::PRIO_PROCESS</code></a></dt>
+<dd>
+<p><a href="#L002068">Process.getpriority</a> または 
+<a href="#L002073">Process.setpriority</a> のプロセスプライオリティ指定。</p></dd>
+<dt><a name="L002083" id="L002083"><code>Process::PRIO_PGRP</code></a></dt>
+<dd>
+<p>プロセスグループプライオリティ。</p></dd>
+<dt><a name="L002084" id="L002084"><code>Process::PRIO_USER</code></a></dt>
+<dd>
+<p>ユーザプライオリティ。</p></dd>
+<dt><a name="L002085" id="L002085"><code>Process::RLIMIT_AS</code></a>
+<dt><a name="L002086" id="L002086"><code>Process::RLIMIT_CORE</code></a>
+<dt><a name="L002087" id="L002087"><code>Process::RLIMIT_CPU</code></a>
+<dt><a name="L002088" id="L002088"><code>Process::RLIMIT_DATA</code></a>
+<dt><a name="L002089" id="L002089"><code>Process::RLIMIT_FSIZE</code></a>
+<dt><a name="L002090" id="L002090"><code>Process::RLIMIT_MEMLOCK</code></a>
+<dt><a name="L002091" id="L002091"><code>Process::RLIMIT_NOFILE</code></a>
+<dt><a name="L002092" id="L002092"><code>Process::RLIMIT_NPROC</code></a>
+<dt><a name="L002093" id="L002093"><code>Process::RLIMIT_RSS</code></a>
+<dt><a name="L002094" id="L002094"><code>Process::RLIMIT_SBSIZE</code></a>
+<dt><a name="L002095" id="L002095"><code>Process::RLIMIT_STACK</code></a>
+<dt><a name="L002096" id="L002096"><code>Process::RLIM_INFINITY</code></a>
+<dt><a name="L002097" id="L002097"><code>Process::RLIM_SAVED_CUR</code></a>
+<dt><a name="L002098" id="L002098"><code>Process::RLIM_SAVED_MAX</code></a></dt>
+<dd>
+<p><a href="#L002046">Process.getrlimit</a> 参照。
+<a href="refm002.html">執筆者募集</a></p></dd>
+<dt><a name="L002099" id="L002099"><code>Process::WNOHANG</code></a></dt>
+<dd>
+<p><a href="#L002079">Process#waitpid</a> の第二引数に指定するフラグで
+す。終了した子プロセスがない時に <code>waitpid</code> がブロックしません。</p></dd>
+<dt><a name="L002100" id="L002100"><code>Process::WUNTRACED</code></a></dt>
+<dd>
+<p><a href="#L002079">Process#waitpid</a> の第二引数に指定するフラグで
+す。子プロセスの停止によりステータスを報告していない子プロセスがあ
+る時に <code>waitpid</code> がブロックしません。</p></dd>
+</dl>
+<h2><a name="L002101" id="L002101">内部クラス:</a></h2>
+<dl>
+<dt><a name="L002102" id="L002102"><code>Status  ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>プロセスの終了ステータスを表現するクラスです。
+<a href="refm058.html">Process::Status</a> を参照してください。</p></dd>
+</dl>
+<h2><a name="L002103" id="L002103">内部モジュール:</a></h2>
+<dl>
+<dt><a name="L002104" id="L002104"><code>UID         ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a>
+<dt><a name="L002105" id="L002105"><code>GID         ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a>
+<dt><a name="L002106" id="L002106"><code>Sys         ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>プロセスのユーザ/グループ属性に関する操作をまとめたモジュール。モ
+ジュール UID、GID は各種 Unix システム間の違いを吸収したインタフェー
+スを提供します。</p>
+<p>モジュール Sys は、システムコール相当のメソッドを提供します。</p>
+<p>それぞれ、<a href="refm084.html">Process::UID</a>, <a href="refm082.html">Process::GID</a>, <a href="refm083.html">Process::Sys</a> 
+を参照してください。</p></dd>
+</dl>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>1.6.7 までは、getpgid() は例外を発生させていませんでした。
+p Process.getpgid(1000000) # =&gt; -1
+</small><br />
+<a name="foottext:2" id="foottext:2" href="#footmark:2"><sup><small>*2</small></sup></a><small>なお、Windows (<a href="refm458.html">mswin32</a>, <a href="refm460.html">mingw32</a>)では、INT
+ILL FPE SEGV TERM BREAK ABRT しか指定できません。<a href="refm384.html">ruby 1.7 feature</a>
+KILL も指定できます</small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm034.html">UP</a>][<a href="refm080.html">&lt;-PREV</a>][<a href="refm082.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

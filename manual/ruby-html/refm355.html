@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>DL::PtrData</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm356.html" rel="next" />
+<link href="refm354.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm352.html">UP</a>][<a href="refm354.html">&lt;-PREV</a>][<a href="refm356.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006778" id="L006778">DL::PtrData</a></h1>
+<p><a href="refm352.html">DL</a></p>
+<h2><a name="L006779" id="L006779">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L006780" id="L006780"><code>PtrData.new(<var>addr</var>, [<var>size</var> = <var>0</var>, <var>free</var> = <var>nil</var>])</code></a></dt>
+<dd>
+<p>アドレス <var>addr</var> を指すポインタに相当する PtrData オブジェクトを返す。
+GC は <var>free</var> 関数を使用してメモリを解放する。</p></dd>
+</dl>
+<h2><a name="L006781" id="L006781">メソッド</a></h2>
+<dl>
+<dt><a name="L006782" id="L006782"><code>free=(<var>sym</var>)</code></a></dt>
+<dd>
+<p>シンボルオブジェクト <var>sym</var> を指定した場合、GC は sym に相当する関数
+を使ってメモリを解放する。</p></dd>
+<dt><a name="L006783" id="L006783"><code>free</code></a></dt>
+<dd>
+<p>GC がメモリを解放するのに使用するシンボルオブジェクト sym を返す。
+sym は普通 PtrData#free= や PtrData.new によって設定される。</p></dd>
+<dt><a name="L006784" id="L006784"><code>size</code></a>
+<dt><a name="L006785" id="L006785"><code>size=(<var>size</var>)</code></a></dt>
+<dd>
+<p>サイズ <var>size</var> を割り当てたメモリを取得および設定する。</p></dd>
+<dt><a name="L006786" id="L006786"><code>to_a(<var>type</var>, [<var>size</var>])</code></a></dt>
+<dd>
+<p><var>type</var> で指定された型の配列を返す。type は 'S','P','I','L','D' そし
+て 'F' のいずれか。</p></dd>
+<dt><a name="L006787" id="L006787"><code>to_s([<var>len</var>])</code></a></dt>
+<dd>
+<p>長さ <var>len</var> の文字列を返す。len を省略した場合は、文字列の終りは '\0'。</p></dd>
+<dt><a name="L006788" id="L006788"><code>ptr</code></a>
+<dt><a name="L006789" id="L006789"><code>+ <var>self</var></code></a>
+</dl>
+<ul>
+<li>ポインタが指す値を PtrData オブジェクト ptr で返す。(訳注:？)
+    (訳注:PtrDataが指す値をポインタであるとして、PtrData にして返す(？))</li>
+</ul>
+<dl>
+<dt><a name="L006790" id="L006790"><code>ref</code></a>
+<dt><a name="L006791" id="L006791"><code>- <var>self</var></code></a></dt>
+<dd>
+<p>参照を PtrData オブジェクト ptr で返す。(訳注:？)
+(訳注:PtrDataへの参照を、PtrData にして返す(？))
+(訳注:PtrDataを指すポインタを、PtrData にして返す(？))</p></dd>
+<dt><a name="L006792" id="L006792"><code><var>self</var> + <var>n</var></code></a></dt>
+<dd>
+<p>PtrData オブジェクトを返す。(訳注: 引数バイトを足した新しい 
+PtrData オブジェクトを返す)</p></dd>
+<dt><a name="L006793" id="L006793"><code><var>self</var> - <var>n</var></code></a></dt>
+<dd>
+<p>PtrData オブジェクトを返す。(訳注: 引数バイトを引いた新しい 
+PtrData オブジェクトを返す)</p></dd>
+<dt><a name="L006794" id="L006794"><code>struct!(<var>type</var>, *<var>members</var>)</code></a></dt>
+<dd>
+<p>構造体メンバをシンボルでアクセスするデータ型を定義する(PtrData#[]
+も参照)</p></dd>
+<dt><a name="L006795" id="L006795"><code>union!(<var>type</var>, *<var>members</var>)</code></a></dt>
+<dd>
+<p>共用体メンバをシンボルでアクセスするデータ型を定義する(PtrData#[]
+も参照)</p></dd>
+<dt><a name="L006796" id="L006796"><code>self[key]</code></a>
+<dt><a name="L006797" id="L006797"><code>self[key, <var>num</var> = <var>0</var>]</code></a></dt>
+<dd>
+<p><var>key</var> が文字列やシンボルなら、このメソッドは構造体/共用体メンバの値
+を返す。それは PtrData#{struct!,union!} によって定義された型を持つ。
+<var>key</var> が整数でこのオブジェクトがポインタ ptr に相当するなら、
+(ptr + key).to_s(num) の値を返す。</p></dd>
+<dt><a name="L006798" id="L006798"><code>self[key, <var>num</var>]= <var>val</var></code></a>
+<dt><a name="L006799" id="L006799"><code>self[key]= <var>val</var></code></a></dt>
+<dd>
+<p><var>key</var> が文字列やシンボルなら、このメソッドは構造体/共用体メンバの値
+を val にする。<var>key</var> が整数で <var>val</var> が文字列なら memcpy(3) を使ってメ
+モリ領域 ptr への値の <var>num</var> バイトをコピーする。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm352.html">UP</a>][<a href="refm354.html">&lt;-PREV</a>][<a href="refm356.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

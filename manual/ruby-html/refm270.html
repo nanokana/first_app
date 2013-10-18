@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>tsort</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm271.html" rel="next" />
+<link href="refm269.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm269.html">&lt;-PREV</a>][<a href="refm271.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L005420" id="L005420">tsort</a></h1>
+<p>tsort はトポロジカルソートと強連結成分に関するモジュールを提供します。</p>
+<h2><a name="L005421" id="L005421">Example</a></h2>
+<pre>require 'tsort'
+
+class Hash
+  include TSort
+  alias tsort_each_node each_key
+  def tsort_each_child(node, &amp;block)
+    fetch(node).each(&amp;block)
+  end
+end
+
+{1=&gt;[2, 3], 2=&gt;[3], 3=&gt;[], 4=&gt;[]}.tsort
+#=&gt; [3, 2, 1, 4]
+
+{1=&gt;[2], 2=&gt;[3, 4], 3=&gt;[2], 4=&gt;[]}.strongly_connected_components
+#=&gt; [[4], [2, 3], [1]]</pre>
+<h2><a name="L005422" id="L005422">TSort module</a></h2>
+<p>TSort は強連結成分に関する Tarjan のアルゴリズムを用いた
+トポロジカルソートの実装です。</p>
+<p>TSort は任意のオブジェクトを有向グラフとして解釈できるように設計されています。
+TSort がオブジェクトをグラフとして解釈するには2つのメソッドを要求します。
+すなわち、<code>tsort_each_node</code> と <code>tsort_each_child</code> です。</p>
+<ul>
+<li><code>tsort_each_node</code> はグラフ上のすべての頂点を巡回するのに用いられます。</li>
+<li><code>tsort_each_child</code> は与えられた頂点の子を巡回するのに用いられます。</li>
+</ul>
+<p>頂点同士の等価性は eql? と hash によって定義されます。
+これは TSort が内部でハッシュを用いているからです。</p>
+<h3><a name="L005423" id="L005423">methods</a></h3>
+<dl>
+<dt><a name="L005420" id="L005420"><code>tsort</code></a></dt>
+<dd>
+<p>頂点をトポロジカルソートして得られる配列を返します。
+この配列は子から親に向かってソートされています。
+すなわち、最初の要素は子を持たず、最後の要素は親を持ちません。</p>
+<p>閉路が存在するとき、例外 <code>TSort::Cyclic</code> を起こします。</p></dd>
+<dt><a name="L005424" id="L005424"><code>tsort_each {|<var>node</var>| ...}</code></a></dt>
+<dd>
+<p><code>tsort</code> メソッドのイテレータ版です。
+<code><var>obj</var>.tsort_each</code> は <code><var>obj</var>.tsort.each</code> と似ていますが、
+ブロックの評価中に <var>obj</var> が変更された場合は予期しない結果になる
+ことがあります。</p>
+<p><code>tsort_each</code> は <code>nil</code> を返します。
+閉路が存在するとき、例外 <code>TSort::Cyclic</code> を起こします。</p></dd>
+<dt><a name="L005425" id="L005425"><code>strongly_connected_components</code></a></dt>
+<dd>
+<p>強連結成分の集まりを配列の配列として返します。
+この配列は子から親に向かってソートされています。
+各要素は強連結成分を表す配列です。</p></dd>
+<dt><a name="L005426" id="L005426"><code>each_strongly_connected_component {|<var>nodes</var>| ...}</code></a></dt>
+<dd>
+<p><code>strongly_connected_components</code> メソッドのイテレータ版です。
+<code><var>obj</var>.each_strongly_connected_component</code> は
+<code><var>obj</var>.strongly_connected_components.each</code> に似ていますが、
+ブロックの評価中に <var>obj</var> が変更された場合は予期しない結果になる
+ことがあります。</p>
+<p><code>each_strongly_connected_component</code> は <code>nil</code> を返します。</p></dd>
+<dt><a name="L005427" id="L005427"><code>each_strongly_connected_component_from(<var>node</var>) {|<var>nodes</var>| ...}</code></a></dt>
+<dd>
+<p><var>node</var> から到達可能な強連結成分についてのイテレータです。</p>
+<p>返す値は規定されていません。</p>
+<p><code>each_strongly_connected_component_from</code> は
+<code>tsort_each_node</code> を呼びません。</p></dd>
+<dt><a name="L005428" id="L005428"><code>tsort_each_node {|<var>node</var>| ...}</code></a></dt>
+<dd>
+<p>TSort で拡張されるクラスで定義されていなければならないメソッドです。</p>
+<p><code>tsort_each_node</code> is used to iterate for all nodes over a graph.</p></dd>
+<dt><a name="L005429" id="L005429"><code>tsort_each_child(<var>node</var>) {|<var>child</var>| ...}</code></a></dt>
+<dd>
+<p>TSort で拡張されるクラスで定義されていなければならないメソッドです。</p>
+<p><code>tsort_each_child</code> is used to iterate for child nodes of <var>node</var>.</p></dd>
+</dl>
+<h2><a name="L005430" id="L005430">より現実的な例</a></h2>
+<p>非常に単純な `make' に似たツールは以下のように実装できます。</p>
+<pre>require 'tsort'
+
+class Make
+  def initialize
+    @dep = {}
+    @dep.default = []
+  end
+
+  def rule(outputs, inputs=[], &amp;block)
+    triple = [outputs, inputs, block]
+    outputs.each {|f| @dep[f] = [triple]}
+    @dep[triple] = inputs
+  end
+
+  def build(target)
+    each_strongly_connected_component_from(target) {|ns|
+      if ns.length != 1
+        fs = ns.delete_if {|n| Array === n}
+        raise TSort::Cyclic.new(&quot;cyclic dependencies: #{fs.join ', '}&quot;)
+      end
+      n = ns.first
+      if Array === n
+        outputs, inputs, block = n
+        inputs_time = inputs.map {|f| File.mtime f}.max
+        begin
+          outputs_time = outputs.map {|f| File.mtime f}.min
+        rescue Errno::ENOENT
+          outputs_time = nil
+        end
+        if outputs_time == nil ||
+           inputs_time != nil &amp;&amp; outputs_time &lt;= inputs_time
+          sleep 1 if inputs_time != nil &amp;&amp; inputs_time.to_i == Time.now.to_i
+          block.call
+        end
+      end
+    }
+  end
+
+  def tsort_each_child(node, &amp;block)
+    @dep[node].each(&amp;block)
+  end
+  include TSort
+end
+
+def command(arg)
+  print arg, &quot;\n&quot;
+  system arg
+end
+
+m = Make.new
+m.rule(%w[t1]) { command 'date &gt; t1' }
+m.rule(%w[t2]) { command 'date &gt; t2' }
+m.rule(%w[t3]) { command 'date &gt; t3' }
+m.rule(%w[t4], %w[t1 t3]) { command 'cat t1 t3 &gt; t4' }
+m.rule(%w[t5], %w[t4 t2]) { command 'cat t4 t2 &gt; t5' }
+m.build('t5')</pre>
+<h2><a name="L005431" id="L005431">Bugs</a></h2>
+<ul>
+<li>tsort という名前は正確ではありません。なぜなら
+  このライブラリは Tarjan の強連結成分に関するアルゴリズムを使っているからです。
+  とはいえ strongly_connected_components という正確な名前は長過ぎます。</li>
+</ul>
+<h2><a name="L005432" id="L005432">References</a></h2>
+<p>R. E. Tarjan, 
+Depth First Search and Linear Graph Algorithms,
+SIAM Journal on Computing, Vol. 1, No. 2, pp. 146-160, June 1972.</p>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm269.html">&lt;-PREV</a>][<a href="refm271.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

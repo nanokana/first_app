@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>OpenSSL::PKCS7::PKCS7</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm232.html" rel="next" />
+<link href="refm230.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm230.html">UP</a>][<a href="refm230.html">&lt;-PREV</a>][<a href="refm232.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L004583" id="L004583">OpenSSL::PKCS7::PKCS7</a></h1>
+<p>注意。</p>
+<p><a href="refm230.html">OpenSSL::PKCS7</a> も参照。read_smime, write_smime, sign そして encrypt は <a href="refm230.html">OpenSSL::PKCS7</a> モジュールのモジュールメソッドとして定義されている。</p>
+<p>PKCS #7 は暗号技術とともに用いられるデータのフォーマットの仕様です。
+データやそれに対する署名、証明した日時など任意の属性を含むことができ、S/MIME などに使用されています。
+<em class="XXINVALIDXX">rfc:2315</em></p>
+<h2><a name="L004584" id="L004584">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L004585" id="L004585"><code>PKCS7.new()</code></a>
+<dt><a name="L004586" id="L004586"><code>PKCS7.new(<var>str</var>)</code></a>
+<dt><a name="L004587" id="L004587"><code>PKCS7.new(<var>io</var>)</code></a></dt>
+<dd>
+<p>PKCS7 オブジェクトを生成する。</p></dd>
+</dl>
+<h2><a name="L004588" id="L004588">メソッド</a></h2>
+<dl>
+<dt><a name="L004589" id="L004589"><code>type</code></a>
+<dt><a name="L004590" id="L004590"><code>type=</code></a></dt>
+<dd>
+<p>タイプを <a href="refm063.html">Symbol</a> オブジェクトで返す。次のうちのいずれか。</p>
+<dl>
+<dt><a name="L004613" id="L004613">:signed, :encrypted, :enveloped, :signedAndEnveloped, :data</a></dt>
+</dl></dd>
+<dt><a name="L004591" id="L004591"><code>detached</code></a>
+<dt><a name="L004592" id="L004592"><code>detached=</code></a></dt>
+<dd>
+<p>平文に署名を付ける形式(multipart/signed)かどうか。 type では :signed にあたる。</p></dd>
+<dt><a name="L004593" id="L004593"><code>detached?</code></a></dt>
+<dd>
+<p>実際に署名されていてかつ平文に署名を付ける形式(multipart/signed)かどうか。</p></dd>
+<dt><a name="L004594" id="L004594"><code>cipher=</code></a></dt>
+<dd>
+<p>使用する暗号アルゴリズムを指定する。</p></dd>
+<dt><a name="L004595" id="L004595"><code>add_signer(<var>singer</var>)</code></a></dt>
+<dd>
+<p>署名者を加える。</p></dd>
+<dt><a name="L004596" id="L004596"><code>signers</code></a></dt>
+<dd>
+<p>メッセージの署名者 OpenSSL::PKCS7::Signer オブジェクトの配列を返す。</p></dd>
+<dt><a name="L004597" id="L004597"><code>add_recipient</code></a>
+<dt><a name="L004598" id="L004598"><code>add_certificate</code></a>
+<dt><a name="L004599" id="L004599"><code>certificates</code></a>
+<dt><a name="L004600" id="L004600"><code>certificates=</code></a></dt>
+<dd>
+<p>署名に付ける証明書を指定する。</p></dd>
+<dt><a name="L004601" id="L004601"><code>add_crl(<var>s</var>)</code></a></dt>
+<dd>
+<p>CRL に加える。</p></dd>
+<dt><a name="L004602" id="L004602"><code>crls</code></a>
+<dt><a name="L004603" id="L004603"><code>crls=</code></a></dt>
+<dd>
+<p>CRL を返す。</p></dd>
+<dt><a name="L004604" id="L004604"><code>add_data(<var>data</var>)</code></a></dt>
+<dd>
+<p>署名の対象となるデータに data を加える。</p></dd>
+<dt><a name="L004605" id="L004605"><code>data</code></a>
+<dt><a name="L004606" id="L004606"><code>data=</code></a></dt>
+<dd>
+<p>署名の対象となるデータを返す。</p></dd>
+<dt><a name="L004607" id="L004607"><code>verify(<var>certs</var>, <var>store</var>, <var>indata</var>=<var>nil</var>, <var>flags</var>=<var>0</var>)</code></a></dt>
+<dd>
+<p>署名を検証する。</p></dd>
+<dt><a name="L004608" id="L004608"><code>decrypt(<var>pkey</var>, <var>cert</var>, <var>flags</var>=<var>0</var>)</code></a></dt>
+<dd>
+<p>復号化する。</p></dd>
+<dt><a name="L004609" id="L004609"><code>to_pem</code></a>
+<dt><a name="L004610" id="L004610"><code>to_s</code></a></dt>
+<dd>
+<p>PEM 形式に変換する。</p></dd>
+<dt><a name="L004611" id="L004611"><code>to_der</code></a></dt>
+<dd>
+<p>DER 形式に変換する。</p></dd>
+<dt><a name="L004612" id="L004612"><code>error_string</code></a>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm230.html">UP</a>][<a href="refm230.html">&lt;-PREV</a>][<a href="refm232.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

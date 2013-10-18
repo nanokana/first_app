@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Enumerable</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm071.html" rel="next" />
+<link href="refm069.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm034.html">UP</a>][<a href="refm069.html">&lt;-PREV</a>][<a href="refm071.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L001741" id="L001741">Enumerable</a></h1>
+<p>繰り返しを行なうクラスのための <code>Mix-in</code>。このモジュールの
+メソッドは全て <code>each</code> を用いて定義されているので、インクルード
+するクラスには <code>each</code> が定義されていなければなりません。</p>
+<h2><a name="L001742" id="L001742">メソッド:</a></h2>
+<dl>
+<dt><a name="L001743" id="L001743"><code>all?</code></a>
+<dt><a name="L001744" id="L001744"><code>all? {|<var>item</var>| ... }</code></a></dt>
+<dd>
+<p><a href="refm384.html">ruby 1.7 feature</a>:</p>
+<p>すべての要素が真である場合に <code>true</code> を返します。偽である要素が
+あれば、ただちに <code>false</code> を返します。</p>
+<p><a href="refm385.html">ruby 1.8 feature</a>:
+ブロックを伴う場合は、各要素に対してブロックを評価し、すべての結果
+が真である場合に <code>true</code> を返します。ブロックが偽を返した時点で、
+ただちに <code>false</code> を返します。</p>
+<pre>p [1,2,3].all? {|v| v &gt; 0}   # =&gt; true
+p [1,2,3].all? {|v| v &gt; 1}   # =&gt; false</pre></dd>
+<dt><a name="L001745" id="L001745"><code>any?</code></a>
+<dt><a name="L001746" id="L001746"><code>any? {|<var>item</var>| ... }</code></a></dt>
+<dd>
+<p><a href="refm384.html">ruby 1.7 feature</a>:</p>
+<p>すべての要素が偽である場合に <code>false</code> を返します。真である要素
+があれば、ただちに <code>true</code> を返します。</p>
+<p><a href="refm385.html">ruby 1.8 feature</a>:
+ブロックを伴う場合は、各要素に対してブロックを評価し、すべての結果
+が偽である場合に <code>false</code> を返します。ブロックが真を返した時点
+で、ただちに <code>true</code> を返します。</p>
+<pre>p [1,2,3].any? {|v| v &gt; 3}   # =&gt; false
+p [1,2,3].any? {|v| v &gt; 1}   # =&gt; true</pre></dd>
+<dt><a name="L001747" id="L001747"><code>collect {|<var>item</var>| ... }</code></a>
+<dt><a name="L001748" id="L001748"><code>map {|<var>item</var>| ... }</code></a></dt>
+<dd>
+<p>各要素に対してブロックを評価した結果を全て含む配列を返します。</p>
+<p>ブロックを省略した場合、</p>
+<pre>obj.collect {|item| item}</pre>
+<p>を行います。これは <a href="#L001770">Enumerable#to_a</a> と同じで
+す。</p></dd>
+<dt><a name="L001749" id="L001749"><code>each_with_index {|<var>item</var>,<var>index</var>| ... }</code></a></dt>
+<dd>
+<p>要素とインデックスを両方与えるイテレータ。</p>
+<p><code>self</code> を返します。</p></dd>
+<dt><a name="L001750" id="L001750"><code>find([<var>ifnone</var>]) {|<var>item</var>| ... }</code></a>
+<dt><a name="L001751" id="L001751"><code>detect([<var>ifnone</var>]) {|<var>item</var>| ... }</code></a></dt>
+<dd>
+<p>要素に対してブロックを評価した値が真になった最初の要素を返します。
+真になる要素がひとつも見つからなかったときは <var>ifnone</var> を(もし
+指定されていれば)評価して <code>nil</code> を返します。
+(<a href="refm384.html">ruby 1.7 feature</a>: <var>ifnone</var>を評価した結果を返します。
+<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a>)
+<a name="footmark:2" id="footmark:2" href="#foottext:2"><sup><small>*2</small></sup></a></p>
+<p><var>ifnone</var> には文字列かあるいは、<code>call</code> メソッドを持つオブジェ
+クト(例えば <a href="refm057.html">Proc</a>)を指定します。</p>
+<pre>[1,2,3].find(&quot;raise&quot;) {|v| v &gt; 4}
+# =&gt; -:1: unhandled exception</pre>
+<p><a href="refm384.html">ruby 1.7 feature</a>: <var>ifnone</var> に文字列は指定できなくなりました。</p></dd>
+<dt><a name="L001752" id="L001752"><code>find_all {|<var>item</var>| ... }</code></a>
+<dt><a name="L001753" id="L001753"><code>select {|<var>item</var>| ... }</code></a></dt>
+<dd>
+<p>各要素に対してブロックを評価した値が真であった要素を全て含む配列を
+返します。真になる要素がひとつもなかった場合は空の配列を返します。</p></dd>
+<dt><a name="L001754" id="L001754"><code>grep(<var>pattern</var>)</code></a>
+<dt><a name="L001755" id="L001755"><code>grep(<var>pattern</var>) {|<var>item</var>| ... }</code></a></dt>
+<dd>
+<p><code><var>pattern</var> === item</code> が成立する要素を全て含んだ配列を返し
+ます。ブロックとともに呼び出された時には条件の成立した要素に対して
+それぞれブロックを評価し、その結果の配列を返します。マッチする要素
+がひとつもなかった場合は空の配列を返します。</p></dd>
+<dt><a name="L001756" id="L001756"><code>inject([<var>init</var>]) {|<var>result</var>, <var>item</var>| ... }   ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>最初に初期値 <var>init</var> と <code>self</code> の最初の要素を引数にブロック
+を実行します。2 回目以降のループでは、前のブロックの実行結果と 
+<code>self</code> の次の要素を引数に順次ブロックを実行します。そうして最
+後の要素まで繰り返し、最後のブロックの実行結果を返します。</p>
+<p>要素が空の場合は <var>init</var> を返します。</p>
+<p>初期値 <var>init</var> を省略した場合は、最初に先頭の要素と 2 番目の要
+素をブロックに渡します。この場合、要素が 1 つしかなければブロック
+を実行せずに最初の要素を返します。要素が空なら <code>nil</code> を返しま
+す。</p>
+<dl>
+<dt><a name="L001774" id="L001774">例</a></dt>
+<dd>
+<p>合計の計算</p>
+<pre>p [1,2,3,4,5].inject(0) {|result, item| result + item }
+  =&gt; 15</pre>
+<p>これは以下のように書くのと同じです。</p>
+<pre>result = 0
+[1,2,3,4,5].each {|v| result += v }
+p result
+=&gt; 15</pre>
+</dd>
+</dl></dd>
+<dt><a name="L001757" id="L001757"><code>member?(<var>val</var>)</code></a>
+<dt><a name="L001758" id="L001758"><code>include?(<var>val</var>)</code></a></dt>
+<dd>
+<p><var>val</var> と <code>==</code> の関係にある要素を含むとき真を返します。</p></dd>
+<dt><a name="L001759" id="L001759"><code>max</code></a></dt>
+<dd>
+<p>最大の要素を返します。全要素が互いに <code>&lt;=&gt;</code> メソッドで比較でき
+ることを仮定しています。</p>
+<p>要素が存在しなければ <code>nil</code> を返します。</p></dd>
+<dt><a name="L001760" id="L001760"><code>max {|<var>a</var>, <var>b</var>| ... }</code></a></dt>
+<dd>
+<p>ブロックの評価結果で各要素の大小判定を行い、最大の要素を返します。
+要素が存在しなければ <code>nil</code> を返します。</p>
+<p>ブロックの値は、<code>a&gt;b</code> のとき正、<code>a==b</code> のとき 0、<code>a&lt;b</code> 
+のとき負の整数を、期待しています。ブロックが整数以外を返したときは
+例外 <a href="refm111.html">TypeError</a> が発生します。</p></dd>
+<dt><a name="L001761" id="L001761"><code>max_by {|<var>item</var>| ... }   ((&lt;<var>ruby</var> <var>1</var>.<var>9</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>ブロックの評価結果を <code>&lt;=&gt;</code> で比較し、最大の要素を返します。
+要素が存在しなければ <code>nil</code> を返します。</p>
+<p>max と max_by の違いは sort と sort_by の違いと同じです。詳細は 
+<a href="#L001769">sort_by</a> を参照してください。</p></dd>
+<dt><a name="L001762" id="L001762"><code>min</code></a></dt>
+<dd>
+<p>最小の要素を返します。全要素が互いに <code>&lt;=&gt;</code> メソッドで比較でき
+ることを仮定しています。</p>
+<p>要素が存在しなければ <code>nil</code> を返します。</p></dd>
+<dt><a name="L001763" id="L001763"><code>min {|<var>a</var>, <var>b</var>| ... }</code></a></dt>
+<dd>
+<p>ブロックの評価結果で各要素の大小判定を行い、最小の要素を返します。
+要素が存在しなければ <code>nil</code> を返します。</p>
+<p>ブロックの値は、<code>a&gt;b</code> のとき正、<code>a==b</code> のとき 0、<code>a&lt;b</code> 
+のとき負の整数を、期待しています。ブロックが整数以外を返したときは
+例外 <code>TypeError</code> が発生します。</p></dd>
+<dt><a name="L001764" id="L001764"><code>min_by {|<var>item</var>| ... }   ((&lt;<var>ruby</var> <var>1</var>.<var>9</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>ブロックの評価結果を <code>&lt;=&gt;</code> で比較し、最小の要素を返します。
+要素が存在しなければ <code>nil</code> を返します。</p>
+<p>min と min_by の違いは sort と sort_by の違いと同じです。詳細は 
+<a href="#L001769">sort_by</a> を参照してください。</p></dd>
+<dt><a name="L001765" id="L001765"><code>partition {|<var>item</var>| ... }    ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>各要素に対してブロックを評価した値が真であった要素からなる配列と
+偽であった要素からなる配列からなる配列を返します。</p>
+<pre>[10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0].partition { |i| i % 3 == 0 }
+ #=&gt; [[9, 6, 3, 0], [10, 8, 7, 5, 4, 2, 1]]</pre></dd>
+<dt><a name="L001766" id="L001766"><code>reject {|<var>item</var>| ... }</code></a></dt>
+<dd>
+<p>各要素に対してブロックを評価し、その値が偽であった要素を集めた新し
+い配列を返します。</p></dd>
+<dt><a name="L001767" id="L001767"><code>sort</code></a>
+<dt><a name="L001768" id="L001768"><code>sort {|<var>a</var>, <var>b</var>| ... }</code></a></dt>
+<dd>
+<p>全ての要素を昇順にソートした配列を生成して返します。</p>
+<p>ブロックなしのときは <code>&lt;=&gt;</code> メソッドを要素に対して呼び、その結
+果をもとにソートします。</p>
+<p><code>&lt;=&gt;</code> 以外でソートしたい場合は、ブロックを指定します。この場合
+ブロックの評価結果を元にソートします。ブロックの値は、<code>a&gt;b</code> の
+とき正、<code>a==b</code> のとき 0、<code>a&lt;b</code> のとき負の整数を、期待して
+います。ブロックが整数以外を返したときは例外 <a href="refm111.html">TypeError</a> が発
+生します。</p>
+<p>Enumerable#sort は安定ではありません (unstable sort)。</p>
+<p>註： 比較結果が同じ要素は元の順序通りに並ぶソートを
+「安定なソート (stable sort)」と言います。</p></dd>
+<dt><a name="L001769" id="L001769"><code>sort_by {|<var>item</var>| ... }   ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>ブロックの評価結果を <code>&lt;=&gt;</code> メソッドで比較することで、self を昇
+順にソートします。ソートされた配列を新たに生成して返します。これは、
+以下とほぼ同じ動作をします。</p>
+<pre>class Array
+  def sort_by
+    self.collect {|i| [yield(i), i] }.
+       sort {|a,b| a[0] &lt;=&gt; b[0] }.
+       collect! {|i| i[1]}
+  end
+end</pre>
+<p><code>sort_by</code> を使わない以下の例では比較を行う度に downcase が実
+行されます。従って downcase の実行速度が遅ければ sort の速度が
+致命的に低下します。</p>
+<pre>p [&quot;BAR&quot;, &quot;FOO&quot;, &quot;bar&quot;, &quot;foo&quot;].sort {|a,b| a.downcase &lt;=&gt; b.downcase }</pre>
+<p>一方次のように <code>sort_by</code> を使うと downcase の実行回数は要素数と
+同じです。つまり、その部分の実行時間は O(n) のオーダーです。</p>
+<pre>p [&quot;BAR&quot;, &quot;FOO&quot;, &quot;bar&quot;, &quot;foo&quot;].sort_by {|v| v.downcase }</pre>
+<p>以下の、実行回数の検証結果を参照してみてください。</p>
+<pre>class Integer
+  def count
+    $n += 1
+    self
+  end
+end
+
+ary = []
+1.upto(1000) {|v| ary &lt;&lt; rand(v) }
+
+$n = 0
+ary.sort {|a,b| a.count &lt;=&gt; b.count }
+p $n          # =&gt; 18200
+
+$n = 0
+ary.sort_by {|v| v.count }
+p $n          # =&gt; 1000</pre>
+<p>Enumerable#sort_by は安定ではありません (unstable sort)。</p>
+<p>註： 比較結果が同じ要素は元の順序通りに並ぶソートを
+「安定なソート (stable sort)」と言います。</p>
+<p>なお、sort_by を以下のように使うと安定なソートを実装できます。</p>
+<pre>i = 0
+ary.sort_by {|v| [v, i += 1] }</pre></dd>
+<dt><a name="L001770" id="L001770"><code>to_a</code></a>
+<dt><a name="L001771" id="L001771"><code>entries</code></a></dt>
+<dd>
+<p>全ての要素を含む配列を返します。</p></dd>
+<dt><a name="L001772" id="L001772"><code>zip([<var>ary1</var>[, <var>ary2</var>[, ...]]])</code></a>
+<dt><a name="L001773" id="L001773"><code>zip([<var>ary1</var>[, <var>ary2</var>[, ...]]]) {|<var>v1</var>, <var>v2</var>, ...| ...}</code></a></dt>
+<dd>
+<p><a href="refm384.html">ruby 1.7 feature</a>:</p>
+<p><code>self</code> と引数に渡した配列の各要素からなる配列の配列を生成して
+返します。生成される配列の要素数は <code>self</code> の要素数です。</p>
+<pre>p [1,2,3].zip([4,5,6], [7,8,9])
+=&gt; [[1, 4, 7], [2, 5, 8], [3, 6, 9]]
+
+p [1,2].zip([:a,:b,:c], [:A,:B,:C,:D])
+=&gt; [[1, :a, :A], [2, :b, :B]]
+
+p (1..5).zip([:a,:b,:c], [:A,:B,:C,:D])
+=&gt; [[1, :a, :A], [2, :b, :B], [3, :c, :C], [4, nil, :D], [5, nil, nil]]</pre>
+<p>ブロック付きで呼び出された場合は、各配列を要素に渡してブロックを実
+行します。この場合、<code>zip</code> は、常に <code>nil</code> を返します。</p>
+<pre>p [1,2,3].zip([4,5,6], [7,8,9]) {|ary|
+  p ary
+}
+=&gt; [1, 4, 7]
+   [2, 5, 8]
+   [3, 6, 9]
+   nil</pre></dd>
+</dl>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>1.7 featureかも。いつから?</small><br />
+<a name="foottext:2" id="foottext:2" href="#footmark:2"><sup><small>*2</small></sup></a><small>あらい: ifnone に文字列が指定できなくなってから<a href="http://www.ruby-lang.org/cgi-bin/cvsweb.cgi/ruby/enum.c.diff?r1=1.28&amp;r2=1.29">&lt;URL:http://www.ruby-lang.org/cgi-bin/cvsweb.cgi/ruby/enum.c.diff?r1=1.28&amp;r2=1.29&gt;</a><sup class="outside"><small>[外部]</small></sup>みたい</small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm034.html">UP</a>][<a href="refm069.html">&lt;-PREV</a>][<a href="refm071.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>TCPSocket</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm163.html" rel="next" />
+<link href="refm161.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm161.html">UP</a>][<a href="refm161.html">&lt;-PREV</a>][<a href="refm163.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L003078" id="L003078">TCPSocket</a></h1>
+<p>インターネットドメインのストリーム型ソケットのクラス。通常の
+<a href="refm045.html">IO</a>クラスのサブクラスと同
+様の入出力ができます。このクラスによってソケットを用いたクラ
+イアントを簡単に記述できるようになります。ユーザの入力をその
+ままサーバに転送するプログラムは以下のようになります。</p>
+<pre>require &quot;socket&quot;
+
+port = if ARGV.size &gt; 0 then ARGV.shift else 4444 end
+print port, &quot;\n&quot;
+
+s = TCPSocket.open(&quot;localhost&quot;, port)
+
+while gets
+  s.write($_)
+  print(s.gets)
+end
+s.close</pre>
+<h2><a name="L003079" id="L003079">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm161.html">IPSocket</a></li>
+</ul>
+<h2><a name="L003080" id="L003080">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L003081" id="L003081"><code>TCPSocket.open(<var>host</var>, <var>service</var> [, <var>local_host</var>, <var>local_service</var>])</code></a>
+<dt><a name="L003082" id="L003082"><code>TCPSocket.new(<var>host</var>, <var>service</var> [, <var>local_host</var>, <var>local_service</var>])</code></a></dt>
+<dd>
+<p>hostで指定したホストのserviceで指定したポートと接続したソケッ
+トを返します。<var>host</var>はホスト名、または dotted quad
+によるインターネットアドレスを示す文字列、<var>service</var>
+は<code>/etc/services</code>(またはNIS)に登録されているサー
+ビス名かポート番号です。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>:
+引数 <var>local_host</var>, <var>local_service</var> を指定した場合、そのアドレス
+に対して<a href="refm535.html">bind(2)</a>します。</p></dd>
+<dt><a name="L003083" id="L003083"><code>TCPSocket.gethostbyname(<var>host</var>)</code></a></dt>
+<dd>
+<p>ホスト名またはIPアドレス(整数または<code>&quot;127.0.0.1&quot;</code>
+のような文字列)からホストの情報を返します。ホスト情報は、ホ
+スト名、ホストの別名の配列、ホストのアドレスタイプ、ホストの
+アドレスを各要素とする配列です。ホストのアドレスは dotted quad
+の文字列(<code>&quot;127.0.0.1&quot;</code>のような文字列)です。</p>
+<pre>p TCPSocket.gethostbyname(&quot;www.ruby-lang.org&quot;)
+#=&gt; [&quot;beryllium.ruby-lang.org&quot;, [], 2, &quot;210.163.138.100&quot;]</pre></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm161.html">UP</a>][<a href="refm161.html">&lt;-PREV</a>][<a href="refm163.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

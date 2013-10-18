@@ -1,0 +1,8 @@
+﻿<div class="entry">
+  <div class="date"><%= @entry.created_at.year %>年<%= @entry.created_at.month %>月<%= @entry.created_at.day %>日</div>
+  <h2><%=h @entry.title %></h2>
+  <div><%= @entry.to_html %></div>
+</div>
+
+<%= link_to 'Edit', edit_entry_path(@entry) %> |
+<%= link_to 'Back', entries_path %>

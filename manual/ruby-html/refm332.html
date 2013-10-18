@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SingleForwardable</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm333.html" rel="next" />
+<link href="refm331.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm330.html">UP</a>][<a href="refm331.html">&lt;-PREV</a>][<a href="refm333.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006411" id="L006411">SingleForwardable</a></h1>
+<p>オブジェクトに対し、メソッドの委譲機能を定義するモジュールです。</p>
+<h2><a name="L006412" id="L006412">使い方</a></h2>
+<p>オブジェクトに対して<var>extend</var>して使います。</p>
+<pre>g = Goo.new
+g.extend SingleForwardable
+g.def_delegator(&quot;@out&quot;, :puts)
+g.puts ...</pre>
+<h2><a name="L006413" id="L006413">メソッド</a></h2>
+<dl>
+<dt><a name="L006414" id="L006414"><code>def_singleton_delegators(<var>accessor</var>, *<var>methods</var>)</code></a></dt>
+<dd>
+<p><var>methods</var>で渡されたメソッドのリストを<var>accessor</var>に委譲する
+ようにします。</p></dd>
+<dt><a name="L006415" id="L006415"><code>def_singleton_delegator(<var>accessor</var>, <var>method</var>, <var>ali</var> = <var>method</var>)</code></a></dt>
+<dd>
+<p><var>method</var>で渡されたメソッドを<var>accessor</var>に委譲するようにしま
+す。<var>ali</var>が引数として渡されたときは, メソッド<var>ali</var>が呼ばれ
+たときには、<var>accessor</var>に対し<var>method</var>を呼び出します。</p></dd>
+<dt><a name="L006416" id="L006416"><code>def_delegators(<var>accessor</var>, *<var>methods</var>)</code></a></dt>
+<dd>
+<p>def_singleton_delegators の別名です。</p></dd>
+<dt><a name="L006417" id="L006417"><code>def_delegator(<var>accessor</var>, <var>method</var>, <var>ali</var> = <var>method</var>)</code></a></dt>
+<dd>
+<p>def_singleton_delegator の別名です。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm330.html">UP</a>][<a href="refm331.html">&lt;-PREV</a>][<a href="refm333.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

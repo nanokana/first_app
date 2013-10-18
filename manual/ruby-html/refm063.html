@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Symbol</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm064.html" rel="next" />
+<link href="refm062.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm035.html">UP</a>][<a href="refm062.html">&lt;-PREV</a>][<a href="refm064.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L001592" id="L001592">Symbol</a></h1>
+<p>シンボルを表すクラス。シンボルは任意の文字列と一対一に対応するオブジェ
+クトです。Ruby スクリプトからは</p>
+<ul>
+<li><code>:symbol</code></li>
+<li><code>'symbol'.intern</code></li>
+</ul>
+<p>のようにして得られます。リテラルでシンボルを表す場合、`<code>:</code>' の後に
+は識別子、メソッド名(`<code>!</code>',`<code>?</code>' などの接尾辞を含む)、変数名
+(`<code>$</code>'などの接頭辞を含む)、再定義できる演算子のいずれかに適合する
+ものしか書くことはできません(そうでなければ文法エラーになります)。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>:</p>
+<pre>p :&quot;foo#{&quot;bar&quot;}&quot;
+  =&gt; :foobar
+p :'foo#{&quot;bar&quot;}'
+  =&gt; :&quot;foo\#{\&quot;bar\&quot;}&quot;
+p %s{foo#{&quot;bar&quot;}}
+  =&gt; :&quot;foo\#{\&quot;bar\&quot;}&quot;</pre>
+<h2><a name="L001593" id="L001593">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm035.html">Object</a></li>
+</ul>
+<h2><a name="L001594" id="L001594">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L001595" id="L001595"><code>Symbol.all_symbols</code></a></dt>
+<dd>
+<p><a href="refm384.html">ruby 1.7 feature</a></p>
+<p>定義済みの全てのシンボルオブジェクトの配列を返します。</p>
+<pre>p Symbol.all_symbols  # =&gt; [:RUBY_PLATFORM, :RUBY_VERSION, ...]</pre>
+<p>シンボルの生成はコンパイル時に行われるので以下のようにしても結果に
+差はありません。</p>
+<pre>a = Symbol.all_symbols
+:foo
+b = Symbol.all_symbols
+p b - a
+# =&gt; []</pre></dd>
+</dl>
+<h2><a name="L001596" id="L001596">メソッド:</a></h2>
+<dl>
+<dt><a name="L001597" id="L001597"><code>to_sym</code></a></dt>
+<dd>
+<p><a href="refm384.html">ruby 1.7 feature</a>:
+<code>self</code> を返します。</p></dd>
+<dt><a name="L001598" id="L001598"><code>id2name()</code></a>
+<dt><a name="L001599" id="L001599"><code>to_s</code></a></dt>
+<dd>
+<p>シンボルに対応する文字列を返します。</p>
+<p>逆に、文字列に対応するシンボルを得るには 
+<a href="refm061.html#L001515">String#intern</a> を使います。</p>
+<pre>p :foo.id2name.intern == :foo
+=&gt; true</pre></dd>
+<dt><a name="L001600" id="L001600"><code>to_i</code></a></dt>
+<dd>
+<p>シンボルに対応する整数を返します。</p>
+<p>逆にこの整数から対応するシンボルを得るには 
+<a href="refm055.html#L001329">Fixnum#id2name</a> を使って一旦文字列を得る必要が
+あります。(<a href="refm384.html">ruby 1.7 feature</a>: 直接シンボルを得るには 
+<a href="refm055.html#L001330">Fixnum#to_sym</a> が使えます)</p>
+<pre>id = :foo.to_i
+p id                  # =&gt; 8881
+p id.id2name.intern   # =&gt; :foo
+p id.to_sym           # =&gt; :foo  (version 1.7)</pre>
+<p>Rubyの実装では予約語、変数名、メソッド名などをこの整数で管理してい
+ます。オブジェクトに対応する整数(<a href="refm035.html#L000662">Object#__id__</a> で得ら
+れます)と Symbol に対応する整数は別のものです。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm035.html">UP</a>][<a href="refm062.html">&lt;-PREV</a>][<a href="refm064.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>net/http</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm204.html" rel="next" />
+<link href="refm202.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm202.html">&lt;-PREV</a>][<a href="refm204.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L003870" id="L003870">net/http</a></h1>
+<h2><a name="L003871" id="L003871">このライブラリについて</a></h2>
+<p>汎用データ転送プロトコル HTTP を扱うライブラリです。
+実装は [RFC2616] <a href="http://www.ietf.org/rfc/rfc2616.txt">&lt;URL:http://www.ietf.org/rfc/rfc2616.txt&gt;</a><sup class="outside"><small>[外部]</small></sup>
+に基きます。</p>
+<ul>
+<li><a href="refm204.html">Net::HTTP</a></li>
+<li><a href="refm205.html">Net::HTTPRequest</a></li>
+<li><a href="refm206.html">Net::HTTPResponse</a></li>
+</ul>
+<p>このページのもくじ</p>
+<ul>
+<li><a href="#L003872">使用例</a></li>
+<li><a href="#L003878">新しい仕様への変更と移行措置について</a></li>
+<li><a href="#L003879">例外</a></li>
+<li><a href="#L003880">フォームの値の区切り文字について</a></li>
+</ul>
+<h2><a name="L003872" id="L003872">使用例</a></h2>
+<h3><a name="L003873" id="L003873">ウェブサーバからドキュメントを得る (GET)</a></h3>
+<pre>require 'net/http'
+Net::HTTP.version_1_2   # おまじない
+Net::HTTP.start('www.example.com', 80) {|http|
+  response = http.get('/index.html')
+  puts response.body
+}</pre>
+<p>また以下は同じ意味で短く書いたものです。</p>
+<pre>require 'net/http'
+Net::HTTP.version_1_2   # おまじない
+Net::HTTP.get_print 'www.example.com', '/index.html'</pre>
+<h3><a name="L003874" id="L003874">フォームの情報を送信する (POST)</a></h3>
+<pre>require 'net/http'
+Net::HTTP.version_1_2   # おまじない
+Net::HTTP.start('www.example.com', 80) {|http|
+  response = http.post('/cgi-bin/somecgi.rb',
+                       'querytype=subject&amp;target=ruby')
+}</pre>
+<p>(参照: <a href="#L003880">フォームの値の区切り文字について</a>)</p>
+<h3><a name="L003875" id="L003875">プロクシ経由のアクセス</a></h3>
+<p>Net::HTTP のクラスメソッド Net::HTTP.Proxy は、常にプロクシ経由で
+接続するような動作をする、新しいクラスを作成して返します。このクラスは
+Net::HTTP を継承しているので Net::HTTP と全く同じように使えます。</p>
+<pre>require 'net/http'
+Net::HTTP.version_1_2   # おまじない
+
+$proxy_addr = 'your.proxy.addr'
+$proxy_port = 8080
+      :
+Net::HTTP::Proxy($proxy_addr, $proxy_port).start( 'some.www.server' ) {|http|
+  # always connect to your.proxy.addr:8080
+      :
+}</pre>
+<p>また Net::HTTP.Proxy は第一引数が nil だと Net::HTTP 自身を返すので
+上のコードのように書いておけばプロクシなしの場合にも対応できます。</p>
+<h3><a name="L003876" id="L003876">リダイレクトに対応する</a></h3>
+<p>以下のメソッド fetch はリダイレクトに対応しています。
+limit 回数以上リダイレクトしたらエラーにします。</p>
+<pre>require 'uri'
+require 'net/http'
+Net::HTTP.version_1_2    # おまじない
+
+def fetch( uri_str, limit = 10 )
+  # 適切な例外クラスに変えるべき
+  raise ArgumentError, 'http redirect too deep' if limit == 0
+
+  response = Net::HTTP.get_response(URI.parse(uri_str))
+  case response
+  when Net::HTTPSuccess     then response
+  when Net::HTTPRedirection then fetch(response['location'], limit - 1)
+  else
+    response.error!
+  end
+end
+
+print fetch('http://www.ruby-lang.org')</pre>
+<p>Ruby 1.6.7 未満には URI クラスが標準添付されていないので、別途調達するか、
+あるいはいいかげんながら以下のようにしてください。</p>
+<pre>require 'net/http'
+Net::HTTP.version_1_2   # おまじない
+
+def fetch( uri_str, limit = 10 )
+  # 適切な例外クラスに変えるべき
+  raise ArgumentError, 'http redirect too deep' if limit == 0
+
+  response = Net::HTTP.get_response(*split_uri(uri_str))
+  case response
+  when Net::HTTPSuccess     then response
+  when Net::HTTPRedirection then fetch(response['location'], limit - 1)
+  else
+    response.error!
+  end
+end
+
+def split_uri( uri_str )
+  m = %r&lt;http://([^/]+)&gt;.match(uri_str) or raise ArgumentError, &quot;cannot parse URI: #{uri_str}&quot;
+  host = m[1].strip
+  path = m.post_match
+  path = '/' if path.empty?
+  return host, path
+end
+
+print fetch('http://www.ruby-lang.org')</pre>
+<h3><a name="L003877" id="L003877">Basic 認証</a></h3>
+<pre>require 'net/http'
+Net::HTTP.version_1_2   # おまじない
+
+req = Net::HTTP::Get.new('/need-auth.cgi')
+req.basic_auth 'account', 'password'
+Net::HTTP.start('www.example.com') {|http|
+  response = http.request(req)
+  print response.body
+}</pre>
+<h2><a name="L003878" id="L003878">新しい仕様への変更と移行措置について</a></h2>
+<p>Ruby 1.6 に入っているのが net/http 1.1 で 1.7 以降が 1.2 ですが、
+この間ではかなり大きく仕様が変わります。そこで突然に仕様を変更
+するのでなく、両方の実装を並存させる時期を設けることにしました。</p>
+<p>メソッド HTTP.version_1_2、HTTP.version_1_1 を呼ぶと
+そのあとに生成される Net::HTTP オブジェクトはそれぞれの
+バージョンの仕様で動作するようになります。以下は使用例です。</p>
+<pre># example
+Net::HTTP.start {|http1| ...(http1 has 1.2 features)... }
+
+Net::HTTP.version_1_1
+Net::HTTP.start {|http2| ...(http2 has 1.1 features)... }
+
+Net::HTTP.version_1_2
+Net::HTTP.start {|http3| ...(http3 has 1.2 features)... }</pre>
+<p>つまり Ruby 1.6 でも Net::HTTP.version_1_2 を呼べば 1.2 の挙動になりますし、
+大半のメソッドは呼べます (Ruby 1.8 でもメソッドが増えているので全てではありません)。
+Ruby 1.8 でも Net::HTTP.version_1_1 を呼べば元の挙動にできるので、後方互換性を
+保つことができます。</p>
+<p>ただし、この機能はスレッドセーフではありません。
+つまり、複数スレッドでそれぞれに version_1_1 や version_1_2 を呼んだ場合、
+次に生成する Net::HTTP オブジェクトがどちらのバージョンになるかは保証できません。
+アプリケーション全体でどちらかのバージョンに固定する必要があります。</p>
+<p>なおどちらを使うかですが、これから書くなら断然 version_1_2 です。
+require 'net/http' 直後に Net::HTTP.version_1_2 を呼んで
+1.1 のことは忘れてください。</p>
+<h2><a name="L003879" id="L003879">例外</a></h2>
+<p>get、head、post メソッドで発生する HTTP プロトコル関連の例外として、
+以下に挙げるものがあります。
+ここに挙げる例外クラスの親クラスはすべて Net::ProtocolError クラスで、
+response メソッドによってエラーの原因となったレスポンスオブジェクトを
+得ることができます。</p>
+<ul>
+<li><p>ProtoRetriableError</p>
+<p>HTTP ステータスコード 3xx を受け取った時に発生します。
+リソースが移動したなどの理由により、リクエストを完了させるには更な
+るアクションが必要になります。</p></li>
+<li><p>ProtoFatalError</p>
+<p>HTTP ステータスコード 4xx を受け取った時に発生します。
+クライアントのリクエストに誤りがあるか、サーバにリクエストを拒否さ
+れた(認証が必要、リソースが存在しないなどで)ことを示します。</p></li>
+<li><p>ProtoServerError</p>
+<p>HTTP ステータスコード 5xx を受け取った時に発生します。
+サーバがリクエストを処理中にエラーが発生したことを示します。</p></li>
+<li><p>ProtoUnknownError</p>
+<p>プロトコルのバージョンが上がった、あるいはライブラリのバグなどで、
+ライブラリが対応していない状況が発生しました。</p></li>
+</ul>
+<h2><a name="L003880" id="L003880">フォームの値の区切り文字について</a></h2>
+<p>POSTで application/x-www-form-urlencoded として複数のフォームの値を送る場合、
+現在広く行なわれているのは、 name0=value0&amp;name1=value1 のようにアンパサンド 
+`&amp;' で区切るやりかたです。
+この方法は、RFC1866 Hypertext Markup Language - 2.0 で初めて公式に登場し、
+HTML 4.01 Specification の 
+<a href="http://www.w3.org/TR/html401/interact/forms.html#h-17.13.4.1">17.13.4 Form content types</a><sup class="outside"><small>[外部]</small></sup> 
+でもそのように書かれています。</p>
+<p>ところが、同じ HTML 4.01 Specification の
+<a href="http://www.w3.org/TR/html401/appendix/notes.html#h-B.2.2">B.2.2 Ampersands in URI attribute values</a><sup class="outside"><small>[外部]</small></sup>
+では、この `&amp;' がSGMLの文字実体参照で用いられることが指摘されており、
+CGIやサーバの実装者に対し `&amp;' の代わりに
+セミコロン `;' をサポートすることを奨めています。</p>
+<p>しかし、実際には `;' を解釈しないCGIやサーバもまだまだ見受けられるため
+このリファレンスマニュアルでは例として `&amp;' を用いました。</p>
+<p>なお Ruby 標準の <a href="refm171.html">cgi</a> ライブラリでは &amp; と ; の両方サポートしていますので、
+<a href="refm171.html">cgi</a> ライブラリを使って CGI スクリプトを書く場合はこれらの違いを気にする
+必要はありません。</p>
+<h2><a name="L003881" id="L003881">参考</a></h2>
+<ul>
+<li><a href="http://jp.rubyist.net/magazine/">Rubyist Magazine</a><sup class="outside"><small>[外部]</small></sup>
+<ul>
+<li><a href="http://jp.rubyist.net/magazine/?0013-BundledLibraries">標準添付ライブラリ紹介【第 7 回】 net/http</a><sup class="outside"><small>[外部]</small></sup></li>
+</ul></li>
+</ul>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm202.html">&lt;-PREV</a>][<a href="refm204.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

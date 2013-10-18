@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>trap::String</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm441.html" rel="next" />
+<link href="refm439.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm421.html">UP</a>][<a href="refm439.html">&lt;-PREV</a>][<a href="refm441.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L009483" id="L009483">String</a></h1>
+<ul>
+<li><p>String#<a href="refm061.html#L001542">split</a>は最後の空文字列を削除するので…。</p>
+<pre>string = &quot;&quot;
+p string.split(//) #=&gt; []</pre>
+<p>つねにStringが返るとは限りません。</p>
+<p>最後の空文字列を取り除きたくない場合は、第2引数を指定します。</p>
+<pre>string = &quot;&quot;
+p string.split(//, -1) #=&gt; [&quot;&quot;]</pre>
+<p>ただし、この場合以下のようになることに注意。</p>
+<pre>string = &quot;abc&quot;
+p string.split(//, -1) #=&gt; [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;&quot;]</pre></li>
+<li><p>String#<a href="refm061.html#L001465">[]</a> は、引数が1つの整数の場合は、整数を返します。文字列ではありません。</p>
+<pre>p 'hoge'[2, 1] # =&gt; &quot;g&quot;
+p 'hoge'[2] # =&gt; 103</pre></li>
+<li><p>全角半角の変換で、全角を半角アルファベットにしたいんだけど tr(&quot;Ａ-Ｚ&quot;,&quot;A-Z&quot;)ができないのはなぜ？ </p>
+<p>jcode を require しましょう。</p>
+<pre>$ ruby -Ke -rjcode -e 'p &quot;Ａ-Ｚ&quot;.tr(&quot;Ａ-Ｚ&quot;,&quot;A-Z&quot;)'
+&quot;A-Z&quot;</pre></li>
+</ul>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm421.html">UP</a>][<a href="refm439.html">&lt;-PREV</a>][<a href="refm441.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

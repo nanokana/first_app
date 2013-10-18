@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>trap::型変換</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm427.html" rel="next" />
+<link href="refm425.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm421.html">UP</a>][<a href="refm425.html">&lt;-PREV</a>][<a href="refm427.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L009454" id="L009454">型変換</a></h1>
+<ul>
+<li>nil.to_aは<code>[nil]</code>ではなく<code>[]</code>となる。</li>
+<li>nil.to_s は <code>&quot;&quot;</code> なのに、<code>puts nil</code> や <code>print nil</code> が <code>nil</code> を表示する。</li>
+<li><p>16 進数文字列を 10 進数文字列に変換する</p>
+<pre>i = &quot;f&quot;.hex
+print i, &quot;-&gt;&quot; ,format(&quot;%x&quot;,i)</pre></li>
+<li><p>oct の挙動</p>
+<p>String#oct は文字列の形式により8進以外への変換を行う</p>
+<pre>p '0b10'.oct #=&gt; 2
+p   '10'.oct #=&gt; 8
+p  '010'.oct #=&gt; 8
+p '0x10'.oct #=&gt; 16</pre>
+<p>String#hex は常に16進変換を行う</p>
+<pre>p '0b10'.hex #=&gt; 2832
+p   '10'.hex #=&gt; 16
+p  '010'.hex #=&gt; 16
+p '0x10'.hex #=&gt; 16</pre></li>
+<li><p>配列への nil の挿入</p>
+<pre>a = [1,2,3]
+a[1,1] = nil  # a[1.1] = nil.to_a を行っている
+p a # [1,3]
+
+a = [1,2,3]
+a[1,1] = [nil]
+p a # [1,nil,3]</pre>
+<p>これは、nil.to_a が [] (空の配列)を返すために起こります。
+ちなみに nil.to_s は &quot;&quot; (空の文字列)を返します。</p></li>
+<li><p>数値演算の誤差<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/25173">ruby-list:25173</a><sup class="outside"><small>[外部]</small></sup>(Rubyに限らない)</p>
+<pre>(500.5 * 1).round   #=&gt; 501
+(500 * 1.001).round #=&gt; 500
+
+printf &quot;%10.20f\n&quot;, (500.5)     #=&gt; 500.50000000000000000000
+printf &quot;%10.20f\n&quot;, (500*1.001) #=&gt; 500.49999999999994315658</pre></li>
+</ul>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm421.html">UP</a>][<a href="refm425.html">&lt;-PREV</a>][<a href="refm427.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

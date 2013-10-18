@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Proc</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm058.html" rel="next" />
+<link href="refm056.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm035.html">UP</a>][<a href="refm056.html">&lt;-PREV</a>][<a href="refm058.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L001369" id="L001369">Proc</a></h1>
+<p><code>Proc</code> はブロックをコンテキスト(ローカル変数のスコープやスタックフ
+レーム)とともにオブジェクト化した手続きオブジェクトです。<code>Proc</code> は
+ローカル変数のスコープを導入しないことを除いて名前のない関数のように使
+えます(<a href="refm477.html#L009720">ダイナミックローカル変数</a>は <code>Proc</code> ローカル
+の変数として使えます)。</p>
+<p><code>Proc</code> がローカル変数のスコープを保持していることは以下の例で
+変数 var を参照できていることからわかります。</p>
+<pre>var = 1
+$foo = Proc.new { var }
+var = 2
+
+def foo
+  $foo.call
+end
+
+p foo       # =&gt; 2</pre>
+<p><code>Proc</code> を生成したメソッドからリターンしてしまった後は <code>Proc</code> 
+からの <a href="refm026.html#L000401">return</a>, <a href="refm026.html#L000395">retry</a> は例外 
+<a href="refm099.html">LocalJumpError</a> を発生させます。</p>
+<pre>def foo
+  proc { return }
+end
+
+foo.call
+# =&gt; in `call': return from proc-closure (LocalJumpError)
+
+def foo
+  proc { retry }
+end
+
+foo.call
+# =&gt; in `call': retry from proc-closure (LocalJumpError)</pre>
+<p>ブロック付きメソッドに対して <code>Proc</code> オブジェクトを `&amp;' を指定して渡すと
+呼び出しブロックのように動作しますが、厳密には以下の違いがあります
+<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a>。</p>
+<pre># 問題なし
+(1..5).each { break }
+
+# ruby 1.6.7, 1.8 で問題なし。1.6.8 では例外
+proc = Proc.new { break }
+(1..5).each(&amp;proc)
+
+# ruby 1.6 では、LocalJumpError
+# ruby 1.8 では、each 再実行
+proc = Proc.new { retry }
+(1..5).each(&amp;proc)
+#=&gt; retry from proc-closure (LocalJumpError)</pre>
+<p>これは、<code>Proc</code> オブジェクトが呼び出しブロックとして振舞う際の制限です。</p>
+<h2><a name="L001370" id="L001370">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm035.html">Object</a></li>
+</ul>
+<h2><a name="L001371" id="L001371">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L001372" id="L001372"><code>Proc.new</code></a>
+<dt><a name="L001373" id="L001373"><code>Proc.new { ... }</code></a></dt>
+<dd>
+<p>ブロックをコンテキストとともにオブジェクト化して返します。</p>
+<p>ブロックを指定しなければ、このメソッドを呼び出したメソッドがブロッ
+クを伴うときに、それを <code>Proc</code> オブジェクトとして生成して返しま
+す。</p>
+<pre>def foo
+   pr = Proc.new
+   pr.call(1,2,3)
+end
+foo {|args| p args }
+# =&gt; [1, 2, 3]</pre>
+<p>これは以下と同じです(厳密には引数の解釈の仕方が異なります。
+<a href="#L001381">Proc#yield</a> を参照してください)。</p>
+<pre>def foo
+  yield(1,2,3)
+end
+foo {|args| p args }
+# =&gt; [1, 2, 3]</pre>
+<p>呼び出し元のメソッドがブロックを伴わなければ、例外 
+<a href="refm094.html">ArgumentError</a> が発生します。</p>
+<pre>def foo
+  Proc.new
+end
+foo
+# =&gt; -:2:in `new': tried to create Proc object without a block (ArgumentError)
+          from -:2:in `foo'
+          from -:4</pre>
+<p><code>Proc.new</code> は、<code>Proc#initialize</code> が定義されていれば
+オブジェクトの初期化のためにこれを呼び出します。このことを
+除けば、<a href="refm029.html#L000469">proc</a> と同じです。</p></dd>
+</dl>
+<h2><a name="L001374" id="L001374">メソッド:</a></h2>
+<dl>
+<dt><a name="L001375" id="L001375"><code>self[arg ...]</code></a>
+<dt><a name="L001376" id="L001376"><code>call(<var>arg</var> ... )</code></a></dt>
+<dd>
+<p>手続きオブジェクトを実行してその結果を返します。引数はブロックの引
+数にそのまま(多重代入のルールに従い)代入されます。</p></dd>
+<dt><a name="L001377" id="L001377"><code>arity</code></a></dt>
+<dd>
+<p><code>Proc</code>オブジェクトの引数の数を返します。<code>self</code> が引数の数
+を可変長で受け取れる場合</p>
+<pre>-(最低限必要な数+1)</pre>
+<p>を返します。</p></dd>
+<dt><a name="L001378" id="L001378"><code>binding     ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p><code>Proc</code> オブジェクトが保持するコンテキストを <a href="refm037.html">Binding</a> オブ
+ジェクトで返します。</p></dd>
+<dt><a name="L001379" id="L001379"><code>to_proc     ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p><code>self</code> を返します。</p></dd>
+<dt><a name="L001380" id="L001380"><code>to_s        ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p><code>self</code> の文字列表現を返します。可能なら <code>self</code> を生成した
+ソースファイル名、行番号を含みます。</p>
+<pre>p Proc.new {
+
+  true
+}.to_s
+
+=&gt; &quot;#&lt;Proc:0x0x401a880c@-:3&gt;&quot;</pre></dd>
+<dt><a name="L001381" id="L001381"><code>yield(<var>arg</var> ... )</code></a></dt>
+<dd>
+<p><a href="refm384.html">ruby 1.7 feature</a></p>
+<p><a href="#L001376">Proc#call</a> と同じですが、引数の数のチェックを行いません。</p>
+<pre>pr = Proc.new {|a,b,c| p [a,b,c]}
+pr.yield(1)        #=&gt; [1, nil, nil]
+pr.yield(1,2,3,4)  #=&gt; [1, 2, 3]
+pr.call(1)         #=&gt; wrong # of arguments (4 for 3) (ArgumentError)</pre>
+<p>これは <a href="refm027.html#L000408">yield</a> と同じ動作です。</p>
+<pre>def foo
+  yield(1)
+end
+foo {|a,b,c| p [a,b,c]}</pre></dd>
+</dl>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>2002-02-20: break に関しては現在 1.6、1.7 共にこの制限はありません
+が、まだ流動的なようです <a href="http://www.ruby-lang.org/cgi-bin/ruby-bugs-ja?selectid=98">ruby-bugs-ja:PR#98</a><sup class="outside"><small>[外部]</small></sup>,
+2003-03-12: <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/19799">ruby-dev:19799</a><sup class="outside"><small>[外部]</small></sup></small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm035.html">UP</a>][<a href="refm056.html">&lt;-PREV</a>][<a href="refm058.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

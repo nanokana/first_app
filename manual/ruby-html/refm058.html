@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Process::Status</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm059.html" rel="next" />
+<link href="refm057.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm035.html">UP</a>][<a href="refm057.html">&lt;-PREV</a>][<a href="refm059.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L001383" id="L001383">Process::Status</a></h1>
+<p><a href="refm384.html">ruby 1.7 feature</a></p>
+<p><a href="refm081.html#L002076">Process.wait</a> などで生成されるオブジェクト。プロセスの終
+了ステータスを表現します。</p>
+<h2><a name="L001384" id="L001384">メソッド</a></h2>
+<dl>
+<dt><a name="L001385" id="L001385"><code><var>self</var> == <var>other</var></code></a></dt>
+<dd>
+<p>同じステータスの場合に真を返します。</p>
+<p><var>other</var> が数値の場合、<code>self.to_i</code> との比較が行われます。こ
+れは後方互換性のためです。</p></dd>
+<dt><a name="L001386" id="L001386"><code><var>self</var> &amp; <var>other</var></code></a></dt>
+<dd>
+<p><code>to_i &amp; other</code> と同じです。</p>
+<p>このメソッドは後方互換性のためにあります。</p></dd>
+<dt><a name="L001387" id="L001387"><code>pid</code></a></dt>
+<dd>
+<p>終了したプロセスのプロセス ID を返します。</p></dd>
+<dt><a name="L001388" id="L001388"><code>to_i</code></a></dt>
+<dd>
+<p>C 言語での終了ステータス表現の整数を返します。</p>
+<p>多くのシステムの実装では、この値の上位 8 bit に <a href="refm535.html">exit(2)</a> 
+に渡した終了ステータスが、下位 8 bit にシグナル等で終了した等の情
+報が入っています。</p></dd>
+<dt><a name="L001389" id="L001389"><code>to_int</code></a></dt>
+<dd>
+<p><code>to_i</code> と同じです。このメソッドにより <code>$?</code> が <a href="refm055.html">Fixnum</a> 
+として扱われるようになります(暗黙の型変換)。これは後方互換性のため
+です。</p>
+<pre>fork { exit 1 }
+Process.wait
+p $? # =&gt; 256</pre></dd>
+<dt><a name="L001390" id="L001390"><code>to_s</code></a></dt>
+<dd>
+<p><code>to_i.to_s</code> と同じです。</p></dd>
+<dt><a name="L001391" id="L001391"><code>exited?</code></a></dt>
+<dd>
+<p>プロセスが <a href="refm535.html">exit(2)</a> により自分で終了した(他のプロ
+セスに止められたのではない)場合、真を返します。</p></dd>
+<dt><a name="L001392" id="L001392"><code>exitstatus</code></a></dt>
+<dd>
+<p><code>exited?</code> が真の場合プロセスが返した終了ステータスの整数を、そ
+うでない場合は <code>nil</code> を返します。</p></dd>
+<dt><a name="L001393" id="L001393"><code>inspect     ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>プロセスの状態を以下のフォーマットで出力します。</p>
+<pre>正常終了のとき
+
+#&lt;Process::Status: pid=18262,exited(nnn)&gt;
+
+シグナルによる停止のとき
+
+#&lt;Process::Status: pid=18262,stopped(SIGxxx=nnn)&gt;
+
+シグナルによる終了のとき
+
+#&lt;Process::Status: pid=18262,signaled(SIGxxx=nnn)&gt;
+
+コアダンプしたとき(このステータスの表示はシステムに依存します)
+
+#&lt;Process::Status: pid=18262,coredumped&gt;</pre></dd>
+<dt><a name="L001394" id="L001394"><code>stopped?</code></a></dt>
+<dd>
+<p>プロセスが現在停止(終了ではない)している場合に真を返します。
+<code>Process.waitpid</code> に <code>Process::WUNTRACED</code> フラグを設定した
+場合にだけ真になりえます。</p></dd>
+<dt><a name="L001395" id="L001395"><code>stopsig</code></a></dt>
+<dd>
+<p><code>stopped?</code> が真の場合そのシグナルの番号を、そうでない場合は 
+<code>nil</code> を返します。</p></dd>
+<dt><a name="L001396" id="L001396"><code>signaled?</code></a></dt>
+<dd>
+<p>プロセスがハンドラを定義していないシグナルを受けて終了した場合に真
+を返します。</p></dd>
+<dt><a name="L001397" id="L001397"><code>termsig</code></a></dt>
+<dd>
+<p><code>signaled?</code> が真の場合プロセスを終了させたシグナル番号を、
+そうでない場合は <code>nil</code> を返します。</p></dd>
+<dt><a name="L001398" id="L001398"><code>coredump?</code></a></dt>
+<dd>
+<p>終了時にコアダンプしていたら真を返します。</p>
+<p>(このメソッドはシステムに依存します。サポートしないプラットフォー
+ムでは常に false を返します)</p></dd>
+</dl>
+<h2><a name="L001399" id="L001399">使用例</a></h2>
+<p>wait を使用した例</p>
+<pre>fork { exit }
+Process.wait
+case
+when $?.signaled?
+  p &quot;child #{$?.pid} was killed by signal #{$?.termsig}&quot;
+when $?.stopped?
+  # 実際には Process.wait を使用しているので、ここに来ることはない
+  p &quot;child #{$?.pid} was stopped by signal #{$?.stopsig}&quot;
+when $?.exited?
+  p &quot;child #{$?.pid} exited normaly. status=#{$?.exitstatus}&quot;
+when $?.coredump?   # システムがこのステータスをサポートしてなければ常にfalse
+  p &quot;child #{$?.pid} dumped core.&quot;
+else
+  p &quot;unknown status %#x&quot; % $?.to_i
+end</pre>
+<p>SIGCHLD を trap する例</p>
+<pre>trap(:SIGCHLD) {|sig|
+
+  puts &quot;interrupted by signal #{sig} at #{caller[1]}&quot;
+  # 複数の子プロセスの終了に対して1つの SIGCHLD しか届かない
+  # 場合があるのでループさせる必要があります
+
+  while Process.waitpid(-1, Process::WNOHANG|Process::WUNTRACED)
+    case
+    when $?.signaled?
+      puts &quot;   child #{$?.pid} was killed by signal #{$?.termsig}&quot;
+    when $?.stopped?
+      puts &quot;   child #{$?.pid} was stopped by signal #{$?.stopsig}&quot;
+    when $?.exited?
+      puts &quot;   child #{$?.pid} exited normaly. status=#{$?.exitstatus}&quot;
+    when $?.coredump?
+      puts &quot;   child #{$?.pid} dumped core.&quot;
+    else
+      p &quot;unknown status %#x&quot; % $?.to_i
+    end
+  end
+}
+
+p pid1 = fork { sleep 1; exit }
+p pid2 = fork { loop { sleep } } # signal を待つための sleep
+begin
+   Process.kill :STOP, pid2
+   sleep                      # SIGCHLD を待つための sleep
+   Process.kill :CONT, pid2
+   Process.kill :TERM, pid2
+   loop { sleep }             # SIGCHLD を待つための sleep
+rescue Errno::ECHILD
+  puts &quot;done&quot;
+end
+
+=&gt; 12964
+   12965
+   interrupted by signal 17 at -:27:in `sleep'
+      child 12965 was stopped by signal 19
+   interrupted by signal 17 at -:30:in `sleep'
+      child 12965 was killed by signal 15
+   interrupted by signal 17 at -:30:in `sleep'
+      child 12964 exited normaly. status=0
+   done</pre>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm035.html">UP</a>][<a href="refm057.html">&lt;-PREV</a>][<a href="refm059.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>trap::Regexp</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm440.html" rel="next" />
+<link href="refm438.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm421.html">UP</a>][<a href="refm438.html">&lt;-PREV</a>][<a href="refm440.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L009481" id="L009481">Regexp</a></h1>
+<ul>
+<li><p>\wに日本語文字も含まれるが、$KCODEを適切に設定するか、
+  個別に指定する必要がある。
+  (\bは\wと\Wを表す幅0の正規表現。)</p>
+<pre># euc-jpの環境の場合
+/a\b/ === 'あaあ'  #=&gt; 2
+/\ba/ === 'あaあ'  #=&gt; nil
+/\ba/e === 'あaあ' #=&gt; nil
+/\ba/e === 'あaあ' #=&gt; nil
+
+# Shift_JISの環境の場合
+/a\b/ === 'あaあ'  #=&gt; 3
+/\ba/ === 'あaあ'  #=&gt; nil
+/\ba/s === 'あaあ' #=&gt; nil
+/\ba/s === 'あaあ' #=&gt; nil</pre></li>
+<li><p>Regexp#eql?とRegexp#hashは定義されていない
+  (Object#eql?とObject#hashが使われる)ので、
+  Hashのキーには向いていません。</p>
+<pre>//.eql? // #=&gt; false
+
+2003-05-07: 現在は定義されています。
+
+p(//.eql?(//))
+=&gt; ruby 1.6.8 (2002-12-24) [i586-linux]
+   false
+=&gt; ruby 1.7.3 (2002-12-11) [i586-linux]
+   false
+=&gt; ruby 1.8.0 (2002-12-31) [i586-linux]
+   true</pre></li>
+<li><p>ある文字列を含む正規表現を作る場合には
+  <a href="refm060.html#L001425">Regexp#quote</a>する必要があります。
+  <a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></p>
+<pre>a = 'a.c'
+/^#{a}$/ === 'abc'              #=&gt; 0   (マッチした)
+/^#{Regexp.quote a}$/ === 'abc' #=&gt; nil (マッチしない)</pre></li>
+<li><p>Perlでは正規表現 $ にマッチできる箇所が文字列末尾の &quot;\n&quot; の中に2カ所
+  ありますが、Rubyでは1カ所しかありません。(が、ruby 1.8 で Perl に
+  従うようになりました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/20125">ruby-dev:20125</a><sup class="outside"><small>[外部]</small></sup>)</p>
+<pre># Perl では $ は改行の前と文字列末尾にマッチする
+% perl -e '$s = &quot;\n&quot;; $s =~ s/$/o/g;   print &quot;[$s]\n&quot;;'
+[o
+o]
+
+# Ruby では $ は改行の前にしかマッチしない
+% ruby -e '$s = &quot;\n&quot;; $s.gsub!(/$/, &quot;o&quot;); print &quot;[#$s]\n&quot;'
+[o
+]
+
+% ruby-1.8.0-2003-05-01 -v -e '$s = &quot;\n&quot;; $s.gsub!(/$/, &quot;o&quot;); print &quot;[#$s]\n&quot;'
+ruby 1.8.0 (2003-05-01) [i586-linux]
+[o
+o]</pre></li>
+</ul>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>セキュリティホールになる可能性もあるので十分注意してください。</small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm421.html">UP</a>][<a href="refm438.html">&lt;-PREV</a>][<a href="refm440.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>WEBrick::HTTPVersion</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm185.html" rel="next" />
+<link href="refm183.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm173.html">UP</a>][<a href="refm183.html">&lt;-PREV</a>][<a href="refm185.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L003640" id="L003640">WEBrick::HTTPVersion</a></h1>
+<p>HTTP のバージョンのための小さなクラス。</p>
+<h2><a name="L003641" id="L003641">インクルードしているモジュール</a></h2>
+<p><a href="refm069.html">Comparable</a></p>
+<h2><a name="L003642" id="L003642">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L003643" id="L003643"><code>HTTPVersion.new(<var>version</var>)</code></a></dt>
+<dd>
+<p>HTTPVersion オブジェクトを生成する。version は文字列か HTTPVersion オブジェクト。</p></dd>
+<dt><a name="L003644" id="L003644"><code>HTTPVersion.convert(<var>version</var>)</code></a></dt>
+<dd>
+<p>version が文字列の場合は HTTPVersion.new(version) を返す。
+version が HTTPVersion オブジェクトの場合はそのまま version を返す。</p></dd>
+</dl>
+<h2><a name="L003645" id="L003645">メソッド</a></h2>
+<dl>
+<dt><a name="L003646" id="L003646"><code>&lt;=&gt;(<var>other</var>)</code></a></dt>
+<dd>
+<p>HTTPVersion オブジェクト other とのバージョンを比較する。
+other より新しいなら 1、同じなら 0、古いなら -1 を返す。</p></dd>
+<dt><a name="L003647" id="L003647"><code>major</code></a>
+<dt><a name="L003648" id="L003648"><code>major=</code></a></dt>
+<dd>
+<p>HTTP バージョンのメジャーを整数で設定する。</p></dd>
+<dt><a name="L003649" id="L003649"><code>minor</code></a>
+<dt><a name="L003650" id="L003650"><code>minor=</code></a></dt>
+<dd>
+<p>HTTP バージョンのマイナーを整数で設定する。</p></dd>
+<dt><a name="L003651" id="L003651"><code>to_s</code></a></dt>
+<dd>
+<p>文字列に変換する。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm173.html">UP</a>][<a href="refm183.html">&lt;-PREV</a>][<a href="refm185.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>WEBrick::HTTPAuth</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm180.html" rel="next" />
+<link href="refm178.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm173.html">UP</a>][<a href="refm178.html">&lt;-PREV</a>][<a href="refm180.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L003587" id="L003587">WEBrick::HTTPAuth</a></h1>
+<p><a href="refm002.html">執筆者募集</a></p>
+<p><a href="http://shogo.homelinux.org/~ysantoso/webrickguide/html/HTTP_Authentication.html">&lt;URL:http://shogo.homelinux.org/~ysantoso/webrickguide/html/HTTP_Authentication.html&gt;</a><sup class="outside"><small>[外部]</small></sup></p>
+<ul>
+<li><a href="refm180.html">WEBrick::HTTPAuth::BasicAuth</a></li>
+<li><a href="refm181.html">WEBrick::HTTPAuth::DigestAuth</a></li>
+<li><a href="refm182.html">WEBrick::HTTPAuth::Htpasswd</a></li>
+<li><a href="refm183.html">WEBrick::HTTPAuth::Htdigest</a></li>
+<li><a href="refm191.html">WEBrick::HTTPAuth::Htgroup</a></li>
+</ul>
+<h2><a name="L003588" id="L003588">モジュール関数</a></h2>
+<dl>
+<dt><a name="L003589" id="L003589"><code>HTTPAuth.basic_auth(<var>req</var>, <var>res</var>, <var>realm</var>){|<var>user</var>, <var>pass</var>| ... }</code></a></dt>
+<dd>
+<p>Basic 認証を行う。ブロックは user, pass を引数として呼ばれ、
+ブロックが true を返すとユーザを認証したことになる。
+ブロックが false を返すと認証に失敗し、
+例外 WEBrick::HTTPStatus::Unauthorized を投げる。</p>
+<pre>srv.mount_proc('/basic_auth') {|req, res| 
+  HTTPAuth.basic_auth(req, res, &quot;WEBrick's realm&quot;) {|user, pass|
+    user == 'webrick' &amp;&amp; pass == 'supersecretpassword'
+  }     
+  res.body = &quot;hoge&quot;
+}</pre></dd>
+<dt><a name="L003590" id="L003590"><code>HTTPAuth.proxy_basic_auth(<var>req</var>, <var>res</var>, <var>realm</var>){|<var>user</var>, <var>pass</var>| ... }</code></a></dt>
+<dd>
+<p>プロクシー <a href="refm176.html">WEBrick::HTTPProxyServer</a> のための Basic 認証を行う。
+ブロックは user, pass を引数として呼ばれ、
+ブロックが true を返すとユーザを認証したことになる。
+ブロックが false を返すと認証に失敗し、例外
+WEBrick::HTTPStatus::ProxyAuthenticationRequired を投げる。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm173.html">UP</a>][<a href="refm178.html">&lt;-PREV</a>][<a href="refm180.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>疑似BNFによるRubyの文法</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm479.html" rel="next" />
+<link href="refm477.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm477.html">&lt;-PREV</a>][<a href="refm479.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L009777" id="L009777">疑似BNFによるRubyの文法</a></h1>
+<p>以下に疑似BNFによるRubyの文法を示します。より詳しくは parse.y を
+参照してください。<code>sample/exyacc.rb</code>を使うと規則だけを取り出せますので
+活用しましょう。</p>
+<p><a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></p>
+<pre>PROGRAM         : COMPSTMT
+
+COMPSTMT        : STMT (TERM EXPR)* [TERM]
+
+STMT            : CALL do [`|' [BLOCK_VAR] `|'] COMPSTMT end
+                | LHS `=' COMMAND [do [`|' [BLOCK_VAR] `|'] COMPSTMT end]
+                | alias FNAME FNAME
+                | undef (FNAME | SYMBOL)+
+                | STMT if EXPR
+                | STMT while EXPR
+                | STMT unless EXPR
+                | STMT until EXPR
+                | STMT rescue STMT
+                | `BEGIN' `{' COMPSTMT `}'
+                | `END' `{' COMPSTMT `}'
+                | EXPR
+
+EXPR            : MLHS `=' MRHS
+                | return CALL_ARGS
+                | EXPR and EXPR
+                | EXPR or EXPR
+                | not EXPR
+                | COMMAND
+                | `!' COMMAND
+                | ARG
+
+CALL            : FUNCTION
+                | COMMAND
+
+COMMAND         : OPERATION CALL_ARGS
+                | PRIMARY `.' FNAME CALL_ARGS
+                | PRIMARY `::' FNAME CALL_ARGS
+                | super CALL_ARGS
+                | yield CALL_ARGS
+
+FUNCTION        : OPERATION [`(' [CALL_ARGS] `)']
+                | PRIMARY `.' FNAME `(' [CALL_ARGS] `)'
+                | PRIMARY `::' FNAME `(' [CALL_ARGS] `)'
+                | PRIMARY `.' FNAME
+                | PRIMARY `::' FNAME
+                | super [`(' [CALL_ARGS] `)']
+
+ARG             : LHS `=' ARG
+                | LHS OP_ASGN ARG
+                | ARG `..' ARG
+                | ARG `...' ARG
+                | ARG `+' ARG
+                | ARG `-' ARG
+                | ARG `*' ARG
+                | ARG `/' ARG
+                | ARG `%' ARG
+                | ARG `**' ARG
+                | `+' ARG
+                | `-' ARG
+                | ARG `|' ARG
+                | ARG `^' ARG
+                | ARG `&amp;' ARG
+                | ARG `&lt;=&gt;' ARG
+                | ARG `&gt;' ARG
+                | ARG `&gt;=' ARG
+                | ARG `&lt;' ARG
+                | ARG `&lt;=' ARG
+                | ARG `==' ARG
+                | ARG `===' ARG
+                | ARG `!=' ARG
+                | ARG `=~' ARG
+                | ARG `!~' ARG
+                | `!' ARG
+                | `~' ARG
+                | ARG `&lt;&lt;' ARG
+                | ARG `&gt;&gt;' ARG
+                | ARG `&amp;&amp;' ARG
+                | ARG `||' ARG
+                | defined? ARG
+                | PRIMARY
+
+PRIMARY         : `(' COMPSTMT `)'
+                | LITERAL
+                | VARIABLE
+                | PRIMARY `::' identifier
+                | `::' identifier
+                | PRIMARY `[' [ARGS] `]'
+                | `[' [ARGS [`,']] `]'
+                | `{' [(ARGS|ASSOCS) [`,']] `}'
+                | return [`(' [CALL_ARGS] `)']
+                | yield [`(' [CALL_ARGS] `)']
+                | defined? `(' ARG `)'
+                | FUNCTION
+                | FUNCTION `{' [`|' [BLOCK_VAR] `|'] COMPSTMT `}'
+                | if EXPR THEN
+                  COMPSTMT
+                  (elsif EXPR THEN COMPSTMT)*
+                  [else COMPSTMT]
+                  end
+                | unless EXPR THEN
+                  COMPSTMT
+                  [else COMPSTMT]
+                  end
+                | while EXPR DO COMPSTMT end
+                | until EXPR DO COMPSTMT end
+                | case [EXPR]
+                  (when WHEN_ARGS THEN COMPSTMT)+
+                  [else COMPSTMT]
+                  end
+                | for BLOCK_VAR in EXPR DO
+                  COMPSTMT
+                  end
+                | begin
+                  COMPSTMT
+                  [rescue [ARGS] [`=&gt;' LHS] THEN COMPSTMT]+
+                  [else COMPSTMT]
+                  [ensure COMPSTMT]
+                  end
+                | class identifier [`&lt;' identifier]
+                  COMPSTMT
+                  end
+                | module identifier
+                  COMPSTMT
+                  end
+                | def FNAME ARGDECL
+                  COMPSTMT
+                  [rescue [ARGS] [`=&gt;' LHS] THEN COMPSTMT]+
+                  [else COMPSTMT]
+                  [ensure COMPSTMT]
+                  end
+                | def SINGLETON (`.'|`::') FNAME ARGDECL
+                  COMPSTMT
+                  end
+
+WHEN_ARGS       : ARGS [`,' `*' ARG]
+                | `*' ARG
+
+THEN            : TERM
+                | then
+                | TERM then
+
+DO              : TERM
+                | do
+                | TERM do
+
+BLOCK_VAR       : LHS
+                | MLHS
+
+MLHS            : MLHS_ITEM `,' MLHS_ITEM [(`,' MLHS_ITEM)*] [`,' `*' [LHS]]
+                | MLHS_ITEM `,' `*' [LHS]
+                | MLHS_ITEM [(`,' MLHS_ITEM)*] `,'
+                | `*' [LHS]
+                | `(' MLHS `)'
+
+MLHS_ITEM       : LHS
+                | '(' MLHS ')'
+
+LHS             : VARNAME
+                | PRIMARY `[' [ARGS] `]'
+                | PRIMARY `.' identifier
+
+MRHS            : ARGS [`,' `*' ARG]
+                | `*' ARG
+
+CALL_ARGS       : ARGS
+                | ARGS [`,' ASSOCS] [`,' `*' ARG] [`,' `&amp;' ARG]
+                | ASSOCS [`,' `*' ARG] [`,' `&amp;' ARG]
+                | `*' ARG [`,' `&amp;' ARG]
+                | `&amp;' ARG
+                | COMMAND
+
+ARGS            : ARG (`,' ARG)*
+
+ARGDECL         : `(' ARGLIST `)'
+                | ARGLIST TERM
+
+ARGLIST         : identifier(`,'identifier)*[`,'`*'[identifier]][`,'`&amp;'identifier]
+                | `*'identifier[`,'`&amp;'identifier]
+                | [`&amp;'identifier]
+
+SINGLETON       : VARNAME
+                | self
+                | nil
+                | true
+                | false
+                | `(' EXPR `)'
+
+ASSOCS          : ASSOC (`,' ASSOC)*
+
+ASSOC           : ARG `=&gt;' ARG
+
+VARIABLE        : VARNAME
+                | self
+                | nil
+                | true
+                | false
+                | __FILE__
+                | __LINE__
+
+LITERAL         : numeric
+                | SYMBOL
+                | STRING
+                | HERE_DOC
+                | WORDS
+                | REGEXP
+
+STRING          : LITERAL_STRING+
+
+TERM            : `;'
+                | `\n'</pre>
+<p>以下のものは字句解析機で解釈されます。</p>
+<pre>OP_ASGN         : `+=' | `-=' | `*=' | `/=' | `%=' | `**='
+                | `&amp;=' | `|=' | `^=' | `&lt;&lt;=' | `&gt;&gt;='
+                | `&amp;&amp;=' | `||='
+
+SYMBOL          : `:'FNAME
+                | `:'`@'identifier
+                | `:'`@@'identifier
+                | `:'GLOBAL
+
+FNAME           : OPERATION
+                | `|' | `^' | `&amp;' | `&lt;=&gt;' | `==' | `===' | `=~'
+                | `&gt;' | `&gt;=' | `&lt;' | `&lt;='
+                | `+' | `-' | `*' | `/' | `%' | `**'
+                | `&lt;&lt;' | `&gt;&gt;' | `~' | ``'
+                | `+@' | `-@' | `[]' | `[]='
+                | __LINE__ | __FILE__  | BEGIN | END
+                | alias | and | begin | break | case | class | def
+                | defined | do | else | elsif | end | ensure | false
+                | for | if | in | module | next | nil | not
+                | or | redo | rescue | retry | return | self | super
+                | then | true | undef | unless | until | when
+                | while | yield
+
+OPERATION       : identifier
+                | identifier'!'
+                | identifier'?'
+
+VARNAME         : GLOBAL
+                | `@'identifier
+                | `@@'identifier
+                | identifier
+
+GLOBAL          : `$'identifier
+                | `$'any_char
+                | `$''-'any_char
+
+LITERAL_STRING  : `&quot;' any_char* `&quot;'
+                | `'' any_char* `''
+                | ``' any_char* ``'
+                | `%'(`Q'|`q'|`x')char any_char* char
+
+HERE_DOC        : `&lt;&lt;'(identifier|STRING)
+                  any_char*
+                  identifier
+                | `&lt;&lt;-'(identifier|STRING)
+                  any_char*
+                  space* identifier
+
+WORDS           : `%'`w'char any_char* char
+
+REGEXP          : `/' any_char* `/'[`i'|`m'|`x'|`o'|`e'|`s'|`u'|`n']
+                | `%'`r' char any_char* char</pre>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>このBNFはまだ完全に1.6対応していません。<a href="refm002.html">執筆者募集</a></small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm477.html">&lt;-PREV</a>][<a href="refm479.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

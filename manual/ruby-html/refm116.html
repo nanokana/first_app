@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>StringIO</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm117.html" rel="next" />
+<link href="refm115.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm115.html">&lt;-PREV</a>][<a href="refm117.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L002283" id="L002283">StringIO</a></h1>
+<p><a href="refm045.html">IO</a> と同じインタフェースを持った文字列クラスです。</p>
+<p><a href="refm002.html">執筆者募集</a></p>
+<h2><a name="L002284" id="L002284">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm039.html">Data</a></li>
+</ul>
+<h2><a name="L002285" id="L002285">例外</a></h2>
+<p>StringIO オブジェクトは大抵の場合 IO オブジェクトと同じ例外を発生させます。
+例えば次の例では write は IOError を発生させます。</p>
+<pre>require &quot;stringio&quot;
+sio = StringIO.new(&quot;hoge&quot;)
+sio.close
+sio.write(&quot;a&quot;)
+# =&gt; in `write': not opened for writing (IOError)</pre>
+<h2><a name="L002286" id="L002286">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L002287" id="L002287"><code>StringIO.new(<var>string</var> = '', <var>mode</var> = '<var>r</var>+')</code></a>
+<dt><a name="L002288" id="L002288"><code>StringIO.open(<var>string</var> = '', <var>mode</var> = '<var>r</var>+')</code></a>
+<dt><a name="L002289" id="L002289"><code>StringIO.open(<var>string</var> = '', <var>mode</var> = '<var>r</var>+') {|<var>io</var>| ... }</code></a></dt>
+<dd>
+<p>StringIO オブジェクトを生成します。<var>mode</var> はデフォルトでは読み書き可能に
+設定されます。与えられた <var>string</var> がフリーズされている場合には、
+mode はデフォルトでは読み取りのみに設定されます。</p>
+<p>ブロックを与えた場合は StringIO オブジェクトを引数としてブロックを評価します。</p>
+<pre>require 'stringio'
+
+io = StringIO.new(&quot;foo&quot;)
+p io.getc       # =&gt; 102
+p io.pos        # =&gt; 1
+p io.size       # =&gt; 3
+io &lt;&lt; &quot;bar&quot;
+p io.size       # =&gt; 4
+io.rewind
+p io.gets       # =&gt; &quot;fbar&quot;
+
+StringIO.open(&quot;hoge&quot;){|io| 
+  p io.string   # =&gt; &quot;hoge&quot;
+}</pre></dd>
+</dl>
+<h2><a name="L002290" id="L002290">メソッド:</a></h2>
+<dl>
+<dt><a name="L002291" id="L002291"><code>string</code></a></dt>
+<dd>
+<p>IOバッファ(文字列)を返します。</p></dd>
+<dt><a name="L002292" id="L002292"><code>string= <var>buf</var></code></a></dt>
+<dd>
+<p>IOバッファを <var>buf</var> に変更し、<var>buf</var> を返します。これ以前の
+バッファは捨てられます。StringIO は読み書き両用になります。
+<var>buf</var> がフリーズされている場合には、読み取り専用になります。
+pos と lineno は 0 にセットされます。</p>
+<p><a href="refm389.html">ruby 1.8.3 feature</a>: ruby 1.8.3 からは <var>buf</var> が <code>nil</code> の場合には、例外 TypeError が
+発生します。</p>
+<p>ruby 1.8.2 まで: <var>buf</var> が <code>nil</code> の場合は、StringIO への読み書きは禁止されます。</p></dd>
+<dt><a name="L002293" id="L002293"><code><var>self</var> &lt;&lt; <var>obj</var></code></a></dt>
+<dd>
+<p><a href="refm045.html#L000997">IO#&lt;&lt;</a> と同様です。obj を pos の位置に書き込みます。 必要なら obj.to_s を呼んで
+文字列に変換します。 self を返します。</p></dd>
+<dt><a name="L002294" id="L002294"><code>binmode</code></a></dt>
+<dd>
+<p>何もせずに <code>self</code> を返します。</p></dd>
+<dt><a name="L002295" id="L002295"><code>close</code></a></dt>
+<dd>
+<p>close します。IO#close と同じように読み書きが禁止されます。</p></dd>
+<dt><a name="L002296" id="L002296"><code>close_read</code></a></dt>
+<dd>
+<p><a href="refm045.html#L001002">IO#close_read</a> と同様です。読み取りを禁止します。</p></dd>
+<dt><a name="L002297" id="L002297"><code>close_write</code></a></dt>
+<dd>
+<p><a href="refm045.html#L001003">IO#close_write</a> と同様です。書き込みが禁止されます。</p></dd>
+<dt><a name="L002298" id="L002298"><code>closed?</code></a></dt>
+<dd>
+<p><a href="refm045.html#L001004">IO#closed?</a> と同様です。</p>
+<pre>sio = StringIO.open(&quot;hoge&quot;)
+p sio.closed? # =&gt; false
+sio.close_read
+p sio.closed? # =&gt; false
+sio.close_write
+sio.closed?   # =&gt; true</pre></dd>
+<dt><a name="L002299" id="L002299"><code>closed_read?</code></a></dt>
+<dd>
+<p>読み取りが禁止されているなら true を返します。</p></dd>
+<dt><a name="L002300" id="L002300"><code>closed_write?</code></a></dt>
+<dd>
+<p>書き込みが禁止されているなら true を返します。</p></dd>
+<dt><a name="L002301" id="L002301"><code>each(<var>sep_string</var>=$/){|<var>line</var>| ... }</code></a>
+<dt><a name="L002302" id="L002302"><code>each_line(<var>sep_string</var>=$/){|<var>line</var>| ... }</code></a></dt>
+<dd>
+<p><a href="refm045.html#L001005">IO#each</a> と同様です。</p></dd>
+<dt><a name="L002303" id="L002303"><code>each_byte{|<var>byte</var>| ... }</code></a></dt>
+<dd>
+<p><a href="refm045.html#L001007">IO#each_byte</a> と同様です。</p></dd>
+<dt><a name="L002304" id="L002304"><code>eof</code></a>
+<dt><a name="L002305" id="L002305"><code>eof?</code></a></dt>
+<dd>
+<p>pos が文字列の終端にあれば true を返します。</p></dd>
+<dt><a name="L002306" id="L002306"><code>fcntl</code></a></dt>
+<dd>
+<p>例外 <a href="refm089.html">NotImplementedError</a> が発生します。</p></dd>
+<dt><a name="L002307" id="L002307"><code>fileno</code></a></dt>
+<dd>
+<p>何もせず <code>nil</code> を返します。</p></dd>
+<dt><a name="L002308" id="L002308"><code>flush</code></a></dt>
+<dd>
+<p>何もせずに <code>self</code> を返します。</p></dd>
+<dt><a name="L002309" id="L002309"><code>fsync</code></a></dt>
+<dd>
+<p>何もせずに 0 を返します。</p></dd>
+<dt><a name="L002310" id="L002310"><code>getc</code></a></dt>
+<dd>
+<p><a href="refm045.html#L001015">IO#getc</a> と同様です。</p></dd>
+<dt><a name="L002311" id="L002311"><code>gets(<var>sep_string</var> = $/)</code></a></dt>
+<dd>
+<p><a href="refm045.html#L001016">IO#gets</a> と同様です。$_ に読み込んだ行がセットされます。</p></dd>
+<dt><a name="L002312" id="L002312"><code>isatty</code></a></dt>
+<dd>
+<p>何もせず <code>false</code> を返します。</p></dd>
+<dt><a name="L002313" id="L002313"><code>lineno</code></a>
+<dt><a name="L002314" id="L002314"><code>lineno=</code></a></dt>
+<dd>
+<p><a href="refm045.html#L001020">IO#lineno</a> と同様です。</p></dd>
+<dt><a name="L002315" id="L002315"><code>path</code></a></dt>
+<dd>
+<p>StringIOには対応するパスはないので <code>nil</code> を返します。</p></dd>
+<dt><a name="L002316" id="L002316"><code>pid</code></a></dt>
+<dd>
+<p>何もせず <code>nil</code> を返します。</p></dd>
+<dt><a name="L002317" id="L002317"><code>pos</code></a>
+<dt><a name="L002318" id="L002318"><code>tell</code></a>
+<dt><a name="L002319" id="L002319"><code>pos = (<var>n</var>)</code></a></dt>
+<dd>
+<p><a href="refm045.html#L001023">IO#pos</a> と同様です。</p></dd>
+<dt><a name="L002320" id="L002320"><code>print([<var>obj</var>, ...])</code></a></dt>
+<dd>
+<p><a href="refm045.html#L001026">IO#print</a> と同様です。</p></dd>
+<dt><a name="L002321" id="L002321"><code>printf(<var>format_string</var> [, <var>obj</var>, ...] )</code></a></dt>
+<dd>
+<p><a href="refm045.html#L001027">IO#printf</a> と同様です。</p></dd>
+<dt><a name="L002322" id="L002322"><code>putc(<var>obj</var>)</code></a></dt>
+<dd>
+<p><a href="refm045.html#L001028">IO#putc</a> と同様です。与えられた <var>obj</var> を返します。</p></dd>
+<dt><a name="L002323" id="L002323"><code>puts(<var>obj</var>, ...)</code></a></dt>
+<dd>
+<p><a href="refm045.html#L001029">IO#puts</a> と同様です。</p></dd>
+<dt><a name="L002324" id="L002324"><code>read([<var>integer</var> [, <var>buffer</var>]])</code></a></dt>
+<dd>
+<p><a href="refm045.html#L000992">IO#read</a> と同様です。</p></dd>
+<dt><a name="L002325" id="L002325"><code>readchar</code></a></dt>
+<dd>
+<p><a href="refm045.html#L001032">IO#readchar</a> と同様です。</p></dd>
+<dt><a name="L002326" id="L002326"><code>readline(<var>sep_string</var> = $/)</code></a></dt>
+<dd>
+<p><a href="refm045.html#L001033">IO#readline</a> と同様です。</p></dd>
+<dt><a name="L002327" id="L002327"><code>readlines(<var>sep_string</var> = $/)</code></a></dt>
+<dd>
+<p><a href="refm045.html#L000993">IO#readlines</a> と同様です。</p></dd>
+<dt><a name="L002328" id="L002328"><code>readpartial([<var>integer</var> [, <var>buffer</var>]])</code></a></dt>
+<dd>
+<p><a href="refm045.html#L001036">IO#readpartial</a> と同様です。</p></dd>
+<dt><a name="L002329" id="L002329"><code>reopen</code></a></dt>
+<dd>
+<p>例外 <a href="refm089.html">NotImplementedError</a> が発生します。</p></dd>
+<dt><a name="L002330" id="L002330"><code>rewind</code></a></dt>
+<dd>
+<p><a href="refm045.html#L001039">IO#rewind</a> と同様です。</p></dd>
+<dt><a name="L002331" id="L002331"><code>seek(<var>n</var>, <var>whence</var>)</code></a></dt>
+<dd>
+<p><a href="refm045.html#L001040">IO#seek</a> と同様です。</p></dd>
+<dt><a name="L002332" id="L002332"><code>size</code></a>
+<dt><a name="L002333" id="L002333"><code>length</code></a></dt>
+<dd>
+<p>文字列の長さを返します。</p></dd>
+<dt><a name="L002334" id="L002334"><code>sync</code></a></dt>
+<dd>
+<p>何もせずに 0 を返します。</p></dd>
+<dt><a name="L002335" id="L002335"><code>sync= <var>bool</var></code></a></dt>
+<dd>
+<p>何もせずに <var>bool</var> を返します。</p></dd>
+<dt><a name="L002336" id="L002336"><code>sysread([<var>integer</var> [, <var>buffer</var>]])</code></a></dt>
+<dd>
+<p>StringIO#read と同じです。</p></dd>
+<dt><a name="L002337" id="L002337"><code>syswrite(<var>obj</var>)</code></a></dt>
+<dd>
+<p>StringIO#write と同じです。</p></dd>
+<dt><a name="L002338" id="L002338"><code>truncate(<var>n</var>)</code></a></dt>
+<dd>
+<p>n が self.size より小さい場合にはバッファのサイズを n に切り詰めます。
+n が self.size より大きい場合にはバッファのサイズを n に拡大します。</p></dd>
+<dt><a name="L002339" id="L002339"><code>tty?</code></a></dt>
+<dd>
+<p>何もせず <code>false</code> を返します。</p></dd>
+<dt><a name="L002340" id="L002340"><code>ungetc(<var>c</var>)</code></a></dt>
+<dd>
+<p>c は Fixnum です。
+pos を 1 減らしてからキャラクターコードが c の文字を書き込みます。この時
+pos は 1 増えません。
+pos が size よりも大きい場合は、リサイズして新しく加えられたバッファを 0 で
+埋めてから pos を 1 減らしてキャラクターコードが c の文字を書き込みます。
+この時も pos は 1 増えません。nil を返します。</p>
+<pre>s = StringIO.new(&quot;hoge&quot;)
+s.pos = 1
+s.ungetc(0x48)
+p s.string   #=&gt; &quot;Hoge&quot;
+p.pos        #=&gt; 0
+
+s = StringIO.new(&quot;hoge&quot;)
+s.pos = 8
+s.ungetc(0x41)
+p s.string   #=&gt; &quot;hoge\000\000\000A&quot;
+p.pos        #=&gt; 7</pre></dd>
+<dt><a name="L002341" id="L002341"><code>write(<var>obj</var>)</code></a></dt>
+<dd>
+<p><a href="refm045.html#L001050">IO#write</a> と同様です。書き込まれた文字列の長さを返します。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm115.html">&lt;-PREV</a>][<a href="refm117.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

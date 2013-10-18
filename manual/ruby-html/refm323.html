@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>win32/registry</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm324.html" rel="next" />
+<link href="refm322.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm322.html">&lt;-PREV</a>][<a href="refm324.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006267" id="L006267">win32/registry - Win32 レジストリ I/F</a></h1>
+<p>win32/registry は Win32 プラットフォームでレジストリをアクセスするための
+ライブラリです。Win32 API の呼び出しに <a href="refm321.html">Win32API</a> を使います。</p>
+<h2><a name="L006268" id="L006268">example</a></h2>
+<pre>Win32::Registry::HKEY_CURRENT_USER.open('SOFTWARE\foo') do |reg|
+  value = reg['foo']                               # 値の読み込み
+  value = reg['foo', Win32::Registry::REG_SZ]      # 型を限定した読み込み
+  type, value = reg.read('foo')                    # 値の読み込み
+  reg['foo'] = 'bar'                               # 値の書き込み
+  reg['foo', Win32::Registry::REG_SZ] = 'bar'      # 型指定付き値の書き込み
+  reg.write('foo', Win32::Registry::REG_SZ, 'bar') # 値の書き込み
+
+  reg.each_value { |name, type, data| ... }        # 値の列挙
+  reg.each_key { |key, wtime| ... }                # サブキーの列挙
+
+  reg.delete_value('foo')                          # 値の削除
+  reg.delete_key('foo')                            # サブキーの削除
+  reg.delete_key('foo', true)                      # サブキーの再帰削除
+end</pre>
+<p>→ <a href="refm324.html">Win32::Registry</a></p>
+<h2><a name="L006269" id="L006269">WSH を用いたレジストリアクセス</a></h2>
+<p>レジストリをアクセスするには <a href="refm322.html">WIN32OLE</a> を使って <a href="http://msdn.microsoft.com/library/en-us/script56/html/wsObjWshShell.asp">WScript.Shell</a><sup class="outside"><small>[外部]</small></sup> オブジェクト経由でアクセスする方法もあります。</p>
+<pre>wsh = WIN32OLE.new('WScript.Shell')
+value = wsh.RegRead 'HKLM\Software\Microsoft\Windows\...'
+wsh.RegWrite 'HKCR\foofile\shell\open\command\', 'REG_SZ', '&quot;C:\...&quot; &quot;%1&quot;'</pre>
+<p>ただし，キーを列挙したり，自由なバイナリ値を読み書きすることができません。</p>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm322.html">&lt;-PREV</a>][<a href="refm324.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>OpenSSL::X509::CRL</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm220.html" rel="next" />
+<link href="refm218.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm217.html">UP</a>][<a href="refm218.html">&lt;-PREV</a>][<a href="refm220.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L004340" id="L004340">OpenSSL::X509::CRL</a></h1>
+<p>CRL(証明書失効リスト) クラス。</p>
+<h2><a name="L004341" id="L004341">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L004342" id="L004342"><code>CRL.new()</code></a>
+<dt><a name="L004343" id="L004343"><code>CRL.new(<var>str</var>)</code></a>
+<dt><a name="L004344" id="L004344"><code>CRL.new(<var>io</var>)</code></a>
+</dl>
+<h2><a name="L004345" id="L004345">メソッド</a></h2>
+<dl>
+<dt><a name="L004346" id="L004346"><code>version</code></a>
+<dt><a name="L004347" id="L004347"><code>version=</code></a></dt>
+<dd>
+<p>CRL のバージョン。</p></dd>
+<dt><a name="L004348" id="L004348"><code>signature_algorithm</code></a></dt>
+<dd>
+<p>署名に使ったアルゴリズム。</p></dd>
+<dt><a name="L004349" id="L004349"><code>issuer</code></a>
+<dt><a name="L004350" id="L004350"><code>issuer=</code></a></dt>
+<dd>
+<p>CRL の発行者。</p></dd>
+<dt><a name="L004351" id="L004351"><code>last_update</code></a>
+<dt><a name="L004352" id="L004352"><code>last_update=</code></a></dt>
+<dd>
+<p>最後に更新された日時。</p></dd>
+<dt><a name="L004353" id="L004353"><code>next_update</code></a>
+<dt><a name="L004354" id="L004354"><code>next_update=</code></a></dt>
+<dd>
+<p>次に更新する日時。</p></dd>
+<dt><a name="L004355" id="L004355"><code>revoked</code></a>
+<dt><a name="L004356" id="L004356"><code>revoked=</code></a></dt>
+<dd>
+<p>失効した証明書の配列。<a href="refm225.html">OpenSSL::X509::Revoked</a> オブジェクトの <a href="refm036.html">Array</a>。</p></dd>
+<dt><a name="L004357" id="L004357"><code>add_revoked(<var>rev</var>)</code></a></dt>
+<dd>
+<p>CRL に失効した証明書を加える。rev は <a href="refm225.html">OpenSSL::X509::Revoked</a> オブジェクト。</p></dd>
+<dt><a name="L004358" id="L004358"><code>sign(<var>pkey</var>, <var>chain</var>=<var>nil</var>)</code></a></dt>
+<dd>
+<p>CRL に署名する。</p></dd>
+<dt><a name="L004359" id="L004359"><code>verify(<var>key</var>)</code></a></dt>
+<dd>
+<p>発行者の公開鍵で CRL に記載されている署名を検証する。</p></dd>
+<dt><a name="L004360" id="L004360"><code>to_der</code></a></dt>
+<dd>
+<p>DER 形式に変換する。</p></dd>
+<dt><a name="L004361" id="L004361"><code>to_pem</code></a>
+<dt><a name="L004362" id="L004362"><code>to_s</code></a></dt>
+<dd>
+<p>PEM 形式に変換する。</p></dd>
+<dt><a name="L004363" id="L004363"><code>to_text</code></a></dt>
+<dd>
+<p>人間が読める形式に変換する。</p></dd>
+<dt><a name="L004364" id="L004364"><code>extensions</code></a>
+<dt><a name="L004365" id="L004365"><code>extensions=</code></a></dt>
+<dd>
+<p>CRL の拡張領域。<a href="refm220.html">OpenSSL::X509::Extension</a> の配列。</p></dd>
+<dt><a name="L004366" id="L004366"><code>add_extension(<var>ex</var>)</code></a></dt>
+<dd>
+<p>拡張領域に値を加える。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm217.html">UP</a>][<a href="refm218.html">&lt;-PREV</a>][<a href="refm220.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

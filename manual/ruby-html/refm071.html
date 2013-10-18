@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SyncEnumerator</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm072.html" rel="next" />
+<link href="refm070.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm070.html">UP</a>][<a href="refm070.html">&lt;-PREV</a>][<a href="refm072.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L001776" id="L001776">SyncEnumerator</a></h1>
+<p>複数の <a href="refm070.html">Enumerable</a> オブジェクトを並行して yield するためのクラスです。</p>
+<h2><a name="L001777" id="L001777">例</a></h2>
+<pre>require 'generator'
+
+s = SyncEnumerator.new([1,2,3], ['a', 'b', 'c'])
+
+# Yields [1, 'a'], [2, 'b'], and [3,'c']
+s.each { |row| puts row.join(', ') }</pre>
+<h2><a name="L001778" id="L001778">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L001779" id="L001779"><code>SyncEnumerator.new(*<var>enums</var>)</code></a></dt>
+<dd>
+<p>SyncEnumerator オブジェクトを生成します。
+複数の <a href="refm070.html">Enumerable</a> オブジェクトを与えます。
+Enumerable オブジェクトのサイズは異なっていても構いません。</p></dd>
+</dl>
+<h2><a name="L001780" id="L001780">メソッド</a></h2>
+<dl>
+<dt><a name="L001781" id="L001781"><code>each{|<var>row</var>| ... }</code></a></dt>
+<dd>
+<p>与えられた Enumerable オブジェクトのそれぞれの要素の配列を引数として
+ブロックを評価します。self を返します。</p>
+<p>要素がある Enumerable オブジェクトがひとつでもあれば、評価を続けます。
+要素のなくなった Enumerable オブジェクトの代わりに nil を配列の要素とします。
+全ての Enumerable オブジェクトの要素がなくなるとそこで、ブロックの評価を止めます。</p>
+<pre>s = SyncEnumerator.new([1, 2, 3], ['a', 'b'], ['X'])
+s.each{|arry| p arry}
+
+# =&gt; 結果
+[1, &quot;a&quot;, &quot;X&quot;]
+[2, &quot;b&quot;, nil]
+[3, nil, nil]</pre></dd>
+<dt><a name="L001782" id="L001782"><code>end?(<var>i</var> = <var>nil</var>)</code></a></dt>
+<dd>
+<p>SyncEnumerator が終わりに達している場合は真を返します。
+<var>i</var> を与えた場合は、<var>i</var> 番目の Enumerable オブジェクトが終わりに
+達している場合、真を返します。</p></dd>
+<dt><a name="L001783" id="L001783"><code>length</code></a>
+<dt><a name="L001784" id="L001784"><code>size</code></a></dt>
+<dd>
+<p>与えられた Enumerable オブジェクトの数を返します。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm070.html">UP</a>][<a href="refm070.html">&lt;-PREV</a>][<a href="refm072.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

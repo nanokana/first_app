@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ThreadsWait</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm318.html" rel="next" />
+<link href="refm316.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm316.html">&lt;-PREV</a>][<a href="refm318.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006153" id="L006153">ThreadsWait</a></h1>
+<p>provides synchronization for multiple threads.</p>
+<h2><a name="L006154" id="L006154">Constants</a></h2>
+<dl>
+<dt><a name="L006155" id="L006155">ThWait</a></dt>
+<dd>
+<p><a href="refm317.html">ThreadsWait</a> の別名</p>
+</dd>
+</dl>
+<h2><a name="L006156" id="L006156">Class Methods:</a></h2>
+<dl>
+<dt><a name="L006157" id="L006157"><code>ThreadsWait.all_waits(<var>thread1</var>,...)</code></a></dt>
+<dd>
+<p>waits until all of specified threads are terminated.
+if a block is supplied for the method, evaluates it for
+each thread termination.</p>
+<pre>require 'thwait'
+
+threads = []
+5.times {|i|
+  threads &lt;&lt; Thread.new { sleep 1; p Thread.current }
+}
+ThreadsWait.all_waits(*threads) {|th| p th }
+=&gt; #&lt;Thread:0x401a0ca8 run&gt;
+   #&lt;Thread:0x401a0d70 run&gt;
+   #&lt;Thread:0x401a1130 run&gt;
+   #&lt;Thread:0x401a13ec run&gt;
+   #&lt;Thread:0x401a17d4 run&gt;
+   #&lt;Thread:0x401a0ca8 dead&gt;
+   #&lt;Thread:0x401a0d70 dead&gt;
+   #&lt;Thread:0x401a1130 dead&gt;
+   #&lt;Thread:0x401a13ec dead&gt;
+   #&lt;Thread:0x401a17d4 dead&gt;</pre></dd>
+<dt><a name="L006158" id="L006158"><code>ThreadsWait.new(<var>thread1</var>,...)</code></a></dt>
+<dd>
+<p>creates synchronization object, specifying thread(s) to wait.</p></dd>
+</dl>
+<h2><a name="L006159" id="L006159">Methods:</a></h2>
+<dl>
+<dt><a name="L006160" id="L006160"><code>ThreadsWait#threads</code></a></dt>
+<dd>
+<p>list threads to be synchronized</p></dd>
+<dt><a name="L006161" id="L006161"><code>ThreadsWait#empty?</code></a></dt>
+<dd>
+<p>is there any thread to be synchronized.</p></dd>
+<dt><a name="L006162" id="L006162"><code>ThreadsWait#finished?</code></a></dt>
+<dd>
+<p>is there already terminated thread.</p></dd>
+<dt><a name="L006163" id="L006163"><code>ThreadsWait#join(<var>thread1</var>,...)</code></a></dt>
+<dd>
+<p>wait for specified thread(s).</p></dd>
+<dt><a name="L006164" id="L006164"><code>ThreadsWait#join_nowait(<var>threa1</var>,...)</code></a></dt>
+<dd>
+<p>specifies thread(s) to wait.  non-blocking.</p></dd>
+<dt><a name="L006165" id="L006165"><code>ThreadsWait#next_wait</code></a></dt>
+<dd>
+<p>waits until any of specified threads is terminated.</p></dd>
+<dt><a name="L006166" id="L006166"><code>ThreadsWait#all_waits</code></a></dt>
+<dd>
+<p>waits until all of specified threads are terminated.
+if a block is supplied for the method, evaluates it for
+each thread termination.</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm316.html">&lt;-PREV</a>][<a href="refm318.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>mutex_m</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm312.html" rel="next" />
+<link href="refm310.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm310.html">&lt;-PREV</a>][<a href="refm312.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006106" id="L006106">mutex_m</a></h1>
+<p>スレッド同期機構である <a href="refm301.html">Mutex</a> のモジュール版です。普通のオブジェクトを
+extend により Mutex にする事ができます。</p>
+<p><a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/1991">ruby-list:1991</a><sup class="outside"><small>[外部]</small></sup></p>
+<h2><a name="L006107" id="L006107">例</a></h2>
+<pre>require &quot;mutex_m&quot;
+obj = Object.new
+obj.extend(Mutex_m)
+obj.lock
+obj.unlock</pre>
+<h2><a name="L006108" id="L006108">メソッド</a></h2>
+<dl>
+<dt><a name="L006109" id="L006109"><code>mu_synchronize{ ... }</code></a>
+<dt><a name="L006110" id="L006110"><code>synchronize{ ... }</code></a></dt>
+<dd>
+<p>Mutex_m をロックし、ブロックを実行します。実行後に必ず Mutex_m 
+のロックを解放します。</p></dd>
+<dt><a name="L006111" id="L006111"><code>mu_lock</code></a>
+<dt><a name="L006112" id="L006112"><code>lock</code></a></dt>
+<dd>
+<p>Mutex_m をロックします。一度にひとつのスレッドしかロックできません。
+既にロックされている mutex に対してロックを行おうとしたスレッドは
+Mutex_m のロックが解放されるまで、実行が停止されます。</p>
+<p>self を返します。</p></dd>
+<dt><a name="L006113" id="L006113"><code>mu_locked?</code></a>
+<dt><a name="L006114" id="L006114"><code>locked?</code></a></dt>
+<dd>
+<p>Mutex_m がロックされている時、真を返します。</p></dd>
+<dt><a name="L006115" id="L006115"><code>mu_try_lock</code></a>
+<dt><a name="L006116" id="L006116"><code>try_lock</code></a></dt>
+<dd>
+<p>Mutex_m をロックしようとして、ロックが成功した場合、真を返します。
+ロックできなかった場合にはブロックせず偽を返します。</p></dd>
+<dt><a name="L006117" id="L006117"><code>mu_unlock</code></a>
+<dt><a name="L006118" id="L006118"><code>unlock</code></a></dt>
+<dd>
+<p>Mutex_m のロックを解放します。
+Mutex_m のロック待ちになっていたスレッドの実行は再開されます。</p>
+<p>self がロックされていなければ nil を返します。そうでなければself を返します。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm310.html">&lt;-PREV</a>][<a href="refm312.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

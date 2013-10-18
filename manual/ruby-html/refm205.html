@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Net::HTTPRequest</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm206.html" rel="next" />
+<link href="refm204.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm203.html">UP</a>][<a href="refm204.html">&lt;-PREV</a>][<a href="refm206.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L003917" id="L003917">Net::HTTPRequest</a></h1>
+<p><a href="refm203.html">net/http</a></p>
+<p>HTTP リクエストを抽象化するクラスです。Net::HTTPRequest は抽象クラス
+なので実際にはサブクラスの </p>
+<ul>
+<li>Net::HTTP::Get</li>
+<li>Net::HTTP::Post</li>
+<li>Net::HTTP::Head</li>
+<li>Net::HTTP::Put </li>
+</ul>
+<p>を使用してください。</p>
+<h2><a name="L003918" id="L003918">例</a></h2>
+<pre>require 'net/http'
+http = Net::HTTP.new('www.example.com', 80)
+req = Net::HTTP::Get.new('/somefile')
+res = http.request(req)
+print res.body</pre>
+<h2><a name="L003919" id="L003919">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L003920" id="L003920"><code>HTTPRequest.new(<var>path</var>)</code></a></dt>
+<dd>
+<p>HTTP リクエストオブジェクトを生成します。リクエストする path を文字列で与える。</p></dd>
+</dl>
+<h2><a name="L003921" id="L003921">メソッド</a></h2>
+<dl>
+<dt><a name="L003922" id="L003922"><code>self[ <var>key</var> ]</code></a></dt>
+<dd>
+<p>key ヘッダフィールドの文字列。
+key は大文字小文字を区別しません。</p></dd>
+<dt><a name="L003923" id="L003923"><code>self[ <var>key</var> ] = <var>val</var></code></a></dt>
+<dd>
+<p>key ヘッダフィールドに val をセットします。
+key は大文字小文字を区別しません。</p></dd>
+<dt><a name="L003924" id="L003924"><code>add_header(<var>key</var>, <var>val</var>) ((&lt;<var>ruby</var> <var>1</var>.<var>9</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>key ヘッダフィールドに val をセットします。</p></dd>
+<dt><a name="L003925" id="L003925"><code>basic_auth( <var>account</var>, <var>password</var> )</code></a></dt>
+<dd>
+<p>Authrization: ヘッダを basic auth 用にセットします。</p></dd>
+<dt><a name="L003926" id="L003926"><code>body ((&lt;<var>ruby</var> <var>1</var>.<var>9</var> <var>feature</var>&gt;))</code></a>
+<dt><a name="L003927" id="L003927"><code>body=(<var>str</var>) ((&lt;<var>ruby</var> <var>1</var>.<var>9</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>サーバに送るリクエストのエンティティボディを文字列で設定します。</p></dd>
+<dt><a name="L003928" id="L003928"><code>body_stream ((&lt;<var>ruby</var> <var>1</var>.<var>9</var> <var>feature</var>&gt;))</code></a>
+<dt><a name="L003929" id="L003929"><code>body_stream= ((&lt;<var>ruby</var> <var>1</var>.<var>9</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>サーバに送るリクエストのエンティティボディを <a href="refm045.html">IO</a> オブジェクトなどの
+ストリームで設定します。read(size) メソッドが定義されている必要があります。</p></dd>
+<dt><a name="L003930" id="L003930"><code>content_length</code></a></dt>
+<dd>
+<p>Content-Length: ヘッダの値 (整数)。</p></dd>
+<dt><a name="L003931" id="L003931"><code>content_range</code></a></dt>
+<dd>
+<p>Content-Range: ヘッダの値 (Range)。</p></dd>
+<dt><a name="L003932" id="L003932"><code>delete(<var>key</var>)</code></a></dt>
+<dd>
+<p>key ヘッダフィールドを削除します。</p></dd>
+<dt><a name="L003933" id="L003933"><code>each {|<var>name</var>, <var>val</var>| .... }</code></a></dt>
+<dd>
+<p>ヘッダ名とその値に対するくりかえし。ヘッダ名は小文字で統一されます。</p></dd>
+<dt><a name="L003934" id="L003934"><code>method</code></a></dt>
+<dd>
+<p>リクエストの HTTP メソッドを文字列で返します。</p></dd>
+<dt><a name="L003935" id="L003935"><code>path</code></a></dt>
+<dd>
+<p>リクエストする path を文字列で返します。</p></dd>
+<dt><a name="L003936" id="L003936"><code>proxy_basic_auth(<var>account</var>, <var>password</var>)</code></a></dt>
+<dd>
+<p>Proxy-Authrization: ヘッダを Proxy 認証のためにセットします。</p></dd>
+<dt><a name="L003937" id="L003937"><code>range</code></a></dt>
+<dd>
+<p>Range: ヘッダの示す範囲を Range オブジェクトで返します。</p></dd>
+<dt><a name="L003938" id="L003938"><code>range = <var>r</var></code></a>
+<dt><a name="L003939" id="L003939"><code>set_range( <var>i</var>, <var>len</var> )</code></a></dt>
+<dd>
+<p>範囲を指定してエンティティを取得するためのヘッダ Range: をセットします。
+r は Range オブジェクト、i, len は始点と長さです。</p></dd>
+<dt><a name="L003940" id="L003940"><code>request_body_permitted?</code></a></dt>
+<dd>
+<p>リクエストにエンティティボディを一緒に送ることが許されている HTTP メソッド
+(POST など)の場合真を返します。</p></dd>
+<dt><a name="L003941" id="L003941"><code>response_body_permitted?</code></a></dt>
+<dd>
+<p>サーバからのレスポンスにエンティティボディを含むことが許されている HTTP メソッド
+(GET, POST など)の場合真を返します。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm203.html">UP</a>][<a href="refm204.html">&lt;-PREV</a>][<a href="refm206.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

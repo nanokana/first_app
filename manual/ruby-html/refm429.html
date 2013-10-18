@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>trap::引数</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm430.html" rel="next" />
+<link href="refm428.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm421.html">UP</a>][<a href="refm428.html">&lt;-PREV</a>][<a href="refm430.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L009460" id="L009460">引数</a></h1>
+<ul>
+<li><p>メソッド呼び出しで 配列を展開した変数列を渡す</p>
+<pre>def sum(a,b,c)
+  print a+b+c,&quot;\n&quot;
+end
+
+a = [1,2,3]
+sum(*a) # -&gt; sum(1,2,3) -&gt; 6</pre></li>
+<li><p>同様にProcをブロックとして渡せる。</p>
+<pre>def foo
+  yield(2)
+end
+
+pr = proc {|i| i*i}
+foo(&amp;pr) #=&gt; 4</pre></li>
+<li><p>逆に仮引数でまとめて受け取ったりProcとして受け取ったりできる。</p>
+<pre>def foo(*arg, &amp;block)
+  block.call arg[1]
+end
+
+foo(0,1,2) do |i|
+  puts i #=&gt; 1
+end
+
+def test(*a)
+  @b = [a]  #正しくは、@b = a
+end
+
+def a = (b)  #正しくは、a=(b)
+  @a = b
+end</pre></li>
+<li><p>superとsuper(...)の違い。</p>
+<pre>class Foo
+  def initialize
+  end
+end
+
+class Bar &lt; Foo
+  def initialize(a)
+    super
+  end
+end
+
+obj = Bar.new(1)
+
+=&gt; -:8:in `initialize': wrong # of arguments(1 for 0) (ArgumentError)</pre>
+<p>上のはバグります。引数なしの super は上の例では super(a) と見なされ
+るからです。呼び出したメソッドと異なる引数で呼び出すには引数を明示し
+ます。</p>
+<pre>class Foo
+  def initialize
+  end
+end
+
+class Bar &lt; Foo
+  def initialize(a)
+    super()    # &lt;- 0個 の引数であることを明示している
+  end
+end
+
+obj = Bar.new(1)</pre></li>
+<li>たまたま同じ signature のメソッドをもってると、オブジェクトのクラス違いに気がつかず、
+  後々とんでもないところで例外が起こる場合があります。
+  (例:PStore#abortとabort)</li>
+<li>ARGVで引数を受け取った後、getsなどで標準入力を使う場合、ARGV.shiftなどで
+  ARGVを空にしておかないとARGVに残っているファイル名のファイルから読み込もうと
+  してしまいます。</li>
+</ul>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm421.html">UP</a>][<a href="refm428.html">&lt;-PREV</a>][<a href="refm430.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

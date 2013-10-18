@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>WEBrick::Cookie</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm186.html" rel="next" />
+<link href="refm184.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm173.html">UP</a>][<a href="refm184.html">&lt;-PREV</a>][<a href="refm186.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L003653" id="L003653">WEBrick::Cookie</a></h1>
+<h2><a name="L003654" id="L003654">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L003655" id="L003655"><code>WEBrick::Cookie.new(<var>name</var>, <var>value</var>)</code></a></dt>
+<dd>
+<p>新しい<a href="refm185.html">WEBrick::Cookie</a>オブジェクトを生成する。
+<var>name</var>にクッキーの名前を、<var>value</var>にクッキーで保持する値を与える。</p></dd>
+<dt><a name="L003656" id="L003656"><code>WEBrick::Cookie.parse(<var>str</var>)</code></a></dt>
+<dd>
+<p>与えられた文字列<var>str</var>を解釈、新しく<a href="refm185.html">WEBrick::Cookie</a>オブジェクトを生成し、配列として返す。</p></dd>
+</dl>
+<h2><a name="L003657" id="L003657">インスタンスメソッド</a></h2>
+<dl>
+<dt><a name="L003658" id="L003658"><code>comment</code></a></dt>
+<dd>
+<p>コメントを返す。</p></dd>
+<dt><a name="L003659" id="L003659"><code>comment = <var>value</var></code></a></dt>
+<dd>
+<p>コメントを設定する。
+<var>value</var>は文字列。</p></dd>
+<dt><a name="L003660" id="L003660"><code>domain</code></a></dt>
+<dd>
+<p>ドメイン名を返す。</p></dd>
+<dt><a name="L003661" id="L003661"><code>domain = <var>value</var></code></a></dt>
+<dd>
+<p>ドメイン名を設定する。
+<var>value</var>は文字列。</p></dd>
+<dt><a name="L003662" id="L003662"><code>expires</code></a></dt>
+<dd>
+<p>有効期限を<a href="refm066.html">Time</a>オブジェクトで返す。</p></dd>
+<dt><a name="L003663" id="L003663"><code>expires = <var>value</var></code></a></dt>
+<dd>
+<p>有効期限を設定する。
+<var>value</var>は<a href="refm066.html">Time</a>オブジェクトまたは文字列。</p></dd>
+<dt><a name="L003664" id="L003664"><code>max_age</code></a></dt>
+<dd>
+<p>クッキーの寿命を返す。</p></dd>
+<dt><a name="L003665" id="L003665"><code>max_age = <var>value</var></code></a></dt>
+<dd>
+<p>クッキーの寿命を秒単位で設定する。
+<var>value</var>は正の整数。0は直ちに破棄される事を意味する。</p></dd>
+<dt><a name="L003666" id="L003666"><code>name</code></a></dt>
+<dd>
+<p>名前を返す。</p></dd>
+<dt><a name="L003667" id="L003667"><code>path</code></a></dt>
+<dd>
+<p>パス名を返す。</p></dd>
+<dt><a name="L003668" id="L003668"><code>path = <var>value</var></code></a></dt>
+<dd>
+<p>パス名を設定する。
+<var>value</var>は文字列。</p></dd>
+<dt><a name="L003669" id="L003669"><code>secure</code></a></dt>
+<dd>
+<p>クッキーのSecure属性を返す。</p></dd>
+<dt><a name="L003670" id="L003670"><code>secure = <var>value</var></code></a></dt>
+<dd>
+<p>クッキーのSecure属性を設定する。
+<var>value</var>は真偽値。</p></dd>
+<dt><a name="L003671" id="L003671"><code>to_s</code></a></dt>
+<dd>
+<p>クッキーを文字列化する。</p></dd>
+<dt><a name="L003672" id="L003672"><code>value</code></a></dt>
+<dd>
+<p>クッキーが保持する値を返す。</p></dd>
+<dt><a name="L003673" id="L003673"><code>value = <var>str</var></code></a></dt>
+<dd>
+<p>クッキーが保持する値を設定する。
+<var>str</var>は文字列。</p></dd>
+<dt><a name="L003674" id="L003674"><code>version</code></a></dt>
+<dd>
+<p>バージョン番号を返す。</p></dd>
+<dt><a name="L003675" id="L003675"><code>version = <var>value</var></code></a></dt>
+<dd>
+<p>バージョン番号を設定する。
+<var>value</var>は整数。</p></dd>
+</dl>
+<h2><a name="L003676" id="L003676">備考</a></h2>
+<p><a href="refm185.html">WEBrick::Cookie</a>クラスは設定された値が正しいものかどうかを厳密に確認しない。</p>
+<p><a href="refm185.html">WEBrick::Cookie</a>クラスはRFC2109の実装である。
+RFC2109はRFC2965により破棄されたが、
+<a href="refm185.html">WEBrick::Cookie</a>クラスはRFC2965の全てに対応していない。</p>
+<h2><a name="L003677" id="L003677">参考</a></h2>
+<dl>
+<dt><a name="L003678" id="L003678"><a href="http://www.mars.dti.ne.jp/~torao/rfc/rfc2109-ja.txt">&lt;URL:http://www.mars.dti.ne.jp/~torao/rfc/rfc2109-ja.txt&gt;</a><sup class="outside"><small>[外部]</small></sup></a></dt>
+<dd>
+<p>RFC2109の日本語訳。</p>
+</dd>
+<dt><a name="L003678" id="L003678"><a href="http://www.studyinghttp.net/translations#RFC2965">HTTP State Management Mechanism</a><sup class="outside"><small>[外部]</small></sup></a></dt>
+<dd>
+<p>RFC2965の日本語訳。</p>
+</dd>
+<dt><a name="L003678" id="L003678"><a href="http://www.studyinghttp.net/cookies">HTTP Cookies</a><sup class="outside"><small>[外部]</small></sup></a></dt>
+<dd>
+<p>クッキーの使い方。</p>
+</dd>
+<dt><a name="L003678" id="L003678"><a href="http://shogo.homelinux.org/~ysantoso/webrickguide/html/Cookie.html">&lt;URL:http://shogo.homelinux.org/~ysantoso/webrickguide/html/Cookie.html&gt;</a><sup class="outside"><small>[外部]</small></sup></a></dt>
+<dd>
+<p>WEBrick::Cookieの解説(英語)。</p>
+</dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm173.html">UP</a>][<a href="refm184.html">&lt;-PREV</a>][<a href="refm186.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

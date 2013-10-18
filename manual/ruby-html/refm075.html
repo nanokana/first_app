@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>GC</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm076.html" rel="next" />
+<link href="refm074.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm034.html">UP</a>][<a href="refm074.html">&lt;-PREV</a>][<a href="refm076.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L001961" id="L001961">GC</a></h1>
+<p><code>GC</code> は Ruby インタプリタの「ゴミ集め(Garbage Collection)」を制御
+するモジュールです。</p>
+<h2><a name="L001962" id="L001962">モジュールメソッド:</a></h2>
+<dl>
+<dt><a name="L001963" id="L001963"><code>GC.disable</code></a></dt>
+<dd>
+<p>ガーベージコレクトを禁止します。</p>
+<p>前回の禁止状態を返します(禁止されていたなら true, GC が有効であったなら、 
+false)。</p></dd>
+<dt><a name="L001964" id="L001964"><code>GC.enable</code></a></dt>
+<dd>
+<p>ガーベージコレクトを許可します。</p>
+<p>前回の禁止状態を返します(禁止されていたなら true, GC が有効であったなら、 
+false)。</p></dd>
+<dt><a name="L001965" id="L001965"><code>GC.start</code></a></dt>
+<dd>
+<p>ガーベージコレクトを開始します。</p>
+<p><code>nil</code> を返します。</p></dd>
+<dt><a name="L001966" id="L001966"><code>GC.stress</code></a>
+<dt><a name="L001967" id="L001967"><code>GC.stress = <var>bool</var></code></a></dt>
+<dd>
+<p><a href="refm392.html">ruby 1.9 feature</a></p>
+<p>GC.stress が真に設定されている間は、GC を行えるすべての機会に GC を行います。</p></dd>
+</dl>
+<h2><a name="L001968" id="L001968">メソッド:</a></h2>
+<dl>
+<dt><a name="L001969" id="L001969"><code>garbage_collect</code></a></dt>
+<dd>
+<p>ガーベージコレクトを開始します。以下と同じ働きをします。</p>
+<pre>GC.start</pre>
+<p><code>nil</code> を返します。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm034.html">UP</a>][<a href="refm074.html">&lt;-PREV</a>][<a href="refm076.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

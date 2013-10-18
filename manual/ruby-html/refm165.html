@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>UDPSocket</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm166.html" rel="next" />
+<link href="refm164.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm161.html">UP</a>][<a href="refm164.html">&lt;-PREV</a>][<a href="refm166.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L003104" id="L003104">UDPSocket</a></h1>
+<p>UDP/IPデータグラム型ソケットのクラス。</p>
+<h2><a name="L003105" id="L003105">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm161.html">IPSocket</a></li>
+</ul>
+<h2><a name="L003106" id="L003106">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L003107" id="L003107"><code>UDPSocket.open([<var>socktype</var>])</code></a>
+<dt><a name="L003108" id="L003108"><code>UDPSocket.new([<var>socktype</var>])</code></a></dt>
+<dd>
+<p>新しいUDPソケットを返します。</p></dd>
+</dl>
+<h2><a name="L003109" id="L003109">メソッド:</a></h2>
+<dl>
+<dt><a name="L003110" id="L003110"><code>bind(<var>host</var>, <var>port</var>)</code></a></dt>
+<dd>
+<p>ソケットを<var>host</var>の<var>port</var>に結合します。</p></dd>
+<dt><a name="L003111" id="L003111"><code>connect(<var>host</var>, <var>port</var>)</code></a></dt>
+<dd>
+<p>ソケットを<var>host</var>の<var>port</var>にconnectします。</p></dd>
+<dt><a name="L003112" id="L003112"><code>send(<var>mesg</var>, <var>flags</var>[, <var>dest_sockaddr</var>])</code></a>
+<dt><a name="L003113" id="L003113"><code>send(<var>mesg</var>, <var>flags</var>, <var>host</var>, <var>port</var>)</code></a></dt>
+<dd>
+<p>ソケットを介してデータを送ります。<var>flags</var> に関しては
+<code>send(2)</code> を参照してください。<code>connect</code> していないソケット
+に対しては送り先を指定するため <var>dest_sockaddr</var> あるいは、<var>host</var> と 
+<var>port</var> を指定する必要があります。実際に送ったデータの長さを返
+します。</p>
+<p><var>dest_sockaddr</var> には<a href="refm159.html#L003049">ソケットアドレス構造体を pack した文字列</a>
+を指定します。</p>
+<p><var>host</var>, <var>port</var> に関しては <a href="refm159.html#L003047">ホスト指定形式</a>、
+<a href="refm159.html#L003048">サービス指定形式</a>を参照してください。</p>
+<p>2 引数、3 引数の形式の場合の動作は、
+<a href="refm160.html#L003065">BasicSocket#send</a> と同じです。</p>
+<p>4 引数の形式で、指定したホストが複数のアドレスを持つ場合、いずれか
+のアドレスへの送信が成功するまで(あるいはすべての送信が失敗するま
+で)、各アドレスへの送信を順に試みます。</p>
+<p>データの送信に失敗した場合は例外 <a href="refm108.html">Errno::EXXX</a> が発生します。</p></dd>
+<dt><a name="L003114" id="L003114"><code>recvfrom_nonblock(<var>maxlen</var>[, <var>flags</var>])</code></a></dt>
+<dd>
+<p><a href="refm391.html">ruby 1.8.5 feature</a></p>
+<p>ソケットをノンブロッキングモードに設定した後、
+<code>recvfrom(2)</code>でソケットからデータを受け取ります。 </p>
+<p>引数、返り値は <a href="refm161.html#L003076">IPSocket#recvfrom</a> と同じです。</p>
+<p><code>recvfrom(2)</code>がエラーになった場合、
+EAGAIN, EINTR を含め例外 <a href="refm108.html">Errno::EXXX</a> が発生します。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm161.html">UP</a>][<a href="refm164.html">&lt;-PREV</a>][<a href="refm166.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

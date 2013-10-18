@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>mathn</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm269.html" rel="next" />
+<link href="refm267.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm267.html">&lt;-PREV</a>][<a href="refm269.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L005354" id="L005354">mathn</a></h1>
+<p><a href="refm263.html">rational</a>と<a href="refm261.html">complex</a>をシームレスに利用するようにするライブラリ。</p>
+<p>Integer や Float に比べ Rational は誤差無しで表現できる範囲が大きいため、
+数値の演算において Rational をシームレスに利用したいことがあります。</p>
+<pre>1/2 -&gt; Rational(1,2)
+2 * Rational(1,2) -&gt; 1 (Fixnum)</pre>
+<p>また、Complex も演算結果の表現範囲を広げるのに利用できます。</p>
+<pre>Complex(0,-1)**2 -&gt; -1 (Fixnum)
+Complex(1,-1) - Complex(0,-1) -&gt; 1 (Fixnum)</pre>
+<p>require 'mathn' すると上の様な動作を行なうようになります。
+つまり、Rational(やRationalを含むComplex)とInteger(FixnumとBignum)との間の関係を、
+ちょうどBignumとFixnumとの間のような関係にします。
+具体的には、Rationalのインスタンスが整数ならば、それは自動的にInteger
+(FixnumまたはBignum)となり、また、<code>整数/整数</code>の結果、
+割り切れない時はRationalが返るようになります。
+後者は、整数のメソッド「/」が整商(.div)でなく、
+商(.quo)を返すようになる、ということを意味します。</p>
+<p>なお、この挙動は、グローバルに影響を与えます。
+つまり、(Rubyで書かれた)汎用ライブラリをrequireしていた場合、
+ライブラリ中の動作も、上のように変更されることになります。
+他人の書いたライブラリを使う時は、ご注意下さい
+(逆に、汎用ライブラリの作者の方々は、この<a href="refm268.html">mathn</a>がrequire
+される可能性を留意して書いて下されば、親切だと思います)。</p>
+<h2><a name="L005355" id="L005355">Integer</a></h2>
+<h3><a name="L005356" id="L005356">クラスメソッド:</a></h3>
+<dl>
+<dt><a name="L005357" id="L005357"><code>Integer.from_prime_division(<var>pd</var>)</code></a></dt>
+<dd>
+<p>素因数分解の配列<var>pd</var>から数を求める。
+<var>pd</var>は<code>[素因数, 指数]</code>組の配列である。</p>
+<p>例:</p>
+<pre>Integer.from_prime_division [[2,3],[3,2]]
+-&gt; 72 # == 2**3 * 3**2</pre></dd>
+</dl>
+<h3><a name="L005358" id="L005358">メソッド:</a></h3>
+<dl>
+<dt><a name="L005359" id="L005359"><code>Integer#gcd2(<var>int</var>)</code></a></dt>
+<dd>
+<p><var>self</var>と<var>int</var>の最大公約数を求める。</p>
+<p>例:</p>
+<pre>12.gcd2 8
+-&gt; 4</pre></dd>
+<dt><a name="L005360" id="L005360"><code>Integer#prime_division</code></a></dt>
+<dd>
+<p><var>self</var>の素因数分解(の配列)を求める。</p>
+<p>例:</p>
+<pre>72.prime_division
+-&gt; [[2, 3], [3, 2]]</pre></dd>
+</dl>
+<h2><a name="L005361" id="L005361">Fixnum</a></h2>
+<ul>
+<li>Fixnum#/がFixnum#quoと同じ働きをするようになる(有理数または整数を返す)。</li>
+</ul>
+<h2><a name="L005362" id="L005362">Bignum</a></h2>
+<ul>
+<li>Bignum#/がBignum#quoと同じ働きをするようになる(有理数または整数を返す)。</li>
+</ul>
+<h2><a name="L005363" id="L005363">Rational</a></h2>
+<dl>
+<dt><a name="L005364" id="L005364"><code>Rational#**</code></a></dt>
+<dd>
+<p>べき乗。 RationalになるようであればRationalで返す。</p></dd>
+<dt><a name="L005365" id="L005365"><code>Rational#power2</code></a></dt>
+<dd>
+<p>作りかけ(^^;;</p></dd>
+<dt><a name="L005366" id="L005366"><code>Rational#inspect</code></a></dt>
+<dd>
+<p>「3/5」などの形で返す。</p></dd>
+</dl>
+<h2><a name="L005367" id="L005367">Math</a></h2>
+<dl>
+<dt><a name="L005368" id="L005368"><code>Math.sqrt(<var>a</var>)</code></a></dt>
+<dd>
+<p>aの正の平方根。
+aがComplexの時は、Complexを返す。
+aが負の時は、aを正にして、その平方根をComplexの虚数部に入れて返す。
+それ以外は、Math.rsqrtに丸投げ。</p></dd>
+<dt><a name="L005369" id="L005369"><code>Math.rsqrt(<var>a</var>)</code></a></dt>
+<dd>
+<p>複素数を考慮しないので、負の数やComplexをあたえてはいけない。</p>
+<p>aがFloatの時は、Floatを返す。
+それ以外の時、平方根が有理数であれば、RationalまたはIntergerを返す。
+無理数であれば、Floatを返す。</p></dd>
+</dl>
+<h2><a name="L005370" id="L005370">Prime</a></h2>
+<h3><a name="L005371" id="L005371">インクルードしているモジュール:</a></h3>
+<ul>
+<li><a href="refm070.html">Enumerable</a></li>
+</ul>
+<h3><a name="L005356" id="L005356">クラスメソッド:</a></h3>
+<dl>
+<dt><a name="L005372" id="L005372"><code>Prime.new</code></a></dt>
+<dd>
+<p>素数を生成するクラスを作る。</p></dd>
+</dl>
+<h3><a name="L005358" id="L005358">メソッド:</a></h3>
+<dl>
+<dt><a name="L005373" id="L005373"><code>Prime#succ</code></a>
+<dt><a name="L005374" id="L005374"><code>Prime#next</code></a></dt>
+<dd>
+<p>次の素数を返す。</p>
+<p>例:</p>
+<pre>q = Prime.new
+q.succ # =&gt; 2
+q.succ # =&gt; 3
+q.succ # =&gt; 5</pre></dd>
+<dt><a name="L005375" id="L005375"><code>Prime#each</code></a></dt>
+<dd>
+<p>素数について繰り返し。
+これは<em>無限ループ</em>になるので必ずbreakを入れること。</p>
+<p>例:</p>
+<pre>&gt; q=Prime.new; i = 0; q.each  {|x| break if i &gt; 5; puts x; i+=1;}
+2
+3
+5
+7
+11
+13</pre></dd>
+<dt><a name="L005376" id="L005376"><code>Prime#primes  ((&lt;<var>ruby</var> <var>1</var>.<var>9</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>それまでに求めた素数の配列を返す。</p></dd>
+</dl>
+<h2><a name="L005377" id="L005377">参考</a></h2>
+<ul>
+<li><a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/1174">ruby-list:1174</a><sup class="outside"><small>[外部]</small></sup></li>
+</ul>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm267.html">&lt;-PREV</a>][<a href="refm269.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

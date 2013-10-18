@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>eregex</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm370.html" rel="next" />
+<link href="refm368.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm368.html">&lt;-PREV</a>][<a href="refm370.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006993" id="L006993">eregex</a></h1>
+<h2><a name="L006994" id="L006994">目的・概要</a></h2>
+<p>2つの正規表現によるAND/ORを提供する。</p>
+<p>Regexpクラスに&amp;と|のメソッドを定義し、それぞれ
+2つの正規表現の両方にマッチすれば真となるもの(RegAnd)と
+いずれかにマッチすれば真となるもの(RegOr)を返す。
+RegAnd、RegOrは=~のみサポートしている。</p>
+<h2><a name="L006995" id="L006995">サンプルコード</a></h2>
+<pre>require 'eregex'
+p &quot;abc&quot; =~ /b/|/c/
+p &quot;abc&quot; =~ /b/&amp;/c/</pre>
+<h2><a name="L006996" id="L006996">class Regexp</a></h2>
+<p>組み込みクラスRegexpを拡張して次のメソッドを定義している。</p>
+<h3><a name="L006997" id="L006997">インスタンスメソッド</a></h3>
+<dl>
+<dt><a name="L006998" id="L006998"><code>Regexp#&amp;(<var>other</var>)</code></a></dt>
+<dd>
+<p><code>RegAnd(self,<var>other</var>)</code>を返す</p></dd>
+<dt><a name="L006999" id="L006999"><code>Regexp#|(<var>other</var>)</code></a></dt>
+<dd>
+<p><code>RegOr(self,<var>other</var>)</code>を返す</p></dd>
+</dl>
+<h2><a name="L007000" id="L007000">class RegAnd</a></h2>
+<h3><a name="L006997" id="L006997">インスタンスメソッド</a></h3>
+<dl>
+<dt><a name="L007001" id="L007001"><code>RegAnd#initialize(<var>reg1</var>,<var>reg2</var>)</code></a></dt>
+<dd>
+<p>コンストラクタ</p></dd>
+<dt><a name="L007002" id="L007002"><code>RegAnd#=~(<var>str</var>)</code></a></dt>
+<dd>
+<p><var>str</var>が<var>reg1</var>と<var>reg2</var>の両方にマッチすれば真を返す</p></dd>
+</dl>
+<h2><a name="L007003" id="L007003">class RegOr</a></h2>
+<h3><a name="L006997" id="L006997">インスタンスメソッド</a></h3>
+<dl>
+<dt><a name="L007004" id="L007004"><code>RegOr#initialize(<var>reg1</var>,<var>reg2</var>)</code></a></dt>
+<dd>
+<p>コンストラクタ</p></dd>
+<dt><a name="L007005" id="L007005"><code>RegOr#=~(<var>str</var>)</code></a></dt>
+<dd>
+<p><var>str</var>が<var>reg1</var>か<var>reg2</var>のいずれかにマッチすれば真を返す</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm368.html">&lt;-PREV</a>][<a href="refm370.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

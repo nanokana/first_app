@@ -1,0 +1,2 @@
+require 'tk'
+TK.mainloop

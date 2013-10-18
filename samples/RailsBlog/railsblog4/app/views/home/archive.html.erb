@@ -1,0 +1,11 @@
+<div class="archive">
+  <h2>アーカイブ</h2>
+  <ul>
+  <% for entry in @entries %>
+    <li>
+      <%=h entry.created_at.year %>年<%=h entry.created_at.month %>月<%=h entry.created_at.day %>日
+       …… <%=link_to h(entry.title), :controller => 'entries', :action => 'show', :id => entry %>
+    </li>
+  <% end %>
+  </ul>
+</div>

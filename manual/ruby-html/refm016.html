@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>終了処理</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm017.html" rel="next" />
+<link href="refm015.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm015.html">&lt;-PREV</a>][<a href="refm017.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L000218" id="L000218">Rubyの終了処理</a></h1>
+<p>Ruby はスクリプトの終端に達した場合や捕捉していない例外が発生した場
+合に終了します(関数 <a href="refm029.html#L000448">exit</a> や <a href="refm029.html#L000432">abort</a>
+、メインスレッドに対する <a href="refm064.html#L001617">Thread.kill</a> などは 
+<a href="refm113.html">SystemExit</a> 例外を発生させます)。終了時には以下
+の処理が順に実行されます。</p>
+<ol>
+<li>すべてのスレッドを <a href="refm064.html#L001617">Thread.kill</a> する。</li>
+<li>Ruby の疑似シグナル SIGEXIT のハンドラが登録されていればそれを実
+      行する(<a href="refm029.html#L000502">trap</a> を参照)。</li>
+<li><a href="refm026.html#L000403">END</a> ブロック(END { ... } または関数
+      <a href="refm029.html#L000434">at_exit</a> で指定したブロック)が登録されていれば、
+      そのブロックを登録とは逆順に実行する。このブロックの実行中に発生
+      した大域脱出はそのブロックの処理を中断するが。スクリプトはまだ終
+      了しない。</li>
+<li><p><a href="refm079.html#L002018">ObjectSpace.define_finalizer</a> により、ファイナ
+      ライザが登録されていればそれらを実行する(実行順序は不定)</p>
+<p>ファイナライザ実行中に発生した大域脱出はそのファイナライザの処理
+を中断するが、スクリプトはまだ終了しない。</p></li>
+<li><p><a href="refm535.html">exit(3)</a> により終了する</p>
+<p>このとき渡される終了ステータス値は終了方法によります。
+例えば、</p>
+<ul>
+<li>スクリプトの終端に達した場合は 0</li>
+<li><a href="refm029.html#L000448">exit</a> に渡した引数</li>
+<li><a href="refm113.html">SystemExit</a> による例外以外は 1</li>
+<li><a href="refm113.html">SystemExit</a> を明示的に raise したときは 0
+        <a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></li>
+</ul></li>
+</ol>
+<p>関数 <a href="refm029.html#L000449">exit!</a> による終了は、<a href="refm535.html">_exit(2)</a> 
+を実行するだけで、上記の処理はいずれも行われません。</p>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small><a href="refm384.html">ruby 1.7 feature</a>: <a href="refm113.html">SystemExit</a> を明示的に raise 
+        したときでも 1 で終了するようになった</small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm015.html">&lt;-PREV</a>][<a href="refm017.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

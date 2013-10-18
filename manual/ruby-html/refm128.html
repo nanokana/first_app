@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ripper</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm129.html" rel="next" />
+<link href="refm127.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm127.html">&lt;-PREV</a>][<a href="refm129.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<p><a href="refm392.html">ruby 1.9 feature</a> <a href="refm002.html">執筆者募集</a></p>
+<p>以下を参照して下さい。</p>
+<ul>
+<li><a href="http://i.loveruby.net/w/RipperTutorial.html">&lt;URL:http://i.loveruby.net/w/RipperTutorial.html&gt;</a><sup class="outside"><small>[外部]</small></sup> </li>
+<li><a href="http://i.loveruby.net/w/RipperTutorial.TokenStreamInterface.html">&lt;URL:http://i.loveruby.net/w/RipperTutorial.TokenStreamInterface.html&gt;</a><sup class="outside"><small>[外部]</small></sup></li>
+</ul>
+<p>Ruby プログラムをテキストとして扱いたい場合、例えばソース色付けを行いたい場合は、
+Ripper::Filter の利用を検討するとよいでしょう。</p>
+<h2><a name="L002540" id="L002540">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L002541" id="L002541"><code>Ripper.new(<var>src</var>, <var>filename</var>=&quot;(<var>ripper</var>)&quot;, <var>lineno</var>=<var>1</var>)</code></a>
+<dt><a name="L002542" id="L002542"><code>Ripper.lex(<var>src</var>, <var>filename</var> = '-', <var>lineno</var> = <var>1</var>) <var>→</var> [((<var>Integer</var>,<var>Integer</var>), <var>Symbol</var>, <var>String</var>)]</code></a></dt>
+<dd>
+<p>Ruby プログラム str をトークンに分割し、そのリストを返す。ただし tokenize と違い、トークンの種類と位置情報が付帯す      る。 </p>
+<p>使用例</p>
+<pre>require 'ripper'
+require 'pp'
+
+pp Ripper.scan(&quot;def m(a) nil end&quot;)
+    #=&gt; [[[1, 0], :on_kw, &quot;def&quot;],
+         [[1, 3], :on_sp, &quot; &quot;],
+         [[1, 4], :on_ident, &quot;m&quot;],
+         [[1, 5], :on_lparen, &quot;(&quot;],
+         [[1, 6], :on_ident, &quot;a&quot;],
+         [[1, 7], :on_rparen, &quot;)&quot;],
+         [[1, 8], :on_sp, &quot; &quot;],
+         [[1, 9], :on_kw, &quot;nil&quot;],
+         [[1, 12], :on_sp, &quot; &quot;],
+         [[1, 13], :on_kw, &quot;end&quot;]]</pre>
+<p>Ripper.scan は分割したトークンを詳しい情報とともに返します。返り値の配列の要素は 3 要素の配列 (概念的にはタプル) です。その内訳を以下に示します。</p>
+<dl>
+<dt><a name="L002550" id="L002550">位置情報 (Integer,Integer)</a></dt>
+<dd>
+<p>トークンが置かれている行 (1-origin) と桁 (0-origin) の 2 要素の配列。 </p>
+</dd>
+<dt><a name="L002551" id="L002551">種類 (Symbol)</a></dt>
+<dd>
+<p>「:on_XXX」の形式で表される、トークンの種類。 </p>
+</dd>
+<dt><a name="L002552" id="L002552">トークン (String)</a></dt>
+<dd>
+<p>トークン文字列。</p>
+</dd>
+</dl></dd>
+<dt><a name="L002543" id="L002543"><code>Ripper.parse(<var>src</var>, <var>filename</var> = '(<var>ripper</var>)', <var>lineno</var> = <var>1</var>)</code></a>
+<dt><a name="L002544" id="L002544"><code>Ripper.sexp(<var>src</var>, <var>filename</var> = '-', <var>lineno</var> = <var>1</var>)</code></a>
+<dt><a name="L002545" id="L002545"><code>Ripper.slice(<var>src</var>, <var>pattern</var>, <var>n</var> = <var>0</var>) -&gt; <var>String</var></code></a></dt>
+<dd>
+<p>pattern を正規表現にコンパイルし、src は文字列にコンパイルして、正規表現マッチを行う。
+そして、n 番目のカッコ内を取り出す</p>
+<p>使用例</p>
+<pre>p Ripper.slice(%(&lt;&lt;HERE\nstring\#{nil}\nHERE),
+               &quot;heredoc_beg .*? nl $(.*?) heredoc_end&quot;, 1)
+# =&gt; &quot;string\#{nil}\n&quot;</pre></dd>
+<dt><a name="L002546" id="L002546"><code>Ripper.token_match(<var>src</var>, <var>pattern</var>)</code></a>
+<dt><a name="L002547" id="L002547"><code>Ripper.tokenize(<var>src</var>, <var>filename</var> = '-', <var>lineno</var> = <var>1</var>) <var>→</var> [<var>String</var>]</code></a></dt>
+<dd>
+<p>Ruby プログラム str をトークンに分割し、そのリストを返す。 </p>
+<p>使用例</p>
+<pre>require 'ripper'
+p Ripper.tokenize(&quot;def m(a) nil end&quot;)
+    #=&gt; [&quot;def&quot;, &quot; &quot;, &quot;m&quot;, &quot;(&quot;, &quot;a&quot;, &quot;)&quot;, &quot; &quot;, &quot;nil&quot;, &quot; &quot;, &quot;end&quot;]</pre>
+<p>Ripper.tokenize は最も単純なトークンストリーム API です。特に説明することはありません。</p>
+<p>Ripper.tokenize は空白やコメントも含め、元の文字列にある文字は 1 バイトも残さずに分割しますが、そのごく僅かな例外として、__END__ 以降の文字列は黙って捨てられます。これは現在のところ仕様と考えてください。</p></dd>
+<dt><a name="L002548" id="L002548"><code>Ripper.yydebug</code></a>
+<dt><a name="L002549" id="L002549"><code>Ripper.yydebug=</code></a>
+</dl>
+<h2><a name="L002553" id="L002553">メソッド</a></h2>
+<dl>
+<dt><a name="L002543" id="L002543"><code>parse</code></a>
+<dt><a name="L002554" id="L002554"><code>column</code></a>
+<dt><a name="L002555" id="L002555"><code>lineno</code></a>
+</dl>
+<h2><a name="L002556" id="L002556">定数</a></h2>
+<dl>
+<dt><a name="L002557" id="L002557"><code>Version</code></a>
+<dt><a name="L002558" id="L002558"><code>EVENTS</code></a></dt>
+<dd>
+<p>PARSER_EVENTS + SCANNER_EVENTS</p></dd>
+<dt><a name="L002559" id="L002559"><code>PARSER_EVENTS</code></a>
+<dt><a name="L002560" id="L002560"><code>PARSER_EVENT_TABLE</code></a>
+<dt><a name="L002561" id="L002561"><code>SCANNER_EVENTS</code></a>
+<dt><a name="L002562" id="L002562"><code>SCANNER_EVENT_TABLE</code></a>
+</dl>
+<h1><a name="L002563" id="L002563">Ripper::Filter</a></h1>
+<p>イベントドリブンインターフェイスを持つクラス。</p>
+<p>利用例</p>
+<pre>require 'ripper'
+require 'cgi'
+
+class Ruby2HTML &lt; Ripper::Filter
+  def on_default(event, tok, f)
+    f &lt;&lt; CGI.escapeHTML(tok)
+  end
+
+  def on_comment(tok, f)
+    f &lt;&lt; %Q[&lt;span class=&quot;comment&quot;&gt;#{CGI.escapeHTML(tok)}&lt;/span&gt;]
+  end
+
+  def on_tstring_beg(tok, f)
+    f &lt;&lt; %Q[&lt;span class=&quot;string&quot;&gt;#{CGI.escapeHTML(tok)}]
+  end
+
+  def on_tstring_end(tok, f)
+    f &lt;&lt; %Q[#{CGI.escapeHTML(tok)}&lt;/span&gt;]
+  end
+end
+
+Ruby2HTML.new(ARGF).parse('')</pre>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm127.html">&lt;-PREV</a>][<a href="refm129.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

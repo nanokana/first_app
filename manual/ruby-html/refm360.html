@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>enumerator</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm361.html" rel="next" />
+<link href="refm359.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm359.html">&lt;-PREV</a>][<a href="refm361.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006839" id="L006839">enumerator</a></h1>
+<p><a href="refm361.html">Enumerable::Enumerator</a>も参照してください。</p>
+<p>このモジュールをrequireすることによって <a href="refm035.html">Object</a> クラスと
+<a href="refm070.html">Enumerable</a> モジュールに以下のメソッドが追加されます。</p>
+<h2><a name="L006840" id="L006840">Object</a></h2>
+<dl>
+<dt><a name="L006841" id="L006841"><code>Object#to_enum(<var>method</var> = :<var>each</var>, *<var>args</var>)</code></a>
+<dt><a name="L006842" id="L006842"><code>Object#enum_for(<var>method</var> = :<var>each</var>, *<var>args</var>)</code></a></dt>
+<dd>
+<p><code>Enumerable::Enumerator.new(self, method, *args)</code>を返す。</p>
+<pre>例:
+    str = &quot;xyz&quot;
+
+    enum = str.enum_for(:each_byte)
+    a = enum.map {|b| '%02x' % b } #=&gt; [&quot;78&quot;, &quot;79&quot;, &quot;7a&quot;]
+
+    # protects an array from being modified
+    a = [1, 2, 3]
+    some_method(a.to_enum)</pre></dd>
+</dl>
+<h2><a name="L006843" id="L006843">Enumerable</a></h2>
+<dl>
+<dt><a name="L006844" id="L006844"><code>Enumerable#each_slice(<var>n</var>) {...}</code></a></dt>
+<dd>
+<p>n要素ずつにわけてブロックに渡して繰り返す。</p>
+<pre>例:
+    (1..10).each_slice(3) {|a| p a}
+    # outputs below
+    [1, 2, 3]
+    [4, 5, 6]
+    [7, 8, 9]
+    [10]</pre></dd>
+<dt><a name="L006845" id="L006845"><code>Enumerable#enum_slice(<var>n</var>)</code></a></dt>
+<dd>
+<p><code>Enumerable::Enumerator.new(self, :each_slice, n)</code>を返す。</p></dd>
+<dt><a name="L006846" id="L006846"><code>Enumerable#each_cons(<var>n</var>) {...}</code></a></dt>
+<dd>
+<p>連続したn要素ずつの配列をブロックに渡して繰り返す。</p>
+<pre>例:
+    (1..10).each_cons(3) {|a| p a}
+    # outputs below
+    [1, 2, 3]
+    [2, 3, 4]
+    [3, 4, 5]
+    [4, 5, 6]
+    [5, 6, 7]
+    [6, 7, 8]
+    [7, 8, 9]
+    [8, 9, 10]</pre></dd>
+<dt><a name="L006847" id="L006847"><code>Enumerable#enum_cons(<var>n</var>)</code></a></dt>
+<dd>
+<p><code>Enumerable::Enumerator.new(self, :each_cons, n)</code>を返す。</p></dd>
+<dt><a name="L006848" id="L006848"><code>Enumerable#enum_with_index</code></a></dt>
+<dd>
+<p><code>Enumerable::Enumerator.new(self, :each_with_index)</code>を返す。</p></dd>
+</dl>
+<h2><a name="L006849" id="L006849">参考</a></h2>
+<ul>
+<li><a href="http://jp.rubyist.net/magazine/">Rubyist Magazine</a><sup class="outside"><small>[外部]</small></sup>
+<ul>
+<li><a href="http://jp.rubyist.net/magazine/?0011-BundledLibraries">標準添付ライブラリ紹介【第 5 回】 enumerator</a><sup class="outside"><small>[外部]</small></sup></li>
+</ul></li>
+</ul>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm359.html">&lt;-PREV</a>][<a href="refm361.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

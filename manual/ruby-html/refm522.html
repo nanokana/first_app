@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ruby-src:ext/readline/README.ja</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm523.html" rel="next" />
+<link href="refm521.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm521.html">&lt;-PREV</a>][<a href="refm523.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1>ruby-src:ext/readline/README.ja</h1>
+GNU&nbsp;Readline&nbsp;Libraryを利用するための拡張モジュールです。<br />
+<br />
+require&nbsp;&quot;readline&quot;<br />
+include&nbsp;Readline<br />
+<br />
+line&nbsp;=&nbsp;readline(&quot;Prompt&gt;&nbsp;&quot;,&nbsp;true)<br />
+<br />
+のように使用してください。<br />
+<br />
+[Readline]<br />
+<br />
+&lt;モジュール関数&gt;<br />
+<br />
+readline(prompt,&nbsp;add_history=nil)<br />
+<br />
+&nbsp;&nbsp;一行入力を読み込みます。<br />
+&nbsp;&nbsp;add_historyがtrueの場合、ヒストリに読み込んだ文字列を追加します。<br />
+<br />
+&lt;クラスメソッド&gt;<br />
+<br />
+completion_proc&nbsp;=&nbsp;proc<br />
+<br />
+&nbsp;&nbsp;補完時の動作を決定するProcオブジェクトを指定します。<br />
+&nbsp;&nbsp;procは引数に入力文字列を取り、候補文字列の配列を返すように<br />
+&nbsp;&nbsp;してください。<br />
+<br />
+completion_proc<br />
+<br />
+&nbsp;&nbsp;補完時の動作を決定するProcオブジェクトを返します。<br />
+<br />
+completion_case_fold&nbsp;=&nbsp;case_fold<br />
+<br />
+&nbsp;&nbsp;補完時に大文字小文字を区別しない場合、trueを指定します。<br />
+<br />
+completion_case_fold<br />
+<br />
+&nbsp;&nbsp;補完時に大文字小文字を区別しない場合、trueを返します。<br />
+<br />
+completion_append_character&nbsp;=&nbsp;char<br />
+<br />
+&nbsp;&nbsp;補完時に付加される文字を文字列で指定します。先頭の一文字が<br />
+&nbsp;&nbsp;設定され、空文字列&nbsp;(&quot;&quot;)&nbsp;または&nbsp;nil&nbsp;を指定すると何も付加<br />
+&nbsp;&nbsp;されなくなります。<br />
+<br />
+completion_append_character<br />
+<br />
+&nbsp;&nbsp;補完時に付加される文字を文字列で返します。デフォルトは<br />
+&nbsp;&nbsp;空白&nbsp;(&quot;&nbsp;&quot;)&nbsp;です。<br />
+<br />
+vi_editing_mode<br />
+<br />
+&nbsp;&nbsp;VIモードになります。<br />
+<br />
+emacs_editing_mode<br />
+<br />
+&nbsp;&nbsp;Emacsモードになります。<br />
+<br />
+&lt;クラス定数&gt;<br />
+<br />
+HISTORY<br />
+<br />
+ヒストリに対する操作はこの定数を通して行ってください。<br />
+配列と同じように扱えるようになっています。<br />
+
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm521.html">&lt;-PREV</a>][<a href="refm523.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>OpenSSL::X509::Extension</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm221.html" rel="next" />
+<link href="refm219.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm217.html">UP</a>][<a href="refm219.html">&lt;-PREV</a>][<a href="refm221.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L004368" id="L004368">OpenSSL::X509::Extension</a></h1>
+<p>X.509 v3 証明書の拡張領域のためのクラス。<a href="refm218.html">OpenSSL::X509::Certificate</a> オブジェクトは
+その拡張領域を Extension オブジェクトの配列として保持している。</p>
+<ul>
+<li><a href="refm221.html">OpenSSL::X509::ExtensionFactory</a></li>
+</ul>
+<h2><a name="L004369" id="L004369">例</a></h2>
+<pre>require 'openssl'
+require 'open-uri'
+
+der = open('http://csrc.nist.gov/pki/pkixtools/cert1.der').read
+cert = OpenSSL::X509::Certificate.new(der)
+p cert.extensions.class # =&gt; Array
+p cert.extensions 
+# =&gt; [subjectKeyIdentifier = 86:CA:A5:22:81:62:EF:AD:0A:89:BC:AD:72:41:2C:29:49:F4:86:56, 
+      basicConstraints = critical, CA:TRUE]
+p cert.extensions[0].class # =&gt; OpenSSL::X509::Extension</pre>
+<h2><a name="L004370" id="L004370">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L004371" id="L004371"><code>Extension.new(<var>oid</var>, <var>value</var>, <var>critical</var>)</code></a></dt>
+<dd>
+<p>Extension オブジェクトを生成する。<var>oid</var> には拡張領域の OID をあらわす
+<a href="refm239.html">OpenSSL::ASN1::ObjectId</a> オブジェクト、あるいは OID の short name か
+long name である文字列を与える。<var>value</var> にはその値を表す DER 形式の文字列か
+<a href="refm237.html">OpenSSL::ASN1::ASN1Data</a> のサブクラスのインスタンスを与える。</p>
+<pre>require 'openssl'
+include OpenSSL
+oid = &quot;subjectKeyIdentifier&quot;
+val = &quot;\004\024\206\312\245\&quot;\201b\357\255\n\211\274\255rA,)I\364\206V&quot;
+ex = X509::Extension.new(oid, val)
+p ex.value # =&gt; &quot;86:CA:A5:22:81:62:EF:AD:0A:89:BC:AD:72:41:2C:29:49:F4:86:56&quot;</pre></dd>
+</dl>
+<h2><a name="L004372" id="L004372">インスタンスメソッド</a></h2>
+<dl>
+<dt><a name="L004373" id="L004373"><code>critical=</code></a>
+<dt><a name="L004374" id="L004374"><code>critical?</code></a></dt>
+<dd>
+<p>クリティカルかどうかを設定する。</p></dd>
+<dt><a name="L004375" id="L004375"><code>oid</code></a>
+<dt><a name="L004376" id="L004376"><code>oid=</code></a></dt>
+<dd>
+<p>OID を文字列で設定する。</p></dd>
+<dt><a name="L004377" id="L004377"><code>to_der</code></a></dt>
+<dd>
+<p>DER形式に変換する。</p></dd>
+<dt><a name="L004378" id="L004378"><code>value</code></a>
+<dt><a name="L004379" id="L004379"><code>value=</code></a></dt>
+<dd>
+<p>値を設定する。</p></dd>
+</dl>
+<h2><a name="L004380" id="L004380">参照</a></h2>
+<ul>
+<li>[RFC 3280] <a href="http://www.ipa.go.jp/security/rfc/RFC3280-04EN.html#42">Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile</a><sup class="outside"><small>[外部]</small></sup></li>
+</ul>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm217.html">UP</a>][<a href="refm219.html">&lt;-PREV</a>][<a href="refm221.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

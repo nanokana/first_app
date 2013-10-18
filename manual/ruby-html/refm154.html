@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>pathname</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm155.html" rel="next" />
+<link href="refm153.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm153.html">&lt;-PREV</a>][<a href="refm155.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L002905" id="L002905">pathname</a></h1>
+<h2><a name="L002906" id="L002906">module Kernel</a></h2>
+<dl>
+<dt><a name="L002907" id="L002907"><code>Pathname(<var>path</var>)</code></a></dt>
+<dd>
+<p><a href="refm391.html">ruby 1.8.5 feature</a></p>
+<p>文字列 path を元に Pathname オブジェクトを生成する。</p>
+<p>Pathanme.new(string) と同じ。</p></dd>
+</dl>
+<h2><a name="L002908" id="L002908">class Pathname</a></h2>
+<p>パス名クラス</p>
+<h3><a name="L002909" id="L002909">Class Methods</a></h3>
+<dl>
+<dt><a name="L002910" id="L002910"><code>Pathname.new(<var>path</var>)</code></a></dt>
+<dd>
+<p>文字列 path を元に Pathname オブジェクトを生成する。</p></dd>
+<dt><a name="L002911" id="L002911"><code>Pathname.getwd</code></a>
+<dt><a name="L002912" id="L002912"><code>Pathname.pwd</code></a></dt>
+<dd>
+<p>カレントディレクトリを元に Pathname オブジェクトを生成する。
+Pathname.new(Dir.getwd) と同じ。</p></dd>
+<dt><a name="L002913" id="L002913"><code>Pathname.glob(<var>pattern</var>)</code></a>
+<dt><a name="L002914" id="L002914"><code>Pathname.glob(<var>pattern</var>) {|<var>pathname</var>| ...}</code></a>
+<dt><a name="L002915" id="L002915"><code>Pathname.glob(<var>pattern</var>[, <var>flags</var>])</code></a>
+<dt><a name="L002916" id="L002916"><code>Pathname.glob(<var>pattern</var>[, <var>flags</var>]) {|<var>pathname</var>| ...}</code></a></dt>
+<dd>
+<p>ワイルドカードの展開を行なった結果を、Pathname オブジェクトの配列として返す。</p>
+<p>引数の意味は、<a href="refm041.html#L000839">Dir.glob</a> と同じ。</p>
+<p>ブロックが与えられたときは、
+ワイルドカードにマッチした Pathname オブジェクトを引数として
+そのブロックを 1 つずつ評価し nil を返す。</p></dd>
+</dl>
+<h3><a name="L002917" id="L002917">Instance Methods</a></h3>
+<dl>
+<dt><a name="L002918" id="L002918"><code><var>self</var> == <var>other</var></code></a>
+<dt><a name="L002919" id="L002919"><code><var>self</var> === <var>other</var></code></a>
+<dt><a name="L002920" id="L002920"><code>eql?(<var>other</var>)</code></a></dt>
+<dd>
+<p>パス名の比較。other と同じなら真を返す。大文字小文字は区別される。
+other は Pathname オブジェクトでなければならない。</p>
+<p>パス名の比較は単純にパス文字列の比較によって行われるので論理的に
+同じパスでも異なると判断される。</p>
+<pre>require 'pathname'
+
+p Pathname.new(&quot;foo/bar&quot;) == Pathname.new(&quot;foo/bar&quot;)
+p Pathname.new(&quot;foo/bar&quot;) == Pathname.new(&quot;foo//bar&quot;)
+p Pathname.new(&quot;foo/../foo/bar&quot;) == Pathname.new(&quot;foo/bar&quot;)
+
+# =&gt; true
+     false
+     false</pre></dd>
+<dt><a name="L002921" id="L002921"><code><var>self</var> &lt;=&gt; <var>other</var></code></a></dt>
+<dd>
+<p>パス名の比較。other と同じなら 0 を、ASCII順で self が大きい場合は
+正、other が大きい場合は負を返す。大文字小文字は区別される。</p>
+<p>other は Pathname オブジェクトでなければならない。</p>
+<p>パス名の比較は単純にパス文字列の比較によって行われるので論理的に
+同じパスでも異なると判断される。</p>
+<pre>require 'pathname'
+
+p Pathname.new(&quot;foo/bar&quot;) &lt;=&gt; Pathname.new(&quot;foo/bar&quot;)
+p Pathname.new(&quot;foo/bar&quot;) &lt;=&gt; Pathname.new(&quot;foo//bar&quot;)
+p Pathname.new(&quot;foo/../foo/bar&quot;) &lt;=&gt; Pathname.new(&quot;foo/bar&quot;)
+=&gt; 0
+   1
+   -1</pre></dd>
+<dt><a name="L002922" id="L002922"><code>hash</code></a></dt>
+<dd>
+<p>ハッシュ値を返す。</p></dd>
+<dt><a name="L002923" id="L002923"><code>to_s</code></a>
+<dt><a name="L002924" id="L002924"><code>to_str</code></a></dt>
+<dd>
+<p>パス名を文字列で返す。</p>
+<p>to_str は、File.open などの引数にそのまま Pathname オブジェクトを
+渡せるように用意してある。</p>
+<pre>require 'pathname'
+
+path = Pathname.new(&quot;/tmp/hogehoge&quot;)
+File.open(path)</pre></dd>
+<dt><a name="L002925" id="L002925"><code>cleanpath(<var>consider_symlink</var> = <var>false</var>)</code></a></dt>
+<dd>
+<p>余計な &quot;.&quot;、&quot;..&quot; や &quot;/&quot; を取り除いた新しい Pathname オブジェクトを返す。</p>
+<pre>require &quot;pathname&quot;
+path = Pathname.new(&quot;//.././../&quot;)
+p path                  # =&gt; #&lt;Pathname://.././../&gt;
+p path.cleanpath        # =&gt; #&lt;Pathname:/&gt;</pre>
+<p>consider_symlink が真ならパス要素にシンボリックリンクがあった場合
+にも問題ないように .. を残す。</p>
+<p>cleanpath は、実際にファイルシステムを参照することなく。文字列操作
+だけで処理を行う。</p>
+<pre>require 'pathname'
+
+Dir.rmdir(&quot;/tmp/foo&quot;)      rescue nil
+File.unlink(&quot;/tmp/bar/foo&quot;) rescue nil
+Dir.rmdir(&quot;/tmp/bar&quot;)      rescue nil
+
+Dir.mkdir(&quot;/tmp/foo&quot;)
+Dir.mkdir(&quot;/tmp/bar&quot;)
+File.symlink(&quot;../foo&quot;, &quot;/tmp/bar/foo&quot;)
+path = Pathname.new(&quot;bar/././//foo/../bar&quot;)
+
+Dir.chdir(&quot;/tmp&quot;)
+
+p path.cleanpath
+p path.cleanpath(true)
+
+=&gt; ruby 1.8.0 (2003-10-10) [i586-linux]
+   #&lt;Pathname:bar/bar&gt;
+   #&lt;Pathname:bar/foo/../bar&gt;</pre></dd>
+<dt><a name="L002926" id="L002926"><code>realpath(<var>force_absolute</var> = <var>true</var>)</code></a></dt>
+<dd>
+<p>余計な &quot;.&quot;、&quot;..&quot; や &quot;/&quot; を取り除いた新しい Pathname オブジェクトを返す。</p>
+<p>ファイルシステムをアクセスし、実際に存在するパスを返す。
+シンボリックリンクも解決される。</p>
+<p>force_absolute が真の場合、絶対パスを返す。self が相対パスであれば、
+カレントディレクトリからの相対パスとして解釈される。</p>
+<p>self が指すパスが存在しない場合は例外 
+<a href="refm108.html">Errno::ENOENT</a> が発生する。</p>
+<pre>require 'pathname'
+
+Dir.rmdir(&quot;/tmp/foo&quot;)      rescue nil
+File.unlink(&quot;/tmp/bar/foo&quot;) rescue nil
+Dir.rmdir(&quot;/tmp/bar&quot;)      rescue nil
+
+Dir.mkdir(&quot;/tmp/foo&quot;)
+Dir.mkdir(&quot;/tmp/bar&quot;)
+File.symlink(&quot;../foo&quot;, &quot;/tmp/bar/foo&quot;)
+path = Pathname.new(&quot;bar/././//foo/../bar&quot;)
+
+Dir.chdir(&quot;/tmp&quot;)
+
+p path.realpath
+p path.realpath(false)
+
+=&gt; ruby 1.8.0 (2003-10-10) [i586-linux]
+   #&lt;Pathname:/tmp/bar&gt;
+   #&lt;Pathname:bar&gt;</pre></dd>
+<dt><a name="L002927" id="L002927"><code>parent</code></a></dt>
+<dd>
+<p>self の親ディレクトリを指す新しい Pathname オブジェクトを返す。</p></dd>
+<dt><a name="L002928" id="L002928"><code>mountpoint?</code></a></dt>
+<dd>
+<p>self がマウントポイントであれば真を返す。</p></dd>
+<dt><a name="L002929" id="L002929"><code>root?</code></a></dt>
+<dd>
+<p>self がルートディレクトリであれば真を返す。判断は文字列操作によっ
+て行われ、ファイルシステムはアクセスされない。</p></dd>
+<dt><a name="L002930" id="L002930"><code>absolute?</code></a></dt>
+<dd>
+<p>self が絶対パス指定であれば真を返す。</p></dd>
+<dt><a name="L002931" id="L002931"><code>relative?</code></a></dt>
+<dd>
+<p>self が相対パス指定であれば真を返す。</p></dd>
+<dt><a name="L002932" id="L002932"><code>each_filename {|<var>v</var>| ... ]</code></a></dt>
+<dd>
+<p>self のパス名要素毎にブロックを実行する。</p>
+<pre>require 'pathname'
+
+Pathname.new(&quot;/foo/../bar&quot;).each_filename {|v| p v}
+
+# =&gt; &quot;foo&quot;
+     &quot;..&quot;
+     &quot;bar&quot;</pre></dd>
+<dt><a name="L002933" id="L002933"><code><var>self</var> + <var>other</var></code></a></dt>
+<dd>
+<p>パス名を連結する。つまり、other を self からの相対パスとした新しい 
+Pathname オブジェクトを生成して返す。</p>
+<p>other が絶対パスなら単に other を Pathname オブジェクトとして返す。</p>
+<p>other は文字列か Pathname オブジェクト。</p></dd>
+<dt><a name="L002934" id="L002934"><code>children</code></a></dt>
+<dd>
+<p>self 配下にあるパス名(Pathnameオブジェクト)の配列を返す。</p>
+<pre>require 'pathname'
+
+p Pathname.new(&quot;/tmp&quot;).children
+=&gt; ruby 1.8.0 (2003-10-10) [i586-linux]
+   [#&lt;Pathname:.X11-unix&gt;, #&lt;Pathname:.iroha_unix&gt;, ... ]</pre>
+<p>&quot;.&quot;, &quot;..&quot; は要素に含まれない。</p>
+<p>self が存在しないパスであったりディレクトリでなければ例外 
+<a href="refm108.html">Errno::EXXX</a> が発生する。</p></dd>
+<dt><a name="L002935" id="L002935"><code>relative_path_from(<var>base_directory</var>)</code></a></dt>
+<dd>
+<p>base_direcoty から self への相対パスを求め Pathname オブジェクトを
+生成して返す。</p>
+<p>パス名の解決は文字列操作によって行われ、ファイルシステムをアクセス
+しない。</p>
+<pre>require 'pathname'
+
+path = Pathname.new(&quot;/tmp/foo&quot;)
+base = Pathname.new(&quot;/tmp&quot;)
+
+p path.relative_path_from(base)
+
+# =&gt; ruby 1.8.0 (2003-10-10) [i586-linux]
+     #&lt;Pathname:foo&gt;</pre>
+<p>self が相対パスなら base_directory も相対パス、self が絶対パスなら 
+base_directory も絶対パスでなければならない。</p>
+<p>base_directory は Pathname オブジェクトでなければならない。</p></dd>
+<dt><a name="L002936" id="L002936"><code>each_line(*<var>args</var>, &amp;<var>block</var>)</code></a></dt>
+<dd>
+<p>IO.foreach(self.to_s, *args, &amp;block)</p></dd>
+<dt><a name="L002937" id="L002937"><code>read(*<var>args</var>)</code></a></dt>
+<dd>
+<p>IO.read(self.to_s, *args)</p></dd>
+<dt><a name="L002938" id="L002938"><code>readlines(*<var>args</var>)</code></a></dt>
+<dd>
+<p>IO.readlines(self.to_s, *args)</p></dd>
+<dt><a name="L002939" id="L002939"><code>sysopen(*<var>args</var>)</code></a></dt>
+<dd>
+<p>IO.sysopen(self.to_s, *args)</p></dd>
+<dt><a name="L002940" id="L002940"><code>atime()</code></a></dt>
+<dd>
+<p>File.atime(self.to_s)</p></dd>
+<dt><a name="L002941" id="L002941"><code>ctime()</code></a></dt>
+<dd>
+<p>File.ctime(self.to_s)</p></dd>
+<dt><a name="L002942" id="L002942"><code>mtime()</code></a></dt>
+<dd>
+<p>File.mtime(self.to_s)</p></dd>
+<dt><a name="L002943" id="L002943"><code>chmod(<var>mode</var>)</code></a></dt>
+<dd>
+<p>File.chmod(mode, self.to_s)</p></dd>
+<dt><a name="L002944" id="L002944"><code>lchmod(<var>mode</var>)</code></a></dt>
+<dd>
+<p>File.chmod(mode, self.to_s)</p></dd>
+<dt><a name="L002945" id="L002945"><code>chown(<var>owner</var>, <var>group</var>)</code></a></dt>
+<dd>
+<p>File.chown(owner, group, self.to_s)</p></dd>
+<dt><a name="L002946" id="L002946"><code>lchown(<var>owner</var>, <var>group</var>)</code></a></dt>
+<dd>
+<p>File.lchown(owner, group, self.to_s)</p></dd>
+<dt><a name="L002947" id="L002947"><code>fnmatch(<var>pattern</var>, *<var>args</var>)</code></a></dt>
+<dd>
+<p>File.fnmatch(pattern, self.to_s, *args)</p></dd>
+<dt><a name="L002948" id="L002948"><code>fnmatch?(<var>pattern</var>, *<var>args</var>)</code></a></dt>
+<dd>
+<p>File.fnmatch?(pattern, self.to_s, *args)</p></dd>
+<dt><a name="L002949" id="L002949"><code>ftype()</code></a></dt>
+<dd>
+<p>File.ftype(self.to_s)</p></dd>
+<dt><a name="L002950" id="L002950"><code>link(<var>old</var>)</code></a></dt>
+<dd>
+<p>File.link(old, self.to_s)</p></dd>
+<dt><a name="L002951" id="L002951"><code>open(*<var>args</var>, &amp;<var>block</var>)</code></a></dt>
+<dd>
+<p>File.open(self.to_s, *args, &amp;block)</p></dd>
+<dt><a name="L002952" id="L002952"><code>readlink()</code></a></dt>
+<dd>
+<p>Pathname.new(File.readlink(self.to_s))</p></dd>
+<dt><a name="L002953" id="L002953"><code>rename(<var>to</var>)</code></a></dt>
+<dd>
+<p>File.rename(self.to_s, to)</p></dd>
+<dt><a name="L002954" id="L002954"><code>stat()</code></a></dt>
+<dd>
+<p>File.stat(self.to_s)</p></dd>
+<dt><a name="L002955" id="L002955"><code>lstat()</code></a></dt>
+<dd>
+<p>File.lstat(self.to_s)</p></dd>
+<dt><a name="L002956" id="L002956"><code>symlink(<var>old</var>)</code></a></dt>
+<dd>
+<p>File.symlink(old, self.to_s)</p></dd>
+<dt><a name="L002957" id="L002957"><code>truncate(<var>length</var>)</code></a></dt>
+<dd>
+<p>File.truncate(self.to_s, length)</p></dd>
+<dt><a name="L002958" id="L002958"><code>utime(<var>atime</var>, <var>mtime</var>)</code></a></dt>
+<dd>
+<p>File.utime(atime, mtime, self.to_s)</p></dd>
+<dt><a name="L002959" id="L002959"><code>basename(*<var>args</var>)</code></a></dt>
+<dd>
+<p>Pathname.new(File.basename(self.to_s, *args))</p></dd>
+<dt><a name="L002960" id="L002960"><code>dirname()</code></a></dt>
+<dd>
+<p>Pathname.new(File.dirname(self.to_s))</p></dd>
+<dt><a name="L002961" id="L002961"><code>extname()</code></a></dt>
+<dd>
+<p>File.extname(self.to_s)</p></dd>
+<dt><a name="L002962" id="L002962"><code>expand_path(*<var>args</var>)</code></a></dt>
+<dd>
+<p>Pathname.new(File.expand_path(self.to_s, *args))</p></dd>
+<dt><a name="L002963" id="L002963"><code>join(*<var>args</var>)</code></a></dt>
+<dd>
+<p>Pathname.new(File.join(self.to_s, *args))</p></dd>
+<dt><a name="L002964" id="L002964"><code>split()</code></a></dt>
+<dd>
+<p>File.split(self.to_s)</p></dd>
+<dt><a name="L002965" id="L002965"><code>blockdev?()</code></a></dt>
+<dd>
+<p>FileTest.blockdev?(self.to_s)</p></dd>
+<dt><a name="L002966" id="L002966"><code>chardev?()</code></a></dt>
+<dd>
+<p>FileTest.chardev?(self.to_s)</p></dd>
+<dt><a name="L002967" id="L002967"><code>executable?()</code></a></dt>
+<dd>
+<p>FileTest.executable?(self.to_s)</p></dd>
+<dt><a name="L002968" id="L002968"><code>executable_real?()</code></a></dt>
+<dd>
+<p>FileTest.executable_real?(self.to_s)</p></dd>
+<dt><a name="L002969" id="L002969"><code>exist?()</code></a></dt>
+<dd>
+<p>FileTest.exist?(self.to_s)</p></dd>
+<dt><a name="L002970" id="L002970"><code>grpowned?()</code></a></dt>
+<dd>
+<p>FileTest.grpowned?(self.to_s)</p></dd>
+<dt><a name="L002971" id="L002971"><code>directory?()</code></a></dt>
+<dd>
+<p>FileTest.directory?(self.to_s)</p></dd>
+<dt><a name="L002972" id="L002972"><code>file?()</code></a></dt>
+<dd>
+<p>FileTest.file?(self.to_s)</p></dd>
+<dt><a name="L002973" id="L002973"><code>pipe?()</code></a></dt>
+<dd>
+<p>FileTest.pipe?(self.to_s)</p></dd>
+<dt><a name="L002974" id="L002974"><code>socket?()</code></a></dt>
+<dd>
+<p>FileTest.socket?(self.to_s)</p></dd>
+<dt><a name="L002975" id="L002975"><code>owned?()</code></a></dt>
+<dd>
+<p>FileTest.owned?(self.to_s)</p></dd>
+<dt><a name="L002976" id="L002976"><code>readable?()</code></a></dt>
+<dd>
+<p>FileTest.readable?(self.to_s)</p></dd>
+<dt><a name="L002977" id="L002977"><code>readable_real?()</code></a></dt>
+<dd>
+<p>FileTest.readable_real?(self.to_s)</p></dd>
+<dt><a name="L002978" id="L002978"><code>setuid?()</code></a></dt>
+<dd>
+<p>FileTest.setuid?(self.to_s)</p></dd>
+<dt><a name="L002979" id="L002979"><code>setgid?()</code></a></dt>
+<dd>
+<p>FileTest.setgid?(self.to_s)</p></dd>
+<dt><a name="L002980" id="L002980"><code>size()</code></a></dt>
+<dd>
+<p>FileTest.size(self.to_s)</p></dd>
+<dt><a name="L002981" id="L002981"><code>size?()</code></a></dt>
+<dd>
+<p>FileTest.size?(self.to_s)</p></dd>
+<dt><a name="L002982" id="L002982"><code>sticky?()</code></a></dt>
+<dd>
+<p>FileTest.sticky?(self.to_s)</p></dd>
+<dt><a name="L002983" id="L002983"><code>symlink?()</code></a></dt>
+<dd>
+<p>FileTest.symlink?(self.to_s)</p></dd>
+<dt><a name="L002984" id="L002984"><code>writable?()</code></a></dt>
+<dd>
+<p>FileTest.writable?(self.to_s)</p></dd>
+<dt><a name="L002985" id="L002985"><code>writable_real?()</code></a></dt>
+<dd>
+<p>FileTest.writable_real?(self.to_s)</p></dd>
+<dt><a name="L002986" id="L002986"><code>zero?()</code></a></dt>
+<dd>
+<p>FileTest.zero?(self.to_s)</p></dd>
+<dt><a name="L002987" id="L002987"><code>rmdir()</code></a></dt>
+<dd>
+<p>Dir.rmdir(self.to_s)</p></dd>
+<dt><a name="L002988" id="L002988"><code>entries()</code></a></dt>
+<dd>
+<p>Dir.entries(self.to_s)</p></dd>
+<dt><a name="L002989" id="L002989"><code>each_entry(&amp;<var>block</var>)</code></a></dt>
+<dd>
+<p>Dir.foreach(self.to_s) {|f| yield Pathname.new(f) }</p></dd>
+<dt><a name="L002990" id="L002990"><code>mkdir(*<var>args</var>)</code></a></dt>
+<dd>
+<p>Dir.mkdir(self.to_s, *args)</p></dd>
+<dt><a name="L002991" id="L002991"><code>opendir(&amp;<var>block</var>)</code></a></dt>
+<dd>
+<p>Dir.open(self.to_s, &amp;block)</p></dd>
+<dt><a name="L002992" id="L002992"><code>find {|<var>pathname</var>| ...}</code></a></dt>
+<dd>
+<p>self 配下のすべてのファイルやディレクトリを一つずつ引数 <var>pathname</var> に渡してブロックを実行する。</p>
+<pre>require 'find'
+Find.find(self.to_s) {|f| yield Pathname.new(f)}</pre>
+<p>と同じ。</p></dd>
+<dt><a name="L002993" id="L002993"><code>mkpath</code></a></dt>
+<dd>
+<p>require 'fileutils'
+FileUtils.mkpath(self.to_s)</p></dd>
+<dt><a name="L002994" id="L002994"><code>rmtree</code></a></dt>
+<dd>
+<p>require 'fileutils'
+FileUtils.rm_r(self.to_s)</p></dd>
+<dt><a name="L002995" id="L002995"><code>unlink</code></a>
+<dt><a name="L002996" id="L002996"><code>delete</code></a></dt>
+<dd>
+<p>self が指すディレクトリあるいはファイルを削除する。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm153.html">&lt;-PREV</a>][<a href="refm155.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,659 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ruby 1.8.4 feature</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm391.html" rel="next" />
+<link href="refm389.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm382.html">UP</a>][<a href="refm389.html">&lt;-PREV</a>][<a href="refm391.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L008728" id="L008728">ruby 1.8.4 feature</a></h1>
+<p>ruby 1.8.4 での ruby 1.8.3 からの変更点です。</p>
+<p>掲載方針</p>
+<ul>
+<li>バグ修正の影響も含めて動作が変わるものを収録する。</li>
+<li>単にバグを直しただけのものは収録しない。</li>
+<li>ライブラリへの単なる定数の追加は収録しない。</li>
+</ul>
+<p>以下は各変更点に付けるべきタグです。</p>
+<p>記号について(特に重要なものは大文字(主観))</p>
+<ul>
+<li>レベル
+<ul>
+<li>[bug]: バグ修正</li>
+<li>[new]: 追加されたクラス／メソッドなど</li>
+<li>[compat]: 変更されたクラス／メソッドなど
+<ul>
+<li>互換性のある変更</li>
+<li>only backward-compatibility</li>
+<li>影響の範囲が小さいと思われる変更もこちら</li>
+</ul></li>
+<li>[change]: 変更されたクラス／メソッドなど(互換性のない変更)</li>
+<li>[obsolete]: 廃止された(される予定の)機能</li>
+<li>[platform]: 対応プラットフォームの追加</li>
+</ul></li>
+</ul>
+<h2><a name="L008729" id="L008729">目次</a></h2>
+<ul>
+<li><a href="#L008730">Ruby本体</a>
+<ul>
+<li><a href="#L008731">Symbol [bug]</a></li>
+<li><a href="#L008731">Symbol [bug]</a></li>
+<li><a href="#L008732">super [bug]</a></li>
+<li><a href="#L008733">正規表現 [bug]</a></li>
+<li><a href="#L008734">シグナル [bug]</a></li>
+</ul></li>
+<li><a href="#L008735">組み込みライブラリ</a>
+<ul>
+<li><a href="#L008736">UnboundMethod#bind [bug]</a></li>
+<li><a href="#L008737">set_trace_func [bug]</a></li>
+<li><a href="#L008738">set_trace_func [change]</a></li>
+<li><a href="#L008739">printf [bug]</a></li>
+<li><a href="#L008740">Hash [bug]</a></li>
+<li><a href="#L008741">test [bug]</a></li>
+<li><a href="#L008742">File.identical? [new]</a></li>
+<li><a href="#L008743">FileTest.identical? [new]</a></li>
+<li><a href="#L008744">File.split [change]</a></li>
+<li><a href="#L008745">File.basename [change]</a></li>
+<li><a href="#L008746">File.dirname [change]</a></li>
+<li><a href="#L008747">Dir.glob (Win全般) [bug]</a></li>
+<li><a href="#L008748">File.basename (Win全般) [change]</a></li>
+<li><a href="#L008749">File.dirname (Win全般) [bug]</a></li>
+<li><a href="#L008750">File::Stat#pipe? [bug]</a></li>
+<li><a href="#L008751">Array#fill [bug]</a></li>
+<li><a href="#L008752">String#scan [bug]</a></li>
+<li><a href="#L008753">File.join [bug]</a></li>
+<li><a href="#L008754">Thread#pass [bug]</a></li>
+<li><a href="#L008755">Module#const_missing [bug]</a></li>
+<li><a href="#L008756">IO [bug]</a></li>
+</ul></li>
+<li><a href="#L008757">添付ライブラリ</a>
+<ul>
+<li><a href="#L008758">Ruby/Tk</a></li>
+<li><a href="#L008759">REXML [compat]</a></li>
+<li><a href="#L008760">TCPSocket#initialize [bug]</a></li>
+<li><a href="#L008761">TCPServer#initialize [bug]</a></li>
+<li><a href="#L008762">optparse</a></li>
+<li><a href="#L008763">find</a></li>
+<li><a href="#L008764">Iconv</a></li>
+<li><a href="#L008765">WEBrick::Config::FileHandler [compat]</a></li>
+<li><a href="#L008766">WEBrick</a></li>
+<li><a href="#L008767">WEBrick::HTTPRequest#query_string= [new]</a></li>
+<li><a href="#L008768">Readline [bug]</a></li>
+<li><a href="#L008769">Syck [bug]</a></li>
+<li><a href="#L008770">irb [bug]</a></li>
+<li><a href="#L008771">RDoc [bug]</a></li>
+<li><a href="#L008772">Win32API [bug]</a></li>
+<li><a href="#L008773">Rinda [bug]</a></li>
+<li><a href="#L008774">Iconv [compat]</a></li>
+<li><a href="#L008775">cgi [bug]</a></li>
+<li><a href="#L008776">DL [bug]</a></li>
+<li><a href="#L008777">fileutils [bug]</a></li>
+<li><a href="#L008778">extmk, mkmf [compat]</a></li>
+<li><a href="#L008779">mkmf: find_executable() [compat]</a></li>
+</ul></li>
+<li><a href="#L008781">拡張ライブラリAPI</a>
+<ul>
+<li><a href="#L008782">rb_funcall2() [bug]</a></li>
+<li><a href="#L008783">rb_respond_to() [change]</a></li>
+<li><a href="#L008784">rb_obj_respond_to() [new]</a></li>
+</ul></li>
+<li><a href="#L008785">プラットフォーム固有</a>
+<ul>
+<li><a href="#L008786">bccwin32 [bug]</a></li>
+<li><a href="#L008787">cygwin [bug]</a></li>
+<li><a href="#L008788">BeOS [bug]</a></li>
+<li><a href="#L008789">Sun [bug]</a></li>
+<li><a href="#L008790">IA64 [bug]</a></li>
+</ul></li>
+</ul>
+<h2><a name="L008730" id="L008730">Ruby本体</a></h2>
+<dl>
+<dt><a name="L008731" id="L008731">Symbol [bug]</a></dt>
+<dd>
+<p>式展開で空のSymbolを作ることができたバグの修正。 <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/166529">ruby-talk:166529</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>p :&quot;&quot;
+
+# =&gt; ruby 1.8.3 (2005-09-21) [i686-linux]
+     -:1: empty symbol literal
+# =&gt; ruby 1.8.4 (2005-12-16) [i686-linux]
+     -:1: empty symbol literal
+
+p :&quot;#{&quot;&quot;}&quot;
+
+# =&gt; ruby 1.8.3 (2005-09-21) [i686-linux]
+     :
+# =&gt; ruby 1.8.4 (2005-12-16) [i686-linux]
+     -:1: empty symbol literal</pre>
+</dd>
+<dt><a name="L008731" id="L008731">Symbol [bug]</a></dt>
+<dd>
+<p>Symbolに適合する文字列を厳密にした。<em class="XXINVALIDXX">ruby-core:03573</em>,<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/27478">ruby-dev:27478</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>1) alias :&quot;foo&quot; :&quot;bar&quot;
+
+    def bar; p &quot;bar&quot;; end
+    alias :&quot;foo&quot; :&quot;bar&quot;
+    foo
+
+    # =&gt; ruby 1.8.4 (2005-12-22) [i686-linux]
+         -:2: syntax error, unexpected tSTRING_CONTENT
+             alias :&quot;foo&quot; :&quot;bar&quot;
+                        ^
+         -:2: warning: unused literal ignored
+    # =&gt; ruby 1.9.0 (2005-12-10) [i686-linux]
+         &quot;bar&quot;
+
+
+2) Symbol#inspect sometimes returns invalid symbol representations:
+
+    puts :&quot;!&quot;.inspect
+    puts :&quot;=&quot;.inspect
+    puts :&quot;0&quot;.inspect
+    puts :&quot;$1&quot;.inspect
+    puts :&quot;@1&quot;.inspect
+    puts :&quot;@@1&quot;.inspect
+    puts :&quot;@&quot;.inspect
+    puts :&quot;@@&quot;.inspect
+
+    # =&gt; ruby 1.8.3 (2005-09-21) [i686-linux]
+         :!
+         :=
+         :0
+         :$1
+         :@1
+         :@@1
+         :@
+         :@@
+    # =&gt; ruby 1.8.4 (2005-12-22) [i686-linux]
+         :&quot;!&quot;
+         :&quot;=&quot;
+         :&quot;0&quot;
+         :$1
+         :&quot;@1&quot;
+         :&quot;@@1&quot;
+         :&quot;@&quot;
+         :&quot;@@&quot;
+
+3) Symbol#inspect sometimes returns suboptimal symbol representations:
+    puts :foo!.inspect
+    puts :bar?.inspect
+
+    # =&gt; ruby 1.8.3 (2005-09-21) [i686-linux]
+         :&quot;foo!&quot;
+         :&quot;bar?&quot;
+    # =&gt; ruby 1.8.4 (2005-12-22) [i686-linux]
+         :foo!
+         :bar?
+
+4) :$- always treats next character literally:
+
+    p eval(&quot;:$-\n&quot;) # =&gt; :&quot;$-\n&quot;
+    p :$-( # =&gt; :&quot;$-(&quot;
+    p :$-  # =&gt; :&quot;$- &quot;
+    p :$-#.object_id # =&gt; 3950350
+
+    # =&gt; ruby 1.8.3 (2005-09-21) [i686-linux]
+         :&quot;$-\n&quot;
+         :&quot;$-(&quot;
+         :&quot;$- &quot;
+         2631438
+
+    # =&gt; ruby 1.8.4 (2005-12-22) [i686-linux]
+         -:2: syntax error, unexpected '(', expecting $end</pre>
+</dd>
+<dt><a name="L008732" id="L008732">super [bug]</a></dt>
+<dd>
+<p>Kernelのメソッド内でsuperを呼んだ時に、存在しないsuperclass
+にアクセスしようとするバグの修正。</p>
+<pre>module Kernel
+  def foo
+    super
+  end
+end
+
+foo
+
+# =&gt; ruby 1.8.3 (2005-09-21) [i686-linux]
+     -:3:in `foo': method `foo' called on terminated object (0xb7e06970) (NotImplementedError)
+        from -:7
+# =&gt; ruby 1.8.4 (2005-12-22) [i686-linux]
+     -:3:in `foo'-:3: warning: too many arguments for format string
+     : super: no superclass method `foo' (NoMethodError)
+        from -:7</pre>
+</dd>
+<dt><a name="L008733" id="L008733">正規表現 [bug]</a></dt>
+<dd>
+<p>文字コードの形で正規表現の文字クラスを指定すると、それ以降の
+バックトラックが効かなくなるバグの修正。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/41328">ruby-list:41328</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>p(/^[a-z]+x[0-9]+$/ =~ &quot;hogex111&quot;)
+p(/^[\x61-\x7a]+x[0-9]+$/ =~ &quot;hogex111&quot;)
+
+# =&gt; ruby 1.8.3 (2005-09-21) [i686-linux]
+     0
+     nil
+# =&gt; ruby 1.8.4 (2005-12-22) [i686-linux]
+     0
+     0</pre>
+</dd>
+<dt><a name="L008734" id="L008734">シグナル [bug]</a></dt>
+<dd>
+<p>シグナルハンドラの実行はクリティカルセクションが終了するまで
+遅延されるようになりました。<em class="XXINVALIDXX">ruby-core:04039</em></p>
+</dd>
+</dl>
+<h2><a name="L008735" id="L008735">組み込みライブラリ</a></h2>
+<dl>
+<dt><a name="L008736" id="L008736">UnboundMethod#bind [bug]</a></dt>
+<dd>
+<p>UnboundMethod#bindされたモジュールのインスタンスメソッド中で
+superを使えなかったバグを修正しました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/27964">ruby-dev:27964</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>module Foo
+  def initialize
+    super
+  end
+end
+
+class Bar
+  include Foo
+  def initialize
+    Foo.instance_method(:initialize).bind(self).call
+  end
+end
+
+Bar.new
+
+# =&gt; ruby 1.8.3 (2005-09-21) [i686-linux]
+     -:3:in `initialize': method `initialize' called on terminated object (0xb7dd2bec) (NotImplementedError)
+        from -:10:in `initialize'
+        from -:14
+# =&gt; ruby 1.8.4 (2005-12-16) [i686-linux]</pre>
+</dd>
+<dt><a name="L008737" id="L008737">set_trace_func [bug]</a></dt>
+<dd>
+<p>クラスメソッドの実行時に、定義されたクラスではなくメタクラスが
+traceに渡されていたバグの修正。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/169307">ruby-talk:169307</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L008738" id="L008738">set_trace_func [change]</a></dt>
+<dd>
+<p>$SAFE=4でtrace_funcの追加を禁止。</p>
+</dd>
+<dt><a name="L008739" id="L008739">printf [bug]</a></dt>
+<dd>
+<p>printfのフォーマット指定子にinteger overflowのバグがありました。
+perl のそれとは違い、セキュリティバグはないそうです。
+<a href="http://www.rubyist.net/~matz/20051207.html#p01">&lt;URL:http://www.rubyist.net/~matz/20051207.html#p01&gt;</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre># ruby 1.8.4 (2005-12-01) [i686-linux]
+
+# ArgumentError
+printf(&quot;%2147483648$d\n&quot;)       # -e:1:in `printf': invalid index - -2147483648$ (ArgumentError)
+printf(&quot;%2147483649$d\n&quot;)       # -e:1:in `printf': invalid index - -2147483647$ (ArgumentError)
+printf(&quot;%4294967296$d\n&quot;)       # -e:1:in `printf': invalid index - 0$ (ArgumentError)
+
+# overflow
+printf(&quot;%4294967297$d\n&quot;, 1)    # 1
+printf(&quot;%4294967298$d\n&quot;, 1, 2) # 2
+
+# 1.8.4 では、上記例はすべて以下のエラーになります。
+# %xx$ に指定できる最大値は 2147483647 です。
+# -e:1:in `printf': width too big (ArgumentError)</pre>
+</dd>
+<dt><a name="L008740" id="L008740">Hash [bug]</a></dt>
+<dd>
+<p>sizeof(long) &gt; sizeof(int) な環境で、ハッシュ関数のオーバー
+フローのためにStringをキーとしたHashの検索が失敗していたバグの修正。
+<em class="XXINVALIDXX">ruby-core:06721</em></p>
+</dd>
+<dt><a name="L008741" id="L008741">test [bug]</a></dt>
+<dd>
+<p>i-nodeを持たないシステム(Windows等)でtest(?-, ...)が常にtrueを返し
+ていたバグを修正。<em class="XXINVALIDXX">ruby-core:06672</em></p>
+</dd>
+<dt><a name="L008742" id="L008742">File.identical? [new]</a></dt>
+<dt><a name="L008743" id="L008743">FileTest.identical? [new]</a></dt>
+<dd>
+<p>test(?-, ...) の代替メソッドとして追加。</p>
+</dd>
+<dt><a name="L008744" id="L008744">File.split [change]</a></dt>
+<dt><a name="L008745" id="L008745">File.basename [change]</a></dt>
+<dt><a name="L008746" id="L008746">File.dirname [change]</a></dt>
+<dd>
+<p>UNCパスに対するFile.dirname・File.basename・File.splitの仕様
+を変更した(UNCをサポートするプラットフォームのみ)。</p>
+<pre>File.split(&quot;//aaa&quot;)      #=&gt; old: [&quot;//&quot;, &quot;aaa&quot;]  new:[&quot;//aaa&quot;, &quot;/&quot;]
+File.split(&quot;//aaa/&quot;)     #=&gt; old: [&quot;//&quot;, &quot;aaa&quot;]  new:[&quot;//aaa&quot;, &quot;/&quot;]
+File.split(&quot;//aaa/bbb&quot;)  #=&gt; old:[&quot;//aaa&quot;, &quot;bbb&quot;]  new:[&quot;//aaa/bbb&quot;, &quot;/&quot;]
+File.split(&quot;//aaa/bbb/&quot;) #=&gt; old:[&quot;//aaa&quot;, &quot;bbb&quot;]  new:[&quot;//aaa/bbb&quot;, &quot;/&quot;]
+File.split(&quot;///aaa&quot;)     #=&gt; old:[&quot;//&quot;, &quot;aaa&quot;]  new:[&quot;//aaa&quot;, &quot;/&quot;]</pre>
+</dd>
+<dt><a name="L008747" id="L008747">Dir.glob (Win全般) [bug]</a></dt>
+<dd>
+<p>共有フォルダの共有名に対する Dir.glob が失敗していたのを修正。（こ
+れはWinNT における、ランタイムライブラリの stat のバグだと思う）自
+前で stat を実装することで回避した。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/41552">ruby-list:41552</a><sup class="outside"><small>[外部]</small></sup>,<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/27711">ruby-dev:27711</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L008748" id="L008748">File.basename (Win全般) [change]</a></dt>
+<dd>
+<p>不完全なUNCを分割しないようにした。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/27797">ruby-dev:27797</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L008749" id="L008749">File.dirname (Win全般) [bug]</a></dt>
+<dd>
+<p>ドライブレターを含むパスに対するFile.dirnameの問題を修正した
+(ドライブレターをサポートするプラットフォームのみ)。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/27738">ruby-dev:27738</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>File.dirname(&quot;C:a/b&quot;)  #=&gt; old: &quot;C:a.&quot;  new: &quot;C:a&quot;
+File.dirname(&quot;C:a///&quot;) #=&gt; old: &quot;C:a///&quot;  new: &quot;C:a&quot;</pre>
+</dd>
+<dt><a name="L008750" id="L008750">File::Stat#pipe? [bug]</a></dt>
+<dd>
+<p>VisualC++ 6 では S_IFIFO がなく _S_IFIFO しか定義されていないため、
+パイプに対する stat.pipe? が false を返していたのを修正。</p>
+</dd>
+<dt><a name="L008751" id="L008751">Array#fill [bug]</a></dt>
+<dd>
+<p>Arrayに対してfillとpopを繰り返すとSEGVするバグを修正しました。<em class="XXINVALIDXX">ruby-core:06625</em></p>
+</dd>
+<dt><a name="L008752" id="L008752">String#scan [bug]</a></dt>
+<dd>
+<p>String#scanで、全角文字に「*」(0回以上の繰り返し)を付けると、空
+文字列にマッチしたときの次の文字が多バイト文字のときにマッチの
+開始位置がずれることがあるバグの修正。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/27535">ruby-dev:27535</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L008753" id="L008753">File.join [bug]</a></dt>
+<dd>
+<p>NULLポインタを持つStringを渡すとFile.joinがSEGVすることがあった
+バグの修正。<em class="XXINVALIDXX">ruby-core:06326</em></p>
+</dd>
+<dt><a name="L008754" id="L008754">Thread#pass [bug]</a></dt>
+<dd>
+<p>Thread#passを呼ぶとThread.criticalがクリアされるようになりました。
+<em class="XXINVALIDXX">ruby-core:04039</em></p>
+</dd>
+<dt><a name="L008755" id="L008755">Module#const_missing [bug]</a></dt>
+<dd>
+<p>const_missingが再定義されていて実行を継続した場合にSEGVする可能性
+があったバグの修正。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/27331">ruby-dev:27331</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L008756" id="L008756">IO [bug]</a></dt>
+<dd>
+<p>Solaris(64bit?)などでEOF後にゴミを読み出すことがあったバグを修正。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/27334">ruby-dev:27334</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+</dl>
+<h2><a name="L008757" id="L008757">添付ライブラリ</a></h2>
+<dl>
+<dt><a name="L008758" id="L008758">Ruby/Tk</a></dt>
+<dd>
+<ul>
+<li><p>対応バージョン</p>
+<pre>Tcl7.6/Tk4.2, Tcl/Tk8.0 〜 8.4.12, Tcl/Tk8.5a1 〜 a3
+
+Tcl/Tk 拡張ライブラリについては
+
+   ActiveTcl8.4.12.0 またはそれ以前
+   ( beta 版 は ActiveTcl8.5.0.0b4 またはそれ以前 )
+
+に含まれるものに対応しています．
+
+対応している Tcl/Tk 拡張の種類とバージョンとは
+   ext/tk/lib/tkextlib/SUPPPORT_STATUS
+     または
+   &lt;installed lib dir&gt;/tkextlib/SUPPORT_STATUS
+を参照してください．
+
+ただし，Tcl/Tk 拡張のバージョンの記述は，対応を行った最新の
+ものを示していますので，記述された以前のバージョンであっても，
+極端に古くない限りは対応できているはずです．
+
+各ライブラリへの対応のための変更履歴は
+   ext/tk/ChangeLog.tkextlib
+を参照してください．</pre></li>
+<li>サンプルスクリプト
+<dl>
+<dt><a name="L008780" id="L008780">ext/tk/sample/scrollframe.rb [new]</a></dt>
+<dd>
+<p>配置したウィジェットの表示範囲をスクロールすることが
+できるようなスクロールバー付きフレームウィジェットク
+ラスのサンプル兼ライブラリ</p>
+</dd>
+</dl></li>
+</ul>
+<p>MacOS X 上で Aqua 版の Tcl/Tk を用いた際，Aqua 特有のダイアログ表示で
+フリーズしてしまうという known bug の回避策を記載したドキュメント
+(ext/tk/README.macosx-aqua) が追加されました．</p>
+<p>削除された Tk インタープリタに対して vwait や tkwait での処理待ちを
+終了せずに待ち続けてしまう可能性があるというバグを修正しました．</p>
+<p>MultiTkIp で生成した Tk インタープリタを削除した後も，
+不要となったはずのスレッドが動き続けるバグを修正しました．</p>
+<p>Tcl/Tk8.5a3 への対応のため，Tk.pkgconfig_list および Tk.pkgconfig_get
+が追加されました．
+同様に Tcl/Tk8.5a3 への対応のため，テキストウィジェット上のインデック
+ス指定における新しい modifier である indices に対応しました．</p>
+<p>Tcl/Tk 上で名前が規定されている仮想イベントの指定した仮想イベントオブ
+ジェクトの生成を少し容易にするため，TkNamedVirtualEvent が別名として
+定義されました．</p>
+<p>Tcl/Tk8.5 への対応のため，仮想イベントのイベント情報の一つである data
+キーの情報を :data で指定できるようになりました．</p>
+<p>セキュリティ上の問題を回避するため，MultiTkIp において IP オブジェクト
+上での操作が許可されるのは，その操作を呼び出した環境 (スレッド) の IP 
+オブジェクトがデフォルトの IP オブジェクト (デフォルトのスレッドグルー
+プに属するもの．require 'multi-tk' の際に生成される) であるか，操作し
+ようとしている IP オブジェクトが自らの直接の slave IP であるかの場合に
+限られるようになりました．</p>
+<p>この修正により，IP オブジェクトの入手に成功することで，ある IP が権限
+を持たないはずの他の IP を操作できてしまう危険を減少させます．ただし，
+ObjectSpace にアクセスし，直接に TclTkIp オブジェクトを取り出して操作
+されることは回避できませんので，ご注意ください。</p>
+<p>Tcl/Tk 上の namespace の扱いが正常に行えないというバグを修正しました．</p>
+<p>Ruby のソース上で tcltklib と tk とを Ruby 1.9 系と同様に一体化しました． 
+これにより，tcltklib の生成に失敗した環境で，動くはずのない tk のライ
+ブラリファイル群がインストールされてしまうことが避けられます．
+今後はソースに含まれる tcltklib 関連のドキュメントを参照する場合には
+ext/tk ディレクトリの下を見てください．</p>
+<p>update 処理が不適切であるために，一部の環境で menubar のメニュー項目に
+登録した処理が実行されない場合があるというバグ (ruby-1.8.3 で enbug し
+ていたもの) を修正しました．</p>
+<p>ウィジェットオブジェクトの属性参照をした場合に属性値として返すオブジェ
+クトをより適切なものにするように改善しました．その方がより便利であろう
+と思いますが，一部の属性において，返されるのが文字列であることを期待し
+てスクリプトを書いている場合には修正が必要になる場合があります．</p>
+<p>例えば bool 値を返す属性については true または false を返すようになり
+ます．よって，戻り値が &quot;1&quot;, &quot;0&quot; の文字列，あるいは 1, 0 の数値であるこ
+とを期待している場合には修正が必要となります．本来，Tcl/Tk の真偽値は
+他にも &quot;true&quot;, &quot;false&quot;, &quot;yes&quot;, &quot;no&quot; などもありますので，値の真偽判定は
+TkComm.bool (TkUtil.bool) メソッドを使って判定することを推奨します．</p>
+<p>また，Tcl/Tk 上の変数が割り当てられている属性において，属性値として
+Tcl/Tk 上の変数名の文字列ではなく TkVariable オブジェクトが返されるよ
+うになります．返された値を別のウィジェットの属性値とするなどでそのまま
+Tk インタープリタに渡している場合や TkVarAccess.new(val) で TkVariable
+オブジェクト化している場合 (val である TkVariable オブジェクトがそのま
+ま返されます) には互換性が保たれますが，返された値をそのまま文字列と比
+較しているような場合には非互換となります．</p>
+</dd>
+<dt><a name="L008759" id="L008759">REXML [compat]</a></dt>
+<dd>
+<p>日本語のエンコーディング変換にiconvよりもnkfを優先して使用するようにし
+ました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/41325">ruby-list:41325</a><sup class="outside"><small>[外部]</small></sup>, <em class="XXINVALIDXX">ruby-core:06520</em></p>
+</dd>
+<dt><a name="L008760" id="L008760">TCPSocket#initialize [bug]</a></dt>
+<dt><a name="L008761" id="L008761">TCPServer#initialize [bug]</a></dt>
+<dd>
+<p>Cygwinの場合のみ、使用中socketに対する再acceptがErrno::EADDRINUSE 
+例外になっていなかった。<em class="XXINVALIDXX">ruby-core:6765</em>,<em class="XXINVALIDXX">ruby-bugs:2872</em>,<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/27818">ruby-dev:27818</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L008762" id="L008762">optparse</a></dt>
+<dd>
+<p>$KCODEで無効なマルチバイト文字列や、改行を含む文字列を引数に渡
+すと切り捨てられていたバグの修正。</p>
+<pre>require &quot;optparse&quot;
+
+puts &quot;[#{ARGV * ', '}]&quot;
+ARGV.options do |opt|
+  opt.on(&quot;-n NODE&quot;) {|v| puts v }
+  opt.parse!
+end
+
+&gt;ruby -v -Ku a.rb -n 時間
+ruby 1.8.2 (2004-12-25) [i386-mswin32]
+[-n, 時間]
+時
+
+&gt;ruby -v -Ku a.rb -n 時間
+ruby 1.8.4 (2005-12-16) [i686-linux]
+[-n, 時間]
+時間</pre>
+</dd>
+<dt><a name="L008763" id="L008763">find</a></dt>
+<dd>
+<p>broken symbolic link(存在しないファイルに対するシンボリックリン
+ク)も返すようになりました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/165866">ruby-talk:165866</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L008764" id="L008764">Iconv</a></dt>
+<dd>
+<p>errnoが正しくセットされなかったときの例外を追加(Windowsで
+iconv.dllの使用するMSVC runtime DLLのバージョンが、ruby本体が使
+用するものと一致していない場合も含む)</p>
+<p>これはrubyやext/iconv自身のバグではなくて、実行時の環境に問題が
+ある場合の回避策です。</p>
+</dd>
+<dt><a name="L008765" id="L008765">WEBrick::Config::FileHandler [compat]</a></dt>
+<dd>
+<p>WEBrick::Config::FileHandler[:UserDir]のデフォルト値が 
+&quot;public_html&quot;からnilになり、意図せずにユーザディレクトリ
+(/~user/public_html)以下が公開されることがなくなりました。
+[webrickja:148]</p>
+</dd>
+<dt><a name="L008766" id="L008766">WEBrick</a></dt>
+<dd>
+<p>WEBrick::CGI#startでreq.query_stringがオリジナルの
+QUERY_STRINGを指すように。</p>
+</dd>
+<dt><a name="L008767" id="L008767">WEBrick::HTTPRequest#query_string= [new]</a></dt>
+<dd>
+<p>メソッド追加。</p>
+</dd>
+<dt><a name="L008768" id="L008768">Readline [bug]</a></dt>
+<dd>
+<p>IO以外を$stdoutにセットするとreadlineでSEGVしていたバグの修正。<em class="XXINVALIDXX">ruby-core:6089</em></p>
+</dd>
+<dt><a name="L008769" id="L008769">Syck [bug]</a></dt>
+<dd>
+<p>syck のメモリバグを修正。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/27384">ruby-dev:27384</a><sup class="outside"><small>[外部]</small></sup>, <em class="XXINVALIDXX">ruby-core:6385</em> <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/27839">ruby-dev:27839</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L008770" id="L008770">irb [bug]</a></dt>
+<dd>
+<p>irbのプロンプトに改行文字が含まれているときにオートインデントが
+ずれるバグの修正。<em class="XXINVALIDXX">ruby-core:06358</em></p>
+</dd>
+<dt><a name="L008771" id="L008771">RDoc [bug]</a></dt>
+<dd>
+<p>正規表現のバックトラックが深くなりすぎて失敗することがあったバグを修正。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/161771">ruby-talk:161771</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L008772" id="L008772">Win32API [bug]</a></dt>
+<dd>
+<p>DNSを手動で複数設定した場合に正しく動作していなかったバグを修正。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/40058">ruby-list:40058</a><sup class="outside"><small>[外部]</small></sup>, <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/27496">ruby-dev:27496</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L008773" id="L008773">Rinda [bug]</a></dt>
+<dd>
+<p>Hash全体がdumpできないオブジェクトとして扱われていました。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/41227">ruby-list:41227</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L008774" id="L008774">Iconv [compat]</a></dt>
+<dd>
+<p>iconv/charset_alias において、Windows上でもencoding名の別名テー
+ブルを生成するようにした。</p>
+<p>iconv/charset_alias は、エンコーディング名のプラットフォームに
+よる違いを吸収するためのユーティリティです。詳細は、<a href="refm256.html">iconv</a> 参照。</p>
+</dd>
+<dt><a name="L008775" id="L008775">cgi [bug]</a></dt>
+<dd>
+<p>NOKIAの携帯(?)からのCookieを正しくパースできなかった問題の修正。
+<em class="XXINVALIDXX">ruby-Patches:2595</em>, <em class="XXINVALIDXX">ruby-core:06183</em></p>
+</dd>
+<dt><a name="L008776" id="L008776">DL [bug]</a></dt>
+<dd>
+<p>FILEが不完全型としてしか定義されない環境に対応。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/27317">ruby-dev:27317</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L008777" id="L008777">fileutils [bug]</a></dt>
+<dd>
+<p>FileUtils::NoWrite, Verbose, DryRun のメソッドが呼べなくなっていた
+のを修正しました。<em class="XXINVALIDXX">ruby-core:05954</em></p>
+</dd>
+<dt><a name="L008778" id="L008778">extmk, mkmf [compat]</a></dt>
+<dd>
+<p>--with-extention オプション追加。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/27449">ruby-dev:27449</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L008779" id="L008779">mkmf: find_executable() [compat]</a></dt>
+<dd>
+<p>実行ファイルを探索するときに環境変数 PATH がセットされてい
+ない場合を考慮しました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/27281">ruby-dev:27281</a><sup class="outside"><small>[外部]</small></sup></p>
+<p>PATH がセットされていない場合は、</p>
+<pre>/usr/local/bin:/usr/ucb:/usr/bin:/bin</pre>
+<p>をPATHの代わりに利用してここからコマンドを探索します。</p>
+</dd>
+</dl>
+<h2><a name="L008781" id="L008781">拡張ライブラリAPI</a></h2>
+<dl>
+<dt><a name="L008782" id="L008782">rb_funcall2() [bug]</a></dt>
+<dd>
+<p>拡張ライブラリ(C言語)からRubyメソッドを呼ぶ関数
+rb_funcall2() が (private メソッドを呼べるのに) protected メソッド
+を呼べない不具合を修正しました。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/27890">ruby-dev:27890</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L008783" id="L008783">rb_respond_to() [change]</a></dt>
+<dd>
+<p>rb_respond_to()をObject#respond_to?のデフォルトの動作と同じ(public 
+メソッドにしか反応しない)にした。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/27411">ruby-dev:27411</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L008784" id="L008784">rb_obj_respond_to() [new]</a></dt>
+<dd>
+<p>追加。rb_respond_to() と異なり可視性を指定できる。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/27408">ruby-dev:27408</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+</dl>
+<h2><a name="L008785" id="L008785">プラットフォーム固有</a></h2>
+<dl>
+<dt><a name="L008786" id="L008786">bccwin32 [bug]</a></dt>
+<dd>
+<p>bccwin32 で winsock のエラーを表示するとき、strerror の返すエラー
+メッセージの途中に改行が入るために、ruby の出力するエラーメッセー
+ジが壊れていたのを修正。</p>
+</dd>
+<dt><a name="L008787" id="L008787">cygwin [bug]</a></dt>
+<dd>
+<p>cygwin環境で、RUBYLIB環境変数が空だと、$LOAD_PATHにゴミが入る。
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/27830">ruby-dev:27830</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L008788" id="L008788">BeOS [bug]</a></dt>
+<dd>
+<p>BeOS でのいくつかのテスト失敗に対処。link(2) が定義されていながら
+常に失敗するので test/fileutils が誤動作していたのに対処。BeOS に
+は link(2) は存在しないと見なすようにした。chown、fchown に id と
+して -1 を渡した場合は、POSIX 的には id を変更すべきでないが、BeOS 
+では (unsigned) -1 に変更してしまっていた。これに対処。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/27672">ruby-dev:27672</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L008789" id="L008789">Sun [bug]</a></dt>
+<dd>
+<p>Sunのコンパイラで拡張ライブラリをリンクできなかった問題の修正。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/27603">ruby-dev:27603</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L008790" id="L008790">IA64 [bug]</a></dt>
+<dd>
+<p>IA64 で、Qtrue Qfalse Qnil が 64bit 整数でなく 32bit 整数として定
+義されていたため、ANYARGS を通して Qtrue を渡し、VALUE で受けると、
+サイズの違いから値が壊れることのあった問題を修正。<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/27513">ruby-dev:27513</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm382.html">UP</a>][<a href="refm389.html">&lt;-PREV</a>][<a href="refm391.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

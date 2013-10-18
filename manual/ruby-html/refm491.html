@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>error.c</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm492.html" rel="next" />
+<link href="refm490.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm488.html">UP</a>][<a href="refm490.html">&lt;-PREV</a>][<a href="refm492.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L009960" id="L009960">error.c</a></h1>
+<dl>
+<dt><a name="L009961" id="L009961">void rb_raise(VALUE err, const char *fmt, ...)</a></dt>
+<dd>
+<p>クラス <var>err</var> の例外を発生します。<var>fmt</var> とその後の引数は、
+<code>printf</code> と同じ形式でエラーメッセージを表します。</p>
+</dd>
+<dt><a name="L009962" id="L009962">void rb_fatal(const char *fmt, ...)</a></dt>
+<dd>
+<p>あらゆる例外処理をスキップして即座にインタプリタが終了します。
+<var>fmt</var> とその後の引数は <code>printf</code> と同じ形式でエラー
+メッセージを表現します。</p>
+</dd>
+<dt><a name="L009963" id="L009963">rb_exit(int status)</a></dt>
+<dd>
+<p>ステータス <var>status</var> でインタプリタを終了させます。</p>
+</dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm488.html">UP</a>][<a href="refm490.html">&lt;-PREV</a>][<a href="refm492.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

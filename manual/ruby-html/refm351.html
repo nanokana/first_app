@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>dl</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm352.html" rel="next" />
+<link href="refm350.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm350.html">&lt;-PREV</a>][<a href="refm352.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006739" id="L006739">dl</a></h1>
+<p>Ruby/DL は、UNIX の <a href="refm535.html">dlopen(3)</a> や Windows の 
+<code>LoadLibrary()</code> などのダイナミックリンカへのインタフェースを提供す
+る。また、現在<a href="http://rubyforge.net/projects/ruby-dl2/">dl2</a><sup class="outside"><small>[外部]</small></sup>のruby-1.8
+版も開発されている。</p>
+<h2><a name="L006740" id="L006740">Libraries</a></h2>
+<ul>
+<li><a href="refm352.html">DL</a>
+<ul>
+<li><a href="refm353.html">DL::Handle</a></li>
+<li><a href="refm354.html">DL::Symbol</a></li>
+<li><a href="refm355.html">DL::PtrData</a></li>
+</ul></li>
+<li><a href="refm356.html">DL::Importable</a>
+<ul>
+<li><a href="refm357.html">dl/struct</a></li>
+</ul></li>
+<li><a href="refm358.html">DL::Types</a></li>
+<li><a href="refm359.html">dl/win32</a></li>
+</ul>
+<h2><a name="L006741" id="L006741">Using Ruby/DL</a></h2>
+<p>通常は、<a href="refm356.html">DL::Importable</a> モジュールを使用する。
+これはライブラリ関数にアクセスするための高水準の関数を持っている。
+あるモジュールを拡張するには以下のように DL::Importable を使用する。</p>
+<pre>require &quot;dl/import&quot;
+module LIBC
+  extend DL::Importable
+end</pre>
+<p>以後、このモジュールの dlload と extern メソッドを使用できる。以下のよ
+うに dlload 使ってライブラリをロードし、それぞれのライブラリ関数に対し
+て extern を使用することでラッパーメソッドを定義する。</p>
+<pre>module LIBC
+  extend DL::Importable
+  dlload &quot;libc.so.6&quot;,&quot;libm.so.6&quot;
+  extern &quot;int strlen(char*)&quot;
+end
+# Note that we should not include the module LIBC from some reason.</pre>
+<p>LIBC.strlen を使用することで、ライブラリ関数 strlen() を使用できる。与
+えられた関数名の最初の文字が大文字なら、定義されるメソッド名の最初の文
+字は小文字になる。</p>
+<p>以下のように <a href="refm357.html">dl/struct</a> で定義される struct や union 関数を使用す
+ることで構造体や共用体のメモリイメージを作成することもできる。</p>
+<pre>require &quot;dl/import&quot;
+require &quot;dl/struct&quot;
+module LIBC
+  extend DL::Importable
+  Timeval = struct [       # define timeval structure.
+    &quot;long tv_sec&quot;,
+    &quot;long tv_uses&quot;,
+  ]
+end
+val = LIBC::Timeval.malloc # allocate memory.</pre>
+<p>上の例で、メモリの割り当てに LIBC::Timeval.new ではなく、
+LIBC::Timeval.malloc を使用していることに注意。LIBC::Timeval.new は、
+作成済みの PtrData オブジェクトをラップするためのものだ。</p>
+<p>以下のように モジュール関数 callback を使用したコールバックを定義できる。</p>
+<pre>module Foo
+  extend DL::Importable
+  def my_comp(str1,str2)
+    str1 &lt;=&gt; str2
+  end
+  COMPARE = callback &quot;int my_comp(char*,char*)&quot;
+end</pre>
+<p>ここで Foo::COMPARE は、my_comp メソッドを起動する Symbol オブジェクトだ。</p>
+<p>DL::Importable モジュールはとても便利だ。しかし、ときにはdlsym() のよ
+うな低レベル関数を直接使わなければならない場面に出くわす。このような場
+合には DL モジュールの関数を使用することになるだろう。これについては 
+<a href="refm352.html">DL</a> で説明する。</p>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm350.html">&lt;-PREV</a>][<a href="refm352.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

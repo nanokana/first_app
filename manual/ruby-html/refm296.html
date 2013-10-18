@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>DateTime</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm297.html" rel="next" />
+<link href="refm295.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm294.html">UP</a>][<a href="refm295.html">&lt;-PREV</a>][<a href="refm297.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L005952" id="L005952">DateTime</a></h1>
+<p>日付だけでなく時間も扱える <a href="refm295.html">Date</a> のサブクラスです。</p>
+<h2><a name="L005953" id="L005953">使い方</a></h2>
+<pre>require 'date'</pre>
+<h2><a name="L005954" id="L005954">スーパークラス</a></h2>
+<p><a href="refm295.html">Date</a></p>
+<h2><a name="L005955" id="L005955">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L005956" id="L005956"><code>civil([<var>year</var>[, <var>mon</var>[, <var>mday</var>[, <var>hour</var>[, <var>min</var>[, <var>sec</var>[, <var>offset</var>[, <var>start</var>]]]]]]]])</code></a>
+<dt><a name="L005957" id="L005957"><code>new([<var>year</var>[, <var>mon</var>[, <var>mday</var>[, <var>hour</var>[, <var>min</var>[, <var>sec</var>[, <var>offset</var>[, <var>start</var>]]]]]]]])</code></a></dt>
+<dd>
+<p>暦日付に相当する日時オブジェクトを生成します。</p></dd>
+<dt><a name="L005958" id="L005958"><code>commercial([<var>cwyear</var>[, <var>cweek</var>[, <var>cwday</var>[, <var>hour</var>[, <var>min</var>[, <var>sec</var>[, <var>offset</var>[, <var>start</var>]]]]]]]])</code></a></dt>
+<dd>
+<p>暦週日付に相当する日時オブジェクトを生成します。</p></dd>
+<dt><a name="L005959" id="L005959"><code>jd([<var>jd</var>[, <var>hour</var>[, <var>min</var>[, <var>sec</var>[, <var>offset</var>[, <var>start</var>]]]]]])</code></a></dt>
+<dd>
+<p>ユリウス日に相当する日時オブジェクトを生成します。</p></dd>
+<dt><a name="L005960" id="L005960"><code>now([<var>start</var>])</code></a></dt>
+<dd>
+<p>現在の時刻に相当する日時オブジェクトを生成します。</p></dd>
+<dt><a name="L005961" id="L005961"><code>ordinal([<var>year</var>[, <var>yday</var>[, <var>hour</var>[, <var>min</var>[, <var>sec</var>[, <var>offset</var>[, <var>start</var>]]]]]]])</code></a></dt>
+<dd>
+<p>年日付に相当する日時オブジェクトを生成します。</p></dd>
+</dl>
+<h2><a name="L005962" id="L005962">メソッド</a></h2>
+<dl>
+<dt><a name="L005963" id="L005963"><code>hour</code></a></dt>
+<dd>
+<p>時間を返します (0-23)。</p></dd>
+<dt><a name="L005964" id="L005964"><code>min</code></a></dt>
+<dd>
+<p>分を返します (0-59)。</p></dd>
+<dt><a name="L005965" id="L005965"><code>new_offset([<var>offset</var>])</code></a></dt>
+<dd>
+<p>self を複製して、その時差を設定しなおします。
+引数を省略した場合は、零 (協定世界時) になります。</p>
+<p>new も参照してください。</p></dd>
+<dt><a name="L005966" id="L005966"><code>offset</code></a></dt>
+<dd>
+<p>時差を返します。</p></dd>
+<dt><a name="L005967" id="L005967"><code>sec</code></a></dt>
+<dd>
+<p>秒を返します (0-59)。</p></dd>
+<dt><a name="L005968" id="L005968"><code>zone</code></a></dt>
+<dd>
+<p>タイムゾーンを返します。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm294.html">UP</a>][<a href="refm295.html">&lt;-PREV</a>][<a href="refm297.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

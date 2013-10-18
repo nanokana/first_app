@@ -1,0 +1,796 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Array</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm037.html" rel="next" />
+<link href="refm035.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm035.html">UP</a>][<a href="refm035.html">&lt;-PREV</a>][<a href="refm037.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L000707" id="L000707">Array</a></h1>
+<p>配列クラス。配列の要素は任意の Ruby オブジェクトです。
+一般的には配列は配列式を使って</p>
+<pre>[1, 2, 3]</pre>
+<p>のように生成します。</p>
+<h2><a name="L000708" id="L000708">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm035.html">Object</a></li>
+</ul>
+<h2><a name="L000709" id="L000709">インクルードしているモジュール:</a></h2>
+<ul>
+<li><a href="refm070.html">Enumerable</a></li>
+</ul>
+<h2><a name="L000710" id="L000710">メソッド一覧:</a></h2>
+<h3><a name="L000711" id="L000711">クラスメソッド:</a></h3>
+<p><a href="#L000713">Array[item,...]</a>
+<a href="#L000714">Array.new</a></p>
+<h3><a name="L000712" id="L000712">メソッド:</a></h3>
+<p><a href="#L000717">self[nth]</a>
+<a href="#L000718">self[start..end]</a>
+<a href="#L000719">self[start, length]</a>
+<a href="#L000720">self[nth]=val</a>
+<a href="#L000721">self[start..end]=val</a>
+<a href="#L000722">self[start, length]=val</a>
+<a href="#L000723">+</a>
+<a href="#L000724">*</a>
+<a href="#L000725">-</a>
+<a href="#L000726">&amp;</a>
+<a href="#L000727">|</a>
+<a href="#L000728">&lt;&lt;</a>
+<a href="#L000729">&lt;=&gt;</a>
+<a href="#L000730">==</a>
+<a href="#L000731">assoc</a>
+<a href="#L000732">at</a>
+<a href="#L000733">clear</a>
+<a href="#L000734">clone</a>
+<a href="#L000736">collect!</a>
+<a href="#L000738">compact</a>
+<a href="#L000739">compact!</a>
+<a href="#L000740">concat</a>
+<a href="#L000741">delete</a>
+<a href="#L000743">delete_at</a>
+<a href="#L000744">delete_if</a>
+<a href="#L000735">dup</a>
+<a href="#L000746">each</a>
+<a href="#L000747">each_index</a>
+<a href="#L000748">empty?</a>
+<a href="#L000749">eql?</a>
+<a href="#L000750">fetch</a>
+<a href="#L000753">fill</a>
+<a href="#L000759">first</a>
+<a href="#L000761">flatten</a>
+<a href="#L000762">flatten!</a>
+<a href="#L000763">include?</a>
+<a href="#L000764">index</a>
+<a href="#L000766">indexes</a>
+<a href="#L000767">indices</a>
+<a href="#L000768">insert</a>
+<a href="#L000770">join</a>
+<a href="#L000771">last</a>
+<a href="#L000773">length</a>
+<a href="#L000737">map!</a>
+<a href="#L000775">nitems</a>
+<a href="#L000776">pack</a>
+<a href="#L000777">pop</a>
+<a href="#L000778">push</a>
+<a href="#L000780">rassoc</a>
+<a href="#L000745">reject!</a>
+<a href="#L000781">replace</a>
+<a href="#L000782">reverse</a>
+<a href="#L000783">reverse!</a>
+<a href="#L000784">reverse_each</a>
+<a href="#L000785">rindex</a>
+<a href="#L000787">shift</a>
+<a href="#L000774">size</a>
+<a href="#L000788">slice</a>
+<a href="#L000790">slice!</a>
+<a href="#L000792">sort</a>
+<a href="#L000793">sort!</a>
+<a href="#L000796">to_a</a>
+<a href="#L000797">to_ary</a>
+<a href="#L000798">to_s</a>
+<a href="#L000799">transpose</a>
+<a href="#L000800">uniq</a>
+<a href="#L000801">uniq!</a>
+<a href="#L000802">unshift</a>
+<a href="#L000804">values_at</a></p>
+<h2><a name="L000711" id="L000711">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L000713" id="L000713"><code>Array[item,...]</code></a></dt>
+<dd>
+<p>引数を要素として持つ配列を生成します。</p></dd>
+<dt><a name="L000714" id="L000714"><code>Array.new([<var>size</var>[, <var>val</var>]])</code></a>
+<dt><a name="L000715" id="L000715"><code>Array.new(<var>ary</var>)  ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a>
+<dt><a name="L000716" id="L000716"><code>Array.new(<var>size</var>) {|<var>index</var>| ... }  ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>配列を生成します。<var>size</var> を指定したときにはその大きさの配列を
+生成し <code>nil</code> で初期化します。第二引数 <var>val</var> も指定したとき
+には <code>nil</code> の代わりにそのオブジェクトを全要素にセットします。
+(要素毎に <var>val</var> が複製されるわけではないことに注意してください。
+全要素が同じオブジェクト <var>val</var> を参照します<a href="refm432.html">trap::Array</a>)。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>: 二番目の形式では引数に指定した配列を複製し
+て返します。</p>
+<pre>p Array.new([1,2,3]) # =&gt; [1,2,3]</pre>
+<p>三番目の形式では、ブロックの評価結果で値を設定します。ブロックは要
+素毎に実行されるので、全要素をあるオブジェクトの複製にすることがで
+きます。</p>
+<pre>p Array.new(5) {|i| i }         # =&gt; [0, 1, 2, 3, 4]
+
+ary = Array.new(3, &quot;foo&quot;)
+ary.each {|obj| p obj.object_id }
+# =&gt; 537774036
+     537774036
+     537774036
+
+ary = Array.new(3) { &quot;foo&quot; }
+ary.each {|obj| p obj.object_id }
+# =&gt; 537770448
+     537770436
+     537770424</pre></dd>
+</dl>
+<h2><a name="L000712" id="L000712">メソッド:</a></h2>
+<dl>
+<dt><a name="L000717" id="L000717"><code>self[nth]</code></a></dt>
+<dd>
+<p><var>nth</var> 番目の要素を返します。先頭の要素が 0 番目になります。
+<var>nth</var> の値が負の時には末尾からのインデックスと見倣します(末尾
+の要素が -1 番目)。<var>nth</var> 番目の要素が存在しない時には 
+<code>nil</code> を返します。</p></dd>
+<dt><a name="L000718" id="L000718"><code>self[start..end]</code></a></dt>
+<dd>
+<p><var>start</var> 番目の要素から <var>end</var> 番目の要素までの部分配列を返
+します。<var>start</var> の値が負の時には末尾からのインデックスと見倣し
+ます(末尾の要素が -1 番目)。<var>start</var> の値が配列の範囲に収まらな
+い場合 <code>nil</code> を返します。<var>end</var> の値が配列の長さを越える時
+には、越えた分の長さは無視されます。また、範囲の始点が終点よりも大
+きい時には <code>nil</code> を返します。</p></dd>
+<dt><a name="L000719" id="L000719"><code>self[start, <var>length</var>]</code></a></dt>
+<dd>
+<p><var>start</var> 番目から <var>length</var> 個の要素を含む部分配列を返します。
+<var>start</var> の値が負の時には末尾からのインデックスと見倣します(末
+尾の要素が -1 番目)。<var>length</var> が <var>start</var> 番目からの配列の
+長さより長い時には、越えた分の長さは無視されます。<var>length</var> が
+負の時には <code>nil</code> を返します。</p></dd>
+<dt><a name="L000720" id="L000720"><code>self[nth]=val</code></a></dt>
+<dd>
+<p><var>nth</var> 番目の要素を <var>val</var> に設定します。<var>nth</var> が配列の
+範囲を越える時には配列の長さを自動的に拡張し、拡張した領域を
+<code>nil</code> で初期化します。</p>
+<p><var>val</var> を返します。</p></dd>
+<dt><a name="L000721" id="L000721"><code>self[start..end]=val</code></a></dt>
+<dd>
+<p><var>start</var> 番目の要素から <var>end</var> 番目の要素までを配列 
+<var>val</var> の内容に置換します。<var>val</var> の値が配列でないときには 
+<var>val</var> で置換します。<var>val</var> の要素の数の方が多い時には、後ろ
+の要素がずれます。</p>
+<p><var>val</var> が <code>nil</code> か 空の配列 <code>[]</code> なら <var>start</var> から 
+<var>end</var> までの要素が削除されます。</p>
+<p>例:</p>
+<pre>ary = [0, 1, 2, 3, 4, 5]
+ary[0..2] = [&quot;a&quot;, &quot;b&quot;]
+p ary
+
+# =&gt; [&quot;a&quot;, &quot;b&quot;, 3, 4, 5]
+
+ary[2..4] = nil
+p ary
+
+# =&gt; [&quot;a&quot;, &quot;b&quot;]</pre>
+<p><var>val</var> を返します。</p></dd>
+<dt><a name="L000722" id="L000722"><code>self[start, <var>length</var>]=<var>val</var></code></a></dt>
+<dd>
+<p>インデックス <var>start</var> から <var>length</var> 個の要素を配列 
+<var>val</var> の内容で置き換えます。<var>val</var> が配列でないときには 
+<code>val.to_ary</code> もしくは <code>[val]</code> の内容で置換します。
+<var>val</var> を返します。</p>
+<p>例:</p>
+<pre>ary = [0, 1, 2, 3]
+ary[1, 2] = ['a', 'b', 'c']
+p ary                        # =&gt; [0, &quot;a&quot;, &quot;b&quot;, &quot;c&quot;, 3]
+ary[2, 1] = 99
+p ary                        # =&gt; [0, &quot;a&quot;, 99, &quot;c&quot;, 3]
+ary[1, 0] = ['inserted']
+p ary                        # =&gt; [0, &quot;inserted&quot;, &quot;a&quot;, 99, &quot;c&quot;, 3]</pre></dd>
+<dt><a name="L000723" id="L000723"><code><var>self</var> + <var>other</var></code></a></dt>
+<dd>
+<p><code>self</code> と <var>other</var> の内容を繋げた新しい配列を返します。
+<var>other</var> が配列でなければ <code>other.to_ary</code> の戻り値を用います。
+その戻り値がまた配列でなかった場合は例外 <a href="refm111.html">TypeError</a> が発生し
+ます。</p>
+<p>例:</p>
+<pre>a = [1, 2]
+b = [8, 9]
+p a + b     #=&gt; [1, 2, 8, 9]
+p a         #=&gt; [1, 2]        (変化なし)
+p b         #=&gt; [8, 9]        (こちらも変化なし)</pre></dd>
+<dt><a name="L000724" id="L000724"><code><var>self</var> * <var>times</var></code></a></dt>
+<dd>
+<p>配列の内容を繰り返した新しい配列を作成し返します。
+値はコピーされないことに注意してください<a href="refm432.html">trap::Array</a>。</p>
+<p>例:</p>
+<pre>p [1, 2, 3] * 3  #=&gt; [1, 2, 3, 1, 2, 3, 1, 2, 3]</pre>
+<p><var>times</var> が文字列なら、self.<a href="#L000770">join</a>(times) と同じ
+動作をします。</p>
+<pre>p [1,2,3] * &quot;,&quot;
+# =&gt; &quot;1,2,3&quot;</pre></dd>
+<dt><a name="L000725" id="L000725"><code><var>self</var> - <var>other</var></code></a></dt>
+<dd>
+<p>集合の差演算。<code>self</code> から <var>other</var> の要素を
+取り除いた内容の新しい配列を返します。
+重複する要素は取り除かれます。</p>
+<p><var>other</var> が配列でなければ <code>to_ary</code> メソッドによる
+暗黙の型変換を試みます。</p>
+<p><a href="refm385.html">ruby 1.8 feature</a>: 要素の同一性は <a href="refm035.html#L000649">Object#===</a> ではなく、<a href="refm035.html#L000655">Object#eql?</a> による評価に変更されました。</p>
+<p><a href="refm385.html">ruby 1.8 feature</a>: <code>self</code>中で重複していて、<var>other</var>中に存在していなかった要素は、その重複が保持されます。</p>
+<pre>p([1, 2, 1, 3, 1, 4, 1, 5] - [2, 3, 4, 5])
+# =&gt; [1, 1, 1, 1]
+
+p([1, 2, 1, 3, 1, 4, 1, 5] - [1, 2, 3, 4, 5])
+# =&gt; []</pre></dd>
+<dt><a name="L000726" id="L000726"><code><var>self</var> &amp; <var>other</var></code></a></dt>
+<dd>
+<p>集合の積演算。両方の配列に含まれる要素からなる新しい配列を返
+します。重複する要素は取り除かれます。
+<var>other</var> が配列でなければ <code>to_ary</code> メソッドによる
+暗黙の型変換を試みます。</p>
+<p>要素の重複判定は、<a href="refm035.html#L000655">Object#eql?</a> により行われます。
+<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></p></dd>
+<dt><a name="L000727" id="L000727"><code><var>self</var> | <var>other</var></code></a></dt>
+<dd>
+<p>集合の和演算。両方の配列にいずれかに含まれる要素を全て含む新し
+い配列を返します。重複する要素は取り除かれます。
+<var>other</var> が配列でなければ <code>to_ary</code> メソッドによる
+暗黙の型変換を試みます。</p>
+<p>要素の重複判定は、<a href="refm035.html#L000655">Object#eql?</a> により行われます。</p></dd>
+<dt><a name="L000728" id="L000728"><code><var>self</var> &lt;&lt; <var>obj</var></code></a></dt>
+<dd>
+<p><var>obj</var> を配列の末尾に追加します。<code>Array#push</code> と同じ効果です。</p>
+<pre>ary = [1]
+ary &lt;&lt; 2
+p ary      # [1, 2]</pre>
+<p>またこのメソッドは <code>self</code> を返すので、以下のように連続して
+書くことができます。</p>
+<pre>ary = [1]
+ary &lt;&lt; 2 &lt;&lt; 3 &lt;&lt; 4
+p ary   #=&gt; [1, 2, 3, 4]</pre></dd>
+<dt><a name="L000729" id="L000729"><code><var>self</var> &lt;=&gt; <var>other</var></code></a></dt>
+<dd>
+<p><code>self</code> と <code>other</code> の各要素をそれぞれ順に <code>&lt;=&gt;</code> で比較
+して、<code>self</code> が大きい時に正、等しい時に 0、小さい時に負の整数
+を返します。各要素が等しいまま、一方だけ配列の末尾に達した時は、よ
+り短い配列の方が小さいとみなします。</p></dd>
+<dt><a name="L000730" id="L000730"><code><var>self</var> == <var>other</var></code></a></dt>
+<dd>
+<p><code>self</code> と <code>other</code> の各要素をそれぞれ順に <code>==</code> で比較し
+て、全要素が等しければ真を返します。</p></dd>
+<dt><a name="L000731" id="L000731"><code>assoc(<var>key</var>)</code></a></dt>
+<dd>
+<p>配列の配列を検索して、その 0 番目の要素が <var>key</var> に等しい最初の
+要素を返します。比較は <code>==</code> 演算子を使って行われます。
+該当する要素がなければ <code>nil</code> を返します。</p>
+<p>例:</p>
+<pre>ary = [[1,15], [2,25], [3,35]]
+p ary.assoc(2)           # =&gt; [2, 25]
+p ary.assoc(100)         # =&gt; nil
+p ary.assoc(15)          # =&gt; nil</pre>
+<p><a href="#L000780">Array#rassoc</a> も参照してください。</p></dd>
+<dt><a name="L000732" id="L000732"><code>at(<var>pos</var>)</code></a></dt>
+<dd>
+<p>配列の <var>pos</var> の位置にある要素を返します。
+self[<var>pos</var>] と同じです。</p></dd>
+<dt><a name="L000733" id="L000733"><code>clear</code></a></dt>
+<dd>
+<p>配列の要素をすべて削除して空にします。
+<code>self</code> を返します。</p>
+<p>例:</p>
+<pre>ary = [1, 2]
+ary.clear
+p ary     #=&gt; []</pre></dd>
+<dt><a name="L000734" id="L000734"><code>clone</code></a>
+<dt><a name="L000735" id="L000735"><code>dup</code></a></dt>
+<dd>
+<p>レシーバと同じ内容を持つ新しい配列を返します。<code>clone</code> は
+frozen tainted singleton-class の情報も含めてコピーしますが、
+<code>dup</code> は内容だけをコピーします。</p>
+<p>またどちらのメソッドも要素それ自体のコピーはしません。
+つまり「浅い(shallow)」コピーを行います。</p>
+<p>例:</p>
+<pre>ary = ['string']
+p ary             #=&gt; [&quot;string&quot;]
+copy = ary.dup
+p copy            #=&gt; [&quot;string&quot;]
+
+ary[0][0...3] = ''
+p ary             #=&gt; [&quot;ing&quot;]
+p copy            #=&gt; [&quot;ing&quot;]</pre></dd>
+<dt><a name="L000736" id="L000736"><code>collect! {|<var>item</var>| ..}</code></a>
+<dt><a name="L000737" id="L000737"><code>map! {|<var>item</var>| ..}</code></a></dt>
+<dd>
+<p>各要素を順番にブロックに渡して評価し、その結果で要素を
+置き換えます。<a href="refm070.html#L001747">Enumerable#collect</a> も参照。</p>
+<p><code>self</code> を返します。</p>
+<p>例:</p>
+<pre>ary = [1, 2, 3]
+ary.map! {|i| i * 3 }
+p ary   #=&gt; [3, 6, 9]</pre></dd>
+<dt><a name="L000738" id="L000738"><code>compact</code></a>
+<dt><a name="L000739" id="L000739"><code>compact!</code></a></dt>
+<dd>
+<p><code>compact</code> は <code>self</code> から <code>nil</code> である要素を取り除いた
+新しい配列を返します。<code>compact!</code> は変更を破壊的に行い、変更が
+行われた場合は <code>self</code> を、そうでなければ <code>nil</code> を返します。</p>
+<p>例:</p>
+<pre>ary = [1, nil, 2, nil, 3, nil]
+p ary.compact   #=&gt; [1, 2, 3]
+p ary           #=&gt; [1, nil, 2, nil, 3, nil]
+ary.compact!
+p ary           #=&gt; [1, 2, 3]
+p ary.compact!  #=&gt; nil</pre></dd>
+<dt><a name="L000740" id="L000740"><code>concat(<var>other</var>)</code></a></dt>
+<dd>
+<p>配列 <var>other</var> を <code>self</code> の末尾に(破壊的に)連結します。
+<code>self</code> を返します。</p>
+<p>例:</p>
+<pre>array = [1, 2]
+a     = [3, 4]
+array.concat a
+p array          # =&gt; [1, 2, 3, 4]
+p a              # =&gt; [3, 4]       # こちらは変わらない</pre></dd>
+<dt><a name="L000741" id="L000741"><code>delete(<var>val</var>)</code></a>
+<dt><a name="L000742" id="L000742"><code>delete(<var>val</var>) { ... }</code></a></dt>
+<dd>
+<p><var>val</var> と <code>==</code> で等しい要素をすべて取り除きます。
+<var>val</var> と等しい要素が見つかった場合は、<em>val</em> を返します。</p>
+<p><var>val</var>と等しい要素がなければ <code>nil</code> を返しますが、ブロックが
+指定されていればブロックを評価してその結果を返します。</p>
+<p>例:</p>
+<pre>array = [1, 2, 3, 2, 1]
+p array.delete(2)       #=&gt; 2
+p array                 #=&gt; [1, 3, 1]
+
+# ブロックなしの引数に nil を渡すとその戻り値から削除が
+# 行われたかどうかの判定をすることはできない
+ary = [nil,nil,nil]
+p ary.delete(nil)       #=&gt; nil
+p ary                   #=&gt; []
+p ary.delete(nil)       #=&gt; nil</pre></dd>
+<dt><a name="L000743" id="L000743"><code>delete_at(<var>pos</var>)</code></a></dt>
+<dd>
+<p><var>pos</var> で指定された位置にある要素を取り除きそれを返します。
+<var>pos</var> が範囲外であったら <code>nil</code> を返します。</p>
+<p><a href="#L000732">at</a> と同様に負のインデックスで末尾から位置を指定するこ
+とができます。</p>
+<p>例:</p>
+<pre>array = [0, 1, 2, 3, 4]
+array.delete_at 2
+p array             #=&gt; [0, 1, 3, 4]</pre></dd>
+<dt><a name="L000744" id="L000744"><code>delete_if {|<var>x</var>| ... }</code></a>
+<dt><a name="L000745" id="L000745"><code>reject! {|<var>x</var>| ... }</code></a></dt>
+<dd>
+<p>要素を順番にブロックに渡して評価し、その結果が真になった要素を
+すべて削除します。</p>
+<p><code>delete_if</code> は常に <code>self</code> を返しますが、<code>reject!</code> は要
+素が 1 つ以上削除されれば <code>self</code> を、 1 つも削除されなければ <code>nil</code> を返します。</p></dd>
+<dt><a name="L000746" id="L000746"><code>each {|<var>item</var>| .... }</code></a></dt>
+<dd>
+<p>各要素に対してブロックを評価します。<code>self</code> を返します。</p>
+<p>例:</p>
+<pre># 1、2、3 が順番に表示される
+[1, 2, 3].each do |i|
+  puts i
+end</pre>
+<p>each により(また、標準のメソッドで)複数の値を取得しながら繰り返す
+ことはできません。現在のところ以下のようなメソッドを定義する必要が
+あります。</p>
+<p>例:</p>
+<pre>class Array
+  def every(&amp;block)
+    arity = block.arity
+    return self.each(&amp;block) if arity &lt;= 0
+
+    i = 0
+    while i &lt; self.size
+      yield(*self[i, arity])
+      i += arity
+    end
+    self
+  end
+end
+
+ary = [1,2,3]
+ary.every {|i| p i}
+# =&gt; 1
+#    2
+#    3
+ary.every {|i,j| p [i,j]}
+# =&gt; [1, 2]
+#    [3, nil]
+ary.every {|i,j,k| p [i,j,k]}
+# =&gt; [1, 2, 3]
+ary.every {|*i| p *i}
+# =&gt; 1
+#    2
+#    3</pre></dd>
+<dt><a name="L000747" id="L000747"><code>each_index {|<var>index</var>| .... }</code></a></dt>
+<dd>
+<p>各要素のインデックスに対してブロックを評価します。
+以下と同じです。</p>
+<pre>(0 ... ary.size).each {|index| ....  }</pre>
+<p><code>self</code> を返します。</p></dd>
+<dt><a name="L000748" id="L000748"><code>empty?</code></a></dt>
+<dd>
+<p>配列の要素数が 0 の時真を返します。</p></dd>
+<dt><a name="L000749" id="L000749"><code>eql?(<var>other</var>)</code></a></dt>
+<dd>
+<p><code>self</code> と <code>other</code> の各要素をそれぞれ順に
+<a href="refm035.html#L000655">Object#eql?</a> で比較して、全要素が等しければ真を返
+します。</p></dd>
+<dt><a name="L000750" id="L000750"><code>fetch(<var>nth</var>)                          ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a>
+<dt><a name="L000751" id="L000751"><code>fetch(<var>nth</var>, <var>ifnone</var>)                  ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a>
+<dt><a name="L000752" id="L000752"><code>fetch(<var>nth</var>) {|<var>nth</var>| ... }             ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p><a href="#L000717">Array#[nth]</a> と同様 <var>nth</var> 番目の要素を返しますが、
+Array#[nth] とは <var>nth</var> 番目の要素が存在しない場合の振舞いが異
+なります。</p>
+<p>最初の形式では、例外 <a href="refm095.html">IndexError</a> が発生します。
+二番目の形式では、引数 <var>ifnone</var> を返します。
+三番目の形式では、ブロックを評価した結果を返します。</p>
+<p>Array#[nth] は、Array#fetch(nth, nil) と同じです。</p></dd>
+<dt><a name="L000753" id="L000753"><code>fill(<var>val</var>)</code></a>
+<dt><a name="L000754" id="L000754"><code>fill(<var>val</var>, <var>start</var>[, <var>length</var>])</code></a>
+<dt><a name="L000755" id="L000755"><code>fill(<var>val</var>, <var>start</var>..<var>end</var>)</code></a>
+<dt><a name="L000756" id="L000756"><code>fill {|<var>index</var>| ... }                         ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a>
+<dt><a name="L000757" id="L000757"><code>fill(<var>start</var>[, <var>length</var>]) {|<var>index</var>| ... }        ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a>
+<dt><a name="L000758" id="L000758"><code>fill(<var>start</var>..<var>end</var>) {|<var>index</var>| ... }             ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>配列の、指定された範囲すべてに <var>val</var> をセットします。二番目の
+形式で <var>length</var> が省略された時は配列の終りまでの長さを意味しま
+す。指定された部分配列が元の配列の範囲を越える時は長さを自動的に拡
+張し、拡張した部分を <var>val</var> で初期化します。</p>
+<p>このメソッドが <var>val</var> のコピーでなく <var>val</var> 自身をセットする
+ことに注意してください(<a href="refm432.html">trap::Array</a>)。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>:</p>
+<p><var>val</var> の代わりにブロックを指定するとブロックの評価結果を値とし
+ます。ブロックは要素毎に実行されるので、セットする値のそれぞれをあ
+るオブジェクトの複製にすることができます。
+ブロックのパラメータには <var>start</var> からのインデックスが渡されます。</p>
+<pre>ary = []
+p ary.fill(1..2) {|i| i}         # =&gt; [nil, 1, 2]
+p ary.fill(0,3) {|i| i}          # =&gt; [0, 1, 2]
+p ary.fill { &quot;foo&quot; }             # =&gt; [&quot;foo&quot;, &quot;foo&quot;, &quot;foo&quot;]
+p ary.collect {|v| v.object_id } # =&gt; [537770124, 537770112, 537770100]</pre>
+<p><a href="refm385.html">ruby 1.8 feature</a>: version 1.8.0 には、ブロックに渡されるパラ
+メータが仕様と異なる不具合がありました。</p>
+<pre>ary = []
+p ary.fill(1..2) {|i| i}         # =&gt; [2, 4, 6]  &lt;- bug
+p ary.fill(0,3) {|i| i}          # =&gt; [1, 3, 5]  &lt;- bug
+p ary.fill { &quot;foo&quot; }             # =&gt; [&quot;foo&quot;, &quot;foo&quot;, &quot;foo&quot;]
+p ary.collect {|v| v.object_id } # =&gt; [537770124, 537770112, 537770100]</pre></dd>
+<dt><a name="L000759" id="L000759"><code>first</code></a>
+<dt><a name="L000760" id="L000760"><code>first(<var>n</var>)    ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>配列の先頭の要素を返します。要素がなければ <code>nil</code> を返します。</p>
+<p>例:</p>
+<pre>p [0, 1, 2].first   #=&gt; 0
+p [].first          #=&gt; nil</pre>
+<p><a href="refm385.html">ruby 1.8 feature</a>:
+省略可能な引数 <var>n</var> を指定した場合、先頭の <var>n</var> 要素を配列で
+返します。<var>n</var> は 0 以上でなければなりません。</p>
+<pre>ary =  [0, 1, 2]
+p ary.first(0)
+p ary.first(1)
+p ary.first(2)
+p ary.first(3)
+p ary.first(4)
+# =&gt; []
+     [0]
+     [0, 1]
+     [0, 1, 2]
+     [0, 1, 2]</pre>
+<p><a href="#L000771">Array#last</a> も参照してください。</p></dd>
+<dt><a name="L000761" id="L000761"><code>flatten</code></a>
+<dt><a name="L000762" id="L000762"><code>flatten!</code></a></dt>
+<dd>
+<p>ネストした配列を平滑化してそれを返します。<code>flatten!</code> は
+配列それ自体を破壊的に平滑化し、配列がネストしていないとき
+には <code>nil</code> を返します。</p>
+<p>例:</p>
+<pre>p [1, [2, 3, [4], 5]].flatten   #=&gt; [1, 2, 3, 4, 5]
+
+array = [[[1, [2, 3]]]]
+array.flatten!
+p array                         #=&gt; [1, 2, 3]</pre></dd>
+<dt><a name="L000763" id="L000763"><code>include?(<var>val</var>)</code></a></dt>
+<dd>
+<p>配列が <var>val</var> と <code>==</code> において等しい要素を持つ時に真を返し
+ます。</p></dd>
+<dt><a name="L000764" id="L000764"><code>index(<var>val</var>)</code></a>
+<dt><a name="L000765" id="L000765"><code>index {|<var>item</var>| ...}          ((&lt;<var>ruby</var> <var>1</var>.<var>9</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>最初の形式では、<var>val</var> と <code>==</code> で等しい最初の要素の位置を返
+します。</p>
+<p><a href="refm392.html">ruby 1.9 feature</a>:
+二番目の形式では、ブロックが真を返した最初の要素の位置を返します。
+ブロック引数には、要素が順に渡されます。</p>
+<p>等しい要素がひとつもなかった時には <code>nil</code> を返します。</p>
+<p>例:</p>
+<pre>p [1, 0, 0, 1, 0].index(1)   #=&gt; 0
+p [1, 0, 0, 0, 0].index(1)   #=&gt; 0
+p [0, 0, 0, 0, 0].index(1)   #=&gt; nil
+p [0, 1, 0, 1, 0].index {|v| v &gt; 0}   #=&gt; 1</pre>
+<p><a href="#L000785">rindex</a> も参照してください。</p></dd>
+<dt><a name="L000766" id="L000766"><code>indexes(<var>index_1</var>, ... , <var>index_n</var>)     ((&lt;<var>obsolete</var>&gt;))</code></a>
+<dt><a name="L000767" id="L000767"><code>indices(<var>index_1</var>, ... , <var>index_n</var>)     ((&lt;<var>obsolete</var>&gt;))</code></a></dt>
+<dd>
+<p>各引数の値をインデックスとする要素の配列を返します。範囲外の
+インデックス指定に対しては <code>nil</code> が対応します。</p>
+<p>例:</p>
+<pre>ary = %w[ a b c d e ]
+p ary.indexes( 0, 2, 4 )          #=&gt; [&quot;a&quot;, &quot;c&quot;, &quot;e&quot;]
+p ary.indexes( 3, 4, 5, 6, 35 )   #=&gt; [&quot;d&quot;, &quot;e&quot;, nil, nil]
+p ary.indexes( 0, -1, -2 )        #=&gt; [&quot;a&quot;, &quot;e&quot;, &quot;d&quot;]
+p ary.indexes( -4, -5, -6, -35 )  #=&gt; [&quot;b&quot;, &quot;a&quot;, nil, nil]</pre>
+<p><a href="refm385.html">ruby 1.8 feature</a>:
+このメソッドは version 1.8 では、<a href="refm393.html">obsolete</a> です。
+使用すると警告メッセージが表示されます。
+代わりに <a href="#L000804">Array#values_at</a> を使用します。</p></dd>
+<dt><a name="L000768" id="L000768"><code>insert(<var>nth</var>, <var>val</var>[, <var>val2</var> ...])</code></a>
+<dt><a name="L000769" id="L000769"><code>insert(<var>nth</var>, [<var>val</var>[, <var>val2</var> ...]])      ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p><a href="refm384.html">ruby 1.7 feature</a></p>
+<p>インデックス <var>nth</var> の要素の直前に第 2 引数以降の値を挿入します。
+<code>self</code> を返します。以下のように定義されます。</p>
+<pre>class Array
+  def insert( n, *vals )
+    self[n, 0] = vals
+    self
+  end
+end</pre>
+<p>例:</p>
+<pre>ary = %w[ foo bar baz ]
+ary.insert 2, 'a', 'b'
+p ary                  # =&gt; [&quot;foo&quot;, &quot;bar&quot;, &quot;a&quot;, &quot;b&quot;, &quot;baz&quot;]</pre>
+<p><a href="refm385.html">ruby 1.8 feature</a>: 引数 val を一つも指定しなければ何もしません。</p></dd>
+<dt><a name="L000770" id="L000770"><code>join([<var>sep</var>])</code></a></dt>
+<dd>
+<p>配列の要素を文字列 <var>sep</var> を間に挟んで連結した文字列を返します。</p>
+<p>文字列でない要素に対しては <code>to_s</code> した結果を連結します。
+要素がまた配列であれば再帰的に (同じ <var>sep</var> を利用して)
+join した文字列を連結します。</p>
+<p><var>sep</var> が <code>nil</code> のときは空文字列を使います。</p>
+<p>引数 <var>sep</var> が省略された場合には変数 <a href="refm030.html#L000530">$,</a>
+の値が使われます。<code>$,</code> のデフォルト値は nil です。</p>
+<p>注: 配列要素が自身を含むような無限にネストした配列に対しては、以下
+のような結果になります。</p>
+<pre>ary = [1,2,3]
+ary.push ary
+p ary           # =&gt; [1, 2, 3, [...]]
+p ary.join      # =&gt; &quot;123123[...]&quot;</pre></dd>
+<dt><a name="L000771" id="L000771"><code>last</code></a>
+<dt><a name="L000772" id="L000772"><code>last(<var>n</var>)    ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>配列の末尾の要素を返します。配列が空のときは <code>nil</code> を返します。</p>
+<pre>p [0, 1, 2].last   #=&gt; 2
+p [].last          #=&gt; nil</pre>
+<p><a href="refm385.html">ruby 1.8 feature</a>:
+省略可能な引数 <var>n</var> を指定した場合、末尾の <var>n</var> 要素を配列で
+返します。<var>n</var> は 0 以上でなければなりません。</p>
+<pre>ary =  [0, 1, 2]
+p ary.last(0)
+p ary.last(1)
+p ary.last(2)
+p ary.last(3)
+p ary.last(4)
+# =&gt; []
+     [2]
+     [1, 2]
+     [0, 1, 2]
+     [0, 1, 2]</pre>
+<p><a href="#L000759">Array#first</a> も参照してください。</p></dd>
+<dt><a name="L000773" id="L000773"><code>length</code></a>
+<dt><a name="L000774" id="L000774"><code>size</code></a></dt>
+<dd>
+<p>配列の長さを返します。配列が空のときは 0 を返します。</p></dd>
+<dt><a name="L000775" id="L000775"><code>nitems</code></a></dt>
+<dd>
+<p><code>nil</code> でない要素の数を返します。</p></dd>
+<dt><a name="L000776" id="L000776"><code>pack(<var>template</var>)</code></a></dt>
+<dd>
+<p>配列の内容を <var>template</var> で指定された文字列にしたがって、
+バイナリとしてパックした文字列を返します。テンプレートは
+型指定文字列とその長さ(省略時は1)を並べたものです。長さと
+して <code>*</code> が指定された時は「残りのデータ全て」の長さを
+表します。型指定文字は<a href="refm451.html">packテンプレート文字列</a>の通りです。</p></dd>
+<dt><a name="L000777" id="L000777"><code>pop</code></a></dt>
+<dd>
+<p>末尾の要素を取り除いてそれを返します。空配列の時は
+<code>nil</code> を返します。</p>
+<p><a href="#L000778">push</a>, <a href="#L000787">shift</a>, <a href="#L000802">unshift</a> も参照し
+てください。</p>
+<p>例:</p>
+<pre>array = [1, [2, 3], 4]
+p array.pop      # =&gt; 4
+p array.pop      # =&gt; [2, 3]
+p array          # =&gt; [1]
+
+p array.pop      # =&gt; 1
+p array.pop      # =&gt; nil
+p array          # =&gt; []</pre></dd>
+<dt><a name="L000778" id="L000778"><code>push(<var>obj1</var>[, <var>obj2</var> ...])</code></a>
+<dt><a name="L000779" id="L000779"><code>push([<var>obj1</var>[, <var>obj2</var> ...]])    ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p><var>obj1</var>, <var>obj2</var> ... を順番に配列の末尾に追加します。</p>
+<p><a href="#L000777">pop</a>, <a href="#L000787">shift</a>, <a href="#L000802">unshift</a> も参照して
+ください。</p>
+<p><code>self</code> を返します。</p>
+<p>例:</p>
+<pre>array = [1, 2, 3]
+array.push 4
+array.push [5, 6]
+array.push 7, 8
+p array          # =&gt; [1, 2, 3, 4, [5, 6], 7, 8]</pre>
+<p><a href="refm385.html">ruby 1.8 feature</a>: 引数を指定しなければ何もしません。</p></dd>
+<dt><a name="L000780" id="L000780"><code>rassoc(<var>obj</var>)</code></a></dt>
+<dd>
+<p><code>self</code> が配列の配列であると仮定して、要素の配列でインデックス 
+1 の要素が <var>obj</var> に等しいものを検索し見つかった最初の要素を返
+します。比較は <code>==</code> 演算子を使って行われます。</p>
+<p>該当する要素がなければ <code>nil</code> を返します。</p>
+<p>例:</p>
+<pre>a = [[15,1], [25,2], [35,3]]
+p a.rassoc(2)    # =&gt; [25, 2]</pre>
+<p><a href="#L000731">Array#assoc</a> も参照してください。</p></dd>
+<dt><a name="L000781" id="L000781"><code>replace(<var>another</var>)</code></a></dt>
+<dd>
+<p>配列の内容を配列 <var>another</var> の内容で置き換えます。
+<code>self</code> を返します。</p>
+<p>例:</p>
+<pre>a = [1, 2, 3]
+a.replace [4, 5, 6]
+p a                 #=&gt; [4, 5, 6]</pre></dd>
+<dt><a name="L000782" id="L000782"><code>reverse</code></a>
+<dt><a name="L000783" id="L000783"><code>reverse!</code></a></dt>
+<dd>
+<p><code>reverse</code> は全ての要素を逆順に並べた新しい配列を返します。
+<code>reverse!</code> は配列の要素を逆順に(破壊的に)並べ替えます。</p>
+<p><code>reverse</code> は、常に新しい配列を返しますが、<code>reverse!</code>  は、
+1 要素の配列に対して <code>nil</code> を返しそれ以外では <code>self</code> を返
+します</p>
+<p><a href="refm385.html">ruby 1.8 feature</a>: 常に self を返します。</p></dd>
+<dt><a name="L000784" id="L000784"><code>reverse_each {|<var>item</var>| ... }</code></a></dt>
+<dd>
+<p>各要素に対して逆順にブロックを評価します。<code>self</code> を返します。</p></dd>
+<dt><a name="L000785" id="L000785"><code>rindex(<var>val</var>)</code></a>
+<dt><a name="L000786" id="L000786"><code>rindex {|<var>item</var>| ... }        ((&lt;<var>ruby</var> <var>1</var>.<var>9</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>最初の形式では、<var>val</var> と <code>==</code> で等しい<em>最後</em>の要素の位
+置を返します。</p>
+<p><a href="refm392.html">ruby 1.9 feature</a>:
+二番目の形式では、ブロックが真を返した<em>最後</em>の要素の位置を返し
+ます。ブロック引数には、要素が順に渡されます。</p>
+<p>等しい要素がひとつもなかった時には <code>nil</code> を返します。</p>
+<p>例:</p>
+<pre>p [1, 0, 0, 1, 0].rindex(1)   #=&gt; 3
+p [1, 0, 0, 0, 0].rindex(1)   #=&gt; 0
+p [0, 0, 0, 0, 0].rindex(1)   #=&gt; nil
+p [0, 1, 0, 1, 0].rindex {|v| v &gt; 0}   #=&gt; 3</pre>
+<p><a href="#L000764">index</a> も参照してください。</p></dd>
+<dt><a name="L000787" id="L000787"><code>shift</code></a></dt>
+<dd>
+<p>配列の先頭の要素を取り除いてそれを返します。残りの要素はひとつずつ
+前に詰められます。空配列に対しては<code>nil</code> を返します。</p>
+<p><a href="#L000778">push</a>, <a href="#L000777">pop</a>, <a href="#L000802">unshift</a> も参照して
+ください。</p></dd>
+<dt><a name="L000788" id="L000788"><code>slice(<var>pos</var>[, <var>len</var>])</code></a>
+<dt><a name="L000789" id="L000789"><code>slice(<var>start</var>..<var>last</var>)</code></a></dt>
+<dd>
+<p><em class="XXINVALIDXX">self[]</em> と同じです。</p></dd>
+<dt><a name="L000790" id="L000790"><code>slice!(<var>pos</var>[, <var>len</var>])</code></a>
+<dt><a name="L000791" id="L000791"><code>slice!(<var>start</var>..<var>last</var>)</code></a></dt>
+<dd>
+<p>指定した要素を取り除いて返します。取り除く要素がなければ <code>nil</code> 
+を返します。</p></dd>
+<dt><a name="L000792" id="L000792"><code>sort</code></a>
+<dt><a name="L000793" id="L000793"><code>sort!</code></a>
+<dt><a name="L000794" id="L000794"><code>sort {|<var>a</var>, <var>b</var>| ... }</code></a>
+<dt><a name="L000795" id="L000795"><code>sort! {|<var>a</var>, <var>b</var>| ... }</code></a></dt>
+<dd>
+<p>配列の内容をソートします。ブロックとともに呼び出された時には
+ブロックに 2 引数を与えて評価し、その結果で比較します。
+ブロックがない時には <code>&lt;=&gt;</code> 演算子を使って比較します。
+<code>sort</code> はソートされた新しい配列を返し、<code>sort!</code> は
+<code>self</code> を破壊的に変更します。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>:
+<code>sort!</code> は、バージョン 1.6 以前には要素の数が 2 より小さい場合には
+<code>nil</code> を返していました。一方バージョン 1.7 では常に <code>self</code> を
+返します。</p></dd>
+<dt><a name="L000796" id="L000796"><code>to_a</code></a>
+<dt><a name="L000797" id="L000797"><code>to_ary</code></a></dt>
+<dd>
+<p><code>self</code> をそのまま返します。</p></dd>
+<dt><a name="L000798" id="L000798"><code>to_s</code></a></dt>
+<dd>
+<p>self.<a href="#L000770">join</a>(<a href="refm030.html#L000530">$,</a>) と同じです。</p></dd>
+<dt><a name="L000799" id="L000799"><code>transpose</code></a></dt>
+<dd>
+<p><a href="refm384.html">ruby 1.7 feature</a>:</p>
+<p><code>self</code> を行列と見立てて、行列の転置(行と列の入れ換え)を行いま
+す。転置した配列を生成して返します。空の配列に対しては空の配列を生
+成して返します。それ以外の一次元の配列に対しては、例外 
+<a href="refm111.html">TypeError</a> が発生します。各要素のサイズが不揃いな配列に対して
+は、例外 <a href="refm095.html">IndexError</a> が発生します。</p>
+<pre>p [[1,2],
+   [3,4],
+   [5,6]].transpose
+# =&gt; [[1, 3, 5], [2, 4, 6]]
+
+p [].transpose
+# =&gt; []
+
+p [1,2,3].transpose
+
+# =&gt; -:1:in `transpose': cannot convert Fixnum into Array (TypeError)
+        from -:1
+
+p [[1,2],
+   [3,4,5],
+   [6,7]].transpose
+# =&gt; -:3:in `transpose': element size differ (3 should be 2) (IndexError)</pre></dd>
+<dt><a name="L000800" id="L000800"><code>uniq</code></a>
+<dt><a name="L000801" id="L000801"><code>uniq!</code></a></dt>
+<dd>
+<p><code>uniq</code> は配列から重複した要素を取り除いた新しい配列を返します。
+取り除かれた要素の部分は前に詰められます。<code>uniq!</code> は削除を破壊
+的に行い、削除が行われた場合は <code>self</code> を、そうでなければ 
+<code>nil</code> を返します。</p>
+<p>要素の重複判定は、<a href="refm035.html#L000655">Object#eql?</a> により行われます。</p>
+<p>例:</p>
+<pre>p [1, 1, 1].uniq         #=&gt; [1]
+p [1, 4, 1].uniq         #=&gt; [1, 4]
+p [1, 3, 2, 2, 3].uniq   #=&gt; [1, 3, 2]</pre></dd>
+<dt><a name="L000802" id="L000802"><code>unshift(<var>obj1</var>[, <var>obj2</var> ...])</code></a>
+<dt><a name="L000803" id="L000803"><code>unshift([<var>obj1</var>[, <var>obj2</var> ...]])         ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p><var>obj1</var>, <var>obj2</var> ... を順番に配列の先頭に挿入します。<code>self</code> を返します。</p>
+<p><a href="#L000778">push</a>, <a href="#L000777">pop</a>, <a href="#L000787">shift</a> も参照してく
+ださい。</p>
+<p>例:</p>
+<pre>arr = [1,2,3]
+arr.unshift 0
+p arr             #=&gt; [0, 1, 2, 3]
+arr.unshift [0]
+p arr             #=&gt; [[0], 0, 1, 2, 3]
+arr.unshift 1, 2
+p arr             #=&gt; [1, 2, [0], 0, 1, 2, 3]</pre>
+<p><a href="refm385.html">ruby 1.8 feature</a>: 引数を指定しなければ何もしません。</p></dd>
+<dt><a name="L000804" id="L000804"><code>values_at(<var>index_1</var>, ... , <var>index_n</var>)</code></a></dt>
+<dd>
+<p><a href="refm385.html">ruby 1.8 feature</a></p>
+<p>引数で指定されたインデックスに対応する要素を配列で返します。インデッ
+クスに対応する値がなければ nil が要素になります。
+(<a href="#L000766">indexes</a>, <a href="#L000767">indices</a> と同じです)</p>
+<p>例:</p>
+<pre>ary = %w[ a b c d e ]
+p ary.values_at( 0, 2, 4 )          #=&gt; [&quot;a&quot;, &quot;c&quot;, &quot;e&quot;]
+p ary.values_at( 3, 4, 5, 6, 35 )   #=&gt; [&quot;d&quot;, &quot;e&quot;, nil, nil, nil]
+p ary.values_at( 0, -1, -2 )        #=&gt; [&quot;a&quot;, &quot;e&quot;, &quot;d&quot;]
+p ary.values_at( -4, -5, -6, -35 )  #=&gt; [&quot;b&quot;, &quot;a&quot;, nil, nil]</pre></dd>
+</dl>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>処理の高速化のために内部で <a href="refm044.html">Hash</a> を使用しているためです</small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm035.html">UP</a>][<a href="refm035.html">&lt;-PREV</a>][<a href="refm037.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

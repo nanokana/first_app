@@ -1,0 +1,1665 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>逆引きRuby/Qt</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm505.html" rel="next" />
+<link href="refm503.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm486.html">UP</a>][<a href="refm503.html">&lt;-PREV</a>][<a href="refm505.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L010941" id="L010941">逆引き Ruby/Qt</a></h1>
+<h2><a name="L010942" id="L010942">GUI コンポーネント全般</a></h2>
+<h3><a name="L010943" id="L010943">幅や高さを指定する</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+a = QApplication.new([$0]+ARGV)
+hello = QLabel.new( &quot;Hello world!&quot;, nil )
+hello.resize( 200, 200 )
+hello.setAlignment(Qt::AlignCenter)
+
+a.setMainWidget( hello )
+hello.show()
+a.exec()</pre>
+<h3><a name="L010944" id="L010944">Widget の見ためを変える</a></h3>
+<h3><a name="L010945" id="L010945">Widget 間の間隔(余白)を設定する</a></h3>
+<h3><a name="L010946" id="L010946">前景、背景色を変える</a></h3>
+<h3><a name="L010947" id="L010947">アクティブ時(マウスが上に来たとき)の前景、背景色を変える</a></h3>
+<h3><a name="L010948" id="L010948">フォントとフォントの大きさを変える</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+a = QApplication.new([$0]+ARGV)
+hello = QLabel.new( &quot;Hello world!&quot;, nil )
+hello.setFont( QFont.new( &quot;Times&quot;, 18, QFont::Bold ) )
+
+a.setMainWidget( hello )
+hello.show()
+a.exec()</pre>
+<h3><a name="L010949" id="L010949">フォントの色を変える</a></h3>
+<h3><a name="L010950" id="L010950">フォントの一覧を取得する</a></h3>
+<h3><a name="L010951" id="L010951">フォーカスを移動する</a></h3>
+<h3><a name="L010952" id="L010952">イメージつきにする</a></h3>
+<h3><a name="L010953" id="L010953">マウスカーソルの形状を変更する</a></h3>
+<h3><a name="L010954" id="L010954">時間のかかる処理時にマウスカーソルの形状を時計にする</a></h3>
+<h3><a name="L010955" id="L010955">独自カーソルを使用する</a></h3>
+<h3><a name="L010956" id="L010956">Widget の種類を取得する</a></h3>
+<h3><a name="L010957" id="L010957">Widget 全てに対して同じ属性を適用する</a></h3>
+<h2><a name="L010958" id="L010958">配置</a></h2>
+<h3><a name="L010959" id="L010959">座標で指定して配置する</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+class MyMainWindow &lt; QWidget
+  def initialize
+
+    hello = QLabel.new( &quot;Hello world!&quot;, self )
+    hello.setGeometry( 100, 50, 200, 100 )
+    hello.setAlignment(Qt::AlignCenter)
+  end
+end
+
+a = QApplication.new([$0]+ARGV)
+w = MyMainWindow.new
+
+a.setMainWidget( w )
+w.show()
+a.exec()</pre>
+<h3><a name="L010960" id="L010960">垂直方向に配置する</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+a = QApplication.new([$0]+ARGV)
+vbox = QVBox.new
+vbox.setMargin(10)
+a.setMainWidget(vbox)
+
+QPushButton.new(&quot;Button1&quot;, vbox)
+QPushButton.new(&quot;Button2&quot;, vbox)
+QPushButton.new(&quot;Button3&quot;, vbox)
+
+vbox.show()
+a.exec()</pre>
+<h3><a name="L010961" id="L010961">水平方向に配置する</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+a = QApplication.new([$0]+ARGV)
+hbox = QHBox.new
+hbox.setMargin(10)
+a.setMainWidget(hbox)
+
+QPushButton.new(&quot;Button1&quot;, hbox)
+QPushButton.new(&quot;Button2&quot;, hbox)
+QPushButton.new(&quot;Button3&quot;, hbox)
+
+hbox.show()
+a.exec()</pre>
+<h3><a name="L010962" id="L010962">格子状に配置する</a></h3>
+<p>横2つに並べられる</p>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+a = QApplication.new([$0]+ARGV)
+grid = QGrid.new( 2, nil)
+grid.setMargin(10)
+
+l1 = QLabel.new( &quot;Label1&quot;, grid )
+l1.setFrameStyle(QFrame::Box | QFrame::Raised)
+l2 = QLabel.new( &quot;Label2&quot;, grid )
+l2.setFrameStyle(QFrame::Box | QFrame::Raised)
+l3 = QLabel.new( &quot;Label3&quot;, grid )
+l3.setFrameStyle(QFrame::Box | QFrame::Raised)
+
+a.setMainWidget( grid )
+grid.show()
+a.exec()</pre>
+<p>Layout クラスを継承している QGridLayout クラスを使うと、</p>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+a = QApplication.new([$0]+ARGV)
+f = QFrame.new( nil )
+grid = QGridLayout.new( f, 1, 2 )
+grid.setMargin(10)
+
+l1 = QLabel.new(&quot;Label1&quot;, f)
+l1.setFrameStyle(QFrame::Box | QFrame::Raised)
+grid.addWidget(l1, 0, 0)
+
+l2 = QLabel.new( &quot;Label2&quot;, f )
+l2.setFrameStyle(QFrame::Box | QFrame::Raised)
+grid.addWidget(l2, 0, 1)
+
+l3 = QLabel.new( &quot;Label3&quot;, f )
+l3.setFrameStyle(QFrame::Box | QFrame::Raised)
+grid.addWidget(l3, 1, 2)
+
+a.setMainWidget( f )
+f.show()
+a.exec()</pre>
+<h3><a name="L010945" id="L010945">Widget 間の間隔(余白)を設定する</a></h3>
+<h3><a name="L010963" id="L010963">Widget を非表示にする</a></h3>
+<h3><a name="L010964" id="L010964">Widget 間の幅を揃える</a></h3>
+<h3><a name="L010965" id="L010965">親 Widget が大きくなったときそれに合わせて Widget を大きくする</a></h3>
+<h3><a name="L010966" id="L010966">格子状の配置でいくつかのセルをまたがらせる</a></h3>
+<h2><a name="L010967" id="L010967">イベント</a></h2>
+<h3><a name="L010968" id="L010968">マウスの第一ボタンをクリックしたときの動作を設定する</a></h3>
+<h3><a name="L010969" id="L010969">マウスをダブルクリックしたときの動作を設定する</a></h3>
+<h3><a name="L010970" id="L010970">マウスの第二ボタンをクリックしたときの動作を設定する</a></h3>
+<h3><a name="L010971" id="L010971">マウスを移動したときの動作を設定する</a></h3>
+<h3><a name="L010972" id="L010972">マウスの座標を取得する</a></h3>
+<h3><a name="L010973" id="L010973">Enterキーを押したときの動作を設定する</a></h3>
+<h3><a name="L010974" id="L010974">どのキーが押されたかを取得する</a></h3>
+<h3><a name="L010975" id="L010975">Widget にフォーカスが移って来たときの動作を設定する</a></h3>
+<h3><a name="L010976" id="L010976">ファンクションキー F1 でヘルプを表示する</a></h3>
+<h3><a name="L010977" id="L010977">特殊キー(Shift, Ctrl, ALT)などが押されたどうかを知る</a></h3>
+<h3><a name="L010978" id="L010978">C-x C-c で終了する</a></h3>
+<h3><a name="L010979" id="L010979">テンキー入力であるかどうかを知る</a></h3>
+<h2><a name="L010980" id="L010980">Label クラス</a></h2>
+<h3><a name="L010981" id="L010981">Label クラスを使用する</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+a = QApplication.new([$0]+ARGV)
+hello = QLabel.new( &quot;Hello world!&quot;, nil )
+
+a.setMainWidget( hello )
+hello.show()
+a.exec()</pre>
+<h3><a name="L010982" id="L010982">表示後にテキストを変更する</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+a = QApplication.new([$0]+ARGV)
+hello = QLabel.new( &quot;Hello world!&quot;, nil )
+hello.setText(&quot;Hello!&quot;)
+
+a.setMainWidget( hello )
+hello.show()
+a.exec()</pre>
+<h3><a name="L010983" id="L010983">表示したテキストを取得する</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+a = QApplication.new([$0]+ARGV)
+hello = QLabel.new( &quot;Hello world!&quot;, nil )
+
+a.setMainWidget( hello )
+hello.show()
+
+p hello.text()           # =&gt; #&lt;Qt2::QString:0x40be9c48&gt;
+puts hello.text().to_str # =&gt; &quot;Hello world!&quot;
+
+a.exec()</pre>
+<p>日本語が含まれている場合 local8Bit で変換してから Ruby Stringに戻す。</p>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+a = QApplication.new([$0]+ARGV)
+codec = QTextCodec::codecForLocale()
+a.setDefaultCodec(codec)
+
+hello = QLabel.new(tr(&quot;こんにちは&quot;), nil )
+
+a.setMainWidget( hello )
+hello.show()
+
+p hello.text()           # =&gt; #&lt;Qt2::QString:0x40be9c48&gt;
+puts hello.text().local8Bit.to_str # =&gt; &quot;こんにちは&quot;
+
+a.exec()</pre>
+<h3><a name="L010984" id="L010984">文字の位置揃えをする</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+a = QApplication.new([$0]+ARGV)
+hello = QLabel.new( &quot;Hello world!&quot;, nil )
+hello.resize( 200, 120 )
+#hello.setAlignment(Qt::AlignLeft)
+hello.setAlignment(Qt::AlignCenter)
+#hello.setAlignment(Qt::AlignRight)
+#hello.setAlignment(Qt::AlignTop)
+#hello.setAlignment(Qt::AlignBottom)
+
+a.setMainWidget( hello )
+hello.show()
+a.exec()</pre>
+<h3><a name="L010985" id="L010985">文字の大きさと色を設定する</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+str = &lt;&lt;EOM
+&lt;font size=10 color=&quot;Red&quot;&gt;
+Hello world!
+&lt;/font&gt;
+EOM
+
+a = QApplication.new([$0]+ARGV)
+hello = QLabel.new( str, nil )
+hello.resize( 300, 120 )
+
+a.setMainWidget( hello )
+hello.show()
+a.exec()</pre>
+<h3><a name="L010986" id="L010986">複数行表示する</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+a = QApplication.new([$0]+ARGV)
+hello = QLabel.new( &quot;Ruby\nPython\nPerl&quot;, nil )
+
+a.setMainWidget( hello )
+hello.show()
+a.exec()</pre>
+<h3><a name="L010987" id="L010987">選択可能なラベルを作る</a></h3>
+<h3><a name="L010988" id="L010988">イメージつきラベルを使用する</a></h3>
+<h2><a name="L010989" id="L010989">LCDNumber クラス</a></h2>
+<h3><a name="L010990" id="L010990">LCDNumber クラスを使用する</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+a = QApplication.new([$0]+ARGV)
+lcd = QLCDNumber.new(2, nil )
+lcd.resize(100, 100)
+lcd.display(10)
+
+a.setMainWidget( lcd )
+lcd.show()
+a.exec()</pre>
+<h3><a name="L010991" id="L010991">表示する桁数を設定する</a></h3>
+<p>newするときに設定するか、もしくは、QLCDNumber#setNumDigits を使用する</p>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+a = QApplication.new([$0]+ARGV)
+lcd = QLCDNumber.new(nil)
+lcd.resize(100, 100)
+lcd.display(10)
+lcd.setNumDigits(3)
+
+a.setMainWidget( lcd )
+lcd.show()
+a.exec()</pre>
+<h3><a name="L010992" id="L010992">2, 8, 16 進表示にする</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+a = QApplication.new([$0]+ARGV)
+lcd = QLCDNumber.new(nil )
+lcd.resize(100, 100)
+lcd.display(10)
+lcd.setBinMode
+#lcd.setHexMode
+#lcd.setDecMode
+
+a.setMainWidget( lcd )
+lcd.show()
+a.exec()</pre>
+<h3><a name="L010993" id="L010993">表示の外観を設定する</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+a = QApplication.new([$0]+ARGV)
+lcd = QLCDNumber.new(nil )
+lcd.resize(100, 100)
+lcd.display(10)
+lcd.setSegmentStyle(QLCDNumber::Outline)
+lcd.setSegmentStyle(QLCDNumber::Filled)
+lcd.setSegmentStyle(QLCDNumber::Flat)
+
+a.setMainWidget( lcd )
+lcd.show()
+a.exec()</pre>
+<h2><a name="L010994" id="L010994">PushButton クラス</a></h2>
+<h3><a name="L010995" id="L010995">PushButton クラスを使用する</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+a = QApplication.new([$0]+ARGV)
+hello = QPushButton.new( &quot;Hello world!&quot;, nil )
+Qt2::connect( hello, QSIGNAL(&quot;clicked()&quot;), a, &quot;quit&quot; )
+
+a.setMainWidget( hello )
+hello.show()
+a.exec()</pre>
+<h3><a name="L010996" id="L010996">Enter で選択できるようにする</a></h3>
+<h3><a name="L010997" id="L010997">ショートカットできるようにする</a></h3>
+<h3><a name="L010998" id="L010998">ボタンを使用不可にする</a></h3>
+<h3><a name="L010999" id="L010999">イメージつきボタンを使用する</a></h3>
+<h2><a name="L011000" id="L011000">CheckBox クラス</a></h2>
+<h3><a name="L011001" id="L011001">CheckBox クラスを使用する</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+a = QApplication.new([$0]+ARGV)
+vbox = QVBox.new
+vbox.setMargin(10)
+a.setMainWidget(vbox)
+
+bg = QVButtonGroup.new(vbox)
+bg.setTitle(&quot;Languages&quot;)
+#bg.setExclusive(true)
+cb = QCheckBox.new(&quot;Ruby&quot;, bg)
+cb.setChecked(true)
+QCheckBox.new(&quot;Python&quot;, bg)
+QCheckBox.new(&quot;Perl&quot;, bg)
+
+vbox.show()
+a.exec()</pre>
+<h3><a name="L011002" id="L011002">ボタンの選択、非選択を切り換える</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+class CheckBoxDemo &lt; QObject
+  def initialize
+    @a = QApplication.new([$0]+ARGV)
+    @vbox = QVBox.new
+    @vbox.setMargin(10)
+    @a.setMainWidget(@vbox)
+
+    @cb = QCheckBox.new(&quot;Ruby&quot;, @vbox)
+    @b1 = QPushButton.new(&quot;select&quot;, @vbox)
+    @b2 = QPushButton.new(&quot;deselect&quot;, @vbox)
+    @b3 = QPushButton.new(&quot;toggle&quot;, @vbox)
+  end
+
+  def callback1
+    @cb.setChecked(true)
+  end
+
+  def callback2
+    @cb.setChecked(false)
+  end
+
+  def callback3
+    @cb.toggle
+  end
+
+  def run
+    Qt2::connect(@b1, QSIGNAL('clicked()'), self, 'callback1')
+    Qt2::connect(@b2, QSIGNAL('clicked()'), self, 'callback2')
+    Qt2::connect(@b3, QSIGNAL('clicked()'), self, 'callback3')
+
+    @vbox.show()
+    @a.exec()
+  end
+end
+
+CheckBoxDemo.new.run</pre>
+<h3><a name="L011003" id="L011003">チェックされているかどうか調べる</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+class CheckBoxDemo &lt; QObject
+  def initialize
+    @a = QApplication.new([$0]+ARGV)
+    @vbox = QVBox.new
+    @vbox.setMargin(10)
+    @a.setMainWidget(@vbox)
+
+    @cb = QCheckBox.new(&quot;Ruby&quot;, @vbox)
+    @b = QPushButton.new(&quot;check&quot;, @vbox)
+  end
+
+  def callback
+    print &quot;#{@cb.isChecked}\n&quot;
+  end
+
+  def run
+    Qt2::connect(@b, QSIGNAL('clicked()'), self, 'callback')
+
+    @vbox.show()
+    @a.exec()
+  end
+end
+
+CheckBoxDemo.new.run</pre>
+<h3><a name="L011004" id="L011004">ビットマップを使用する</a></h3>
+<h2><a name="L011005" id="L011005">RadioButton クラス</a></h2>
+<h3><a name="L011006" id="L011006">RadioButton クラスを使用する</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+a = QApplication.new([$0]+ARGV)
+vbox = QVBox.new
+vbox.setMargin(10)
+a.setMainWidget(vbox)
+
+bg = QVButtonGroup.new(vbox)
+bg.setTitle(&quot;Languages&quot;)
+#bg.setExclusive(true)
+rb = QRadioButton.new(&quot;Ruby&quot;, bg)
+rb.setChecked(true)
+QRadioButton.new(&quot;Python&quot;, bg)
+QRadioButton.new(&quot;Perl&quot;, bg)
+
+vbox.show()
+a.exec()</pre>
+<h3><a name="L011002" id="L011002">ボタンの選択、非選択を切り換える</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+class RadioButtonDemo &lt; QObject
+  def initialize
+    @a = QApplication.new([$0]+ARGV)
+    @vbox = QVBox.new
+    @vbox.setMargin(10)
+    @a.setMainWidget(@vbox)
+
+    bg = QVButtonGroup.new(@vbox)
+    bg.setTitle(&quot;Languages&quot;)
+
+    @rb = QRadioButton.new(&quot;Ruby&quot;, bg)
+    @rb.setChecked(true)
+    QRadioButton.new(&quot;Python&quot;, bg)
+    QRadioButton.new(&quot;Perl&quot;, bg)
+    @b1 = QPushButton.new(&quot;select&quot;, @vbox)
+    @b2 = QPushButton.new(&quot;deselect&quot;, @vbox)
+    @b3 = QPushButton.new(&quot;toggle&quot;, @vbox)
+  end
+
+  def callback1
+    @rb.setChecked(true)
+  end
+
+  def callback2
+    @rb.setChecked(false)
+  end
+
+  def callback3
+    @rb.toggle
+  end
+
+  def run
+    Qt2::connect(@b1, QSIGNAL('clicked()'), self, 'callback1')
+    Qt2::connect(@b2, QSIGNAL('clicked()'), self, 'callback2')
+    Qt2::connect(@b3, QSIGNAL('clicked()'), self, 'callback3')
+
+    @vbox.show()
+    @a.exec()
+  end
+end
+
+RadioButtonDemo.new.run</pre>
+<h3><a name="L011007" id="L011007">どのボタンが選択されているかどうかを調べる</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+class RadioButtonDemo &lt; QObject
+  def initialize
+    @a = QApplication.new([$0]+ARGV)
+    @vbox = QVBox.new
+    @vbox.setMargin(10)
+    @a.setMainWidget(@vbox)
+
+    bg = QVButtonGroup.new(@vbox)
+    bg.setTitle(&quot;Languages&quot;)
+
+    @rb = QRadioButton.new(&quot;Ruby&quot;, bg)
+    @rb.setChecked(true)
+    QRadioButton.new(&quot;Python&quot;, bg)
+    QRadioButton.new(&quot;Perl&quot;, bg)
+
+    @b = QPushButton.new(&quot;check&quot;, @vbox)
+  end
+
+  def callback
+    print &quot;#{@rb.isChecked}\n&quot;
+  end
+
+  def run
+    Qt2::connect(@b, QSIGNAL('clicked()'), self, 'callback')
+
+    @vbox.show()
+    @a.exec()
+  end
+end
+
+RadioButtonDemo.new.run</pre>
+<h3><a name="L011004" id="L011004">ビットマップを使用する</a></h3>
+<h2><a name="L011008" id="L011008">LineEdit クラス</a></h2>
+<h3><a name="L011009" id="L011009">LineEdit クラスを使用する</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+a = QApplication.new([$0]+ARGV)
+e = QLineEdit.new(&quot;&quot;)
+
+a.setMainWidget( e )
+e.show()
+a.exec()</pre>
+<h3><a name="L011010" id="L011010">あらかじめ文字列を入力しておく</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+a = QApplication.new([$0]+ARGV)
+e = QLineEdit.new(&quot;Hello!&quot;)
+
+a.setMainWidget( e )
+e.show()
+a.exec()</pre>
+<h3><a name="L011011" id="L011011">文字列を挿入する</a></h3>
+<h3><a name="L011012" id="L011012">入力内容を取得する</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+class LineEditDemo &lt; QObject
+  def initialize
+    @a = QApplication.new([$0]+ARGV)
+    @vbox = QVBox.new
+    @vbox.setMargin(10)
+    @a.setMainWidget(@vbox)
+
+    @e = QLineEdit.new(&quot;Hello!&quot;, @vbox)
+    @b = QPushButton.new(&quot;Print!&quot;, @vbox)
+  end
+
+  def callback
+    print &quot;#{@e.text.to_str}\n&quot;
+  end
+
+  def run
+    Qt2::connect(@b, QSIGNAL('clicked()'), self, 'callback')
+
+    @vbox.show()
+    @a.exec()
+  end
+end
+
+LineEditDemo.new.run</pre>
+<p>本当にこれで良い？</p>
+<h3><a name="L011013" id="L011013">入力内容をクリアする</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+class LineEditDemo &lt; QObject
+  def initialize
+    @a = QApplication.new([$0]+ARGV)
+    @vbox = QVBox.new
+    @vbox.setMargin(10)
+    @a.setMainWidget(@vbox)
+
+    @e = QLineEdit.new(&quot;Hello!&quot;, @vbox)
+    @b = QPushButton.new(&quot;Clear!&quot;, @vbox)
+  end
+
+  def callback
+    @e.clear
+  end
+
+  def run
+    Qt2::connect(@b, QSIGNAL('clicked()'), self, 'callback')
+
+    @vbox.show()
+    @a.exec()
+  end
+end
+
+LineEditDemo.new.run</pre>
+<h3><a name="L011014" id="L011014">パスワードの入力を行う</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+a = QApplication.new([$0]+ARGV)
+e = QLineEdit.new(&quot;&quot;)
+e.setEchoMode(QLineEdit::Password)
+
+a.setMainWidget( e )
+e.show()
+a.exec()</pre>
+<h3><a name="L011015" id="L011015">数値のみ入力できるようにする</a></h3>
+<h3><a name="L011016" id="L011016">入力最大文字数を設定する</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+a = QApplication.new([$0]+ARGV)
+e = QLineEdit.new(&quot;&quot;)
+e.setMaxLength(5)
+
+a.setMainWidget( e )
+e.show()
+a.exec()</pre>
+<h3><a name="L011017" id="L011017">Read Only にする</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+a = QApplication.new([$0]+ARGV)
+e = QLineEdit.new(&quot;&quot;)
+e.setReadOnly(true)
+
+a.setMainWidget( e )
+e.show()
+a.exec()</pre>
+<h3><a name="L011018" id="L011018">選択部分を取得する</a></h3>
+<h3><a name="L011019" id="L011019">選択部分を消去する</a></h3>
+<h3><a name="L011020" id="L011020">特定の領域を選択状態にする</a></h3>
+<h3><a name="L011021" id="L011021">フォーカスされたら全体を選択状態にする</a></h3>
+<h3><a name="L011022" id="L011022">日本語入力を開始する</a></h3>
+<h3><a name="L011023" id="L011023">日本語入力を自動的にONする</a></h3>
+<h3><a name="L011024" id="L011024">クリップボードを使う</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+class LineEditDemo &lt; QObject
+  def initialize
+    @a = QApplication.new([$0]+ARGV)
+    @vbox = QVBox.new
+    @vbox.setMargin(10)
+    @a.setMainWidget(@vbox)
+
+    @e = QLineEdit.new(&quot;Hello!&quot;, @vbox)
+    @b1 = QPushButton.new(&quot;Cut&quot;, @vbox)
+    @b2 = QPushButton.new(&quot;Copy&quot;, @vbox)
+    @b3 = QPushButton.new(&quot;Paste&quot;, @vbox)
+  end
+
+  def callback1
+    @e.cut
+  end
+
+  def callback2
+    @e.copy
+  end
+
+  def callback3
+    @e.paste
+  end
+
+  def run
+    Qt2::connect(@b1, QSIGNAL('clicked()'), self, 'callback1')
+    Qt2::connect(@b2, QSIGNAL('clicked()'), self, 'callback2')
+    Qt2::connect(@b3, QSIGNAL('clicked()'), self, 'callback3')
+
+    @vbox.show()
+    @a.exec()
+  end
+end
+
+LineEditDemo.new.run</pre>
+<h3><a name="L011025" id="L011025">カーソル位置を取得する</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+class LineEditDemo &lt; QObject
+  def initialize
+    @a = QApplication.new([$0]+ARGV)
+    @vbox = QVBox.new
+    @vbox.setMargin(10)
+    @a.setMainWidget(@vbox)
+
+    @e = QLineEdit.new(&quot;Hello!&quot;, @vbox)
+    @b = QPushButton.new(&quot;Cursor Position&quot;, @vbox)
+  end
+
+  def callback
+    print &quot;#{@e.cursorPosition}\n&quot;
+  end
+
+  def run
+    Qt2::connect(@b, QSIGNAL('clicked()'), self, 'callback')
+
+    @vbox.show()
+    @a.exec()
+  end
+end
+
+LineEditDemo.new.run</pre>
+<h3><a name="L011026" id="L011026">Enter を入力したときの動作を設定する</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+class LineEditDemo &lt; QObject
+  def initialize
+    @a = QApplication.new([$0]+ARGV)
+    @e = QLineEdit.new(&quot;Hello!&quot;, @vbox)
+  end
+
+  def callback
+    print &quot;#{@e.text.to_str}\n&quot;
+  end
+
+  def run
+    Qt2::connect(@e, QSIGNAL('returnPressed()'), self, 'callback')
+
+    @a.setMainWidget( @e )
+    @e.show()
+    @a.exec()
+  end
+end
+
+LineEditDemo.new.run</pre>
+<h3><a name="L011027" id="L011027">Enter で入力を完了できるようにする</a></h3>
+<h3><a name="L011028" id="L011028">Enter で次の入力欄に移動できるようにする</a></h3>
+<h3><a name="L011029" id="L011029">入力内容を別 Widget にリアルタイムで反映する</a></h3>
+<h2><a name="L011030" id="L011030">MultiLineEdit クラス</a></h2>
+<h3><a name="L011031" id="L011031">MultiLineEdit クラスを使用する</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+a = QApplication.new([$0]+ARGV)
+e = QMultiLineEdit.new(nil)
+
+a.setMainWidget( e )
+e.show()
+a.exec()</pre>
+<h3><a name="L011011" id="L011011">文字列を挿入する</a></h3>
+<pre>#!/usr/bin/env ruby
+
+require &quot;qt2&quot;
+include Qt2
+
+class MultiLineEditDemo &lt; QObject
+  def initialize
+    @a = QApplication.new([$0]+ARGV)
+    @vbox = QVBox.new
+    @vbox.setMargin(10)
+    @a.setMainWidget(@vbox)
+
+    @e = QMultiLineEdit.new(@vbox)
+    @e.setText(&quot;Test&quot;)
+
+    @b = QPushButton.new(&quot;Append&quot;, @vbox)
+  end
+
+  def callback
+    @e.append(&quot;foo&quot;)
+  end
+
+  def run
+    Qt2::connect(@b, QSIGNAL('clicked()'), self, 'callback')
+
+    @vbox.show()
+    @a.exec()
+  end
+end
+
+MultiLineEditDemo.new.run</pre>
+<h3><a name="L011032" id="L011032">スクロールバーを付ける</a></h3>
+<h3><a name="L011033" id="L011033">テキストの全内容を取得する</a></h3>
+<pre>#!/usr/bin/env ruby
+
+require &quot;qt2&quot;
+include Qt2
+
+class MultiLineEditDemo &lt; QObject
+  def initialize
+    @a = QApplication.new([$0]+ARGV)
+    @vbox = QVBox.new
+    @vbox.setMargin(10)
+    @a.setMainWidget(@vbox)
+
+    @e = QMultiLineEdit.new(@vbox)
+    @e.setText(&quot;Test&quot;)
+
+    @b = QPushButton.new(&quot;get Text&quot;, @vbox)
+  end
+
+  def callback
+    puts @e.text.to_str
+  end
+
+  def run
+    Qt2::connect(@b, QSIGNAL('clicked()'), self, 'callback')
+
+    @vbox.show()
+    @a.exec()
+  end
+end
+
+MultiLineEditDemo.new.run</pre>
+<h3><a name="L011034" id="L011034">入力内容をクリア, Undo, Redo する</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+class MultiLineEditDemo &lt; QObject
+  def initialize
+    @a = QApplication.new([$0]+ARGV)
+    @vbox = QVBox.new
+    @vbox.setMargin(10)
+    @a.setMainWidget(@vbox)
+
+    @e = QMultiLineEdit.new(@vbox)
+    @b1 = QPushButton.new(&quot;Clear&quot;, @vbox)
+    @b2 = QPushButton.new(&quot;Undo&quot;, @vbox)
+    @b3 = QPushButton.new(&quot;Redo&quot;, @vbox)
+  end
+
+  def callback1
+    @e.clear
+  end
+
+  def callback2
+    @e.undo
+  end
+
+  def callback3
+    @e.redo
+  end
+
+  def run
+    Qt2::connect(@b1, QSIGNAL('clicked()'), self, 'callback1')
+    Qt2::connect(@b2, QSIGNAL('clicked()'), self, 'callback2')
+    Qt2::connect(@b3, QSIGNAL('clicked()'), self, 'callback3')
+
+    @vbox.show()
+    @a.exec()
+  end
+end
+
+MultiLineEditDemo.new.run</pre>
+<h3><a name="L011016" id="L011016">入力最大文字数を設定する</a></h3>
+<h3><a name="L011017" id="L011017">Read Only にする</a></h3>
+<pre>#!/usr/bin/env ruby
+
+require &quot;qt2&quot;
+include Qt2
+
+class MultiLineEditDemo &lt; QObject
+  def initialize
+    @a = QApplication.new([$0]+ARGV)
+    @vbox = QVBox.new
+    @vbox.setMargin(10)
+    @a.setMainWidget(@vbox)
+
+    @e = QMultiLineEdit.new(@vbox)
+    #@e.setReadOnly(true)
+    @e.setText(&quot;Test&quot;)
+
+    @b = QPushButton.new(&quot;Read Only Toggle&quot;, @vbox)
+  end
+
+  def callback
+    @e.setReadOnly(!@e.isReadOnly)
+  end
+
+  def run
+    Qt2::connect(@b, QSIGNAL('clicked()'), self, 'callback')
+
+    @vbox.show()
+    @a.exec()
+  end
+end
+
+MultiLineEditDemo.new.run
+
+Read Only でもコードからは text の設定はできる</pre>
+<h3><a name="L011024" id="L011024">クリップボードを使う</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+class MultiLineEditDemo &lt; QObject
+  def initialize
+    @a = QApplication.new([$0]+ARGV)
+    @vbox = QVBox.new
+    @vbox.setMargin(10)
+    @a.setMainWidget(@vbox)
+
+    @e = QMultiLineEdit.new(@vbox)
+    @b1 = QPushButton.new(&quot;Cut&quot;, @vbox)
+    @b2 = QPushButton.new(&quot;Copy&quot;, @vbox)
+    @b3 = QPushButton.new(&quot;Paste&quot;, @vbox)
+  end
+
+  def callback1
+    @e.cut
+  end
+
+  def callback2
+    @e.copy
+  end
+
+  def callback3
+    @e.paste
+  end
+
+  def run
+    Qt2::connect(@b1, QSIGNAL('clicked()'), self, 'callback1')
+    Qt2::connect(@b2, QSIGNAL('clicked()'), self, 'callback2')
+    Qt2::connect(@b3, QSIGNAL('clicked()'), self, 'callback3')
+
+    @vbox.show()
+    @a.exec()
+  end
+end
+
+MultiLineEditDemo.new.run</pre>
+<h3><a name="L011025" id="L011025">カーソル位置を取得する</a></h3>
+<h3><a name="L011035" id="L011035">画像を表示する</a></h3>
+<h3><a name="L011036" id="L011036">文字の属性を変更する</a></h3>
+<h3><a name="L011037" id="L011037">文字に下線を引く</a></h3>
+<h3><a name="L011038" id="L011038">文字の上に横線を引く</a></h3>
+<h2><a name="L011039" id="L011039">TextView クラス</a></h2>
+<h3><a name="L011040" id="L011040">TextView クラスを使用する</a></h3>
+<h2><a name="L011041" id="L011041">TextBrowser クラス</a></h2>
+<h3><a name="L011042" id="L011042">TextBrowser クラスを使用する</a></h3>
+<h2><a name="L011043" id="L011043">ListBox クラス</a></h2>
+<h3><a name="L011044" id="L011044">ListBox クラスを使用する</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+a = QApplication.new([$0]+ARGV)
+
+list = QListBox.new(nil)
+for i in 0..10
+  list.insertItem(&quot;item #{i}&quot;)
+end
+
+a.setMainWidget( list )
+list.show()
+a.exec()</pre>
+<h3><a name="L011045" id="L011045">項目を追加する</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+class ListBoxDemo &lt; QObject
+  def initialize
+    @a = QApplication.new([$0]+ARGV)
+    @vbox = QVBox.new
+    @vbox.setMargin(10)
+    @a.setMainWidget(@vbox)
+
+    @l = QListBox.new(@vbox)
+    @b = QPushButton.new(&quot;insert&quot;, @vbox)
+
+    @i = 1
+  end
+
+  def callback
+    @l.insertItem(&quot;item #{@i}&quot;)
+    @i += 1
+  end
+
+  def run
+    Qt2::connect(@b, QSIGNAL('clicked()'), self, 'callback')
+
+    @vbox.show()
+    @a.exec()
+  end
+end
+
+ListBoxDemo.new.run</pre>
+<h3><a name="L011046" id="L011046">項目を削除する</a></h3>
+<h3><a name="L011047" id="L011047">全項目を削除する</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+class ListBoxDemo &lt; QObject
+  def initialize
+    @a = QApplication.new([$0]+ARGV)
+    @vbox = QVBox.new
+    @vbox.setMargin(10)
+    @a.setMainWidget(@vbox)
+
+    @l = QListBox.new(@vbox)
+    @b1 = QPushButton.new(&quot;insert&quot;, @vbox)
+    @b2 = QPushButton.new(&quot;clear&quot;, @vbox)
+
+    @i = 1
+  end
+
+  def callback1
+    @l.insertItem(&quot;item #{@i}&quot;)
+    @i += 1
+  end
+
+  def callback2
+    @l.clear
+  end
+
+  def run
+    Qt2::connect(@b1, QSIGNAL('clicked()'), self, 'callback1')
+    Qt2::connect(@b2, QSIGNAL('clicked()'), self, 'callback2')
+
+    @vbox.show()
+    @a.exec()
+  end
+end
+
+ListBoxDemo.new.run</pre>
+<h3><a name="L011048" id="L011048">項目数を取得する</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+class ListBoxDemo &lt; QObject
+  def initialize
+    @a = QApplication.new([$0]+ARGV)
+    @vbox = QVBox.new
+    @vbox.setMargin(10)
+    @a.setMainWidget(@vbox)
+
+    @l = QListBox.new(@vbox)
+    @b1 = QPushButton.new(&quot;insert&quot;, @vbox)
+    @b2 = QPushButton.new(&quot;number&quot;, @vbox)
+
+    @i = 1
+  end
+
+  def callback1
+    @l.insertItem(&quot;item #{@i}&quot;)
+    @i += 1
+  end
+
+  def callback2
+    print &quot;#{@l.count}\n&quot;
+  end
+
+  def run
+    Qt2::connect(@b1, QSIGNAL('clicked()'), self, 'callback1')
+    Qt2::connect(@b2, QSIGNAL('clicked()'), self, 'callback2')
+
+    @vbox.show()
+    @a.exec()
+  end
+end
+
+ListBoxDemo.new.run</pre>
+<h3><a name="L011049" id="L011049">選択された項目を取得する</a></h3>
+<h3><a name="L011050" id="L011050">選択された項目数を取得する</a></h3>
+<h3><a name="L011051" id="L011051">複数選択できるリストボックスを作る</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+class ListBoxDemo &lt; QObject
+  def initialize
+    @a = QApplication.new([$0]+ARGV)
+    @vbox = QVBox.new
+    @vbox.setMargin(10)
+    @a.setMainWidget(@vbox)
+
+    @l = QListBox.new(@vbox)
+    for i in 0..10
+      @l.insertItem(&quot;item #{i}&quot;)
+    end
+
+    bg = QVButtonGroup.new(@vbox)
+    bg.setTitle(&quot;Languages&quot;)
+
+    @rb1 = QRadioButton.new(&quot;Single&quot;, bg)
+    @rb1.setChecked(true)
+    @rb2 = QRadioButton.new(&quot;Extended&quot;, bg)
+    @rb3 = QRadioButton.new(&quot;Multi&quot;, bg)
+    @rb4 = QRadioButton.new(&quot;NoSelection&quot;, bg)
+  end
+
+  def callback1
+    @l.setSelectionMode(QListBox::Single)
+  end
+
+  def callback2
+    @l.setSelectionMode(QListBox::Extended)
+  end
+
+  def callback3
+    @l.setSelectionMode(QListBox::Multi)
+  end
+
+  def callback4
+    @l.setSelectionMode(QListBox::NoSelection)
+  end
+
+  def run
+    Qt2::connect(@rb1, QSIGNAL('clicked()'), self, 'callback1')
+    Qt2::connect(@rb2, QSIGNAL('clicked()'), self, 'callback2')
+    Qt2::connect(@rb3, QSIGNAL('clicked()'), self, 'callback3')
+    Qt2::connect(@rb4, QSIGNAL('clicked()'), self, 'callback4')
+
+    @vbox.show()
+    @a.exec()
+  end
+end
+
+ListBoxDemo.new.run</pre>
+<h3><a name="L011052" id="L011052">リストボックスを使用不可にする</a></h3>
+<h3><a name="L011032" id="L011032">スクロールバーを付ける</a></h3>
+<h3><a name="L011053" id="L011053">先頭に表示される項目を設定する</a></h3>
+<h3><a name="L011054" id="L011054">multi column なリストボックスを作る</a></h3>
+<h2><a name="L011055" id="L011055">ComboBox クラス</a></h2>
+<h3><a name="L011056" id="L011056">ComboBox クラスを使用する</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+a = QApplication.new([$0]+ARGV)
+
+cb = QComboBox.new(nil)
+for i in 0..10
+  cb.insertItem(&quot;item #{i}&quot;)
+end
+
+a.setMainWidget( cb )
+cb.show()
+a.exec()</pre>
+<h3><a name="L011057" id="L011057">入力可能なComboBox クラスを使用する</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+a = QApplication.new([$0]+ARGV)
+
+cb = QComboBox.new(true, nil)
+for i in 0..10
+  cb.insertItem(&quot;item #{i}&quot;)
+end
+
+a.setMainWidget( cb )
+cb.show()
+a.exec()</pre>
+<h3><a name="L011045" id="L011045">項目を追加する</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+class ComboBoxDemo &lt; QObject
+  def initialize
+    @a = QApplication.new([$0]+ARGV)
+    @vbox = QVBox.new
+    @vbox.setMargin(10)
+    @a.setMainWidget(@vbox)
+
+    @cb = QComboBox.new(@vbox)
+    @b = QPushButton.new(&quot;insert&quot;, @vbox)
+
+    @i = 1
+  end
+
+  def callback
+    @cb.insertItem(&quot;item #{@i}&quot;)
+    @i += 1
+  end
+
+  def run
+    Qt2::connect(@b, QSIGNAL('clicked()'), self, 'callback')
+
+    @vbox.show()
+    @a.exec()
+  end
+end
+
+ComboBoxDemo.new.run</pre>
+<h3><a name="L011046" id="L011046">項目を削除する</a></h3>
+<h3><a name="L011047" id="L011047">全項目を削除する</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+class ComboBoxDemo &lt; QObject
+  def initialize
+    @a = QApplication.new([$0]+ARGV)
+    @vbox = QVBox.new
+    @vbox.setMargin(10)
+    @a.setMainWidget(@vbox)
+
+    @cb = QComboBox.new(@vbox)
+    @b1 = QPushButton.new(&quot;insert&quot;, @vbox)
+    @b2 = QPushButton.new(&quot;clear&quot;, @vbox)
+
+    @i = 1
+  end
+
+  def callback1
+    @cb.insertItem(&quot;item #{@i}&quot;)
+    @i += 1
+  end
+
+  def callback2
+    @cb.clear
+  end
+
+  def run
+    Qt2::connect(@b1, QSIGNAL('clicked()'), self, 'callback1')
+    Qt2::connect(@b2, QSIGNAL('clicked()'), self, 'callback2')
+
+    @vbox.show()
+    @a.exec()
+  end
+end
+
+ComboBoxDemo.new.run</pre>
+<h3><a name="L011048" id="L011048">項目数を取得する</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+class ComboBoxDemo &lt; QObject
+  def initialize
+    @a = QApplication.new([$0]+ARGV)
+    @vbox = QVBox.new
+    @vbox.setMargin(10)
+    @a.setMainWidget(@vbox)
+
+    @cb = QComboBox.new(@vbox)
+    @b1 = QPushButton.new(&quot;insert&quot;, @vbox)
+    @b2 = QPushButton.new(&quot;number&quot;, @vbox)
+
+    @i = 1
+  end
+
+  def callback1
+    @cb.insertItem(&quot;item #{@i}&quot;)
+    @i += 1
+  end
+
+  def callback2
+    print &quot;#{@cb.count}\n&quot;
+  end
+
+  def run
+    Qt2::connect(@b1, QSIGNAL('clicked()'), self, 'callback1')
+    Qt2::connect(@b2, QSIGNAL('clicked()'), self, 'callback2')
+
+    @vbox.show()
+    @a.exec()
+  end
+end
+
+ComboBoxDemo.new.run</pre>
+<h3><a name="L011049" id="L011049">選択された項目を取得する</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+class ComboBoxDemo &lt; QObject
+  def initialize
+    @a = QApplication.new([$0]+ARGV)
+    @vbox = QVBox.new
+    @vbox.setMargin(10)
+    @a.setMainWidget(@vbox)
+
+    @cb = QComboBox.new(@vbox)
+    @b = QPushButton.new(&quot;text&quot;, @vbox)
+
+    for i in 0..10
+      @cb.insertItem(&quot;item #{i}&quot;)
+    end
+  end
+
+  def callback
+    print &quot;currentText: #{@cb.currentText.to_str}  currentItem: #{@cb.currentItem}\n&quot;
+  end
+
+  def run
+    Qt2::connect(@b, QSIGNAL('clicked()'), self, 'callback')
+
+    @vbox.show()
+    @a.exec()
+  end
+end
+
+ComboBoxDemo.new.run</pre>
+<h2><a name="L011058" id="L011058">Listview クラス</a></h2>
+<h3><a name="L011059" id="L011059">Listview クラスを使用する</a></h3>
+<h2><a name="L011060" id="L011060">Slider クラス</a></h2>
+<h3><a name="L011061" id="L011061">Slider クラスを使用する</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+a = QApplication.new([$0]+ARGV)
+s = QSlider.new(nil)
+s.setRange(0, 100)
+s.setValue(0)
+
+a.setMainWidget( s )
+s.show()
+a.exec()</pre>
+<h3><a name="L011062" id="L011062">水平のスケールを使用する</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+a = QApplication.new([$0]+ARGV)
+s = QSlider.new(nil)
+#s.setOrientation(QSlider::Vertical)
+s.setOrientation(QSlider::Horizontal)
+s.setRange(0, 100)
+s.setValue(0)
+
+a.setMainWidget( s )
+s.show()
+a.exec()</pre>
+<h3><a name="L011063" id="L011063">現在の値を取得する</a></h3>
+<h3><a name="L011064" id="L011064">値を変更する</a></h3>
+<h3><a name="L011065" id="L011065">軸を表示するかどうかを変える</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+a = QApplication.new([$0]+ARGV)
+s = QSlider.new(nil)
+s.setRange(0, 100)
+s.setValue(0)
+s.setTickmarks(QSlider::NoMarks)
+s.setTickmarks(QSlider::Left)
+s.setTickmarks(QSlider::Right)
+s.setTickmarks(QSlider::Both)
+
+#s.setOrientation(QSlider::Horizontal)
+#s.setTickmarks(QSlider::Below)
+#s.setTickmarks(QSlider::Above)
+
+a.setMainWidget( s )
+s.show()
+a.exec()</pre>
+<h3><a name="L011066" id="L011066">現在の値を表示するかどうかを変える</a></h3>
+<h3><a name="L011067" id="L011067">スケールの移動単位を設定する</a></h3>
+<h2><a name="L011068" id="L011068">SpinBox クラス</a></h2>
+<h3><a name="L011069" id="L011069">SpinBox クラスを使用する</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+a = QApplication.new([$0]+ARGV)
+s = QSpinBox.new(nil)
+s.setRange(0, 10)
+s.setValue(0)
+
+a.setMainWidget( s )
+s.show()
+a.exec()</pre>
+<h3><a name="L011070" id="L011070">値を取得する</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+class SpinBoxDemo &lt; QObject
+  def initialize
+    @a = QApplication.new([$0]+ARGV)
+    @vbox = QVBox.new
+    @vbox.setMargin(10)
+    @a.setMainWidget(@vbox)
+
+    @s = QSpinBox.new(@vbox)
+    @s.setRange(0, 10)
+    @s.setValue(0)
+
+    @b = QPushButton.new(&quot;value&quot;, @vbox)
+  end
+
+  def callback
+    print &quot;#{@s.text.to_str}\n&quot;
+  end
+
+  def run
+    Qt2::connect(@b, QSIGNAL('clicked()'), self, 'callback')
+
+    @vbox.show()
+    @a.exec()
+  end
+end
+
+SpinBoxDemo.new.run</pre>
+<h3><a name="L011071" id="L011071">値をクリアする</a></h3>
+<h3><a name="L011072" id="L011072">上限、下限を設定する</a></h3>
+<h3><a name="L011073" id="L011073">値が循環するようにする</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+a = QApplication.new([$0]+ARGV)
+s = QSpinBox.new(nil)
+s.setRange(0, 10)
+s.setValue(0)
+s.setWrapping(true)
+
+a.setMainWidget( s )
+s.show()
+a.exec()</pre>
+<h3><a name="L011074" id="L011074">最低値のときに表示する文字列を指定する</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+a = QApplication.new([$0]+ARGV)
+s = QSpinBox.new(nil)
+s.setRange(-1, 10)
+s.setValue(0)
+s. setSpecialValueText(&quot;Min!&quot;)
+
+a.setMainWidget( s )
+s.show()
+a.exec()</pre>
+<h3><a name="L011075" id="L011075">数値の前や後ろに付ける文字列を設定する</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+a = QApplication.new([$0]+ARGV)
+s = QSpinBox.new(nil)
+s.setRange(0, 10)
+s.setValue(0)
+s.setPrefix(&quot;Item &quot;)
+s.setSuffix(&quot; Points&quot;)
+
+a.setMainWidget( s )
+s.show()
+a.exec()</pre>
+<h3><a name="L011076" id="L011076">増分を設定する</a></h3>
+<h2><a name="L011077" id="L011077">ProgressBar クラス</a></h2>
+<h3><a name="L011078" id="L011078">ProgressBar クラスを使用する</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+class ProgressBarDemo &lt; QObject
+  def initialize
+    @a = QApplication.new([$0]+ARGV)
+    @vbox = QVBox.new
+    @vbox.setMargin(10)
+    @a.setMainWidget(@vbox)
+
+    @pb = QProgressBar.new(@vbox)
+    @s = QSlider.new(@vbox)
+    @s.setOrientation(QSlider::Horizontal)
+  end
+
+  def sliderValueChanged(value)
+     @pb.setProgress(value)
+  end
+
+  def run
+    Qt2::connect(@s, QSIGNAL('valueChanged(int)'), self, 'sliderValueChanged')
+
+    @vbox.show()
+    @a.exec()
+  end
+end
+
+ProgressBarDemo.new.run</pre>
+<h3><a name="L011079" id="L011079">リセットする</a></h3>
+<h2><a name="L011080" id="L011080">Painter クラス</a></h2>
+<h3><a name="L011081" id="L011081">線を描画する</a></h3>
+<h3><a name="L011082" id="L011082">多角形を描画する</a></h3>
+<h3><a name="L011083" id="L011083">四角を描画する</a></h3>
+<h3><a name="L011084" id="L011084">角の丸い四角を描画する</a></h3>
+<h3><a name="L011085" id="L011085">円を描画する</a></h3>
+<h3><a name="L011086" id="L011086">楕円を描画する</a></h3>
+<h3><a name="L011087" id="L011087">扇形を描画する</a></h3>
+<h3><a name="L011088" id="L011088">円弧を描画する</a></h3>
+<h3><a name="L011089" id="L011089">ベジェ曲線を描画する</a></h3>
+<h3><a name="L011090" id="L011090">テキストを描画する</a></h3>
+<h3><a name="L011091" id="L011091">図形の中身を塗りつぶす</a></h3>
+<h3><a name="L011092" id="L011092">図形の色を変更する</a></h3>
+<h2><a name="L011093" id="L011093">Canvas クラス</a></h2>
+<h2><a name="L011094" id="L011094">Menu</a></h2>
+<h3><a name="L011095" id="L011095">チェックボタンメニューを作る</a></h3>
+<h3><a name="L011096" id="L011096">ラジオボタンメニューを作る</a></h3>
+<h3><a name="L011097" id="L011097">カスケードメニューを作る</a></h3>
+<h3><a name="L011098" id="L011098">セパレータを使う</a></h3>
+<h3><a name="L011099" id="L011099">イメージを使用する</a></h3>
+<h3><a name="L011100" id="L011100">ポップアップメニューを作る</a></h3>
+<h3><a name="L011101" id="L011101">ショートカットキーを設定する</a></h3>
+<h3><a name="L011102" id="L011102">メニューの項目を使用不可にする</a></h3>
+<h3><a name="L011103" id="L011103">ヘルプメニューのみ右端に付けるようにする</a></h3>
+<h2><a name="L011104" id="L011104">ダイアログ</a></h2>
+<h3><a name="L011105" id="L011105">ダイアログボックスを表示する</a></h3>
+<h3><a name="L011106" id="L011106">メッセージボックスを表示する</a></h3>
+<pre>#!/usr/bin/env ruby
+
+require &quot;qt2&quot;
+include Qt2
+
+class DialogDemo &lt; QObject
+  def initialize
+    @a = QApplication.new([$0]+ARGV)
+    @vbox = QVBox.new
+    @vbox.setMargin(10)
+    @b1 = QPushButton.new(&quot;information Dialog&quot;, @vbox)
+    @b2 = QPushButton.new(&quot;warning Dialog&quot;, @vbox)
+    @b3 = QPushButton.new(&quot;critical Dialog&quot;, @vbox)
+    @b4 = QPushButton.new(&quot;about Dialog&quot;, @vbox)
+    @b5 = QPushButton.new(&quot;aboutQt Dialog&quot;, @vbox)
+  end
+
+  def callback1
+    QMessageBox::information(@vbox, &quot;title&quot;, &quot;contents&quot;, QMessageBox::Ok)
+  end
+
+  def callback2
+    QMessageBox::warning(@vbox, &quot;title&quot;, &quot;contents&quot;, QMessageBox::Ok, QMessageBox::No)
+  end
+
+  def callback3
+    QMessageBox::critical(@vbox, &quot;title&quot;, &quot;contents&quot;,
+                          QMessageBox::Yes, QMessageBox::No, QMessageBox::Cancel)
+  end
+
+  def callback4
+    QMessageBox::about(@vbox, &quot;title&quot;, &quot;contents&quot;)
+  end
+
+  def callback5
+    QMessageBox::aboutQt(@vbox, &quot;title&quot;)
+  end
+
+  def run
+    Qt2::connect(@b1, QSIGNAL('clicked()'), self, 'callback1')
+    Qt2::connect(@b2, QSIGNAL('clicked()'), self, 'callback2')
+    Qt2::connect(@b3, QSIGNAL('clicked()'), self, 'callback3')
+    Qt2::connect(@b4, QSIGNAL('clicked()'), self, 'callback4')
+    Qt2::connect(@b5, QSIGNAL('clicked()'), self, 'callback5')
+
+    @a.setMainWidget(@vbox)
+    @vbox.show()
+    @a.exec()
+  end
+end
+
+DialogDemo.new.run</pre>
+<h3><a name="L011107" id="L011107">独自のダイアログを作成する</a></h3>
+<h3><a name="L011108" id="L011108">ファイル選択のダイアログを表示する</a></h3>
+<h3><a name="L011109" id="L011109">カラー選択のダイアログを表示する</a></h3>
+<h3><a name="L011110" id="L011110">プログレスダイアログを表示する</a></h3>
+<h3><a name="L011111" id="L011111">タブダイアログを使用する</a></h3>
+<h2><a name="L011112" id="L011112">イメージ</a></h2>
+<h3><a name="L011113" id="L011113">イメージを表示する</a></h3>
+<h3><a name="L011114" id="L011114">イメージを保存する</a></h3>
+<h3><a name="L011115" id="L011115">GIFアニメーションを表示する</a></h3>
+<h2><a name="L011116" id="L011116">その他</a></h2>
+<h3><a name="L011117" id="L011117">プログラムを終了する</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+a = QApplication.new([$0]+ARGV)
+quit = QPushButton.new( &quot;Quit&quot;, nil )
+Qt2::connect( quit, QSIGNAL(&quot;clicked()&quot;), a, &quot;quit&quot; )
+
+a.setMainWidget( quit )
+quit.show()
+a.exec()</pre>
+<h3><a name="L011118" id="L011118">ウィンドウマネージャーのクローズボタンを押したときにすぐにプログラムを終了しない</a></h3>
+<h3><a name="L011119" id="L011119">タイトルを設定する</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+title = &quot;Hello world!&quot;
+
+a = QApplication.new([title]+ARGV)
+hello = QLabel.new( &quot;Hello world!&quot;, nil )
+hello.resize( 200, 120 )
+
+a.setMainWidget( hello )
+hello.show()
+a.exec()</pre>
+<h3><a name="L011120" id="L011120">アイコンを設定する</a></h3>
+<h3><a name="L011121" id="L011121">アイコン化されたときに表示される文字列を設定する</a></h3>
+<h3><a name="L011122" id="L011122">新しいウィンドウを生成する</a></h3>
+<h3><a name="L011123" id="L011123">ウィンドウを消去する</a></h3>
+<h3><a name="L011124" id="L011124">ウィンドウを非表示にする</a></h3>
+<h3><a name="L011125" id="L011125">ウィンドウの表示位置を指定する</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+a = QApplication.new([$0]+ARGV)
+hello = QLabel.new( &quot;Hello world!&quot;, nil )
+hello.setGeometry( 100, 400, 200, 100 )
+hello.setAlignment(Qt::AlignCenter)
+
+a.setMainWidget( hello )
+hello.show()
+a.exec()</pre>
+<p>とか</p>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+class MyMainWindow &lt; QWidget
+  def initialize
+    setGeometry( 100, 100, 200, 100 )
+
+    hello = QLabel.new( &quot;Hello world!&quot;, self )
+    #hello.setGeometry( 100, 50, 200, 100 )
+    hello.setAlignment(Qt::AlignCenter)
+  end
+end
+
+a = QApplication.new([$0]+ARGV)
+w = MyMainWindow.new
+
+a.setMainWidget( w )
+w.show()
+a.exec()</pre>
+<p>とか</p>
+<h3><a name="L011126" id="L011126">画面中央にウィンドウを表示する</a></h3>
+<h3><a name="L011127" id="L011127">ウィンドウを移動する</a></h3>
+<h3><a name="L011128" id="L011128">画面の大きさを取得する</a></h3>
+<h3><a name="L011129" id="L011129">ウィンドウの大きさを固定する</a></h3>
+<h3><a name="L011130" id="L011130">モーダルウィンドウを作成する</a></h3>
+<h3><a name="L011131" id="L011131">ベルを鳴らす</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+class BellDemo &lt; QObject
+  def initialize
+    @a = QApplication.new([$0]+ARGV)
+    @b = QPushButton.new(&quot;bell&quot;, nil)
+  end
+
+  def callback
+    QApplication.beep
+  end
+
+  def run
+    Qt2::connect(@b, QSIGNAL('clicked()'), self, 'callback')
+
+    @a.setMainWidget( @b )
+    @b.show()
+    @a.exec()
+  end
+end
+
+BellDemo.new.run</pre>
+<h3><a name="L011132" id="L011132">ウィンドウがアクティブのとき特定の Widget にフォーカスを移動する</a></h3>
+<h3><a name="L011133" id="L011133">日本語を表示する</a></h3>
+<pre>require &quot;qt2&quot;
+include Qt2
+
+a = QApplication.new([$0]+ARGV)
+codec = QTextCodec::codecForLocale()
+a.setDefaultCodec(codec)
+
+hello = QLabel.new( tr(&quot;こんにちは&quot;), nil )
+
+a.setMainWidget( hello )
+hello.show()
+a.exec()</pre>
+<h3><a name="L011134" id="L011134">タイマー機能を使用する</a></h3>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm486.html">UP</a>][<a href="refm503.html">&lt;-PREV</a>][<a href="refm505.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

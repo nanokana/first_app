@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>File::Constants</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm074.html" rel="next" />
+<link href="refm072.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm034.html">UP</a>][<a href="refm072.html">&lt;-PREV</a>][<a href="refm074.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L001912" id="L001912">File::Constants</a></h1>
+<p><a href="refm046.html">File</a> クラスに関る定数を集めたモジュール。</p>
+<p><code>File</code> クラスはこのモジュールをインクルードしているので、以下に挙
+げる定数は <code>File</code> クラスの定数のように扱うことができます。</p>
+<h2><a name="L001913" id="L001913">定数</a></h2>
+<p>以下の定数は、<a href="refm046.html#L001121">File#flock</a> で使用します。</p>
+<dl>
+<dt><a name="L001914" id="L001914"><code>LOCK_SH</code></a></dt>
+<dd>
+<p>共有ロック。複数のプロセスが同時にロックを共有できます。</p></dd>
+<dt><a name="L001915" id="L001915"><code>LOCK_EX</code></a></dt>
+<dd>
+<p>排他ロック。同時にはただひとつのプロセスだけがロックを保持できます。</p></dd>
+<dt><a name="L001916" id="L001916"><code>LOCK_UN</code></a></dt>
+<dd>
+<p>アンロック。</p></dd>
+<dt><a name="L001917" id="L001917"><code>LOCK_NB</code></a></dt>
+<dd>
+<p>ロックの際にブロックしない。他の指定と <code>or</code> することで指定します。</p></dd>
+</dl>
+<p>以下の定数は、<a href="refm046.html#L001080">File.open</a>で使用します。</p>
+<dl>
+<dt><a name="L001918" id="L001918"><code>RDONLY</code></a>
+<dt><a name="L001919" id="L001919"><code>WRONLY</code></a>
+<dt><a name="L001920" id="L001920"><code>RDWR</code></a>
+<dt><a name="L001921" id="L001921"><code>APPEND</code></a>
+<dt><a name="L001922" id="L001922"><code>CREAT</code></a>
+<dt><a name="L001923" id="L001923"><code>EXCL</code></a>
+<dt><a name="L001924" id="L001924"><code>NONBLOCK</code></a>
+<dt><a name="L001925" id="L001925"><code>TRUNC</code></a>
+<dt><a name="L001926" id="L001926"><code>NOCTTY</code></a>
+<dt><a name="L001927" id="L001927"><code>BINARY</code></a>
+<dt><a name="L001928" id="L001928"><code>SYNC</code></a>
+</dl>
+<p>以下の定数は、<a href="refm046.html#L001074">File.fnmatch</a>, <a href="refm041.html#L000839">Dir.glob</a>で使用します。
+<a href="refm384.html">ruby 1.7 feature</a></p>
+<dl>
+<dt><a name="L001929" id="L001929"><code>FNM_NOESCAPE</code></a>
+<dt><a name="L001930" id="L001930"><code>FNM_PATHNAME</code></a>
+<dt><a name="L001931" id="L001931"><code>FNM_PERIOD</code></a>
+<dt><a name="L001932" id="L001932"><code>FNM_CASEFOLD</code></a>
+<dt><a name="L001933" id="L001933"><code>FNM_DOTMATCH</code></a>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm034.html">UP</a>][<a href="refm072.html">&lt;-PREV</a>][<a href="refm074.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

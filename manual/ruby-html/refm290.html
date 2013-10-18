@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>readline</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm291.html" rel="next" />
+<link href="refm289.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm289.html">&lt;-PREV</a>][<a href="refm291.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L005733" id="L005733">readline</a></h1>
+<p>GNU Readline によるコマンドライン入力インタフェースを提供するモジュー
+ルです。</p>
+<h2><a name="L005734" id="L005734">使い方</a></h2>
+<p>このようにして使います。</p>
+<pre>require &quot;readline&quot;
+
+while buf = Readline.readline(&quot;&gt; &quot;, true)
+    print &quot;-&gt; &quot;, buf, &quot;\n&quot;
+end</pre>
+<h2><a name="L005735" id="L005735">モジュール関数</a></h2>
+<dl>
+<dt><a name="L005736" id="L005736"><code>Readline.readline([<var>prompt</var>, [<var>add_hist</var>]])</code></a></dt>
+<dd>
+<p>ユーザからのキー入力を求め、入力した文字列を返します。EOF(UNIX で
+は ^D)を入力すると nil を返します。</p>
+<p>入力時には行内編集が可能で、vi モードと Emacs モードが用意されています。
+(<a href="#L005753">Readline.vi_editing_mode</a>、<a href="#L005754">Readline.emacs_editing_mode</a>
+を参照)。デフォルトは Emacs モードです。</p>
+<p>文字列 <var>prompt</var> を指定するとカーソルの前にこの文字列を表示します。</p>
+<p><var>add_hist</var> が真ならば、入力した文字列はヒストリに記録されます。
+Emacs モードなら ^P を入力することで前に入力した文字列を呼び出した
+り、<a href="#L005758">Readline::HISTORY</a> モジュールによりヒストリの内容を操作す
+ることができます。このデフォルト値は nil です。</p>
+<dl>
+<dt><a name="L005737" id="L005737">注意</a></dt>
+<dd>
+<p>入力待ちの状態で ^C すると ruby インタプリタもろとも終了し端末状
+態を復帰しません。これを回避するには、</p>
+<pre>stty_save = `stty -g`.chomp
+begin
+  while buf = Readline.readline
+      p buf
+  end
+rescue Interrupt
+  system(&quot;stty&quot;, stty_save)
+  exit
+end</pre>
+<p>または、</p>
+<pre>stty_save = `stty -g`.chomp
+trap(&quot;INT&quot;) { system &quot;stty&quot;, stty_save; exit }
+
+while buf = Readline.readline
+  p buf
+end</pre>
+<p>などとします。単に、^C を受け付けなくするだけならば以下で十分です。</p>
+<pre>trap(&quot;INT&quot;, &quot;SIG_IGN&quot;)
+
+while buf = Readline.readline
+  p buf
+end</pre>
+</dd>
+</dl></dd>
+</dl>
+<h2><a name="L005738" id="L005738">モジュールメソッド</a></h2>
+<dl>
+<dt><a name="L005739" id="L005739"><code>Readline.completion_proc= <var>proc</var></code></a></dt>
+<dd>
+<p>補完時の動作を決定する<a href="refm057.html">Proc</a>オブジェクトを指定します。
+<var>proc</var>は引数に入力文字列を取り、候補文字列の配列を返すようにしてください。</p>
+<p>入力文字列は Readline.completer_word_break_characters に含まれる文字で単語ごとに区切られます。
+つまり、それらの文字の直後からカーソルの直前までの文字列が <var>proc</var> の引数に渡されます。</p>
+<pre>require 'readline'
+
+WORDS = %w[foo foobar foobaz]
+
+Readline.completion_proc = proc {|word|
+    WORDS.grep(/\A#{Regexp.quote word}/)
+}
+
+while buf = Readline.readline(&quot;&gt; &quot;)
+  p buf
+end</pre></dd>
+<dt><a name="L005740" id="L005740"><code>Readline.basic_word_break_characters=(<var>str</var>)</code></a>
+<dt><a name="L005741" id="L005741"><code>Readline.basic_word_break_characters</code></a></dt>
+<dd>
+<p>補完時の単語同士の区切りを指定する basic な文字列。デフォルトでは
+Bash用の文字列 &quot; \t\n\&quot;\\'`@$&gt;&lt;=;|&amp;{(&quot; (スペース含む)になっています。</p></dd>
+<dt><a name="L005742" id="L005742"><code>Readline.completer_word_break_characters=(<var>str</var>)</code></a>
+<dt><a name="L005743" id="L005743"><code>Readline.completer_word_break_characters</code></a></dt>
+<dd>
+<p>rl_complete_internal() で使われる、補完時の単語同士の区切りを指定する
+文字列です。デフォルトでは Readline.basic_word_break_characters です。</p></dd>
+<dt><a name="L005744" id="L005744"><code>Readline.basic_quote_characters=(<var>str</var>)</code></a>
+<dt><a name="L005745" id="L005745"><code>Readline.basic_quote_characters</code></a></dt>
+<dd>
+<p>引用符を指定します。デフォルトでは、/&quot;'/ です。</p></dd>
+<dt><a name="L005746" id="L005746"><code>Readline.completer_quote_characters=(<var>str</var>)</code></a>
+<dt><a name="L005747" id="L005747"><code>Readline.completer_quote_character</code></a></dt>
+<dd>
+<p>補完時の引用符を指定します。この引用符の間では、completer_word_break_characters
+も、普通の文字列として扱われます。</p></dd>
+<dt><a name="L005748" id="L005748"><code>Readline.filename_quote_characters=(<var>str</var>)</code></a>
+<dt><a name="L005749" id="L005749"><code>Readline.filename_quote_characters</code></a></dt>
+<dd>
+<p>補完時のファイル名の引用符を指定します。デフォルトでは nil です。</p></dd>
+<dt><a name="L005750" id="L005750"><code>Readline.completion_proc</code></a></dt>
+<dd>
+<p>補完時の動作を決定する<a href="refm057.html">Proc</a>オブジェクトを返します。</p></dd>
+<dt><a name="L005751" id="L005751"><code>Readline.completion_case_fold=(<var>bool</var>)</code></a>
+<dt><a name="L005752" id="L005752"><code>Readline.completion_case_fold</code></a></dt>
+<dd>
+<p>入力補完時に大文字／小文字の区別をするかどうかを決定します。
+<var>bool</var> が真ならば区別しません。</p></dd>
+<dt><a name="L005753" id="L005753"><code>Readline.vi_editing_mode</code></a></dt>
+<dd>
+<p>編集モードを vi モードにします。詳細は、GNU Readline のマニュアル
+を参照してください。</p></dd>
+<dt><a name="L005754" id="L005754"><code>Readline.emacs_editing_mode</code></a></dt>
+<dd>
+<p>編集モードを Emacs モードにします。デフォルトは Emacs モードです。</p>
+<p>詳細は、GNU Readline のマニュアルを参照してください。</p></dd>
+</dl>
+<h2><a name="L005755" id="L005755">定数</a></h2>
+<dl>
+<dt><a name="L005756" id="L005756"><code>Readline::FILENAME_COMPLETION_PROC</code></a>
+<dt><a name="L005757" id="L005757"><code>Readline::USERNAME_COMPLETION_PROC</code></a></dt>
+<dd>
+<p>ライブラリに組み込みで用意された補完用 <a href="refm057.html">Proc</a> オブジェクトです。
+それぞれファイル名、ユーザ名の補完を行います。
+<a href="#L005739">Readline.completion_proc=</a> で使用します。</p></dd>
+<dt><a name="L005758" id="L005758"><code>Readline::HISTORY</code></a></dt>
+<dd>
+<p>Readlineモジュールで入力した内容は入力履歴として記録されます(有効にし
+ていればですが。<a href="#L005736">Readline.readline</a> を参照)</p>
+<p>この定数により、入力履歴の内容にアクセスすることができます。おおよそ、
+<a href="refm036.html">Array</a> クラスのインスタンスのように振舞います。
+(<a href="refm070.html">Enumerable</a> モジュールをextend しています)</p>
+<pre>while buf = Readline.readline(&quot;&gt; &quot;, true)
+  p Readline::HISTORY.to_a
+  print &quot;-&gt; &quot;, buf, &quot;\n&quot;
+end</pre>
+<p>空行や直前の入力と同じ内容は入力履歴に残したくないと思うかも知れません。
+この場合、以下のようにします。</p>
+<pre>while buf = Readline.readline(&quot;&gt; &quot;, true)
+  # p Readline::HISTORY.to_a
+  Readline::HISTORY.pop if /^\s*$/ =~ buf
+
+  begin
+    Readline::HISTORY.pop if Readline::HISTORY[Readline::HISTORY.length-2] == buf
+  rescue IndexError
+  end
+
+  # p Readline::HISTORY.to_a
+  print &quot;-&gt; &quot;, buf, &quot;\n&quot;
+end</pre></dd>
+</dl>
+<h2><a name="L005759" id="L005759">備考</a></h2>
+<ul>
+<li>Readline.readline メソッドはスレッドに対応しています。
+  入力待ち状態のときはスレッドコンテキストの切替えが発生します。</li>
+<li><a href="http://www.gnu.org/directory/readline.html">readline: GNU Free Software Directory</a><sup class="outside"><small>[外部]</small></sup></li>
+</ul>
+<h2><a name="L005760" id="L005760">履歴</a></h2>
+<dl>
+<dt><a name="L005761" id="L005761">version 1.8</a></dt>
+<dd>
+<ul>
+<li>Readline.basic_word_break_characters</li>
+<li>Readline.completer_word_break_characters</li>
+<li>Readline.basic_quote_characters</li>
+<li>Readline.completer_quote_characters</li>
+<li>Readline.filename_quote_characters</li>
+</ul>
+</dd>
+</dl>
+<p>以上が追加されました。</p>
+<dl>
+<dt><a name="L005762" id="L005762">version 1.5 (ruby version 1.6.5?)</a></dt>
+<dd>
+<ul>
+<li>Readline.completion_append_character が追加されました <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-ext/1760">ruby-ext:01760</a><sup class="outside"><small>[外部]</small></sup>。</li>
+<li><a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/14574">ruby-dev:14574</a><sup class="outside"><small>[外部]</small></sup> を提案中</li>
+</ul>
+</dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm289.html">&lt;-PREV</a>][<a href="refm291.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

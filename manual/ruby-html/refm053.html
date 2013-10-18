@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Integer</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm054.html" rel="next" />
+<link href="refm052.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm052.html">UP</a>][<a href="refm052.html">&lt;-PREV</a>][<a href="refm054.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L001284" id="L001284">Integer</a></h1>
+<p>整数の抽象クラス。サブクラスとして <a href="refm055.html">Fixnum</a> と <a href="refm054.html">Bignum</a> があり
+ます。この 2 種類の整数は値の大きさに応じてお互いに自動的に変換されま
+す。ビット操作において整数は無限の長さのビットストリングとみなすことが
+できます。</p>
+<h2><a name="L001285" id="L001285">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm035.html">Object</a>
+<ul>
+<li><a href="refm052.html">Numeric</a>
+<ul>
+<li><a href="refm053.html">Integer</a> &lt;&lt;
+<ul>
+<li><a href="refm054.html">Bignum</a></li>
+<li><a href="refm055.html">Fixnum</a></li>
+</ul></li>
+<li><a href="refm056.html">Float</a></li>
+</ul></li>
+</ul></li>
+</ul>
+<h2><a name="L001286" id="L001286">インクルードしているモジュール:</a></h2>
+<ul>
+<li><a href="refm080.html">Precision</a></li>
+</ul>
+<h2><a name="L001287" id="L001287">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L001288" id="L001288"><code>Integer.induced_from(<var>num</var>)</code></a></dt>
+<dd>
+<p><var>num</var> を <code>Integer</code> に変換した結果を返します。</p></dd>
+</dl>
+<h2><a name="L001289" id="L001289">メソッド:</a></h2>
+<dl>
+<dt><a name="L001290" id="L001290"><code>self[nth]</code></a></dt>
+<dd>
+<p><var>nth</var> 番目のビット(最下位ビット(LSB)が 0 番目)が立っている時 1 
+を、そうでなければ 0 を返します。</p>
+<p><code>self[nth]=bit</code> が Integer にないのは、Numeric 関連クラスが 
+immutable であるためです。</p></dd>
+</dl>
+<h2><a name="L001289" id="L001289">メソッド:</a></h2>
+<dl>
+<dt><a name="L001291" id="L001291"><code><var>self</var> + <var>other</var></code></a>
+<dt><a name="L001292" id="L001292"><code><var>self</var> - <var>other</var></code></a>
+<dt><a name="L001293" id="L001293"><code><var>self</var> * <var>other</var></code></a>
+<dt><a name="L001294" id="L001294"><code><var>self</var> / <var>other</var></code></a>
+<dt><a name="L001295" id="L001295"><code><var>self</var> % <var>other</var></code></a>
+<dt><a name="L001296" id="L001296"><code><var>self</var> ** <var>other</var></code></a></dt>
+<dd>
+<p>算術演算子。それぞれ和、差、積、商、剰余、冪を計算します。</p></dd>
+<dt><a name="L001297" id="L001297"><code><var>self</var> &lt;=&gt; <var>other</var></code></a></dt>
+<dd>
+<p><code>self</code> と <code>other</code> を比較して、<code>self</code> が大きい時に正、
+等しい時に 0、小さい時に負の整数を返します。</p></dd>
+<dt><a name="L001298" id="L001298"><code><var>self</var> == <var>other</var></code></a>
+<dt><a name="L001299" id="L001299"><code><var>self</var> &lt; <var>other</var></code></a>
+<dt><a name="L001300" id="L001300"><code><var>self</var> &lt;= <var>other</var></code></a>
+<dt><a name="L001301" id="L001301"><code><var>self</var> &gt; <var>other</var></code></a>
+<dt><a name="L001302" id="L001302"><code><var>self</var> &gt;= <var>other</var></code></a></dt>
+<dd>
+<p>比較演算子。</p></dd>
+<dt><a name="L001303" id="L001303"><code>~ <var>self</var></code></a>
+<dt><a name="L001304" id="L001304"><code><var>self</var> | <var>other</var></code></a>
+<dt><a name="L001305" id="L001305"><code><var>self</var> &amp; <var>other</var></code></a>
+<dt><a name="L001306" id="L001306"><code><var>self</var> ^ <var>other</var></code></a></dt>
+<dd>
+<p>ビット演算子。それぞれ否定、論理和、論理積、排他的論理和を計算しま
+す。</p></dd>
+<dt><a name="L001307" id="L001307"><code><var>self</var> &lt;&lt; <var>bits</var></code></a>
+<dt><a name="L001308" id="L001308"><code><var>self</var> &gt;&gt; <var>bits</var></code></a></dt>
+<dd>
+<p>シフト演算子。<code>bits</code> だけビットを右(左)にシフトします。</p>
+<p>右シフトは、符号ビット(最上位ビット(MSB))が保持されます。</p>
+<pre>printf(&quot;%#b\n&quot;, 0b0101 &lt;&lt; 1)
+printf(&quot;%#b\n&quot;, 0b0101 &gt;&gt; 1)
+
+=&gt; 0b1010
+   0b10
+
+p -1 &gt;&gt; 1
+
+=&gt; -1</pre></dd>
+<dt><a name="L001309" id="L001309"><code>chr</code></a></dt>
+<dd>
+<p>文字コードに対応する 1 バイトの文字列を返します。例えば 
+<code>65.chr</code> は &quot;A&quot; を返します。</p>
+<p>逆に文字列から文字コードを得るには <code>&quot;A&quot;[0]</code> とします
+(<a href="refm061.html#L001465">String#[]</a> を参照してください)。</p>
+<p>整数は 0 から 255 の範囲内でなければなりません。範囲外の整数に対す
+る呼び出しは例外 <a href="refm102.html">RangeError</a> を発生させます。</p></dd>
+<dt><a name="L001310" id="L001310"><code>downto(<var>min</var>) {|<var>n</var>| ... }</code></a></dt>
+<dd>
+<p><code>self</code> から <var>min</var> まで 1 ずつ減らしながら繰り返します。
+<code>self</code> &lt; <code>min</code> であれば何もしません。</p>
+<p><a href="#L001321">upto</a>, <a href="#L001313">step</a>, <a href="#L001314">times</a> も参照。</p></dd>
+<dt><a name="L001311" id="L001311"><code>next</code></a>
+<dt><a name="L001312" id="L001312"><code>succ</code></a></dt>
+<dd>
+<p><em>次</em>の整数を返します。</p></dd>
+<dt><a name="L001313" id="L001313"><code>step(<var>limit</var>, <var>step</var>) {|<var>n</var>| ... }</code></a></dt>
+<dd>
+<p><code>self</code> からはじめ <var>step</var> を足しながら <var>limit</var> を越える
+前までブロックを繰り返します。<var>step</var> は負の数も指定できます。
+また、<var>limit</var> や <var>step</var> には <a href="refm056.html">Float</a> なども指定できます。</p>
+<p><var>step</var> に 0 を指定した場合は例外 <a href="refm094.html">ArgumentError</a> が発生します。</p>
+<p><code>self</code> を返します。</p>
+<p><a href="#L001321">upto</a>, <a href="#L001310">downto</a>, <a href="#L001314">times</a> も参照。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>: Numeric#<a href="refm052.html#L001280">step</a> も参照。</p></dd>
+<dt><a name="L001314" id="L001314"><code>times {|<var>n</var>| ... }</code></a></dt>
+<dd>
+<p><code>self</code> 回だけ(0 から <code>self-1</code> まで)繰り返します。
+<code>self</code> が負であれば何もしません。</p>
+<p><code>self</code> を返します。</p>
+<p><a href="#L001321">upto</a>, <a href="#L001310">downto</a>, <a href="#L001313">step</a> も参照。</p></dd>
+<dt><a name="L001315" id="L001315"><code>to_i</code></a>
+<dt><a name="L001316" id="L001316"><code>to_int</code></a></dt>
+<dd>
+<p><code>self</code> を返します。</p></dd>
+<dt><a name="L001317" id="L001317"><code>size</code></a></dt>
+<dd>
+<p>整数の実装上のサイズをバイト数で返します。</p>
+<p>現在の実装では <a href="refm055.html">Fixnum</a> は、<code>sizeof(long)</code> 固定(多くの 32
+bit マシンで 4 バイト)、<a href="refm054.html">Bignum</a>は、システム依存です。</p>
+<pre>p 1.size
+p 0x1_0000_0000.size
+# =&gt; 4
+     8</pre></dd>
+<dt><a name="L001318" id="L001318"><code>to_f</code></a></dt>
+<dd>
+<p>値を浮動小数点数(<a href="refm056.html">Float</a>)に変換します。</p></dd>
+<dt><a name="L001319" id="L001319"><code>to_s</code></a>
+<dt><a name="L001320" id="L001320"><code>to_s(<var>base</var>)       ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>整数を 10 進文字列表現に変換します。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>: 引数を指定すれば、それを基数とした文字列表
+現に変換します。基数として 2 〜 36 以外を指定した場合は例外 
+<a href="refm094.html">ArgumentError</a> が発生します。</p>
+<pre>p 10.to_s(2)    # =&gt; &quot;1010&quot;
+p 10.to_s(8)    # =&gt; &quot;12&quot;
+p 10.to_s(16)   # =&gt; &quot;a&quot;
+p 35.to_s(36)   # =&gt; &quot;z&quot;</pre></dd>
+<dt><a name="L001321" id="L001321"><code>upto(<var>max</var>) {|<var>n</var>| ... }</code></a></dt>
+<dd>
+<p><code>self</code> から <var>max</var> まで 1 ずつ増やしながら繰り返します。
+<code>self</code> &gt; <code>max</code> であれば何もしません。</p>
+<p><code>self</code> を返します。</p>
+<p><a href="#L001310">downto</a>, <a href="#L001313">step</a>, <a href="#L001314">times</a> も参照。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm052.html">UP</a>][<a href="refm052.html">&lt;-PREV</a>][<a href="refm054.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

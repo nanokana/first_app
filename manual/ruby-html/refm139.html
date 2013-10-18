@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Zlib::Inflate</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm140.html" rel="next" />
+<link href="refm138.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm135.html">UP</a>][<a href="refm138.html">&lt;-PREV</a>][<a href="refm140.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L002684" id="L002684">Zlib::Inflate</a></h1>
+<p>入力データを展開するストリームのクラス。Zlib::Deflate と違い、
+このクラスのインスタンスを複製 (clone, dup) することはできません。</p>
+<h2><a name="L002685" id="L002685">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm137.html">Zlib::ZStream</a></li>
+</ul>
+<h2><a name="L002686" id="L002686">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L002687" id="L002687"><code>Inflate.inflate(<var>string</var>)</code></a></dt>
+<dd>
+<p><var>string</var> を展開します。展開に辞書が必要な場合には
+Zlib::NeedDict 例外が発生します。</p>
+<p>ちなみに、このメソッドは以下のコードとほぼ同じです:</p>
+<pre>def inflate(string)
+  zstream = Zlib::Inflate.new
+  buf = zstream.inflate(string)
+  zstream.finish
+  zstream.close
+  buf
+end</pre></dd>
+<dt><a name="L002688" id="L002688"><code>Inflate.new([<var>windowBits</var>])</code></a></dt>
+<dd>
+<p>展開ストリームを作成します。引数の詳細は zlib.h を参照して下さい。
+nil の場合はデフォルトの値を使用します。</p></dd>
+</dl>
+<h2><a name="L002689" id="L002689">メソッド:</a></h2>
+<dl>
+<dt><a name="L002687" id="L002687"><code>inflate(<var>string</var>)</code></a></dt>
+<dd>
+<p><var>string</var> を展開ストリームに入力します。処理後、ストリームからの
+出力を返します。このメソッドを呼ぶと出力バッファ及び入力バッファは
+空になります。<var>string</var> が nil の場合はストリームへの入力を
+終了します。(<a href="refm137.html#L002662">Zlib::ZStream#finish</a> と同じ)。</p>
+<p>展開に辞書が必要な場合には Zlib::NeedDict 例外が発生します。
+<a href="#L002692">set_dictionary</a> メソッドで辞書をセットした
+後で、空文字列と共にこのメソッドを再度呼び出して下さい。</p></dd>
+<dt><a name="L002690" id="L002690"><code>&lt;&lt; <var>string</var></code></a></dt>
+<dd>
+<p><a href="#L002687">inflate</a> と同じように <var>string</var> を
+展開ストリームに入力しますが、Zlib::Inflate オブジェクト
+そのものを返します。展開ストリームからの出力は、
+出力バッファに保存されます。</p></dd>
+<dt><a name="L002691" id="L002691"><code>finish</code></a></dt>
+<dd>
+<p>展開ストリームを終了します。
+ストリーム内に残っていたデータ (つまり圧縮データの後についていた
+ゴミデータ) を返します。
+<a href="refm137.html#L002663">Zlib::ZStream#finished?</a> が真でない時に finish を呼ぶと
+例外が発生します。</p>
+<p>展開ストリームは圧縮データ内に終了コードを発見した時点で
+自ら終了するため、明示的に finish を呼ぶ必要は必ずしも
+ありませんが、このメソッドは圧縮データが正しく終了しているかを
+確認するのに便利です。</p></dd>
+<dt><a name="L002692" id="L002692"><code>set_dictionary(<var>string</var>)</code></a></dt>
+<dd>
+<p>展開に用いる辞書を指定します。<var>string</var> を返します。
+このメソッドは Zlib::NeedDict 例外が発生した直後のみ
+有効です。詳細は zlib.h を参照して下さい。</p></dd>
+<dt><a name="L002693" id="L002693"><code>sync(<var>string</var>)</code></a></dt>
+<dd>
+<p><var>string</var> を入力バッファの末尾に追加し、次の full flush
+point まで読み飛ばします。入力バッファ内に full flush point
+が存在しない場合は、入力バッファを空にし false を返します。
+入力バッファ内に full flush point が見つかった場合は
+true を返し、残りのデータは入力バッファ内に保持されます。</p></dd>
+<dt><a name="L002694" id="L002694"><code>sync_point?</code></a></dt>
+<dd>
+<p>What is this?
+<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a>
+(<a href="refm002.html">執筆者募集</a>)</p></dd>
+</dl>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small> <a href="refm525.html">原文</a>のまま。 </small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm135.html">UP</a>][<a href="refm138.html">&lt;-PREV</a>][<a href="refm140.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

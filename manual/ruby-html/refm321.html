@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Win32API</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm322.html" rel="next" />
+<link href="refm320.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm320.html">&lt;-PREV</a>][<a href="refm322.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006257" id="L006257">Win32API</a></h1>
+<p>Win32 API をコールするためのクラスです。</p>
+<h2><a name="L006258" id="L006258">メソッド</a></h2>
+<dl>
+<dt><a name="L006259" id="L006259"><code>Win32API.new(<var>dllname</var>, <var>proc</var>, <var>import</var>, <var>export</var>)</code></a></dt>
+<dd>
+<p>DLL <var>dllname</var> をロードし、API関数 <var>proc</var> のオブジェクトを
+生成します。<var>import</var> には <var>proc</var> の引数の型のリストを、
+<var>export</var> には <var>proc</var> の戻り値の型を指定します。</p>
+<p>型の指定は以下の文字列または配列です。</p>
+<ul>
+<li><code>&quot;p&quot;</code> ポインタ</li>
+<li><code>&quot;n&quot;</code>, <code>&quot;l&quot;</code> long <a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></li>
+<li><code>&quot;i&quot;</code> int</li>
+<li><code>&quot;v&quot;</code> void</li>
+</ul>
+<p><var>import</var> が <code>nil</code> の場合は引数なしと見なされます。また、
+<var>export</var> が <code>nil</code> の場合は戻り値なし(<code>void</code>)と見なさ
+れます。</p></dd>
+<dt><a name="L006260" id="L006260"><code>Win32API#call([<var>args</var> ...])</code></a>
+<dt><a name="L006261" id="L006261"><code>Win32API#Call([<var>args</var> ...])</code></a></dt>
+<dd>
+<p>API関数 をコールします。指定する引数と戻り値は <code>new</code> の引数の
+指定に従います。特にポインタを渡してそのポインタの指す領域に値が
+設定される場合はその領域をあらかじめ確保しておく必要があります。</p>
+<p>例えば、文字列が返る関数をコールする場合は以下のようにします。</p>
+<pre>obj = Win32API.new 'dllname.dll', 'foo', 'p', 'v'
+arg = &quot;\0&quot; * 256
+obj.call(arg)</pre>
+<p>ポインタの配列を渡す場合は以下のようにします。<a name="footmark:2" id="footmark:2" href="#foottext:2"><sup><small>*2</small></sup></a><a name="footmark:3" id="footmark:3" href="#foottext:3"><sup><small>*3</small></sup></a></p>
+<pre>obj = Win32API.new 'dllname.dll', 'foo', 'p', 'v'
+args = [&quot;\0&quot; * 256, &quot;\0&quot; * 256, &quot;\0&quot; * 256,]
+obj.call(args.pack(&quot;p3&quot;))</pre></dd>
+</dl>
+<h2><a name="L006262" id="L006262">使用例</a></h2>
+<p>MessageBox (Win32API のクラスメソッドにしてみた)</p>
+<pre>require 'Win32API'
+# require 'dl/win32'
+
+class Win32API
+  # type flag
+  MB_OK               = 0
+  MB_OKCANCEL         = 1
+  MB_ABORTRETRYIGNORE = 2
+  MB_YESNOCANCEL      = 3
+  MB_YESNO            = 4
+  MB_RETRYCANCEL      = 5
+
+  # return values
+  IDOK     = 1
+  IDCANCEL = 2
+  IDABORT  = 3
+  IDRETRY  = 4
+  IDIGNORE = 5
+  IDYES    = 6
+  IDNO     = 7
+
+  def Win32API.MessageBox(wnd, text, caption, type = MB_OK)
+    messagebox = Win32API.new('user32', 'MessageBox', %w(p p p i), 'i')
+
+    messagebox.call(wnd, text, caption, type)
+  end
+
+  def Win32API.MessageBoxEx(wnd, text, caption, type = MB_OK, languageid = 0)
+    messagebox = Win32API.new('user32', 'MessageBoxEx', %w(p p p i i), 'i')
+
+    messagebox.call(wnd, text, caption, type, languageid)
+  end
+end
+
+p Win32API.MessageBox(0, &quot;test message&quot;, &quot;test caption&quot;)
+p Win32API.MessageBoxEx(0, &quot;test message&quot;, &quot;test caption&quot;)
+p Win32API.MessageBox(0, &quot;てすと&quot;, &quot;テスト&quot;)
+p Win32API.MessageBoxEx(0, &quot;てすと&quot;, &quot;テスト&quot;)</pre>
+<p><a href="refm463.html">Cygwin</a> の uname コマンドの代わり</p>
+<pre>require 'Win32API'
+
+module Cygwin
+  def uname
+    uname = Win32API.new 'cygwin1', 'uname', ['P'], 'I'
+    utsname = ' ' * 100
+    raise 'cannot get system name' if uname.call(utsname) == -1
+
+    utsname.unpack('A20' * 5)
+  end
+  module_function :uname
+end
+
+p Cygwin.uname
+
+=&gt; [&quot;CYGWIN_98-4.10&quot;, &quot;hoge&quot;, &quot;1.1.7(0.31/3/2)&quot;, &quot;2000-12-25 12:39&quot;, &quot;i586&quot;]</pre>
+<p>Cygwin の cygpath コマンドの代わり</p>
+<pre>require 'Win32API'
+
+module Cygwin
+  @conv_to_full_posix_path =
+    Win32API.new('cygwin1.dll', 'cygwin_conv_to_full_posix_path', 'PP', 'I')
+  @conv_to_posix_path =
+    Win32API.new('cygwin1.dll', 'cygwin_conv_to_posix_path', 'PP', 'I')
+  @conv_to_full_win32_path =
+    Win32API.new('cygwin1.dll', 'cygwin_conv_to_full_win32_path', 'PP', 'I')
+  @conv_to_win32_path =
+    Win32API.new('cygwin1.dll', 'cygwin_conv_to_win32_path', 'PP', 'I')
+
+  def cygpath(options, path)
+    absolute = shortname = false
+    func = nil
+    options.delete(&quot; \t-&quot;).each_byte {|opt|
+      case opt
+      when ?u
+        func = [@conv_to_full_posix_path, @conv_to_posix_path]
+      when ?w
+        func = [@conv_to_full_win32_path, @conv_to_win32_path]
+      when ?a
+        absolute = true
+      when ?s
+        shortname = true
+      end
+    }
+    raise ArgumentError &quot;first argument must contain -u or -w&quot; if func.nil?
+    func = absolute ? func[0] : func[1]
+    buf = &quot;\0&quot; * 300
+    if func.Call(path, buf) == -1
+      raise &quot;cannot convert path name&quot;
+    end
+
+    buf.delete!(&quot;\0&quot;)
+    buf
+  end
+  module_function :cygpath
+end
+
+p Cygwin.cygpath(&quot;-u&quot;, 'c:\\')
+p Cygwin.cygpath(&quot;-w&quot;, '/cygdrive/c')
+p Cygwin.cygpath(&quot;-wa&quot;, '.')
+
+=&gt; &quot;/cygdrive/c&quot;
+   &quot;c:\\&quot;
+   &quot;d:\\home\\arai&quot;</pre>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>あらい: 2001-03-23 本当?</small><br />
+<a name="foottext:2" id="foottext:2" href="#footmark:2"><sup><small>*2</small></sup></a><small>あらい: 2001-03-23 まだ試してない。あってるかな？</small><br />
+<a name="foottext:3" id="foottext:3" href="#footmark:3"><sup><small>*3</small></sup></a><small>バグ？: 2004-01-29 obj.call([args.pack(&quot;p3&quot;)].pack(&quot;P&quot;))のような？</small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm320.html">&lt;-PREV</a>][<a href="refm322.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

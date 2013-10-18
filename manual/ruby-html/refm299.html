@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>thread</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm300.html" rel="next" />
+<link href="refm298.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm298.html">&lt;-PREV</a>][<a href="refm300.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L005992" id="L005992">thread</a></h1>
+<p><a href="refm064.html">Thread</a>を拡張するライブラリです．rubyインタプリタを
+デバッグオプション付き(<a href="refm030.html">$DEBUG</a>を真)で実行したときには，
+<a href="refm064.html">Thread.abort_on_exception</a>をtrueにします<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a>．</p>
+<p>以下のクラスが定義されています．</p>
+<ul>
+<li><a href="refm300.html">ConditionVariable</a></li>
+<li><a href="refm301.html">Mutex</a></li>
+<li><a href="refm302.html">Queue</a>
+<ul>
+<li><a href="refm303.html">SizedQueue</a></li>
+</ul></li>
+</ul>
+<p>また，<a href="refm064.html">Thread</a>クラスに以下のクラスメソッドを追加定義します。</p>
+<h2><a name="L005993" id="L005993">Thread</a></h2>
+<h3><a name="L005994" id="L005994">クラスメソッド</a></h3>
+<dl>
+<dt><a name="L005995" id="L005995"><code>Thread.exclusive { ... }</code></a></dt>
+<dd>
+<p>ブロック実行中、Threadの切り替えを行いません。</p></dd>
+</dl>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>あらい: 2001-02-11 
+$DEBUGが真の場合、rubyインタプリタの方で abort_on_exception を true にした
+ときと同じ動作にするので、この機能は必要ないのではないか？</small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm298.html">&lt;-PREV</a>][<a href="refm300.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

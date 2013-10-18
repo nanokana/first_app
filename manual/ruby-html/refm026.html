@@ -1,0 +1,657 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>制御構造</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm027.html" rel="next" />
+<link href="refm025.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm020.html">UP</a>][<a href="refm025.html">&lt;-PREV</a>][<a href="refm027.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L000379" id="L000379">制御構造</a></h1>
+<ul>
+<li><a href="#L000380">条件分岐</a>
+<ul>
+<li><a href="#L000381">if</a></li>
+<li><a href="#L000382">if 修飾子</a></li>
+<li><a href="#L000383">unless</a></li>
+<li><a href="#L000384">unless 修飾子</a></li>
+<li><a href="#L000385">case</a></li>
+</ul></li>
+<li><a href="#L000386">繰り返し</a>
+<ul>
+<li><a href="#L000387">while</a></li>
+<li><a href="#L000388">while 修飾子</a></li>
+<li><a href="#L000389">until</a></li>
+<li><a href="#L000390">until修飾子</a></li>
+<li><a href="#L000391">for</a></li>
+<li><a href="#L000392">break</a></li>
+<li><a href="#L000393">next</a></li>
+<li><a href="#L000394">redo</a></li>
+<li><a href="#L000395">retry</a></li>
+</ul></li>
+<li><a href="#L000396">例外処理</a>
+<ul>
+<li><a href="#L000397">raise</a></li>
+<li><a href="#L000398">begin</a></li>
+<li><a href="#L000399">rescue修飾子</a></li>
+</ul></li>
+<li><a href="#L000400">その他</a>
+<ul>
+<li><a href="#L000401">return</a></li>
+<li><a href="#L000402">BEGIN</a></li>
+<li><a href="#L000403">END</a></li>
+</ul></li>
+</ul>
+<p>Rubyでは(Cなどとは異なり)制御構造は式であって、何らかの値を返すものが
+あります(返さないものもあります。値を返さない式を代入式の右辺に置くと 
+parse error になります)。</p>
+<p>RubyはC言語やPerlから引き継いだ制御構造を持ちますが、
+その他に<a href="refm027.html#L000407">ブロック付きメソッド呼び出し</a>という
+制御構造の抽象化を援助する機能があります。ブロック付きメソッド呼び出しは
+繰り返しを始めとする制御構造をクラス設計者が定義する事が出来るものです.</p>
+<h2><a name="L000380" id="L000380">条件分岐</a></h2>
+<h3><a name="L000381" id="L000381">if</a></h3>
+<p>例:</p>
+<pre>if age &gt;= 12 then
+  print &quot;adult fee\n&quot;
+else
+  print &quot;child fee\n&quot;
+end
+gender = if foo.gender == &quot;male&quot; then &quot;male&quot; else &quot;female&quot; end</pre>
+<p>文法:</p>
+<pre>if 式 [then]
+  式 ...
+[elsif 式 [then]
+  式 ... ]
+...
+[else
+  式 ... ]
+end</pre>
+<p>条件式を評価した結果が真である時、<code>then</code> 以下の式を評価します。
+<code>if</code> の条件式が偽であれば <code>elsif</code> の条件を評価します。
+<code>elsif</code> 節は複数指定でき、全ての <code>if</code> および <code>elsif</code> 
+の条件式が偽であったとき <code>else</code> 節があればその式が評価されます。</p>
+<p><code>if</code> 式は、条件が成立した節(あるいは <code>else</code> 節)の最後に評価し
+た式の結果を返します。<code>else</code> 節がなくいずれの条件も成り立たなけれ
+ば <code>nil</code> を返します。</p>
+<p>Ruby では <code>false</code> または <code>nil</code> だけが偽で、それ以外は 0 や空文
+字列も含め全て真です。</p>
+<p>Ruby では if を繋げるのは <code>elsif</code> であり、<code>else if</code>
+(C のように)でも <code>elif</code>(sh のように)でもないことに注意してください。</p>
+<p>また <code>if</code> の条件式が正規表現のリテラルである時には特別に</p>
+<pre>$_ =~ リテラル</pre>
+<p>であるかのように評価されます。</p>
+<h3><a name="L000382" id="L000382">if 修飾子</a></h3>
+<p>例:</p>
+<pre>print &quot;debug\n&quot; if $DEBUG</pre>
+<p>文法:</p>
+<pre>式 if 式</pre>
+<p>右辺の条件が成立する時に、左辺の式を評価してその結果を返します。
+条件が成立しなければ <code>nil</code> を返します。</p>
+<h3><a name="L000383" id="L000383">unless</a></h3>
+<p>例:</p>
+<pre>unless baby?
+  feed_meat
+else
+  feed_milk
+end</pre>
+<p>文法:</p>
+<pre>unless 式 [then]
+  式 ...
+[else
+  式 ... ]
+end</pre>
+<p><code>unless</code> は <code>if</code> と反対で、条件式が偽の時に <code>then</code> 以下の
+式を評価します。<code>unless</code> 式に<code>elsif</code> を指定することはできませ
+ん。</p>
+<h3><a name="L000384" id="L000384">unless 修飾子</a></h3>
+<p>例:</p>
+<pre>print &quot;stop\n&quot; unless valid(passwd)</pre>
+<p>文法:</p>
+<pre>式 unless 式</pre>
+<p>右辺の条件が成立しない時に、左辺の式を評価してその結果を返します。
+条件が成立しなければ <code>nil</code> を返します。</p>
+<h3><a name="L000385" id="L000385">case</a></h3>
+<p>例:</p>
+<pre>case $age
+when 0 .. 2
+  &quot;baby&quot;
+when 3 .. 6
+  &quot;little child&quot;
+when 7 .. 12
+  &quot;child&quot;
+when 13 .. 18
+  &quot;youth&quot;
+else
+  &quot;adult&quot;
+end</pre>
+<p>文法:</p>
+<pre>case [式]
+[when 式 [, 式] ...[, `*' 式] [then]
+  式..]..
+[when `*' 式 [then]
+  式..]..
+[else
+  式..]
+end</pre>
+<p><code>case</code> は一つの式に対する一致判定による分岐を行います。<code>when</code> 
+節で指定された値と最初の式を評価した結果とを演算子 <code>===</code> を用いて
+比較して、一致する場合には <code>when</code> 節の本体を評価します。</p>
+<p>つまり、</p>
+<pre>case 式0
+when 式1, 式2
+  stmt1
+when 式3, 式4
+  stmt2
+else
+  stmt3
+end</pre>
+<p>は以下の <code>if</code> 式とほぼ等価です。</p>
+<pre>_tmp = 式0
+if 式1 === _tmp or 式2 === _tmp
+  stmt1
+elsif 式3 === _tmp or 式4 === _tmp
+  stmt2
+else
+  stmt3
+end</pre>
+<p>when 節の評価順序はこの上記 if 文に書き直した場合と同じです。つまり上
+から順に(そして左から順に) === が評価されます。また「式0」は1回だけ評
+価されます。</p>
+<p>when 節の最後の式に `*' を前置すればその式は配列展開されます。</p>
+<pre>ary = [1,2,3]
+
+case v
+when *ary
+ ..
+end</pre>
+<p>は、</p>
+<pre>case v
+when 1, 2, 3
+ ..
+end</pre>
+<p>と等価です。</p>
+<p><code>===</code> がどのような条件で真になるかは、各クラスの <code>===</code> メソッ
+ドの動作についてのドキュメントを参照して下さい。</p>
+<p><code>case</code> の「式」を省略した場合、<code>when</code> の条件式が偽でない最初の
+式を評価します。</p>
+<pre>foo = false
+bar = true
+quu = false
+
+case
+when foo then puts 'foo is true'
+when bar then puts 'bar is true'
+when quu then puts 'quu is true'
+end
+# &quot;bar is true&quot;と表示される</pre>
+<p><code>case</code> は、条件が成立した <code>when</code> 節、(あるいは <code>else</code> 節)
+の最後に評価した式の結果を返します。いずれの条件も成り立たなければ 
+<code>nil</code> を返します。</p>
+<h2><a name="L000386" id="L000386">繰り返し</a></h2>
+<h3><a name="L000387" id="L000387">while</a></h3>
+<p>例:</p>
+<pre>ary = [0,2,4,8,16,32,64,128,256,512,1024]
+i = 0
+while i &lt; ary.length
+  print ary[i]
+  i += 1
+end</pre>
+<p>文法:</p>
+<pre>while 式 [do]
+   ...
+end</pre>
+<p>式を評価した値が真の間、本体を繰り返し実行します。
+<code>while</code> は値を返しません。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>: <code>while</code> は <code>nil</code> を返します。また、引
+数を伴った <code>break</code> により <code>while</code> 式の戻り値をその値にすること
+もできます。</p>
+<h3><a name="L000388" id="L000388">while 修飾子</a></h3>
+<p>例:</p>
+<pre>sleep(60) while io_not_ready?</pre>
+<p>文法:</p>
+<pre>式 while 式</pre>
+<p>右辺の式を評価した値が真の間、左辺を繰り返し実行します。</p>
+<p>左辺の式が <code>rescue</code> 節も <code>ensure</code> 節もない <code>begin</code> である場合には、
+それを最初に一回評価してから繰り返します。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>: version 1.7 では、rescue/ensure 節があっても、
+同様に解釈されます。</p>
+<p>例:</p>
+<pre>send_request(data)
+begin
+  res = get_response()
+end while res == 'Continue'</pre>
+<p><code>while</code> 修飾した式は値を返しません。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>: <code>while</code> 修飾した式は <code>nil</code> を返します。
+また、引数を伴った <code>break</code> により <code>while</code> 修飾した式の戻り値を
+その値にすることもできます。</p>
+<h3><a name="L000389" id="L000389">until</a></h3>
+<p>例:</p>
+<pre>until f.eof?
+  print f.gets
+end</pre>
+<p>文法:</p>
+<pre>until 式 [do]
+   ...
+end</pre>
+<p>式を評価した値が真になるまで、本体を繰り返して実行します。
+<code>until</code> は、値を返しません。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>: <code>until</code> は <code>nil</code> を返します。また、引
+数を伴った <code>break</code> により <code>until</code> 式の戻り値をその値にすること
+もできます。</p>
+<h3><a name="L000390" id="L000390">until修飾子</a></h3>
+<p>例:</p>
+<pre>print(f.gets) until f.eof?</pre>
+<p>文法:</p>
+<pre>式 until 式</pre>
+<p>右辺の式を評価した値が真になるまで、左辺を繰り返して実行しま
+す。</p>
+<p>左辺の式が <code>rescue</code> 節も <code>ensure</code> 節もない <code>begin</code> である場合には、
+それを最初に一回評価してから繰り返します。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>: version 1.7 では、rescue/ensure 節があっても、
+同様に解釈されます</p>
+<p>例:</p>
+<pre>send_request(data)
+begin
+  res = get_response()
+end until res == 'OK'</pre>
+<p><code>until</code> 修飾した式は値を返しません。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>: <code>until</code> 修飾した式は <code>nil</code> を返します。
+また、引数を伴った <code>break</code> により <code>until</code> 修飾した式の戻り値を
+その値にすることもできます。</p>
+<h3><a name="L000391" id="L000391">for</a></h3>
+<p>例:</p>
+<pre>for i in [1, 2, 3]
+  print i*2, &quot;\n&quot;
+end</pre>
+<p>文法:</p>
+<pre>for lhs ...  in 式 [do]
+  式..
+end</pre>
+<p>式を評価した結果のオブジェクトの各要素に対して本体を繰り返し
+て実行します。これは以下の式とほぼ等価です。</p>
+<pre>(式).each `{' `|' lhs..`|' 式.. `}'</pre>
+<p>「ほぼ」というのは、<code>do  ...  end</code>または<code>{ }</code>による
+ブロックは新しいローカル変数の有効範囲を導入するのに対し、
+<code>for</code>文はローカル変数のスコープに影響を及ぼさない点が
+異なるからです。</p>
+<p><code>for</code> は、<code>in</code> に指定したオブジェクトの <code>each</code> 
+メソッドの戻り値を返します。</p>
+<p>複数のループ変数指定は以下のような場合に使用します。</p>
+<pre>for i,j in [[1,2], [3,4], [5,6]]
+  p [i,j]
+end
+=&gt; [1, 2]
+   [3, 4]
+   [5, 6]</pre>
+<p>for や each で配列要素を複数個ずつ取得しながらループすることは
+できません。</p>
+<pre>for i,j in [1, 2, 3]
+  p [i,j]
+end
+
+=&gt; [1, nil]
+   [2, nil]
+   [3, nil]
+
+# [1,2] [3,nil] を期待するかもしれないがそうはならない</pre>
+<p>代わりにそのようなメソッド(イテレータ)を定義する必要があります。
+<a href="refm036.html#L000746">each</a> の例も参照してください。</p>
+<pre>class Array
+  def each2
+    i = 0
+    while i &lt; self.size
+      yield self[i], self[i+1]
+      i += 2
+    end
+  end
+end</pre>
+<h3><a name="L000392" id="L000392">break</a></h3>
+<p>例:</p>
+<pre>i = 0
+while i &lt; 3
+  print i, &quot;\n&quot;
+  break
+end</pre>
+<p>文法:</p>
+<pre>break
+
+break val             ruby 1.7 feature</pre>
+<p><code>break</code> はもっとも内側のループを脱出します。ループとは</p>
+<ul>
+<li>while</li>
+<li>until</li>
+<li>for</li>
+<li>イテレータ</li>
+</ul>
+<p>のいずれかを指します。C 言語と異なり、<code>break</code> はループを脱出する作
+用だけを持ち、<code>case</code> を抜ける作用は持ちません。</p>
+<p><code>break</code> によりループを抜けた <code>for</code> やイテレータは <code>nil</code> 
+を返します。<a href="refm384.html">ruby 1.7 feature</a>: ただし、引数を指定した場合はループ
+の戻り値はその引数になります。</p>
+<h3><a name="L000393" id="L000393">next</a></h3>
+<p>例:</p>
+<pre># 空行を捨てるcat
+ARGF.each_line do |line|
+  next if line.strip.empty?
+  print line
+end</pre>
+<p>文法:</p>
+<pre>next
+
+next val              ruby 1.7 feature</pre>
+<p><code>next</code>はもっとも内側のループの次の繰り返しにジャンプします。
+<em class="XXINVALIDXX">イテレータ</em>では、<a href="refm027.html#L000408">yield</a> 呼び出し
+の脱出になります。</p>
+<p><code>next</code> により抜けた <code>yield</code> 式は <code>nil</code> を返します。
+<a href="refm384.html">ruby 1.7 feature</a>: ただし、引数を指定した場合、<code>yield</code> 式の戻
+り値はその引数になります。</p>
+<h3><a name="L000394" id="L000394">redo</a></h3>
+<p>例:</p>
+<pre>redo</pre>
+<p>文法:</p>
+<pre>redo</pre>
+<p>ループ条件のチェックを行なわず、現在の繰り返しをやり直します。</p>
+<h3><a name="L000395" id="L000395">retry</a></h3>
+<p>例:</p>
+<pre>retry</pre>
+<p>文法:</p>
+<pre>retry</pre>
+<p>イテレータ、ブロックまたはfor文の中で使われた場合には、そのイテレータ
+を起動しなおします。イテレータの引数も再評価されます。</p>
+<pre>for i in 1..5
+  retry if some_condition # i == 1 からやり直し
+end
+
+# ユーザ定義の &quot;untilループ&quot;
+def UNTIL(cond)
+  return if cond
+  yield
+  retry
+end</pre>
+<p><code>retry</code> は、ループ以外に後述の <code>rescue</code> 節でも使えます。この場
+合は、<code>begin</code> 式を始めからもう一度実行します。<code>retry</code> を使うこ
+とである処理が成功するまで処理を繰り返すようなループを作ることができます。</p>
+<pre>begin
+  do_something # exception raised
+rescue
+  # handles error
+  retry  # restart from beginning
+end</pre>
+<p><code>rescue</code> 節やイテレータブロック、for 文以外で <code>retry</code> が用い
+られた場合には例外 <a href="refm099.html">LocalJumpError</a> が発生します。
+<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></p>
+<p>イテレータ呼び出しにおける <code>break</code>, <code>next</code>, <code>redo</code>,
+<code>retry</code> をまとめると以下のようになります。</p>
+<pre>def iter
+ (a)
+  :
+ (b)
+ yield
+ (c)
+  :
+ (d)
+end
+iter { retry }   -&gt; (a) へ飛ぶ
+iter { redo  }   -&gt; (b) へ飛ぶ
+iter { next  }   -&gt; (c) へ飛ぶ
+iter { break }   -&gt; (d) へ飛ぶ</pre>
+<p>(a) は、厳密には引数評価から始まります。(b) はブロック実行の直前を指し
+ています(yield の引数が再評価されるわけではない)。(d) は、メソッドの終
+了です。</p>
+<pre>def iter(var = p(&quot;(a)&quot;))
+  p &quot; : &quot;
+  yield
+  p &quot;(c)&quot;
+  p &quot; : &quot;
+ensure
+  p &quot;(d)&quot;
+end
+
+iter { p &quot;(b)&quot;; retry }     # =&gt; (a) .. (b)(d)(a) .. (b)(d)(a) ...
+iter { p &quot;(b)&quot;; redo  }     # =&gt; (a) .. (b)(b)(b)(b) ...
+iter { p &quot;(b)&quot;; next  }     # =&gt; (a) .. (b)(c) .. (d)
+iter { p &quot;(b)&quot;; break }     # =&gt; (a)..(b)(d)</pre>
+<p><a name="footmark:2" id="footmark:2" href="#foottext:2"><sup><small>*2</small></sup></a></p>
+<h2><a name="L000396" id="L000396">例外処理</a></h2>
+<h3><a name="L000397" id="L000397">raise</a></h3>
+<p>例:</p>
+<pre>raise &quot;you lose&quot;  # 例外 RuntimeError を発生させる
+# 以下の二つは SyntaxError を発生させる
+raise SyntaxError, &quot;invalid syntax&quot;
+raise SyntaxError.new(&quot;invalid syntax&quot;)
+raise             # 最後の例外の再発生</pre>
+<p>文法:</p>
+<pre>raise
+raise messageまたはexception
+raise error_type, message
+raise error_type, message, traceback</pre>
+<p>例外を発生させます。第一の形式では直前の例外を再発生させます。
+第二の形式では、引数が文字列であった場合、その文字列をメッセー
+ジとする <a href="refm105.html">RuntimeError</a> 例外を発生させます。引数が例外
+オブジェクトであった場合にはその例外を発生させます。第三の形式
+では第一引数で指定された例外を、第二引数をメッセージとして発生さ
+せます。第四の形式の第三引数は
+<a href="refm030.html#L000524">$@</a>または
+<a href="refm029.html#L000438">caller</a>で得られる
+スタック情報で、例外が発生した場所を示します。</p>
+<p>発生した例外は後述の <code>begin</code> 式の <code>rescue</code> 節で捕らえることができます。
+その場合 <code>rescue <var>error_type</var> =&gt; <var>var</var></code> の形式を使えば
+例外オブジェクトを得られます。このオブジェクトは組み込み
+変数 <a href="refm030.html#L000523">$!</a> でも得られます。また例外が
+発生したソースコード上の位置は変数 <a href="refm030.html#L000524">$@</a> に格納されます。</p>
+<p><a href="refm029.html#L000473">raise</a> は Ruby の予約語ではなく、<a href="refm076.html">Kernel</a> モジュールで
+定義されている関数的メソッドです。</p>
+<h3><a name="L000398" id="L000398">begin</a></h3>
+<p>例:</p>
+<pre>begin
+  do_something
+rescue
+  recover
+ensure
+  must_to_do
+end</pre>
+<p>文法:</p>
+<pre>begin
+  式..
+[rescue [error_type,..] [=&gt; evar] [then]
+  式..]..
+[else
+  式..]
+[ensure
+  式..]
+end</pre>
+<p>本体の実行中に例外が発生した場合、<code>rescue</code> 節(複数指定できます)が
+与えられていれば例外を捕捉できます。発生した例外と一致する 
+<code>rescue</code> 節が存在する時には <code>rescue</code> 節の本体が実行されます。
+発生した例外は <a href="refm030.html#L000523">$!</a> を使って参照することができます。また、
+指定されていれば変数 <var>evar</var> にも <code>$!</code> と同様に発生した例外が格
+納されます。</p>
+<pre>begin
+  raise &quot;error message&quot;
+rescue =&gt; evar
+  p $!
+  p evar
+end
+# =&gt; #&lt;RuntimeError: error message&gt;
+     #&lt;RuntimeError: error message&gt;</pre>
+<p>例外の一致判定は例外のクラスが <code>rescue</code> 節で指定したクラスと同じか
+またはサブクラスであるかどうか <a href="refm035.html#L000672">Object#kind_of?</a> を用いて判
+定されます<a name="footmark:3" id="footmark:3" href="#foottext:3"><sup><small>*3</small></sup></a>。</p>
+<p><var>error_type</var> が省略された時は <a href="refm093.html">StandardError</a> のサブクラスであ
+る全ての例外を捕捉します。Rubyの組み込み例外は(<a href="refm113.html">SystemExit</a> や 
+<a href="refm092.html">Interrupt</a> のような脱出を目的としたものを除いて)
+<a href="refm093.html">StandardError</a> のサブクラスです。</p>
+<p>例外クラスのクラス階層については
+<a href="refm034.html#L000639">例外クラス</a>
+を参照してください。</p>
+<p><code>rescue</code> では <var>error_type</var> は通常の引数と同じように評価され、
+そのいずれかが一致すれば本体が実行されます。<var>error_type</var> を評価し
+た値がクラスやモジュールでない場合には例外 <a href="refm111.html">TypeError</a> が発生しま
+す。</p>
+<p>省略可能な <code>else</code> 節は、本体の実行によって例外が発生しなかった場合
+に評価されます。</p>
+<p><code>ensure</code> 節が存在する時は <code>begin</code> 式を終了する直前に必ず 
+<code>ensure</code> 節の本体を評価します。</p>
+<p><code>begin</code>式全体の評価値は、本体／<code>rescue</code>節／<code>else</code>節のうち
+最後に評価された文の値です。また各節において文が存在しなかったときの値
+は<code>nil</code>です。いずれにしても<code>ensure</code>節の値は無視されます。</p>
+<h3><a name="L000399" id="L000399">rescue修飾子</a></h3>
+<p>例:</p>
+<pre>open(&quot;nonexistent file&quot;) rescue STDERR.puts &quot;Warning: #$!&quot;</pre>
+<p>文法:</p>
+<pre>式1 rescue 式2</pre>
+<p>式1で例外が発生したとき、式2を評価します。
+以下と同じ意味です。捕捉する例外クラスを指定することはできません。
+(つまり、<a href="refm093.html">StandardError</a> 例外クラスのサブクラスだけしか捕捉できません)</p>
+<pre>begin
+  式1
+rescue
+  式2
+end</pre>
+<p>rescue修飾子を伴う式の値は例外が発生しなければ式1、例外が発生すれば式2 
+です。ただし、大抵の場合、優先順位の都合により式全体を括弧で囲む必要が
+あります。</p>
+<pre>var = open(&quot;nonexistent file&quot;) rescue false
+p var
+=&gt; nil      # 値を持たない変数 var が定義されただけ
+
+var = (open(&quot;nonexistent file&quot;) rescue false)
+p var
+=&gt; false</pre>
+<p>特にメソッドの引数に渡す場合は二重に括弧が必要となります。</p>
+<pre>p(open(&quot;nonexistent file&quot;) rescue false)
+=&gt; parse error
+
+p((open(&quot;nonexistent file&quot;) rescue false))
+=&gt; false</pre>
+<p><a href="refm384.html">ruby 1.7 feature</a>: 1.7 では、rescue の優先度が変更され、
+この心配はなくなっています。</p>
+<pre>var = open(&quot;nonexistent file&quot;) rescue false
+p var
+=&gt; false
+
+p(open(&quot;nonexistent file&quot;) rescue false)
+=&gt; false</pre>
+<h2><a name="L000400" id="L000400">その他</a></h2>
+<h3><a name="L000401" id="L000401">return</a></h3>
+<p>例:</p>
+<pre>return
+return 12
+return 1,2,3</pre>
+<p>文法:</p>
+<pre>return [式[`,' 式 ... ]]</pre>
+<p>式の値を戻り値としてメソッドの実行を終了します。式が2つ以上
+与えられた時には、それらを要素とする配列をメソッドの戻り値と
+します。式が省略された場合には <code>nil</code> を戻り値とします。</p>
+<h3><a name="L000402" id="L000402">BEGIN</a></h3>
+<p>例:</p>
+<pre>BEGIN {
+   ...
+}</pre>
+<p>文法:</p>
+<pre>BEGIN '{' 文.. '}'</pre>
+<p>初期化ルーチンを登録します。<code>BEGIN</code>ブロックで指定した文は当該ファ
+イルのどの文が実行されるより前に実行されます。複数の<code>BEGIN</code>が指定
+された場合には指定された順に実行されます。</p>
+<p><code>BEGIN</code>ブロックはコンパイル時に登録されます。即ち一つの記述につき
+ただ一回だけ登録が行われます。</p>
+<pre>if false
+  BEGIN { p &quot;begin&quot; }
+end
+
+# =&gt; &quot;begin&quot;</pre>
+<p><code>BEGIN</code>ブロックは独立したローカル変数のスコープを導入するため、ロー
+カル変数を外部と共有できません。ブロックの外と情報を伝達するには定数や
+グローバル変数などを介する必要があります。</p>
+<pre>BEGIN { $foo, foo = true, true }
+p $foo  # =&gt; true
+p foo   # undefined local variable or method `foo' for main:Object (NameError)</pre>
+<p><code>BEGIN</code>はメソッド定義式中には書けません。parse error になります。</p>
+<pre>def foo
+  BEGIN { p &quot;begin&quot; }
+end
+# =&gt; -:2: BEGIN in method</pre>
+<h3><a name="L000403" id="L000403">END</a></h3>
+<p>例:</p>
+<pre>END {
+   ... 
+}</pre>
+<p>文法:</p>
+<pre>END '{' 文.. '}'</pre>
+<p>「後始末」ルーチンを登録します。<code>END</code> ブロックで指定した文はインタ
+プリタが終了する時に実行されます。Ruby の終了時処理について詳しくは 
+<a href="refm016.html">終了処理</a>を参照してください。</p>
+<p>複数の <code>END</code> ブロックを登録した場合は、登録したときと逆の順序で実
+行されます。</p>
+<pre>END { p 1 }
+END { p 2 }
+END { p 3 }
+
+# =&gt; 3
+     2
+     1</pre>
+<p><code>END</code> ブロックは一つの記述につき最初の一回のみ有効です。たとえば以
+下のようにループの中で実行しても複数の <code>END</code> ブロックが登録される
+わけではありません。そのような目的には <a href="refm029.html#L000434">at_exit</a> を使
+います。</p>
+<pre>5.times do |i|
+  END { p i }
+end
+# =&gt; 0</pre>
+<p><code>END</code> をメソッド定義式中に書くと警告が出ます
+<a name="footmark:4" id="footmark:4" href="#foottext:4"><sup><small>*4</small></sup></a>。
+意図的にこのようなことを行いたい場合は <a href="refm029.html#L000434">at_exit</a> を使
+います。</p>
+<pre>def foo
+  END { p &quot;end&quot; }
+end
+p foo
+
+# =&gt; -:2: warning: END in method; use at_exit
+     nil
+     &quot;end&quot;</pre>
+<p><code>END</code> は、<code>BEGIN</code> とは異なり実行時に後処理を登録します。したがっ
+て、以下の例では END ブロックは実行されません。</p>
+<pre>if false
+  END { p &quot;end&quot; }
+end</pre>
+<p><code>END</code> や <a href="refm029.html#L000434">at_exit</a> で登録した後処理を取り消すこと
+はできません。</p>
+<p><code>END</code> ブロックは <code>BEGIN</code> ブロックとは異なり周囲とスコープを共有し
+ます。すなわちイテレータと同様のスコープを持ちます。</p>
+<p><code>END</code> ブロックの中で発生した例外はその <code>END</code> ブロックを中断し
+ますが、すべての後始末ルーチンが実行されるよう、インタプリタは終了せず
+にメッセージだけを出力します。</p>
+<p>例:</p>
+<pre>END { p &quot;FOO&quot; }
+END { raise &quot;bar&quot;; p &quot;BAR&quot; }
+END { raise &quot;baz&quot;; p &quot;BAZ&quot; }
+
+=&gt; baz (RuntimeError)
+   bar (RuntimeError)
+   &quot;FOO&quot;</pre>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>あるいは、突然エラーになってインタプリタが終了します。
+retry #=&gt; -:1: retry outside of rescue clause</small><br />
+<a name="foottext:2" id="foottext:2" href="#footmark:2"><sup><small>*2</small></sup></a><small>あらい 2002-01-13: ensure は大域脱出を捕まえるので retry が (d) 
+に飛んでいるあまり良い例じゃないか</small><br />
+<a name="foottext:3" id="foottext:3" href="#footmark:3"><sup><small>*3</small></sup></a><small><a href="refm384.html">ruby 1.7 feature</a>: 1.7 での例外の一致判定は 
+<a href="refm050.html#L001187">Module#===</a> を用いて行われます</small><br />
+<a name="foottext:4" id="foottext:4" href="#footmark:4"><sup><small>*4</small></sup></a><small><a href="refm385.html">ruby 1.8 feature</a>: これは 1.8.1 から <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/21513">ruby-dev:21513</a><sup class="outside"><small>[外部]</small></sup></small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm020.html">UP</a>][<a href="refm025.html">&lt;-PREV</a>][<a href="refm027.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

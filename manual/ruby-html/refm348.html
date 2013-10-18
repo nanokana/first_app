@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>OptionParser</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm349.html" rel="next" />
+<link href="refm347.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm347.html">UP</a>][<a href="refm347.html">&lt;-PREV</a>][<a href="refm349.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006662" id="L006662">OptionParser</a></h1>
+<p><a href="refm347.html">optparse</a>
+<a href="refm349.html">optparse::チュートリアル</a>
+<a href="refm002.html">執筆者募集</a></p>
+<p>コマンドラインのオプションを取り扱うためのクラスです。
+オプションが指定された時に呼ばれるブロックを <a href="#L006691">OptionParser#on</a> メソッドで
+登録していきます。つまり、
+OptionParser を使う場合、基本的には</p>
+<ol>
+<li>OptionParser オブジェクト opt を生成する。</li>
+<li>オプションを取り扱うブロックを opt に登録する。</li>
+<li>opt.parse(ARGV) でコマンドラインを実際に parse する。</li>
+</ol>
+<p>というような流れになります。</p>
+<pre>require &quot;optparse&quot;
+ProgramConfig = Hash.new
+opts = OptionParser.new
+opts.on(&quot;-a&quot;){|v| ProgramConfig[:a] = true } # -a オプションがコマンドラインで指定されていた場合の動作。
+opts.parse!(ARGV)                            # 実際にコマンドラインの parse を行う。</pre>
+<h2><a name="L006663" id="L006663">デフォルトで利用可能なオプション</a></h2>
+<p>以下はデフォルトで利用可能なオプションです。オプションサマリには
+出てきません。</p>
+<dl>
+<dt><a name="L006664" id="L006664"><code>--help</code></a></dt>
+<dd>
+<p>オプションサマリを表示します。</p></dd>
+<dt><a name="L006665" id="L006665"><code>--version</code></a></dt>
+<dd>
+<p>定数 <code>::Version</code> が定義されていたら、それを表示します。</p></dd>
+</dl>
+<h2><a name="L006666" id="L006666">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L006667" id="L006667"><code>OptionParser.new(<var>banner</var>=<var>nil</var>, <var>width</var>=<var>32</var>, <var>indent</var> = ' '*<var>4</var>)</code></a>
+<dt><a name="L006668" id="L006668"><code>OptionParser.new(<var>banner</var>=<var>nil</var>, <var>width</var>=<var>32</var>, <var>indent</var> = ' '*<var>4</var>) {|<var>opt</var>| ...}</code></a></dt>
+<dd>
+<p>OptionParser オブジェクトを生成します。
+banner にはヘルプ(サマリ)の最初の部分に表示されるアプリケーションの説明
+などを文字列として与えます。
+width にはサマリの幅を数値で与えます。indent にはサマリのインデント
+を文字列として与えます。</p>
+<p>ブロックが与えられた場合、生成した OptionParser オブジェクトを引数としてブロックを評
+価します。つまり、以下のような書き方が可能です。</p>
+<pre>require 'optparse'
+OptionParser.new do |opt|
+
+  opt.on('-a') {|v| p v }
+  opt.on('-b') {|v| p v }
+
+  opt.parse!(ARGV)
+end</pre></dd>
+<dt><a name="L006669" id="L006669"><code>OptionParser.accept(<var>klass</var>, <var>pat</var> = /.*/){|<var>str</var>| ...}</code></a></dt>
+<dd>
+<p>オプションの引数を文字列から Ruby のオブジェクトに変換するための
+ブロックを登録します。すべての OptionParser インスタンスに共通です。
+klass にはクラスオブジェクトを与えます。pat には match メソッドを持ったオブジェクト
+(Regexp オブジェクトなど)を与えます。</p>
+<p>ブロックには、文字列から klass のインスタンスを生成して返すものを指定します。</p>
+<p><a href="#L006691">OptionParser#on</a> で klass を指定した場合、
+コマンドラインのオプションに与えられた引数はこの accept で登録したブロックで
+klass のインスタンスに変換されてから、
+OptionParser#on で登録したブロックに渡されます。</p>
+<pre>require &quot;optparse&quot;
+OptionParser.accept(Time) do |s,|
+  begin
+    Time.parse(s) if s
+  rescue
+    raise OptionParser::InvalidArgument, s
+  end
+end
+
+opts = OptionParser.new
+
+opts.on(&quot;-t&quot;, &quot;--time [TIME]&quot;, Time) do |time|
+  p time.class #=&gt; Time
+end
+
+opts.parse!(ARGV) </pre>
+<p>いくつかのクラスに対しては変換用のブロックがデフォルトで登録されて
+います。<a href="#L006706">デフォルトで利用可能な引数クラス</a>を参照
+して下さい。</p></dd>
+<dt><a name="L006670" id="L006670"><code>OptionParser.reject(<var>klass</var>)</code></a></dt>
+<dd>
+<p>accept で登録したブロックを削除します。</p></dd>
+</dl>
+<h2><a name="L006671" id="L006671">インスタンスメソッド</a></h2>
+<dl>
+<dt><a name="L006669" id="L006669"><code>accept(<var>klass</var>, <var>pat</var> = /.*/){|<var>str</var>| ...}</code></a></dt>
+<dd>
+<p>OptionParser.accept と同様ですが、登録したブロックはレシーバーに限定されます。</p></dd>
+<dt><a name="L006670" id="L006670"><code>reject(<var>klass</var>)</code></a></dt>
+<dd>
+<p>accept で登録したブロックを削除します。</p></dd>
+<dt><a name="L006672" id="L006672"><code>banner</code></a>
+<dt><a name="L006673" id="L006673"><code>banner= <var>heading</var></code></a></dt>
+<dd>
+<p>サマリの最初の部分を設定します。</p></dd>
+<dt><a name="L006674" id="L006674"><code>summary_width</code></a>
+<dt><a name="L006675" id="L006675"><code>summary_width= <var>width</var></code></a></dt>
+<dd>
+<p>サマリを表示するときの幅を数値で設定します。</p></dd>
+<dt><a name="L006676" id="L006676"><code>summary_indent</code></a>
+<dt><a name="L006677" id="L006677"><code>summary_indent= <var>indent</var></code></a></dt>
+<dd>
+<p>サマリを表示する時のインデントを文字列で設定します。</p></dd>
+<dt><a name="L006678" id="L006678"><code>program_name</code></a>
+<dt><a name="L006679" id="L006679"><code>program_name= <var>name</var></code></a></dt>
+<dd>
+<p>プログラムの名前を文字列で設定します。デフォルトは <code>$0</code> が使わ
+れます。</p></dd>
+<dt><a name="L006680" id="L006680"><code>version</code></a>
+<dt><a name="L006681" id="L006681"><code>version= <var>ver</var></code></a></dt>
+<dd>
+<p>プログラムのバージョンを設定します。</p></dd>
+<dt><a name="L006682" id="L006682"><code>release</code></a>
+<dt><a name="L006683" id="L006683"><code>release= <var>rel</var></code></a></dt>
+<dd>
+<p>Release code.</p></dd>
+<dt><a name="L006684" id="L006684"><code>ver</code></a></dt>
+<dd>
+<p><code>program_name</code>、<code>version</code> と <code>release</code> から生成したバー
+ジョンを表す文字列を返します。</p></dd>
+<dt><a name="L006685" id="L006685"><code>summarize(<var>to</var> = [], <var>width</var> = @<var>summary_width</var>, <var>max</var> = <var>width</var> - <var>1</var>, <var>indent</var>= @<var>summary_indent</var>)</code></a>
+<dt><a name="L006686" id="L006686"><code>summarize(<var>to</var> = [], <var>width</var> = @<var>summary_width</var>, <var>max</var> = <var>width</var> - <var>1</var>, <var>indent</var>= @<var>summary_indent</var>) {|<var>line</var>| ... }</code></a></dt>
+<dd>
+<p>サマリを <var>to</var> へと加えていきます。
+<var>to</var> には <var>&lt;&lt;</var> メソッドが定義されたオブジェクトを与えます。
+デフォルトは <code>[]</code> です。
+<var>width</var> にはサマリの幅を数値で与えます。デフォルトは self.summary_width です。
+サマリの最大幅を数値で与えます。デフォルトは <code>self.summary_width - 1</code>です。
+<var>indent</var> にはサマリのインデントを文字列で与えます。デフォルトは 
+<var>self.summary_indent</var> です。</p>
+<p>ブロックが与えられた場合、サマリの各行を引数としてブロックを評価します。
+この場合、ブロックの中で明示的に <var>to</var> へと加えていかない限り、
+<var>to</var> にサマリが加えられることはありません。</p></dd>
+<dt><a name="L006687" id="L006687"><code>help</code></a>
+<dt><a name="L006688" id="L006688"><code>to_s</code></a></dt>
+<dd>
+<p>サマリの文字列を返します。</p></dd>
+<dt><a name="L006689" id="L006689"><code>to_a</code></a></dt>
+<dd>
+<p>サマリの各行を要素とした配列を返します。</p></dd>
+<dt><a name="L006690" id="L006690"><code>separator(<var>str</var>)</code></a></dt>
+<dd>
+<p>サマリを表示する時に、オプションを区切るためのメソッドです。オプションにいくつかの種類がある場合に、サマリがわかりやすくなります。   
+区切りとして引数 str が表示されます。サマリには on メソッドを呼んだ順にオプションが表示されるので、
+区切りを挿入したいところで separator を呼びます。<a href="refm347.html#L006660">例</a>を参照してください。</p></dd>
+<dt><a name="L006691" id="L006691"><code>on(<var>short</var> [, <var>klass</var> [, <var>pat</var> [, <var>desc</var>]]]) {|<var>v</var>| ...}</code></a>
+<dt><a name="L006692" id="L006692"><code>on(<var>long</var>  [, <var>klass</var> [, <var>pat</var> [, <var>desc</var>]]]) {|<var>v</var>| ...}</code></a>
+<dt><a name="L006693" id="L006693"><code>on(<var>short</var>, <var>long</var> [, <var>klass</var> [, <var>pat</var> [, <var>desc</var>]]]) {|<var>v</var>| ...}</code></a></dt>
+<dd>
+<p>オプションを取り扱うためのブロックを登録します。</p>
+<p>short にはショートオプションを表す文字列を与えます。
+そのオプションが引数をとらない場合は、</p>
+<pre>on(&quot;-x&quot;){|boolean| ...}</pre>
+<p>となります。コマンドラインにオプションが存在した場合 true を引数と
+してブロックを評価します。
+ショートオプションが引数をとる場合は、</p>
+<pre>on(&quot;-x MANDATORY&quot;){|val| ...}</pre>
+<p>となります。&quot;MANDATORY&quot; の部分は任意の文字列で構いません。
+オプションの引数が必須でない場合は [] をつけて、</p>
+<pre>on(&quot;-x [OPTIONAL]&quot;){|val| ...}</pre>
+<p>となります。</p>
+<p>long にはロングオプションを表す文字列を与えます。ショートオプショ
+ンの時と同様に、</p>
+<pre>on(&quot;--long&quot;){|boolean| ...}
+on(&quot;--long MANDATORY&quot;){|val| ...}
+on(&quot;--long [OPTIONAL]&quot;){|val| ...}</pre>
+<p>と指定できます。</p>
+<p>ショートオプションとロングオプションを同時に登録することもできます。</p>
+<pre>opts.on(&quot;-r&quot;, &quot;--require LIBRARY&quot;){|lib| ...}</pre>
+<p>これは以下と同値です。</p>
+<pre>opts.on(&quot;-r LIBRARY&quot;){|lib| ...}
+opts.on(&quot;--require LIBRARY&quot;){|lib| ...}</pre>
+<p>klass にはクラスを与えます。    
+どのようなクラスを受け付けるかは、
+<a href="#L006706">デフォルトで利用可能な引数クラス</a>を参照して下さ
+い。OptionParser.accept や OptionParser#accept によって、受け付け
+るクラスを増やすことができます。登録されていないクラスが指定された
+場合、例外 ArgumentError を投げます。</p>
+<p>オプションの引数は accept で登録したブロックで klass のインスタンス
+に変換されてから、ブロックに渡されます。</p>
+<pre>opts.on(&quot;-w&quot;, &quot;--width N&quot;, Integer){|w| 
+  p w.class #=&gt; Integer
+}
+# ruby command --width=32
+
+opts.on(&quot;-o&quot;, &quot;--overwrite VALUE&quot;, TrueClass){|boolean| ...}
+# ruby command --overwrite yes</pre>
+<p>klass には可能な引数を列挙した配列やハッシュを
+与えることもできます。</p>
+<pre>opts.on(&quot;--protocol VALUE&quot;, [:http, :ftp, :https]){|w| 
+  p w
+}
+# ruby command --protocol=http #=&gt; :http
+
+opts.on(&quot;-c&quot;, &quot;--charset VALUE&quot;, {&quot;jis&quot; =&gt; &quot;iso-2022-jp&quot;, &quot;sjis&quot; =&gt; &quot;shift_jis&quot;}){|w| 
+  p w
+}
+# ruby command --charset=jis #=&gt; &quot;iso-2022-jp&quot;</pre>
+<p>コマンドに与えられた引数が配列やハッシュに含まれない場合、
+例外 OptionParser::InvalidArgument が parse 実行時に投げられます。</p>
+<p>pat にはオプションの引数に許すパターンを表す正規表現で与えます。
+コマンドに与えられた引数がパターンにマッチしない場合、
+例外 OptionParser::InvalidArgument が parse 実行時に投げられます。</p>
+<pre>opts.on(&quot;--username VALUE&quot;, /[a-zA-Z0-9_]+/){|name| ...}
+# ruby command --username=ruby_user
+# ruby command --username=ruby.user #=&gt; Error</pre>
+<p>desc にはオプションの説明を文字列で与えます。
+サマリに表示されます。</p></dd>
+<dt><a name="L006694" id="L006694"><code>on_head(<var>short</var> [, <var>long</var> [, <var>klass</var> [, <var>pat</var> [, <var>desc</var>]]]]) {...}</code></a>
+<dt><a name="L006695" id="L006695"><code>on_tail(<var>short</var> [, <var>long</var> [, <var>klass</var> [, <var>pat</var> [, <var>desc</var>]]]]) {...}</code></a></dt>
+<dd>
+<p><a href="#L006691">OptionParser#on</a>と同様の働きをします。
+on メソッドと違う点は、OptionParser オブジェクトが保持している
+リストの最初かあるいは最後にブロックを登録する点です。</p>
+<p>--version や --help の説明をサマリの最後に表示したい時に便利です。</p>
+<pre>opts.on_tail(&quot;-h&quot;, &quot;--help&quot;, &quot;Show this message&quot;) do
+  puts opts
+  exit
+end
+
+opts.on_tail(&quot;--version&quot;, &quot;Show version&quot;) do
+  puts OptionParser::Version.join('.')
+  exit
+end</pre></dd>
+<dt><a name="L006696" id="L006696"><code>order(*<var>argv</var>)</code></a>
+<dt><a name="L006697" id="L006697"><code>order(*<var>argv</var>){|<var>s</var>| ...}</code></a>
+<dt><a name="L006698" id="L006698"><code>order!(<var>argv</var> = <var>ARGV</var>)</code></a>
+<dt><a name="L006699" id="L006699"><code>order!(<var>argv</var> = <var>ARGV</var>) {|<var>s</var>| ...}</code></a></dt>
+<dd>
+<p>与えられた <var>argv</var> を順番にパースします。
+オプションではないコマンドの引数(下の例で言うと somefile)に出会うと、パースを中断します。
+ブロックが与えられている場合は、パースを中断せずに
+引数をブロックに渡してブロックを評価し、パースを継続します。argv を返します。</p>
+<p>order! は与えられた <var>argv</var> を破壊的にパースします。
+<var>argv</var> からオプションがすべて取り除かれます。</p>
+<pre>$ cat opt.rb
+require 'optparse'
+opt = OptionParser.new
+
+opt.on('-a [VAL]') {|v| p :a }
+opt.on('-b') {|v| p :b }
+
+opt.order!(ARGV)
+p ARGV
+
+$ ruby opt2.rb -a foo somefile -b
+:a
+[&quot;somefile&quot;, &quot;-b&quot;]</pre>
+<p>コマンドの引数 somefile よりも後ろにオプションを置くことができま
+せん。-b もコマンドのオプションではない引数として扱われてしまいます。</p></dd>
+<dt><a name="L006700" id="L006700"><code>permute(*<var>argv</var>)</code></a>
+<dt><a name="L006701" id="L006701"><code>permute!(<var>argv</var> = <var>ARGV</var>)</code></a></dt>
+<dd>
+<p>与えられた <var>argv</var> をパースします。
+オプションではないコマンドの引数(下の例で言うと somefile)があってもパースを中断しません。
+オプションでない引数の配列を返します。</p>
+<p>permute! は与えられた <var>argv</var> を破壊的にパースします。
+<var>argv</var> からオプションがすべて取り除かれます</p>
+<pre>$ cat opt.rb
+require 'optparse'
+opt = OptionParser.new
+
+opt.on('-a [VAL]') {|v| p :a }
+opt.on('-b ') {|v| p :b }
+
+opt.permute!(ARGV)
+p ARGV
+
+$ ruby opt2.rb -a foo somefile -b
+:a
+:b
+[&quot;somefile&quot;]</pre>
+<p>order と違いコマンドの引数 somefile よりも後ろにオプションを置くことが
+できます。</p></dd>
+<dt><a name="L006702" id="L006702"><code>parse(*<var>argv</var>)</code></a>
+<dt><a name="L006703" id="L006703"><code>parse!(<var>argv</var> = <var>ARGV</var>)</code></a></dt>
+<dd>
+<p>与えられた <var>argv</var> をパースします。
+permute と同様に振舞います。しかし、
+環境変数に <code>POSIXLY_CORRECT</code> が設定されている場合は、
+order と同様に振舞います。</p>
+<p>parse! は permute! と同様に <var>argv</var> を破壊的にをパースします。
+環境変数に <code>POSIXLY_CORRECT</code> が設定されている場合は、
+order! と同様に振舞います。</p></dd>
+<dt><a name="L006704" id="L006704"><code>load(<var>filename</var>)</code></a></dt>
+<dd>
+<p>file を読み込んで各行に対して parse を行ないます。</p></dd>
+<dt><a name="L006705" id="L006705"><code>environment(<var>env</var>)</code></a></dt>
+<dd>
+<p>環境変数 env に対して
+<a href="refm126.html#L002483">Shellwords.shellwords</a> を呼
+んで配列にしてから parse を行ないます。</p></dd>
+</dl>
+<h2><a name="L006706" id="L006706">デフォルトで利用可能な引数クラス</a></h2>
+<dl>
+<dt><a name="L006707" id="L006707">Object</a></dt>
+<dd>
+<p>any string, and no conversion. this is fall-back.</p>
+</dd>
+<dt><a name="L006708" id="L006708">String</a></dt>
+<dd>
+<p>any none-empty string, and no conversion.</p>
+</dd>
+<dt><a name="L006709" id="L006709">Integer</a></dt>
+<dd>
+<p>Ruby/C-like integer, octal for <code>0-7</code> sequence, binary for
+<code>0b</code>, hexadecimal for <code>0x</code>, and decimal for others; with
+optional sign prefix. Converts to <code>Integer</code>.</p>
+</dd>
+<dt><a name="L006710" id="L006710">Float</a></dt>
+<dd>
+<p>Float number format, and converts to <code>Float</code>.</p>
+</dd>
+<dt><a name="L006711" id="L006711">Numeric</a></dt>
+<dd>
+<p>Generic numeric format, and converts to <code>Integer</code> for integer
+format, <code>Float</code> for float format.</p>
+</dd>
+<dt><a name="L006712" id="L006712">OptionParser::DecimalInteger</a></dt>
+<dd>
+<p>Decimal integer format, to be converted to <code>Integer</code>.</p>
+</dd>
+<dt><a name="L006713" id="L006713">OptionParser::OctalInteger</a></dt>
+<dd>
+<p>Ruby/C like octal/hexadecimal/binary integer format, to be converted
+to <code>Integer</code>.</p>
+</dd>
+<dt><a name="L006714" id="L006714">OptionParser::DecimalNumeric</a></dt>
+<dd>
+<p>Decimal integer/float number format, to be converted to
+<code>Integer</code> for integer format, <code>Float</code> for float format.</p>
+</dd>
+<dt><a name="L006715" id="L006715">TrueClass</a></dt>
+<dd>
+<p>Boolean switch, which means whether it is present or not, whether it
+is absent or not with prefix <code>no-</code>, or it takes an argument
+<code>yes/no/true/false/+/-</code>.</p>
+</dd>
+<dt><a name="L006716" id="L006716">FalseClass</a></dt>
+<dd>
+<p>Similar to <em class="XXINVALIDXX">TrueClass</em>, but defaulted to <code>false</code>.</p>
+</dd>
+<dt><a name="L006717" id="L006717">Array</a></dt>
+<dd>
+<p>List of strings separated by &quot;,&quot;</p>
+</dd>
+</dl>
+<h2><a name="L006718" id="L006718">例外</a></h2>
+<h3><a name="L006719" id="L006719">OptionParser::ParseError</a></h3>
+<p>OptionParser の例外クラスの基底クラスです。</p>
+<h3><a name="L006720" id="L006720">OptionParser::AmbiguousOption</a></h3>
+<p>補完が曖昧にしかできないオプションがあった場合に投げられます。
+スーパークラスは OptionParser::ParseError です。</p>
+<h3><a name="L006721" id="L006721">OptionParser::NeedlessArgument</a></h3>
+<p>引数を取らないはずのオプションに引数が与えられた場合に
+投げられます。スーパークラスは OptionParser::ParseError です。</p>
+<h3><a name="XXINVALIDXX" id="XXINVALIDXX">OptionParser::MissingArgument </a></h3>
+<p>引数が必要なオプションに引数が与えられなかった場合に
+投げられます。スーパークラスは OptionParser::ParseError です。</p>
+<h3><a name="L006723" id="L006723">OptionParser::InvalidOption</a></h3>
+<p>定義されていないオプションが与えられた場合に、
+投げられます。スーパークラスは OptionParser::ParseError です。</p>
+<h3><a name="L006724" id="L006724">OptionParser::InvalidArgument</a></h3>
+<p>オプションの引数が指定されたパターンにマッチしない時に投げられます。
+スーパークラスは OptionParser::ParseError です。</p>
+<h3><a name="L006725" id="L006725">OptionParser::AmbiguousArgument</a></h3>
+<p>オプションの引数が曖昧にしか補完できない場合に投げられます。
+スーパークラスは OptionParser::InvalidArgument です。</p>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm347.html">UP</a>][<a href="refm347.html">&lt;-PREV</a>][<a href="refm349.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

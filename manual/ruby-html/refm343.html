@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>mkmf</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm344.html" rel="next" />
+<link href="refm342.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm342.html">&lt;-PREV</a>][<a href="refm344.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006565" id="L006565">mkmf</a></h1>
+<p>Ruby の拡張ライブラリのための Makefile を作成するライブラリです。通常 
+extconf.rb という名の ruby スクリプトの中で require され、このスクリプ
+トを実行することで Makefile を作成するのが慣習となっています。</p>
+<p>拡張ライブラリの作り方(extconf.rbの書き方)に関しては ruby のアーカイブ
+に含まれる <a href="refm532.html">ruby-src:README.EXT</a> (日本語版は 
+<a href="refm533.html">ruby-src:README.EXT.ja</a>)も参照してください。</p>
+<h2><a name="L006566" id="L006566">使い方</a></h2>
+<p>架空の拡張ライブラリ foo.so を作成することを考えます。この拡張ライブラ
+リを作成するためには、ヘッダファイル bar.h とライブラリ libbar.a の関
+数 baz() が必要だとします。このための extconf.rb は以下のように書きま
+す。</p>
+<pre>require 'mkmf'
+
+dir_config('bar')
+if have_header('bar.h') and have_library('bar', 'baz')
+  create_makefile('foo')
+end</pre>
+<p>そして、拡張ライブラリを作成、インストールするには以下のようにします。</p>
+<pre>$ ruby extconf.rb
+$ make
+$ make site-install</pre>
+<p><code>dir_config('bar')</code> により、ヘッダファイルのパス、ライブラリのパス
+を以下のように指定できます。</p>
+<pre>$ ruby extconf.rb --with-bar-include=/usr/local/include \
+                  --with-bar-lib=/usr/local/lib
+
+あるいは
+
+$ ruby extconf.rb --with-bar-dir=/usr/local</pre>
+<p>詳細は <a href="#L006597">dir_config</a> を参照してください。</p>
+<h2><a name="L006567" id="L006567">configure オプション</a></h2>
+<p>ここでの configure オプションとは ruby インタプリタ作成時に指定された 
+configure スクリプトのオプション、または extconf.rb 実行時のオプショ
+ンのことです。extconf.rb の作成者は任意のオプションを定義できます。
+(<a href="#L006593">arg_config</a> を参照)。</p>
+<p>また、以下のオプションがデフォルトで利用可能です。</p>
+<dl>
+<dt><a name="L006568" id="L006568">--with-opt-include=<var>directory</var></a></dt>
+<dd>
+<p>ヘッダファイルを探索するディレクトリ <var>directory</var> を追加します。</p>
+</dd>
+<dt><a name="L006569" id="L006569">--with-opt-lib=<var>directory</var></a></dt>
+<dd>
+<p>ライブラリファイルを探索するディレクトリ <var>directory</var> を追加します。</p>
+</dd>
+<dt><a name="L006570" id="L006570">--with-opt-dir=<var>directory</var></a></dt>
+<dd>
+<p>ヘッダファイル、ライブラリファイルを探索するディレクトリ 
+<var>directory</var>/include、<var>directory</var>/lib をそれぞれ追加します。</p>
+</dd>
+<dt><a name="L006571" id="L006571">--with-<var>target</var>-include=<var>directory</var></a></dt>
+<dd>
+<p>extconf.rb の中で <a href="#L006597">dir_config</a>(<var>target</var>) を実行していればこ
+のオプションを指定できます。</p>
+<p>ヘッダファイルを探索するディレクトリ <var>directory</var> を追加します。</p>
+</dd>
+<dt><a name="L006572" id="L006572">--with-<var>target</var>-lib=<var>directory</var></a></dt>
+<dd>
+<p>extconf.rb の中で <a href="#L006597">dir_config</a>(<var>target</var>) を実行していればこ
+のオプションを指定できます。</p>
+<p>ライブラリを探索するディレクトリ <var>directory</var> を追加します。</p>
+</dd>
+<dt><a name="L006573" id="L006573">--with-<var>target</var>-dir=<var>directory</var></a></dt>
+<dd>
+<p>extconf.rb の中で <a href="#L006597">dir_config</a>(<var>target</var>) を実行していればこ
+のオプションを指定できます。</p>
+<p>ヘッダファイル、ライブラリファイルを探索するディレクトリ 
+<var>directory</var>/include、<var>directory</var>/lib をそれぞれ追加します。</p>
+</dd>
+</dl>
+<h2><a name="L006574" id="L006574">depend ファイル</a></h2>
+<p>カレントディレクトリに depend という名前のファイルがあればこの内容は生
+成される Makefile の最後に追加されます。</p>
+<p>このファイルは、ソースファイルの依存関係を記述するために使用します。例
+えば、拡張ライブラリのソース foo.c が foo.h をインクルードしていれば
+foo.h が更新されたときにも foo.c を再コンパイルしたくなります。</p>
+<p>このような依存関係を記述するには depend ファイルに以下を書きます。</p>
+<pre>foo.o: foo.c foo.h</pre>
+<p>これは、foo.o が foo.c と foo.h に依存し、これらが更新されれば foo.o 
+は再作成されることを示します。</p>
+<p>C コンパイラによっては、このような出力を自動生成することができます。こ
+のためのオプションは -M として知られています。</p>
+<pre>cc -M *.c &gt; depend</pre>
+<p>は、上記の出力を得ます。</p>
+<p>gcc では、さらに -MM というオプションがあります。これは(通常更新するこ
+とのないstdio.hなど)システムのヘッダファイルを依存ファイルとみなしませ
+ん。(#include &lt;...&gt; の形式で参照されるヘッダファイルをシステムのヘッダ
+ファイルとみなすようです)</p>
+<pre>gcc -MM *.c &gt; depend</pre>
+<p>のように使います。</p>
+<p>depend ファイルを他の用途で使用しては行けません。mkmf はこの内容を 
+Makefile に出力する際に多少の加工を行う場合があります。</p>
+<h2><a name="L006575" id="L006575">make ターゲット</a></h2>
+<p>extconf.rb が生成した Makefile には以下のターゲットが定義されています。</p>
+<dl>
+<dt><a name="L006576" id="L006576">all</a></dt>
+<dd>
+<p>拡張ライブラリを作成します。</p>
+</dd>
+<dt><a name="L006577" id="L006577">clean</a></dt>
+<dd>
+<p>作成した拡張ライブラリ、オブジェクトファイルなどを削除します。</p>
+</dd>
+<dt><a name="L006578" id="L006578">distclean</a></dt>
+<dt><a name="L006579" id="L006579">realclean</a></dt>
+<dd>
+<p>clean に加えて Makefile extconf.h(<a href="#L006596">create_header</a>参照) core ruby 
+などを削除します。</p>
+</dd>
+<dt><a name="L006580" id="L006580">install</a></dt>
+<dt><a name="L006581" id="L006581">site-install</a></dt>
+<dd>
+<p>作成した拡張ライブラリを <a href="#L006608">$archdir</a> にインストールします。カレン
+トディレクトリにディレクトリ lib があればその配下の ruby スクリプト
+(.rb ファイル)をディレクトリ階層ごと <a href="#L006607">$libdir</a> にインストールし
+ます。</p>
+<p>独立したライブラリとしてコンパイルされた場合、拡張ライブラリは <a href="#L006610">$sitearchdir</a> に、
+ruby スクリプトは <a href="#L006609">$sitelibdir</a> にインストールされます。</p>
+</dd>
+</dl>
+<h2><a name="L006582" id="L006582">関数</a></h2>
+<p>以下は、extconf.rb を記述するのに有用な関数です。ヘッダファイルの存在
+チェック、ライブラリの存在チェックなど、システム間の差異を調べシステム
+に適した Makefile を生成するためにこれらの関数が必要となります。</p>
+<dl>
+<dt><a name="L006583" id="L006583"><code>try_link(<var>src</var>[, <var>opt</var>])</code></a></dt>
+<dd>
+<p>C ソース <var>src</var> をコンパイル、リンクします。リンクの結果が正常
+かどうかを true または false で返します。</p>
+<p><var>opt</var>が指定されていればリンク時のコマンド引数として渡されます。
+このメソッドは、<a href="#L006615">$CFLAGS</a>、<a href="#L006616">$LDFLAGS</a> の値もコンパイラ、リ
+ンカに渡します。</p>
+<p><var>src</var> には直接 C ソースを文字列で書きます。</p></dd>
+<dt><a name="L006584" id="L006584"><code>try_cpp(<var>src</var>[, <var>opt</var>])</code></a></dt>
+<dd>
+<p>C ソース <var>src</var> をプリプロセスし、その結果が正常かどうかを true 
+または false で返します。</p>
+<p><code><a href="#L006615">$CFLAGS</a> <var>opt</var></code> をプリプロセッサの引数に渡します。</p>
+<p><var>src</var> には直接 C ソースを文字列で書きます。</p>
+<p>このメソッドはヘッダファイルの存在チェックなどに使用します。</p></dd>
+<dt><a name="L006585" id="L006585"><code>egrep_cpp(<var>pat</var>, <var>src</var>[, <var>opt</var>])</code></a></dt>
+<dd>
+<p>C ソース <var>src</var> をプリプロセスし、その結果が正規表現 <var>pat</var> 
+にマッチするかどうかを判定します。<var>pat</var> には、<em>egrepの</em>正
+規表現を文字列で指定します。</p>
+<p><code> <a href="#L006604">CPP</a> <a href="#L006615">$CFLAGS</a> <var>opt</var> <code>| egrep</code> <var>pat</var> </code></p>
+<p>を実行し、その結果が正常かどうかを true または false で返します。</p>
+<p><var>src</var> には直接 C ソースを文字列で書きます。</p>
+<p>このメソッドはヘッダファイルに関数などの宣言があるかどうかを検
+査するのに使用します。</p></dd>
+<dt><a name="L006586" id="L006586"><code>try_run(<var>src</var>[, <var>opt</var>])</code></a></dt>
+<dd>
+<p>C ソース <var>src</var> をコンパイルし、生成された実行ファイルを実行し
+た結果が正常かどうかを true または false で返します。</p>
+<p><var>src</var> には直接 C ソースを文字列で書きます。</p></dd>
+<dt><a name="L006587" id="L006587"><code>install_rb(<var>mfile</var>, <var>dest</var>[, <var>srcdir</var>])</code></a></dt>
+<dd>
+<p><em> このメソッドは、<a href="#L006599">create_makefile</a> が使用します </em></p>
+<p>ディレクトリ <var>srcdir</var><code>/lib</code> 配下の ruby スクリプト
+(<code>.rb</code>ファイル)を<var>dest</var> にインストールするための Makefile 
+規則を <var>mfile</var> に出力します。<var>mfile</var> は <a href="refm045.html">IO</a> クラスの
+インスタンスです。</p>
+<p><var>srcdir</var><code>/lib</code> のディレクトリ構造はそのまま <var>dest</var> 配
+下に反映されます。</p>
+<p>引数 <var>srcdir</var> のデフォルトは &quot;.&quot; です。</p></dd>
+<dt><a name="L006588" id="L006588"><code>append_library(<var>libs</var>, <var>lib</var>)</code></a></dt>
+<dd>
+<p>ライブラリ <var>lib</var> をライブラリのリスト <var>libs</var> の先頭に追加
+した結果を返します。</p>
+<p>引数 <var>libs</var> とこのメソッドの戻り値はリンカに渡す引数形式の文字
+列です。これは UNIX では、</p>
+<pre>&quot;-lfoo -lbar&quot;</pre>
+<p>であり、MS-Windows などでは</p>
+<pre>&quot;foo.lib bar.lib&quot;</pre>
+<p>です。引数 <var>lib</var> は、この例での <code>&quot;foo&quot;</code> や <code>&quot;bar&quot;</code> に
+あたります。</p></dd>
+<dt><a name="L006589" id="L006589"><code>have_library(<var>lib</var>[, <var>func</var>])</code></a></dt>
+<dd>
+<p>ライブラリ <var>lib</var> がシステムに存在し、関数 <var>func</var> が定義され
+ているかどうかを検査します。検査に成功すれば <a href="#L006614">$libs</a> に 
+<var>lib</var> を追加し true を返します。そうでなければ false を返しま
+す。</p>
+<p><var>func</var> の指定を省略した場合、関数の存在は検査しません。</p>
+<p><var>func</var> が nil または空文字列(&quot;&quot;) であれば特に何も検査をせずに、
+無条件で <var>lib</var> を追加します。</p></dd>
+<dt><a name="L006590" id="L006590"><code>find_library(<var>lib</var>, <var>func</var>[, <var>path1</var>[, <var>path2</var>[, ...]]])</code></a></dt>
+<dd>
+<p>関数 <var>func</var> が定義されたライブラリ <var>lib</var> を探します。最初
+にパス指定なしで検査し、次に<var>path1</var>を指定、ダメなら<var>path2</var> 
+を指定・・・といったように順にリンク可能なライブラリを探索します。</p>
+<p>検査に成功すれば <var>lib</var> を <a href="#L006614">$libs</a> に追加し、見つかったパス
+を <a href="#L006616">$LDFLAGS</a> に追加して true を返します。指定されたすべての
+パスを検査してもライブラリ <var>lib</var> が見つからなければ false を返
+します。</p>
+<p><var>path</var> の指定がなければ<a href="#L006589">have_library</a>と同じです。</p></dd>
+<dt><a name="L006591" id="L006591"><code>have_func(<var>func</var>[, <var>header</var>])</code></a></dt>
+<dd>
+<p>関数 <var>func</var> が存在するかどうかを検査します。</p>
+<p><var>func</var> が存在すれば <a href="#L006613">$defs</a> に <code>-DHAVE_<var>func</var></code>
+(<var>func</var> は大文字に変換されます)を追加して true を返します。そ
+うでなければ false を返します。</p>
+<p><var>header</var> には、関数<var>func</var>を使用するのに必要なヘッダファイ
+ル名を指定します。これは引数の型チェックのためではなく(そのような
+検査はこのメソッドでは行われません)関数が実際にはマクロで定義され
+ている場合などのために使用します。</p></dd>
+<dt><a name="L006592" id="L006592"><code>have_header(<var>header</var>)</code></a></dt>
+<dd>
+<p>ヘッダファイル <var>header</var> が存在するかどうかを検査します。</p>
+<p><var>header</var> が存在すれば <a href="#L006613">$defs</a> に、
+<code>-DHAVE_<var>header</var></code> (<var>header</var> は実際には大文字に変換され 
+文字 &quot;-&quot;, &quot;.&quot;  が、&quot;_&quot; に置き換えられます)を追加して true を返しま
+す。そうでなければ false を返します。</p></dd>
+<dt><a name="L006593" id="L006593"><code>arg_config(<var>config</var>[, <var>default</var>])</code></a></dt>
+<dd>
+<p><a href="#L006567">configure オプション</a> --<var>config</var> の値を返します。値が設定
+されていなければ <var>default</var> を返します。</p>
+<p>extconf.rb の場合、</p>
+<pre>ruby extconf.rb --foo --bar=baz</pre>
+<p>と実行すれば
+arg_config(&quot;--foo&quot;) の値は true、arg_config(&quot;--bar&quot;) の値は &quot;baz&quot; 
+です。</p></dd>
+<dt><a name="L006594" id="L006594"><code>with_config(<var>config</var>[, <var>default</var>])</code></a></dt>
+<dd>
+<p><a href="#L006593">arg_config</a> と同じですが、<code>--with-<var>config</var></code> オプショ
+ンの値だけを参照します。</p></dd>
+<dt><a name="L006595" id="L006595"><code>enable_config(<var>config</var>[, <var>default</var>])</code></a></dt>
+<dd>
+<p><a href="#L006593">arg_config</a> と同じですが、<code>--enable-<var>config</var></code> オプショ
+ン、または<code>--disable-<var>config</var></code> オプションの値だけを参照しま
+す。</p></dd>
+<dt><a name="L006596" id="L006596"><code>create_header()</code></a></dt>
+<dd>
+<p><a href="#L006591">have_func</a>などの検査結果を元に</p>
+<pre>#define HAVE_FUNC 1
+#define HAVE_HEADER_H 1</pre>
+<p>などを定義した extconf.h ファイルを生成します。</p></dd>
+<dt><a name="L006597" id="L006597"><code>dir_config(<var>target</var>[, <var>default</var>])</code></a>
+<dt><a name="L006598" id="L006598"><code>dir_config(<var>target</var>[, <var>idefault</var>, <var>ldefault</var>])</code></a></dt>
+<dd>
+<p>システムに標準では存在しないヘッダファイルやライブラリがあるディレ
+クトリを extconf.rb の利用者が指定できるようにします。</p>
+<p>最初の形式では、<a href="#L006567">configure オプション</a> 
+<code>--with-<var>target</var>-dir=<var>path</var></code> が指定されていれば、
+<a href="#L006615">$CFLAGS</a> に &quot;-I<var>path</var>/include&quot; を <a href="#L006616">$LDFLAGS</a> に 
+&quot;-L<var>path</var>/lib&quot; を追加します。</p>
+<p><code>--with-<var>target</var>-dir</code> の代わりに <a href="#L006567">configure オプション</a> 
+<code>--with-<var>target</var>-include</code>、<code>--with-<var>target</var>-lib</code> 
+が指定されていれば、これらの値を <code>$CFLAGS</code>、<code>$LDFLAGS</code> に
+それぞれ追加します。</p>
+<p><a href="#L006567">configure オプション</a>がいずれも指定されていなければ、省略可能な引数
+<var>deafult</var>、<var>idefault</var>、<var>ldefault</var> が使用されます。最初
+の形式では、<code>&quot;-I<var>default</var>/include&quot;</code>、
+<code>&quot;-L<var>default</var>/lib&quot;</code> をそれぞれ追加し、二番目の形式では 
+<code>&quot;-I<var>idefault</var>&quot;</code>、<code>&quot;-L<var>ldefault</var>&quot;</code> をそれぞれ追加
+します。</p></dd>
+<dt><a name="L006599" id="L006599"><code>create_makefile(<var>target</var>[, <var>srcdir</var>])</code></a></dt>
+<dd>
+<p><a href="#L006589">have_library</a>などの各種検査の結果を元に 
+拡張ライブラリ <var>target</var>.so を作成する Makefile を生成します。</p>
+<p><var>srcdir</var> は make 変数 srcdir の値になり、これにはソー
+スがあるディレクトリ名を指定します。省略した場合は、
+extconf.rb があるディレクトリです。</p>
+<p>extconf.rb は普通このメソッドの呼び出しで終ります。</p></dd>
+</dl>
+<h2><a name="L006600" id="L006600">定数</a></h2>
+<dl>
+<dt><a name="L006601" id="L006601"><code>CONFIG</code></a></dt>
+<dd>
+<p><a href="refm344.html#L006627">Config::MAKEFILE_CONFIG</a> と同じです。</p></dd>
+<dt><a name="L006602" id="L006602"><code>CFLAGS</code></a></dt>
+<dd>
+<p>この値は、Makefileにも反映されます。</p></dd>
+<dt><a name="L006603" id="L006603"><code>LINK</code></a></dt>
+<dd>
+<p>リンクを検査するときのコマンドラインのフォーマットです。
+<a href="#L006583">try_link</a>などが使用します。</p></dd>
+<dt><a name="L006604" id="L006604"><code>CPP</code></a></dt>
+<dd>
+<p>プリプロセスを検査するときのコマンドラインのフォーマットです。
+<a href="#L006584">try_cpp</a>などが使用します。</p></dd>
+</dl>
+<h2><a name="L006605" id="L006605">グローバル変数</a></h2>
+<dl>
+<dt><a name="L006606" id="L006606"><code>$srcdir</code></a></dt>
+<dd>
+<p>ruby インタプリタを make したときのソースディレクトリです。</p></dd>
+<dt><a name="L006607" id="L006607"><code>$libdir</code></a></dt>
+<dd>
+<p>ruby のライブラリを置くディレクトリです。
+通常 <code>/usr/local/lib/ruby/<var>version</var></code> です。</p></dd>
+<dt><a name="L006608" id="L006608"><code>$archdir</code></a></dt>
+<dd>
+<p>マシン固有のライブラリを置くディレクトリです。
+通常 <code>/usr/local/lib/ruby/<var>version</var>/<var>arch</var></code> です。</p></dd>
+<dt><a name="L006609" id="L006609"><code>$sitelibdir</code></a></dt>
+<dd>
+<p>サイト固有のライブラリを置くディレクトリです。
+通常 <code>/usr/local/lib/ruby/site_ruby/<var>version</var></code> です。</p></dd>
+<dt><a name="L006610" id="L006610"><code>$sitearchdir</code></a></dt>
+<dd>
+<p>サイト固有でかつマシン固有のライブラリを置くディレクトリです。
+通常 <code>/usr/local/lib/ruby/site_ruby/<var>version</var>/<var>arch</var></code> です。</p></dd>
+<dt><a name="L006611" id="L006611"><code>$hdrdir</code></a></dt>
+<dd>
+<p>ruby のヘッダファイル <code>ruby.h</code> が存在するディレクトリです。
+通常 <code>/usr/local/lib/ruby/<var>version</var>/<var>arch</var></code> です。</p></dd>
+<dt><a name="L006612" id="L006612"><code>$topdir</code></a></dt>
+<dd>
+<p>拡張ライブラリを make するためのヘッダファイル、ライブラリ等が存在
+するディレクトリです。</p>
+<p>通常 <code>/usr/local/lib/ruby/<var>version</var>/<var>arch</var></code> です。</p></dd>
+<dt><a name="L006613" id="L006613"><code>$defs</code></a></dt>
+<dd>
+<p>拡張ライブラリをコンパイルするときのマクロ定義を指定する配列です。</p>
+<p><a href="#L006591">have_func</a>、<a href="#L006592">have_header</a> の検査結果はこの配列の要素になり</p>
+<pre>[&quot;-DHAVE_FUNC&quot;, &quot;-DHAVE_HEADER_H&quot;]</pre>
+<p>といった値になります。</p>
+<p><a href="#L006596">create_header</a> は、この変数の値を参照してヘッダファイルを生成
+します。</p></dd>
+<dt><a name="L006614" id="L006614"><code>$libs</code></a></dt>
+<dd>
+<p>拡張ライブラリをリンクするときに一緒にリンクされるライブラリを指定
+する文字列です。</p>
+<p><a href="#L006589">have_library</a>、<a href="#L006590">find_library</a> の検査結果はこの文字列に</p>
+<pre>&quot;-lfoo -lbar&quot;</pre>
+<p>のように間に空白を置いて連結されます。</p></dd>
+<dt><a name="L006615" id="L006615"><code>$CFLAGS</code></a></dt>
+<dd>
+<p>拡張ライブラリをコンパイルするときの C コンパイラのオプション、ヘッ
+ダファイルのディレクトリを指定する文字列です。</p>
+<p><a href="#L006597">dir_config</a> はこの変数に値 &quot;-Idir&quot; を追加します。</p></dd>
+<dt><a name="L006616" id="L006616"><code>$LDFLAGS</code></a></dt>
+<dd>
+<p>拡張ライブラリをリンクするときのリンカのオプション、ライブラリファ
+イルのディレクトリを指定する文字列です。</p>
+<p><a href="#L006590">find_library</a>、<a href="#L006597">dir_config</a> はこの変数に値 &quot;-Ldir&quot; を追加
+します。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm342.html">&lt;-PREV</a>][<a href="refm344.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

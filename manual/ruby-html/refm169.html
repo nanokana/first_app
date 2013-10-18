@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Socket::Constants</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm170.html" rel="next" />
+<link href="refm168.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm159.html">UP</a>][<a href="refm168.html">&lt;-PREV</a>][<a href="refm170.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L003173" id="L003173">Socket::Constants</a></h1>
+<p>ソケット操作の指定のための定数を定義したモジュール。このモジュー
+ルをインクルードすれば、定数(AF_INETなど)を直接参照できます。</p>
+<p>これらの定数は<a href="refm168.html">Socket</a>の定数としても定義されています。</p>
+<h2><a name="L003174" id="L003174">アドレスファミリー</a></h2>
+<dl>
+<dt><a name="L003175" id="L003175"><code>AF_INET</code></a>
+<dt><a name="L003176" id="L003176"><code>AF_UNSPEC</code></a>
+<dt><a name="L003177" id="L003177"><code>AF_INET6</code></a>
+<dt><a name="L003178" id="L003178"><code>AF_UNIX</code></a>
+<dt><a name="L003179" id="L003179"><code>AF_AX25</code></a>
+<dt><a name="L003180" id="L003180"><code>AF_IPX</code></a>
+<dt><a name="L003181" id="L003181"><code>AF_APPLETALK</code></a></dt>
+<dd>
+<p><a href="refm168.html#L003145">Socket.open</a> の第一引数 domain に使用します。</p></dd>
+</dl>
+<h2><a name="L003182" id="L003182">ソケットタイプ</a></h2>
+<dl>
+<dt><a name="L003183" id="L003183"><code>SOCK_STREAM</code></a>
+<dt><a name="L003184" id="L003184"><code>SOCK_DGRAM</code></a>
+<dt><a name="L003185" id="L003185"><code>SOCK_RAW</code></a>
+<dt><a name="L003186" id="L003186"><code>SOCK_RDM</code></a>
+<dt><a name="L003187" id="L003187"><code>SOCK_SEQPACKET</code></a>
+<dt><a name="L003188" id="L003188"><code>SOCK_PACKET</code></a></dt>
+<dd>
+<p><a href="refm168.html#L003145">Socket.open</a> の第二引数 type に使用します。</p></dd>
+</dl>
+<h2><a name="L003189" id="L003189">IPプロトコル</a></h2>
+<dl>
+<dt><a name="L003190" id="L003190"><code>IPPROTO_IP</code></a>
+<dt><a name="L003191" id="L003191"><code>IPPROTO_ICMP</code></a>
+<dt><a name="L003192" id="L003192"><code>IPPROTO_TCP</code></a>
+<dt><a name="L003193" id="L003193"><code>IPPROTO_UDP</code></a>
+<dt><a name="L003194" id="L003194"><code>IPPROTO_RAW</code></a>
+<dt><a name="L003195" id="L003195"><code>IPPROTO_IGMP</code></a>
+<dt><a name="L003196" id="L003196"><code>IPPROTO_GGP</code></a>
+<dt><a name="L003197" id="L003197"><code>IPPROTO_EGP</code></a>
+<dt><a name="L003198" id="L003198"><code>IPPROTO_PUP</code></a>
+<dt><a name="L003199" id="L003199"><code>IPPROTO_IDP</code></a>
+<dt><a name="L003200" id="L003200"><code>IPPROTO_HELLO</code></a>
+<dt><a name="L003201" id="L003201"><code>IPPROTO_ND</code></a>
+<dt><a name="L003202" id="L003202"><code>IPPROTO_TP</code></a>
+<dt><a name="L003203" id="L003203"><code>IPPROTO_XTP</code></a>
+<dt><a name="L003204" id="L003204"><code>IPPROTO_EON</code></a>
+<dt><a name="L003205" id="L003205"><code>IPPROTO_BIP</code></a>
+<dt><a name="L003206" id="L003206"><code>IPPROTO_MAX</code></a></dt>
+<dd>
+<p><a href="refm160.html#L003062">getsockopt</a>, <a href="refm160.html#L003066">setsockopt</a> の level 引数に使用します。</p>
+<p>また、<a href="refm168.html#L003145">Socket.open</a> の
+第一引数 domain に AF_INET もしくは AF_INET6,
+第二引数 type に SOCK_RAW を指定した場合の、
+第三引数 protocol にも使用します。</p>
+<p>なお、AF_INET で SOCK_STREAM な場合には IPPROTO_TCP を使用できますが、
+その場合は 0 を指定しても同じ結果を得られますので通常は使用されません。
+AF_INET で SOCK_DGRAM の場合の IPPROTO_UDP も同様です。</p></dd>
+</dl>
+<h2><a name="L003207" id="L003207">フラグ</a></h2>
+<dl>
+<dt><a name="L003208" id="L003208"><code>AI_PASSIVE</code></a>
+<dt><a name="L003209" id="L003209"><code>AI_CANONNAME</code></a>
+<dt><a name="L003210" id="L003210"><code>AI_NUMERICHOST</code></a></dt>
+<dd>
+<p><a href="refm168.html#L003148">Socket.getaddrinfo</a> の flags 引数に使用します。</p></dd>
+</dl>
+<h2><a name="L003211" id="L003211">shutdown の how</a></h2>
+<dl>
+<dt><a name="L003212" id="L003212"><code>SHUT_RD</code></a>
+<dt><a name="L003213" id="L003213"><code>SHUT_RDWR</code></a>
+<dt><a name="L003214" id="L003214"><code>SHUT_WR</code></a></dt>
+<dd>
+<p><a href="refm160.html#L003067">shutdown</a> の how 引数に使用します。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm159.html">UP</a>][<a href="refm168.html">&lt;-PREV</a>][<a href="refm170.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

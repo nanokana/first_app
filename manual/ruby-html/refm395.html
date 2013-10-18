@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Ruby FAQ</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm396.html" rel="next" />
+<link href="refm394.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm394.html">&lt;-PREV</a>][<a href="refm396.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L009205" id="L009205">Ruby FAQ</a></h1>
+<ol>
+<li><a href="refm396.html">一般的な質問</a></li>
+<li><a href="refm397.html">変数、定数、引数</a></li>
+<li><a href="refm399.html">ブロック付きメソッド呼び出し</a>（<a href="refm398.html">イテレータ</a>）</li>
+<li><a href="refm400.html">構文</a></li>
+<li><a href="refm401.html">メソッド</a></li>
+<li><a href="refm402.html">クラス、モジュール</a></li>
+<li><a href="refm403.html">組み込みライブラリ</a></li>
+<li><a href="refm404.html">拡張ライブラリ</a></li>
+<li><a href="refm405.html">ドキュメントされていない機能</a></li>
+<li><a href="refm406.html">日本語の取り扱い</a></li>
+<li><a href="refm407.html">Rubyの処理系について</a></li>
+</ol>
+<h2><a name="L009206" id="L009206">一般的な質問</a></h2>
+<ul>
+<li><a href="refm396.html#L009219">1.1 Rubyとは何ですか</a></li>
+<li><a href="refm396.html#L009220">1.2 名前の由来を教えてください</a></li>
+<li><a href="refm396.html#L009221">1.3 Rubyの歴史を教えてください</a></li>
+<li><a href="refm396.html#L009222">1.4 どこで手に入りますか</a></li>
+<li><a href="refm396.html#L009223">1.5 Rubyのホームページを教えてください</a></li>
+<li><a href="refm396.html#L009224">1.6 Rubyのメーリングリストはありますか</a></li>
+<li><a href="refm396.html#L009225">1.7 メイリングリストの過去メールを調べたいのですが</a></li>
+<li><a href="refm396.html#L009226">1.8 rubyistとruby hackerの違いは</a></li>
+<li><a href="refm396.html#L009227">1.9 &quot;Ruby&quot;と&quot;ruby&quot;はどっちが正しいのですか</a></li>
+<li><a href="refm396.html#L009228">1.10 Rubyの参考書を教えてください</a></li>
+<li><a href="refm396.html#L009229">1.11 マニュアルを読んでも理解できないところがあるのですが</a></li>
+<li><a href="refm396.html#L009230">1.12 Ruby のキャラクターは羊？</a></li>
+<li><a href="refm396.html#L009231">1.13 バグ報告はどこへ行えばよいでしょう？</a></li>
+</ul>
+<h2><a name="L009207" id="L009207">変数、定数、引数</a></h2>
+<ul>
+<li><a href="refm397.html#L009234">2.1 変数や定数への代入によりオブジェクトはコピーされますか</a></li>
+<li><a href="refm397.html#L009235">2.2 ローカル変数のスコープはどのように決められていますか</a></li>
+<li><a href="refm397.html#L009236">2.3 ローカル変数はいつ参照可能になるのでしょうか</a></li>
+<li><a href="refm397.html#L009237">2.4 定数のスコープはどのように決められていますか</a></li>
+<li><a href="refm397.html#L009238">2.5 実引数は仮引数にどのように渡されますか</a></li>
+<li><a href="refm397.html#L009239">2.6 仮引数に代入すると実引数に影響を及ぼしますか</a></li>
+<li><a href="refm397.html#L009240">2.7 仮引数の指すオブジェクトにメッセージを送るとどうなりますか</a></li>
+<li><a href="refm397.html#L009241">2.8 <code>*</code>がついた引数は何ですか</a></li>
+<li><a href="refm397.html#L009242">2.9 <code>&amp;</code>がついた引数は何ですか</a></li>
+<li><a href="refm397.html#L009243">2.10 仮引数にデフォルト値を指定できますか</a></li>
+<li><a href="refm397.html#L009244">2.11 ブロックに引数を渡すにはどうしますか</a></li>
+<li><a href="refm397.html#L009245">2.12 変数や定数の値が知らないうちに変化することがありますが</a></li>
+<li><a href="refm397.html#L009246">2.13 定数は変更されませんか</a></li>
+</ul>
+<h2><a name="L009208" id="L009208">ブロック付きメソッド呼び出し</a></h2>
+<ul>
+<li><a href="refm399.html#L009255">3.1 ブロック付きメソッド呼び出しとは何ですか</a></li>
+<li><em class="XXINVALIDXX">3.2 ブロック付きメソッド呼び出しにブロックを渡すにはどうすればいいですか</em></li>
+<li><a href="refm399.html#L009257">3.3 ブロックは呼び出したメソッドの中からどのように使われますか</a></li>
+<li><a href="refm399.html#L009258">3.4 <code>Proc.new</code>では手続きオブジェクトが作られませんが</a></li>
+</ul>
+<h2><a name="L009209" id="L009209">構文</a></h2>
+<ul>
+<li><a href="refm400.html#L009261">4.1 <code>:exit</code>等の<code>:</code>のついた識別子は何ですか</a></li>
+<li><a href="refm400.html#L009262">4.2 シンボルと同名の変数の値を取り出すにはどうすればいいですか</a></li>
+<li><a href="refm400.html#L009263">4.3 <code>loop</code>は制御構造ですか</a></li>
+<li><a href="refm400.html#L009264">4.4 <code>a +b</code>がエラーになりますが</a></li>
+<li><a href="refm400.html#L009265">4.5 <code>s = &quot;x&quot;; puts s *10</code> がエラーになりますが</a></li>
+<li><a href="refm400.html#L009266">4.6 <code>p {}</code>で何も表示されません</a></li>
+<li><a href="refm400.html#L009267">4.7 pos=() という setter メソッドがあるのに、pos = 1 としてもなにも起こっていないように見える</a></li>
+<li><a href="refm400.html#L009268">4.8 <code>'\1'</code>と<code>'\\1'</code>はどう違いますか</a></li>
+<li><a href="refm400.html#L009269">4.9 <code>p true or true and false</code>は<code>true</code>を表示するのに、<code>a=true if true or true and false</code>では、<code>a</code>に<code>true</code>が代入されません。</a></li>
+<li><a href="refm400.html#L009270">4.10 <code>p(nil || &quot;&quot;)</code> はなんでもないのに、 <code>p(nil or &quot;&quot;)</code> はパースエラーだと言われます</a></li>
+</ul>
+<h2><a name="L009210" id="L009210">メソッド</a></h2>
+<ul>
+<li><a href="refm401.html#L009273">5.1 オブジェクトにメッセージを送った時に実行されるメソッドはどのように捜されますか</a></li>
+<li><a href="refm401.html#L009274">5.2 <code>+</code>や<code>-</code>は演算子ですか</a></li>
+<li><a href="refm401.html#L009275">5.3 関数はありますか</a></li>
+<li><a href="refm401.html#L009276">5.4 オブジェクトのインスタンス変数を外から参照できますか</a></li>
+<li><a href="refm401.html#L009277">5.5 <code>private</code>と<code>protected</code>の違いが分かりません</a></li>
+<li><a href="refm401.html#L009278">5.6 インスタンス変数をpublicにしたいのですが</a></li>
+<li><a href="refm401.html#L009279">5.7 メソッドの可視性を指定したいのですが</a></li>
+<li><a href="refm401.html#L009280">5.8 メソッド名に大文字で始まる識別子は使えますか</a></li>
+<li><a href="refm401.html#L009281">5.9 <code>super</code>が<code>ArgumentError</code>になりますが</a></li>
+<li><a href="refm401.html#L009282">5.10 2段階上の同名のメソッドを呼びたいのですが</a></li>
+<li><a href="refm401.html#L009283">5.11 組み込み関数を再定義した時に、元の関数を呼びたい時はどうしますか</a></li>
+<li><a href="refm401.html#L009284">5.12 破壊的メソッドとは何ですか</a></li>
+<li><a href="refm401.html#L009285">5.13 副作用が起こるのはどんな時ですか</a></li>
+<li><a href="refm401.html#L009286">5.14 メソッドから複数の戻り値を返すことはできますか</a></li>
+<li><a href="refm401.html#L009287">5.15 今実行中のメソッドの名前を知りたいのですが</a></li>
+</ul>
+<h2><a name="L009211" id="L009211">クラス、モジュール</a></h2>
+<ul>
+<li><a href="refm402.html#L009290">6.1 クラス定義は、一度に行わなければなりませんか</a></li>
+<li><a href="refm402.html#L009291">6.2 クラス変数はありますか</a></li>
+<li><a href="refm402.html#L009292">6.3 クラスのインスタンス変数とは何ですか</a></li>
+<li><a href="refm402.html#L009293">6.4 特異メソッドとは何ですか</a></li>
+<li><a href="refm402.html#L009294">6.5 クラスメソッドはありますか</a></li>
+<li><a href="refm402.html#L009295">6.6 特異クラスとは何ですか</a></li>
+<li><a href="refm402.html#L009296">6.7 モジュール関数とは何ですか</a></li>
+<li><a href="refm402.html#L009297">6.8 クラスとモジュールの違いは何ですか</a></li>
+<li><a href="refm402.html#L009298">6.9 モジュールはサブクラスを作りますか</a></li>
+<li><a href="refm402.html#L009299">6.10 クラス定義の中でクラスメソッドを定義するのと、トップレベルでクラスメソッドを定義する違いは何ですか</a></li>
+<li><a href="refm402.html#L009300">6.11 <code>load</code>と<code>require</code>はどう違いますか</a></li>
+<li><a href="refm402.html#L009301">6.12 <code>include</code>と<code>extend</code>はどう違いますか</a></li>
+<li><a href="refm402.html#L009302">6.13 <code>self</code> というのは何ですか</a></li>
+<li><a href="refm402.html#L009303">6.14 <code>MatchData</code> の <code>begin</code>、<code>end</code> は何を返しますか</a></li>
+<li><a href="refm402.html#L009304">6.15 クラス名からクラスを得ることはできますか</a></li>
+</ul>
+<h2><a name="L009212" id="L009212">組み込みライブラリ</a></h2>
+<ul>
+<li><a href="refm403.html#L009307">7.1 <code>instance_methods(true)</code>は何を返しますか</a></li>
+<li><a href="refm403.html#L009308">7.2 <code>rand</code>がいつも同じ乱数列を出しますが</a></li>
+<li><a href="refm403.html#L009309">7.3 0から51の中から重複のない5つをランダムに選ぶにはどうしますか</a></li>
+<li><a href="refm403.html#L009310">7.4 <code>Fixnum</code>、<code>Symbol</code>、<code>true</code>、<code>nil</code>、<code>false</code>が即値だということですが、参照との違いは何ですか</a></li>
+<li><a href="refm403.html#L009311">7.5 <code>nil</code>と<code>false</code>はどう違いますか</a></li>
+<li><a href="refm403.html#L009312">7.6 ファイルを読み込んで書き換えても変化しません</a></li>
+<li><a href="refm403.html#L009313">7.7 同じ名前のファイルに書き戻したいのですが</a></li>
+<li><a href="refm403.html#L009314">7.8 ファイルに書き込んでそのファイルをコピーしましたが、全部コピーされません</a></li>
+<li><a href="refm403.html#L009315">7.9 パイプで<code>less</code>に文字列を渡したのですが、表示されません</a></li>
+<li><a href="refm403.html#L009316">7.10 参照されない<code>File</code>オブジェクトはどうなりますか</a></li>
+<li><a href="refm403.html#L009317">7.11 ファイルを<code>close</code>しないのは気持ちが悪いのですが</a></li>
+<li><a href="refm403.html#L009318">7.12 ファイルを時間の新しい順にソートしたいのですが</a></li>
+<li><a href="refm403.html#L009319">7.13 ファイル中の単語の出現頻度を調べたいのですが</a></li>
+<li><a href="refm403.html#L009320">7.14 条件に文字列を使ったとき、文字列が空(&quot;&quot;)の時にも<code>true</code>になります</a></li>
+<li><a href="refm403.html#L009321">7.15 英語文字列の配列を辞書順にソートしたいのですが</a></li>
+<li><a href="refm403.html#L009322">7.16 <code>&quot;abcd&quot;[0]</code>は、何を返しますか</a></li>
+<li><a href="refm403.html#L009323">7.17 タブをスペースに展開したいのですが</a></li>
+<li><a href="refm403.html#L009324">7.18 バックスラッシュをエスケープするにはどうしますか</a></li>
+<li><a href="refm403.html#L009325">7.19 <code>sub</code>と<code>sub!</code>はどう違うのですか</a></li>
+<li><a href="refm403.html#L009326">7.20 \Zのマッチする場所はどこですか</a></li>
+<li><a href="refm403.html#L009327">7.21 範囲オブジェクトのコンストラクタ<code>..</code>と<code>...</code>はどう違いますか</a></li>
+<li><a href="refm403.html#L009328">7.22 関数ポインタはありますか</a></li>
+<li><a href="refm403.html#L009329">7.23 スレッドとプロセスのフォークはどう使い分けるのですか</a></li>
+<li><a href="refm403.html#L009330">7.24 Marshalの使い方を教えてください</a></li>
+<li><a href="refm403.html#L009331">7.25 例外処理はありますか</a></li>
+<li><a href="refm403.html#L009332">7.26 <code>trap</code>はどのように使いますか</a></li>
+<li><a href="refm403.html#L009333">7.27 ファイルの行数を数えたいのですが</a></li>
+<li><a href="refm403.html#L009334">7.28 配列からハッシュへの変換はどうすればできますか</a></li>
+<li><em class="XXINVALIDXX">7.29 文字列からArrayを作るのは %w(...) でできますが、同じように文字列からHashを作るにはどうすればよいですか</em></li>
+<li><a href="refm403.html#L009336">7.30 例外 NameError が捕捉できません</a></li>
+<li><a href="refm403.html#L009337">7.31 succがあってprevがないのはなぜですか</a></li>
+</ul>
+<h2><a name="L009213" id="L009213">拡張ライブラリ</a></h2>
+<ul>
+<li><a href="refm404.html#L009340">8.1 Rubyを対話型で使いたいのですが</a></li>
+<li><a href="refm404.html#L009341">8.2 デバッガはありますか</a></li>
+<li><a href="refm404.html#L009342">8.3 C言語で書かれたライブラリをRubyで使いたいのですが</a></li>
+<li><a href="refm404.html#L009343">8.4 Tcl/Tkのインターフェースはありますか</a></li>
+<li><a href="refm404.html#L009344">8.5 Tkが動かないのですが</a></li>
+<li><a href="refm404.html#L009345">8.6 gtk+、xformsのインターフェースはありますか</a></li>
+<li><a href="refm404.html#L009346">8.7 日付の計算をしたいのですが</a></li>
+</ul>
+<h2><a name="L009214" id="L009214">ドキュメントされていない機能</a></h2>
+<h2><a name="L009215" id="L009215">日本語の取り扱い</a></h2>
+<ul>
+<li><a href="refm406.html#L009351">10.1 漢字を含んだスクリプトが文字化けを出力したり、正しく実行できない場合があります</a></li>
+<li><a href="refm406.html#L009352">10.2 オプション<code>-K</code> と <code>$KCODE</code> の違いはなんですか？</a></li>
+<li><a href="refm406.html#L009353">10.3 日本語の識別子は使えますか</a></li>
+<li><a href="refm406.html#L009354">10.4 日本語を含む文字列から1文字ずつ文字列を取り出すにはどうしますか</a></li>
+<li><a href="refm406.html#L009355">10.5 tr(&quot;あ&quot;,&quot;a&quot;)がうまく動きません</a></li>
+<li><a href="refm406.html#L009356">10.6 ひらがなをソートするにはどうしますか</a></li>
+<li><a href="refm406.html#L009357">10.7 SJISの機種依存コード84BF から 889Fまでを空白に置き換えたいのですが</a></li>
+<li><a href="refm406.html#L009358">10.8 いわゆる全角文字と半角文字の変換を行うにはどうするのがよいですか？</a></li>
+<li><a href="refm406.html#L009359">10.9 いわゆる半角カナの扱い</a></li>
+<li><a href="refm406.html#L009360">10.10 日本語を含む文字列から n バイトを切り出したいのですが</a></li>
+<li><a href="refm406.html#L009361">10.11 日本語テキストを n 桁で折り返したいのですが</a></li>
+</ul>
+<h2><a name="L009216" id="L009216">Ruby の処理系について</a></h2>
+<ul>
+<li><a href="refm407.html#L009365">11.1 Ruby スクリプトをコンパイルすることはできますか？</a></li>
+<li><a href="refm407.html#L009366">11.2 Java VM 上で動く Ruby ってありますか？</a></li>
+<li><a href="refm407.html#L009367">11.3 オリジナル以外の Ruby の実装はありますか？</a></li>
+<li><a href="refm407.html#L009368">11.4 Ruby 用の indent みたいなものはありますか？</a></li>
+<li><a href="refm407.html#L009369">11.5 ネイティブスレッドを使った Ruby はない？</a></li>
+<li><a href="refm407.html#L009370">11.6 GC が遅い！ どうにかならないの？</a></li>
+<li><a href="refm407.html#L009371">11.7 Mac では Ruby は動かないの？</a></li>
+</ul>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm394.html">&lt;-PREV</a>][<a href="refm396.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

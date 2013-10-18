@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>WEBrick::HTTPServer</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm176.html" rel="next" />
+<link href="refm174.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm173.html">UP</a>][<a href="refm174.html">&lt;-PREV</a>][<a href="refm176.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L003498" id="L003498">WEBrick::HTTPServer</a></h1>
+<p><a href="refm002.html">執筆者募集</a></p>
+<p>HTTP サーバのためのクラス。</p>
+<p>簡単な例。</p>
+<pre>require 'webrick'
+srv = WEBrick::HTTPServer.new({:DocumentRoot =&gt; '/home/username/public_html/',
+                               :BindAddress =&gt; '127.0.0.1',
+                               :Port =&gt; 10080})
+srv.mount('/hoge.pl', WEBrick::HTTPServlet::CGIHandler, 'really_executed_script.rb')
+srv.start</pre>
+<h2><a name="L003499" id="L003499">スーパークラス</a></h2>
+<p><a href="refm174.html">WEBrick::GenericServer</a></p>
+<h2><a name="L003500" id="L003500">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L003501" id="L003501"><code>HTTPServer.new(<var>config</var>={}, <var>default</var>=<var>Config</var>::<var>HTTP</var>)</code></a></dt>
+<dd>
+<p>HTTPServer オブジェクトを生成する。config は設定を保存したハッシュ。 
+default にはデフォルトの設定を保存したハッシュを与える。デフォルト値は 
+<a href="#L003508">WEBrick::Config::HTTP</a></p></dd>
+</dl>
+<h2><a name="L003502" id="L003502">インスタンスメソッド</a></h2>
+<dl>
+<dt><a name="L003503" id="L003503"><code>mount(<var>dir</var>, <var>servlet</var>, *<var>options</var>)</code></a></dt>
+<dd>
+<p>サーバ上のディレクトリ dir にサーブレット servlet を対応させる。
+dir はディレクトリをあらわす文字列。servlet は
+<a href="refm187.html">WEBrick::HTTPServlet::AbstractServlet</a> のサブクラス。*options を引数としてサーブレットのコンストラクタ new(*options) が呼び出される。</p></dd>
+<dt><a name="L003504" id="L003504"><code>mount_proc(<var>dir</var>, <var>proc</var>)</code></a>
+<dt><a name="L003505" id="L003505"><code>mount_proc(<var>dir</var>){|<var>req</var>, <var>res</var>| ...}</code></a></dt>
+<dd>
+<p>サーバ上のディレクトリ dir に <a href="refm057.html">Proc</a> オブジェクト proc を対応させる。
+proc は <a href="refm177.html">WEBrick::HTTPResponse</a> オブジェクトと <a href="refm178.html">WEBrick::HTTPRequest</a>
+オブジェクトを引数として proc.call(request, response) の引数の順で呼び出される。</p></dd>
+<dt><a name="L003506" id="L003506"><code>unmount(<var>dir</var>)</code></a></dt>
+<dd>
+<p>サーバ上のディレクトリ dir とサーブレットとの対応を解消する。</p></dd>
+<dt><a name="L003507" id="L003507"><code>virtual_host(<var>server</var>)</code></a></dt>
+<dd>
+<p>サーバの保持しているバーチャルホストのリストに server を加える。 
+server は HTTPServer オブジェクト。
+クライアントからのリクエストのうち server へのものは server に委譲される
+ようになる。</p></dd>
+</dl>
+<h2><a name="L003508" id="L003508">WEBrick::Config::HTTP</a></h2>
+<p>HTTPServer.new(config) に与えた時に有効な設定とそのデフォルト値。
+<a href="refm174.html#L003485">WEBrick::Config::General</a>も参照。
+<a href="http://shogo.homelinux.org/~ysantoso/webrickguide/html/Server_Configuration.html">&lt;URL:http://shogo.homelinux.org/~ysantoso/webrickguide/html/Server_Configuration.html&gt;</a><sup class="outside"><small>[外部]</small></sup>
+も参照。</p>
+<pre>HTTP = {
+  :ServerName     =&gt; Utils.getservername,
+  :BindAddress    =&gt; nil,   # &quot;0.0.0.0&quot; or &quot;::&quot; or nil
+  :Port           =&gt; 80,
+  :MaxClients     =&gt; 100,   # maximum number of the concurrent connections
+  :ServerType     =&gt; nil,   # default: WEBrick::SimpleServer
+  :Logger         =&gt; nil,   # default: WEBrick::Log.new
+  :ServerSoftware =&gt; &quot;WEBrick/#{WEBrick::VERSION} &quot; +
+                     &quot;(Ruby/#{RUBY_VERSION}/#{RUBY_RELEASE_DATE})&quot;,
+  :TempDir        =&gt; ENV['TMPDIR']||ENV['TMP']||ENV['TEMP']||'/tmp',
+  :DoNotListen    =&gt; false,
+  :StartCallback  =&gt; nil,
+  :StopCallback   =&gt; nil,
+  :AcceptCallback =&gt; nil,
+  :DoNotReverseLookup =&gt; nil,
+
+  :RequestTimeout =&gt; 30,
+  :HTTPVersion    =&gt; HTTPVersion.new(&quot;1.1&quot;),
+  :AccessLog      =&gt; nil,
+  :MimeTypes      =&gt; HTTPUtils::DefaultMimeTypes,
+  :DirectoryIndex =&gt; [&quot;index.html&quot;,&quot;index.htm&quot;,&quot;index.cgi&quot;,&quot;index.rhtml&quot;],
+  :DocumentRoot   =&gt; nil,
+  :DocumentRootOptions =&gt; { :FancyIndexing =&gt; true },
+  :RequestCallback =&gt; nil,
+  :ServerAlias    =&gt; nil,
+
+  :CGIInterpreter =&gt; nil,
+  :CGIPathEnv     =&gt; nil,
+
+  # workaround: if Request-URIs contain 8bit chars,
+  # they should be escaped before calling of URI.parse().
+  :Escape8bitURI  =&gt; false
+}</pre>
+<dl>
+<dt><a name="L003509" id="L003509">:RequestTimeout</a></dt>
+<dd>
+<p>どれだけの時間 クライアントからの入力を待つかを整数か <a href="refm056.html">Float</a> で指定する。
+単位は秒。</p>
+</dd>
+<dt><a name="L003510" id="L003510">:HTTPVersion</a></dt>
+<dd>
+<p>使用する HTTP のバージョン。<a href="refm184.html">WEBrick::HTTPVersion</a> オブジェクトで指定する。</p>
+</dd>
+<dt><a name="L003511" id="L003511">:AccessLog</a></dt>
+<dd>
+<p>アクセスログの出力先とフォーマットを [[io, format], [io, format], ...] のような
+配列で指定する。io は <a href="refm045.html">IO</a> オブジェクト。format は文字列。フォーマットの
+形式は Apache のそれに準拠。以下を参照。デフォルトでは標準エラー出力に出力する。
+<a href="http://httpd.apache.org/docs/mod/mod_log_config.html#formats">&lt;URL:http://httpd.apache.org/docs/mod/mod_log_config.html#formats&gt;</a><sup class="outside"><small>[外部]</small></sup></p>
+</dd>
+<dt><a name="L003512" id="L003512">:MimeTypes</a></dt>
+<dd>
+<p>拡張子と mime-type との対応をハッシュで指定する。</p>
+</dd>
+<dt><a name="L003513" id="L003513">:DirectoryIndex</a></dt>
+<dd>
+<p>ディレクトリのインデックスとなるファイル名を配列で指定する。</p>
+</dd>
+<dt><a name="L003514" id="L003514">:DocumentRoot</a></dt>
+<dd>
+<p>サーバ上のルートディレクトリに対応させる、ローカルのファイルシステムの
+ディレクトリを文字列で指定する。</p>
+</dd>
+<dt><a name="L003515" id="L003515">:DocumentRootOptions</a></dt>
+<dd>
+<p><a href="refm188.html">WEBrick::HTTPServlet::FileHandler</a> のコンストラクタに渡されるオプションを
+ハッシュで指定する。</p>
+</dd>
+<dt><a name="L003516" id="L003516">:RequestCallback</a></dt>
+<dd>
+<p>クライアントからのリクエストを受け付けた時に呼ばれる <a href="refm057.html">Proc</a> オブジェクトを
+指定する。callback.call(req, res) のように呼ばれる。</p>
+</dd>
+<dt><a name="L003517" id="L003517">:ServerAlias</a></dt>
+<dd>
+<p>サーバのホスト名の別名を配列で指定する。</p>
+</dd>
+<dt><a name="L003518" id="L003518">:CGIInterpreter</a></dt>
+<dd>
+<p>CGI を実行するインタプリタを文字列で指定する。</p>
+</dd>
+<dt><a name="L003519" id="L003519">:CGIPathEnv</a></dt>
+<dd>
+<p>CGI に渡される PATH 環境変数を文字列で指定する。</p>
+</dd>
+<dt><a name="L003520" id="L003520">:Escape8bitURI</a></dt>
+<dd>
+<p><a href="refm002.html">執筆者募集</a></p>
+</dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm173.html">UP</a>][<a href="refm174.html">&lt;-PREV</a>][<a href="refm176.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

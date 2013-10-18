@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ruby-src:lib/tempfile.rb</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm527.html" rel="next" />
+<link href="refm525.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm525.html">&lt;-PREV</a>][<a href="refm527.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1>ruby-src:lib/tempfile.rb</h1>
+#<br />
+#&nbsp;tempfile&nbsp;-&nbsp;manipulates&nbsp;temporary&nbsp;files<br />
+#<br />
+#&nbsp;$Id:&nbsp;tempfile.rb&nbsp;11708&nbsp;2007-02-12&nbsp;23:01:19Z&nbsp;shyouhei&nbsp;$<br />
+#<br />
+<br />
+require&nbsp;'delegate'<br />
+require&nbsp;'tmpdir'<br />
+require&nbsp;'thread'<br />
+<br />
+#&nbsp;A&nbsp;class&nbsp;for&nbsp;managing&nbsp;temporary&nbsp;files.&nbsp;&nbsp;This&nbsp;library&nbsp;is&nbsp;written&nbsp;to&nbsp;be<br />
+#&nbsp;thread&nbsp;safe.<br />
+class&nbsp;Tempfile&nbsp;&lt;&nbsp;DelegateClass(File)<br />
+&nbsp;&nbsp;MAX_TRY&nbsp;=&nbsp;10<br />
+&nbsp;&nbsp;@@cleanlist&nbsp;=&nbsp;[]<br />
+&nbsp;&nbsp;@@lock&nbsp;=&nbsp;Mutex.new<br />
+<br />
+&nbsp;&nbsp;#&nbsp;Creates&nbsp;a&nbsp;temporary&nbsp;file&nbsp;of&nbsp;mode&nbsp;0600&nbsp;in&nbsp;the&nbsp;temporary&nbsp;directory<br />
+&nbsp;&nbsp;#&nbsp;whose&nbsp;name&nbsp;is&nbsp;basename.pid.n&nbsp;and&nbsp;opens&nbsp;with&nbsp;mode&nbsp;&quot;w+&quot;.&nbsp;&nbsp;A&nbsp;Tempfile<br />
+&nbsp;&nbsp;#&nbsp;object&nbsp;works&nbsp;just&nbsp;like&nbsp;a&nbsp;File&nbsp;object.<br />
+&nbsp;&nbsp;#<br />
+&nbsp;&nbsp;#&nbsp;If&nbsp;tmpdir&nbsp;is&nbsp;omitted,&nbsp;the&nbsp;temporary&nbsp;directory&nbsp;is&nbsp;determined&nbsp;by<br />
+&nbsp;&nbsp;#&nbsp;Dir::tmpdir&nbsp;provided&nbsp;by&nbsp;'tmpdir.rb'.<br />
+&nbsp;&nbsp;#&nbsp;When&nbsp;$SAFE&nbsp;&gt;&nbsp;0&nbsp;and&nbsp;the&nbsp;given&nbsp;tmpdir&nbsp;is&nbsp;tainted,&nbsp;it&nbsp;uses<br />
+&nbsp;&nbsp;#&nbsp;/tmp.&nbsp;(Note&nbsp;that&nbsp;ENV&nbsp;values&nbsp;are&nbsp;tainted&nbsp;by&nbsp;default)<br />
+&nbsp;&nbsp;def&nbsp;initialize(basename,&nbsp;tmpdir=Dir::tmpdir)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;$SAFE&nbsp;&gt;&nbsp;0&nbsp;and&nbsp;tmpdir.tainted?<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tmpdir&nbsp;=&nbsp;'/tmp'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;end<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lock&nbsp;=&nbsp;tmpname&nbsp;=&nbsp;nil<br />
+&nbsp;&nbsp;&nbsp;&nbsp;n&nbsp;=&nbsp;failure&nbsp;=&nbsp;0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;@@lock.synchronize&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;begin<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;begin<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tmpname&nbsp;=&nbsp;File.join(tmpdir,&nbsp;make_tmpname(basename,&nbsp;n))<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lock&nbsp;=&nbsp;tmpname&nbsp;+&nbsp;'.lock'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;n&nbsp;+=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;end&nbsp;while&nbsp;@@cleanlist.include?(tmpname)&nbsp;or<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;File.exist?(lock)&nbsp;or&nbsp;File.exist?(tmpname)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dir.mkdir(lock)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rescue<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;failure&nbsp;+=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;retry&nbsp;if&nbsp;failure&nbsp;&lt;&nbsp;MAX_TRY<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;raise&nbsp;&quot;cannot&nbsp;generate&nbsp;tempfile&nbsp;`%s'&quot;&nbsp;%&nbsp;tmpname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;end<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;@data&nbsp;=&nbsp;[tmpname]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;@clean_proc&nbsp;=&nbsp;Tempfile.callback(@data)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ObjectSpace.define_finalizer(self,&nbsp;@clean_proc)<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;@tmpfile&nbsp;=&nbsp;File.open(tmpname,&nbsp;File::RDWR|File::CREAT|File::EXCL,&nbsp;0600)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;@tmpname&nbsp;=&nbsp;tmpname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;@@cleanlist&nbsp;&lt;&lt;&nbsp;@tmpname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;@data[1]&nbsp;=&nbsp;@tmpfile<br />
+&nbsp;&nbsp;&nbsp;&nbsp;@data[2]&nbsp;=&nbsp;@@cleanlist<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;super(@tmpfile)<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;Now&nbsp;we&nbsp;have&nbsp;all&nbsp;the&nbsp;File/IO&nbsp;methods&nbsp;defined,&nbsp;you&nbsp;must&nbsp;not<br />
+&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;carelessly&nbsp;put&nbsp;bare&nbsp;puts(),&nbsp;etc.&nbsp;after&nbsp;this.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Dir.rmdir(lock)<br />
+&nbsp;&nbsp;end<br />
+<br />
+&nbsp;&nbsp;def&nbsp;make_tmpname(basename,&nbsp;n)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;sprintf('%s.%d.%d',&nbsp;basename,&nbsp;$$,&nbsp;n)<br />
+&nbsp;&nbsp;end<br />
+&nbsp;&nbsp;private&nbsp;:make_tmpname<br />
+<br />
+&nbsp;&nbsp;#&nbsp;Opens&nbsp;or&nbsp;reopens&nbsp;the&nbsp;file&nbsp;with&nbsp;mode&nbsp;&quot;r+&quot;.<br />
+&nbsp;&nbsp;def&nbsp;open<br />
+&nbsp;&nbsp;&nbsp;&nbsp;@tmpfile.close&nbsp;if&nbsp;@tmpfile<br />
+&nbsp;&nbsp;&nbsp;&nbsp;@tmpfile&nbsp;=&nbsp;File.open(@tmpname,&nbsp;'r+')<br />
+&nbsp;&nbsp;&nbsp;&nbsp;@data[1]&nbsp;=&nbsp;@tmpfile<br />
+&nbsp;&nbsp;&nbsp;&nbsp;__setobj__(@tmpfile)<br />
+&nbsp;&nbsp;end<br />
+<br />
+&nbsp;&nbsp;def&nbsp;_close&nbsp;&nbsp;#&nbsp;:nodoc:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;@tmpfile.close&nbsp;if&nbsp;@tmpfile<br />
+&nbsp;&nbsp;&nbsp;&nbsp;@tmpfile&nbsp;=&nbsp;nil<br />
+&nbsp;&nbsp;&nbsp;&nbsp;@data[1]&nbsp;=&nbsp;nil&nbsp;if&nbsp;@data<br />
+&nbsp;&nbsp;end<br />
+&nbsp;&nbsp;protected&nbsp;:_close<br />
+<br />
+&nbsp;&nbsp;#Closes&nbsp;the&nbsp;file.&nbsp;&nbsp;If&nbsp;the&nbsp;optional&nbsp;flag&nbsp;is&nbsp;true,&nbsp;unlinks&nbsp;the&nbsp;file<br />
+&nbsp;&nbsp;#&nbsp;after&nbsp;closing.<br />
+&nbsp;&nbsp;#<br />
+&nbsp;&nbsp;#&nbsp;If&nbsp;you&nbsp;don't&nbsp;explicitly&nbsp;unlink&nbsp;the&nbsp;temporary&nbsp;file,&nbsp;the&nbsp;removal<br />
+&nbsp;&nbsp;#&nbsp;will&nbsp;be&nbsp;delayed&nbsp;until&nbsp;the&nbsp;object&nbsp;is&nbsp;finalized.<br />
+&nbsp;&nbsp;def&nbsp;close(unlink_now=false)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;unlink_now<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;close!<br />
+&nbsp;&nbsp;&nbsp;&nbsp;else<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_close<br />
+&nbsp;&nbsp;&nbsp;&nbsp;end<br />
+&nbsp;&nbsp;end<br />
+<br />
+&nbsp;&nbsp;#&nbsp;Closes&nbsp;and&nbsp;unlinks&nbsp;the&nbsp;file.<br />
+&nbsp;&nbsp;def&nbsp;close!<br />
+&nbsp;&nbsp;&nbsp;&nbsp;_close<br />
+&nbsp;&nbsp;&nbsp;&nbsp;@clean_proc.call<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ObjectSpace.undefine_finalizer(self)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;@data&nbsp;=&nbsp;@tmpname&nbsp;=&nbsp;nil<br />
+&nbsp;&nbsp;end<br />
+<br />
+&nbsp;&nbsp;#&nbsp;Unlinks&nbsp;the&nbsp;file.&nbsp;&nbsp;On&nbsp;UNIX-like&nbsp;systems,&nbsp;it&nbsp;is&nbsp;often&nbsp;a&nbsp;good&nbsp;idea<br />
+&nbsp;&nbsp;#&nbsp;to&nbsp;unlink&nbsp;a&nbsp;temporary&nbsp;file&nbsp;immediately&nbsp;after&nbsp;creating&nbsp;and&nbsp;opening<br />
+&nbsp;&nbsp;#&nbsp;it,&nbsp;because&nbsp;it&nbsp;leaves&nbsp;other&nbsp;programs&nbsp;zero&nbsp;chance&nbsp;to&nbsp;access&nbsp;the<br />
+&nbsp;&nbsp;#&nbsp;file.<br />
+&nbsp;&nbsp;def&nbsp;unlink<br />
+&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;keep&nbsp;this&nbsp;order&nbsp;for&nbsp;thread&nbsp;safeness<br />
+&nbsp;&nbsp;&nbsp;&nbsp;begin<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;File.unlink(@tmpname)&nbsp;if&nbsp;File.exist?(@tmpname)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@@cleanlist.delete(@tmpname)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@data&nbsp;=&nbsp;@tmpname&nbsp;=&nbsp;nil<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ObjectSpace.undefine_finalizer(self)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;rescue&nbsp;Errno::EACCES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;may&nbsp;not&nbsp;be&nbsp;able&nbsp;to&nbsp;unlink&nbsp;on&nbsp;Windows;&nbsp;just&nbsp;ignore<br />
+&nbsp;&nbsp;&nbsp;&nbsp;end<br />
+&nbsp;&nbsp;end<br />
+&nbsp;&nbsp;alias&nbsp;delete&nbsp;unlink<br />
+<br />
+&nbsp;&nbsp;#&nbsp;Returns&nbsp;the&nbsp;full&nbsp;path&nbsp;name&nbsp;of&nbsp;the&nbsp;temporary&nbsp;file.<br />
+&nbsp;&nbsp;def&nbsp;path<br />
+&nbsp;&nbsp;&nbsp;&nbsp;@tmpname<br />
+&nbsp;&nbsp;end<br />
+<br />
+&nbsp;&nbsp;#&nbsp;Returns&nbsp;the&nbsp;size&nbsp;of&nbsp;the&nbsp;temporary&nbsp;file.&nbsp;&nbsp;As&nbsp;a&nbsp;side&nbsp;effect,&nbsp;the&nbsp;IO<br />
+&nbsp;&nbsp;#&nbsp;buffer&nbsp;is&nbsp;flushed&nbsp;before&nbsp;determining&nbsp;the&nbsp;size.<br />
+&nbsp;&nbsp;def&nbsp;size<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;@tmpfile<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@tmpfile.flush<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@tmpfile.stat.size<br />
+&nbsp;&nbsp;&nbsp;&nbsp;else<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;end<br />
+&nbsp;&nbsp;end<br />
+&nbsp;&nbsp;alias&nbsp;length&nbsp;size<br />
+<br />
+&nbsp;&nbsp;class&nbsp;&lt;&lt;&nbsp;self<br />
+&nbsp;&nbsp;&nbsp;&nbsp;def&nbsp;callback(data)&nbsp;&nbsp;#&nbsp;:nodoc:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pid&nbsp;=&nbsp;$$<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Proc.new&nbsp;{<br />
+&nbsp;&nbsp;if&nbsp;pid&nbsp;==&nbsp;$$&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;path,&nbsp;tmpfile,&nbsp;cleanlist&nbsp;=&nbsp;*data<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;&quot;removing&nbsp;&quot;,&nbsp;path,&nbsp;&quot;...&quot;&nbsp;if&nbsp;$DEBUG<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;tmpfile.close&nbsp;if&nbsp;tmpfile<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;keep&nbsp;this&nbsp;order&nbsp;for&nbsp;thread&nbsp;safeness<br />
+&nbsp;&nbsp;&nbsp;&nbsp;File.unlink(path)&nbsp;if&nbsp;File.exist?(path)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cleanlist.delete(path)&nbsp;if&nbsp;cleanlist<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;&quot;done\n&quot;&nbsp;if&nbsp;$DEBUG<br />
+&nbsp;&nbsp;end<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;end<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;If&nbsp;no&nbsp;block&nbsp;is&nbsp;given,&nbsp;this&nbsp;is&nbsp;a&nbsp;synonym&nbsp;for&nbsp;new().<br />
+&nbsp;&nbsp;&nbsp;&nbsp;#<br />
+&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;If&nbsp;a&nbsp;block&nbsp;is&nbsp;given,&nbsp;it&nbsp;will&nbsp;be&nbsp;passed&nbsp;tempfile&nbsp;as&nbsp;an&nbsp;argument,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;and&nbsp;the&nbsp;tempfile&nbsp;will&nbsp;automatically&nbsp;be&nbsp;closed&nbsp;when&nbsp;the&nbsp;block<br />
+&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;terminates.&nbsp;&nbsp;In&nbsp;this&nbsp;case,&nbsp;open()&nbsp;returns&nbsp;nil.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;def&nbsp;open(*args)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tempfile&nbsp;=&nbsp;new(*args)<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;block_given?<br />
+&nbsp;&nbsp;begin<br />
+&nbsp;&nbsp;&nbsp;&nbsp;yield(tempfile)<br />
+&nbsp;&nbsp;ensure<br />
+&nbsp;&nbsp;&nbsp;&nbsp;tempfile.close<br />
+&nbsp;&nbsp;end<br />
+<br />
+&nbsp;&nbsp;nil<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else<br />
+&nbsp;&nbsp;tempfile<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;end<br />
+&nbsp;&nbsp;&nbsp;&nbsp;end<br />
+&nbsp;&nbsp;end<br />
+end<br />
+<br />
+if&nbsp;__FILE__&nbsp;==&nbsp;$0<br />
+#&nbsp;&nbsp;$DEBUG&nbsp;=&nbsp;true<br />
+&nbsp;&nbsp;f&nbsp;=&nbsp;Tempfile.new(&quot;foo&quot;)<br />
+&nbsp;&nbsp;f.print(&quot;foo\n&quot;)<br />
+&nbsp;&nbsp;f.close<br />
+&nbsp;&nbsp;f.open<br />
+&nbsp;&nbsp;p&nbsp;f.gets&nbsp;#&nbsp;=&gt;&nbsp;&quot;foo\n&quot;<br />
+&nbsp;&nbsp;f.close!<br />
+end<br />
+
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm525.html">&lt;-PREV</a>][<a href="refm527.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

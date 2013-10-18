@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Rinda::Template</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm201.html" rel="next" />
+<link href="refm199.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm199.html">&lt;-PREV</a>][<a href="refm201.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L003802" id="L003802">Rinda::Template</a></h1>
+<p><a href="refm195.html">Rinda</a></p>
+<p>タプルのマッチングのためのクラスです。ユーザがこのクラスを直接使うことはありません。</p>
+<h2><a name="L003803" id="L003803">例</a></h2>
+<pre>require 'rinda/rinda'
+
+template = Rinda::Template.new(['abc', nil, nil])
+template.match(['abc', 2, 5])   # =&gt; true
+template.match(['hoge', 2, 5])  # =&gt; false
+
+template = Rinda::Template.new([String, Integer, nil])
+template.match(['abc', 2, 5])   # =&gt; true
+template.match(['abcd', 2, 5])  # =&gt; true
+
+template = Rinda::Template.new([/^abc/, Integer, nil])
+template.match([/^abc/, Integer, nil])  # =&gt; true
+template.match(['abc', 2, 5])           # =&gt; true
+template.match(['def', 2, 5])           # =&gt; false
+
+template = Rinda::Template.new({'name' =&gt; String, 'age' =&gt; Integer})
+template.match({'name' =&gt; 'seki', 'age' =&gt; 0x20})   # =&gt; true
+template.match({'name' =&gt; :seki,  'age' =&gt; 0x20})   # =&gt; false</pre>
+<h2><a name="L003804" id="L003804">スーパークラス</a></h2>
+<p><a href="refm199.html">Rinda::Tuple</a></p>
+<h2><a name="L003805" id="L003805">メソッド</a></h2>
+<dl>
+<dt><a name="L003806" id="L003806"><code>===(<var>tuple</var>)</code></a>
+<dt><a name="L003807" id="L003807"><code>match(<var>tuple</var>)</code></a></dt>
+<dd>
+<p><code>self</code> と <var>tuple</var> のサイズが同じで、<code>self</code> の各要素が <var>tuple</var> に
+マッチする
+場合は真を返します。マッチングの検査には <code>==</code> と <code>===</code> を用います。
+<code>nil</code> はワイルドカードです。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm199.html">&lt;-PREV</a>][<a href="refm201.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

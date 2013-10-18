@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Syslog</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm320.html" rel="next" />
+<link href="refm318.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm318.html">&lt;-PREV</a>][<a href="refm320.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006187" id="L006187">Syslog</a></h1>
+<p>UNIXのsyslogのラッパーモジュール。</p>
+<p><a href="refm383.html">ruby 1.6 feature</a>: 1.6.6以降に標準添付されています。</p>
+<pre>require 'syslog'
+
+Syslog.open(&quot;syslogtest&quot;)
+Syslog.log(Syslog::LOG_WARNING, &quot;the sky is falling in %d seconds!&quot;, 100)
+Syslog.close</pre>
+<h2><a name="L006188" id="L006188">インクルードしているモジュール</a></h2>
+<ul>
+<li><a href="refm320.html">Syslog::Constants</a></li>
+</ul>
+<h2><a name="L006189" id="L006189">モジュール関数:</a></h2>
+<dl>
+<dt><a name="L006190" id="L006190"><code>Syslog.open(<var>ident</var>=$<var>0</var>, <var>options</var>=<var>Syslog</var>::<var>LOG_PID</var>|<var>Syslog</var>::<var>LOG_CONS</var>, <var>facility</var>=<var>Syslog</var>::<var>LOG_USER</var>)</code></a>
+<dt><a name="L006191" id="L006191"><code>Syslog.open(<var>ident</var>=$<var>0</var>, <var>options</var>=<var>Syslog</var>::<var>LOG_PID</var>|<var>Syslog</var>::<var>LOG_CONS</var>, <var>facility</var>=<var>Syslog</var>::<var>LOG_USER</var>) { |<var>syslog</var>| ... }</code></a></dt>
+<dd>
+<p>与えられた引数でsyslogを開く。以降、他の Syslog モジュール関数が使
+用可能となる。</p>
+<p>ブロック付きで呼ばれた場合は、self を引数としてブロックを実行し、
+最後に Syslog.close を行う。</p>
+<p>syslogを既に開いていた場合は<a href="refm105.html">RuntimeError</a>が発生する。</p>
+<p><code>ident</code> はすべてのログにつく識別子で、どのプログラムから送られ
+たログなのかを識別するために使われる。通常プログラム名が使われる。</p>
+<p><code>options</code> には、Syslog.open や Syslog.log の動作を制御するフラ
+グを指定する。</p>
+<p><var>facility</var> には、ログ出力を行うプログラムの種別を指定する。
+syslog はこの値にしたがって出力先となるログファイルを決める。
+(<a href="refm535.html">syslog.conf(5)</a> 参照)</p>
+<p><code>options</code> と <code>facility</code> に指定できる値については
+<a href="refm320.html">Syslog::Constants</a> を参照。</p>
+<pre>例:
+  Syslog.open('ftpd', Syslog::LOG_PID | Syslog::LOG_NDELAY,
+              Syslog::LOG_FTP)</pre>
+<p><code>self</code> を返す。</p>
+<p>syslog の詳細については <a href="refm535.html">syslog(3)</a> を参照。</p></dd>
+<dt><a name="L006192" id="L006192"><code>Syslog.open!(<var>ident</var>=$<var>0</var>, <var>options</var>=<var>Syslog</var>::<var>LOG_PID</var>|<var>Syslog</var>::<var>LOG_CONS</var>, <var>facility</var>=<var>Syslog</var>::<var>LOG_USER</var>) { |<var>syslog</var>| ... }</code></a>
+<dt><a name="L006193" id="L006193"><code>Syslog.reopen(<var>ident</var>=$<var>0</var>, <var>options</var>=<var>Syslog</var>::<var>LOG_PID</var>|<var>Syslog</var>::<var>LOG_CONS</var>, <var>facility</var>=<var>Syslog</var>::<var>LOG_USER</var>) { |<var>syslog</var>| ... }</code></a></dt>
+<dd>
+<p>開いていた syslog を最初にクローズする点を除いて Syslog.open と同じ。</p></dd>
+<dt><a name="L006194" id="L006194"><code>Syslog.opened?</code></a></dt>
+<dd>
+<p>syslog をオープンしていれば真を返す。</p></dd>
+<dt><a name="L006195" id="L006195"><code>Syslog.ident</code></a>
+<dt><a name="L006196" id="L006196"><code>Syslog.options</code></a>
+<dt><a name="L006197" id="L006197"><code>Syslog.facility</code></a></dt>
+<dd>
+<p>最後のopenで与えられた対応する引数を返す。</p></dd>
+<dt><a name="L006198" id="L006198"><code>Syslog.log(<var>priority</var>, <var>format</var>, ...)</code></a></dt>
+<dd>
+<p>syslogにメッセージを書き込む。</p>
+<p>priority は優先度を示す定数(<a href="refm320.html">Syslog::Constants</a>参照)。
+また、<var>facility</var>(<a href="refm320.html">Syslog::Constants</a>参照)を論理和で指定す
+ることで open で指定した <var>facility</var> を切替えることもできる。</p>
+<p>format 以降は <a href="refm029.html#L000488">sprintf</a> と同じ形式の引数を指定する。
+メッセージに改行を含める必要はない。</p>
+<pre>例:
+  Syslog.log(Syslog::LOG_CRIT, &quot;the sky is falling in %d seconds!&quot;, 10)</pre>
+<p>注： <a href="refm535.html">syslog(3)</a> のように format に %m は使用できない。</p></dd>
+<dt><a name="L006199" id="L006199"><code>Syslog.emerg(<var>message</var>, ...)</code></a>
+<dt><a name="L006200" id="L006200"><code>Syslog.alert(<var>message</var>, ...)</code></a>
+<dt><a name="L006201" id="L006201"><code>Syslog.crit(<var>message</var>, ...)</code></a>
+<dt><a name="L006202" id="L006202"><code>Syslog.err(<var>message</var>, ...)</code></a>
+<dt><a name="L006203" id="L006203"><code>Syslog.warning(<var>message</var>, ...)</code></a>
+<dt><a name="L006204" id="L006204"><code>Syslog.notice(<var>message</var>, ...)</code></a>
+<dt><a name="L006205" id="L006205"><code>Syslog.info(<var>message</var>, ...)</code></a>
+<dt><a name="L006206" id="L006206"><code>Syslog.debug(<var>message</var>, ...)</code></a></dt>
+<dd>
+<p><code>Syslog#log()</code>のショートカットメソッド。
+システムによっては定義されていないものもある。</p>
+<pre>例:
+  Syslog.crit(&quot;the sky is falling in %d seconds!&quot;,5)</pre></dd>
+<dt><a name="L006207" id="L006207"><code>Syslog.mask</code></a>
+<dt><a name="L006208" id="L006208"><code>Syslog.mask=(<var>mask</var>)</code></a></dt>
+<dd>
+<p>ログの優先度のマスクを取得または設定する。
+マスクは永続的であり、
+<code>Syslog.open</code>や<code>Syslog.close</code>
+ではリセットされない。</p>
+<pre>例:
+  Syslog.mask = Syslog::LOG_UPTO(Syslog::LOG_ERR)</pre></dd>
+<dt><a name="L006209" id="L006209"><code>Syslog.close</code></a></dt>
+<dd>
+<p>syslogを閉じる。</p></dd>
+<dt><a name="L006210" id="L006210"><code>Syslog.instance</code></a></dt>
+<dd>
+<p>selfを返す。(旧版との互換性のため)</p></dd>
+<dt><a name="L006211" id="L006211"><code>Syslog.LOG_MASK(<var>priority</var>)</code></a></dt>
+<dd>
+<p>1つの優先度に対するマスクを作成する。</p></dd>
+<dt><a name="L006212" id="L006212"><code>Syslog.LOG_UPTO(<var>priority</var>)</code></a></dt>
+<dd>
+<p><code>priority</code>までのすべての優先度のマスクを作成する。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm318.html">&lt;-PREV</a>][<a href="refm320.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

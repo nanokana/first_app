@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>tracer</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm341.html" rel="next" />
+<link href="refm339.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm339.html">&lt;-PREV</a>][<a href="refm341.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006539" id="L006539">tracer</a></h1>
+<h2><a name="L006540" id="L006540">目的・概要</a></h2>
+<p>実行トレース出力をとる機能を提供する。</p>
+<p>使い方は大きく分けて2通り。</p>
+<dl>
+<dt><a name="L006541" id="L006541"><kbd>ruby -rtracer hoge.rb</kbd></a></dt>
+<dd>
+<p>hoge.rbの実行をすべてトレース出力する。</p>
+</dd>
+<dt><a name="L006542" id="L006542"><code>require 'tracer'</code></a></dt>
+<dd>
+<p><code>Tracer.on</code>
+によりトレース出力を有効にする。</p>
+<p><code>Tracer.off</code>
+によりトレース出力を無効にする。</p>
+<p>また、ブロック付きで <code>Tracer.on</code> を呼び出すと、そのブロック内のみ
+トレースを出力する。</p>
+</dd>
+</dl>
+<h2><a name="L006543" id="L006543">サンプルコード</a></h2>
+<p>なし</p>
+<h2><a name="L006544" id="L006544">class Tracer</a></h2>
+<h3><a name="L006545" id="L006545">クラスメソッド</a></h3>
+<dl>
+<dt><a name="L006546" id="L006546"><code>Tracer.on</code></a>
+<dt><a name="L006547" id="L006547"><code>Tracer.on {...}</code></a></dt>
+<dd>
+<p>トレース出力を開始。
+ブロックを与えられた場合はそのブロック内のみトレース出力を行う。</p></dd>
+<dt><a name="L006548" id="L006548"><code>Tracer.off</code></a></dt>
+<dd>
+<p>トレース出力を中断。</p></dd>
+<dt><a name="L006549" id="L006549"><code>Tracer.set_get_line_procs(<var>filename</var>, <var>proc</var>)</code></a>
+<dt><a name="L006550" id="L006550"><code>Tracer.set_get_line_procs(<var>filename</var>) { |<var>line</var>| ...}</code></a></dt>
+<dd>
+<p>あるファイルについて利用する、行番号からソースのその行の内容を返す
+手続きを指定する。何も指定しなければデフォルトの動作が利用される。
+指定する手続きは行番号を唯一の引数として呼び出される。</p></dd>
+<dt><a name="L006551" id="L006551"><code>Tracer.add_filter(<var>proc</var>)</code></a>
+<dt><a name="L006552" id="L006552"><code>Tracer.add_filter { |<var>event</var>,<var>file</var>,<var>line</var>,<var>id</var>,<var>binding</var>| ...}</code></a></dt>
+<dd>
+<p>トレース出力するかどうかを決定するフィルタを追加する。
+何もフィルタを与えない場合はすべての行についてトレース情報が出力される。
+与えられた手続き(ブロックまたはProcオブジェクト)が真を返せば
+トレースは出力される。
+フィルタは複数追加でき、そのうち一つでも偽を返すとトレースの出力は
+抑制される。
+フィルタ手続きは引数として event,file,line,id,binding の5つ
+をとる(組み込み関数set_trace_funcで指定するものとほぼ同じ)。
+set_trace_funcに関してはRuby本 p.391を参照。</p>
+<dl>
+<dt><a name="XXINVALIDXX" id="XXINVALIDXX">フィルタ手続きのパラメータ</a></dt>
+<dd>
+<p>Ruby本 p.391より。</p>
+<dl>
+<dt><a name="XXINVALIDXX" id="XXINVALIDXX">event</a></dt>
+<dd>
+<p>イベントを表す文字列。</p>
+<p>以下の種類がある。カッコ内はtracerの出力での表記。</p>
+<dl>
+<dt><a name="XXINVALIDXX" id="XXINVALIDXX">line (-)</a></dt>
+<dd>
+<p>ある行を実行</p>
+</dd>
+<dt><a name="XXINVALIDXX" id="XXINVALIDXX">call (&gt;)</a></dt>
+<dd>
+<p>メソッド呼び出し</p>
+</dd>
+<dt><a name="XXINVALIDXX" id="XXINVALIDXX">return (&lt;)</a></dt>
+<dd>
+<p>メソッドからのリターン</p>
+</dd>
+<dt><a name="XXINVALIDXX" id="XXINVALIDXX">class (C)</a></dt>
+<dd>
+<p>クラスコンテキストに入った</p>
+</dd>
+<dt><a name="XXINVALIDXX" id="XXINVALIDXX">end (E)</a></dt>
+<dd>
+<p>クラスコンテキストから出た</p>
+</dd>
+<dt><a name="XXINVALIDXX" id="XXINVALIDXX">raise</a></dt>
+<dd>
+<p>例外が発生した</p>
+</dd>
+<dt><a name="XXINVALIDXX" id="XXINVALIDXX">c-call</a></dt>
+<dd>
+<p>Cで記述されたメソッドが呼ばれた</p>
+</dd>
+<dt><a name="XXINVALIDXX" id="XXINVALIDXX">c-return</a></dt>
+<dd>
+<p>Cで記述されたメソッドからreturn</p>
+</dd>
+</dl>
+</dd>
+<dt><a name="XXINVALIDXX" id="XXINVALIDXX">file</a></dt>
+<dd>
+<p>現在処理しているファイルの名前</p>
+</dd>
+<dt><a name="XXINVALIDXX" id="XXINVALIDXX">line</a></dt>
+<dd>
+<p>現在処理している行番号</p>
+</dd>
+<dt><a name="XXINVALIDXX" id="XXINVALIDXX">id</a></dt>
+<dd>
+<p>最後に呼び出されたメソッドのメソッド名(のシンボル)
+そのようなメソッドがなければ0になる。</p>
+</dd>
+<dt><a name="XXINVALIDXX" id="XXINVALIDXX">binding</a></dt>
+<dd>
+<p>現在のコンテキスト</p>
+</dd>
+</dl>
+</dd>
+</dl></dd>
+</dl>
+<h2><a name="L006553" id="L006553">SEE ALSO</a></h2>
+<ul>
+<li><a href="refm029.html#L000484">set_trace_func</a></li>
+</ul>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm339.html">&lt;-PREV</a>][<a href="refm341.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

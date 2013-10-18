@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>time</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm298.html" rel="next" />
+<link href="refm296.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm296.html">&lt;-PREV</a>][<a href="refm298.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L005970" id="L005970">time</a></h1>
+<p>組み込みの <a href="refm066.html">Time</a> クラスを拡張します。日時を表す文字列をパースして <a href="refm066.html">Time</a> オブジェクトに変換したり、逆に <a href="refm066.html">Time</a> オブジェクトを RFC などで定められた文字列に変換したりする機能を提供します。</p>
+<ul>
+<li>date-time は <em class="XXINVALIDXX">RFC:2822</em> で定義されています。</li>
+<li>HTTP-date は <em class="XXINVALIDXX">RFC:2616</em> で定義されています。</li>
+<li>dateTime は XML Schema Part 2: Datatypes (ISO 8601) で定義されています。</li>
+<li>文字列から<a href="refm066.html">Time</a>オブジェクトへの変換では<a href="refm298.html">parsedate</a>により様々な形式を扱えます。</li>
+</ul>
+<h2><a name="L005971" id="L005971">Design Issue</a></h2>
+<p><a href="refm527.html">ruby-src:lib/time.rb</a>参照
+<a href="refm002.html">執筆者募集</a></p>
+<h2><a name="L005972" id="L005972">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L005973" id="L005973"><code>Time.parse(<var>date</var>, <var>now</var>=<var>Time</var>.<var>now</var>)</code></a>
+<dt><a name="L005974" id="L005974"><code>Time.parse(<var>date</var>, <var>now</var>=<var>Time</var>.<var>now</var>) {|<var>year</var>| <var>year</var>}</code></a></dt>
+<dd>
+<p><var>date</var>を<a href="refm298.html#L005990">ParseDate.parsedate</a>によって
+パースして<a href="refm066.html">Time</a>オブジェクトに変換します。</p>
+<p>ブロック付きで呼ばれた場合、<var>date</var>の年はブロックによって変換されます。</p>
+<p>例:</p>
+<pre>Time.parse(...) {|y| y &lt; 100 ? (y &gt;= 69 ? y + 1900 : y + 2000) : y}</pre>
+<p>与えられた時刻に上位の要素がなかったり壊れていた場合、<var>now</var>の
+該当要素が使われます。
+下位の要素がなかったり壊れていた場合、最小値(1か0)が使われます。</p>
+<p>例:</p>
+<pre># 現在時刻が &quot;Thu Nov 29 14:33:20 GMT 2001&quot; で
+# タイムゾーンがGMTとすると:
+Time.parse(&quot;16:30&quot;)     #=&gt; Thu Nov 29 16:30:00 GMT 2001
+Time.parse(&quot;7/23&quot;)      #=&gt; Mon Jul 23 00:00:00 GMT 2001
+Time.parse(&quot;Aug 31&quot;)    #=&gt; Fri Aug 31 00:00:00 GMT 2001</pre>
+<p><a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></p>
+<p><a href="refm298.html">parsedate</a>が<var>date</var>から情報を取り出せないとき、または
+<a href="refm066.html">Time</a>クラスが指定された日時を表現できないときに<a href="refm094.html">ArgumentError</a>が
+発生します。</p>
+<p>このメソッドは他のパース用メソッドのフェイルセーフとして以下のように使用できます:</p>
+<pre>Time.rfc2822(date) rescue Time.parse(date)
+Time.httpdate(date) rescue Time.parse(date)
+Time.xmlschema(date) rescue Time.parse(date)</pre>
+<p>従って<a href="#L005973">Time.parse</a>の失敗はチェックすべきです。</p></dd>
+<dt><a name="L005975" id="L005975"><code>Time.rfc2822(<var>date</var>)</code></a>
+<dt><a name="L005976" id="L005976"><code>Time.rfc822(<var>date</var>)</code></a></dt>
+<dd>
+<p><em class="XXINVALIDXX">RFC:2822</em>で定義されているdate-timeとして<var>date</var>をパースして
+<a href="refm066.html">Time</a>オブジェクトに変換します。
+この形式は<em class="XXINVALIDXX">RFC:822</em>で定義されて<em class="XXINVALIDXX">RFC:1123</em>で更新された形式と
+同じです。</p>
+<p><var>date</var>が<em class="XXINVALIDXX">RFC:2822</em>に準拠していない、または
+<a href="refm066.html">Time</a>クラスが指定された日時を表現できないときに<a href="refm094.html">ArgumentError</a>が
+発生します。</p></dd>
+<dt><a name="L005977" id="L005977"><code>Time.httpdate(<var>date</var>)</code></a></dt>
+<dd>
+<p><em class="XXINVALIDXX">RFC:2616</em>で定義されているHTTP-dateとして<var>date</var>をパースして
+<a href="refm066.html">Time</a>オブジェクトに変換します。</p>
+<p><var>date</var>が<em class="XXINVALIDXX">RFC:2616</em>に準拠していない、または
+<a href="refm066.html">Time</a>クラスが指定された日時を表現できないときに<a href="refm094.html">ArgumentError</a>が
+発生します。</p></dd>
+<dt><a name="L005978" id="L005978"><code>Time.xmlschema(<var>date</var>)</code></a>
+<dt><a name="L005979" id="L005979"><code>Time.iso8601(<var>date</var>)</code></a></dt>
+<dd>
+<p>XML Schema で定義されているdateTimeとして<var>date</var>をパースして
+<a href="refm066.html">Time</a>オブジェクトに変換します。</p>
+<p><var>date</var>がISO 8601で定義されている形式に準拠していない、または
+<a href="refm066.html">Time</a>クラスが指定された日時を表現できないときに<a href="refm094.html">ArgumentError</a>が
+発生します。</p></dd>
+</dl>
+<h2><a name="L005980" id="L005980">メソッド:</a></h2>
+<dl>
+<dt><a name="L005981" id="L005981"><code>Time#rfc2822</code></a>
+<dt><a name="L005982" id="L005982"><code>Time#rfc822</code></a></dt>
+<dd>
+<p><em class="XXINVALIDXX">RFC:2822</em>で定義されているdate-timeとして表現される以下の形式の文字列を返します:</p>
+<pre>day-of-week, DD month-name CCYY hh:mm:ss zone</pre>
+<p>ただし zoneは [+-]hhmm です。</p>
+<p>selfがUTC timeの場合、zoneは +0000 になります。</p></dd>
+<dt><a name="L005983" id="L005983"><code>Time#httpdate</code></a></dt>
+<dd>
+<p><em class="XXINVALIDXX">RFC:2616</em>で定義されているHTTP-dateのrfc1123-dateとして
+表現される以下の形式の文字列を返します:</p>
+<pre>day-of-week, DD month-name CCYY hh:mm:ss GMT</pre>
+<p>注意: 結果はいつも UTC (GMT) です。</p></dd>
+<dt><a name="L005984" id="L005984"><code>Time#xmlschema([<var>fractional_seconds</var>])</code></a>
+<dt><a name="L005985" id="L005985"><code>Time#iso8601([<var>fractional_seconds</var>])</code></a></dt>
+<dd>
+<p>XML Schemaで定義されているdateTimeとして
+表現される以下の形式の文字列を返します:</p>
+<pre>CCYY-MM-DDThh:mm:ssTZD
+CCYY-MM-DDThh:mm:ss.sssTZD</pre>
+<p>ただし TZD は Z または [+-]hh:mm です。</p>
+<p>If self is a UTC time, Z is used as TZD.
+[+-]hh:mm is used otherwise.</p>
+<p><var>fractional_seconds</var>は小数点以下の秒を指定します。
+<var>fractional_seconds</var>のデフォルト値は0です。</p></dd>
+</dl>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small><a href="refm002.html">執筆者募集</a></small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm296.html">&lt;-PREV</a>][<a href="refm298.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Rubyの文法</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm021.html" rel="next" />
+<link href="refm019.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm019.html">&lt;-PREV</a>][<a href="refm021.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L000294" id="L000294">Rubyの文法</a></h1>
+<ul>
+<li><a href="refm021.html">字句構造</a>
+<ul>
+<li><a href="refm021.html#L000297">識別子</a></li>
+<li><a href="refm021.html#L000298">コメント</a></li>
+<li><a href="refm021.html#L000299">埋め込みドキュメント</a></li>
+<li><a href="refm021.html#L000300">予約語</a></li>
+</ul></li>
+<li><a href="refm022.html">プログラム</a>
+<ul>
+<li><a href="refm022.html#L000303">式</a></li>
+<li><a href="refm022.html#L000306">プログラムの終り</a></li>
+</ul></li>
+<li><a href="refm023.html">変数と定数</a>
+<ul>
+<li><a href="refm023.html#L000309">ローカル変数</a></li>
+<li><a href="refm023.html#L000310">インスタンス変数</a></li>
+<li><a href="refm023.html#L000311">クラス変数</a></li>
+<li><a href="refm023.html#L000312">グローバル変数</a></li>
+<li><a href="refm023.html#L000313">疑似変数</a></li>
+<li><a href="refm023.html#L000320">定数</a>
+<ul>
+<li><a href="refm023.html#L000321">定数参照の優先順位</a></li>
+</ul></li>
+</ul></li>
+<li><a href="refm024.html">リテラル</a>
+<ul>
+<li><a href="refm024.html#L000324">数値リテラル</a></li>
+<li><a href="refm024.html#L000338">文字列リテラル</a>
+<ul>
+<li><a href="refm024.html#L000339">バックスラッシュ記法</a></li>
+<li><a href="refm024.html#L000355">式展開</a></li>
+</ul></li>
+<li><a href="refm024.html#L000356">コマンド出力</a></li>
+<li><a href="refm024.html#L000357">ヒアドキュメント (行指向文字列リテラル)</a></li>
+<li><em class="XXINVALIDXX">正規表現</em></li>
+<li><a href="refm024.html#L000363">配列式</a></li>
+<li><a href="refm024.html#L000364">ハッシュ式</a></li>
+<li><a href="refm024.html#L000365">範囲オブジェクト</a></li>
+<li><a href="refm024.html#L000366">シンボル</a></li>
+<li><a href="refm024.html#L000367">%記法</a></li>
+</ul></li>
+<li><a href="refm025.html">演算子式</a>
+<ul>
+<li><a href="refm025.html#L000370">代入</a>
+<ul>
+<li><a href="refm025.html#L000371">自己代入</a></li>
+<li><a href="refm025.html#L000372">多重代入</a></li>
+</ul></li>
+<li><a href="refm025.html#L000373">範囲式</a></li>
+<li><a href="refm025.html#L000374">and</a></li>
+<li><a href="refm025.html#L000375">or</a></li>
+<li><a href="refm025.html#L000376">not</a></li>
+<li><a href="refm025.html#L000377">条件演算子</a></li>
+</ul></li>
+<li><a href="refm026.html">制御構造</a>
+<ul>
+<li><a href="refm026.html#L000380">条件分岐</a>
+<ul>
+<li><a href="refm026.html#L000381">if</a></li>
+<li><a href="refm026.html#L000382">if 修飾子</a></li>
+<li><a href="refm026.html#L000383">unless</a></li>
+<li><a href="refm026.html#L000384">unless 修飾子</a></li>
+<li><a href="refm026.html#L000385">case</a></li>
+</ul></li>
+<li><a href="refm026.html#L000386">繰り返し</a>
+<ul>
+<li><a href="refm026.html#L000387">while</a></li>
+<li><a href="refm026.html#L000388">while 修飾子</a></li>
+<li><a href="refm026.html#L000389">until</a></li>
+<li><a href="refm026.html#L000390">until修飾子</a></li>
+<li><a href="refm026.html#L000391">for</a></li>
+<li><a href="refm026.html#L000392">break</a></li>
+<li><a href="refm026.html#L000393">next</a></li>
+<li><a href="refm026.html#L000394">redo</a></li>
+<li><a href="refm026.html#L000395">retry</a></li>
+</ul></li>
+<li><a href="refm026.html#L000396">例外処理</a>
+<ul>
+<li><a href="refm026.html#L000397">raise</a></li>
+<li><a href="refm026.html#L000398">begin</a></li>
+<li><a href="refm026.html#L000399">rescue修飾子</a></li>
+</ul></li>
+<li><a href="refm026.html#L000400">その他</a>
+<ul>
+<li><a href="refm026.html#L000401">return</a></li>
+<li><a href="refm026.html#L000402">BEGIN</a></li>
+<li><a href="refm026.html#L000403">END</a></li>
+</ul></li>
+</ul></li>
+<li><a href="refm027.html">メソッド呼び出し</a>
+<ul>
+<li><a href="refm027.html#L000406">super</a></li>
+<li><a href="refm027.html#L000407">ブロック付きメソッド呼び出し</a>（<em class="XXINVALIDXX">イテレータ</em>）</li>
+<li><a href="refm027.html#L000408">yield</a></li>
+</ul></li>
+<li><a href="refm028.html">クラス／メソッドの定義</a>
+<ul>
+<li><a href="refm028.html#L000411">クラス定義</a></li>
+<li><a href="refm028.html#L000412">特異クラス定義</a></li>
+<li><a href="refm028.html#L000413">モジュール定義</a></li>
+<li><a href="refm028.html#L000414">メソッド定義</a>
+<ul>
+<li><a href="refm028.html#L000415">演算子式の定義</a></li>
+<li><a href="refm028.html#L000416">メソッド定義のネスト</a></li>
+<li><a href="refm028.html#L000417">メソッドの評価</a></li>
+</ul></li>
+<li><a href="refm028.html#L000418">特異メソッド定義</a></li>
+<li><a href="refm028.html#L000419">クラスメソッドの定義</a></li>
+<li><a href="refm028.html#L000420">呼び出し制限</a></li>
+<li><a href="refm028.html#L000421">定義に関する操作</a>
+<ul>
+<li><a href="refm028.html#L000422">alias</a></li>
+<li><a href="refm028.html#L000423">undef</a></li>
+<li><a href="refm028.html#L000424">defined?</a></li>
+</ul></li>
+</ul></li>
+</ul>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm019.html">&lt;-PREV</a>][<a href="refm021.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

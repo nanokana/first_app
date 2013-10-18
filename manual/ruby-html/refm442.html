@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>trap::Time</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm443.html" rel="next" />
+<link href="refm441.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm421.html">UP</a>][<a href="refm441.html">&lt;-PREV</a>][<a href="refm443.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L009487" id="L009487">Time</a></h1>
+<h2><a name="L009488" id="L009488">タイムゾーン</a></h2>
+<p>rubyが出力するタイムゾーン文字列はOSの実装に依存しています。以下のよう
+な文字列を返すOSさえあります。
+<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></p>
+<pre>$ ruby -e 'p Time.now'
+Mon Sep 04 17:32:11 東京 (標準時) 2000</pre>
+<p>また、カレントのタイムゾーンを返す実装も多く、Time.gmtime などの
+効力が及ばない場合があります。</p>
+<pre>puts Time.now.gmtime.strftime(&quot;%H:%M %Z&quot;) #-&gt; 06:09 GMT+9:00</pre>
+<p>OSによらずruby自身が&quot;UTC&quot;を出力する場合もあるのでさらに複雑です。
+<a name="footmark:2" id="footmark:2" href="#foottext:2"><sup><small>*2</small></sup></a></p>
+<pre>$ ruby -e 'p Time.now.gmtime.zone'
+&quot;GMT&quot;
+$ ruby -e 'p Time.now.gmtime'
+Tue Jan 16 17:09:22 UTC 2001</pre>
+<p>これらの問題の影響を受けるメソッドには以下のものがあります。</p>
+<ul>
+<li>Time#strftime</li>
+<li>Time#zone</li>
+<li>Time#to_s</li>
+<li>Time#inspect</li>
+<li>Time#to_a</li>
+</ul>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>Windowsで環境変数TZを設定していないときにこのようになることがあるようです。</small><br />
+<a name="foottext:2" id="foottext:2" href="#footmark:2"><sup><small>*2</small></sup></a><small> <a href="refm384.html">version 1.7</a>では <a href="refm066.html">Time#zone</a> は&quot;UTC&quot;
+を返します</small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm421.html">UP</a>][<a href="refm441.html">&lt;-PREV</a>][<a href="refm443.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

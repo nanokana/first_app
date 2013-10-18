@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Complex</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm263.html" rel="next" />
+<link href="refm261.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm261.html">UP</a>][<a href="refm261.html">&lt;-PREV</a>][<a href="refm263.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L005197" id="L005197">Complex</a></h1>
+<p>[2002-04-03]  by <a href="mailto:sugawah@attglobal.net">すす</a><sup class="outside"><small>[外部]</small></sup></p>
+<p>複素数を扱うクラス</p>
+<h2><a name="L005198" id="L005198">使い方 Usage</a></h2>
+<p>Complexを使うためにはrequire 'complex'する必要がある。
+このライブラリをrequireすると、さらにMathモジュールが複素数対応に拡張される。</p>
+<pre>require 'complex'</pre>
+<p>また、添付ライブラリのベクトルクラス<a href="refm267.html">Vector</a>、および、
+行列クラス<a href="refm266.html">Matrix</a>を読み込んでいるとき、
+VectorやMatrixの要素として、複素数を使うことができる。
+VectorおよびMatrixのそれぞれの項目を参照せよ。</p>
+<pre>require 'matrix'
+require 'complex'</pre>
+<h2><a name="L005199" id="L005199">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm052.html">Numeric</a></li>
+</ul>
+<h2><a name="L005200" id="L005200">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L005201" id="L005201"><code>Complex.new(<var>r</var>,<var>i</var>)</code></a>
+<dt><a name="L005202" id="L005202"><code>Complex(<var>r</var>,<var>i</var>=<var>0</var>)</code></a>
+<dt><a name="L005203" id="L005203"><code>Complex.new!(<var>r</var>,<var>i</var>=<var>0</var>)</code></a></dt>
+<dd>
+<p>実部がr、虚部iが複素数を生成する。</p></dd>
+</dl>
+<h2><a name="L005204" id="L005204">メソッド:</a></h2>
+<dl>
+<dt><a name="L005205" id="L005205"><code>Complex#+ <var>c</var></code></a></dt>
+<dd>
+<p>複素数cを加えた結果を返す。</p></dd>
+<dt><a name="L005206" id="L005206"><code>Complex#- <var>c</var></code></a></dt>
+<dd>
+<p>複素数cを減じた結果を返す。</p></dd>
+<dt><a name="L005207" id="L005207"><code>Complex#* <var>c</var></code></a></dt>
+<dd>
+<p>複素数cを乗じた結果を返す。</p></dd>
+<dt><a name="L005208" id="L005208"><code>Complex#/ <var>c</var></code></a></dt>
+<dd>
+<p>複素数cで除した結果を返す。</p></dd>
+<dt><a name="L005209" id="L005209"><code>Complex#% <var>c</var></code></a></dt>
+<dd>
+<p>複素数cで除した余り(実部同士、虚部同士の演算結果)を返す。</p></dd>
+<dt><a name="L005210" id="L005210"><code>Complex#** <var>c</var></code></a></dt>
+<dd>
+<p>複素数cでべき乗した結果を返す。</p></dd>
+<dt><a name="L005211" id="L005211"><code>Complex#divmod -- <var>obsolete</var></code></a></dt>
+<dd>
+<p>このメソッドは廃止された。</p></dd>
+<dt><a name="L005212" id="L005212"><code>Complex#abs</code></a></dt>
+<dd>
+<p>複素数の絶対値を返す。</p></dd>
+<dt><a name="L005213" id="L005213"><code>Complex#abs2</code></a></dt>
+<dd>
+<p>複素数の絶対値の2乗を返す。</p></dd>
+<dt><a name="L005214" id="L005214"><code>Complex#arg</code></a></dt>
+<dd>
+<p>複素数の偏角を返す。(値域は?）</p></dd>
+<dt><a name="L005215" id="L005215"><code>Complex#polar</code></a></dt>
+<dd>
+<p>複素数の極座標表示、すなわち、配列[self.abs,self.arg]を返す。</p></dd>
+<dt><a name="L005216" id="L005216"><code>Complex#conjugate</code></a></dt>
+<dd>
+<p>共役複素数を返す。</p></dd>
+<dt><a name="L005217" id="L005217"><code>Complex#real</code></a></dt>
+<dd>
+<p>実部を返す。</p></dd>
+<dt><a name="L005218" id="L005218"><code>Complex#image</code></a></dt>
+<dd>
+<p>虚部を返す。</p></dd>
+<dt><a name="L005219" id="L005219"><code>Complex#&lt;=&gt; <var>c</var></code></a></dt>
+<dd>
+<p>cとの比較結果を返す。</p></dd>
+<dt><a name="L005220" id="L005220"><code>Complex#== <var>c</var></code></a></dt>
+<dd>
+<p>cと等しければ、真を返す。</p></dd>
+<dt><a name="L005221" id="L005221"><code>Complex#to_i</code></a></dt>
+<dd>
+<p>整数<a href="refm053.html">Integer</a>に変換する。</p></dd>
+<dt><a name="L005222" id="L005222"><code>Complex#to_f</code></a></dt>
+<dd>
+<p>浮動小数点数<a href="refm056.html">Float</a>に変換する。</p></dd>
+<dt><a name="L005223" id="L005223"><code>Complex#to_r</code></a></dt>
+<dd>
+<p>有理数<a href="refm264.html">Rational</a>に変換する。</p></dd>
+</dl>
+<h2><a name="L005224" id="L005224">定数</a></h2>
+<dl>
+<dt><a name="L005225" id="L005225">I</a></dt>
+<dd>
+<p>虚数単位。</p>
+</dd>
+</dl>
+<h2><a name="L005226" id="L005226">ChangeLog</a></h2>
+<ul>
+<li>[2002-04-03] 初版 by <a href="mailto:sugawah@attglobal.net">すす</a><sup class="outside"><small>[外部]</small></sup></li>
+<li>[2003-04-29] Complex#polarの記述を正しい配列リテラルの表記に修正 by <a href="mailto:pastor@fmc.rikkyo.ne.jp">pastor</a><sup class="outside"><small>[外部]</small></sup></li>
+</ul>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm261.html">UP</a>][<a href="refm261.html">&lt;-PREV</a>][<a href="refm263.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

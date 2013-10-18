@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>OpenSSL::X509</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm218.html" rel="next" />
+<link href="refm216.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm213.html">UP</a>][<a href="refm216.html">&lt;-PREV</a>][<a href="refm218.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L004261" id="L004261">OpenSSL::X509</a></h1>
+<ul>
+<li><a href="refm218.html">OpenSSL::X509::Certificate</a></li>
+<li><a href="refm223.html">OpenSSL::X509::Store</a></li>
+</ul>
+<h2><a name="L004262" id="L004262">定数</a></h2>
+<p>以下は OpenSSL::X509::Store#purpose にセットされる値。</p>
+<dl>
+<dt><a name="L004263" id="L004263"><code>PURPOSE_ANY</code></a></dt>
+<dd>
+<p>どんな目的に対しても使えるか。</p></dd>
+<dt><a name="L004264" id="L004264"><code>PURPOSE_CRL_SIGN</code></a></dt>
+<dd>
+<p>CRL の署名をするのに使えるか。</p></dd>
+<dt><a name="L004265" id="L004265"><code>PURPOSE_NS_SSL_SERVER</code></a></dt>
+<dd>
+<p>Netscape SSL server の証明書として使えるか。</p></dd>
+<dt><a name="L004266" id="L004266"><code>PURPOSE_SMIME_ENCRYPT</code></a></dt>
+<dd>
+<p>S/MIME の暗号化をするのに使えるか。</p></dd>
+<dt><a name="L004267" id="L004267"><code>PURPOSE_SMIME_SIGN</code></a></dt>
+<dd>
+<p>S/MIME の署名をするのに使えるか。</p></dd>
+<dt><a name="L004268" id="L004268"><code>PURPOSE_SSL_CLIENT</code></a></dt>
+<dd>
+<p>SSL のクライアントサイドの証明書として使えるか。</p></dd>
+<dt><a name="L004269" id="L004269"><code>PURPOSE_SSL_SERVER</code></a></dt>
+<dd>
+<p>SSL のサーバサイドの証明書として使えるか。</p></dd>
+</dl>
+<p>以下は OpenSSL::X509::Store#trust にセットされる値。</p>
+<dl>
+<dt><a name="L004270" id="L004270"><code>TRUST_COMPAT</code></a>
+<dt><a name="L004271" id="L004271"><code>TRUST_EMAIL</code></a>
+<dt><a name="L004272" id="L004272"><code>TRUST_OBJECT_SIGN</code></a>
+<dt><a name="L004273" id="L004273"><code>TRUST_SSL_CLIENT</code></a>
+<dt><a name="L004274" id="L004274"><code>TRUST_SSL_SERVER</code></a>
+</dl>
+<p>以下は OpenSSL::X509::Store#error にセットされる値。</p>
+<dl>
+<dt><a name="L004275" id="L004275"><code>V_OK</code></a>
+<dt><a name="L004276" id="L004276"><code>V_ERR_AKID_SKID_MISMATCH</code></a>
+<dt><a name="L004277" id="L004277"><code>V_ERR_APPLICATION_VERIFICATION</code></a>
+<dt><a name="L004278" id="L004278"><code>V_ERR_CERT_CHAIN_TOO_LONG</code></a>
+<dt><a name="L004279" id="L004279"><code>V_ERR_CERT_HAS_EXPIRED</code></a>
+<dt><a name="L004280" id="L004280"><code>V_ERR_CERT_NOT_YET_VALID</code></a>
+<dt><a name="L004281" id="L004281"><code>V_ERR_CERT_REJECTED</code></a>
+<dt><a name="L004282" id="L004282"><code>V_ERR_CERT_REVOKED</code></a>
+<dt><a name="L004283" id="L004283"><code>V_ERR_CERT_SIGNATURE_FAILURE</code></a>
+<dt><a name="L004284" id="L004284"><code>V_ERR_CERT_UNTRUSTED</code></a>
+<dt><a name="L004285" id="L004285"><code>V_ERR_CRL_HAS_EXPIRED</code></a>
+<dt><a name="L004286" id="L004286"><code>V_ERR_CRL_NOT_YET_VALID</code></a>
+<dt><a name="L004287" id="L004287"><code>V_ERR_CRL_SIGNATURE_FAILURE</code></a>
+<dt><a name="L004288" id="L004288"><code>V_ERR_DEPTH_ZERO_SELF_SIGNED_CERT</code></a>
+<dt><a name="L004289" id="L004289"><code>V_ERR_ERROR_IN_CERT_NOT_AFTER_FIELD</code></a>
+<dt><a name="L004290" id="L004290"><code>V_ERR_ERROR_IN_CERT_NOT_BEFORE_FIELD</code></a>
+<dt><a name="L004291" id="L004291"><code>V_ERR_ERROR_IN_CRL_LAST_UPDATE_FIELD</code></a>
+<dt><a name="L004292" id="L004292"><code>V_ERR_ERROR_IN_CRL_NEXT_UPDATE_FIELD</code></a>
+<dt><a name="L004293" id="L004293"><code>V_ERR_INVALID_CA</code></a>
+<dt><a name="L004294" id="L004294"><code>V_ERR_INVALID_PURPOSE</code></a>
+<dt><a name="L004295" id="L004295"><code>V_ERR_KEYUSAGE_NO_CERTSIGN</code></a>
+<dt><a name="L004296" id="L004296"><code>V_ERR_OUT_OF_MEM</code></a>
+<dt><a name="L004297" id="L004297"><code>V_ERR_PATH_LENGTH_EXCEEDED</code></a>
+<dt><a name="L004298" id="L004298"><code>V_ERR_SELF_SIGNED_CERT_IN_CHAIN</code></a>
+<dt><a name="L004299" id="L004299"><code>V_ERR_SUBJECT_ISSUER_MISMATCH</code></a>
+<dt><a name="L004300" id="L004300"><code>V_ERR_UNABLE_TO_DECODE_ISSUER_PUBLIC_KEY</code></a>
+<dt><a name="L004301" id="L004301"><code>V_ERR_UNABLE_TO_DECRYPT_CERT_SIGNATURE</code></a>
+<dt><a name="L004302" id="L004302"><code>V_ERR_UNABLE_TO_DECRYPT_CRL_SIGNATURE</code></a>
+<dt><a name="L004303" id="L004303"><code>V_ERR_UNABLE_TO_GET_CRL</code></a>
+<dt><a name="L004304" id="L004304"><code>V_ERR_UNABLE_TO_GET_ISSUER_CERT</code></a>
+<dt><a name="L004305" id="L004305"><code>V_ERR_UNABLE_TO_GET_ISSUER_CERT_LOCALLY</code></a>
+<dt><a name="L004306" id="L004306"><code>V_ERR_UNABLE_TO_VERIFY_LEAF_SIGNATURE</code></a>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm213.html">UP</a>][<a href="refm216.html">&lt;-PREV</a>][<a href="refm218.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

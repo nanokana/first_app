@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>OpenSSL::Cipher::Cipher</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm216.html" rel="next" />
+<link href="refm214.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm213.html">UP</a>][<a href="refm214.html">&lt;-PREV</a>][<a href="refm216.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L004226" id="L004226">OpenSSL::Cipher::Cipher</a></h1>
+<p>対称鍵暗号のために抽象化されたインターフェースを提供するクラス。</p>
+<p>以下が実装されているクラス。</p>
+<ul>
+<li>OpenSSL::Cipher::BF</li>
+<li>OpenSSL::Cipher::CAST5</li>
+<li>OpenSSL::Cipher::DES</li>
+<li>OpenSSL::Cipher::IDEA</li>
+<li>OpenSSL::Cipher::RC2</li>
+<li>OpenSSL::Cipher::RC4</li>
+<li>OpenSSL::Cipher::RC5</li>
+</ul>
+<p>AES も OpenSSL::Cipher::Cipher.new('aes256') などとすれば利用可能です。</p>
+<p><a href="refm389.html">ruby 1.8.3 feature</a>: Cast5 と Idea が CAST5 と IDEA に改名されました。</p>
+<p>使用例。</p>
+<pre>require 'openssl'
+
+p a123 = &quot;0123456789&quot;
+pass = &quot;hogehoge&quot;
+enc = OpenSSL::Cipher::DES.new
+enc.encrypt
+enc.pkcs5_keyivgen(pass)
+p a = enc.update(a123)
+p b = enc.final
+s = a + b
+
+dec = OpenSSL::Cipher::DES.new
+dec.decrypt
+dec.pkcs5_keyivgen(pass)
+p a = dec.update(s)
+p b = dec.final
+p a + b #=&gt; &quot;0123456789&quot;</pre>
+<h2><a name="L004227" id="L004227">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L004228" id="L004228"><code>Cipher.new(<var>name</var>)</code></a>
+<dt><a name="L004229" id="L004229"><code>Cipher.new()</code></a></dt>
+<dd>
+<p>対称鍵暗号アルゴリズムの名前 name を与えると暗号オブジェクトを生成する。
+利用できるアルゴリズムはシステムにインストールされている openssl に依存します。</p></dd>
+</dl>
+<pre>$ openssl
+OpenSSL&gt; version
+OpenSSL 0.9.7d 17 Mar 2004
+OpenSSL&gt; enc help
+（略）  
+Cipher Types
+-aes-128-cbc               -aes-128-cfb               -aes-128-ecb
+-aes-128-ofb               -aes-192-cbc               -aes-192-cfb
+-aes-192-ecb               -aes-192-ofb               -aes-256-cbc
+-aes-256-cfb               -aes-256-ecb               -aes-256-ofb
+-aes128                    -aes192                    -aes256
+-bf                        -bf-cbc                    -bf-cfb
+-bf-ecb                    -bf-ofb                    -blowfish
+-cast                      -cast-cbc                  -cast5-cbc
+-cast5-cfb                 -cast5-ecb                 -cast5-ofb
+-des                       -des-cbc                   -des-cfb
+-des-ecb                   -des-ede                   -des-ede-cbc
+-des-ede-cfb               -des-ede-ofb               -des-ede3
+-des-ede3-cbc              -des-ede3-cfb              -des-ede3-ofb
+-des-ofb                   -des3                      -desx
+-desx-cbc                  -idea                      -idea-cbc
+-idea-cfb                  -idea-ecb                  -idea-ofb
+-rc2                       -rc2-40-cbc                -rc2-64-cbc
+-rc2-cbc                   -rc2-cfb                   -rc2-ecb
+-rc2-ofb                   -rc4                       -rc4-40
+-rc5                       -rc5-cbc                   -rc5-cfb
+-rc5-ecb                   -rc5-ofb</pre>
+<p>さまざまな方式がありますが、2006年現在 aes256 (aes-256-cbc) を用いるのが安心でしょう。</p>
+<p>参考: <a href="http://x68000.q-e-d.net/~68user/unix/pickup?openssl">UNIXの部屋 検索結果: openssl</a><sup class="outside"><small>[外部]</small></sup></p>
+<pre>require 'openssl'
+include OpenSSL::Cipher
+
+# Triple DES
+c1 = Cipher.new(&quot;DES-EDE3-CBC&quot;)
+c2 = DES.new(:EDE3, &quot;CBC&quot;)
+pass = &quot;open sesame!&quot;
+data = &quot;Hello world!&quot;
+c1.pkcs5_keyivgen(pass)
+s1 = c1.encrypt.update(data) + c1.final
+c2.pkcs5_keyivgen(pass)
+s2 = c2.decrypt.update(s1) + c2.final
+p(data == s2) #=&gt; true
+
+c1 = Cipher.new(&quot;AES256&quot;)
+c2 = Cipher.new(&quot;AES-256-CBC&quot;)
+pass = &quot;open sesame!&quot;
+data = &quot;Hello world!&quot;
+c1.pkcs5_keyivgen(pass)
+s1 = c1.encrypt.update(data) + c1.final
+c2.pkcs5_keyivgen(pass)
+s2 = c2.decrypt.update(s1) + c2.final
+p(data == s2) #=&gt; true</pre>
+<h2><a name="L004230" id="L004230">メソッド</a></h2>
+<dl>
+<dt><a name="L004231" id="L004231"><code>reset</code></a></dt>
+<dd>
+<p>暗号、暗号鍵、暗号化復号化フラグを共にリセットする。</p></dd>
+<dt><a name="L004232" id="L004232"><code>encrypt(<var>key</var>, <var>iv</var>)</code></a></dt>
+<dd>
+<p>暗号化の準備をする。iv は initialization vector、必要なら使用される。
+このAPIに引数を渡すのは推奨しない。パスワードから鍵を生成する場合は、
+pkcs5_keyivgenを使用すること。</p></dd>
+<dt><a name="L004233" id="L004233"><code>decrypt(<var>key</var>, <var>iv</var>)</code></a></dt>
+<dd>
+<p>復号化の準備をする。iv は initialization vector、必要なら使用される。
+このAPIに引数を渡すのは推奨しない。パスワードから鍵を生成する場合は、
+pkcs5_keyivgenを使用すること。</p></dd>
+<dt><a name="L004234" id="L004234"><code>update(<var>data</var>)</code></a></dt>
+<dd>
+<p>与えられた文字列を暗号化あるいは復号化して文字列として返す。直前に呼ばれた encrypt あるいは decrypt により暗号化か復号化かが決まる。</p></dd>
+<dt><a name="L004235" id="L004235"><code>final()</code></a></dt>
+<dd>
+<p>ブロックに残っているデータを暗号化あるいは復号化する。final() を呼んだあとでは update を呼んではいけない。</p></dd>
+<dt><a name="L004236" id="L004236"><code>key=</code></a></dt>
+<dd>
+<p>暗号鍵を設定する。
+なお、ここでいう「暗号鍵」は AES のアルゴリズムに渡される鍵であり、「パスワード」ではない。</p></dd>
+<dt><a name="L004237" id="L004237"><code>key_len</code></a>
+<dt><a name="L004238" id="L004238"><code>key_len=</code></a></dt>
+<dd>
+<p>暗号鍵の長さ。</p></dd>
+<dt><a name="L004239" id="L004239"><code>iv=</code></a></dt>
+<dd>
+<p>初期ベクトル (initialization vector)。</p></dd>
+<dt><a name="L004240" id="L004240"><code>iv_len</code></a></dt>
+<dd>
+<p>初期ベクトルの長さ。</p></dd>
+<dt><a name="L004241" id="L004241"><code>block_size</code></a></dt>
+<dd>
+<p>ブロックのサイズを返す。</p></dd>
+<dt><a name="L004242" id="L004242"><code>padding=</code></a></dt>
+<dd>
+<p>パディングを設定する。</p></dd>
+<dt><a name="L004243" id="L004243"><code>pkcs5_keyivgen(<var>pass</var>, <var>salt</var>=<var>nil</var>, <var>num</var>=<var>2048</var>, <var>digest</var>=<var>OpenSSL</var>::<var>Digest</var>::<var>MD5</var>.<var>new</var>())</code></a></dt>
+<dd>
+<p>pass から key と iv を生成し key= と iv= に設定する。
+salt は 8-octet string でないといけない。nil を返す。</p></dd>
+</dl>
+<h2><a name="L004244" id="L004244">エラー</a></h2>
+<p>OpenSSL::Cipher::CipherError</p>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm213.html">UP</a>][<a href="refm214.html">&lt;-PREV</a>][<a href="refm216.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

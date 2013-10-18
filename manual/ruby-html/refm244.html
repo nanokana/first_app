@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>XMLRPC::Client</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm245.html" rel="next" />
+<link href="refm243.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm243.html">UP</a>][<a href="refm243.html">&lt;-PREV</a>][<a href="refm245.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L004892" id="L004892">XMLRPC::Client</a></h1>
+<p><a href="refm002.html">執筆者募集</a></p>
+<p><a href="refm243.html">XMLRPC</a></p>
+<p>XML-RPC サーバにプロシジャを実行させるためのクラスです。</p>
+<h2><a name="L004893" id="L004893">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L004894" id="L004894"><code>Client.new( <var>host</var> = &quot;<var>localhost</var>&quot;, <var>path</var> = &quot;/<var>RPC2</var>&quot;, <var>port</var> = <var>80</var> <var>or</var> <var>443</var>, <var>proxy_host</var> = <var>nil</var>, <var>proxy_port</var> = <var>nil</var>, <var>user</var> = <var>nil</var>, <var>password</var> = <var>nil</var>, <var>use_ssl</var> = <var>false</var>, <var>timeout</var> = <var>30</var>)</code></a></dt>
+<dd>
+<p>Client オブジェクトを生成します。</p></dd>
+<dt><a name="L004895" id="L004895"><code>Client.new2( <var>uri</var>, <var>proxy</var> = <var>nil</var>, <var>timeout</var> = <var>30</var>)</code></a></dt>
+<dd>
+<p>Client オブジェクトを生成します。<var>uri</var> は文字列です。<var>proxy</var> は
+&quot;proxy.eample.com:8080&quot; のような文字列です。</p>
+<pre>require 'xmlrpc/client'
+serv = XMLRPC::Client.new2('http://www.example.com/RPC2')
+serv.call(&quot;sample.sumAndDifference&quot;, 5, 3)</pre></dd>
+<dt><a name="L004896" id="L004896"><code>Client.new3( <var>hash</var> = {} )</code></a></dt>
+<dd>
+<p><a href="refm044.html">Hash</a> オブジェクト <var>hash</var> から Client オブジェクトを生成します。
+有効なハッシュのキーはそれぞれ文字列     </p>
+<ul>
+<li>host</li>
+<li>path</li>
+<li>port</li>
+<li>proxy_host</li>
+<li>proxy_port</li>
+<li>user</li>
+<li>password</li>
+<li>use_ssl</li>
+<li>timeout </li>
+</ul>
+<p>です。</p></dd>
+</dl>
+<h2><a name="L004897" id="L004897">メソッド</a></h2>
+<dl>
+<dt><a name="L004898" id="L004898"><code>call( <var>method</var>, *<var>args</var> )</code></a>
+<dt><a name="L004899" id="L004899"><code>call2( <var>method</var>, *<var>args</var> )</code></a>
+<dt><a name="L004900" id="L004900"><code>multicall( *<var>methods</var> )</code></a>
+<dt><a name="L004901" id="L004901"><code>multicall2( *<var>methods</var> )</code></a>
+<dt><a name="L004902" id="L004902"><code>proxy( <var>prefix</var>, *<var>args</var> )</code></a>
+<dt><a name="L004903" id="L004903"><code>proxy2( <var>prefix</var>, *<var>args</var> )</code></a>
+<dt><a name="L004904" id="L004904"><code>call_async(...)</code></a>
+<dt><a name="L004905" id="L004905"><code>call2_async(...)</code></a>
+<dt><a name="L004906" id="L004906"><code>multicall_async(...)</code></a>
+<dt><a name="L004907" id="L004907"><code>multicall2_async(...)</code></a>
+<dt><a name="L004908" id="L004908"><code>proxy_async(...)</code></a>
+<dt><a name="L004909" id="L004909"><code>proxy2_async(...)</code></a>
+<dt><a name="L004910" id="L004910"><code>timeout</code></a>
+<dt><a name="L004911" id="L004911"><code>timeout=</code></a>
+<dt><a name="L004912" id="L004912"><code>user</code></a>
+<dt><a name="L004913" id="L004913"><code>user=</code></a>
+<dt><a name="L004914" id="L004914"><code>password</code></a>
+<dt><a name="L004915" id="L004915"><code>password=</code></a>
+<dt><a name="L004916" id="L004916"><code>set_writer( <var>writer</var> )</code></a>
+<dt><a name="L004917" id="L004917"><code>set_parser( <var>parser</var> )</code></a>
+<dt><a name="L004918" id="L004918"><code>cookie</code></a>
+<dt><a name="L004919" id="L004919"><code>cookie=</code></a>
+<dt><a name="L004920" id="L004920"><code>http_header_extra</code></a>
+<dt><a name="L004921" id="L004921"><code>http_header_extra=</code></a>
+<dt><a name="L004922" id="L004922"><code>http_last_response</code></a>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm243.html">UP</a>][<a href="refm243.html">&lt;-PREV</a>][<a href="refm245.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

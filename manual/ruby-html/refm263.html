@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>rational</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm264.html" rel="next" />
+<link href="refm262.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm262.html">&lt;-PREV</a>][<a href="refm264.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L005228" id="L005228">rational</a></h1>
+<p>--&gt; <a href="refm264.html">Rational</a></p>
+<h2><a name="L005229" id="L005229">関数:</a></h2>
+<dl>
+<dt><a name="L005230" id="L005230"><code>Rational(<var>a</var>, <var>b</var>)</code></a></dt>
+<dd>
+<p><a href="refm264.html">Rational</a> オブジェクトを生成する。</p></dd>
+</dl>
+<h2><a name="L005231" id="L005231">Integer</a></h2>
+<p>rational を require すると <a href="refm053.html">Integer</a> のメソッドが以下のように再定義される。</p>
+<h3><a name="L005232" id="L005232">メソッド</a></h3>
+<dl>
+<dt><a name="L005233" id="L005233"><code><var>self</var> / <var>other</var></code></a></dt>
+<dd>
+<p>除算。</p>
+<ul>
+<li>otherが有理数(Rational)ならば、有理数(Rational)を返す。</li>
+<li>otherがそれ以外なら、<a href="refm053.html">オリジナルの`/'</a>と同じ。つまり、
+        other が整数(Integer)ならば、整数(Integer)を(整除)、浮動小数(Float)ならば、
+        浮動小数(Float)を返す。</li>
+</ul>
+<p>ただし、いずれも、other == 0 の時は、<a href="refm112.html">ZeroDivisionError</a>となる。</p></dd>
+<dt><a name="L005234" id="L005234"><code><var>self</var> ** <var>other</var></code></a></dt>
+<dd>
+<p>べき乗。</p>
+<ul>
+<li>otherが正または0の整数(Integer)ならば、整数(Integer)を返す。</li>
+<li>otherが負の整数(Integer)ならば、有理数(Rational)を返す。</li>
+<li>otherが有理数(Rational)や浮動小数(Float)ならば、浮動小数(Float)を返す。</li>
+</ul></dd>
+<dt><a name="L005235" id="L005235"><code>power!(<var>other</var>)</code></a></dt>
+<dd>
+<p><a href="refm053.html">オリジナルの`**'</a>と同じ。otherが正または0の整数(Integer)ならば、
+整数(Integer)を、それ以外なら、浮動小数(Float)を返す。</p></dd>
+<dt><a name="L005236" id="L005236"><code>to_r</code></a></dt>
+<dd>
+<p>対応する有理数(Rational)を返す。Rational(self, 1) と同じ。</p></dd>
+<dt><a name="L005237" id="L005237"><code>gcd(<var>n</var>)</code></a></dt>
+<dd>
+<p>self と n の最大公約数を Fixnum として返す。self や n が負の場合は、正に
+変換してから計算する。</p></dd>
+<dt><a name="L005238" id="L005238"><code>lcm(<var>n</var>)</code></a></dt>
+<dd>
+<p>self と n の最小公倍数を返す。self や n が負の場合は、正に
+変換してから計算する。</p></dd>
+<dt><a name="L005239" id="L005239"><code>gcdlcm(<var>int</var>)</code></a></dt>
+<dd>
+<p>最大公約数と最小公倍数の配列 [self.gcd, self.lcm] を返します。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm262.html">&lt;-PREV</a>][<a href="refm264.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>MatchData</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm048.html" rel="next" />
+<link href="refm046.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm035.html">UP</a>][<a href="refm046.html">&lt;-PREV</a>][<a href="refm048.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L001133" id="L001133">MatchData</a></h1>
+<p>正規表現のマッチに関する情報を扱うためのクラス。
+このクラスのインスタンスは、</p>
+<ul>
+<li><a href="refm060.html#L001426">Regexp.last_match</a></li>
+<li><a href="refm060.html#L001435">Regexp#match</a>, <a href="refm061.html#L001519">String#match</a></li>
+<li><a href="refm030.html#L000514">$~</a></li>
+</ul>
+<p>などにより得られます。</p>
+<h2><a name="L001134" id="L001134">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm035.html">Object</a></li>
+</ul>
+<h2><a name="L001135" id="L001135">メソッド:</a></h2>
+<dl>
+<dt><a name="L001136" id="L001136"><code>self[n]</code></a></dt>
+<dd>
+<p><var>n</var> 番目の部分文字列を返します。0 はマッチ全体を意味します。
+<var>n</var> の値が負の時には末尾からのインデックスと見倣します(末尾の
+要素が -1 番目)。<var>n</var> 番目の要素が存在しない時には <code>nil</code> を
+返します。</p>
+<pre>/(foo)(bar)(BAZ)?/ =~ &quot;foobarbaz&quot;
+p $~.to_a       # =&gt; [&quot;foobar&quot;, &quot;foo&quot;, &quot;bar&quot;, nil]
+p $~[0]         # =&gt; &quot;foobar&quot;
+p $~[1]         # =&gt; &quot;foo&quot;
+p $~[2]         # =&gt; &quot;bar&quot;
+p $~[3]         # =&gt; nil        (マッチしていない)
+p $~[4]         # =&gt; nil        (範囲外)
+p $~[-2]        # =&gt; &quot;bar&quot;</pre></dd>
+<dt><a name="L001137" id="L001137"><code>self[start..end]</code></a></dt>
+<dd>
+<p><em class="XXINVALIDXX">Array#[start..end]</em> と同じです。</p>
+<pre>/(foo)(bar)/ =~ &quot;foobarbaz&quot;
+p $~[0..2]      # =&gt; [&quot;foobar&quot;, &quot;foo&quot;, &quot;bar&quot;]</pre></dd>
+<dt><a name="L001138" id="L001138"><code>self[start, <var>length</var>]</code></a></dt>
+<dd>
+<p><em class="XXINVALIDXX">Array#[start, length]</em> と同じです。</p>
+<pre>/(foo)(bar)/ =~ &quot;foobarbaz&quot;
+p $~[0, 3]      # =&gt; [&quot;foobar&quot;, &quot;foo&quot;, &quot;bar&quot;]</pre></dd>
+<dt><a name="L001139" id="L001139"><code>begin(<var>n</var>)</code></a></dt>
+<dd>
+<p><var>n</var> 番目の部分文字列先頭のオフセットを返します。0 はマッチ全体
+を意味します。<var>n</var> が範囲外の場合は例外 <a href="refm095.html">IndexError</a> が発生
+します。<var>n</var> 番目の部分文字列がマッチしていなければ <code>nil</code> 
+を返します。</p>
+<pre>/(foo)(bar)(BAZ)?/ =~ &quot;foobarbaz&quot;
+p $~.begin(0)   # =&gt; 0
+p $~.begin(1)   # =&gt; 0
+p $~.begin(2)   # =&gt; 3
+p $~.begin(3)   # =&gt; nil
+p $~.begin(-1)  # =&gt; `begin': index -1 out of matches (IndexError)</pre></dd>
+<dt><a name="L001140" id="L001140"><code>end(<var>n</var>)</code></a></dt>
+<dd>
+<p><var>n</var> 番目の部分文字列終端のオフセットを返します。0 はマッチ全体
+を意味します。<var>n</var> が範囲外の場合は例外 <a href="refm095.html">IndexError</a> が発生
+します。<var>n</var> 番目の部分文字列がマッチしていなければ <code>nil</code> 
+を返します。</p>
+<pre>/(foo)(bar)(BAZ)?/ =~ &quot;foobarbaz&quot;
+p $~.end(0)   # =&gt; 6
+p $~.end(1)   # =&gt; 3
+p $~.end(2)   # =&gt; 6
+p $~.end(3)   # =&gt; nil
+p $~.end(-1)  # =&gt; `end': index -1 out of matches (IndexError)</pre></dd>
+<dt><a name="L001141" id="L001141"><code>captures      ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p><a href="refm030.html#L000518">$1</a>, <a href="refm030.html#L000519">$2</a>, ... を格納した配列を
+返します。<a href="#L001149">to_a</a> と異なり <a href="refm030.html#L000513">$&amp;</a> を要
+素に含みません。グループにマッチした部分文字列がなければ対応する要
+素は nil になります。</p>
+<pre>/(foo)(bar)(BAZ)?/ =~ &quot;foobarbaz&quot;
+p $~.to_a       # =&gt; [&quot;foobar&quot;, &quot;foo&quot;, &quot;bar&quot;, nil]
+p $~.captures       # =&gt; [&quot;foo&quot;, &quot;bar&quot;, nil]</pre></dd>
+<dt><a name="L001142" id="L001142"><code>length</code></a>
+<dt><a name="L001143" id="L001143"><code>size</code></a></dt>
+<dd>
+<p>部分文字列の数を返します(self.to_a.size と同じです)。</p>
+<pre>/(foo)(bar)(BAZ)?/ =~ &quot;foobarbaz&quot;
+p $~.size       # =&gt; 4</pre></dd>
+<dt><a name="L001144" id="L001144"><code>offset(<var>n</var>)</code></a></dt>
+<dd>
+<p><var>n</var> 番目の部分文字列のオフセットの配列 <code>[start, end]</code> を返
+します。</p>
+<pre>[ self.begin(n), self.end(n) ]</pre>
+<p>と同じです。<var>n</var>番目の部分文字列がマッチしていなければ
+<code>[nil, nil]</code> を返します。</p></dd>
+<dt><a name="L001145" id="L001145"><code>post_match</code></a></dt>
+<dd>
+<p>マッチした部分より後ろの文字列を返します(<a href="refm030.html#L000516">$'</a>と同じ)。</p>
+<pre>/(bar)(BAZ)?/ =~ &quot;foobarbaz&quot;
+p $~.post_match # =&gt; &quot;baz&quot;</pre></dd>
+<dt><a name="L001146" id="L001146"><code>pre_match</code></a></dt>
+<dd>
+<p>マッチした部分より前の文字列を返します(<a href="refm030.html#L000515">$`</a>と同じ)。</p>
+<pre>/(bar)(BAZ)?/ =~ &quot;foobarbaz&quot;
+p $~.pre_match  # =&gt; &quot;foo&quot;</pre></dd>
+<dt><a name="L001147" id="L001147"><code>select { ... }</code></a></dt>
+<dd>
+<p><a href="refm385.html">ruby 1.8 feature</a></p>
+<p>self.to_a.<a href="refm070.html#L001753">select</a> { ... } と同じです。</p></dd>
+<dt><a name="L001148" id="L001148"><code>string</code></a></dt>
+<dd>
+<p>マッチ対象になった文字列の複製を返します。返す文字列はフリーズ
+(<a href="refm035.html#L000658">Object#freeze</a>)されています。</p></dd>
+<dt><a name="L001149" id="L001149"><code>to_a</code></a></dt>
+<dd>
+<p><a href="refm030.html#L000513">$&amp;</a>, <a href="refm030.html#L000518">$1</a>, <a href="refm030.html#L000519">$2</a>,
+... を格納した配列を返します。</p>
+<pre>/(foo)(bar)(BAZ)?/ =~ &quot;foobarbaz&quot;
+p $~.to_a       # =&gt; [&quot;foobar&quot;, &quot;foo&quot;, &quot;bar&quot;, nil]</pre>
+<p><a href="#L001141">captures</a> も参照してください。</p></dd>
+<dt><a name="L001150" id="L001150"><code>to_s</code></a></dt>
+<dd>
+<p>マッチした文字列全体を返します。</p>
+<pre>/bar/ =~ &quot;foobarbaz&quot;
+p $~            # =&gt; #&lt;MatchData:0x401b1be4&gt;
+p $~.to_s       # =&gt; &quot;bar&quot;</pre></dd>
+<dt><a name="L001151" id="L001151"><code>values_at(<var>index1</var>, <var>index2</var>, ...)</code></a></dt>
+<dd>
+<p><a href="refm385.html">ruby 1.8 feature</a></p>
+<p>正規表現中の <var>indexN</var> 番目の括弧にマッチした部分文字列の配列を
+返します。0 番目は <a href="refm030.html#L000513">$&amp;</a> のようにマッチした文字列全
+体を表します。</p>
+<pre>m = /(foo)(bar)(baz)/.match(&quot;foobarbaz&quot;)
+p m.values_at(0,1,2,3,4)   # same as m.to_a.values_at(...)
+p m.values_at(-1,-2,-3)
+
+=&gt; [&quot;foobarbaz&quot;, &quot;foo&quot;, &quot;bar&quot;, &quot;baz&quot;, nil]
+   [&quot;baz&quot;, &quot;bar&quot;, &quot;foo&quot;]</pre></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm035.html">UP</a>][<a href="refm046.html">&lt;-PREV</a>][<a href="refm048.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

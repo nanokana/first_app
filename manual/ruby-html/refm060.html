@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Regexp</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm061.html" rel="next" />
+<link href="refm059.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm035.html">UP</a>][<a href="refm059.html">&lt;-PREV</a>][<a href="refm061.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L001419" id="L001419">Regexp</a></h1>
+<p><a href="refm019.html">正規表現</a>のクラス。正規表現のリテラルはスラッシュで囲んだ形式
+で生成します。</p>
+<pre>/^this is regexp/</pre>
+<p><code>Regexp.new(string)</code> を使って正規表現オブジェクトを動的に生成する
+こともできます。</p>
+<h2><a name="L001420" id="L001420">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm035.html">Object</a></li>
+</ul>
+<h2><a name="L001421" id="L001421">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L001422" id="L001422"><code>Regexp.compile(<var>string</var>[, <var>option</var>[, <var>code</var>]])</code></a>
+<dt><a name="L001423" id="L001423"><code>Regexp.new(<var>string</var>[, <var>option</var>[, <var>code</var>]])</code></a></dt>
+<dd>
+<p>文字列 <var>string</var> をコンパイルして正規表現オブジェクトを生成して
+返します。</p>
+<p>第二引数が <a href="refm055.html">Fixnum</a> であった場合、その値は</p>
+<ul>
+<li><a href="#L001442">Regexp::IGNORECASE</a></li>
+<li><a href="#L001443">Regexp::MULTILINE</a></li>
+<li><a href="#L001441">Regexp::EXTENDED</a></li>
+</ul>
+<p>の論理和でなければなりません。</p>
+<p>第二引数が <a href="refm055.html">Fixnum</a> 以外であれば真偽値の指定として見なされ、真
+(nil, false 以外)であれば <a href="#L001442">Regexp::IGNORECASE</a> 
+の指定と同じになります。</p>
+<p>第三引数が与えられた時には、<a href="refm030.html#L000551">$KCODE</a> の値にかかわ
+らず、指定された文字コードでマッチを行います。文字コードは 
+<code>$KCODE</code> への代入と同様に文字列引数の最初の一文字で決定されま
+す。</p>
+<p>第一引数が正規表現であれば内容が同じ(ただし、上記フラグの内容はク
+リアされた)正規表現を複製して返します。このとき、複製した正規表現
+に対して、第二、第三引数の指定が設定されます。</p>
+<p><a href="refm385.html">ruby 1.8 feature</a>: 第一引数が正規表現であれば第一引数を複製し
+て返します。第二、第三引数は警告の上無視されます。</p>
+<p>正規表現のコンパイルに失敗した場合、例外 <a href="refm104.html">RegexpError</a> が発生
+します。</p></dd>
+<dt><a name="L001424" id="L001424"><code>Regexp.escape(<var>string</var>[,<var>kcode</var>])</code></a>
+<dt><a name="L001425" id="L001425"><code>Regexp.quote(<var>string</var>[,<var>kcode</var>])</code></a></dt>
+<dd>
+<p><var>string</var> の中で正規表現において特別な意味を持つ文字の直前にエ
+スケープ文字(バックスラッシュ)を挿入した文字列を返します。省略可能
+な引数 <var>kcode</var> で文字列の文字コードを指定します
+(省略時は <a href="refm030.html#L000551">$KCODE</a> の値が使用されます)。</p>
+<p>文字コードの指定は <code>$KCODE</code> と同様に行います。</p></dd>
+<dt><a name="L001426" id="L001426"><code>Regexp.last_match</code></a></dt>
+<dd>
+<p>カレントスコープで最後に行った正規表現マッチの <a href="refm047.html">MatchData</a> オ
+ブジェクトを返します。このメソッドの呼び出しは <a href="refm030.html#L000514">$~</a> 
+の参照と同じです。</p>
+<pre>/(.)(.)/ =~ &quot;ab&quot;
+p Regexp.last_match      # =&gt; #&lt;MatchData:0x4599e58&gt;
+p Regexp.last_match[0]   # =&gt; &quot;ab&quot;
+p Regexp.last_match[1]   # =&gt; &quot;a&quot;
+p Regexp.last_match[2]   # =&gt; &quot;b&quot;
+p Regexp.last_match[3]   # =&gt; nil</pre></dd>
+<dt><a name="L001427" id="L001427"><code>Regexp.last_match([<var>nth</var>])   ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>整数 <var>nth</var> が 0 の場合、マッチした文字列を返します
+(<a href="refm030.html#L000513">$&amp;</a>)。それ以外では、<var>nth</var> 番目の括弧にマッチ
+した部分文字列を返します(<a href="refm030.html#L000518">$1</a>,<a href="refm030.html#L000519">$2</a>,...)。
+対応する括弧がない場合やマッチしなかった場合には <code>nil</code> を返し
+ます。</p>
+<pre>/(.)(.)/ =~ &quot;ab&quot;
+p Regexp.last_match      # =&gt; #&lt;MatchData:0x4599e58&gt;
+p Regexp.last_match(0)   # =&gt; &quot;ab&quot;
+p Regexp.last_match(1)   # =&gt; &quot;a&quot;
+p Regexp.last_match(2)   # =&gt; &quot;b&quot;
+p Regexp.last_match(3)   # =&gt; nil</pre>
+<p>正規表現全体がマッチしなかった場合、引数なしの 
+<code>Regexp.last_match</code> は<code>nil</code> を返すため、
+<code>last_match[1]</code> の形式では例外 <a href="refm100.html">NameError</a> が発生します。
+対して、<code>last_match(1)</code> は <code>nil</code> を返します。</p></dd>
+<dt><a name="L001428" id="L001428"><code>Regexp.union([<var>pattern</var>, ...])   ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;)) <var>version</var> <var>1</var>.<var>8</var>.<var>1</var> <var>以降</var></code></a></dt>
+<dd>
+<p>引数として与えた <var>patttern</var> を選択 <code>|</code> で連結し、Regexp として返します。
+結果の Regexp は与えた <var>patttern</var> のどれかにマッチする場合にマッチするものになります。</p>
+<pre>p Regexp.union(/a/, /b/, /c/) #=&gt; /(?-mix:a)|(?-mix:b)|(?-mix:c)/</pre>
+<p><var>patttern</var> は Regexp または String で与えます。
+String で与えた場合、それ自身と等しい文字列のみにマッチするものと解釈され、
+エスケープされて結果の Regexp に組み込まれます。</p>
+<pre>p Regexp.union(&quot;a&quot;, &quot;?&quot;, &quot;b&quot;) # =&gt; /a|\?|b/
+p Regexp.union(/a/, &quot;*&quot;) # =&gt; /(?-mix:a)|\*/</pre>
+<p>引数をひとつも与えなかった場合、決してマッチしない Regexp を返します。</p>
+<pre>p Regexp.union() # =&gt; /(?!)/</pre>
+<p>結果の Regexp が対応する文字コードは引数として与えた Regexp が扱う文字コードに一致します。
+固定コードに対してコンパイルされている Regexp を複数与える場合、
+それらのコードは一致していなければなりません。
+異なる固定コードに対してコンパイルされている Regexp が存在する場合、
+ArgumentError が発生します。</p>
+<pre>p Regexp.union(/a/e, /b/e) # =&gt; /(?-mix:a)|(?-mix:b)/e
+p Regexp.union(/a/e, /b/s) # =&gt; ArgumentError</pre>
+<p>コードが固定されている Regexp とコードが固定されていない Regexp を混ぜた場合、
+結果の Regexp は固定されているコードに対応するものになります。</p>
+<pre>p Regexp.union(/a/e, /b/) # =&gt; /(?-mix:a)|(?-mix:b)/e</pre></dd>
+</dl>
+<h2><a name="L001429" id="L001429">メソッド:</a></h2>
+<dl>
+<dt><a name="L001430" id="L001430"><code><var>self</var> =~ <var>string</var></code></a>
+<dt><a name="L001431" id="L001431"><code><var>self</var> === <var>string</var></code></a></dt>
+<dd>
+<p>文字列 <var>string</var> との正規表現マッチを行います。マッチした場合、
+マッチした位置のインデックスを返します(先頭は0)。マッチしなかった
+場合、あるいは <var>string</var> が <code>nil</code> の場合には <code>nil</code> を返
+します。</p>
+<p>組み込み変数 <a href="refm030.html#L000514">$~</a> にマッチに関する情報が設定されます。</p>
+<p><var>string</var> が<code>nil</code> でも <a href="refm061.html">String</a> オブジェクトでもなけれ
+ば例外 <a href="refm111.html">TypeError</a> が発生します。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>: Regexp#=== は、真偽値を返します。引数が文
+字列でないか、マッチしなければ <code>false</code> を、マッチすれば 
+<code>true</code> を返します。</p></dd>
+<dt><a name="L001432" id="L001432"><code>~ <var>self</var></code></a></dt>
+<dd>
+<p>変数 <code>$_</code> の値との間でのマッチをとります。ちょうど以下と同じ意
+味です。</p>
+<pre>self =~ $_</pre></dd>
+<dt><a name="L001433" id="L001433"><code>casefold?</code></a></dt>
+<dd>
+<p>正規表現が大文字小文字の判定をしないようにコンパイルされている時、
+真を返します。</p></dd>
+<dt><a name="L001434" id="L001434"><code>kcode</code></a></dt>
+<dd>
+<p>その正規表現が対応するようにコンパイルされている文字コードを 
+<a href="refm030.html#L000551">$KCODE</a> と同じ形式で返します。もし、正規表現が固定
+コードに対してコンパイルされていない(マッチ時点での <code>$KCODE</code> 
+の値を用いる)場合には、nil を返します。</p></dd>
+<dt><a name="L001435" id="L001435"><code>match(<var>str</var>)</code></a>
+<dt><a name="L001436" id="L001436"><code>match(<var>str</var>[, <var>pos</var>])   ((&lt;<var>ruby</var> <var>1</var>.<var>9</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p><a href="refm047.html">MatchData</a> オブジェクトを返す点を除いて、<code>self =~ str</code> と
+同じです。マッチしなかった場合 nil を返します。</p>
+<p>正規表現にマッチした部分文字列だけが必要な場合に、</p>
+<pre>bar = /foo(.*)baz/.match(&quot;foobarbaz&quot;).to_a[1]
+
+foo, bar, baz = /(foo)(bar)(baz)/.match(&quot;foobarbaz&quot;).to_a.values_at(1,2,3)</pre>
+<p>のように使用できます。(to_a は、マッチに失敗した場合を考慮しています。)</p>
+<p><a href="refm385.html">ruby 1.8 feature</a>:
+1.8 の多重代入の規則では右辺が配列でない一つのオブジェクトで to_a 
+メソッドを持つ場合、右辺に * を付けることで to_a の結果を利用でき
+ます。つまり、上記は以下のように書くことができます。(ここでの 
+`<code>_</code>' は、<a href="refm030.html#L000513">$&amp;</a> を捨てるために適当に選んだ変数
+名)</p>
+<pre>_, foo, bar, baz = */(foo)(bar)(baz)/.match(&quot;foobarbaz&quot;)
+p [foo, bar, baz]
+
+# =&gt; [&quot;foo&quot;, &quot;bar&quot;, &quot;baz&quot;]</pre>
+<p>このような用途に <a href="refm047.html#L001141">MatchData#captures</a> が使
+えると考えるかも知れませんが、captures では、マッチに失敗した場合、
+nil.captures を呼び出そうとして例外 <a href="refm101.html">NoMethodError</a> が発生して
+しまいます。</p>
+<pre>foo, bar, baz = /(foo)(bar)(baz)/.match(&quot;foobar&quot;).captures
+
+# =&gt; -:1: undefined method `captures' for nil:NilClass (NoMethodError)</pre>
+<p><a href="refm392.html">ruby 1.9 feature</a>:
+省略可能な第二引数 pos を指定すると、マッチの開始位置を pos から行
+うよう制御できます(pos のデフォルト値は 0)。</p>
+<pre>p(/(.).(.)/.match(&quot;foobar&quot;, 3).captures)   # =&gt; [&quot;b&quot;, &quot;r&quot;]
+p(/(.).(.)/.match(&quot;foobar&quot;, -3).captures)  # =&gt; [&quot;b&quot;, &quot;r&quot;]</pre>
+<p>pos を指定しても <a href="refm047.html#L001144">MatchData#offset</a> 等の結果
+には影響しません。つまり、</p>
+<pre>re.match(str[pos..-1])</pre>
+<p>と</p>
+<pre>re.match(str, pos)</pre>
+<p>は異なります。</p></dd>
+<dt><a name="L001437" id="L001437"><code>options ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>正規表現の生成時に指定されたオプションを返します。戻り値は、
+<code>Regexp::EXTENDED</code>, <code>Regexp::IGNORECASE</code>,
+<code>Regexp::MULTILINE</code> の論理和です。</p>
+<pre>p Regexp::IGNORECASE # =&gt; 1
+p //i.options        # =&gt; 1</pre></dd>
+<dt><a name="L001438" id="L001438"><code>source</code></a></dt>
+<dd>
+<p>その正規表現のもととなった文字列表現を生成して返します。</p>
+<pre>re = /foo|bar|baz/i
+p re.source     # =&gt; &quot;foo|bar|baz&quot;</pre></dd>
+<dt><a name="L001439" id="L001439"><code>to_s        ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>正規表現の文字列表現を生成して返します。返される文字列は他の正規表
+現に埋め込んでもその意味が保持されるようになっています。</p>
+<pre>re = /foo|bar|baz/i
+p re.to_s       # =&gt; &quot;(?i-mx:foo|bar|baz)&quot;
+p /#{re}+/o     # =&gt; /(?i-mx:foo|bar|baz)+/</pre>
+<p>ただし、後方参照を含む正規表現は意図通りにはならない場合があります。
+これは現状、後方参照を番号でしか指定できないためです。</p>
+<pre>re = /(foo|bar)\1/      # \1 は、foo か bar
+p /(baz)#{re}/          # \1 は、baz
+
+# =&gt; /(baz)(?-mix:(foo|bar)\1)/</pre></dd>
+</dl>
+<h2><a name="L001440" id="L001440">定数</a></h2>
+<dl>
+<dt><a name="L001441" id="L001441"><code>EXTENDED</code></a></dt>
+<dd>
+<p>バックスラッシュでエスケープされていない空白と # から改行までを無
+視します。<a href="refm024.html#L000358">正規表現リテラル</a> の //x オプションと同じ
+です。(空白を入れる場合は<code>\</code>でエスケープして<code>\ (&lt;-空白)</code>と
+指定します)</p></dd>
+<dt><a name="L001442" id="L001442"><code>IGNORECASE</code></a></dt>
+<dd>
+<p>文字の大小の違いを無視します。
+<a href="refm024.html#L000358">正規表現リテラル</a> の //i オプションと同じです。</p></dd>
+<dt><a name="L001443" id="L001443"><code>MULTILINE</code></a></dt>
+<dd>
+<p>複数行モード。正規表現 &quot;.&quot; が改行にマッチするようになります。
+<a href="refm024.html#L000358">正規表現リテラル</a> の //m オプションと同じです。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm035.html">UP</a>][<a href="refm059.html">&lt;-PREV</a>][<a href="refm061.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

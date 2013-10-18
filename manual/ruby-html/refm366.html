@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>e2mmap</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm367.html" rel="next" />
+<link href="refm365.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm365.html">&lt;-PREV</a>][<a href="refm367.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006906" id="L006906">e2mmap -- Exception2MessageMapper</a></h1>
+<p>例外クラスに特定のエラーメッセージ用フォーマットを関連づけます。</p>
+<h2><a name="L006907" id="L006907">Usage</a></h2>
+<p>1. クラス定義の中で、Exception2MessageMapperをextendすれば、
+def_e2messageメソッドやdef_exceptionメソッドが使えます。
+これらで例外クラスとメッセージを関連づけることができます。</p>
+<pre>class Foo
+  extend Exception2MessageMapper
+  def_e2message ExistingExceptionClass, &quot;message...&quot;
+  def_exception :NewExceptionClass, &quot;message...&quot;, StandardError
+  ...
+end
+
+foo = Foo.new
+foo.Fail ....</pre>
+<p>2. 何度も使いたい例外クラスは、クラスの代わりにモジュールで定義して、
+それをincludeして使います。</p>
+<pre>module ErrorMod
+  extend Exception2MessageMapper
+  def_e2meggage ExistingExceptionClass, &quot;message...&quot;
+  def_exception :NewExceptionClass, &quot;message...&quot;, StandardError
+  ...
+end
+class Foo
+  include ErrorMod
+  ...
+end
+
+foo = Foo.new
+foo.Fail ....</pre>
+<p>3. 例外を設定したクラスのインスタンス以外から例外を呼ぶこともできます。</p>
+<pre>module ErrorMod
+  extend Exception2MessageMapper
+  def_e2message ExistingExceptionClass, &quot;message...&quot;
+  def_exception :NewExceptionClass, &quot;message...&quot;, StandardError
+  ...
+end
+class Foo
+  extend Exception2MessageMapper
+  include ErrorMod
+  ...
+end
+
+Foo.Fail NewExceptionClass, arg...
+Foo.Fail ExistingExceptionClass, arg...</pre>
+<h2><a name="L006908" id="L006908">モジュール関数</a></h2>
+<dl>
+<dt><a name="L006909" id="L006909"><code>def_e2message(<var>exception</var>, <var>message_form</var>)</code></a></dt>
+<dd>
+<p>すでに存在する例外クラスexceptionに、
+エラーメッセージ用フォーマット message_form を関連づけます。
+message_formの形式は sprintf() のformat文字列と同じです。</p>
+<p>このフォーマットはRaise(またはその別名のFail)で使われます。</p></dd>
+<dt><a name="L006910" id="L006910"><code>def_exception(<var>exception_name</var>, <var>message_form</var>, <var>superclass</var>)</code></a></dt>
+<dd>
+<p>exception_nameという名前の例外クラスを作ります(exception_name
+はシンボルで与えられます)。
+このクラスは、superclassが設定されていればそのクラスの
+サブクラスに、設定されていない場合はStandardErrorのサブ
+クラスになります。</p>
+<p>そして、そのクラスにmessage_formで指定されたフォーマットを
+関連づけます。
+これはRaise(またはその別名のFail)で使われます。</p></dd>
+</dl>
+<h2><a name="L006911" id="L006911">メソッド</a></h2>
+<dl>
+<dt><a name="L006912" id="L006912"><code>Raise(<var>error</var>, [<var>args</var> [,<var>args2</var>...]])</code></a></dt>
+<dd>
+<p>errorクラスのエラーを発生させます。</p>
+<p>errorの後に続く引数 args群は、例外クラスに関連づけられたエラー
+メッセージ用フォーマットと合わせて、エラーメッセージの一部に
+なります。例えば、</p>
+<pre>class Foo
+  extend Exception2MessageMapper
+  def_exception :NewExceptionClass, &quot;message...%d, %d and %d&quot;
+
+  def foo
+    Raise NewExceptionClass, 1, 2, 3
+  end
+end</pre>
+<p>という定義があれば、</p>
+<pre>Foo.new().foo()</pre>
+<p>というメソッドで、</p>
+<pre>in `Raise': message...1, 2 and 3 (Foo::NewExceptionClass)  </pre>
+<p>というエラーが発生します。</p>
+<p>また、</p>
+<pre>Foo.Raise Foo::NewExceptionClass, 1, 3, 5</pre>
+<p>というメソッドでも、</p>
+<pre>in `Raise': message...1, 3 and 5 (Foo::NewExceptionClass)  </pre>
+<p>という例外が発生します。</p></dd>
+<dt><a name="L006913" id="L006913"><code>Fail(<var>error</var>, [<var>args</var> [,<var>args2</var>...]])</code></a></dt>
+<dd>
+<p>Raise の別名です。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm365.html">&lt;-PREV</a>][<a href="refm367.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

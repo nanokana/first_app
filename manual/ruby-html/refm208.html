@@ -1,0 +1,898 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>net/imap</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm209.html" rel="next" />
+<link href="refm207.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm207.html">&lt;-PREV</a>][<a href="refm209.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L003981" id="L003981">net/imap</a></h1>
+<p>Copyright (C) 2000  Shugo Maeda &lt;shugo@ruby-lang.org&gt;</p>
+<p>This library is distributed under the terms of the Ruby license.
+You can freely distribute/modify this library.</p>
+<ul>
+<li><a href="#L003982">Net::IMAP</a></li>
+<li><a href="#L004030">Net::IMAP::ContinuationRequest</a></li>
+<li><a href="#L004033">Net::IMAP::UntaggedResponse</a></li>
+<li><a href="#L004035">Net::IMAP::TaggedResponse</a></li>
+<li><a href="#L004037">Net::IMAP::ResponseText</a></li>
+<li><a href="#L004040">Net::IMAP::ResponseCode</a></li>
+<li><a href="#L004042">Net::IMAP::MailboxList</a></li>
+<li><a href="#L004045">Net::IMAP::MailboxQuota</a></li>
+<li><a href="#L004049">Net::IMAP::MailboxQuotaRoot</a></li>
+<li><a href="#L004051">Net::IMAP::MailboxACLItem</a></li>
+<li><a href="#L004054">Net::IMAP::StatusData</a></li>
+<li><a href="#L004055">Net::IMAP::FetchData</a></li>
+<li><a href="#L004068">Net::IMAP::Envelope</a></li>
+<li><a href="#L004079">Net::IMAP::Address</a></li>
+<li><a href="#L004082">Net::IMAP::ContentDisposition</a></li>
+<li><a href="#L004085">Net::IMAP::BodyTypeBasic</a></li>
+<li><a href="#L004097">Net::IMAP::BodyTypeText</a></li>
+<li><a href="#L004099">Net::IMAP::BodyTypeMessage</a></li>
+<li><a href="#L004102">Net::IMAP::BodyTypeMultipart</a></li>
+<li><a href="#L004104">References</a></li>
+</ul>
+<h2><a name="L003982" id="L003982">Net::IMAP</a></h2>
+<p>Net::IMAP implements Internet Message Access Protocol (IMAP) clients.
+(The protocol is described in <a href="#L004105">[IMAP]</a>.)</p>
+<p>Net::IMAP supports multiple commands. For example,</p>
+<pre>imap = Net::IMAP.new(&quot;imap.foo.net&quot;, &quot;imap2&quot;)
+imap.authenticate(&quot;cram-md5&quot;, &quot;bar&quot;, &quot;password&quot;)
+imap.select(&quot;inbox&quot;)
+fetch_thread = Thread.start { imap.fetch(1..-1, &quot;UID&quot;) }
+search_result = imap.search([&quot;BODY&quot;, &quot;hello&quot;])
+fetch_result = fetch_thread.value
+imap.disconnect</pre>
+<p>This script invokes the FETCH command and the SEARCH command concurrently.</p>
+<h3><a name="L003983" id="L003983">Super Class</a></h3>
+<p>Object</p>
+<h3><a name="L003984" id="L003984">Class Methods</a></h3>
+<dl>
+<dt><a name="L003985" id="L003985">new(host, port = 143, usessl = false, certs = nil, verify = false)</a></dt>
+<dd>
+<p>Creates a new Net::IMAP object and connects it to the specified
+port on the named host.  If usessl is true, then an attempt will
+be made to use SSL (now TLS) to connect to the server.  For this
+to work OpenSSL<a href="#L004112">[OSSL]</a> and the Ruby OpenSSL<a href="#L004113">[RSSL]</a>
+extension need to be installed.  The certs parameter indicates
+the path or file containing the CA cert of the server, and the
+verify parameter is for the OpenSSL verification callback.</p>
+</dd>
+<dt><a name="L003986" id="L003986">debug</a></dt>
+<dd>
+<p>Returns the debug mode.</p>
+</dd>
+<dt><a name="L003987" id="L003987">debug = val</a></dt>
+<dd>
+<p>Sets the debug mode.</p>
+</dd>
+<dt><a name="L003988" id="L003988">add_authenticator(auth_type, authenticator)</a></dt>
+<dd>
+<p>Adds an authenticator for Net::IMAP#authenticate.</p>
+</dd>
+</dl>
+<h3><a name="L003989" id="L003989">Methods</a></h3>
+<dl>
+<dt><a name="L003990" id="L003990">greeting</a></dt>
+<dd>
+<p>Returns an initial greeting response from the server.</p>
+</dd>
+<dt><a name="L003991" id="L003991">responses</a></dt>
+<dd>
+<p>Returns recorded untagged responses.</p>
+<p>ex).</p>
+<pre>imap.select(&quot;inbox&quot;)
+p imap.responses[&quot;EXISTS&quot;][-1]
+#=&gt; 2
+p imap.responses[&quot;UIDVALIDITY&quot;][-1]
+#=&gt; 968263756</pre>
+</dd>
+<dt><a name="L003992" id="L003992">disconnect</a></dt>
+<dd>
+<p>Disconnects from the server.</p>
+</dd>
+<dt><a name="L003993" id="L003993">capability</a></dt>
+<dd>
+<p>Sends a CAPABILITY command, and returns a listing of
+capabilities that the server supports.</p>
+</dd>
+<dt><a name="L003994" id="L003994">noop</a></dt>
+<dd>
+<p>Sends a NOOP command to the server. It does nothing.</p>
+</dd>
+<dt><a name="L003995" id="L003995">logout</a></dt>
+<dd>
+<p>Sends a LOGOUT command to inform the server that the client is
+done with the connection.</p>
+</dd>
+<dt><a name="L003996" id="L003996">authenticate(auth_type, arg...)</a></dt>
+<dd>
+<p>Sends an AUTEHNTICATE command to authenticate the client.
+The auth_type parameter is a string that represents
+the authentication mechanism to be used. Currently Net::IMAP
+supports &quot;LOGIN&quot; and &quot;CRAM-MD5&quot; for the auth_type.</p>
+<p>ex).</p>
+<pre>imap.authenticate('LOGIN', user, password)</pre>
+</dd>
+<dt><a name="L003997" id="L003997">login(user, password)</a></dt>
+<dd>
+<p>Sends a LOGIN command to identify the client and carries
+the plaintext password authenticating this user.</p>
+</dd>
+<dt><a name="L003998" id="L003998">select(mailbox)</a></dt>
+<dd>
+<p>Sends a SELECT command to select a mailbox so that messages
+in the mailbox can be accessed.</p>
+</dd>
+<dt><a name="L003999" id="L003999">examine(mailbox)</a></dt>
+<dd>
+<p>Sends a EXAMINE command to select a mailbox so that messages
+in the mailbox can be accessed. However, the selected mailbox
+is identified as read-only.</p>
+</dd>
+<dt><a name="L004000" id="L004000">create(mailbox)</a></dt>
+<dd>
+<p>Sends a CREATE command to create a new mailbox.</p>
+</dd>
+<dt><a name="L004001" id="L004001">delete(mailbox)</a></dt>
+<dd>
+<p>Sends a DELETE command to remove the mailbox.</p>
+</dd>
+<dt><a name="L004002" id="L004002">rename(mailbox, newname)</a></dt>
+<dd>
+<p>Sends a RENAME command to change the name of the mailbox to
+the newname.</p>
+</dd>
+<dt><a name="L004003" id="L004003">subscribe(mailbox)</a></dt>
+<dd>
+<p>Sends a SUBSCRIBE command to add the specified mailbox name to
+the server's set of &quot;active&quot; or &quot;subscribed&quot; mailboxes.</p>
+</dd>
+<dt><a name="L004004" id="L004004">unsubscribe(mailbox)</a></dt>
+<dd>
+<p>Sends a UNSUBSCRIBE command to remove the specified mailbox name
+from the server's set of &quot;active&quot; or &quot;subscribed&quot; mailboxes.</p>
+</dd>
+<dt><a name="L004005" id="L004005">list(refname, mailbox)</a></dt>
+<dd>
+<p>Sends a LIST command, and returns a subset of names from
+the complete set of all names available to the client.
+The return value is an array of <a href="#L004042">Net::IMAP::MailboxList</a>.</p>
+<p>ex).</p>
+<pre>imap.create(&quot;foo/bar&quot;)
+imap.create(&quot;foo/baz&quot;)
+p imap.list(&quot;&quot;, &quot;foo/%&quot;)
+#=&gt; [#&lt;Net::IMAP::MailboxList attr=[:Noselect], delim=&quot;/&quot;, name=&quot;foo/&quot;&gt;, #&lt;Net::IMAP::MailboxList attr=[:Noinferiors, :Marked], delim=&quot;/&quot;, name=&quot;foo/bar&quot;&gt;, #&lt;Net::IMAP::MailboxList attr=[:Noinferiors], delim=&quot;/&quot;, name=&quot;foo/baz&quot;&gt;]</pre>
+</dd>
+<dt><a name="L004006" id="L004006">lsub(refname, mailbox)</a></dt>
+<dd>
+<p>Sends a LSUB command, and returns a subset of names from the set
+of names that the user has declared as being &quot;active&quot; or
+&quot;subscribed&quot;.
+The return value is an array of <a href="#L004042">Net::IMAP::MailboxList</a>.</p>
+</dd>
+<dt><a name="L004007" id="L004007">status(mailbox, attr)</a></dt>
+<dd>
+<p>Sends a STATUS command, and returns the status of the indicated
+mailbox.
+The return value is a hash of attributes.</p>
+<p>ex).</p>
+<pre>p imap.status(&quot;inbox&quot;, [&quot;MESSAGES&quot;, &quot;RECENT&quot;])
+#=&gt; {&quot;RECENT&quot;=&gt;0, &quot;MESSAGES&quot;=&gt;44}</pre>
+</dd>
+<dt><a name="L004008" id="L004008">append(mailbox, message, flags = nil, date_time = nil)</a></dt>
+<dd>
+<p>Sends a APPEND command to append the message to the end of
+the mailbox.</p>
+<p>ex).</p>
+<pre>imap.append(&quot;inbox&quot;, &lt;&lt;EOF.gsub(/\n/, &quot;\r\n&quot;), [:Seen], Time.now)
+Subject: hello
+From: shugo@ruby-lang.org
+To: shugo@ruby-lang.org
+
+hello world
+EOF</pre>
+</dd>
+<dt><a name="L004009" id="L004009">check</a></dt>
+<dd>
+<p>Sends a CHECK command to request a checkpoint of the currently
+selected mailbox.</p>
+</dd>
+<dt><a name="L004010" id="L004010">close</a></dt>
+<dd>
+<p>Sends a CLOSE command to close the currently selected mailbox.
+The CLOSE command permanently removes from the mailbox all
+messages that have the \Deleted flag set.</p>
+</dd>
+<dt><a name="L004011" id="L004011">expunge</a></dt>
+<dd>
+<p>Sends a EXPUNGE command to permanently remove from the currently
+selected mailbox all messages that have the \Deleted flag set.</p>
+</dd>
+<dt><a name="L004012" id="L004012">search(keys, charset = nil)</a></dt>
+<dt><a name="L004013" id="L004013">uid_search(keys, charset = nil)</a></dt>
+<dd>
+<p>Sends a SEARCH command to search the mailbox for messages that
+match the given searching criteria, and returns message sequence
+numbers (search) or unique identifiers (uid_search).</p>
+<p>ex).</p>
+<pre>p imap.search([&quot;SUBJECT&quot;, &quot;hello&quot;])
+#=&gt; [1, 6, 7, 8]
+p imap.search('SUBJECT &quot;hello&quot;')
+#=&gt; [1, 6, 7, 8]</pre>
+</dd>
+<dt><a name="L004014" id="L004014">fetch(set, attr)</a></dt>
+<dt><a name="L004015" id="L004015">uid_fetch(set, attr)</a></dt>
+<dd>
+<p>Sends a FETCH command to retrieve data associated with a message
+in the mailbox. the set parameter is a number or an array of
+numbers or a Range object. the number is a message sequence
+number (fetch) or a unique identifier (uid_fetch).
+The return value is an array of <a href="#L004055">Net::IMAP::FetchData</a>.</p>
+<p>ex).</p>
+<pre>p imap.fetch(6..8, &quot;UID&quot;)
+#=&gt; [#&lt;Net::IMAP::FetchData seqno=6, attr={&quot;UID&quot;=&gt;98}&gt;, #&lt;Net::IMAP::FetchData seqno=7, attr={&quot;UID&quot;=&gt;99}&gt;, #&lt;Net::IMAP::FetchData seqno=8, attr={&quot;UID&quot;=&gt;100}&gt;]
+p imap.fetch(6, &quot;BODY[HEADER.FIELDS (SUBJECT)]&quot;)
+#=&gt; [#&lt;Net::IMAP::FetchData seqno=6, attr={&quot;BODY[HEADER.FIELDS (SUBJECT)]&quot;=&gt;&quot;Subject: test\r\n\r\n&quot;}&gt;]
+data = imap.uid_fetch(98, [&quot;RFC822.SIZE&quot;, &quot;INTERNALDATE&quot;])[0]
+p data.seqno
+#=&gt; 6
+p data.attr[&quot;RFC822.SIZE&quot;]
+#=&gt; 611
+p data.attr[&quot;INTERNALDATE&quot;]
+#=&gt; &quot;12-Oct-2000 22:40:59 +0900&quot;
+p data.attr[&quot;UID&quot;]
+#=&gt; 98</pre>
+</dd>
+<dt><a name="L004016" id="L004016">store(set, attr, flags)</a></dt>
+<dt><a name="L004017" id="L004017">uid_store(set, attr, flags)</a></dt>
+<dd>
+<p>Sends a STORE command to alter data associated with a message
+in the mailbox. the set parameter is a number or an array of
+numbers or a Range object. the number is a message sequence
+number (store) or a unique identifier (uid_store).
+The return value is an array of <a href="#L004055">Net::IMAP::FetchData</a>.</p>
+<p>ex).</p>
+<pre>p imap.store(6..8, &quot;+FLAGS&quot;, [:Deleted])
+#=&gt; [#&lt;Net::IMAP::FetchData seqno=6, attr={&quot;FLAGS&quot;=&gt;[:Seen, :Deleted]}&gt;, #&lt;Net::IMAP::FetchData seqno=7, attr={&quot;FLAGS&quot;=&gt;[:Seen, :Deleted]}&gt;, #&lt;Net::IMAP::FetchData seqno=8, attr={&quot;FLAGS&quot;=&gt;[:Seen, :Deleted]}&gt;]</pre>
+</dd>
+<dt><a name="L004018" id="L004018">copy(set, mailbox)</a></dt>
+<dt><a name="L004019" id="L004019">uid_copy(set, mailbox)</a></dt>
+<dd>
+<p>Sends a COPY command to copy the specified message(s) to the end
+of the specified destination mailbox. the set parameter is
+a number or an array of numbers or a Range object. the number is
+a message sequence number (copy) or a unique identifier (uid_copy).</p>
+</dd>
+<dt><a name="L004020" id="L004020">sort(sort_keys, search_keys, charset)</a></dt>
+<dt><a name="L004021" id="L004021">uid_sort(sort_keys, search_keys, charset)</a></dt>
+<dd>
+<p>Sends a SORT command to sort messages in the mailbox.</p>
+<p>ex).</p>
+<pre>p imap.sort([&quot;FROM&quot;], [&quot;ALL&quot;], &quot;US-ASCII&quot;)
+#=&gt; [1, 2, 3, 5, 6, 7, 8, 4, 9]
+p imap.sort([&quot;DATE&quot;], [&quot;SUBJECT&quot;, &quot;hello&quot;], &quot;US-ASCII&quot;)
+#=&gt; [6, 7, 8, 1]</pre>
+</dd>
+<dt><a name="L004022" id="L004022">setquota(mailbox, quota)</a></dt>
+<dd>
+<p>Sends a SETQUOTA command along with the specified mailbox and
+quota.  If quota is nil, then quota will be unset for that
+mailbox.  Typically one needs to be logged in as server admin
+for this to work.  The IMAP quota commands are described in
+<a href="#L004110">[RFC-2087]</a>.</p>
+</dd>
+<dt><a name="L004023" id="L004023">getquota(mailbox)</a></dt>
+<dd>
+<p>Sends the GETQUOTA command along with specified mailbox.
+If this mailbox exists, then an array containing a
+<a href="#L004045">Net::IMAP::MailboxQuota</a> object is returned.  This
+command generally is only available to server admin.</p>
+</dd>
+<dt><a name="L004024" id="L004024">getquotaroot(mailbox)</a></dt>
+<dd>
+<p>Sends the GETQUOTAROOT command along with specified mailbox.
+This command is generally available to both admin and user.
+If mailbox exists, returns an array containing objects of
+<a href="#L004049">Net::IMAP::MailboxQuotaRoot</a> and <a href="#L004045">Net::IMAP::MailboxQuota</a>.</p>
+</dd>
+<dt><a name="L004025" id="L004025">setacl(mailbox, user, rights)</a></dt>
+<dd>
+<p>Sends the SETACL command along with mailbox, user and the
+rights that user is to have on that mailbox.  If rights is nil,
+then that user will be stripped of any rights to that mailbox.
+The IMAP ACL commands are described in <a href="#L004111">[RFC-2086]</a>.</p>
+</dd>
+<dt><a name="L004026" id="L004026">getacl(mailbox)</a></dt>
+<dd>
+<p>Send the GETACL command along with specified mailbox.
+If this mailbox exists, an array containing objects of
+<a href="#L004051">Net::IMAP::MailboxACLItem</a> will be returned.</p>
+</dd>
+<dt><a name="L004027" id="L004027">add_response_handler(handler = Proc.new)</a></dt>
+<dd>
+<p>Adds a response handler.</p>
+<p>ex).</p>
+<pre>imap.add_response_handler do |resp|
+  p resp
+end</pre>
+</dd>
+<dt><a name="L004028" id="L004028">remove_response_handler(handler)</a></dt>
+<dd>
+<p>Removes the response handler.</p>
+</dd>
+<dt><a name="L004029" id="L004029">response_handlers</a></dt>
+<dd>
+<p>Returns all response handlers.</p>
+</dd>
+</dl>
+<h2><a name="L004030" id="L004030">Net::IMAP::ContinuationRequest</a></h2>
+<p>Net::IMAP::ContinuationRequest represents command continuation requests.</p>
+<p>The command continuation request response is indicated by a &quot;+&quot; token
+instead of a tag.  This form of response indicates that the server is
+ready to accept the continuation of a command from the client.  The
+remainder of this response is a line of text.</p>
+<pre>continue_req    ::= &quot;+&quot; SPACE (resp_text / base64)</pre>
+<h3><a name="L003983" id="L003983">Super Class</a></h3>
+<p>Struct</p>
+<h3><a name="L003989" id="L003989">Methods</a></h3>
+<dl>
+<dt><a name="L004031" id="L004031">data</a></dt>
+<dd>
+<p>Returns the data (Net::IMAP::ResponseText).</p>
+</dd>
+<dt><a name="L004032" id="L004032">raw_data</a></dt>
+<dd>
+<p>Returns the raw data string.</p>
+</dd>
+</dl>
+<h2><a name="L004033" id="L004033">Net::IMAP::UntaggedResponse</a></h2>
+<p>Net::IMAP::UntaggedResponse represents untagged responses.</p>
+<p>Data transmitted by the server to the client and status responses
+that do not indicate command completion are prefixed with the token
+&quot;*&quot;, and are called untagged responses.</p>
+<pre>response_data   ::= &quot;*&quot; SPACE (resp_cond_state / resp_cond_bye /
+                    mailbox_data / message_data / capability_data)</pre>
+<h3><a name="L003983" id="L003983">Super Class</a></h3>
+<p>Struct</p>
+<h3><a name="L003989" id="L003989">Methods</a></h3>
+<dl>
+<dt><a name="L004034" id="L004034">name</a></dt>
+<dd>
+<p>Returns the name such as &quot;FLAGS&quot;, &quot;LIST&quot;, &quot;FETCH&quot;....</p>
+</dd>
+<dt><a name="L004031" id="L004031">data</a></dt>
+<dd>
+<p>Returns the data such as an array of flag symbols,
+a <a href="#L004042">Net::IMAP::MailboxList</a> object....</p>
+</dd>
+<dt><a name="L004032" id="L004032">raw_data</a></dt>
+<dd>
+<p>Returns the raw data string.</p>
+</dd>
+</dl>
+<h2><a name="L004035" id="L004035">Net::IMAP::TaggedResponse</a></h2>
+<p>Net::IMAP::TaggedResponse represents tagged responses.</p>
+<p>The server completion result response indicates the success or
+failure of the operation.  It is tagged with the same tag as the
+client command which began the operation.</p>
+<pre>response_tagged ::= tag SPACE resp_cond_state CRLF
+
+tag             ::= 1*&lt;any ATOM_CHAR except &quot;+&quot;&gt;
+
+resp_cond_state ::= (&quot;OK&quot; / &quot;NO&quot; / &quot;BAD&quot;) SPACE resp_text</pre>
+<h3><a name="L003983" id="L003983">Super Class</a></h3>
+<p>Struct</p>
+<h3><a name="L003989" id="L003989">Methods</a></h3>
+<dl>
+<dt><a name="L004036" id="L004036">tag</a></dt>
+<dd>
+<p>Returns the tag.</p>
+</dd>
+<dt><a name="L004034" id="L004034">name</a></dt>
+<dd>
+<p>Returns the name. the name is one of &quot;OK&quot;, &quot;NO&quot;, &quot;BAD&quot;.</p>
+</dd>
+<dt><a name="L004031" id="L004031">data</a></dt>
+<dd>
+<p>Returns the data. See <a href="#L004037">Net::IMAP::ResponseText</a>.</p>
+</dd>
+<dt><a name="L004032" id="L004032">raw_data</a></dt>
+<dd>
+<p>Returns the raw data string.</p>
+</dd>
+</dl>
+<h2><a name="L004037" id="L004037">Net::IMAP::ResponseText</a></h2>
+<p>Net::IMAP::ResponseText represents texts of responses.
+The text may be prefixed by the response code.</p>
+<pre>resp_text       ::= [&quot;[&quot; resp_text_code &quot;]&quot; SPACE] (text_mime2 / text)
+                    ;; text SHOULD NOT begin with &quot;[&quot; or &quot;=&quot;</pre>
+<h3><a name="L003983" id="L003983">Super Class</a></h3>
+<p>Struct</p>
+<h3><a name="L003989" id="L003989">Methods</a></h3>
+<dl>
+<dt><a name="L004038" id="L004038">code</a></dt>
+<dd>
+<p>Returns the response code. See <a href="#L004040">Net::IMAP::ResponseCode</a>.</p>
+</dd>
+<dt><a name="L004039" id="L004039">text</a></dt>
+<dd>
+<p>Returns the text.</p>
+</dd>
+</dl>
+<h2><a name="L004040" id="L004040">Net::IMAP::ResponseCode</a></h2>
+<p>Net::IMAP::ResponseCode represents response codes.</p>
+<pre>resp_text_code  ::= &quot;ALERT&quot; / &quot;PARSE&quot; /
+                    &quot;PERMANENTFLAGS&quot; SPACE &quot;(&quot; #(flag / &quot;\*&quot;) &quot;)&quot; /
+                    &quot;READ-ONLY&quot; / &quot;READ-WRITE&quot; / &quot;TRYCREATE&quot; /
+                    &quot;UIDVALIDITY&quot; SPACE nz_number /
+                    &quot;UNSEEN&quot; SPACE nz_number /
+                    atom [SPACE 1*&lt;any TEXT_CHAR except &quot;]&quot;&gt;]</pre>
+<h3><a name="L004041" id="L004041">SuperClass</a></h3>
+<p>Struct</p>
+<h3><a name="L003989" id="L003989">Methods</a></h3>
+<dl>
+<dt><a name="L004034" id="L004034">name</a></dt>
+<dd>
+<p>Returns the name such as &quot;ALERT&quot;, &quot;PERMANENTFLAGS&quot;, &quot;UIDVALIDITY&quot;....</p>
+</dd>
+<dt><a name="L004031" id="L004031">data</a></dt>
+<dd>
+<p>Returns the data if it exists.</p>
+</dd>
+</dl>
+<h2><a name="L004042" id="L004042">Net::IMAP::MailboxList</a></h2>
+<p>Net::IMAP::MailboxList represents contents of the LIST response.</p>
+<pre>mailbox_list    ::= &quot;(&quot; #(&quot;\Marked&quot; / &quot;\Noinferiors&quot; /
+                    &quot;\Noselect&quot; / &quot;\Unmarked&quot; / flag_extension) &quot;)&quot;
+                    SPACE (&lt;&quot;&gt; QUOTED_CHAR &lt;&quot;&gt; / nil) SPACE mailbox</pre>
+<h3><a name="L003983" id="L003983">Super Class</a></h3>
+<p>Struct</p>
+<h3><a name="L003989" id="L003989">Methods</a></h3>
+<dl>
+<dt><a name="L004043" id="L004043">attr</a></dt>
+<dd>
+<p>Returns the name attributes. Each name attribute is a symbol
+capitalized by String#capitalize, such as :Noselect (not :NoSelect).</p>
+</dd>
+<dt><a name="L004044" id="L004044">delim</a></dt>
+<dd>
+<p>Returns the hierarchy delimiter</p>
+</dd>
+<dt><a name="L004034" id="L004034">name</a></dt>
+<dd>
+<p>Returns the mailbox name.</p>
+</dd>
+</dl>
+<h2><a name="L004045" id="L004045">Net::IMAP::MailboxQuota</a></h2>
+<p>Net::IMAP::MailboxQuota represents contents of GETQUOTA response.
+This object can also be a response to GETQUOTAROOT.  In the syntax
+specification below, the delimiter used with the &quot;#&quot; construct is a
+single space (SPACE).</p>
+<pre>quota_list      ::= &quot;(&quot; #quota_resource &quot;)&quot;
+
+quota_resource  ::= atom SPACE number SPACE number
+
+quota_response  ::= &quot;QUOTA&quot; SPACE astring SPACE quota_list</pre>
+<h3><a name="L003983" id="L003983">Super Class</a></h3>
+<p>Struct</p>
+<h3><a name="L003989" id="L003989">Methods</a></h3>
+<dl>
+<dt><a name="L004046" id="L004046">mailbox</a></dt>
+<dd>
+<p>The mailbox with the associated quota.</p>
+</dd>
+<dt><a name="L004047" id="L004047">usage</a></dt>
+<dd>
+<p>Current storage usage of mailbox.</p>
+</dd>
+<dt><a name="L004048" id="L004048">quota</a></dt>
+<dd>
+<p>Quota limit imposed on mailbox.</p>
+</dd>
+</dl>
+<h2><a name="L004049" id="L004049">Net::IMAP::MailboxQuotaRoot</a></h2>
+<p>Net::IMAP::MailboxQuotaRoot represents part of the GETQUOTAROOT
+response. (GETQUOTAROOT can also return Net::IMAP::MailboxQuota.)</p>
+<pre>quotaroot_response
+                ::= &quot;QUOTAROOT&quot; SPACE astring *(SPACE astring)</pre>
+<h3><a name="L003983" id="L003983">Super Class</a></h3>
+<p>Struct</p>
+<h3><a name="L003989" id="L003989">Methods</a></h3>
+<dl>
+<dt><a name="L004046" id="L004046">mailbox</a></dt>
+<dd>
+<p>The mailbox with the associated quota.</p>
+</dd>
+<dt><a name="L004050" id="L004050">quotaroots</a></dt>
+<dd>
+<p>Zero or more quotaroots that effect the quota on the
+specified mailbox.</p>
+</dd>
+</dl>
+<h2><a name="L004051" id="L004051">Net::IMAP::MailboxACLItem</a></h2>
+<p>Net::IMAP::MailboxACLItem represents response from GETACL.</p>
+<pre>acl_data        ::= &quot;ACL&quot; SPACE mailbox *(SPACE identifier SPACE
+                     rights)
+
+identifier      ::= astring
+
+rights          ::= astring</pre>
+<h3><a name="L003983" id="L003983">Super Class</a></h3>
+<p>Struct</p>
+<h3><a name="L003989" id="L003989">Methods</a></h3>
+<dl>
+<dt><a name="L004052" id="L004052">user</a></dt>
+<dd>
+<p>Login name that has certain rights to the mailbox
+that was specified with the getacl command.</p>
+</dd>
+<dt><a name="L004053" id="L004053">rights</a></dt>
+<dd>
+<p>The access rights the indicated user has to the
+mailbox.</p>
+</dd>
+</dl>
+<h2><a name="L004054" id="L004054">Net::IMAP::StatusData</a></h2>
+<p>Net::IMAP::StatusData represents contents of the STATUS response.</p>
+<h3><a name="L003983" id="L003983">Super Class</a></h3>
+<p>Object</p>
+<h3><a name="L003989" id="L003989">Methods</a></h3>
+<dl>
+<dt><a name="L004046" id="L004046">mailbox</a></dt>
+<dd>
+<p>Returns the mailbox name.</p>
+</dd>
+<dt><a name="L004043" id="L004043">attr</a></dt>
+<dd>
+<p>Returns a hash. Each key is one of &quot;MESSAGES&quot;, &quot;RECENT&quot;, &quot;UIDNEXT&quot;,
+&quot;UIDVALIDITY&quot;, &quot;UNSEEN&quot;. Each value is a number.</p>
+</dd>
+</dl>
+<h2><a name="L004055" id="L004055">Net::IMAP::FetchData</a></h2>
+<p>Net::IMAP::FetchData represents contents of the FETCH response.</p>
+<h3><a name="L003983" id="L003983">Super Class</a></h3>
+<p>Object</p>
+<h3><a name="L003989" id="L003989">Methods</a></h3>
+<dl>
+<dt><a name="L004056" id="L004056">seqno</a></dt>
+<dd>
+<p>Returns the message sequence number.
+(Note: not the unique identifier, even for the UID command response.)</p>
+</dd>
+<dt><a name="L004043" id="L004043">attr</a></dt>
+<dd>
+<p>Returns a hash. Each key is a data item name, and each value is
+its value.</p>
+<p>The current data items are:</p>
+<dl>
+<dt><a name="L004057" id="L004057">BODY</a></dt>
+<dd>
+<p>A form of BODYSTRUCTURE without extension data.</p>
+</dd>
+<dt><a name="L004058" id="L004058">BODY[&lt;section&gt;]&lt;&lt;origin_octet&gt;&gt;</a></dt>
+<dd>
+<p>A string expressing the body contents of the specified section.</p>
+</dd>
+<dt><a name="L004059" id="L004059">BODYSTRUCTURE</a></dt>
+<dd>
+<p>An object that describes the <a href="#L004108">[MIME-IMB]</a> body structure of a message.
+See <a href="#L004085">Net::IMAP::BodyTypeBasic</a>, <a href="#L004097">Net::IMAP::BodyTypeText</a>,
+<a href="#L004099">Net::IMAP::BodyTypeMessage</a>, <a href="#L004102">Net::IMAP::BodyTypeMultipart</a>.</p>
+</dd>
+<dt><a name="L004060" id="L004060">ENVELOPE</a></dt>
+<dd>
+<p>A <a href="#L004068">Net::IMAP::Envelope</a> object that describes the envelope
+structure of a message.</p>
+</dd>
+<dt><a name="L004061" id="L004061">FLAGS</a></dt>
+<dd>
+<p>A array of flag symbols that are set for this message. flag symbols
+are capitalized by String#capitalize.</p>
+</dd>
+<dt><a name="L004062" id="L004062">INTERNALDATE</a></dt>
+<dd>
+<p>A string representing the internal date of the message.</p>
+</dd>
+<dt><a name="L004063" id="L004063">RFC822</a></dt>
+<dd>
+<p>Equivalent to BODY[].</p>
+</dd>
+<dt><a name="L004064" id="L004064">RFC822.HEADER</a></dt>
+<dd>
+<p>Equivalent to BODY.PEEK[HEADER].</p>
+</dd>
+<dt><a name="L004065" id="L004065">RFC822.SIZE</a></dt>
+<dd>
+<p>A number expressing the <a href="#L004109">[RFC-822]</a> size of the message.</p>
+</dd>
+<dt><a name="L004066" id="L004066">RFC822.TEXT</a></dt>
+<dd>
+<p>Equivalent to BODY[TEXT].</p>
+</dd>
+<dt><a name="L004067" id="L004067">UID</a></dt>
+<dd>
+<p>A number expressing the unique identifier of the message.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<h2><a name="L004068" id="L004068">Net::IMAP::Envelope</a></h2>
+<p>Net::IMAP::Envelope represents envelope structures of messages.</p>
+<h3><a name="L003983" id="L003983">Super Class</a></h3>
+<p>Struct</p>
+<h3><a name="L003989" id="L003989">Methods</a></h3>
+<dl>
+<dt><a name="L004069" id="L004069">date</a></dt>
+<dd>
+<p>Retunns a string that represents the date.</p>
+</dd>
+<dt><a name="L004070" id="L004070">subject</a></dt>
+<dd>
+<p>Retunns a string that represents the subject.</p>
+</dd>
+<dt><a name="L004071" id="L004071">from</a></dt>
+<dd>
+<p>Retunns an array of <a href="#L004079">Net::IMAP::Address</a> that represents the from.</p>
+</dd>
+<dt><a name="L004072" id="L004072">sender</a></dt>
+<dd>
+<p>Retunns an array of <a href="#L004079">Net::IMAP::Address</a> that represents the sender.</p>
+</dd>
+<dt><a name="L004073" id="L004073">reply_to</a></dt>
+<dd>
+<p>Retunns an array of <a href="#L004079">Net::IMAP::Address</a> that represents the reply-to.</p>
+</dd>
+<dt><a name="L004074" id="L004074">to</a></dt>
+<dd>
+<p>Retunns an array of <a href="#L004079">Net::IMAP::Address</a> that represents the to.</p>
+</dd>
+<dt><a name="L004075" id="L004075">cc</a></dt>
+<dd>
+<p>Retunns an array of <a href="#L004079">Net::IMAP::Address</a> that represents the cc.</p>
+</dd>
+<dt><a name="L004076" id="L004076">bcc</a></dt>
+<dd>
+<p>Retunns an array of <a href="#L004079">Net::IMAP::Address</a> that represents the bcc.</p>
+</dd>
+<dt><a name="L004077" id="L004077">in_reply_to</a></dt>
+<dd>
+<p>Retunns a string that represents the in-reply-to.</p>
+</dd>
+<dt><a name="L004078" id="L004078">message_id</a></dt>
+<dd>
+<p>Retunns a string that represents the message-id.</p>
+</dd>
+</dl>
+<h2><a name="L004079" id="L004079">Net::IMAP::Address</a></h2>
+<p><a href="#L004079">Net::IMAP::Address</a> represents electronic mail addresses.</p>
+<h3><a name="L003983" id="L003983">Super Class</a></h3>
+<p>Struct</p>
+<h3><a name="L003989" id="L003989">Methods</a></h3>
+<dl>
+<dt><a name="L004034" id="L004034">name</a></dt>
+<dd>
+<p>Returns the phrase from <a href="#L004109">[RFC-822]</a> mailbox.</p>
+</dd>
+<dt><a name="L004080" id="L004080">route</a></dt>
+<dd>
+<p>Returns the route from <a href="#L004109">[RFC-822]</a> route-addr.</p>
+</dd>
+<dt><a name="L004046" id="L004046">mailbox</a></dt>
+<dd>
+<p>nil indicates end of <a href="#L004109">[RFC-822]</a> group.
+If non-nil and host is nil, returns <a href="#L004109">[RFC-822]</a> group name.
+Otherwise, returns <a href="#L004109">[RFC-822]</a> local-part</p>
+</dd>
+<dt><a name="L004081" id="L004081">host</a></dt>
+<dd>
+<p>nil indicates <a href="#L004109">[RFC-822]</a> group syntax.
+Otherwise, returns <a href="#L004109">[RFC-822]</a> domain name.</p>
+</dd>
+</dl>
+<h2><a name="L004082" id="L004082">Net::IMAP::ContentDisposition</a></h2>
+<p>Net::IMAP::ContentDisposition represents Content-Disposition fields.</p>
+<h3><a name="L003983" id="L003983">Super Class</a></h3>
+<p>Struct</p>
+<h3><a name="L003989" id="L003989">Methods</a></h3>
+<dl>
+<dt><a name="L004083" id="L004083">dsp_type</a></dt>
+<dd>
+<p>Returns the disposition type.</p>
+</dd>
+<dt><a name="L004084" id="L004084">param</a></dt>
+<dd>
+<p>Returns a hash that represents parameters of the Content-Disposition
+field.</p>
+</dd>
+</dl>
+<h2><a name="L004085" id="L004085">Net::IMAP::BodyTypeBasic</a></h2>
+<p>Net::IMAP::BodyTypeBasic represents basic body structures of messages.</p>
+<h3><a name="L003983" id="L003983">Super Class</a></h3>
+<p>Struct</p>
+<h3><a name="L003989" id="L003989">Methods</a></h3>
+<dl>
+<dt><a name="L004086" id="L004086">media_type</a></dt>
+<dd>
+<p>Returns the content media type name as defined in <a href="#L004108">[MIME-IMB]</a>.</p>
+</dd>
+<dt><a name="L004087" id="L004087">subtype</a></dt>
+<dd>
+<p>Returns the content subtype name as defined in <a href="#L004108">[MIME-IMB]</a>.</p>
+</dd>
+<dt><a name="L004084" id="L004084">param</a></dt>
+<dd>
+<p>Returns a hash that represents parameters as defined in
+<a href="#L004108">[MIME-IMB]</a>.</p>
+</dd>
+<dt><a name="L004088" id="L004088">content_id</a></dt>
+<dd>
+<p>Returns a string giving the content id as defined in <a href="#L004108">[MIME-IMB]</a>.</p>
+</dd>
+<dt><a name="L004089" id="L004089">description</a></dt>
+<dd>
+<p>Returns a string giving the content description as defined in
+<a href="#L004108">[MIME-IMB]</a>.</p>
+</dd>
+<dt><a name="L004090" id="L004090">encoding</a></dt>
+<dd>
+<p>Returns a string giving the content transfer encoding as defined in
+<a href="#L004108">[MIME-IMB]</a>.</p>
+</dd>
+<dt><a name="L004091" id="L004091">size</a></dt>
+<dd>
+<p>Returns a number giving the size of the body in octets.</p>
+</dd>
+<dt><a name="L004092" id="L004092">md5</a></dt>
+<dd>
+<p>Returns a string giving the body MD5 value as defined in <a href="#L004107">[MD5]</a>.</p>
+</dd>
+<dt><a name="L004093" id="L004093">disposition</a></dt>
+<dd>
+<p>Returns a <a href="#L004082">Net::IMAP::ContentDisposition</a> object giving
+the content disposition.</p>
+</dd>
+<dt><a name="L004094" id="L004094">language</a></dt>
+<dd>
+<p>Returns a string or an array of strings giving the body
+language value as defined in [LANGUAGE-TAGS].</p>
+</dd>
+<dt><a name="L004095" id="L004095">extension</a></dt>
+<dd>
+<p>Returns extension data.</p>
+</dd>
+<dt><a name="L004096" id="L004096">multipart?</a></dt>
+<dd>
+<p>Returns false.</p>
+</dd>
+</dl>
+<h2><a name="L004097" id="L004097">Net::IMAP::BodyTypeText</a></h2>
+<p>Net::IMAP::BodyTypeText represents TEXT body structures of messages.</p>
+<h3><a name="L003983" id="L003983">Super Class</a></h3>
+<p>Struct</p>
+<h3><a name="L003989" id="L003989">Methods</a></h3>
+<dl>
+<dt><a name="L004098" id="L004098">lines</a></dt>
+<dd>
+<p>Returns the size of the body in text lines.</p>
+</dd>
+</dl>
+<p>And Net::IMAP::BodyTypeText has all methods of <a href="#L004085">Net::IMAP::BodyTypeBasic</a>.</p>
+<h2><a name="L004099" id="L004099">Net::IMAP::BodyTypeMessage</a></h2>
+<p>Net::IMAP::BodyTypeMessage represents MESSAGE/RFC822 body structures of messages.</p>
+<h3><a name="L003983" id="L003983">Super Class</a></h3>
+<p>Struct</p>
+<h3><a name="L003989" id="L003989">Methods</a></h3>
+<dl>
+<dt><a name="L004100" id="L004100">envelope</a></dt>
+<dd>
+<p>Returns a <a href="#L004068">Net::IMAP::Envelope</a> giving the envelope structure.</p>
+</dd>
+<dt><a name="L004101" id="L004101">body</a></dt>
+<dd>
+<p>Returns an object giving the body structure.</p>
+</dd>
+</dl>
+<p>And Net::IMAP::BodyTypeMessage has all methods of <a href="#L004097">Net::IMAP::BodyTypeText</a>.</p>
+<h2><a name="L004102" id="L004102">Net::IMAP::BodyTypeMultipart</a></h2>
+<h3><a name="L003983" id="L003983">Super Class</a></h3>
+<p>Struct</p>
+<h3><a name="L003989" id="L003989">Methods</a></h3>
+<dl>
+<dt><a name="L004086" id="L004086">media_type</a></dt>
+<dd>
+<p>Returns the content media type name as defined in <a href="#L004108">[MIME-IMB]</a>.</p>
+</dd>
+<dt><a name="L004087" id="L004087">subtype</a></dt>
+<dd>
+<p>Returns the content subtype name as defined in <a href="#L004108">[MIME-IMB]</a>.</p>
+</dd>
+<dt><a name="L004103" id="L004103">parts</a></dt>
+<dd>
+<p>Returns multiple parts.</p>
+</dd>
+<dt><a name="L004084" id="L004084">param</a></dt>
+<dd>
+<p>Returns a hash that represents parameters as defined in
+<a href="#L004108">[MIME-IMB]</a>.</p>
+</dd>
+<dt><a name="L004093" id="L004093">disposition</a></dt>
+<dd>
+<p>Returns a <a href="#L004082">Net::IMAP::ContentDisposition</a> object giving
+the content disposition.</p>
+</dd>
+<dt><a name="L004094" id="L004094">language</a></dt>
+<dd>
+<p>Returns a string or an array of strings giving the body
+language value as defined in [LANGUAGE-TAGS].</p>
+</dd>
+<dt><a name="L004095" id="L004095">extension</a></dt>
+<dd>
+<p>Returns extension data.</p>
+</dd>
+<dt><a name="L004096" id="L004096">multipart?</a></dt>
+<dd>
+<p>Returns true.</p>
+</dd>
+</dl>
+<h2><a name="L004104" id="L004104">References</a></h2>
+<dl>
+<dt><a name="L004105" id="L004105">[IMAP]</a></dt>
+<dd>
+<p>M. Crispin, &quot;INTERNET MESSAGE ACCESS PROTOCOL - VERSION 4rev1&quot;,
+RFC 2060, December 1996.</p>
+</dd>
+<dt><a name="L004106" id="L004106">[LANGUAGE-TAGS]</a></dt>
+<dd>
+<p>Alvestrand, H., &quot;Tags for the Identification of
+Languages&quot;, RFC 1766, March 1995.</p>
+</dd>
+<dt><a name="L004107" id="L004107">[MD5]</a></dt>
+<dd>
+<p>Myers, J., and M. Rose, &quot;The Content-MD5 Header Field&quot;, RFC
+1864, October 1995.</p>
+</dd>
+<dt><a name="L004108" id="L004108">[MIME-IMB]</a></dt>
+<dd>
+<p>Freed, N., and N. Borenstein, &quot;MIME (Multipurpose Internet
+Mail Extensions) Part One: Format of Internet Message Bodies&quot;, RFC
+2045, November 1996.</p>
+</dd>
+<dt><a name="L004109" id="L004109">[RFC-822]</a></dt>
+<dd>
+<p>Crocker, D., &quot;Standard for the Format of ARPA Internet Text
+Messages&quot;, STD 11, RFC 822, University of Delaware, August 1982.</p>
+</dd>
+<dt><a name="L004110" id="L004110">[RFC-2087]</a></dt>
+<dd>
+<p>Myers, J., &quot;IMAP4 QUOTA extension&quot;, RFC 2087, January 1997.</p>
+</dd>
+<dt><a name="L004111" id="L004111">[RFC-2086]</a></dt>
+<dd>
+<p>Myers, J., &quot;IMAP4 ACL extension&quot;, RFC 2086, January 1997.</p>
+</dd>
+<dt><a name="L004112" id="L004112">[OSSL]</a></dt>
+<dd>
+<p>http://www.openssl.org</p>
+</dd>
+<dt><a name="L004113" id="L004113">[RSSL]</a></dt>
+<dd>
+<p>http://savannah.gnu.org/projects/rubypki</p>
+</dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm207.html">&lt;-PREV</a>][<a href="refm209.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

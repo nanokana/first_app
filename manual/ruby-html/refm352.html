@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>DL</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm353.html" rel="next" />
+<link href="refm351.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm351.html">UP</a>][<a href="refm351.html">&lt;-PREV</a>][<a href="refm353.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006743" id="L006743">DL</a></h1>
+<p><a href="refm351.html">dl</a>も参照。また、現在<a href="http://rubyforge.net/projects/ruby-dl2/">dl2</a><sup class="outside"><small>[外部]</small></sup>のruby-1.8
+版も開発されており、 また、ruby-1.9にはすでにdl2がdlとして添付されている。
+dl2のドキュメントは、<a href="http://rubyforge.org/cgi-bin/viewcvs.cgi/ruby-dl2/doc/?root=ruby-dl2">ruby-dl2のdoc</a><sup class="outside"><small>[外部]</small></sup>を参照。</p>
+<p>モジュール DL は数個のモジュール関数と定数を持つ 3 つのクラスから成っ
+ている。クラス <a href="refm354.html">DL::Symbol</a> は呼び出す事ができるシンボルに相当する。クラス 
+<a href="refm355.html">DL::PtrData</a> は、C のポインタのようなメモリブロックを示す。
+クラス <a href="refm353.html">DL::Handle</a> から具体化されたオブジェクトはオープンしたライブラリの
+操作を持つ。</p>
+<ul>
+<li><a href="refm353.html">DL::Handle</a></li>
+<li><a href="refm354.html">DL::Symbol</a></li>
+<li><a href="refm355.html">DL::PtrData</a></li>
+</ul>
+<h2><a name="L006744" id="L006744">定数</a></h2>
+<ul>
+<li>RTLD_GLOBAL</li>
+<li>RTLD_LAZY</li>
+<li>RTLD_NOW</li>
+<li>MAX_ARG</li>
+<li>MAX_CBARG</li>
+<li>MAX_CBENT</li>
+</ul>
+<h2><a name="L006745" id="L006745">モジュール関数</a></h2>
+<dl>
+<dt><a name="L006746" id="L006746"><code>DL.dlopen(<var>lib</var>){|<var>handle</var>| ... }</code></a></dt>
+<dd>
+<p><a href="refm353.html#L006758">DL::Handle.new(lib)</a> と等価。</p></dd>
+</dl>
+<h2><a name="L006747" id="L006747">メソッド</a></h2>
+<dl>
+<dt><a name="L006748" id="L006748"><code>set_callback(<var>cbtype</var>, <var>entry</var>){|<var>args</var>| ... }</code></a>
+<dt><a name="L006749" id="L006749"><code>set_callback(<var>cbtype</var>, <var>entry</var>, <var>proc</var>)</code></a></dt>
+<dd>
+<p>proc や指定したブロックを呼ぶ entry-th pre-defined function を作成
+する。entry-th pre-defined function は cbtype と entry で指定され
+る。<var>cbtype</var> はコールバックのプロトタイプ。<var>cbtype</var> については
+<a href="#L006754">Type specifiers</a> も参照。</p></dd>
+<dt><a name="L006750" id="L006750"><code>get_callback(<var>cbtype</var>, <var>entry</var>)</code></a></dt>
+<dd>
+<p>上記 set_callback 関数によって与えられた <a href="refm057.html">Proc</a> オブジェクトを返す。</p></dd>
+<dt><a name="L006751" id="L006751"><code>malloc(<var>size</var>, [<var>free</var> = <var>nil</var>])</code></a></dt>
+<dd>
+<p><var>size</var> バイトのメモリ領域を割り当て、PtrData オブジェクトを ptr とし
+て返す。</p></dd>
+<dt><a name="L006752" id="L006752"><code>strdup(<var>str</var>)</code></a></dt>
+<dd>
+<p>文字列 <var>str</var> を複製した新しい文字列へのポインタに相当する PtrData オ
+ブジェクトを返す。</p></dd>
+<dt><a name="L006753" id="L006753"><code>sizeof(<var>type</var>)</code></a></dt>
+<dd>
+<p>型のサイズを返す。 sizeof(&quot;C&quot;) + sizeof(&quot;L&quot;) は、
+sizeof(&quot;CL&quot;) と等価ではない。後者は構造体 struct foo { char c;
+long l; } の十分なサイズを返すと推定されるが、そのサイズは C の 
+sizeof(foo) と同じではないかもしれない。</p>
+<p>(訳注: sizeof メソッドは独自にアラインメントを考慮してサイズを決定
+するが C 言語のそれとは異なるかもしれないということを言っている)</p>
+<p>(訳注: sizeof(&quot;L3&quot;) のように型の後に数字を付けることもできる。指定
+できる型については <a href="#L006754">Type specifiers</a> を参照)</p></dd>
+</dl>
+<h2><a name="L006754" id="L006754">Type specifiers</a></h2>
+<p>プロトタイプは以下の型修飾子から成る。プロトタイプの最初の要素は戻り値
+の型を意味する。残りの要素は各引数の型を意味する。</p>
+<pre>C : 文字 (char)
+c : 文字を指すポインタ (char *)
+H : short 整数  (short)
+h : short 整数を指すポインタ (short *)
+I : 整数 (char, short, int)
+i : 整数を指すポインタ (char *, short *, int *)
+L : long 整数 (long)
+l : long 整数へのポインタ (long *)
+F : 実数 (float)
+f : 実数へのポインタ (float *)
+D : 実数 (double)
+d : 実数へのポインタ(double *)
+S : 不変(immutable)の文字列 (const char *)
+s : 変更可能(mutable)な文字列 (char *)
+A : 配列 (const type[])
+a : 変更可能(mutable)な配列 (type[])
+P : ポインタ (void *)
+p : 変更可能(mutable)なポインタ (void *)
+0 : void 関数(これはプロトタイプの最初の文字でなければならない)</pre>
+<p>cbtype は型修飾子 0, C, I, H, L, F, D, S そして P から成る。例えば:</p>
+<pre>DL.callback('IPP'){|ptr1,ptr2|
+  str1 = ptr1.ptr.to_s
+  str2 = ptr2.ptr.to_s
+  str1 &lt;=&gt; str2
+}</pre>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm351.html">UP</a>][<a href="refm351.html">&lt;-PREV</a>][<a href="refm353.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

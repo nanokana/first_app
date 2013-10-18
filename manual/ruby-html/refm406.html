@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>FAQ::日本語の取り扱い</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm407.html" rel="next" />
+<link href="refm405.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm395.html">UP</a>][<a href="refm405.html">&lt;-PREV</a>][<a href="refm407.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L009350" id="L009350">10. 日本語の取り扱い</a></h1>
+<ul>
+<li><a href="#L009351">10.1 漢字を含んだスクリプトが文字化けを出力したり、正しく実行できない場合があります</a></li>
+<li><a href="#L009352">10.2 オプション<code>-K</code> と <code>$KCODE</code> の違いはなんですか？</a></li>
+<li><a href="#L009353">10.3 日本語の識別子は使えますか</a></li>
+<li><a href="#L009354">10.4 日本語を含む文字列から1文字ずつ文字列を取り出すにはどうしますか</a></li>
+<li><a href="#L009355">10.5 tr(&quot;あ&quot;,&quot;a&quot;)がうまく動きません</a></li>
+<li><a href="#L009356">10.6 ひらがなをソートするにはどうしますか</a></li>
+<li><a href="#L009357">10.7 SJISの機種依存コード84BF から 889Fまでを空白に置き換えたいのですが</a></li>
+<li><a href="#L009358">10.8 いわゆる全角文字と半角文字の変換を行うにはどうするのがよいですか？</a></li>
+<li><a href="#L009359">10.9 いわゆる半角カナの扱い</a></li>
+<li><a href="#L009360">10.10 日本語を含む文字列から n バイトを切り出したいのですが</a></li>
+<li><a href="#L009361">10.11 日本語テキストを n 桁で折り返したいのですが</a></li>
+<li><em class="XXINVALIDXX">10.12 UTF-8で書かれたコードを正しく実行できません</em></li>
+</ul>
+<h2><a name="L009351" id="L009351">10.1 漢字を含んだスクリプトが文字化けを出力したり、正しく実行できない場合があります</a></h2>
+<p><em>ruby 1.6以降、デフォルトで漢字コードを特別に解釈しなくなりました</em>。
+漢字を扱いたい場合は <kbd>ruby -Ke</kbd> などとして<a href="refm030.html">$KCODE</a> 
+を適切に設定しておく必要があります。</p>
+<p>Windows 上で SJIS を使用している場合、<kbd>ruby -Ks</kbd>を、
+UNIX 系 OS 上で EUC を使用している場合、<kbd>ruby -Ke</kbd>を
+UTF-8N を使用している場合、<kbd>ruby -Ku</kbd>を
+指定する必要があります。</p>
+<p>なお、スクリプトの先頭行に</p>
+<pre>#! ruby -Ks</pre>
+<p>などと書けばオプションの指定をスクリプトに埋め込むことができます。
+これがもっとも無難でポピュラーな方法です。</p>
+<h2><a name="L009352" id="L009352">10.2 オプション<code>-K</code> と <code>$KCODE</code> の違いはなんですか？</a></h2>
+<p>効果が及ぶタイミングが違います。</p>
+<p>例えばSJISコードのファイルで以下のスクリプトがあった場合</p>
+<pre>$KCODE = 'SJIS'
+s = &quot;表&quot;</pre>
+<p>$KCODE に値を設定する段階ではスクリプトは解析された後です。文字列リテ
+ラルは($KCODE のデフォルトが &quot;NONE&quot; であるため)マルチバイトとして解釈
+されていません。</p>
+<p>オプション -K による漢字コードの指定ならばスクリプトを読む前に漢字コー
+ドが指定されるので、スクリプト解析の段階で漢字コードを認識します。</p>
+<p>ちなみに漢字コードを含んだスクリプトで問題が発生する理由は「表」などの
+文字がシフトJISコードでバックスラッシュ(&quot;\&quot;)と同じコードを含むからです。</p>
+<h2><a name="L009353" id="L009353">10.3 日本語の識別子は使えますか</a></h2>
+<p>-K オプションを正しく指定すれば、漢字で始まる変数名は英小文字に相当するもの
+として使えます。ポータビリティが低いのでおすすめできません。</p>
+<p>Hash を使えば似たようなことができます、こちらの方がより安全と言えます。</p>
+<pre>var = {'変数' =&gt; '値'}
+var['変数'] = 1</pre>
+<h2><a name="L009354" id="L009354">10.4 日本語を含む文字列から1文字ずつ文字列を取り出すにはどうしますか</a></h2>
+<p>$KCODE を設定した上で split(//) や scan(/./) を使います。</p>
+<h2><a name="L009355" id="L009355">10.5 tr(&quot;あ&quot;,&quot;a&quot;)がうまく動きません</a></h2>
+<p>組み込みの <a href="refm061.html">String#tr</a> は、バイトごとに変換します。
+<code>require &quot;jcode&quot;</code> とすると、日本語を文字ごとに扱えます。
+(<a href="refm257.html">jcode</a> を参照)</p>
+<h2><a name="L009356" id="L009356">10.6 ひらがなをソートするにはどうしますか</a></h2>
+<p>以下は、ひらがなの濁音、半濁音、拗音、撥音の文字を無視してソートを行う例です。
+<a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></p>
+<pre>require &quot;jcode&quot;
+
+a = &quot;ぁぃぅぇぉがぎぐげござじずぜぞだぢづでど&quot; \
+    &quot;ばびぶべぼぱぴぷぺぽゃゅょっゎ&quot;
+b = &quot;あいうえおかきくけこさしすせそたちつてと&quot; \
+    &quot;はひふへほはひふへほやゆよつわ&quot;
+
+ary = %w[ふー ばー ばず]
+
+p ary.sort
+p ary.collect{|l| [l.tr(a,b), l]}.sort.collect!{|e| e[1]}
+
+# =&gt; [&quot;ばー&quot;, &quot;ばず&quot;, &quot;ふー&quot;]
+#    [&quot;ばー&quot;, &quot;ばず&quot;, &quot;ふー&quot;]</pre>
+<p>余談ですが、version 1.7 以降なら <a href="refm070.html">Enumerable#sort_by</a> を
+使って最後の行を</p>
+<pre>p ary.sort_by {|l| l.tr(a,b)}</pre>
+<p>と書けます。</p>
+<h2><a name="L009357" id="L009357">10.7 SJISの機種依存コード84BF から 889Fまでを空白に置き換えたいのですが</a></h2>
+<p>正規表現で[あ-ん]というような範囲表現が使えますが、機種依存文字を直接
+書くことはプログラムの可読性を損ないます。かといって</p>
+<pre>gsub(/[\x84\xbf-\x88\x9f]/s, '　')</pre>
+<p>と書くことはできません。このような場合は以下のトリックを使うことで</p>
+<pre>gsub(Regexp.compile(&quot;[\x84\xbf-\x88\x9f]&quot;, nil, 's'), '　')
+または
+gsub(/#{&quot;[\x84\xbf-\x88\x9f]&quot;}/s, '　')</pre>
+<p>2バイトコードの範囲をうまく数値で表現して、空白に置き換えることができ
+ます。(余談ですが、このようなときには空白でなくゲタ(&quot;〓&quot;)に置き換えま
+すけどね)</p>
+<h2><a name="L009358" id="L009358">10.8 いわゆる全角文字と半角文字の変換を行うにはどうするのがよいですか？</a></h2>
+<p>標準ならば <a href="refm260.html">nkf</a> ライブラリを使う方法と <a href="refm257.html">jcode</a> ライブラ
+リを使って変換を行う方法があります。あと <a href="http://raa.ruby-lang.org/list.rhtml?name=Kakasi">RAA:Kakasi</a><sup class="outside"><small>[外部]</small></sup> ライブラリな
+どでも可能です。</p>
+<p><a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/10505">ruby-list:10505</a><sup class="outside"><small>[外部]</small></sup>,
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/25839">ruby-list:25839</a><sup class="outside"><small>[外部]</small></sup>,
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/31238">ruby-list:31238</a><sup class="outside"><small>[外部]</small></sup>,
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/31240">ruby-list:31240</a><sup class="outside"><small>[外部]</small></sup>,
+<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/31508">ruby-list:31508</a><sup class="outside"><small>[外部]</small></sup> 
+などなど<a name="footmark:2" id="footmark:2" href="#foottext:2"><sup><small>*2</small></sup></a></p>
+<h2><a name="L009359" id="L009359">10.9 いわゆる半角カナの扱い</a></h2>
+<p>Ruby はいわゆる半角カナを完全にはサポートしてません。</p>
+<pre># 以下の例で &quot;ア&quot; は半角文字としてみてください
+ruby -Ks -e 'p &quot;あア&quot;'
+=&gt; &quot;あ\261&quot;</pre>
+<p>開発中の M17N版 ruby ではこのようなことにはならないそうです。</p>
+<h2><a name="L009360" id="L009360">10.10 日本語を含む文字列から n バイトを切り出したいのですが</a></h2>
+<p>多バイト文字の切り出しでは、文字の泣き別れが問題になるのです
+が、これに対しては $KCODE を設定したとき /./ が、分断された
+文字にマッチしないことを利用できます。</p>
+<pre>$KCODE = &quot;e&quot;
+p /./ =~ &quot;あ&quot;[0,1]    # =&gt; nil
+
+# 注：漢字の要素になり得ない文字コードにはマッチします。
+
+p /./ =~ &quot;\xff&quot;       # =&gt; 0</pre>
+<p>以下は、文字列の左からたかだか len バイトまでを切り出すメソッ
+ド jleft のサンプルです。</p>
+<pre>class String
+  def jleft(len)
+    return &quot;&quot; if len &lt;= 0
+
+    str = self[0,len]
+    if /.\z/ !~ str
+        str[-1,1] = ''
+    end
+    str
+  end
+end
+
+$KCODE = 'e'
+s = &quot;あいうえお&quot;
+for i in -2 .. s.size+2
+    p [i, s.jleft(i)]
+end
+
+=&gt; [-2, &quot;&quot;]
+   [-1, &quot;&quot;]
+   [0, &quot;&quot;]
+   [1, &quot;&quot;]
+   [2, &quot;あ&quot;]
+   [3, &quot;あ&quot;]
+   [4, &quot;あい&quot;]
+   [5, &quot;あい&quot;]
+   [6, &quot;あいう&quot;]
+   [7, &quot;あいう&quot;]
+   [8, &quot;あいうえ&quot;]
+   [9, &quot;あいうえ&quot;]
+   [10, &quot;あいうえお&quot;]
+   [11, &quot;あいうえお&quot;]
+   [12, &quot;あいうえお&quot;]</pre>
+<p>もう一つ EUC コード限定で以下のような方法があります。</p>
+<pre>class String
+  def jleft(len)
+    return &quot;&quot; if len &lt;= 0
+
+    str = self[0, len]
+
+    if str.count(&quot;\xa1-\xfe&quot;) % 2 == 1
+      str[-1, 1] = ''
+    end
+    str
+  end
+end</pre>
+<p>注：いずれも 3 バイト文字には対応してません。</p>
+<h2><a name="L009361" id="L009361">10.11 日本語テキストを n 桁で折り返したいのですが</a></h2>
+<p><a href="refm260.html">nkf</a> の <code>-f</code> オプションが利用できます。</p>
+<pre>require 'nkf'
+p NKF.nkf(&quot;-ef11&quot;, &quot;あいうえお、かきくけこ&quot;)</pre>
+<p>ただ、こちらは禁則処理やスペースの調整などを行ってくれて
+賢すぎるので細かく制御できない場合があります。</p>
+<p>自力でやるには <a href="#L009360">10.10</a>
+の方法を応用します。</p>
+<pre>class String
+  def jfold(len)
+    return &quot;&quot; if len &lt;= 0
+
+    right = self.delete(&quot;\r\n&quot;)
+    while right and not right.empty?
+      left, right = right.unpack(&quot;a#{len} a*&quot;)
+
+      if /.\z/ !~ left
+          right[0,0] = left[-1,1]
+          left[-1,1] = ''
+      end
+      yield left
+    end
+  end
+end
+
+&quot;あいうえお、かきくけこ&quot;.jfold(11) {|s|
+  puts s
+}
+# =&gt;  あいうえお
+      、かきくけ
+      こ</pre>
+<p>ただ、これは n バイト毎の folding です。TAB の桁位置を考慮し
+ていません。また、nkf に比べれば格段に遅いです。</p>
+<h2><a name="L009362" id="L009362">10.12 UTF-8で書いたコードを正しく実行できません</a></h2>
+<p><a href="#L009351">10.1 漢字を含んだスクリプトが文字化けを出力したり、正しく実行できない場合があります</a>
+の項目をチェックしたにもかかわらず、どうしても UTF-8 を正しく解釈してくれない場合は、
+UTF-8 と UTF-8N の違いを疑ってみる必要があるかもしれません。</p>
+<p>このリファレンスマニュアルでは単に UTF-8 と書かれていますが、
+実は ruby インタープリタが解釈するのは UTF-8N です。一般的なエディタでは
+暗黙的に UTF-8N のみを取り扱いますが、一部のエディタ<a name="footmark:3" id="footmark:3" href="#foottext:3"><sup><small>*3</small></sup></a>では
+UTF-8 と UTF-8N を区別します。このような場合には UTF-8N で保存してみてください。</p>
+<p><a href="refm002.html">執筆者募集</a></p>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>あらい 2001-10-07: 例が悪かった(^^;</small><br />
+<a name="foottext:2" id="foottext:2" href="#footmark:2"><sup><small>*2</small></sup></a><small>適当に誰かまとめてちょうだい<a href="refm002.html">執筆者募集</a></small><br />
+<a name="foottext:3" id="foottext:3" href="#footmark:3"><sup><small>*3</small></sup></a><small> RDEで確認。 </small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm395.html">UP</a>][<a href="refm405.html">&lt;-PREV</a>][<a href="refm407.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

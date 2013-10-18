@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ruby-src:doc/shell.rd.ja</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm514.html" rel="next" />
+<link href="refm512.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm512.html">&lt;-PREV</a>][<a href="refm514.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L011407" id="L011407">目的</a></h1>
+<p>ruby上でsh/cshのようにコマンドの実行及びフィルタリングを手軽に行う.
+sh/cshの制御文はrubyの機能を用いて実現する.</p>
+<h1><a name="L011408" id="L011408">主なクラス一覧</a></h1>
+<h2><a name="L011409" id="L011409">Shell</a></h2>
+<p>Shellオブジェクトはカレントディレクトリを持ち, コマンド実行はそこからの
+相対パスになります.</p>
+<dl>
+<dt><a name="L011410" id="L011410"><code>Shell#cwd</code></a>
+<dt><a name="L011411" id="L011411"><code>Shell#dir</code></a>
+<dt><a name="L011412" id="L011412"><code>Shell#getwd</code></a>
+<dt><a name="L011413" id="L011413"><code>Shell#pwd</code></a></dt>
+<dd>
+<p>カレントディレクトリを返す。</p></dd>
+<dt><a name="L011414" id="L011414"><code>Shell#system_path</code></a></dt>
+<dd>
+<p>コマンドサーチパスの配列を返す。</p></dd>
+<dt><a name="L011415" id="L011415"><code>Shell#umask</code></a></dt>
+<dd>
+<p>umaskを返す。</p></dd>
+</dl>
+<h2><a name="L011416" id="L011416">Filter</a></h2>
+<p>コマンドの実行結果はすべてFilterとしてかえります. Enumerableをincludeし
+ています.</p>
+<h1><a name="L011417" id="L011417">主なメソッド一覧</a></h1>
+<h2><a name="L011418" id="L011418">コマンド定義</a></h2>
+<p>OS上のコマンドを実行するにはまず, Shellのメソッドとして定義します.</p>
+<p>注) コマンドを定義しなくとも直接実行できるShell#systemコマンドもあります.</p>
+<dl>
+<dt><a name="L011419" id="L011419"><code>Shell.def_system_command(<var>command</var>, <var>path</var> = <var>command</var>)</code></a></dt>
+<dd>
+<p>Shellのメソッドとしてcommandを登録します. </p>
+<p>例)
+Shell.def_system_command &quot;ls&quot;</p>
+<pre>ls を定義</pre>
+<p>Shell.def_system_command &quot;sys_sort&quot;, &quot;sort&quot;</p>
+<pre>sortコマンドをsys_sortとして定義</pre></dd>
+<dt><a name="L011420" id="L011420"><code>Shell.undef_system_command(<var>command</var>)</code></a></dt>
+<dd>
+<p>commandを削除します.</p></dd>
+<dt><a name="L011421" id="L011421"><code>Shell.alias_command(<var>ali</var>, <var>command</var>, *<var>opts</var>) {...}</code></a></dt>
+<dd>
+<p>commandのaliasをします. </p>
+<p>例)</p>
+<pre>Shell.alias_command &quot;lsC&quot;, &quot;ls&quot;, &quot;-CBF&quot;, &quot;--show-control-chars&quot;
+Shell.alias_command(&quot;lsC&quot;, &quot;ls&quot;){|*opts| [&quot;-CBF&quot;, &quot;--show-control-chars&quot;, *opts]}</pre></dd>
+<dt><a name="L011422" id="L011422"><code>Shell.unalias_command(<var>ali</var>)</code></a></dt>
+<dd>
+<p>commandのaliasを削除します.</p></dd>
+<dt><a name="L011423" id="L011423"><code>Shell.install_system_commands(<var>pre</var> = &quot;<var>sys_</var>&quot;)</code></a></dt>
+<dd>
+<p>system_path上にある全ての実行可能ファイルをShellに定義する. メソッ
+ド名は元のファイル名の頭にpreをつけたものとなる.</p></dd>
+</dl>
+<h2><a name="L011424" id="L011424">生成</a></h2>
+<dl>
+<dt><a name="L011425" id="L011425"><code>Shell.new</code></a></dt>
+<dd>
+<p>プロセスのカレントディレクトリをカレントディレクトリとするShellオ
+ブジェクトを生成します.</p></dd>
+<dt><a name="L011426" id="L011426"><code>Shell.cd(<var>path</var>)</code></a></dt>
+<dd>
+<p>pathをカレントディレクトリとするShellオブジェクトを生成します.</p></dd>
+</dl>
+<h2><a name="L011427" id="L011427">プロセス管理</a></h2>
+<dl>
+<dt><a name="L011428" id="L011428"><code>Shell#jobs</code></a></dt>
+<dd>
+<p>スケジューリングされているjobの一覧を返す.</p></dd>
+<dt><a name="L011429" id="L011429"><code>Shell#kill <var>sig</var>, <var>job</var></code></a></dt>
+<dd>
+<p>jobにシグナルsigを送る</p></dd>
+</dl>
+<h2><a name="L011430" id="L011430">カレントディレクトリ操作</a></h2>
+<dl>
+<dt><a name="L011431" id="L011431"><code>Shell#cd(<var>path</var>, &amp;<var>block</var>)</code></a>
+<dt><a name="L011432" id="L011432"><code>Shell#chdir</code></a></dt>
+<dd>
+<p>カレントディレクトリをpathにする. イテレータとして呼ばれたときには
+ブロック実行中のみカレントディレクトリを変更する.</p></dd>
+<dt><a name="L011433" id="L011433"><code>Shell#pushd(<var>path</var> = <var>nil</var>, &amp;<var>block</var>)</code></a>
+<dt><a name="L011434" id="L011434"><code>Shell#pushdir</code></a></dt>
+<dd>
+<p>カレントディレクトリをディレクトリスタックにつみ, カレントディレク
+トリをpathにする. pathが省略されたときには, カレントディレクトリと
+ディレクトリスタックのトップを交換する. イテレータとして呼ばれたと
+きには, ブロック実行中のみpushdする.</p></dd>
+<dt><a name="L011435" id="L011435"><code>Shell#popd</code></a>
+<dt><a name="L011436" id="L011436"><code>Shell#popdir</code></a></dt>
+<dd>
+<p>ディレクトリスタックからポップし, それをカレントディレクトリにする.</p></dd>
+</dl>
+<h2><a name="L011437" id="L011437">ファイル/ディレクトリ操作</a></h2>
+<dl>
+<dt><a name="L011438" id="L011438"><code>Shell#foreach(<var>path</var> = <var>nil</var>, &amp;<var>block</var>)</code></a></dt>
+<dd>
+<p>pathがファイルなら, File#foreach
+pathがディレクトリなら, Dir#foreach</p></dd>
+<dt><a name="L011439" id="L011439"><code>Shell#open(<var>path</var>, <var>mode</var>)</code></a></dt>
+<dd>
+<p>pathがファイルなら, File#open
+pathがディレクトリなら, Dir#open</p></dd>
+<dt><a name="L011440" id="L011440"><code>Shell#unlink(<var>path</var>)</code></a></dt>
+<dd>
+<p>pathがファイルなら, File#unlink
+pathがディレクトリなら, Dir#unlink</p></dd>
+<dt><a name="L011441" id="L011441"><code>Shell#test(<var>command</var>, <var>file1</var>, <var>file2</var>)</code></a>
+<dt><a name="L011442" id="L011442"><code>Shell#[command, <var>file1</var>, <var>file2</var>]</code></a></dt>
+<dd>
+<p>ファイルテスト関数testと同じ. 
+例)</p>
+<pre>sh[?e, &quot;foo&quot;]
+sh[:e, &quot;foo&quot;]
+sh[&quot;e&quot;, &quot;foo&quot;]
+sh[:exists?, &quot;foo&quot;]
+sh[&quot;exists?&quot;, &quot;foo&quot;]</pre></dd>
+<dt><a name="L011443" id="L011443"><code>Shell#mkdir(*<var>path</var>)</code></a></dt>
+<dd>
+<p>Dir.mkdirと同じ(複数可)</p></dd>
+<dt><a name="L011444" id="L011444"><code>Shell#rmdir(*<var>path</var>)</code></a></dt>
+<dd>
+<p>Dir.rmdirと同じ(複数可)</p></dd>
+</dl>
+<h2><a name="L011445" id="L011445">コマンド実行</a></h2>
+<dl>
+<dt><a name="L011446" id="L011446"><code>System#system(<var>command</var>, *<var>opts</var>)</code></a></dt>
+<dd>
+<p>commandを実行する.
+例)</p>
+<pre>print sh.system(&quot;ls&quot;, &quot;-l&quot;)
+sh.system(&quot;ls&quot;, &quot;-l&quot;) | sh.head &gt; STDOUT</pre></dd>
+<dt><a name="L011447" id="L011447"><code>System#rehash</code></a></dt>
+<dd>
+<p>リハッシュする</p></dd>
+<dt><a name="L011448" id="L011448"><code>Shell#transact &amp;<var>block</var></code></a></dt>
+<dd>
+<p>ブロック中ではshellをselfとして実行する.
+例)</p>
+<pre>sh.transact{system(&quot;ls&quot;, &quot;-l&quot;) | head &gt; STDOUT}</pre></dd>
+<dt><a name="L011449" id="L011449"><code>Shell#out(<var>dev</var> = <var>STDOUT</var>, &amp;<var>block</var>)</code></a></dt>
+<dd>
+<p>transactを呼び出しその結果をdevに出力する.</p></dd>
+</dl>
+<h2><a name="L011450" id="L011450">内部コマンド</a></h2>
+<dl>
+<dt><a name="L011451" id="L011451"><code>Shell#echo(*<var>strings</var>)</code></a>
+<dt><a name="L011452" id="L011452"><code>Shell#cat(*<var>files</var>)</code></a>
+<dt><a name="L011453" id="L011453"><code>Shell#glob(<var>patten</var>)</code></a>
+<dt><a name="L011454" id="L011454"><code>Shell#tee(<var>file</var>)</code></a></dt>
+<dd>
+<p>これらは実行すると, それらを内容とするFilterオブジェクトを返します. </p></dd>
+<dt><a name="L011455" id="L011455"><code>Filter#each &amp;<var>block</var></code></a></dt>
+<dd>
+<p>フィルタの一行ずつをblockに渡す.</p></dd>
+<dt><a name="L011456" id="L011456"><code>Filter#&lt;(<var>src</var>)</code></a></dt>
+<dd>
+<p>srcをフィルタの入力とする. srcが, 文字列ならばファイルを, IOであれ
+ばそれをそのまま入力とする.</p></dd>
+<dt><a name="L011457" id="L011457"><code>Filter#&gt;(<var>to</var>)</code></a></dt>
+<dd>
+<p>srcをフィルタの出力とする. toが, 文字列ならばファイルに, IOであれ
+ばそれをそのまま出力とする.</p></dd>
+<dt><a name="L011458" id="L011458"><code>Filter#&gt;&gt;(<var>to</var>)</code></a></dt>
+<dd>
+<p>srcをフィルタに追加する. toが, 文字列ならばファイルに, IOであれば
+それをそのまま出力とする.</p></dd>
+<dt><a name="L011459" id="L011459"><code>Filter#|(<var>filter</var>)</code></a></dt>
+<dd>
+<p>パイプ結合</p></dd>
+<dt><a name="L011460" id="L011460"><code>Filter#+(<var>filter</var>)</code></a></dt>
+<dd>
+<p>filter1 + filter2 は filter1の出力の後, filter2の出力を行う.</p></dd>
+<dt><a name="L011461" id="L011461"><code>Filter#to_a</code></a>
+<dt><a name="L011462" id="L011462"><code>Filter#to_s</code></a>
+</dl>
+<h2><a name="L011463" id="L011463">組込みコマンド</a></h2>
+<dl>
+<dt><a name="L011464" id="L011464"><code>Shell#atime(<var>file</var>)</code></a>
+<dt><a name="L011465" id="L011465"><code>Shell#basename(<var>file</var>, *<var>opt</var>)</code></a>
+<dt><a name="L011466" id="L011466"><code>Shell#chmod(<var>mode</var>, *<var>files</var>)</code></a>
+<dt><a name="L011467" id="L011467"><code>Shell#chown(<var>owner</var>, <var>group</var>, *<var>file</var>)</code></a>
+<dt><a name="L011468" id="L011468"><code>Shell#ctime(<var>file</var>)</code></a>
+<dt><a name="L011469" id="L011469"><code>Shell#delete(*<var>file</var>)</code></a>
+<dt><a name="L011470" id="L011470"><code>Shell#dirname(<var>file</var>)</code></a>
+<dt><a name="L011471" id="L011471"><code>Shell#ftype(<var>file</var>)</code></a>
+<dt><a name="L011472" id="L011472"><code>Shell#join(*<var>file</var>)</code></a>
+<dt><a name="L011473" id="L011473"><code>Shell#link(<var>file_from</var>, <var>file_to</var>)</code></a>
+<dt><a name="L011474" id="L011474"><code>Shell#lstat(<var>file</var>)</code></a>
+<dt><a name="L011475" id="L011475"><code>Shell#mtime(<var>file</var>)</code></a>
+<dt><a name="L011476" id="L011476"><code>Shell#readlink(<var>file</var>)</code></a>
+<dt><a name="L011477" id="L011477"><code>Shell#rename(<var>file_from</var>, <var>file_to</var>)</code></a>
+<dt><a name="L011478" id="L011478"><code>Shell#split(<var>file</var>)</code></a>
+<dt><a name="L011479" id="L011479"><code>Shell#stat(<var>file</var>)</code></a>
+<dt><a name="L011480" id="L011480"><code>Shell#symlink(<var>file_from</var>, <var>file_to</var>)</code></a>
+<dt><a name="L011481" id="L011481"><code>Shell#truncate(<var>file</var>, <var>length</var>)</code></a>
+<dt><a name="L011482" id="L011482"><code>Shell#utime(<var>atime</var>, <var>mtime</var>, *<var>file</var>)</code></a></dt>
+<dd>
+<p>これらはFileクラスにある同名のクラスメソッドと同じです.</p></dd>
+<dt><a name="L011483" id="L011483"><code>Shell#blockdev?(<var>file</var>)</code></a>
+<dt><a name="L011484" id="L011484"><code>Shell#chardev?(<var>file</var>)</code></a>
+<dt><a name="L011485" id="L011485"><code>Shell#directory?(<var>file</var>)</code></a>
+<dt><a name="L011486" id="L011486"><code>Shell#executable?(<var>file</var>)</code></a>
+<dt><a name="L011487" id="L011487"><code>Shell#executable_real?(<var>file</var>)</code></a>
+<dt><a name="L011488" id="L011488"><code>Shell#exist?(<var>file</var>)/<var>Shell</var>#<var>exists</var>?(<var>file</var>)</code></a>
+<dt><a name="L011489" id="L011489"><code>Shell#file?(<var>file</var>)</code></a>
+<dt><a name="L011490" id="L011490"><code>Shell#grpowned?(<var>file</var>)</code></a>
+<dt><a name="L011491" id="L011491"><code>Shell#owned?(<var>file</var>)</code></a>
+<dt><a name="L011492" id="L011492"><code>Shell#pipe?(<var>file</var>)</code></a>
+<dt><a name="L011493" id="L011493"><code>Shell#readable?(<var>file</var>)</code></a>
+<dt><a name="L011494" id="L011494"><code>Shell#readable_real?(<var>file</var>)</code></a>
+<dt><a name="L011495" id="L011495"><code>Shell#setgid?(<var>file</var>)</code></a>
+<dt><a name="L011496" id="L011496"><code>Shell#setuid?(<var>file</var>)</code></a>
+<dt><a name="L011497" id="L011497"><code>Shell#size(<var>file</var>)/<var>Shell</var>#<var>size</var>?(<var>file</var>)</code></a>
+<dt><a name="L011498" id="L011498"><code>Shell#socket?(<var>file</var>)</code></a>
+<dt><a name="L011499" id="L011499"><code>Shell#sticky?(<var>file</var>)</code></a>
+<dt><a name="L011500" id="L011500"><code>Shell#symlink?(<var>file</var>)</code></a>
+<dt><a name="L011501" id="L011501"><code>Shell#writable?(<var>file</var>)</code></a>
+<dt><a name="L011502" id="L011502"><code>Shell#writable_real?(<var>file</var>)</code></a>
+<dt><a name="L011503" id="L011503"><code>Shell#zero?(<var>file</var>)</code></a></dt>
+<dd>
+<p>これらはFileTestクラスにある同名のクラスメソッドと同じです.</p></dd>
+<dt><a name="L011504" id="L011504"><code>Shell#syscopy(<var>filename_from</var>, <var>filename_to</var>)</code></a>
+<dt><a name="L011505" id="L011505"><code>Shell#copy(<var>filename_from</var>, <var>filename_to</var>)</code></a>
+<dt><a name="L011506" id="L011506"><code>Shell#move(<var>filename_from</var>, <var>filename_to</var>)</code></a>
+<dt><a name="L011507" id="L011507"><code>Shell#compare(<var>filename_from</var>, <var>filename_to</var>)</code></a>
+<dt><a name="L011508" id="L011508"><code>Shell#safe_unlink(*<var>filenames</var>)</code></a>
+<dt><a name="L011509" id="L011509"><code>Shell#makedirs(*<var>filenames</var>)</code></a>
+<dt><a name="L011510" id="L011510"><code>Shell#install(<var>filename_from</var>, <var>filename_to</var>, <var>mode</var>)</code></a></dt>
+<dd>
+<p>これらはFileToolsクラスにある同名のクラスメソッドと同じです.</p>
+<p>その他, 以下のものがエイリアスされています.</p></dd>
+<dt><a name="L011511" id="L011511"><code>Shell#cmp	&lt;- <var>Shell</var>#<var>compare</var></code></a>
+<dt><a name="L011512" id="L011512"><code>Shell#mv	&lt;- <var>Shell</var>#<var>move</var></code></a>
+<dt><a name="L011513" id="L011513"><code>Shell#cp	&lt;- <var>Shell</var>#<var>copy</var></code></a>
+<dt><a name="L011514" id="L011514"><code>Shell#rm_f	&lt;- <var>Shell</var>#<var>safe_unlink</var></code></a>
+<dt><a name="L011515" id="L011515"><code>Shell#mkpath	&lt;- <var>Shell</var>#<var>makedirs</var></code></a>
+</dl>
+<h1><a name="L011516" id="L011516">サンプル</a></h1>
+<h2><a name="L011517" id="L011517">ex1</a></h2>
+<pre>sh = Shell.cd(&quot;/tmp&quot;)
+sh.mkdir &quot;shell-test-1&quot; unless sh.exists?(&quot;shell-test-1&quot;)
+sh.cd(&quot;shell-test-1&quot;)
+for dir in [&quot;dir1&quot;, &quot;dir3&quot;, &quot;dir5&quot;]
+  if !sh.exists?(dir)
+    sh.mkdir dir
+    sh.cd(dir) do</pre>
+<pre>f = sh.open(&quot;tmpFile&quot;, &quot;w&quot;)
+f.print &quot;TEST\n&quot;
+f.close</pre>
+<pre>end
+print sh.pwd</pre>
+<pre>end</pre>
+<pre>end</pre>
+<h2><a name="L011518" id="L011518">ex2</a></h2>
+<pre>sh = Shell.cd(&quot;/tmp&quot;)
+sh.transact do
+  mkdir &quot;shell-test-1&quot; unless exists?(&quot;shell-test-1&quot;)
+  cd(&quot;shell-test-1&quot;)
+  for dir in [&quot;dir1&quot;, &quot;dir3&quot;, &quot;dir5&quot;]
+    if !exists?(dir)</pre>
+<pre>mkdir dir
+cd(dir) do
+  f = open(&quot;tmpFile&quot;, &quot;w&quot;)
+  f.print &quot;TEST\n&quot;
+  f.close
+end
+print pwd</pre>
+<pre>end</pre>
+<pre>end</pre>
+<pre>end</pre>
+<h2><a name="L011519" id="L011519">ex3</a></h2>
+<pre>sh.cat(&quot;/etc/printcap&quot;) | sh.tee(&quot;tee1&quot;) &gt; &quot;tee2&quot;
+(sh.cat &lt; &quot;/etc/printcap&quot;) | sh.tee(&quot;tee11&quot;) &gt; &quot;tee12&quot;
+sh.cat(&quot;/etc/printcap&quot;) | sh.tee(&quot;tee1&quot;) &gt;&gt; &quot;tee2&quot;
+(sh.cat &lt; &quot;/etc/printcap&quot;) | sh.tee(&quot;tee11&quot;) &gt;&gt; &quot;tee12&quot;</pre>
+<h2><a name="L011520" id="L011520">ex4</a></h2>
+<pre>print sh.cat(&quot;/etc/passwd&quot;).head.collect{|l| l =~ /keiju/}</pre>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm512.html">&lt;-PREV</a>][<a href="refm514.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

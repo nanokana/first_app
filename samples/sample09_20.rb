@@ -1,0 +1,1 @@
+p "abcdefg".reverse    #=> "gfedcba"

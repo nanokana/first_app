@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>WEBrick::HTTPResponse</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm178.html" rel="next" />
+<link href="refm176.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm173.html">UP</a>][<a href="refm176.html">&lt;-PREV</a>][<a href="refm178.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L003527" id="L003527">WEBrick::HTTPResponse</a></h1>
+<h2><a name="L003528" id="L003528">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L003529" id="L003529"><code>HTTPResponse.new(<var>config</var>)</code></a></dt>
+<dd>
+<p>HTTPResponse オブジェクトを生成する。config には設定を保存したハッシュを与える。</p></dd>
+</dl>
+<h2><a name="L003530" id="L003530">インスタンスメソッド</a></h2>
+<dl>
+<dt><a name="L003531" id="L003531"><code>[<var>field</var>]</code></a></dt>
+<dd>
+<p>レスポンスのヘッダの該当する内容を文字列で返す。</p></dd>
+<dt><a name="L003532" id="L003532"><code>[<var>field</var>] = <var>val</var></code></a></dt>
+<dd>
+<p>レスポンスの該当するヘッダに val を設定する。val は文字列。</p></dd>
+<dt><a name="L003533" id="L003533"><code>body</code></a>
+<dt><a name="L003534" id="L003534"><code>body=val</code></a></dt>
+<dd>
+<p>クライアントに返す内容を設定する。val は文字列。</p></dd>
+<dt><a name="L003535" id="L003535"><code>chunked?</code></a>
+<dt><a name="L003536" id="L003536"><code>chunked=(<var>true</var> <var>or</var> <var>false</var>)</code></a></dt>
+<dd>
+<p>レスポンスを chunk に分けてクライアントに返すかどうかを設定する。</p></dd>
+<dt><a name="L003537" id="L003537"><code>content_type</code></a>
+<dt><a name="L003538" id="L003538"><code>content_type=val</code></a></dt>
+<dd>
+<p>content-type ヘッダを設定する。val は文字列。</p></dd>
+<dt><a name="L003539" id="L003539"><code>cookies</code></a></dt>
+<dd>
+<p><a href="refm185.html">WEBrick::Cookie</a> の配列を返す。</p></dd>
+<dt><a name="L003540" id="L003540"><code>each{|<var>key</var>, <var>val</var>| ... }</code></a></dt>
+<dd>
+<p>ヘッダ名を key、内容を val としてブロックを評価します。</p></dd>
+<dt><a name="L003541" id="L003541"><code>header</code></a></dt>
+<dd>
+<p>ヘッダ名を key、内容を val とするハッシュを返す。key も val も文字列。</p></dd>
+<dt><a name="L003542" id="L003542"><code>http_version</code></a></dt>
+<dd>
+<p>HTTP のバージョンを <a href="refm184.html">WEBrick::HTTPVersion</a> オブジェクトで返す。 </p></dd>
+<dt><a name="L003543" id="L003543"><code>keep_alive?</code></a>
+<dt><a name="L003544" id="L003544"><code>keep_alive</code></a>
+<dt><a name="L003545" id="L003545"><code>keep_alive=(<var>true</var> <var>or</var> <var>false</var>)</code></a></dt>
+<dd>
+<p>keep_alive をオンにするかどうかを設定する。</p></dd>
+<dt><a name="L003546" id="L003546"><code>reason_phrase</code></a>
+<dt><a name="L003547" id="L003547"><code>reason_phrase=val</code></a></dt>
+<dd>
+<p>HTTP のレスポンスの最初の行の reason phrase を設定する。val は文字列。</p></dd>
+<dt><a name="L003548" id="L003548"><code>status</code></a></dt>
+<dd>
+<p>status コードを整数で返す。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm173.html">UP</a>][<a href="refm176.html">&lt;-PREV</a>][<a href="refm178.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

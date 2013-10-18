@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>benchmark</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm339.html" rel="next" />
+<link href="refm337.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm337.html">&lt;-PREV</a>][<a href="refm339.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006493" id="L006493">benchmark</a></h1>
+<p>-&gt; <em class="XXINVALIDXX">ruby-src:lib/benchmark.rb</em></p>
+<p><a href="refm002.html">執筆者募集</a></p>
+<p>ベンチマークを取るためのクラスです。</p>
+<h2><a name="L006494" id="L006494">Benchmark</a></h2>
+<h3><a name="L006495" id="L006495">モジュール関数:</a></h3>
+<dl>
+<dt><a name="L006496" id="L006496"><code>Benchmark.measure { ... }</code></a>
+<dt><a name="L006497" id="L006497"><code>Benchmark.realtime { ... }</code></a></dt>
+<dd>
+<p>与えられたブロックを実行して、経過した時間を Process.times() で計り、
+Benchmark::Tms オブジェクトを生成して返します。
+Tms オブジェクトには to_s が定義されているので、基本的には以下のように
+使います。</p>
+<pre>require 'benchmark'
+
+puts Benchmark::CAPTION
+puts Benchmark.measure { &quot;a&quot;*1_000_000 }
+
+=&gt;
+
+    user     system      total        real
+1.166667   0.050000   1.216667 (  0.571355)</pre></dd>
+<dt><a name="L006498" id="L006498"><code>Benchmark.bm(<var>label_width</var> = <var>0</var>, *<var>labels</var>) {|<var>rep</var>| ... }</code></a></dt>
+<dd>
+<p>benchmark メソッドの引数を簡略化したものです。benchmark メソッドと同様に働きます。</p>
+<pre>require 'benchmark'
+
+n = 50000
+Benchmark.bm do |x|
+  x.report { for i in 1..n; a = &quot;1&quot;; end }
+  x.report { n.times do   ; a = &quot;1&quot;; end }
+  x.report { 1.upto(n) do ; a = &quot;1&quot;; end }
+end
+
+=&gt;
+
+      user     system      total        real
+  1.033333   0.016667   1.016667 (  0.492106)
+  1.483333   0.000000   1.483333 (  0.694605)
+  1.516667   0.000000   1.516667 (  0.711077)</pre>
+<p>以下のようにも書けます。</p>
+<pre>require 'benchmark'
+
+n = 50000
+Benchmark.bm(7) do |x|
+  x.report(&quot;for:&quot;)   { for i in 1..n; a = &quot;1&quot;; end }
+  x.report(&quot;times:&quot;) { n.times do   ; a = &quot;1&quot;; end }
+  x.report(&quot;upto:&quot;)  { 1.upto(n) do ; a = &quot;1&quot;; end }
+end
+
+=&gt;
+             user     system      total        real
+for:     1.050000   0.000000   1.050000 (  0.503462)
+times:   1.533333   0.016667   1.550000 (  0.735473)
+upto:    1.500000   0.016667   1.516667 (  0.711239)</pre></dd>
+<dt><a name="L006499" id="L006499"><code>Benchmark.bmbm(<var>width</var> = <var>0</var>) {|<var>job</var>| ... }</code></a></dt>
+<dd>
+<p>Benchmark::Job オブジェクトを生成して、それを引数として与えられたブロックを
+実行します。ベンチマークの実行時の隔たりを防ぐため、ブロックを2回実行します。
+最初は Rehearsal として表示されます。</p>
+<pre>require 'benchmark'
+
+array = (1..1000000).map { rand }
+
+Benchmark.bmbm do |x|
+  x.report(&quot;sort!&quot;) { array.dup.sort! }
+  x.report(&quot;sort&quot;)  { array.dup.sort  }
+end
+
+=&gt;
+
+Rehearsal -----------------------------------------
+sort!  11.928000   0.010000  11.938000 ( 12.756000)
+sort   13.048000   0.020000  13.068000 ( 13.857000)
+------------------------------- total: 25.006000sec
+
+            user     system      total        real
+sort!  12.959000   0.010000  12.969000 ( 13.793000)
+sort   12.007000   0.000000  12.007000 ( 12.791000)</pre></dd>
+<dt><a name="L006500" id="L006500"><code>Benchmark.benchmark(<var>caption</var> = &quot;&quot;, <var>label_width</var> = <var>nil</var>, <var>fmtstr</var> = <var>nil</var>, *<var>labels</var>){|<var>rep</var>| ...}</code></a></dt>
+<dd>
+<p>Benchmark::Report オブジェクトを生成し、それを引数として与えられたブロックを実行します。
+基本的には以下のように使います。ブロックが Benchmark::Tms オブジェクトの配列を返した場合は、
+それらの数値も追加の行に表示されます。</p>
+<pre>require 'benchmark'
+
+n = 50000
+
+# これは
+#    Benchmark.bm(7, &quot;&gt;total:&quot;, &quot;&gt;avg:&quot;) do |x| ... end
+# と同じ
+Benchmark.benchmark(&quot; &quot;*7 + Benchmark::CAPTION,
+                    7,
+                    Benchmark::FMTSTR,
+                    &quot;&gt;total:&quot;,
+                    &quot;&gt;avg:&quot;) do |x|
+
+  tf = x.report(&quot;for:&quot;)   { for i in 1..n; a = &quot;1&quot;; end }
+  tt = x.report(&quot;times:&quot;) { n.times do   ; a = &quot;1&quot;; end }
+  tu = x.report(&quot;upto:&quot;)  { 1.upto(n) do ; a = &quot;1&quot;; end }
+
+  [tf+tt+tu, (tf+tt+tu)/3]
+end
+
+=&gt;
+
+             user     system      total        real
+for:     1.016667   0.016667   1.033333 (  0.485749)
+times:   1.450000   0.016667   1.466667 (  0.681367)
+upto:    1.533333   0.000000   1.533333 (  0.722166)
+&gt;total:  4.000000   0.033333   4.033333 (  1.889282)
+&gt;avg:    1.333333   0.011111   1.344444 (  0.629761)</pre>
+<p><var>fmtstr</var> には、printf に似たフォーマット文字列を指定します。
+フォーマット文字列として以下が使用できます。</p>
+<ul>
+<li>%u: user CPU time</li>
+<li>%y: system CPU time</li>
+<li>%U: user CPU time of children</li>
+<li>%Y: system CPU time of children</li>
+<li>%t: total CPU time</li>
+<li>%r: real time</li>
+<li>%n: label string</li>
+</ul>
+<p><var>fmtstr</var> を省略したときは Benchmark::FMTSTR が使用されます。
+その内容は</p>
+<pre>&quot;%10.6u %10.6y %10.6t %10.6r\n&quot;</pre>
+<p>です。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm337.html">&lt;-PREV</a>][<a href="refm339.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

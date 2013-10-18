@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>base64</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm382.html" rel="next" />
+<link href="refm380.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm380.html">&lt;-PREV</a>][<a href="refm382.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L007061" id="L007061">base64</a></h1>
+<p>MIME Base64のデコード/エンコードを行うメソッドが定義されています。この
+ライブラリはbase64エンコーディングのサンプルスクリプトとして書かれまし
+た。</p>
+<p>Base64は、3オクテット(8bits * 3 = 24bits)のバイナリコードをASCII文字の
+うちの65文字 ([A-Za-z0-9+/]の64文字とpaddingのための'=')だけを使用して
+4オクテット(6bits * 4 = 24bits)の印字可能文字列に変換するエンコーディ
+ング法です。<em class="XXINVALIDXX">RFC:2045</em>で定義されています。</p>
+<h2><a name="L007062" id="L007062">使用方法</a></h2>
+<pre>irb&gt; require 'base64'
+true
+irb&gt; b64encode(&quot;日本語&quot;)
+xvzL3Ljs
+&quot;xvzL3Ljs\n&quot;
+irb&gt; decode64('xvzL3Ljs')
+&quot;日本語&quot;
+irb&gt; decode_b(&quot;日本語&quot;)
+xvzL3Ljs
+&quot;日本語&quot;
+irb&gt; decode_b(&quot;C $B8@8l%]%$%s%?40A4@)GF(B&quot;)
+&quot;C 言語ポインタ完全制覇&quot;</pre>
+<h2><a name="L007063" id="L007063">関数</a></h2>
+<dl>
+<dt><a name="L007064" id="L007064"><code>decode64(<var>str</var>)</code></a></dt>
+<dd>
+<p>Base64エンコードされた文字列<var>str</var>をデコードする。</p></dd>
+<dt><a name="L007065" id="L007065"><code>encode64(<var>str</var>)</code></a></dt>
+<dd>
+<p>文字列<var>str</var>をBase64エンコードする。</p></dd>
+<dt><a name="L007066" id="L007066"><code>decode_b(<var>str</var>)</code></a></dt>
+<dd>
+<p><em class="XXINVALIDXX">RFC:2047</em> で定義されている encoded-word を
+含む文字列<var>str</var>をデコードする。</p>
+<p>encoded-word は、</p>
+<pre>&quot;=?&quot; + charset + &quot;?&quot; + encoding + &quot;?&quot; + encoded-text + &quot;?=&quot;</pre>
+<p>という形式の文字列で、メールヘッダに使用される。</p>
+<p>この関数は charset として &quot;iso-2022-jp&quot; と &quot;shift_jis&quot; を、
+encoding として &quot;B&quot;-encoding (Base64) だけをサポートしている。</p>
+<dl>
+<dt><a name="L007068" id="L007068">バグ</a></dt>
+<dd>
+<p>実際は、内部で Kconv.toeuc を呼んでいるため <a href="refm260.html">nkf</a>ライブラリ
+が勝手にデコードを行ってしまう(<a href="refm260.html">NKFの注意</a>を参照のこと)。
+したがって、この関数はあまり意味がなくなってしまっている。
+(昔のKconvの実装はNKFを使用しなかったためこのようなことになって
+いるのだと思われる)</p>
+</dd>
+</dl></dd>
+<dt><a name="L007067" id="L007067"><code>b64encode(<var>bin</var>, <var>len</var> = <var>60</var>)</code></a></dt>
+<dd>
+<p>文字列<var>bin</var>をエンコードし、<var>len</var>の長さで折り返し、<em>表示</em>する。
+<em>表示</em>までしてしまうのはサンプルだからです。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm380.html">&lt;-PREV</a>][<a href="refm382.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

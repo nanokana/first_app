@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>trap::空白文字による違い</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm424.html" rel="next" />
+<link href="refm422.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm421.html">UP</a>][<a href="refm422.html">&lt;-PREV</a>][<a href="refm424.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L009448" id="L009448">空白文字による違い</a></h1>
+<ul>
+<li><p>空白に注意</p>
+<pre>a=1;
+b = a+2;   # a と 2 の和
+b = a +2;  # a(+2) と解釈される.
+b = a + 2; # a と 2 の和
+
+a = b = c = true
+a?b:c       # a?(b(:c)) と解釈される
+a ? b : c   # 条件演算子</pre></li>
+</ul>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm421.html">UP</a>][<a href="refm422.html">&lt;-PREV</a>][<a href="refm424.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

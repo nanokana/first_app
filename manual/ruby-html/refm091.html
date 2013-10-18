@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SignalException</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm092.html" rel="next" />
+<link href="refm090.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm034.html">UP</a>][<a href="refm090.html">&lt;-PREV</a>][<a href="refm092.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L002162" id="L002162">SignalException</a></h1>
+<p><a href="refm029.html#L000502">trap</a> されていないシグナル(<a href="refm535.html">signal(2)</a> 
+参照)を受け取ったときに発生します。</p>
+<p>実際に発生したシグナル名は、
+<a href="refm040.html#L000828">SignalException#message</a> から
+&quot;<code>SIG<var>name</var></code>&quot;という形で得られます。</p>
+<p>デフォルトの状態では、以下のシグナルが <code>SignalException</code> を発生さ
+せます。</p>
+<pre>SIGHUP, SIGQUIT, SIGALRM, SIGUSR1, SIGUSR2</pre>
+<p>また、<code>SIGINT</code> は 例外 <a href="refm092.html">Interrupt</a> を発生させます。</p>
+<h2><a name="L002163" id="L002163">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm040.html">Exception</a></li>
+</ul>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm034.html">UP</a>][<a href="refm090.html">&lt;-PREV</a>][<a href="refm092.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

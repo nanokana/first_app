@@ -1,0 +1,9 @@
+# -*- coding: utf-8 -*-
+def total(from, to)
+  result = 0 #合計の値
+  from.upto(to) do |num| #fromからtoまで処理する
+    if block_given? # ブロックがあれば
+      result += yield(num)
+    else
+      result += num
+    end

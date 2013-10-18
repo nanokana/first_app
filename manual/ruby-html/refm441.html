@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>trap::Thread</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm442.html" rel="next" />
+<link href="refm440.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm421.html">UP</a>][<a href="refm440.html">&lt;-PREV</a>][<a href="refm442.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L009485" id="L009485">Thread</a></h1>
+<ul>
+<li><p>finalizer で Mutex は注意<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/24697">ruby-list:24697</a><sup class="outside"><small>[外部]</small></sup></p>
+<p>finalizer で登録したブロックの中で、Mutex などで待ちに入るとデッドロックします。
+理由はまだ自分で整理しきれてないのですが、おそらく、同じ Mutex を他でもロックしていると、そのロック中の GC で finalizerが 呼ばれてデッドロックするのかな、と思います。
+weakref みたいに Thread.critical を使う方が安全です。</p></li>
+<li><p>以下の TCPServer の使用例では s2がThreadのブロック内で評価される前に、
+  whileのループでs2を更新してしまうことがあるため、期待した動作になら
+  ない。正しい使い方に関しては<a href="refm163.html">TCPServer</a>のスレッド版の例を参照。</p>
+<pre>s = TCPServer.new(11111)
+
+while(true)
+  s2 = s.accept
+  Thread.new do
+    sleep 0.1
+    p s2
+  end
+end</pre></li>
+<li><p>timeout</p>
+<p><a href="refm445.html">trap::timeout</a> に書かれた落とし穴は Thread の問題です。</p></li>
+<li><p>代入演算子はアトミックじゃない<a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-dev/22193">ruby-dev:22193</a><sup class="outside"><small>[外部]</small></sup></p>
+<p>+= のような代入演算子は途中でスレッドが切り替わる可能性があります。スレッド間で変数を共有している場合には注意が必要です。</p></li>
+</ul>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm421.html">UP</a>][<a href="refm440.html">&lt;-PREV</a>][<a href="refm442.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

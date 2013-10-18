@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>monitor</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm308.html" rel="next" />
+<link href="refm306.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm306.html">&lt;-PREV</a>][<a href="refm308.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006066" id="L006066">monitor</a></h1>
+<p>スレッドの同期機構としてのモニター機能を提供するクラスです。
+また同じスレッドから何度も lock できる Mutex としての機能も提供します。</p>
+<h2><a name="L006067" id="L006067">Components</a></h2>
+<ul>
+<li><a href="refm308.html">MonitorMixin</a></li>
+<li><a href="refm309.html">Monitor</a></li>
+<li><a href="refm310.html">MonitorMixin::ConditionVariable</a></li>
+</ul>
+<h2><a name="L006068" id="L006068">参照</a></h2>
+<ul>
+<li><a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/6829">ruby-list:6829</a><sup class="outside"><small>[外部]</small></sup></li>
+<li><a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/30447">ruby-list:30447</a><sup class="outside"><small>[外部]</small></sup>
+<ul>
+<li><a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/30449">ruby-list:30449</a><sup class="outside"><small>[外部]</small></sup></li>
+</ul></li>
+</ul>
+<p>monitor は以下のような <a href="refm301.html">Mutex</a> としての機能も提供します。</p>
+<ul>
+<li>lock の持ち主がスレッドである Mutex / 何度も lock できる Mutex 
+<ul>
+<li>lock したスレッドを Mutex 側が覚えていて</li>
+<li>そのスレッドがもう一度 lock しようとしてもブロックしない</li>
+<li>synchronize は lock していなかったら通常どおり、
+    自分が lock していたら ただ yield するだけ (lock/unlockもしない)</li>
+<li>unlock はそのスレッドだけができる</li>
+</ul></li>
+</ul>
+<p><a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/30447">ruby-list:30447</a><sup class="outside"><small>[外部]</small></sup> より。</p>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm306.html">&lt;-PREV</a>][<a href="refm308.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

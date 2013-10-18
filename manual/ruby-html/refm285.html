@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>PStore</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm286.html" rel="next" />
+<link href="refm284.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm284.html">&lt;-PREV</a>][<a href="refm286.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L005648" id="L005648">PStore</a></h1>
+<p>Rubyのオブジェクトを外部ファイルに格納するためのクラス。
+内部で<a href="refm077.html">Marshal</a>を使っている。</p>
+<h2><a name="L005649" id="L005649">使い方</a></h2>
+<pre>require 'pstore'
+db = PStore.new(&quot;/tmp/foo&quot;)
+db.transaction do
+  p db.roots
+  ary = db[&quot;root&quot;] = [1,2,3,4]
+  ary[0] = [1,1.5]
+end
+
+db.transaction do
+  p db[&quot;root&quot;]
+end</pre>
+<p>データベースにアクセスするためには、transactionの<em>ブロック内</em>である必要がある。
+インターフェースはHashライクである。</p>
+<h2><a name="L005650" id="L005650">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L005651" id="L005651"><code>PStore.new(<var>file</var>)</code></a></dt>
+<dd>
+<p>ファイル名 <var>file</var> に対してデータベースを読み書きする。
+<var>file</var> のあるディレクトリは書き込み可能である必要がある。
+データベースを更新するときにバックアップファイルが作成されるため。</p>
+<p><a href="refm388.html">ruby 1.8.2 feature</a>: データベースの更新が成功すると、バックアップファイルは削除される。バックアップファイル名は
+ファイル名に &quot;.tmp&quot; および &quot;.new&quot; を付けたもの。</p>
+<p>ruby 1.8.1 まで: バックアップファイルは削除されずに残る。バックアップファイル名はファイル名の後に &quot;~&quot; を付けたもの。</p></dd>
+</dl>
+<h2><a name="L005652" id="L005652">メソッド</a></h2>
+<dl>
+<dt><a name="L005653" id="L005653"><code>transaction {|<var>pstore</var>| ... }</code></a>
+<dt><a name="L005654" id="L005654"><code>transaction(<var>read_only</var>=<var>false</var>) {|<var>pstore</var>| ... }    ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>トランザクションに入る。
+このブロックの中でしかデータベースの読み書きはできない。</p>
+<p><a href="refm384.html">ruby 1.7 feature</a>: 1.7では読み込み専用のトランザクションが使用可能。</p></dd>
+<dt><a name="L005655" id="L005655"><code>[<var>name</var>]</code></a></dt>
+<dd>
+<p>ルート<var>name</var>に対応する値を得る。
+<code>Hash#[]</code>に相当。</p></dd>
+<dt><a name="L005656" id="L005656"><code>[<var>name</var>] = <var>value</var></code></a></dt>
+<dd>
+<p>ルート<var>name</var>に対応する値<var>value</var>をセットする。
+<code>Hash#[]=</code>に相当。</p></dd>
+<dt><a name="L005657" id="L005657"><code>fetch(<var>name</var>[, <var>default</var>]) ((&lt;<var>ruby</var> <var>1</var>.<var>8</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>ルート<var>name</var>に対応する値を得る。
+該当するルートが登録されていない時には、
+引数 <var>default</var> が与えられていればその値を返し、
+与えられていなければ例外 <a href="refm286.html">PStore::Error</a> が発生します。
+<code>Hash#fetch</code>に相当。</p></dd>
+<dt><a name="L005658" id="L005658"><code>delete(<var>name</var>)</code></a></dt>
+<dd>
+<p>ルート<var>name</var>に対応する値を削除する。
+<code>Hash#delete</code>に相当。</p></dd>
+<dt><a name="L005659" id="L005659"><code>roots</code></a></dt>
+<dd>
+<p>ルートの集合を配列で返す。
+<code>Hash#keys</code>に相当。</p></dd>
+<dt><a name="L005660" id="L005660"><code>root?(<var>name</var>)</code></a></dt>
+<dd>
+<p><var>name</var>がルートであるかどうか。
+<code>Hash#key?</code>に相当。</p></dd>
+<dt><a name="L005661" id="L005661"><code>path</code></a></dt>
+<dd>
+<p>データベースのファイル名を得る。</p></dd>
+<dt><a name="L005662" id="L005662"><code>commit</code></a></dt>
+<dd>
+<p>データベースの読み書きを終了する。
+すなわち、transactionブロックから抜ける。
+データベースの変更が反映される。</p></dd>
+<dt><a name="L005663" id="L005663"><code>abort</code></a></dt>
+<dd>
+<p>データベースの読み書きを終了する。
+transactionブロックから抜けるが、データベースの変更は反映されない。</p></dd>
+</dl>
+<h2><a name="L005664" id="L005664">プライベートメソッド</a></h2>
+<dl>
+<dt><a name="L005665" id="L005665"><code>in_transaction</code></a></dt>
+<dd>
+<p>トランザクションの中でなければ例外を発生させる。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm284.html">&lt;-PREV</a>][<a href="refm286.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

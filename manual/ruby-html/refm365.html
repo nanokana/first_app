@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ostruct</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm366.html" rel="next" />
+<link href="refm364.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm364.html">&lt;-PREV</a>][<a href="refm366.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L006899" id="L006899">ostruct</a></h1>
+<p>手軽な構造体クラス。
+<code>method_missing</code>の使い方の例でもある。</p>
+<h2><a name="L006900" id="L006900">使い方</a></h2>
+<pre>require 'ostruct'
+s = OpenStruct.new
+s.foo = 25
+p s.foo          # =&gt; 25
+s.bar = 2
+p s.bar          # =&gt; 2
+p s              # =&gt; &lt;OpenStruct bar=2 foo=25&gt;
+s.delete_field(&quot;foo&quot;)
+p s.foo          # =&gt; nil
+p s              # =&gt; &lt;OpenStruct bar=2&gt;
+
+t = OpenStruct.new(&quot;foo&quot;=&gt;&quot;bar&quot;)
+p t.foo         # =&gt; &quot;bar&quot;
+t.baz = &quot;fobar&quot;
+p t.baz         # =&gt; &quot;fobar&quot;</pre>
+<h2><a name="L006901" id="L006901">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L006902" id="L006902"><code>OpenStruct.new(<var>hash</var> = <var>nil</var>)</code></a></dt>
+<dd>
+<p><code>OpenStruct</code>オブジェクトを生成。
+<var>hash</var>が与えられたとき、</p></dd>
+</dl>
+<h2><a name="L006903" id="L006903">メソッド</a></h2>
+<dl>
+<dt><a name="L006904" id="L006904"><code>OpenStruct#delete_field(<var>name</var>)</code></a></dt>
+<dd>
+<p><var>name</var>で指定された要素を削除。
+その後その要素を参照したら<code>nil</code>が返る。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm364.html">&lt;-PREV</a>][<a href="refm366.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

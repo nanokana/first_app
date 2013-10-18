@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ri</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm011.html" rel="next" />
+<link href="refm009.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm007.html">UP</a>][<a href="refm009.html">&lt;-PREV</a>][<a href="refm011.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L000116" id="L000116">ri</a></h1>
+<p><a href="refm002.html">執筆者募集</a></p>
+<p>コマンドラインから RDoc で書かれた Ruby のリファレンスを引くことができます。
+リファレンスは英語で書かれています。似たようなものに <a href="refm482.html">ReFe</a> があります。</p>
+<h2><a name="L000117" id="L000117">インストール</a></h2>
+<p>ソースから Ruby をインストールしている場合は、デフォルトでインストールされているはずです。特に以下のように実行すると必要なものが全てインストールされます。</p>
+<pre>$ make install-doc</pre>
+<p>ソースからでなくパッケージからインストールしている場合は、各パッケージに依存します。</p>
+<h2><a name="L000118" id="L000118">使い方</a></h2>
+<p>以下のようにクラス名やモジュール名の完全な文字列を入力しなくても、リファレンスを引くことができます。当てはまる候補が複数ある場合は、当てはまる候補のリストを表示します。</p>
+<pre>$ ri  File
+$ ri  File.new
+$ ri  F.n
+$ ri  zip
+$ ri  String\#gsub
+$ ri  String.gsub</pre>
+<p>メソッドを参照するにはクラス名とメソッドの間に # をいれます。 . で代用することもできます。</p>
+<h2><a name="L000119" id="L000119">オプション</a></h2>
+<pre>--help, -h   you're looking at it
+
+--classes, -c   Display the names of classes and modules we
+                know about
+
+--doc-dir, -d &lt;dirname&gt;
+                A directory to search for documentation. If not
+                specified, we search the standard rdoc/ri directories.
+
+ --format, -f &lt;name&gt;
+                Format to use when displaying output:
+                   ansi, bs, html, plain, simple
+                Use 'bs' (backspace) with most pager programs.
+                To use ANSI, either also use the -T option, or
+                tell your pager to allow control characters
+                (for example using the -R option to less)
+
+--list-names, -l  List all the names known to RDoc, one per line
+
+--no-pager, -T   Send output directly to stdout.
+
+  --width, -w output width
+                Set the width of the output
+
+--version, -v   Display the version of ri</pre>
+<h2><a name="L000120" id="L000120">zsh 補完</a></h2>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm007.html">UP</a>][<a href="refm009.html">&lt;-PREV</a>][<a href="refm011.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

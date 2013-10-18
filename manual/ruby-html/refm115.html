@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>添付ライブラリ</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm116.html" rel="next" />
+<link href="refm114.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm114.html">&lt;-PREV</a>][<a href="refm116.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L002260" id="L002260">添付ライブラリ</a></h1>
+<p>Ruby は、ライブラリによるクラスやモジュール、メソッドの追加などの拡張
+を行うことができます。以下は、標準で添付・配布されているライブラリの一
+覧です。ライブラリの読み込みには <a href="refm029.html#L000480">require</a> を使用します。</p>
+<h2><a name="L002261" id="L002261">添付ライブラリ一覧</a></h2>
+<p><a href="#L002262">テキスト</a>
+/ <a href="#L002263">ファイルフォーマット</a>
+/ <a href="#L002264">ファイル</a>
+/ <a href="#L002265">ネットワーク</a>
+/ <a href="#L002266">入出力</a>
+/ <a href="#L002267">文字コード</a>
+/ <a href="#L002268">数学</a>
+/ <a href="#L002269">データベース</a>
+/ <a href="#L002270">画面制御・CUI</a>
+/ <a href="#L002271">GUI</a>
+/ <a href="#L002272">日付・時間</a>
+/ <a href="#L002273">マルチスレッド・同期</a>
+/ <a href="#L002274">Unix</a>
+/ <a href="#L002275">MS Windows</a>
+/ <a href="#L002276">GC</a>
+/ <a href="#L002277">デザインパターン</a>
+/ <a href="#L002278">開発ツール</a>
+/ <a href="#L002279">コマンドライン</a>
+/ <a href="#L002280">その他</a></p>
+<h3><a name="L002262" id="L002262">テキスト</a></h3>
+<ul>
+<li><a href="refm116.html">stringio</a>       文字列を IO にみせかける <a href="refm384.html">ruby 1.7 feature</a></li>
+<li><a href="refm117.html">digest</a>                  メッセージダイジェストライブラリ (MD5, RMD160, SHA1, SHA256, SHA384, SHA512) <a href="refm383.html">ruby 1.6 feature</a></li>
+<li><a href="refm125.html">erb</a>                     埋め込み Ruby (ERB) <a href="refm385.html">ruby 1.8 feature</a></li>
+<li><a href="refm126.html">shellwords</a>              シェルに似たトークン分割をするライブラリ</li>
+<li><a href="refm127.html">strscan</a>                 高速スキャナ <a href="refm384.html">ruby 1.7 feature</a></li>
+<li><a href="refm128.html">ripper</a>                  Ruby プログラムのパーサ <a href="refm392.html">ruby 1.9 feature</a></li>
+</ul>
+<h3><a name="L002263" id="L002263">ファイルフォーマット</a></h3>
+<ul>
+<li><a href="refm129.html">yaml</a>               YAML (YAML Ain't Markup Language) <a href="refm385.html">ruby 1.8 feature</a></li>
+<li><a href="refm132.html">rexml</a>                   XML (The Extensible Markup Language) <a href="refm385.html">ruby 1.8 feature</a></li>
+<li><a href="refm133.html">rss</a>                     RSS <a href="refm388.html">ruby 1.8.2 feature</a></li>
+<li><a href="refm134.html">zlib</a>                    gzip, deflate 圧縮・伸張 <a href="refm385.html">ruby 1.8 feature</a></li>
+<li><a href="refm144.html">mailread</a>                Unix mbox なメールから情報を得る</li>
+<li><a href="refm145.html">csv</a>                     CSV (Comma Separated Values) <a href="refm385.html">ruby 1.8 feature</a></li>
+</ul>
+<h3><a name="L002264" id="L002264">ファイル</a></h3>
+<ul>
+<li><a href="refm152.html">fileutils</a>               ファイル操作ユーティリティ <a href="refm384.html">ruby 1.7 feature</a></li>
+<li><a href="refm153.html">find</a>                    ファイル探索モジュール</li>
+<li><a href="refm154.html">pathname</a>                パス名クラス <a href="refm385.html">ruby 1.8 feature</a></li>
+<li><a href="refm157.html">tempfile</a>                テンポラリファイル生成</li>
+<li><a href="refm155.html">tmpdir</a>                  テンポラリディレクトリを返す <a href="refm385.html">ruby 1.8 feature</a></li>
+<li><a href="refm156.html">un</a>                      Unixコマンド like なファイル操作ユーティリティ <a href="refm385.html">ruby 1.8 feature</a></li>
+</ul>
+<h3><a name="L002265" id="L002265">ネットワーク</a></h3>
+<ul>
+<li><a href="refm158.html">open-uri</a>                open() の URI サポート拡張 <a href="refm385.html">ruby 1.8 feature</a></li>
+<li><a href="refm159.html">socket</a>                  ソケット拡張ライブラリ</li>
+<li><a href="refm170.html">uri</a>                 URI ライブラリ <a href="refm383.html">ruby 1.6 feature</a></li>
+<li><a href="refm171.html">cgi</a>                     CGI作成支援</li>
+<li><a href="refm172.html">cgi/session</a>           CGIセッション管理</li>
+<li><a href="refm173.html">webrick</a>                 WEB server toolkit <a href="refm385.html">ruby 1.8 feature</a></li>
+<li><a href="refm194.html">drb</a>                     分散 Ruby (dRuby) <a href="refm385.html">ruby 1.8 feature</a></li>
+<li><a href="refm195.html">rinda</a>             A Ruby implementation of the Linda distributed computing paradigm <a href="refm385.html">ruby 1.8 feature</a></li>
+<li><a href="refm201.html">net/ftp</a>               FTP クライアントライブラリ</li>
+<li><a href="refm202.html">net/ftptls</a>            SSL/TLS 拡張 FTP クライアントライブラリ <a href="refm385.html">ruby 1.8 feature</a></li>
+<li><a href="refm203.html">net/http</a>              HTTP クライアントライブラリ</li>
+<li><a href="refm207.html">net/https</a>             SSL/TLS 拡張 HTTP クライアントライブラリ <a href="refm385.html">ruby 1.8 feature</a></li>
+<li><a href="refm208.html">net/imap</a>              IMAP クライアントライブラリ <a href="refm383.html">ruby 1.6 feature</a></li>
+<li><a href="refm209.html">net/pop</a>               POP クライアントライブラリ</li>
+<li><a href="refm210.html">net/smtp</a>              SMTP クライアントライブラリ</li>
+<li><a href="refm211.html">net/telnet</a>            TELNET クライアントライブラリ</li>
+<li><a href="refm212.html">net/telnets</a>           SSL/TLS 拡張 TELNET クライアントライブラリ <a href="refm385.html">ruby 1.8 feature</a></li>
+<li><a href="refm213.html">openssl</a>                 Ruby/OpenSSL  <a href="refm385.html">ruby 1.8 feature</a></li>
+<li><a href="refm241.html">resolv-replace</a>          名前解決に resolv を使用する <a href="refm383.html">ruby 1.6 feature</a></li>
+<li><a href="refm242.html">resolv</a>                  Ruby版 リゾルバ <a href="refm383.html">ruby 1.6 feature</a></li>
+<li><a href="refm243.html">xmlrpc</a>           XML-RPC (remote procedure calls over HTTP using XML) <a href="refm385.html">ruby 1.8 feature</a></li>
+<li><a href="refm245.html">gserver</a>                 Ruby Generic Server <a href="refm385.html">ruby 1.8 feature</a></li>
+<li><a href="refm246.html">soap</a>                    SOAP4R <a href="refm385.html">ruby 1.8 feature</a></li>
+<li><a href="refm247.html">wsdl</a>                    WSDL4R <a href="refm385.html">ruby 1.8 feature</a></li>
+<li><a href="refm248.html">ping</a>                    ホストに対するパケット到達の検証</li>
+<li><a href="refm249.html">ipaddr</a>                  IPアドレスクラス(IPAddr) <a href="refm385.html">ruby 1.8 feature</a></li>
+</ul>
+<h3><a name="L002266" id="L002266">入出力</a></h3>
+<ul>
+<li><a href="refm250.html">fcntl</a>                   <a href="refm535.html">fcntl(2)</a> で使用する定数を集めたモジュール</li>
+<li><a href="refm251.html">open3</a>                   外部プログラムと標準入力・標準出力・標準エラー出力で通信するライブラリ</li>
+<li><a href="refm252.html">readbytes</a>               IO に指定した長さを確実に読むメソッドを追加するライブラリ</li>
+<li><a href="refm253.html">scanf</a>                   C の scanf のようなライブラリ <a href="refm385.html">ruby 1.8 feature</a></li>
+<li><a href="refm254.html">io/nonblock</a>           IO クラスの拡張 (nonblockモードに関するメソッドの追加) <a href="refm385.html">ruby 1.8 feature</a></li>
+<li><a href="refm255.html">io/wait</a>               IO クラスの拡張 (IO の入力待ちを行うメソッドの追加) <a href="refm385.html">ruby 1.8 feature</a></li>
+</ul>
+<h3><a name="L002267" id="L002267">文字コード</a></h3>
+<ul>
+<li><a href="refm256.html">iconv</a>                   文字列エンコーディング変換ライブラリ <a href="refm384.html">ruby 1.7 feature</a></li>
+<li><a href="refm257.html">jcode</a>                   Stringクラスを日本語対応に変更する</li>
+<li><a href="refm258.html">kconv</a>                   漢字コード変換</li>
+<li><a href="refm260.html">nkf</a>                     日本語文字コードエンコーディング変換</li>
+</ul>
+<h3><a name="L002268" id="L002268">数学</a></h3>
+<ul>
+<li><a href="refm261.html">complex</a>                 複素数クラス</li>
+<li><a href="refm263.html">rational</a>                有理数クラス</li>
+<li><a href="refm265.html">matrix</a>                  行列・ベクトルクラス</li>
+<li><a href="refm268.html">mathn</a>                   数値演算メソッドを数学的に正しく変更するライブラリ</li>
+<li><a href="refm269.html">set</a>                     有限集合 <a href="refm384.html">ruby 1.7 feature</a></li>
+<li><a href="refm270.html">tsort</a>                   トポロジカルソートと強連結成分 <a href="refm384.html">ruby 1.7 feature</a></li>
+<li><a href="refm271.html">bigdecimal</a>              可変長浮動小数点演算 <a href="refm385.html">ruby 1.8 feature</a></li>
+</ul>
+<h3><a name="L002269" id="L002269">データベース</a></h3>
+<ul>
+<li><a href="refm282.html">dbm</a>                     ndbm をハッシュのように使うためのライブラリ</li>
+<li><a href="refm283.html">gdbm</a>                    gdbm (GNU dbm) をハッシュのように使うためのライブラリ</li>
+<li><a href="refm284.html">sdbm</a>                    sdbm ハッシュライブラリ</li>
+<li><a href="refm285.html">pstore</a>           オブジェクト永続化</li>
+</ul>
+<h3><a name="L002270" id="L002270">画面制御・CUI</a></h3>
+<ul>
+<li><a href="refm287.html">curses</a>                  端末操作ライブラリ curses のインターフェイス</li>
+<li><a href="refm288.html">expect</a>                  対話プログラムをスクリプトから制御する</li>
+<li><a href="refm289.html">pty</a>                     疑似端末(Pseudo tTY)を扱うモジュール</li>
+<li><a href="refm290.html">readline</a>                GNU Readline インタフェース</li>
+<li><a href="refm292.html">shell</a>                   シェルに似たインターフェースを提供するライブラリ</li>
+</ul>
+<h3><a name="L002271" id="L002271">GUI</a></h3>
+<ul>
+<li><a href="refm293.html">tk</a>                      Tcl/Tk ライブラリ</li>
+</ul>
+<h3><a name="L002272" id="L002272">日付・時間</a></h3>
+<ul>
+<li><a href="refm294.html">date</a>                    日付クラス</li>
+<li><a href="refm297.html">time</a>                    文字列とTimeオブジェクトの変換 <a href="refm383.html">ruby 1.6 feature</a></li>
+<li><a href="refm298.html">parsedate</a>               日付・時刻フォーマットの解析</li>
+</ul>
+<h3><a name="L002273" id="L002273">マルチスレッド・同期</a></h3>
+<ul>
+<li><a href="refm299.html">thread</a>                  Mutex, Queue などのスレッド関連ユーティリティ</li>
+<li><a href="refm304.html">timeout</a>                 タイムアウトを行うメソッド timeout</li>
+<li><a href="refm307.html">monitor</a>                 モニタライブラリ (並行処理プリミティブ)</li>
+<li><a href="refm311.html">mutex_m</a>                 Mutexのモジュール版</li>
+<li><a href="refm312.html">sync</a>                    Mix-inにより再入可能なreader/writerロック機能を提供するライブラリ</li>
+<li><a href="refm317.html">thwait</a>      thread synchronization class</li>
+</ul>
+<h3><a name="L002274" id="L002274">Unix</a></h3>
+<ul>
+<li><a href="refm318.html">etc</a>                     <code>/etc/passwd</code> などの情報を取得するライブラリ</li>
+<li><a href="refm319.html">syslog</a>           UNIXのsyslogのラッパーモジュール <a href="refm383.html">ruby 1.6 feature</a></li>
+</ul>
+<h3><a name="L002275" id="L002275">MS Windows</a></h3>
+<ul>
+<li><a href="refm321.html">Win32API</a>                Win32 API をコールするクラス (win32 専用) 将来 dl/win32 で置き換えられる予定</li>
+<li><a href="refm322.html">WIN32OLE</a>                Win32OLE 拡張モジュール <a href="refm384.html">ruby 1.7 feature</a></li>
+<li><a href="refm323.html">win32/registry</a>        Win32 レジストリ I/F <a href="refm384.html">ruby 1.7 feature</a></li>
+</ul>
+<h3><a name="L002276" id="L002276">GC</a></h3>
+<ul>
+<li><a href="refm325.html">weakref</a>                 GC される「弱い」リファレンスを作成する</li>
+<li><a href="refm326.html">finalize</a>                オブジェクトがGCされる時にある依存オブジェクトに対してメッセージを送るライブラリ</li>
+</ul>
+<h3><a name="L002277" id="L002277">デザインパターン</a></h3>
+<ul>
+<li><a href="refm327.html">delegate</a>                委譲を支援するクラス</li>
+<li><a href="refm330.html">forwardable</a>             クラスに対してメソッドの委譲機能を定義するライブラリ</li>
+<li><a href="refm333.html">observable</a>              Observer パターンの Ruby 実装</li>
+<li><a href="refm334.html">singleton</a>               Singleton パターンの Ruby 実装</li>
+</ul>
+<h3><a name="L002278" id="L002278">開発ツール</a></h3>
+<ul>
+<li><a href="refm335.html">test/unit</a>  ユニットテストライブラリ <a href="refm385.html">ruby 1.8 feature</a></li>
+<li><a href="refm336.html">pp</a>                      Pretty-printer <a href="refm384.html">ruby 1.7 feature</a></li>
+<li><a href="refm338.html">benchmark</a>               ベンチマークライブラリ <a href="refm384.html">ruby 1.7 feature</a></li>
+<li><a href="refm339.html">debug</a>                   Ruby デバッガ</li>
+<li><a href="refm340.html">tracer</a>                  Ruby のトレーサ</li>
+<li><a href="refm341.html">profiler</a>                プロファイラライブラリ <a href="refm384.html">ruby 1.7 feature</a></li>
+<li><a href="refm342.html">profile</a>                 require するだけで使えるプロファイラ</li>
+<li><a href="refm343.html">mkmf</a>                    拡張ライブラリ作成用ツール</li>
+<li><a href="refm344.html">rbconfig</a>                Ruby インタプリタの設定情報</li>
+<li><a href="refm345.html">rubyunit</a>                RubyUnit互換ライブラリ <a href="refm385.html">ruby 1.8 feature</a></li>
+</ul>
+<h3><a name="L002279" id="L002279">コマンドライン</a></h3>
+<ul>
+<li><a href="refm348.html">optparse</a>   コマンドラインオプションの解析 <a href="refm384.html">ruby 1.7 feature</a></li>
+<li><a href="refm350.html">getoptlong</a>              コマンドラインオプションの解析</li>
+</ul>
+<h3><a name="L002280" id="L002280">その他</a></h3>
+<ul>
+<li><a href="refm351.html">dl</a>                      ダイナミックリンカへのインタフェース <a href="refm384.html">ruby 1.7 feature</a></li>
+<li><a href="refm360.html">enumerator</a>              each 以外のメソッドも enumerate できるようにするライブラリ <a href="refm385.html">ruby 1.8 feature</a></li>
+<li><a href="refm362.html">generator</a>               内部イテレータから外部イテレータへ変換するライブラリ <a href="refm385.html">ruby 1.8 feature</a></li>
+<li><a href="refm363.html">abbrev</a>                  Calculate the set of unique abbreviations for a given set of strings <a href="refm385.html">ruby 1.8 feature</a></li>
+<li><a href="refm364.html">prettyprint</a>             PrettyPrint <a href="refm384.html">ruby 1.7 feature</a></li>
+<li><a href="refm365.html">ostruct</a>                 Python 風の「attr on write」Struct</li>
+<li><a href="refm366.html">e2mmap</a>                  例外クラスとメッセージのマッピング</li>
+<li><a href="refm367.html">English</a>                 特殊変数 $! などに英語名の別名($ERROR_INFO など)をつける</li>
+<li><a href="refm368.html">logger</a>                  a simple but sophisticated logging utility <a href="refm385.html">ruby 1.8 feature</a></li>
+<li><a href="refm369.html">eregex</a>                  正規表現の `|', `&amp;' 演算子による結合を可能にする</li>
+<li><a href="refm370.html">racc runtime</a>       <a href="http://www.ruby-lang.org/en/raa-list.rhtml?name=Racc">Racc</a><sup class="outside"><small>[外部]</small></sup> ランタイムライブラリ <a href="refm384.html">ruby 1.7 feature</a></li>
+</ul>
+<h3><a name="L002281" id="L002281">obsolete</a></h3>
+<ul>
+<li><a href="refm371.html">Env</a>                     <em>このライブラリはobsoleteです</em></li>
+<li><a href="refm372.html">importenv</a>               環境変数をグローバル変数で操作</li>
+<li><a href="refm373.html">cgi-lib</a>                 <em>このライブラリはobsoleteです</em>(<a href="refm171.html">cgi</a>を使ってください)</li>
+<li><a href="refm374.html">date2</a>                   <em>このライブラリはobsoleteです</em>(<a href="refm294.html">date</a>を使ってください)</li>
+<li><a href="refm376.html">getopts</a>                 コマンドラインオプションの解析</li>
+<li><a href="refm377.html">parsearg</a>                コマンドラインオプションの解析(<a href="refm376.html">getopts</a>も参照)</li>
+<li><a href="refm378.html">md5</a>                     <em>このライブラリはobsoleteです</em>(<a href="refm117.html#L002344">digest/md5</a>を使ってください)</li>
+<li><a href="refm379.html">sha1</a>                    <em>このライブラリはobsoleteです</em>(<a href="refm117.html#L002346">digest/sha1</a>を使ってください)</li>
+<li><a href="refm380.html">ftools</a>                  1.8 以降では、ftools の利用は推奨しません。<a href="refm152.html">fileutils</a>を使ってください。</li>
+<li><a href="refm381.html">base64</a>                  Base64 エンコーディングを扱う操作を集めたモジュール (<a href="refm061.html#L001567">String#unpack</a>、<a href="refm036.html#L000776">Array#pack</a>で同等の処理ができます。<a href="refm451.html">packテンプレート文字列</a>の'm'、'M'を参照してください)</li>
+<li><a href="refm375.html">final</a>                   <em>このライブラリはobsoleteです</em>(本体組み込みになりました。1.8 ではこのライブラリはなくなりました)</li>
+<li>ftplib                        <em>このライブラリはobsoleteです</em>(代わりに <a href="refm201.html">net/ftp</a> を使用します。1.8 ではこのライブラリはなくなりました)</li>
+<li>telnet                        <em>このライブラリはobsoleteです</em>(<a href="refm211.html">net/telnet</a>を使ってください。1.8 ではこのライブラリはなくなりました)</li>
+</ul>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm114.html">&lt;-PREV</a>][<a href="refm116.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

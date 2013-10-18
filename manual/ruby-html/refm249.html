@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ipaddr</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm250.html" rel="next" />
+<link href="refm248.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm248.html">&lt;-PREV</a>][<a href="refm250.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L004965" id="L004965">IPAddr</a></h1>
+<p>IP アドレスを扱うのためのクラスです。</p>
+<pre>require 'ipaddr'
+
+ipaddr1 = IPAddr.new &quot;3ffe:505:2::1&quot;
+p ipaddr1        #=&gt; #&lt;IPAddr: IPv6:3ffe:0505:0002:0000:0000:0000:0000:0001/ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff&gt;
+
+ipaddr3 = IPAddr.new &quot;192.168.2.0/24&quot;
+p ipaddr3        #=&gt; #&lt;IPAddr: IPv4:192.168.2.0/255.255.255.0&gt;</pre>
+<h2><a name="L004966" id="L004966">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L004967" id="L004967"><code>IPAddr.new(<var>addr</var> = '::', <var>family</var> = <var>Socket</var>::<var>AF_UNSPEC</var>)</code></a></dt>
+<dd>
+<p>新しい IPAddr オブジェクトを生成します。addr は `address/prefixlen' や 
+'address/mask' などの形式も受け付けます。プリフィックス長やマスクが指定されると、
+マスクされた IPAddr オブジェクトを返します。IPv6 アドレスの場合は、[ ] で
+囲まれていてもかまいません。
+family は自動的に判定されますが、明示的に指定することもできます。</p></dd>
+<dt><a name="L004968" id="L004968"><code>IPAddr.new_ntoh(<var>addr</var>)</code></a></dt>
+<dd>
+<p>ネットワークバイトオーダーのバイト列から IPAddr オブジェクトを生成します。</p>
+<pre>require 'ipaddr'
+p IPAddr.new_ntoh(&quot;\300\250\001\001&quot;) #=&gt; &lt;IPAddr: IPv4:192.168.1.1/255.255.255.255&gt;</pre></dd>
+<dt><a name="L004969" id="L004969"><code>IPAddr.ntop(<var>addr</var>)</code></a></dt>
+<dd>
+<p>ネットワークバイトオーダーのバイト列で表現された IP アドレスを人間の読める形式に変換します。</p></dd>
+</dl>
+<h2><a name="L004970" id="L004970">メソッド</a></h2>
+<dl>
+<dt><a name="L004971" id="L004971"><code>&amp;(<var>ipaddr</var>)</code></a></dt>
+<dd>
+<p>他の IPAddr オブジェクトとのビットごとの論理積により、新しい IPAddr オブジェクトを生成します。</p></dd>
+<dt><a name="L004972" id="L004972"><code>|(<var>ipaddr</var>)</code></a></dt>
+<dd>
+<p>他の IPAddr オブジェクトとのビットごとの論理和により、新しい IPAddr オブジェクトを生成します。</p></dd>
+<dt><a name="L004973" id="L004973"><code>~</code></a></dt>
+<dd>
+<p>ビットごとの論理否定により、新しい IPAddr オブジェクトを返します。</p></dd>
+<dt><a name="L004974" id="L004974"><code>&gt;&gt;(<var>num</var>)</code></a></dt>
+<dd>
+<p>ビットごとの右シフト演算により、新しい IPAddr オブジェクトを返します。</p></dd>
+<dt><a name="L004975" id="L004975"><code>&lt;&lt;(<var>num</var>)</code></a></dt>
+<dd>
+<p>ビットごとの左シフト演算により、新しい IPAddr オブジェクトを返します。</p></dd>
+<dt><a name="L004976" id="L004976"><code>==(<var>ipaddr</var>)</code></a></dt>
+<dd>
+<p>IPAddr オブジェクト同士が等しいかを比較します。</p>
+<pre>require &quot;ipaddr&quot;
+p IPAddr.new(&quot;192.168.0.1&quot;) == IPAddr.new(&quot;192.168.0.1/24&quot;) #=&gt; false</pre></dd>
+<dt><a name="L004977" id="L004977"><code>mask(<var>a</var>)</code></a></dt>
+<dd>
+<p>マスクされた新しい IPAddr オブジェクトを返します。引数にはプリフィックス長とマスクの両方を受け付けます。(e.g. 8, 64, &quot;255.255.255.0&quot;, etc.)</p></dd>
+<dt><a name="L004978" id="L004978"><code>include?(<var>ipaddr</var>)</code></a></dt>
+<dd>
+<p>与えられた IPAddr オブジェクトが自身の範囲に入っているかを判定します。</p></dd>
+<dt><a name="L004979" id="L004979"><code>to_i</code></a></dt>
+<dd>
+<p>整数に変換します。</p>
+<pre>require &quot;ipaddr&quot;
+p IPAddr.new(&quot;0.0.1.0&quot;).to_i #=&gt; 256</pre></dd>
+<dt><a name="L004980" id="L004980"><code>to_s</code></a></dt>
+<dd>
+<p>文字列に変換します。</p></dd>
+<dt><a name="L004981" id="L004981"><code>to_string</code></a></dt>
+<dd>
+<p>標準的な文字列表現に変換します。</p></dd>
+<dt><a name="L004982" id="L004982"><code>hton</code></a></dt>
+<dd>
+<p>ネットワークオーダーのバイト列に変換します。</p></dd>
+<dt><a name="L004983" id="L004983"><code>ipv4?</code></a></dt>
+<dd>
+<p>IPv4 なら真を返します。</p></dd>
+<dt><a name="L004984" id="L004984"><code>ipv6?</code></a></dt>
+<dd>
+<p>IPv6 なら真を返します。</p></dd>
+<dt><a name="L004985" id="L004985"><code>ipv4_mapped?</code></a></dt>
+<dd>
+<p>IPv4 射影 IPv6 アドレスなら 真を返します。</p></dd>
+<dt><a name="L004986" id="L004986"><code>ipv4_compat?</code></a></dt>
+<dd>
+<p>IPv4 互換 IPv6 アドレスなら 真を返します。</p></dd>
+<dt><a name="L004987" id="L004987"><code>ipv4_mapped</code></a></dt>
+<dd>
+<p>IPv4 アドレスから IPv4 射影 IPv6 アドレスの新しい IPAddr オブジェクトを返します。</p></dd>
+<dt><a name="L004988" id="L004988"><code>ipv4_compat</code></a></dt>
+<dd>
+<p>IPv4 アドレスから IPv4 互換 IPv6 アドレスの新しい IPAddr オブジェクトを返します。</p></dd>
+<dt><a name="L004989" id="L004989"><code>native</code></a></dt>
+<dd>
+<p>IPv4 射影 IPv6 アドレスや IPv4 互換 IPv6 アドレスから、IPv4 アドレスの新しい IPAddr オブジェクトを返しま 
+す。IPv4 互換でも IPv4 組み込みでもないなら自身を返します。</p>
+<pre>require &quot;ipaddr&quot;
+p IPAddr.new(&quot;0000:0000:0000:0000:0000:ffff:c0a8:0001&quot;).native #=&gt; #&lt;IPAddr: IPv4:192.168.0.1/255.255.255.255&gt;</pre></dd>
+<dt><a name="L004990" id="L004990"><code>reverse</code></a></dt>
+<dd>
+<p>DNS 逆引きのための文字列を返します。IPv6 なら RFC3172 で定義された形式で返します。</p>
+<pre>require &quot;ipaddr&quot;
+p IPAddr.new(&quot;192.168.0.1&quot;).reverse #=&gt; &quot;1.0.168.192.in-addr.arpa&quot;</pre></dd>
+<dt><a name="L004991" id="L004991"><code>ip6_arpa</code></a></dt>
+<dd>
+<p>IPv6 なら RFC3172 で定義された形式で DNS 逆引きのための文字列を返します。IPv4 の場合は例外を発生します。</p></dd>
+<dt><a name="L004992" id="L004992"><code>ip6_int</code></a></dt>
+<dd>
+<p>IPv6 なら RFC1886 互換形式で DNS 逆引きのための文字列を返します。IPv4 の場合は例外を発生します。</p></dd>
+</dl>
+<h2><a name="L004993" id="L004993">参照</a></h2>
+<ul>
+<li><em class="XXINVALIDXX">rfc:3513</em></li>
+</ul>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm248.html">&lt;-PREV</a>][<a href="refm250.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

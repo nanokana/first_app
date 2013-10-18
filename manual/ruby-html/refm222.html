@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>OpenSSL::X509::Name</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm223.html" rel="next" />
+<link href="refm221.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm217.html">UP</a>][<a href="refm221.html">&lt;-PREV</a>][<a href="refm223.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L004398" id="L004398">OpenSSL::X509::Name</a></h1>
+<h2><a name="L004399" id="L004399">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L004400" id="L004400"><code>Name.parse(<var>str</var>)</code></a></dt>
+<dd>
+<p>名前をパースして Name オブジェクトを返す。</p></dd>
+<dt><a name="L004401" id="L004401"><code>Name.new([[<var>oid1</var>, <var>val1</var>], [<var>oid2</var>, <var>val2</var>] ...], <var>template</var>=<var>OBJECT_TYPE_TEMPLATE</var>)</code></a>
+<dt><a name="L004402" id="L004402"><code>Name.new()</code></a></dt>
+<dd>
+<p>Name オブジェクトを生成する。</p></dd>
+</dl>
+<h2><a name="L004403" id="L004403">メソッド</a></h2>
+<dl>
+<dt><a name="L004404" id="L004404"><code>add_entry(<var>oid</var>, <var>value</var>, <var>type</var>=<var>nil</var>)</code></a></dt>
+<dd>
+<p>エントリー oid に value を設定する。type を指定することも出来る。type を指定しない場合は oid より自動的に判別する。</p></dd>
+<dt><a name="L004405" id="L004405"><code>to_s</code></a></dt>
+<dd>
+<p>人間の読める形式にして返す。</p></dd>
+<dt><a name="L004406" id="L004406"><code>to_a</code></a></dt>
+<dd>
+<p>配列にして返す。</p></dd>
+<dt><a name="L004407" id="L004407"><code>cmp(<var>name</var>)</code></a>
+<dt><a name="L004408" id="L004408"><code>&lt;=&gt;</code></a></dt>
+<dd>
+<p>他の Name オブジェクトと比較する。</p></dd>
+<dt><a name="L004409" id="L004409"><code>to_der</code></a></dt>
+<dd>
+<p>DER 形式を返す。</p></dd>
+</dl>
+<h2><a name="L004410" id="L004410">定数</a></h2>
+<dl>
+<dt><a name="L004411" id="L004411"><code>OBJECT_TYPE_TEMPLATE</code></a></dt>
+<dd>
+<p>エントリーのタイプを収納したハッシュ。エントリーをキーとして、値にタイプが収納されている。キーは次の文字列、</p></dd>
+</dl>
+<pre>'C', 'countryName', 'serialNumber', 'dnQualifier',
+'DC', 'domainComponent', 'emailAddress'</pre>
+<dl>
+<dt><a name="L004412" id="L004412"><code>DEFAULT_OBJECT_TYPE</code></a></dt>
+<dd>
+<p>エントリーのデフォルトのタイプ。UTF8文字列。</p></dd>
+<dt><a name="L004413" id="L004413"><code>COMPAT</code></a>
+<dt><a name="L004414" id="L004414"><code>RFC2253</code></a>
+<dt><a name="L004415" id="L004415"><code>ONELINE</code></a>
+<dt><a name="L004416" id="L004416"><code>MULTILINE</code></a>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm217.html">UP</a>][<a href="refm221.html">&lt;-PREV</a>][<a href="refm223.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ruby-src:ext/pty/README.expect</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm520.html" rel="next" />
+<link href="refm518.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm518.html">&lt;-PREV</a>][<a href="refm520.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1>ruby-src:ext/pty/README.expect</h1>
+&nbsp;&nbsp;README&nbsp;for&nbsp;expect<br />
+&nbsp;&nbsp;&nbsp;by&nbsp;A.&nbsp;Ito,&nbsp;28&nbsp;October,&nbsp;1998<br />
+<br />
+&nbsp;&nbsp;Expect&nbsp;library&nbsp;adds&nbsp;IO&nbsp;class&nbsp;a&nbsp;method&nbsp;called&nbsp;expect(),&nbsp;which<br />
+does&nbsp;similar&nbsp;act&nbsp;to&nbsp;tcl's&nbsp;expect&nbsp;extension.&nbsp;<br />
+<br />
+The&nbsp;usage&nbsp;of&nbsp;the&nbsp;method&nbsp;is:<br />
+<br />
+&nbsp;&nbsp;&nbsp;IO#expect(pattern,timeout=9999999)<br />
+<br />
+where&nbsp;`pattern'&nbsp;is&nbsp;an&nbsp;instance&nbsp;of&nbsp;String&nbsp;or&nbsp;Regexp&nbsp;and&nbsp;`timeout'<br />
+is&nbsp;Fixnum,&nbsp;which&nbsp;can&nbsp;be&nbsp;omitted.&nbsp;<br />
+&nbsp;&nbsp;When&nbsp;the&nbsp;method&nbsp;is&nbsp;called&nbsp;without&nbsp;block,&nbsp;it&nbsp;waits&nbsp;until&nbsp;the<br />
+input&nbsp;which&nbsp;matches&nbsp;the&nbsp;pattern&nbsp;is&nbsp;obtained&nbsp;from&nbsp;the&nbsp;IO&nbsp;or&nbsp;the&nbsp;time<br />
+specified&nbsp;as&nbsp;the&nbsp;timeout&nbsp;passes.&nbsp;When&nbsp;the&nbsp;pattern&nbsp;is&nbsp;obtained&nbsp;from&nbsp;the<br />
+IO,&nbsp;the&nbsp;method&nbsp;returns&nbsp;an&nbsp;array.&nbsp;The&nbsp;first&nbsp;element&nbsp;of&nbsp;the&nbsp;array&nbsp;is&nbsp;the<br />
+entire&nbsp;string&nbsp;obtained&nbsp;from&nbsp;the&nbsp;IO&nbsp;until&nbsp;the&nbsp;pattern&nbsp;matches.&nbsp;The<br />
+following&nbsp;elements&nbsp;indicates&nbsp;the&nbsp;specific&nbsp;pattern&nbsp;which&nbsp;matched&nbsp;to&nbsp;the<br />
+anchor&nbsp;in&nbsp;the&nbsp;regular&nbsp;expression.&nbsp;If&nbsp;the&nbsp;method&nbsp;ends&nbsp;because&nbsp;of<br />
+timeout,&nbsp;it&nbsp;returns&nbsp;nil.&nbsp;<br />
+&nbsp;&nbsp;&nbsp;When&nbsp;the&nbsp;method&nbsp;is&nbsp;called&nbsp;with&nbsp;block,&nbsp;the&nbsp;array&nbsp;is&nbsp;passed&nbsp;as<br />
+the&nbsp;block&nbsp;parameter.<br />
+
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="index.html">UP</a>][<a href="refm518.html">&lt;-PREV</a>][<a href="refm520.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

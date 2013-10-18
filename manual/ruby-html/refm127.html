@@ -1,0 +1,662 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>strscan</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm128.html" rel="next" />
+<link href="refm126.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm126.html">&lt;-PREV</a>][<a href="refm128.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L002485" id="L002485">strscan</a></h1>
+<p><a href="refm384.html">ruby 1.7 feature</a></p>
+<h2><a name="L002486" id="L002486">このライブラリについて</a></h2>
+<p>strscan は文字列スキャナライブラリです。
+簡単に高速なスキャナを記述できます。</p>
+<h2><a name="L002487" id="L002487">例</a></h2>
+<p>以下に使用例を示します。</p>
+<pre>s = StringScanner.new('This is an example string')
+s.eos?            #=&gt; false
+
+p s.scan(/\w+/)   #=&gt; &quot;This&quot;
+p s.scan(/\w+/)   #=&gt; nil
+p s.scan(/\s+/)   #=&gt; &quot; &quot;
+p s.scan(/\s+/)   #=&gt; nil
+p s.scan(/\w+/)   #=&gt; &quot;is&quot;
+s.eos?            #=&gt; false
+
+p s.scan(/\s+/)   #=&gt; &quot; &quot;
+p s.scan(/\w+/)   #=&gt; &quot;an&quot;
+p s.scan(/\s+/)   #=&gt; &quot; &quot;
+p s.scan(/\w+/)   #=&gt; &quot;example&quot;
+p s.scan(/\s+/)   #=&gt; &quot; &quot;
+p s.scan(/\w+/)   #=&gt; &quot;string&quot;
+s.eos?            #=&gt; true
+
+p s.scan(/\s+/)   #=&gt; nil
+p s.scan(/\w+/)   #=&gt; nil</pre>
+<p>StringScanner オブジェクトはスキャンする文字列と「スキャンポインタ」のセットです。
+スキャンポインタとはスキャンしおわったところを示すインデックスのことです。
+オブジェクト作成直後にはスキャンポインタは文字列先頭にあり、
+その地点でのみマッチを試します。マッチしたらその後ろにポインタを進めます。</p>
+<pre>## a string and a scan pointer   (&quot;_&quot; = scan pointer)
+
+s = StringScanner.new('This is an example string')
+_This is an example string     s.eos? = false
+s.scan(/\w+/)
+This_ is an example string     s.eos? = false
+s.scan(/\s+/)
+This _is an example string     s.eos? = false
+s.scan(/\w+/)
+This is_ an example string     s.eos? = false
+s.scan(/\s+/)
+This is _an example string     s.eos? = false
+s.scan(/\w+/)
+This is an_ example string     s.eos? = false
+s.scan(/\s+/)
+This is an _example string     s.eos? = false
+s.scan(/\w+/)
+This is an example_ string     s.eos? = false
+s.scan(/\s+/)
+This is an example _string     s.eos? = false
+s.scan(/\w+/)
+This is an example string_     s.eos? = true</pre>
+<h2><a name="L002488" id="L002488">警告</a></h2>
+<p>StringScanner は $~ $&amp; $1 $2 …… などの正規表現関連変数を
+セットしません。代わりに StringScanner#[], #matched? などの
+マッチデータ関連メソッドを使ってください。</p>
+<h2><a name="L002489" id="L002489">class StringScanner</a></h2>
+<h3><a name="L002490" id="L002490">スーパークラス</a></h3>
+<ul>
+<li><a href="refm035.html">Object</a></li>
+</ul>
+<h3><a name="L002491" id="L002491">メソッド一覧</a></h3>
+<h4><a name="L002492" id="L002492">クラスメソッド</a></h4>
+<p><a href="#L002495">StringScanner.new</a></p>
+<h4><a name="L002493" id="L002493">インスタンスメソッド</a></h4>
+<p><a href="#L002496">self[nth]</a>
+<a href="#L002497">self &lt;&lt; str</a>
+<a href="#L002499">beginning_of_line?</a>
+<a href="#L002500">bol?</a>
+<a href="#L002501">check</a>
+<a href="#L002502">check_until</a>
+<a href="#L002498">concat</a>
+<a href="#L002503">eos?</a>
+<a href="#L002505">exist?</a>
+<a href="#L002506">getch</a>
+<a href="#L002507">get_byte</a>
+<a href="#L002509">inspect</a>
+<a href="#L002510">match?</a>
+<a href="#L002511">matched</a>
+<a href="#L002512">matched?</a>
+<a href="#L002513">matched_size</a>
+<a href="#L002514">peek</a>
+<a href="#L002516">pointer</a>
+<a href="#L002518">pointer = n</a>
+<a href="#L002517">pos</a>
+<a href="#L002519">pos = n</a>
+<a href="#L002520">post_match</a>
+<a href="#L002521">pre_match</a>
+<a href="#L002522">reset</a>
+<a href="#L002523">rest</a>
+<a href="#L002525">rest_size</a>
+<a href="#L002527">scan</a>
+<a href="#L002528">scan_full</a>
+<a href="#L002529">scan_until</a>
+<a href="#L002530">search_full</a>
+<a href="#L002531">skip</a>
+<a href="#L002532">skip_until</a>
+<a href="#L002533">string</a>
+<a href="#L002534">string = str</a>
+<a href="#L002535">terminate</a>
+<a href="#L002537">unscan</a></p>
+<p>以下のメソッドは将来的に削除されます。</p>
+<p><a href="#L002536">clear</a>
+<a href="#L002504">empty?</a>
+<a href="#L002508">getbyte</a>
+<a href="#L002515">peep</a>
+<a href="#L002524">rest?</a>
+<a href="#L002526">restsize</a></p>
+<h4><a name="L002494" id="L002494">定数</a></h4>
+<p><a href="#L002538">Version</a></p>
+<h3><a name="L002492" id="L002492">クラスメソッド</a></h3>
+<dl>
+<dt><a name="L002495" id="L002495"><code>StringScanner.new(<var>str</var>, <var>dup</var> = <var>false</var>)</code></a></dt>
+<dd>
+<p>新しい StringScanner オブジェクトを生成します。
+str はスキャン対象の文字列です。</p>
+<p>Ruby 1.8.0 では、dup が true の時は文字列を複製して freeze します。
+dup が false なら複製せずに freeze します。</p>
+<p>Ruby 1.8.1 以降では dup は単に無視します。
+引数の文字列は複製も freeze もされず、そのまま使います。</p></dd>
+</dl>
+<h3><a name="L002493" id="L002493">インスタンスメソッド</a></h3>
+<dl>
+<dt><a name="L002496" id="L002496"><code>self[nth]</code></a></dt>
+<dd>
+<p>前回マッチした正規表現の <var>nth</var> 番目のかっこに対応する部分文字列を
+返します。インデックス 0 はマッチした部分全体です。前回のマッチが
+失敗していると常に nil を返します。</p>
+<pre>s = StringScanner.new('test string')
+s.scan(/\w(\w)(\w*)/) # =&gt; &quot;test&quot;
+s[0]                  # =&gt; &quot;test&quot;
+s[1]                  # =&gt; &quot;e&quot;
+s[2]                  # =&gt; &quot;st&quot;
+s.scan(/\w+/)         # =&gt; nil
+s[0]                  # =&gt; nil
+s[1]                  # =&gt; nil
+s[2]                  # =&gt; nil
+s.scan(/\s+/)         # =&gt; &quot; &quot;
+s[0]                  # =&gt; &quot; &quot;
+s[1]                  # =&gt; nil
+s[2]                  # =&gt; nil
+s.scan(/\w(\w)(\w*)/) # =&gt; &quot;string&quot;
+s[0]                  # =&gt; &quot;string&quot;
+s[1]                  # =&gt; &quot;t&quot;
+s[2]                  # =&gt; &quot;ring&quot;</pre></dd>
+<dt><a name="L002497" id="L002497"><code><var>self</var> &lt;&lt; <var>str</var></code></a>
+<dt><a name="L002498" id="L002498"><code>concat(<var>str</var>)</code></a></dt>
+<dd>
+<p>操作対象の文字列に対し <var>str</var> を破壊的に連結します。
+マッチ記録は変更されません。</p>
+<p>selfを返します。</p>
+<pre>s = StringScanner.new('test') # =&gt; #&lt;StringScanner 0/4 @ &quot;test&quot;&gt;
+s.match(/\w(\w*)/)            # =&gt; &quot;test&quot;
+s[0]                          # =&gt; &quot;test&quot;
+s[1]                          # =&gt; &quot;est&quot;
+s &lt;&lt; ' string'                # =&gt; #&lt;StringScanner 4/11 &quot;test&quot; @ &quot; stri...&quot;&gt;
+s[0]                          # =&gt; &quot;test&quot;
+s[1]                          # =&gt; &quot;est&quot;
+s.match(/\s+/)                # =&gt; &quot; &quot;
+s.match(/\w+/)                # =&gt; &quot;string&quot;</pre>
+<p>この操作は StringScanner.new に渡した文字列にも影響することがあります。</p>
+<pre>str = 'test'
+s = StringScanner.new(str) # =&gt; #&lt;StringScanner 0/4 @ &quot;test&quot;&gt;
+s &lt;&lt; ' string'             # =&gt; #&lt;StringScanner 0/11 @ &quot;test ...&quot;&gt;
+str                        # =&gt; &quot;test string&quot;</pre>
+<p>このメソッドは Ruby 1.8.1 以降でのみ定義されています。</p></dd>
+<dt><a name="L002499" id="L002499"><code>beginning_of_line?</code></a>
+<dt><a name="L002500" id="L002500"><code>bol?</code></a></dt>
+<dd>
+<p>スキャンポインタが行頭を指しているなら true を、
+行頭以外を指しているなら false を返します。</p>
+<p>行頭の定義は、文字列先頭かまたは \n の直後を指していることです。
+文字列末尾は必ずしも行頭ではありません。</p>
+<pre>s = StringScanner.new('test\nstring')
+s.bol?        # =&gt; true
+s.scan(/\w+/)
+s.bol?        # =&gt; false
+s.scan(/\n/)
+s.bol?        # =&gt; true
+s.scan(/\w+/)
+s.bol?        # =&gt; false</pre>
+<p>このメソッドは Ruby 1.8.1 以降でのみ定義されています。</p></dd>
+<dt><a name="L002501" id="L002501"><code>check(<var>regexp</var>)</code></a></dt>
+<dd>
+<p>現在位置から <var>regexp</var> とのマッチを試みます。
+マッチに成功したらマッチした部分文字列を返します。
+マッチに失敗したら nil を返します。</p>
+<p>このメソッドはマッチが成功してもスキャンポインタを進めません。</p>
+<pre>s = StringScanner.new('test string')
+s.check(/\w+/) # =&gt; &quot;test&quot;
+s.pos          # =&gt; 0
+s.matched      # =&gt; &quot;test&quot;
+s.check(/\s+/) # =&gt; nil
+s.matched      # =&gt; nil</pre></dd>
+<dt><a name="L002502" id="L002502"><code>check_until(<var>regexp</var>)</code></a></dt>
+<dd>
+<p><var>regexp</var> が一致するまで文字列をスキャンします。
+マッチに成功したらスキャン開始位置からマッチ部分の末尾までの部分文字列を返します。
+マッチに失敗したら nil を返します。    </p>
+<p>このメソッドはマッチが成功してもスキャンポインタを進めません。</p>
+<pre>s = StringScanner.new('test string')
+s.check_until(/str/) # =&gt; &quot;test str&quot;
+s.matched            # =&gt; &quot;str&quot;
+s.pos                # =&gt; 0
+s.pre_match          # =&gt; &quot;test &quot;</pre></dd>
+<dt><a name="L002503" id="L002503"><code>eos?</code></a>
+<dt><a name="L002504" id="L002504"><code>empty?</code></a></dt>
+<dd>
+<p>スキャンポインタが文字列の末尾を指しているなら true を、
+末尾以外を指しているなら false を返します。</p>
+<pre>s = StringScanner.new('test string')
+s.eos?        # =&gt; false
+s.scan(/\w+/)
+s.scan(/\s+/)
+s.scan(/\w+/)
+s.eos?        # =&gt; true</pre>
+<p><a href="#L002504">empty?</a> は将来のバージョンで削除される予定です。
+代わりに <a href="#L002503">eos?</a> を使ってください。</p></dd>
+<dt><a name="L002505" id="L002505"><code>exist?(<var>regexp</var>)</code></a></dt>
+<dd>
+<p>[注意] このメソッドは Ruby 1.8.5 以前では正しく動作しません。
+Ruby 1.8.6 以降は以下の記述に沿った仕様に変わります。</p>
+<p>スキャンポインタの位置の文字列から <var>regexp</var> がマッチする位置を返します。
+この位置はスキャンポインタからの相対位置です。
+マッチしなければ nil を返します。</p>
+<p>このメソッドはマッチが成功してもスキャンポインタを進めません。</p>
+<pre>s = StringScanner.new('test string')
+s.exist?(/s/) # =&gt; 3
+s.exist?(//)  # =&gt; 0
+s.scan(/\w+/) # =&gt; &quot;test&quot;
+s.exist?(/s/) # =&gt; 2
+s.exist?(/e/) # =&gt; nil</pre></dd>
+<dt><a name="L002506" id="L002506"><code>getch</code></a></dt>
+<dd>
+<p>一文字スキャンして文字列で返します。
+一文字の定義は $KCODE に依存します。
+スキャンポインタをその後ろに進めます。
+スキャンポインタが文字列の末尾を指すならnilを返します。</p>
+<pre>s = StringScanner.new(&quot;るびい&quot;) # 文字コードはEUC-JPとします
+$KCODE = 'n'                    # 単なるバイト列として認識されます
+s.getch                         # =&gt; &quot;\244&quot;
+s.getch                         # =&gt; &quot;\353&quot;
+$KCODE = &quot;e&quot;                    # EUC-JPの文字列として認識されます
+s.getch                         # =&gt; &quot;び&quot;
+s.getch                         # =&gt; &quot;い&quot;
+s.getch                         # =&gt; nil</pre></dd>
+<dt><a name="L002507" id="L002507"><code>get_byte</code></a>
+<dt><a name="L002508" id="L002508"><code>getbyte</code></a></dt>
+<dd>
+<p>$KCODE に関らず 1 バイトスキャンして文字列で返します。
+スキャンポインタをその後ろに進めます。
+スキャンポインタが文字列の末尾を指すなら nil を返します。</p>
+<pre>s = StringScanner.new(&quot;るびい&quot;) # 文字コードはEUC-JPとします
+$KCODE = 'n'                    # 単なるバイト列として認識されます
+s.get_byte                      # =&gt; &quot;\244&quot;
+s.get_byte                      # =&gt; &quot;\353&quot;
+$KCODE = 'e'                    # やはり単なるバイト列として認識されます
+s.get_byte                      # =&gt; &quot;\244&quot;
+s.get_byte                      # =&gt; &quot;\323&quot;
+s.get_byte                      # =&gt; &quot;\244&quot;
+s.get_byte                      # =&gt; &quot;\244&quot;
+s.get_byte                      # =&gt; nil</pre>
+<p><a href="#L002508">getbyte</a> は将来のバージョンで削除される予定です。
+代わりに <a href="#L002507">get_byte</a> を使ってください。</p></dd>
+<dt><a name="L002509" id="L002509"><code>inspect</code></a></dt>
+<dd>
+<p>StringScannerオブジェクトを表す文字列を返します。</p>
+<pre>s = StringScanner.new('test string')
+s.inspect                            # =&gt; &quot;#&lt;StringScanner 0/11 @ \&quot;test ...\&quot;&gt;&quot;
+s.scan(/\w+/)                        # =&gt; &quot;test&quot;
+s.inspect                            # =&gt; &quot;#&lt;StringScanner 4/11 \&quot;test\&quot; @ \&quot; stri...\&quot;&gt;&quot;
+s.scan(/\s+/)                        # =&gt; &quot; &quot;
+s.inspect                            # =&gt; &quot;#&lt;StringScanner 5/11 \&quot;test \&quot; @ \&quot;strin...\&quot;&gt;&quot;
+s.scan(/\w+/)                        # =&gt; &quot;string&quot;
+s.inspect                            # =&gt; &quot;#&lt;StringScanner fin&gt;&quot;</pre>
+<p>文字列にはクラス名の他、以下の情報が含まれます。</p>
+<ul>
+<li>スキャナポインタの現在位置。</li>
+<li>スキャン対象の文字列の長さ。</li>
+<li>スキャンポインタの前後にある文字。上記実行例の @ がスキャンポインタを表します。</li>
+</ul></dd>
+<dt><a name="L002510" id="L002510"><code>match?(<var>regexp</var>)</code></a></dt>
+<dd>
+<p>スキャンポインタの地点だけで <var>regexp</var> と文字列のマッチを試します。
+マッチしたら、スキャンポインタは進めずにマッチした
+部分文字列の長さを返します。マッチしなかったら nil を
+返します。</p>
+<pre>s = StringScanner.new('test string')
+p s.match?(/\w+/)   #=&gt; 4
+p s.match?(/\w+/)   #=&gt; 4
+p s.match?(/\s+/)   #=&gt; nil</pre></dd>
+<dt><a name="L002511" id="L002511"><code>matched</code></a></dt>
+<dd>
+<p>前回マッチした部分文字列を返します。
+前回のマッチに失敗していると nil を返します。</p>
+<pre>s = StringScanner.new('test string')
+s.matched     # =&gt; nil
+s.scan(/\w+/) # =&gt; &quot;test&quot;
+s.matched     # =&gt; &quot;test&quot;
+s.scan(/\w+/) # =&gt; nil
+s.matched     # =&gt; nil
+s.scan(/\s+/) # =&gt; &quot; &quot;
+s.matched     # =&gt; &quot; &quot;</pre></dd>
+<dt><a name="L002512" id="L002512"><code>matched?</code></a></dt>
+<dd>
+<p>前回のマッチが成功していたら true を、
+失敗していたら false を返します。</p>
+<pre>s = StringScanner.new('test string')
+s.matched?    # =&gt; false
+s.scan(/\w+/) # =&gt; &quot;test&quot;
+s.matched?    # =&gt; true
+s.scan(/\w+/) # =&gt; nil
+s.matched?    # =&gt; false
+s.scan(/\s+/) # =&gt; &quot; &quot;
+s.matched?    # =&gt; true</pre></dd>
+<dt><a name="L002513" id="L002513"><code>matched_size</code></a></dt>
+<dd>
+<p>前回マッチした部分文字列の長さを返します。
+前回マッチに失敗していたら nil を返します。</p>
+<pre>s = StringScanner.new('test string')
+s.matched_size # =&gt; nil
+s.scan(/\w+/)  # =&gt; &quot;test&quot;
+s.matched_size # =&gt; 4
+s.scan(/\w+/)  # =&gt; nil
+s.matched_size # =&gt; nil</pre></dd>
+<dt><a name="L002514" id="L002514"><code>peek(<var>bytes</var>)</code></a>
+<dt><a name="L002515" id="L002515"><code>peep(<var>bytes</var>)</code></a></dt>
+<dd>
+<p>スキャンポインタから長さ <var>bytes</var> バイト分だけ文字列を返します。</p>
+<pre>s = StringScanner.new('test string')
+s.peek(4)   # =&gt; &quot;test&quot;</pre>
+<p><var>bytes</var> は 0 以上の整数です。
+ただし、スキャン対象の文字列の長さを超える分は無視されます。
+また、負数を与えると例外 <code>ArgumentError</code> が発生します。
+<var>bytes</var> が 0 のとき、またはスキャンポインタが文字列の末尾を
+指しているときは空文字列 (&quot;&quot;) を返します。</p>
+<pre>s = StringScanner.new('test string')
+s.peek(4)     # =&gt; &quot;test&quot;
+s.peek(20)    # =&gt; &quot;test string&quot;
+s.peek(0)     # =&gt; &quot;&quot;
+s.peek(-1)    # ArgumentError: negative string size (or size too big)
+s.scan(/\w+/) # =&gt; &quot;test&quot;
+s.scan(/\s+/) # =&gt; &quot; &quot;
+s.scan(/\w+/) # =&gt; &quot;string&quot;
+s.peek(4)     # =&gt; &quot;&quot;</pre>
+<p>このメソッドを実行してもスキャンポインタは移動しません。</p>
+<pre>s = StringScanner.new('test string')
+s.peek(4)     # =&gt; &quot;test&quot;
+s.peek(4)     # =&gt; &quot;test&quot;
+s.scan(/\w+/) # =&gt; &quot;test&quot;
+s.peek(4)     # =&gt; &quot; str&quot;
+s.peek(4)     # =&gt; &quot; str&quot;</pre>
+<p><a href="#L002515">peep</a> は将来のバージョンでは削除される予定です。
+代わりに <a href="#L002514">peek</a> を使ってください。</p></dd>
+<dt><a name="L002516" id="L002516"><code>pointer</code></a>
+<dt><a name="L002517" id="L002517"><code>pos</code></a></dt>
+<dd>
+<p>現在のスキャンポインタのインデックスを返します。</p>
+<pre>s = StringScanner.new('test string')
+s.pos         # =&gt; 0
+s.scan(/\w+/) # =&gt; &quot;test&quot;
+s.pos         # =&gt; 4
+s.scan(/\w+/) # =&gt; nil
+s.pos         # =&gt; 4
+s.scan(/\s+/) # =&gt; &quot; &quot;
+s.pos         # =&gt; 5</pre></dd>
+<dt><a name="L002518" id="L002518"><code>pointer = <var>n</var></code></a>
+<dt><a name="L002519" id="L002519"><code>pos = <var>n</var></code></a></dt>
+<dd>
+<p>スキャンポインタのインデックスを <var>n</var> にセットします。</p>
+<p><var>n</var> は整数で、バイト単位で指定します。
+マッチ対象の文字列の長さを超える値を指定すると例外 <code>RangeError</code> が発生します。
+負数を指定すると文字列の末尾からのオフセットとして扱います。</p>
+<p><var>n</var> を返します。</p>
+<pre>s = StringScanner.new('test string')
+s.scan(/\w+/) # =&gt; &quot;test&quot;
+s.pos = 1     # =&gt; 1
+s.scan(/\w+/) # =&gt; &quot;est&quot;
+s.pos = 7     # =&gt; 7
+s.scan(/\w+/) # =&gt; &quot;ring&quot;
+s.pos = 20    # RangeError: index out of range
+s.pos = -4    # =&gt; -4
+s.scan(/\w+/) # =&gt; &quot;ring&quot;</pre></dd>
+</dl>
+<pre>Ruby 1.8.0 ではこのメソッドはマッチ記録を捨てていましたが、
+Ruby 1.8.1 以降は記録を捨てなくなりました。</pre>
+<dl>
+<dt><a name="L002520" id="L002520"><code>post_match</code></a></dt>
+<dd>
+<p>前回マッチを行った文字列のうち、マッチしたところよりも後ろの
+部分文字列を返します。前回のマッチが失敗していると常に nil を
+返します。</p>
+<pre>s = StringScanner.new('test string')
+s.post_match  # =&gt; nil
+s.scan(/\w+/) # =&gt; &quot;test&quot;
+s.post_match  # =&gt; &quot; string&quot;
+s.scan(/\w+/) # =&gt; nil
+s.post_match  # =&gt; nil
+s.scan(/\s+/) # =&gt; &quot; &quot;
+s.post_match  # =&gt; &quot;string&quot;
+s.scan(/\w+/) # =&gt; &quot;string&quot;
+s.post_match  # =&gt; &quot;&quot;
+s.scan(/\w+/) # =&gt; nil
+s.post_match  # =&gt; nil</pre></dd>
+<dt><a name="L002521" id="L002521"><code>pre_match</code></a></dt>
+<dd>
+<p>前回マッチを行った文字列のうち、マッチしたところよりも前の
+部分文字列を返します。前回のマッチが失敗していると常に nil を
+返します。</p>
+<pre>s = StringScanner.new('test string')
+s.pre_match   # =&gt; nil
+s.scan(/\w+/) # =&gt; &quot;test&quot;
+s.pre_match   # =&gt; &quot;&quot;
+s.scan(/\w+/) # =&gt; nil
+s.pre_match   # =&gt; nil
+s.scan(/\s+/) # =&gt; &quot; &quot;
+s.pre_match   # =&gt; &quot;test&quot;
+s.scan(/\w+/) # =&gt; &quot;string&quot;
+s.pre_match   # =&gt; &quot;test &quot;
+s.scan(/\w+/) # =&gt; nil
+s.pre_match   # =&gt; nil</pre></dd>
+<dt><a name="L002522" id="L002522"><code>reset</code></a></dt>
+<dd>
+<p>スキャンポインタを文字列の先頭 (インデックス 0) に戻し、
+マッチ記録を捨てます。</p>
+<p>self を返します。</p>
+<p>pos = 0と同じ動作です。</p>
+<pre>s = StringScanner.new('test string')
+s.scan(/\w+/) # =&gt; &quot;test&quot;
+s.matched     # =&gt; &quot;test&quot;
+s.pos         # =&gt; 4
+s[0]          # =&gt; &quot;test&quot;
+s.reset
+s.matched     # =&gt; nil
+s[0]          # =&gt; nil
+s.pos         # =&gt; 0</pre></dd>
+<dt><a name="L002523" id="L002523"><code>rest</code></a></dt>
+<dd>
+<p>文字列の残り (rest) を返します。
+具体的には、スキャンポインタが指す位置からの文字列を返します。
+スキャンポインタが文字列の末尾を指していたら空文字列 (&quot;&quot;) を返します。</p>
+<pre>s = StringScanner.new('test string')
+s.rest         # =&gt; &quot;test string&quot;
+s.scan(/\w+/)  # =&gt; &quot;test&quot;
+s.rest         # =&gt; &quot; string&quot;
+s.scan(/\s+/)  # =&gt; &quot; &quot;
+s.rest         # =&gt; &quot;string&quot;
+s.scan(/\w+/)  # =&gt; &quot;string&quot;
+s.rest         # =&gt; &quot;&quot;</pre></dd>
+<dt><a name="L002524" id="L002524"><code>rest?</code></a></dt>
+<dd>
+<p>文字列が残っているならば trueを、
+残っていないならば false を返します。</p>
+<p><a href="#L002503">eos?</a> と逆の結果を返します。</p>
+<pre>s = StringScanner.new('test string')
+s.eos?        # =&gt; false
+s.rest?       # =&gt; true
+s.scan(/\w+/)
+s.scan(/\s+/)
+s.scan(/\w+/)
+s.eos?        # =&gt; true
+s.rest?       # =&gt; false</pre>
+<p><a href="#L002524">rest?</a> は将来のバージョンで削除される予定です。
+代わりに <a href="#L002503">eos?</a> を使ってください。</p></dd>
+<dt><a name="L002525" id="L002525"><code>rest_size</code></a>
+<dt><a name="L002526" id="L002526"><code>restsize</code></a></dt>
+<dd>
+<p>文字列の残りの長さを返します。
+stringscanner.rest.size と同じです。</p>
+<pre>s = StringScanner.new('test string')
+s.rest_size # =&gt; 11
+s.rest.size # =&gt; 11</pre>
+<p><a href="#L002526">restsize</a> は将来のバージョンで削除される予定です。
+代わりに<a href="#L002525">rest_size</a> を使ってください。</p></dd>
+<dt><a name="L002527" id="L002527"><code>scan(<var>regexp</var>)</code></a></dt>
+<dd>
+<p>スキャンポインタの地点だけで <var>regexp</var> と文字列のマッチを試します。
+マッチしたら、スキャンポインタを進めて正規表現にマッチした
+部分文字列を返します。マッチしなかったら nil を返します。</p>
+<pre>s = StringScanner.new('test string')
+p s.scan(/\w+/)   #=&gt; &quot;test&quot;
+p s.scan(/\w+/)   #=&gt; nil
+p s.scan(/\s+/)   #=&gt; &quot; &quot;
+p s.scan(/\w+/)   #=&gt; &quot;string&quot;
+p s.scan(/./)     #=&gt; nil</pre></dd>
+<dt><a name="L002528" id="L002528"><code>scan_full(<var>regexp</var>, <var>s</var>, <var>f</var>)</code></a></dt>
+<dd>
+<p>スキャンポインタの位置から <var>regexp</var> と文字列のマッチを試します。
+マッチに成功すると、<var>s</var> と <var>f</var> の値によって以下のように動作します。</p>
+<ul>
+<li><var>s</var> が true ならばスキャンポインタを進めます。</li>
+<li><var>s</var> が false ならばスキャンポインタを進めません。</li>
+<li><var>f</var> が true ならばマッチした部分文字列を返します。</li>
+<li><var>f</var> が false ならばマッチした部分文字列の長さを返します。</li>
+</ul>
+<p>マッチに失敗すると <var>s</var> や <var>f</var> に関係なく nil を返します。</p>
+<p>このメソッドは <var>s</var> と <var>f</var> の組み合わせにより、
+他のメソッドと同等の動作になります。</p>
+<ul>
+<li>scan_full(regexp, true, true) は <a href="#L002527">scan</a> と同等。</li>
+<li>scan_full(regexp, true, false) は <a href="#L002531">skip</a> と同等。</li>
+<li>scan_full(regexp, false, true) は <a href="#L002501">check</a> と同等。</li>
+<li>scan_full(regexp, false, false) は <em class="XXINVALIDXX">match</em> と同等。</li>
+</ul></dd>
+<dt><a name="L002529" id="L002529"><code>scan_until(<var>regexp</var>)</code></a></dt>
+<dd>
+<p><var>regexp</var> が一致するまで文字列をスキャンします。
+マッチに成功したらスキャンポインタを進めて、
+スキャン開始位置からマッチ部分の末尾までの部分文字列を返します。
+マッチに失敗したら nil を返します。</p>
+<pre>s = StringScanner.new('test string')
+s.scan_until(/str/) # =&gt; &quot;test str&quot;
+s.matched           # =&gt; &quot;str&quot;
+s.pos               # =&gt; 8
+s.pre_match         # =&gt; &quot;test &quot;</pre></dd>
+<dt><a name="L002530" id="L002530"><code>search_full(<var>regexp</var>, <var>s</var>, <var>f</var>)</code></a></dt>
+<dd>
+<p><var>regexp</var> が一致するまで文字列をスキャンします。
+マッチに成功すると、<var>s</var> と <var>f</var> の値によって以下のように動作します。</p>
+<ul>
+<li><var>s</var> が true ならばスキャンポインタを進めます。</li>
+<li><var>s</var> が false ならばスキャンポインタを進めません。</li>
+<li><var>f</var> が true ならばマッチした部分文字列を返します。</li>
+<li><var>f</var> が false ならばマッチした部分文字列の長さを返します。</li>
+</ul>
+<p>マッチに失敗すると <var>s</var> や <var>f</var> に関係なく nil を返します。</p>
+<p>このメソッドは <var>s</var> と <var>f</var> の組み合わせにより、
+他のメソッドと同等の動作になります。</p>
+<ul>
+<li>search_full(regexp, true, true) は <a href="#L002529">scan_until</a> と同等。</li>
+<li>search_full(regexp, true, false) は <a href="#L002532">skip_until</a> と同等。</li>
+<li>search_full(regexp, false, true) は <a href="#L002502">check_until</a> と同等。</li>
+<li>search_full(regexp, false, false) は <a href="#L002505">exist?</a> と同等。</li>
+</ul></dd>
+<dt><a name="L002531" id="L002531"><code>skip(<var>regexp</var>)</code></a></dt>
+<dd>
+<p>スキャンポインタの地点だけで <var>regexp</var> と文字列のマッチを試します。
+マッチしたらスキャンポインタを進めマッチした部分文字列の
+長さを返します。マッチしなかったら nil を返します。</p>
+<p>このメソッドはマッチが成功してもスキャンポインタを進めません。</p>
+<pre>s = StringScanner.new('test string')
+p s.skip(/\w+/)   #=&gt; 4
+p s.skip(/\w+/)   #=&gt; nil
+p s.skip(/\s+/)   #=&gt; 1
+p s.skip(/\w+/)   #=&gt; 6
+p s.skip(/./)     #=&gt; nil</pre></dd>
+<dt><a name="L002532" id="L002532"><code>skip_until(<var>regexp</var>)</code></a></dt>
+<dd>
+<p><var>regexp</var> が一致するまで文字列をスキャンします。
+マッチに成功したらスキャンポインタを進めて、
+スキャン開始位置からマッチ部分の末尾までの部分文字列の長さを返します。
+マッチに失敗したら nil を返します。</p>
+<pre>s = StringScanner.new('test string')
+s.scan_until(/str/) # =&gt; 8
+s.matched           # =&gt; &quot;str&quot;
+s.pos               # =&gt; 8
+s.pre_match         # =&gt; &quot;test &quot;</pre></dd>
+<dt><a name="L002533" id="L002533"><code>string</code></a></dt>
+<dd>
+<p>スキャン対象にしている文字列を返します。</p>
+<pre>s = StringScanner.new('test string')
+s.string # =&gt; &quot;test string&quot;</pre>
+<p>Ruby 1.8.0 では返り値は freeze されています。
+Ruby 1.8.1 以降では返り値は freeze されていません。</p>
+<pre>s = StringScanner.new('test string')
+s.string.frozen? # =&gt; true  (Ruby 1.8.0の場合)
+                 # =&gt; fales (Ruby 1.8.1以降の場合)</pre>
+<p>なお、Ruby 1.8.1 以降の StringScanner#string は StringScanner.new に渡した
+文字列をそのまま返しますが、この仕様が将来に渡って保証されるわけではありません。
+この仕様に依存したコードを書かないようにしましょう。</p>
+<pre>str = 'test string'
+s = StringScanner.new(str)
+s.string == str    # =&gt; true
+s.string.eql?(str) # =&gt; true (将来は false になる可能性がある)</pre>
+<p>また Ruby 1.8.1 以降では返り値の文字列に対して破壊的な変更もできますが、
+この操作がスキャン対象の文字列を変更することも保証されません。
+この仕様に依存したコードを書かないでください。</p>
+<pre>str = 'test string'
+s = StringScanner.new(str)
+s.string.replace(&quot;0123&quot;)
+s.scan(/\w+/)     # =&gt; &quot;0123&quot; (将来は &quot;test&quot; が返る可能性あり)
+str               # =&gt; &quot;0123&quot; (将来は &quot;test string&quot; が返る可能性あり)</pre></dd>
+<dt><a name="L002534" id="L002534"><code>string = <var>str</var></code></a></dt>
+<dd>
+<p>スキャン対象の文字列を <var>str</var> に変更して、マッチ記録を捨てます。
+<var>str</var> を返します。</p>
+<pre>str = '0123'
+s = StringScanner.new('test string')
+s.string = str     # =&gt; &quot;0123&quot;
+s.scan(/\w+/)      # =&gt; &quot;0123&quot;</pre></dd>
+<dt><a name="L002535" id="L002535"><code>terminate</code></a>
+<dt><a name="L002536" id="L002536"><code>clear</code></a></dt>
+<dd>
+<p>スキャンポインタを文字列末尾後まで進め、マッチ記録を捨てます。</p>
+<p>self を返します。</p>
+<p>pos = self.string.size と同じ動作です。</p>
+<pre>s = StringScanner.new('test string')
+s.scan(/\w+/) # =&gt; &quot;test&quot;
+s.matched     # =&gt; &quot;test&quot;
+s.pos         # =&gt; 4
+s[0]          # =&gt; &quot;test&quot;
+s.terminate
+s.matched     # =&gt; nil
+s[0]          # =&gt; nil
+s.pos         # =&gt; 11</pre>
+<p><a href="#L002536">clear</a> は将来のバージョンで削除される予定です。
+代わりに <a href="#L002535">terminate</a> を使ってください。</p></dd>
+<dt><a name="L002537" id="L002537"><code>unscan</code></a></dt>
+<dd>
+<p>スキャンポインタを前回のマッチの前の位置に戻します。</p>
+<pre>s = StringScanner.new('test string')
+s.scan(/\w+/) # =&gt; &quot;test&quot;
+s.unscan
+s.scan(/\w+/) # =&gt; &quot;test&quot;</pre>
+<p>このメソッドでポインタを戻せるのは 1 回分だけです。
+2 回分以上戻そうとしたときは例外 <code>StringScanner::Error</code> が発生します。
+また、まだマッチを一度も行っていないときや、
+前回のマッチが失敗していたときも例外 <code>StringScanner::Error</code> が発生します。</p>
+<pre>s = StringScanner.new('test string')
+s.unscan      # StringScanner::Error: can't unscan: prev match had failed
+s.scan(/\w+/) # =&gt; &quot;test&quot;
+s.unscan
+s.unscan      # StringScanner::Error: can't unscan: prev match had failed
+s.scan(/\w+/) # =&gt; &quot;test&quot;
+s.scan(/\w+/) # =&gt; nil
+s.unscan      # StringScanner::Error: can't unscan: prev match had failed</pre>
+<p>selfを返します。</p></dd>
+</dl>
+<h3><a name="L002494" id="L002494">定数</a></h3>
+<dl>
+<dt><a name="L002538" id="L002538"><code>Version</code></a></dt>
+<dd>
+<p>StringScannerクラスのバージョンを文字列で返します。
+この文字列はfreezeされています。</p>
+<pre>StringScanner::Version           # =&gt; &quot;0.7.0&quot;
+StringScanner::Version.frozen?   # =&gt; true</pre></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm115.html">UP</a>][<a href="refm126.html">&lt;-PREV</a>][<a href="refm128.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

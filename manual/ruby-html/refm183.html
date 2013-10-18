@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>WEBrick::HTTPAuth::Htdigest</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm184.html" rel="next" />
+<link href="refm182.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm179.html">UP</a>][<a href="refm182.html">&lt;-PREV</a>][<a href="refm184.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L003628" id="L003628">WEBrick::HTTPAuth::Htdigest</a></h1>
+<p>Apache の htdigest 互換のクラス。</p>
+<h2><a name="L003629" id="L003629">例</a></h2>
+<pre>require 'webrick'
+include WEBrick
+htd = HTTPAuth::Htdigest.new('dot.htdigest')
+htd.set_passwd('realm', 'username', 'supersecretpass')
+htd.flush
+htd2 = HTTPAuth::Htdigest.new('dot.htdigest')
+p htd2.get_passwd('realm', 'username', false) == '65fe03e5b0a199462186848cc7fda42b'</pre>
+<h2><a name="L003630" id="L003630">クラスメソッド</a></h2>
+<dl>
+<dt><a name="L003631" id="L003631"><code>Htdigest.new(<var>path</var>)</code></a></dt>
+<dd>
+<p>Htdigest オブジェクトを生成する。.htdigest ファイルのパスを <var>path</var> で与える。</p></dd>
+</dl>
+<h2><a name="L003632" id="L003632">メソッド</a></h2>
+<dl>
+<dt><a name="L003633" id="L003633"><code>delete_passwd(<var>realm</var>, <var>user</var>)</code></a></dt>
+<dd>
+<p><var>realm</var> に属するユーザ <var>user</var> のパスワードを削除する。</p></dd>
+<dt><a name="L003634" id="L003634"><code>each{|<var>user</var>, <var>realm</var>, <var>pass</var>| ...}</code></a></dt>
+<dd>
+<p>各ユーザ、<var>realm</var> とパスワードに関してブロックを評価する。</p></dd>
+<dt><a name="L003635" id="L003635"><code>flush(<var>path</var>=<var>nil</var>)</code></a></dt>
+<dd>
+<p>ファイルに書き込む。ファイル名 <var>path</var> を与えた場合は、<var>path</var> に書き込む。</p></dd>
+<dt><a name="L003636" id="L003636"><code>get_passwd(<var>realm</var>, <var>user</var>, <var>reload_db</var>)</code></a></dt>
+<dd>
+<p><var>realm</var> からユーザのパスワードの MD5 ハッシュ値を取得し文字列として返す。
+<var>reload_db</var> が true の場合、reload を呼んでからハッシュ値を返す。</p></dd>
+<dt><a name="L003637" id="L003637"><code>reload</code></a></dt>
+<dd>
+<p>ファイルから再度読み込む。</p></dd>
+<dt><a name="L003638" id="L003638"><code>set_passwd(<var>realm</var>, <var>user</var>, <var>pass</var>)</code></a></dt>
+<dd>
+<p><var>realm</var> に対応させてユーザ <var>user</var> とパスワード <var>pass</var> を保存する。</p></dd>
+</dl>
+
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm179.html">UP</a>][<a href="refm182.html">&lt;-PREV</a>][<a href="refm184.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>

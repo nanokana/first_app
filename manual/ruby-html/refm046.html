@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="EUC-JP" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>File</title>
+<meta http-equiv="Content-type" content="text/html; charset=EUC-JP" />
+<link href="default.css" type="text/css" rel="stylesheet" />
+<link href="refm047.html" rel="next" />
+<link href="refm045.html" rel="prev" />
+<link href="index.html" rel="start" />
+
+</head>
+<body>
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm045.html">UP</a>][<a href="refm045.html">&lt;-PREV</a>][<a href="refm047.html">NEXT-&gt;</a>]</span></div>
+<hr />
+
+<h1><a name="L001057" id="L001057">File</a></h1>
+<p>ファイルアクセスのためのクラス。通常 <a href="refm029.html#L000464">open</a>
+または <a href="#L001080">File.open</a> を使って生成します。</p>
+<h2><a name="L001058" id="L001058">スーパークラス:</a></h2>
+<ul>
+<li><a href="refm045.html">IO</a></li>
+</ul>
+<h2><a name="L001059" id="L001059">インクルードしているモジュール:</a></h2>
+<ul>
+<li><a href="refm073.html">File::Constants</a></li>
+</ul>
+<p><a href="refm385.html">ruby 1.8 feature</a>: File::Constants は、<a href="refm045.html">IO</a> でインクルードさ
+れるようになりました。</p>
+<h2><a name="L001060" id="L001060">クラスメソッド:</a></h2>
+<dl>
+<dt><a name="L001061" id="L001061"><code>File.atime(<var>filename</var>)</code></a>
+<dt><a name="L001062" id="L001062"><code>File.ctime(<var>filename</var>)</code></a>
+<dt><a name="L001063" id="L001063"><code>File.mtime(<var>filename</var>)</code></a></dt>
+<dd>
+<p>atime は最終アクセス時刻、
+ctime は状態が最後に変更された時刻、
+mtime は最終更新時刻を <a href="refm066.html">Time</a> オブジェクトとして返します。</p>
+<p>なお、ctime における状態の変更とは chmod などによるものです。</p>
+<p>ファイルの時刻の取得に失敗した場合は例外 <a href="refm108.html">Errno::EXXX</a> が発生
+します。</p></dd>
+<dt><a name="L001064" id="L001064"><code>File.basename(<var>filename</var>[, <var>suffix</var>])</code></a></dt>
+<dd>
+<p><var>filename</var> の一番後ろのスラッシュに続く要素を返します。もし、
+引数 <var>suffix</var> が与えられて、かつそれが <var>filename</var> の末尾に
+一致するなら、それを取り除いたものを返します。</p>
+<p>例:</p>
+<pre>p File.basename(&quot;ruby/ruby.c&quot;)        #=&gt; &quot;ruby.c&quot;
+p File.basename(&quot;ruby/ruby.c&quot;, &quot;.c&quot;)  #=&gt; &quot;ruby&quot;
+p File.basename(&quot;ruby/ruby.c&quot;, &quot;.*&quot;)  #=&gt; &quot;ruby&quot;
+p File.basename(&quot;ruby/ruby.exe&quot;, &quot;.*&quot;)  #=&gt; &quot;ruby&quot;</pre>
+<p><a href="#L001071">File.dirname</a>, <a href="#L001073">File.extname</a> も参照。</p>
+<p><a href="refm386.html">1.6.8から1.8.0への変更点(まとめ)</a></p>
+<p>File.basename の動作は <a href="http://www.unix-systems.org/version3/online.html">SUSv3</a><sup class="outside"><small>[外部]</small></sup> に従うよう変更されました。</p>
+<pre>p File.basename(&quot;foo/bar/&quot;)      # =&gt; &quot;bar&quot;  以前は、&quot;&quot;</pre></dd>
+<dt><a name="L001065" id="L001065"><code>File.chmod(<var>mode</var>[, <var>filename</var>[, ...]])</code></a>
+<dt><a name="L001066" id="L001066"><code>File.lchmod(<var>mode</var>[, <var>filename</var>[, ...]])             ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>ファイルのモードを <var>mode</var> に変更します。モードを変更したファイ
+ルの数を返します。モードの変更に失敗した場合は例外 
+<a href="refm108.html">Errno::EXXX</a> が発生します。</p>
+<p><var>mode</var> は <a href="refm535.html">chmod(2)</a> と同様に数値で指定します。</p>
+<p><code>lchmod</code> は、シンボリックリンクに関してリンクそのものの
+モードを変更します。<a href="refm535.html">lchmod(2)</a> を実装し
+ていないシステムでこのメソッドを呼び出すと 
+<a href="refm089.html">NotImplementedError</a> 例外が発生します。</p></dd>
+<dt><a name="L001067" id="L001067"><code>File.chown(<var>owner</var>, <var>group</var>[, <var>filename</var>[, ...]])</code></a>
+<dt><a name="L001068" id="L001068"><code>File.lchown(<var>owner</var>, <var>group</var>[, <var>filename</var>[, ...]])     ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>ファイルのオーナーとグループを変更します。スーパーユーザだけがファ
+イルのオーナーとグループを変更できます。変更を行ったファイルの数を
+返します。変更に失敗した場合は例外 <a href="refm108.html">Errno::EXXX</a> が発生します。</p>
+<p><var>owner</var> と <var>group</var> は、<a href="refm535.html">chown(2)</a> と同様に
+数値で指定します。
+片方だけ変更したいような場合は <code>nil</code> または <code>-1</code> を指定する
+ことでオーナーやグループを現在のままにすることができます。</p>
+<p><code>lchown</code> は、シンボリックリンクに関してリンクそのもののオーナー、
+グループを変更します。<a href="refm535.html">lchown(2)</a> を実装していない
+システムでこのメソッドを呼び出すと <a href="refm089.html">NotImplementedError</a> 例外
+が発生します。</p></dd>
+<dt><a name="L001069" id="L001069"><code>File.delete(<var>filename</var> ... )</code></a>
+<dt><a name="L001070" id="L001070"><code>File.unlink(<var>filename</var> ... )</code></a></dt>
+<dd>
+<p>ファイルを削除します。削除したファイルの数を返します。削除に失敗し
+た場合は例外 <a href="refm108.html">Errno::EXXX</a> が発生します。</p>
+<p>このメソッドは通常ファイルの削除用で、ディレクトリの削除には
+<a href="refm041.html#L000847">Dir.rmdir</a> を使います。</p></dd>
+<dt><a name="L001071" id="L001071"><code>File.dirname(<var>filename</var>)</code></a></dt>
+<dd>
+<p><var>filename</var> の一番後ろのスラッシュより前を文
+字列として返します。スラッシュを含まないファイル名に対しては
+<code>&quot;.&quot;</code>(カレントディレクトリ)を返します。</p>
+<p>例:</p>
+<pre>p File.dirname(&quot;dir/file.ext&quot;)    # =&gt; &quot;dir&quot;
+p File.dirname(&quot;file.ext&quot;)        # =&gt; &quot;.&quot;</pre>
+<p><a href="#L001064">File.basename</a>, <a href="#L001073">File.extname</a> も参照。</p>
+<p><a href="refm385.html">ruby 1.8 feature</a></p>
+<p>File.dirname の動作は <a href="http://www.unix-systems.org/version3/online.html">SUSv3</a><sup class="outside"><small>[外部]</small></sup> に従うよう変更されました。</p>
+<pre>p File.dirname(&quot;foo/bar/&quot;)      # =&gt; &quot;foo&quot;  以前は、&quot;foo/bar&quot;
+p File.dirname(&quot;foo//bar&quot;)      # =&gt; &quot;foo&quot;  以前は、&quot;foo/&quot;</pre></dd>
+<dt><a name="L001072" id="L001072"><code>File.expand_path(<var>path</var>[, <var>default_dir</var>])</code></a></dt>
+<dd>
+<p><var>path</var> を絶対パスに展開した文字列を返します。
+<var>path</var> が相対パスであれば <var>default_dir</var> を基準にします。
+<var>default_dir</var> が <code>nil</code> かまたは与えられなかった時にはカ
+レントディレクトリが使われます。</p>
+<p>先頭の <code>~</code> はホームディレクトリ(環境変数 HOME が使われます)に、
+<code>~USER</code> はそのユーザのホームディレクトリに展開されます。</p>
+<pre>p File.expand_path(&quot;..&quot;)         #=&gt; &quot;/home/matz/work&quot;
+p File.expand_path(&quot;..&quot;, &quot;/tmp&quot;) #=&gt; &quot;/&quot;
+p File.expand_path(&quot;~&quot;)          #=&gt; &quot;/home/matz&quot;
+p File.expand_path(&quot;~foo&quot;)       #=&gt; &quot;/home/foo&quot;</pre></dd>
+<dt><a name="L001073" id="L001073"><code>File.extname(<var>filename</var>)      ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>ファイル名 <var>filename</var> の拡張子部分(最後の &quot;.&quot; に続く文字列)を
+返します。ディレクトリ名に含まれる &quot;.&quot; や、ファイル名先頭の &quot;.&quot; 
+は拡張子の一部としては見なされません。<var>filename</var> に拡張子が含
+まれない場合は空文字列を返します。</p>
+<pre>p File.extname(&quot;foo/foo.txt&quot;)     # =&gt; &quot;.txt&quot;
+p File.extname(&quot;foo/foo.tar.gz&quot;)  # =&gt; &quot;.gz&quot;
+p File.extname(&quot;foo/bar&quot;)         # =&gt; &quot;&quot;
+p File.extname(&quot;foo/.bar&quot;)        # =&gt; &quot;&quot;
+p File.extname(&quot;foo.txt/bar&quot;)     # =&gt; &quot;&quot;
+p File.extname(&quot;.foo&quot;)            # =&gt; &quot;&quot;</pre>
+<p><a href="#L001064">File.basename</a>, <a href="#L001071">File.dirname</a> も参照。</p></dd>
+<dt><a name="L001074" id="L001074"><code>File.fnmatch(<var>pattern</var>, <var>path</var>[, <var>flags</var>])   ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a>
+<dt><a name="L001075" id="L001075"><code>File.fnmatch?(<var>pattern</var>, <var>path</var>[, <var>flags</var>])   ((&lt;<var>ruby</var> <var>1</var>.<var>7</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p>ファイル名のパターンマッチを行います(<a href="refm535.html">fnmatch(3)</a>)。
+<var>path</var> が <var>pattern</var> にマッチすれば真を返します。</p>
+<p><var>pattern</var> にはワイルドカードとして `*', `?', `[]' が使用できま
+す(<a href="refm041.html#L000839">Dir.glob</a> とは違って `{}' や `**/' は使用できません)。</p>
+<pre>%w[foo foobar bar].each {|f|
+  p File.fnmatch(&quot;foo*&quot;, f)
+}
+# =&gt; true
+     true
+     false</pre>
+<p><var>flags</var> に以下の定数(<a href="refm073.html">File::Constants</a> モジュールで定義さ
+れています)を論理和で指定することでパターンマッチの動作を変更する
+ことができます。<var>flags</var> のデフォルト値は0(フラグ指定なし)です。</p>
+<dl>
+<dt><a name="L001114" id="L001114">FNM_NOESCAPE</a></dt>
+<dd>
+<p>エスケープ文字 `\' を普通の文字とみなします。</p>
+<pre># デフォルトでは \ を伴う任意の文字はその文字にマッチしますが、
+# このフラグをつけると、\ が普通の文字として扱われます。
+p File.fnmatch('\a', 'a')                       # =&gt; true
+p File.fnmatch('\a', '\a', File::FNM_NOESCAPE)  # =&gt; true
+
+# 前者で * は、エスケープされているので &quot;*&quot; そのものにマッチ
+# します。
+p File.fnmatch('\*', 'a')                       # =&gt; false
+p File.fnmatch('\*', '\a', File::FNM_NOESCAPE)  # =&gt; true
+
+# 単体の \ は、このフラグの有無に関わらず \ にマッチします。
+# (シングルクォート文字列中では \\ は、\ であることに注意)
+p File.fnmatch('\\', '\\')                      # =&gt; true
+p File.fnmatch('\\', '\\', File::FNM_NOESCAPE)  # =&gt; true</pre>
+</dd>
+<dt><a name="L001115" id="L001115">FNM_PATHNAME</a></dt>
+<dd>
+<p>ワイルドカード `*', `?', `[]' が `/' にマッチしなくなります。
+シェルのパターンマッチにはこのフラグが使用されています。</p>
+<pre>p File.fnmatch('*', '/', File::FNM_PATHNAME)   # =&gt; false
+p File.fnmatch('?', '/', File::FNM_PATHNAME)   # =&gt; false
+p File.fnmatch('[/]', '/', File::FNM_PATHNAME) # =&gt; false</pre>
+</dd>
+<dt><a name="L001116" id="L001116">FNM_CASEFOLD</a></dt>
+<dd>
+<p>アルファベットの大小文字を区別せずにパターンマッチを行います。</p>
+<pre>p File.fnmatch('A', 'a', File::FNM_CASEFOLD)   # =&gt; true</pre>
+</dd>
+<dt><a name="L001117" id="L001117">FNM_DOTMATCH</a></dt>
+<dd>
+<p>ワイルドカード `*', `?', `[]' が先頭の `.' にマッチするようになります。</p>
+<pre>p File.fnmatch('*', '.', File::FNM_DOTMATCH)           # =&gt; true
+p File.fnmatch('?', '.', File::FNM_DOTMATCH)           # =&gt; true
+p File.fnmatch('[.]', '.', File::FNM_DOTMATCH)         # =&gt; true
+p File.fnmatch('foo/*', 'foo/.', File::FNM_DOTMATCH)   # =&gt; true</pre>
+</dd>
+</dl></dd>
+<dt><a name="L001076" id="L001076"><code>File.ftype(<var>filename</var>)</code></a></dt>
+<dd>
+<p>ファイルのタイプを表す文字列を返します。文字列は以下のうちのいずれ
+かです。<a href="refm043.html#L000882">File.lstat(filename).ftype</a> と同じで
+す(シンボリックリンクに対して &quot;link&quot; を返します)。</p>
+<pre>&quot;file&quot;
+&quot;directory&quot;
+&quot;characterSpecial&quot;
+&quot;blockSpecial&quot;
+&quot;fifo&quot;
+&quot;link&quot;
+&quot;socket&quot;
+
+&quot;unknown&quot;</pre>
+<p><a name="footmark:1" id="footmark:1" href="#foottext:1"><sup><small>*1</small></sup></a></p></dd>
+<dt><a name="L001077" id="L001077"><code>File.join(<var>item</var>, <var>item</var>, ...)</code></a></dt>
+<dd>
+<p><code>File::SEPARATOR</code>を間に入れて文字列を連結します。</p>
+<pre>[item, item, ...].join(File::SEPARATOR)</pre>
+<p>と同じです。(<a href="refm394.html">DOSISH 対応</a>で環境依存になる予定です。)</p></dd>
+<dt><a name="L001078" id="L001078"><code>File.link(<var>old</var>, <var>new</var>)</code></a></dt>
+<dd>
+<p><var>old</var> を指す <var>new</var> という名前のハードリンクを
+生成します。<var>old</var> はすでに存在している必要があります。</p>
+<p>ハードリンクに成功した場合は 0 を返します。失敗した場合は例外 
+<a href="refm108.html">Errno::EXXX</a> が発生します。</p></dd>
+<dt><a name="L001079" id="L001079"><code>File.new(<var>path</var>[, <var>mode</var> [, <var>perm</var>]])</code></a>
+<dt><a name="L001080" id="L001080"><code>File.open(<var>path</var>[, <var>mode</var> [, <var>perm</var>]])</code></a>
+<dt><a name="L001081" id="L001081"><code>File.open(<var>path</var>[, <var>mode</var> [, <var>perm</var>]]) {|<var>file</var>| ... }</code></a></dt>
+<dd>
+<p><var>path</var>で指定されるファイルをオープンし、ファイルオブジェクトを
+返します。ファイルのオープンに失敗した場合は例外 <a href="refm108.html">Errno::EXXX</a> 
+が発生します。</p>
+<p>引数 <var>mode</var>, <var>perm</var> については 組み込み関数 
+<a href="refm029.html#L000464">open</a> と同じです。</p>
+<p><code>open()</code> はブロックを指定することができます。
+ブロックを指定して呼び出した場合は、ファイルオブジェクトを
+与えられてブロックが実行されます。ブロックの実行が終了すると、
+ファイルは自動的にクローズされます。</p>
+<p>ブロックが指定されたときのこのメソッドの戻り値はブロックの実行結果
+です。</p></dd>
+<dt><a name="L001082" id="L001082"><code>File.readlink(<var>path</var>)</code></a></dt>
+<dd>
+<p>シンボリックリンクのリンク先を文字列で返します。リンクの読み取りに
+失敗した場合は例外 <a href="refm108.html">Errno::EXXX</a> が発生します。</p></dd>
+<dt><a name="L001083" id="L001083"><code>File.rename(<var>from</var>, <var>to</var>)</code></a></dt>
+<dd>
+<p>ファイルの名前を変更します。ディレクトリが異なる場合には移動も行い
+ます。<a href="refm535.html">rename(2)</a> を参照してください。移動先のファ
+イルが存在する時には上書きされます。</p>
+<p>ファイルの移動に成功した場合 0 を返します。失敗した場合は例外 
+<a href="refm108.html">Errno::EXXX</a> が発生します。</p></dd>
+<dt><a name="L001084" id="L001084"><code>File.split(<var>pathname</var>)</code></a></dt>
+<dd>
+<p><var>pathname</var> を <code>dirname</code> と<code>basename</code> に分割して、2 要
+素の配列を返します。</p>
+<pre>[File.dirname(pathname), File.basename(pathname)]</pre>
+<p>と同じです。</p></dd>
+<dt><a name="L001085" id="L001085"><code>File.stat(<var>filename</var>)</code></a>
+<dt><a name="L001086" id="L001086"><code>File.lstat(<var>filename</var>)</code></a></dt>
+<dd>
+<p><var>filename</var> の情報を含む <a href="refm043.html">File::Stat</a> オブジェクトを生成し
+て返します。情報の取得に失敗した場合は例外 <a href="refm108.html">Errno::EXXX</a> が発
+生します。</p>
+<p><code>lstat</code> は、シンボリックリンクに関してリンクそのものの
+情報を返します。
+<a href="refm535.html">lstat(2)</a> を実装していないシステムでは、
+<code>File.stat</code> と同じです。</p>
+<p><a href="refm045.html#L001041">IO#stat</a>,
+<a href="#L001086">File#lstat</a> も参照してください。</p></dd>
+<dt><a name="L001087" id="L001087"><code>File.symlink(<var>old</var>, <var>new</var>)</code></a></dt>
+<dd>
+<p><var>old</var> への <var>new</var> という名前のシンボリックリンクを生成しま
+す。</p>
+<p>シンボリックリンクの作成に成功すれば 0 を返します。失敗した場合は
+例外 <a href="refm108.html">Errno::EXXX</a> が発生します。</p></dd>
+<dt><a name="L001088" id="L001088"><code>File.truncate(<var>path</var>, <var>length</var>)</code></a></dt>
+<dd>
+<p><var>path</var> で指定されたファイルのサイズを最大 <var>length</var> バイト
+にします。</p>
+<p>サイズの変更に成功すれば 0 を返します。失敗した場合は例外 
+<a href="refm108.html">Errno::EXXX</a> が発生します。</p></dd>
+<dt><a name="L001089" id="L001089"><code>File.umask([<var>umask</var>])</code></a></dt>
+<dd>
+<p>umask を変更します。変更前の umask の値を返します。<var>umask</var> を
+省略すると変更を行わないで、現在の umask の値を返します。</p></dd>
+<dt><a name="L001090" id="L001090"><code>File.utime(<var>atime</var>, <var>mtime</var>[, <var>filename</var>[, ...]])</code></a></dt>
+<dd>
+<p>ファイルの最終アクセス時刻と更新時刻を変更します。変更したファイル
+の数を返します。変更に失敗した場合は例外 <a href="refm108.html">Errno::EXXX</a> が発生
+します。</p>
+<p>先頭の二つの引数は時刻を指定する数値または <a href="refm066.html">Time</a> クラスのイン
+スタンスでなければなりません。</p></dd>
+<dt><a name="L001091" id="L001091"><code>File.blockdev?(<var>path</var>)</code></a></dt>
+<dd>
+<p><a href="refm074.html#L001937">FileTest.blockdev?</a> と同じです。</p></dd>
+<dt><a name="L001092" id="L001092"><code>File.chardev?(<var>path</var>)</code></a></dt>
+<dd>
+<p><a href="refm074.html#L001938">FileTest.chardev?</a> と同じです。</p></dd>
+<dt><a name="L001093" id="L001093"><code>File.directory?(<var>path</var>)</code></a></dt>
+<dd>
+<p><a href="refm074.html#L001943">FileTest.directory?</a> と同じです。</p></dd>
+<dt><a name="L001094" id="L001094"><code>File.executable?(<var>path</var>)</code></a></dt>
+<dd>
+<p><a href="refm074.html#L001939">FileTest.executable?</a> と同じです。</p></dd>
+<dt><a name="L001095" id="L001095"><code>File.executable_real?(<var>path</var>)</code></a></dt>
+<dd>
+<p><a href="refm074.html#L001940">FileTest.executable_real?</a> と同じです。</p></dd>
+<dt><a name="L001096" id="L001096"><code>File.exist?(<var>path</var>)</code></a></dt>
+<dd>
+<p><a href="refm074.html#L001941">FileTest.exist?</a> と同じです。</p></dd>
+<dt><a name="L001097" id="L001097"><code>File.file?(<var>path</var>)</code></a></dt>
+<dd>
+<p><a href="refm074.html#L001944">FileTest.file?</a> と同じです。</p></dd>
+<dt><a name="L001098" id="L001098"><code>File.grpowned?(<var>path</var>)</code></a></dt>
+<dd>
+<p><a href="refm074.html#L001942">FileTest.grpowned?</a> と同じです。</p></dd>
+<dt><a name="L001099" id="L001099"><code>File.owned?(<var>path</var>)</code></a></dt>
+<dd>
+<p><a href="refm074.html#L001948">FileTest.owned?</a> と同じです。</p></dd>
+<dt><a name="L001100" id="L001100"><code>File.identical?(<var>filename1</var>, <var>filename2</var>)    ((&lt;<var>ruby</var> <var>1</var>.<var>8</var>.<var>4</var> <var>feature</var>&gt;))</code></a></dt>
+<dd>
+<p><a href="refm074.html#L001945">FileTest.identical?</a> と同じです。</p></dd>
+<dt><a name="L001101" id="L001101"><code>File.pipe?(<var>path</var>)</code></a></dt>
+<dd>
+<p><a href="refm074.html#L001946">FileTest.pipe?</a> と同じです。</p></dd>
+<dt><a name="L001102" id="L001102"><code>File.readable?(<var>path</var>)</code></a></dt>
+<dd>
+<p><a href="refm074.html#L001949">FileTest.readable?</a> と同じです。</p></dd>
+<dt><a name="L001103" id="L001103"><code>File.readable_real?(<var>path</var>)</code></a></dt>
+<dd>
+<p><a href="refm074.html#L001950">FileTest.readable_real?</a> と同じです。</p></dd>
+<dt><a name="L001104" id="L001104"><code>File.setgid?(<var>path</var>)</code></a></dt>
+<dd>
+<p><a href="refm074.html#L001952">FileTest.setgid?</a> と同じです。</p></dd>
+<dt><a name="L001105" id="L001105"><code>File.setuid?(<var>path</var>)</code></a></dt>
+<dd>
+<p><a href="refm074.html#L001951">FileTest.setuid?</a> と同じです。</p></dd>
+<dt><a name="L001106" id="L001106"><code>File.size(<var>path</var>)</code></a></dt>
+<dd>
+<p><a href="refm074.html#L001953">FileTest.size</a> と同じです。</p></dd>
+<dt><a name="L001107" id="L001107"><code>File.size?(<var>path</var>)</code></a></dt>
+<dd>
+<p><a href="refm074.html#L001954">FileTest.size?</a> と同じです。</p></dd>
+<dt><a name="L001108" id="L001108"><code>File.socket?(<var>path</var>)</code></a></dt>
+<dd>
+<p><a href="refm074.html#L001947">FileTest.socket?</a> と同じです。</p></dd>
+<dt><a name="L001109" id="L001109"><code>File.sticky?(<var>path</var>)</code></a></dt>
+<dd>
+<p><a href="refm074.html#L001955">FileTest.sticky?</a> と同じです。</p></dd>
+<dt><a name="L001110" id="L001110"><code>File.symlink?(<var>path</var>)</code></a></dt>
+<dd>
+<p><a href="refm074.html#L001956">FileTest.symlink?</a> と同じです。</p></dd>
+<dt><a name="L001111" id="L001111"><code>File.writable?(<var>path</var>)</code></a></dt>
+<dd>
+<p><a href="refm074.html#L001957">FileTest.writable?</a> と同じです。</p></dd>
+<dt><a name="L001112" id="L001112"><code>File.writable_real?(<var>path</var>)</code></a></dt>
+<dd>
+<p><a href="refm074.html#L001958">FileTest.writable_real?</a> と同じです。</p></dd>
+<dt><a name="L001113" id="L001113"><code>File.zero?(<var>path</var>)</code></a></dt>
+<dd>
+<p><a href="refm074.html#L001959">FileTest.zero?</a> と同じです。</p></dd>
+</dl>
+<h2><a name="L001118" id="L001118">メソッド:</a></h2>
+<dl>
+<dt><a name="L001061" id="L001061"><code>atime</code></a>
+<dt><a name="L001062" id="L001062"><code>ctime</code></a>
+<dt><a name="L001063" id="L001063"><code>mtime</code></a></dt>
+<dd>
+<p>atime は最終アクセス時刻、
+ctime は状態が最後に変更された時刻、
+mtime は最終更新時刻を <a href="refm066.html">Time</a> オブジェクトとして返します。</p>
+<p>なお、ctime における状態の変更とは chmod などによるものです。</p>
+<p>ファイルの時刻の取得に失敗した場合は例外 <a href="refm108.html">Errno::EXXX</a> が発生
+します。</p></dd>
+<dt><a name="L001119" id="L001119"><code>chmod(<var>mode</var>)</code></a></dt>
+<dd>
+<p>ファイルのモードを <var>mode</var> に変更します。モードの変更に成功した
+場合は 0 を返します。失敗した場合は例外 <a href="refm108.html">Errno::EXXX</a> が発生し
+ます。</p>
+<p><var>mode</var> は <a href="refm535.html">chmod(2)</a> と同様に数値で指定します。</p></dd>
+<dt><a name="L001120" id="L001120"><code>chown(<var>owner</var>, <var>group</var>)</code></a></dt>
+<dd>
+<p>ファイルのオーナーとグループを変更します。スーパーユーザだけがファ
+イルのオーナーとグループを変更できます。所有者の変更に成功した場合
+は 0 を返します。変更に失敗した場合は例外 <a href="refm108.html">Errno::EXXX</a> が発生
+します。</p>
+<p><var>owner</var> と <var>group</var> は、<a href="refm535.html">chown(2)</a> と同様に
+数値で指定します。
+<code>nil</code> または <code>-1</code> を指定することでオーナーやグループを現在
+のままにすることができます。</p></dd>
+<dt><a name="L001121" id="L001121"><code>flock(<var>operation</var>)</code></a></dt>
+<dd>
+<p>ファイルをロックします。ロックに成功した場合は 0 を返します。失敗
+した場合は例外 <a href="refm108.html">Errno::EXXX</a> が発生します。<code>File::LOCK_NB</code> が指
+定されていて、ブロックされそうな場合には <code>false</code> を返します。
+有効な <var>operation</var> は以下の通りです。</p>
+<ul>
+<li><p><code>File::LOCK_SH</code></p>
+<p>共有ロック。複数のプロセスが同時にロックを共有できます。</p>
+<p>システムによってはロック対象のファイルは読み込みモード
+(<code>&quot;r&quot;, &quot;r+&quot; など</code>)でオープンされている必要があります。そのよ
+うなシステムでは読み込み可能でないファイルに対するロックは例外 
+<a href="refm108.html">Errno::EBADF</a> が発生するかもしれません。</p></li>
+<li><p><code>File::LOCK_EX</code></p>
+<p>排他ロック。同時にはただひとつのプロセスだけがロックを保持できます。</p>
+<p>システムによってはロック対象のファイルは書き込みモード
+(<code>&quot;w&quot;, &quot;r+&quot; など</code>)でオープンされている必要があります。そのよ
+うなシステムでは書き込み可能でないファイルに対するロックは例外 
+<a href="refm108.html">Errno::EBADF</a> が発生するかもしれません。</p></li>
+<li><p><code>File::LOCK_UN</code></p>
+<p>アンロック。</p>
+<p>この明示的なアンロック以外に、Rubyインタプリタの終了
+(プロセスの終了)によっても自動的にロック状態は解除されます。</p></li>
+<li><p><code>File::LOCK_NB</code></p>
+<p>ノンブロックモード。</p>
+<p><code>File::LOCK_SH | File::LOCK_NB</code> のように他の指定と <code>or</code> することで指
+定します。この指定がない場合、ブロックされる条件での <code>flock</code> 
+の呼び出しはロックが解除されるまでブロックされます。</p>
+<p><code>File::LOCK_NB</code> の指定がある場合、ブロックされる条件での
+<code>flock</code> は <code>false</code> を返します。</p>
+<p>「ブロックされる条件」とは</p>
+<ul>
+<li>他のプロセスが排他ロックをすでに行っている場合にロックを行う</li>
+<li>他のプロセスがロックしている状態で排他ロックを行う</li>
+</ul>
+<p>の場合です</p></li>
+</ul>
+<p>以上の定数は <a href="refm073.html">File::Constants</a> モジュールで定義されています。</p>
+<p>例:</p>
+<pre>f = File.open(&quot;/tmp/foo&quot;, &quot;w&quot;)
+
+f.flock(File::LOCK_EX)
+puts &quot;locked by process1&quot;
+
+fork {
+  f = File.open(&quot;/tmp/foo&quot;, &quot;r&quot;)
+  f.flock(File::LOCK_SH)
+  puts &quot;locked by process2&quot;
+  sleep 5
+  puts &quot;unlocked by process2&quot;
+}
+
+sleep 5
+
+f.flock(File::LOCK_UN)
+puts &quot;unlocked by process1&quot;
+sleep 1 # &lt;- 子プロセスが確実に先にロックするための sleep
+f.flock(File::LOCK_EX)
+puts &quot;re-locked by process1&quot;
+
+=&gt; locked by process1
+   unlocked by process1
+   locked by process2
+   unlocked by process2
+   re-locked by process1</pre></dd>
+<dt><a name="L001122" id="L001122"><code>path</code></a></dt>
+<dd>
+<p>オープン時に使用したパスを文字列で返します。</p></dd>
+<dt><a name="L001086" id="L001086"><code>lstat</code></a></dt>
+<dd>
+<p>ファイルの状態を含む <a href="refm043.html">File::Stat</a> オブジェクトを生成して返しま
+す。情報の取得に失敗した場合は例外 <a href="refm108.html">Errno::EXXX</a> が発生します。</p>
+<p><code>lstat</code> は、シンボリックリンクに関してリンクそのものの
+情報を返します。
+<a href="refm535.html">lstat(2)</a> を実装していないシステムでは、
+<a href="refm045.html#L001041">IO#stat</a>と同じです。</p>
+<p><a href="refm045.html#L001041">IO#stat</a>,
+<a href="#L001085">File.stat</a>,
+<a href="#L001086">File.lstat</a> も参照してください。</p></dd>
+<dt><a name="L001123" id="L001123"><code>truncate(<var>length</var>)</code></a></dt>
+<dd>
+<p>ファイルのサイズを最大 <var>length</var> バイトにします。ファイルが書き
+込みモードでオープンされてなければ例外 <a href="refm097.html">IOError</a> が発生します。</p>
+<p>サイズの変更に成功すれば 0 を返します。失敗した場合は例外 
+<a href="refm108.html">Errno::EXXX</a> が発生します。</p></dd>
+</dl>
+<h2><a name="L001124" id="L001124">定数:</a></h2>
+<dl>
+<dt><a name="L001125" id="L001125"><code>ALT_SEPARATOR</code></a></dt>
+<dd>
+<p>システムのファイルパスのセパレータが <code>SEPARATOR</code> と異なる場合
+に設定されます。MS-DOS などでは <code>&quot;\&quot;</code> です。UNIX や 
+<a href="refm463.html">Cygwin</a> などでは <code>nil</code> です。</p></dd>
+<dt><a name="L001126" id="L001126"><code>PATH_SEPARATOR</code></a></dt>
+<dd>
+<p>PATH 環境変数の要素のセパレータです。UNIX では <code>&quot;:&quot;</code> MS-DOS な
+どでは <code>&quot;;&quot;</code> です。</p></dd>
+<dt><a name="L001127" id="L001127"><code>SEPARATOR</code></a>
+<dt><a name="L001128" id="L001128"><code>Separator</code></a></dt>
+<dd>
+<p>ファイルパスのセパレータです。ファイルを扱うメソッドにパス名を渡す
+場合などスクリプト内のパス名は環境によらずこのセパレータで統一され
+ます。値は <code>&quot;/&quot;</code> です。</p></dd>
+</dl>
+<h2><a name="L001129" id="L001129">内部クラス:</a></h2>
+<dl>
+<dt><a name="L001130" id="L001130"><code>Constants</code></a></dt>
+<dd>
+<p>File クラスに関係する定数を格納したモジュールです。<a href="refm073.html">File::Constants</a>
+を参照してください。</p></dd>
+<dt><a name="L001131" id="L001131"><code>Stat</code></a></dt>
+<dd>
+<p>stat 構造体(<a href="refm535.html">stat(2)</a>参照)を表すクラスです。
+<a href="refm043.html">File::Stat</a> を参照してください。</p></dd>
+</dl>
+<hr />
+<p class="foottext">
+<a name="foottext:1" id="foottext:1" href="#footmark:1"><sup><small>*1</small></sup></a><small>あらい 2002-01-07: 今のところ &quot;unknown&quot; を返すことはないはず。
+もしそのようなことがあれば、バグ報告をした方が良いと思われる</small><br />
+</p>
+<hr />
+<div class="navigator"><span class="navigator">[<a href="index.html">MAIN</a>][<a href="refm539.html">INDEX</a>]&nbsp;&nbsp;&nbsp;[<a href="index.html">TOP</a>][<a href="refm045.html">UP</a>][<a href="refm045.html">&lt;-PREV</a>][<a href="refm047.html">NEXT-&gt;</a>]</span></div>
+
+</body>
+</html>
